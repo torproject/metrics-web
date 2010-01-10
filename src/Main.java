@@ -69,6 +69,7 @@ public class Main {
     // Write updated stats files to disk
     bsfh.writeFile();
     csfh.writeFile();
+    dsfh.writeFile();
   }
 }
 

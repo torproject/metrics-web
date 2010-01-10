@@ -20,9 +20,23 @@ public class DirreqStatsFileHandler {
           + "/dirreq-stats... ");
       BufferedReader br = new BufferedReader(new FileReader(
           this.dirreqStatsFile));
-      String line = null;
-      while ((br.readLine()) != null) {
-        // TODO read dirreq-stats; also, take into account that headers might be different than the countries that we're interested in now!
+      String line = br.readLine();
+      if (line != null) {
+        String[] headers = line.split(",");
+        for (int i = 2; i < headers.length - 1; i++) {
+          this.countries.add(headers[i]);
+        }
+        while ((line = br.readLine()) != null) {
+          String[] readData = line.split(",");
+          String dirNickname = readData[0];
+          String date = readData[1];
+          Map<String, String> obs = new HashMap<String, String>();
+          for (int i = 2; i < readData.length - 1; i++) {
+            obs.put(headers[i], readData[i]);
+          }
+          String share = readData[readData.length - 1];
+          this.addObs(dirNickname, date, obs, share);
+        }
       }
       System.out.println("done");
       br.close();
@@ -33,19 +47,23 @@ public class DirreqStatsFileHandler {
       Map<String, String> obs, String share) {
     String obsKey = dirNickname + "," + date;
     StringBuilder sb = new StringBuilder(obsKey);
-    for (String c : countries) {
+    for (String c : this.countries) {
       sb.append("," + (obs.containsKey(c) ? obs.get(c) : "0"));
     }
     sb.append("," + share);
-    observations.put(obsKey, sb.toString());
+    this.observations.put(obsKey, sb.toString());
   }
   public void writeFile() throws IOException {
     System.out.print("Writing file " + this.statsDir
         + "/dirreq-stats... ");
     BufferedWriter bwDirreqStats = new BufferedWriter(
         new FileWriter(this.dirreqStatsFile));
-// TODO write countries to header!
-    for (String observation : observations.values()) {
+    bwDirreqStats.append("nickname,date");
+    for (String country : this.countries) {
+      bwDirreqStats.append("," + country);
+    }
+    bwDirreqStats.append(",share\n");
+    for (String observation : this.observations.values()) {
       bwDirreqStats.append(observation + "\n");
     }
     bwDirreqStats.close();
