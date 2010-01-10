@@ -1,1 +1,10 @@
-Test
+ERNIE is the Enhanced R-based tor Network Intelligence Engine
+         (why ERNIE? because nobody liked BIRT; sorry for misspelling Tor)
+
+--------------------------------------------------------------------------
+
+install to ~/ernie/
+
+crontab entries
+15 * * * * cd ~/ernie/ && ./run.sh
+
