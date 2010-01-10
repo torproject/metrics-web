@@ -18,10 +18,19 @@ public class Main {
     // Define which stats we are interested in
     String authority = "80.190.246.100";
     SortedSet<String> countries = new TreeSet<String>();
+    countries.add("bh");
     countries.add("cn");
+    countries.add("cu");
+    countries.add("et");
     countries.add("ir");
     countries.add("mm");
+    countries.add("sa");
+    countries.add("sy");
+    countries.add("tn");
+    countries.add("tm");
+    countries.add("uz");
     countries.add("vn");
+    countries.add("ye");
     SortedMap<String, String> directories = new TreeMap<String, String>();
     directories.put("8522EB98C91496E80EC238E732594D1509158E77",
         "trusted");

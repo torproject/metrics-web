@@ -58,7 +58,7 @@ public class DirreqStatsFileHandler {
         + "/dirreq-stats... ");
     BufferedWriter bwDirreqStats = new BufferedWriter(
         new FileWriter(this.dirreqStatsFile));
-    bwDirreqStats.append("nickname,date");
+    bwDirreqStats.append("directory,date");
     for (String country : this.countries) {
       bwDirreqStats.append("," + country);
     }
