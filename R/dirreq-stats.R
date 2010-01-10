@@ -61,8 +61,8 @@ plot_trusted <- function(country, people, filename, color) {
   data <- c()
   for (i in datesStr) {
     data <- c(data, ifelse(i %in% trusted$date,
-        trusted[[paste("req3", country, sep="")]][trusted$date == i] /
-        trusted$v3share[trusted$date == i] * 10, NA))
+        trusted[[country]][trusted$date == i] /
+        trusted$share[trusted$date == i] * 10, NA))
   }
   firstdays <- c()
   for (i in datesStr)
