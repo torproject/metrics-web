@@ -29,18 +29,22 @@ for (i in 1:(length(monthticks) - 1))
   monthat <- c(monthat, (monthticks[i] + monthticks[i + 1]) / 2)
 png("website/graphs/exit.png", width=600, height=400)
 par(mar = c(4.1, 3.9, 2.1, 4.1))
-plot(runningNum, ylim=c(0, max(na.omit(runningNum))), type="l", col="red",
-    lwd=2, axes=FALSE, frame=FALSE, main=paste("Number of exit relays"),
+runningCol <- "red"
+exitCol <- "darkgreen"
+plot(runningNum, ylim=c(0, max(na.omit(runningNum))), type="l",
+    col=runningCol, lwd=2, axes=FALSE, frame=FALSE,
+    main=paste("Number of exit relays"),
     xlab=paste("Last updated:", date()), ylab="")
-lines(exitNum, col="green", lwd=2)
+lines(exitNum, col=exitCol, lwd=2)
 mtext("All relays", side=4, line=0, las=1,
-    at=tail(na.omit(runningNum), n=1), col="red")
+    at=tail(na.omit(runningNum), n=1), col=runningCol)
 mtext("Exit relays", side=4, line=0, las=1,
-    at=tail(na.omit(exitNum), n=1), col="green")
+    at=tail(na.omit(exitNum), n=1), col=exitCol)
 axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
 axis(1, at=c(1, length(exitNum)), labels=FALSE, lwd=1, lwd.ticks=0)
 axis(1, at=monthat, lwd=0, labels=monthlabels)
 axis(2, las=1, lwd=0, lwd.ticks=1)
-axis(2, las=1, at=c(min(na.omit(exitNum)), max(na.omit(runningNum))), lwd.ticks=0, labels=FALSE)
+axis(2, at=c(min(na.omit(runningNum)), max(na.omit(runningNum))), lwd.ticks=0, labels=FALSE)
+axis(2, at=c(min(na.omit(exitNum)), max(na.omit(exitNum))), lwd.ticks=0, labels=FALSE)
 dev.off()
 
