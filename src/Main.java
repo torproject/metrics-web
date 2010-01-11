@@ -11,9 +11,11 @@ public class Main {
   public static void main(String[] args) throws IOException,
       ParseException {
 
-    // Should we import data or not?
-    boolean importFromDisk = args.length > 0
+    // Should we only import from disk or only download descriptors?
+    boolean importOnly = args.length > 0
         && args[0].equals("import");
+    boolean downloadOnly = args.length > 0
+        && args[0].equals("download");
 
     // Define which stats we are interested in
     String authority = "80.190.246.100";
@@ -53,20 +55,22 @@ public class Main {
         directories);
 
     // Read files in archives/ directory
-    if (importFromDisk) {
+    if (!downloadOnly) {
 // TODO prevent overlapping runs by cron and manually!!
       ArchiveReader ar = new ArchiveReader(cp, sdp, eip, "archives",
           directories.keySet());
     }
 
     // Download current descriptors
-    ConsensusDownloader cd = new ConsensusDownloader(cp, authority);
+    if (!importOnly) {
+      ConsensusDownloader cd = new ConsensusDownloader(cp, authority);
 /* TODO no downloading until parsing files on disk works!
-    ServerDescriptorDownloader sdd = new ServerDescriptorDownloader(sdp,
-        authority);
-    ExtraInfoDownloader eid = new ExtraInfoDownloader(eip, authority,
-        directories);
+      ServerDescriptorDownloader sdd = new ServerDescriptorDownloader(sdp,
+          authority);
+      ExtraInfoDownloader eid = new ExtraInfoDownloader(eip, authority,
+          directories);
 */
+    }
 
     // Read files in bridges/ directory
     BridgeReader br = new BridgeReader(bsfh, "bridges", countries);
