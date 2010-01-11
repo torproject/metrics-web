@@ -6,7 +6,10 @@ ERNIE is the Enhanced R-based tor Network Intelligence Engine
 install to ~/ernie/
 
 crontab entries
-15 * * * * cd ~/ernie/ && ./run.sh
+15 * * * * cd ~/ernie/ && ./download.sh
+
+add soft link to /var/www
+$ ln -s /home/karsten/ernie/website/ /var/www/metrics
 
 --------------------------------------------------------------------------
 
@@ -17,4 +20,6 @@ Grepping relevant dirreq-stats from extra-info descriptors (speeds up
 
 $ grep -REl "^extra-info moria1|^extra-info trusted" extra-info/ \
   | xargs -I {} mv {} relevant-extra-infos/
+
+$ cd ~/ernie/ && ./import.sh
 

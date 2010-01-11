@@ -27,7 +27,7 @@ monthlabels <- c(monthlabels,
 monthat <- c()
 for (i in 1:(length(monthticks) - 1))
   monthat <- c(monthat, (monthticks[i] + monthticks[i + 1]) / 2)
-png("graphs/exit.png", width=600, height=400)
+png("website/graphs/exit.png", width=600, height=400)
 par(mar = c(4.1, 3.9, 2.1, 4.1))
 plot(runningNum, ylim=c(0, max(na.omit(runningNum))), type="l", col="red",
     lwd=2, axes=FALSE, frame=FALSE, main=paste("Tor exit relays"),
