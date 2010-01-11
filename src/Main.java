@@ -67,9 +67,9 @@ public class Main {
 /* TODO no downloading until parsing files on disk works!
       ServerDescriptorDownloader sdd = new ServerDescriptorDownloader(sdp,
           authority);
+*/
       ExtraInfoDownloader eid = new ExtraInfoDownloader(eip, authority,
           directories);
-*/
     }
 
     // Read files in bridges/ directory
