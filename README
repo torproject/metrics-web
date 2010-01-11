@@ -8,3 +8,13 @@ install to ~/ernie/
 crontab entries
 15 * * * * cd ~/ernie/ && ./run.sh
 
+--------------------------------------------------------------------------
+
+Importing descriptors
+
+Grepping relevant dirreq-stats from extra-info descriptors (speeds up
+  importing significantly!)
+
+$ grep -REl "^extra-info moria1|^extra-info trusted" extra-info/ \
+  | xargs -I {} mv {} relevant-extra-infos/
+
