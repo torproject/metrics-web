@@ -54,11 +54,13 @@ public class Main {
     ExtraInfoParser eip = new ExtraInfoParser(dsfh, countries,
         directories);
 
-    // Read files in archives/ directory
+    // Read files in archives/ and bridges/ directory
     if (!downloadOnly) {
 // TODO prevent overlapping runs by cron and manually!!
       ArchiveReader ar = new ArchiveReader(cp, sdp, eip, "archives",
           directories.keySet());
+      BridgeReader br = new BridgeReader(csfh, bsfh, "bridges",
+          countries);
     }
 
     // Download current descriptors
@@ -71,9 +73,6 @@ public class Main {
       ExtraInfoDownloader eid = new ExtraInfoDownloader(eip, authority,
           directories);
     }
-
-    // Read files in bridges/ directory
-    BridgeReader br = new BridgeReader(bsfh, "bridges", countries);
 
     // Parse torperf files
     // TODO maybe convert them in a format that is easier to process for R than the current one?

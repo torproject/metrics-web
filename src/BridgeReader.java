@@ -4,8 +4,11 @@ import java.util.*;
 import org.apache.commons.codec.digest.*;
 
 public class BridgeReader {
-  public BridgeReader(BridgeStatsFileHandler bsfh, String bridgesDir,
+  public BridgeReader(ConsensusStatsFileHandler csfh,
+      BridgeStatsFileHandler bsfh, String bridgesDir,
       SortedSet<String> countries) throws IOException, ParseException {
+    System.out.print("Parsing all files in directory " + bridgesDir
+        + "/...");
     SimpleDateFormat timeFormat = new SimpleDateFormat(
         "yyyy-MM-dd HH:mm:ss");
     timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -27,7 +30,20 @@ public class BridgeReader {
       boolean skip = false;
       String line = null;
       while ((line = br.readLine()) != null) {
-        if (line.startsWith("extra-info ")) {
+        if (line.startsWith("r ")) {
+          // parse bridge status; TODO possibly move to own class
+          int runningBridges = 0;
+          while ((line = br.readLine()) != null) {
+            if (line.startsWith("s ") && line.contains(" Running")) {
+              runningBridges++;
+            }
+          }
+          String fn = pop.getName();
+          String date = fn.substring(0, 4) + "-" + fn.substring(4, 6)
+              + "-" + fn.substring(6, 8) + " " + fn.substring(9, 11)
+              + ":" + fn.substring(11, 13) + ":" + fn.substring(13, 15);
+          csfh.addBridgeConsensusResults(date, runningBridges);
+        } else if (line.startsWith("extra-info ")) {
           hashedIdentity = needToHash ? DigestUtils.shaHex(
               line.split(" ")[2]).toUpperCase() : line.split(" ")[2];
           skip = bsfh.isKnownRelay(hashedIdentity);
@@ -66,5 +82,6 @@ public class BridgeReader {
       }
       br.close();
     }
+    System.out.println("done");
   }
 }

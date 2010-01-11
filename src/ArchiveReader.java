@@ -9,8 +9,8 @@ public class ArchiveReader {
   public ArchiveReader(ConsensusParser cp, ServerDescriptorParser sdp,
       ExtraInfoParser eip, String archivesDir, Set<String> directoryKeys)
       throws IOException {
-    System.out.print("Reading all files in directory " + archivesDir
-        + "/ ...");
+    System.out.print("Parsing all files in directory " + archivesDir
+        + "/...");
     Stack<File> filesInInputDir = new Stack<File>();
     filesInInputDir.add(new File(archivesDir));
     while (!filesInInputDir.isEmpty()) {
