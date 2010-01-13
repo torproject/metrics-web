@@ -59,8 +59,8 @@ public class Main {
 // TODO prevent overlapping runs by cron and manually!!
       ArchiveReader ar = new ArchiveReader(cp, sdp, eip, "archives",
           directories.keySet());
-      BridgeReader br = new BridgeReader(csfh, bsfh, "bridges",
-          countries);
+      SanitizedBridgesReader sbr = new SanitizedBridgesReader(csfh, bsfh,
+          "bridges", countries);
     }
 
     // Download current descriptors
