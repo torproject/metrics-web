@@ -64,6 +64,7 @@ public class BridgeStatsFileHandler {
     BufferedWriter bwRelayIdentities = new BufferedWriter(
         new FileWriter(this.hashedRelayIdentitiesFile));
     for (String hashedRelay : hashedRelays) {
+// TODO check if this bridge is a known relay!!!!!
       bwRelayIdentities.append(hashedRelay + "\n");
     }
     bwRelayIdentities.close();

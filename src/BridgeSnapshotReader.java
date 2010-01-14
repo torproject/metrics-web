@@ -1,4 +1,5 @@
 import java.io.*;
+import java.text.*;
 import java.util.*;
 import org.apache.commons.compress.compressors.gzip.*;
 import org.apache.commons.compress.archivers.tar.*;
@@ -7,9 +8,9 @@ import org.apache.commons.compress.archivers.tar.*;
  * Reads the half-hourly snapshots of bridge descriptors from Tonga.
  */
 public class BridgeSnapshotReader {
-  public BridgeSnapshotReader(BridgeStatsFileHandler bsfh,
+  public BridgeSnapshotReader(BridgeDescriptorParser bdp,
       String bridgeDirectoriesDir, String parsedBridgeDirectories,
-      Set<String> countries) throws IOException {
+      Set<String> countries) throws IOException, ParseException {
     SortedSet<String> parsed = new TreeSet<String>();
     File pbdFile = new File(parsedBridgeDirectories);
     if (pbdFile.exists()) {
@@ -43,11 +44,12 @@ public class BridgeSnapshotReader {
           InputStreamReader isr = new InputStreamReader(tais);
           BufferedReader br = new BufferedReader(isr);
           TarArchiveEntry en = null;
-          String line = null;
+          String fn = pop.getName();
+          String dateTime = fn.substring(11, 21) + " "
+                + fn.substring(22, 24) + ":" + fn.substring(24, 26) + ":"
+                + fn.substring(26, 28);
           while ((en = tais.getNextTarEntry()) != null) {
-            while ((line = br.readLine()) != null) {
-              ; // TODO do all the hard work
-            }
+            bdp.parse(br, dateTime, false);
           }
           br.close();
           parsed.add(pop.getName());

@@ -53,15 +53,17 @@ public class Main {
     ServerDescriptorParser sdp = new ServerDescriptorParser();
     ExtraInfoParser eip = new ExtraInfoParser(dsfh, countries,
         directories);
+    BridgeDescriptorParser bdp = new BridgeDescriptorParser(csfh, bsfh,
+        countries);
 
     // Read files in archives/ and bridges/ directory
     if (!downloadOnly) {
 // TODO prevent overlapping runs by cron and manually!!
       ArchiveReader ar = new ArchiveReader(cp, sdp, eip, "archives",
           directories.keySet());
-      SanitizedBridgesReader sbr = new SanitizedBridgesReader(csfh, bsfh,
+      SanitizedBridgesReader sbr = new SanitizedBridgesReader(bdp,
           "bridges", countries);
-      BridgeSnapshotReader bsr = new BridgeSnapshotReader(bsfh,
+      BridgeSnapshotReader bsr = new BridgeSnapshotReader(bdp,
           "bridge-directories", "stats/parsed-bridge-directories",
           countries);
     }
