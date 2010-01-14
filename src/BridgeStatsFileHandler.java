@@ -28,7 +28,7 @@ public class BridgeStatsFileHandler {
         for (int i = 3; i < headers.length; i++) {
           this.countries.add(headers[i]);
         }
-        while ((br.readLine()) != null) {
+        while ((line = br.readLine()) != null) {
           String[] readData = line.split(",");
           String hashedBridgeIdentity = readData[0];
           String date = readData[1];
@@ -102,6 +102,7 @@ public class BridgeStatsFileHandler {
         bwBridgeStats.append(observation + "\n");
       }
     }
+    bwBridgeStats.close();
   }
 }
 
