@@ -11,6 +11,21 @@ public class Main {
   public static void main(String[] args) throws IOException,
       ParseException {
 
+    // use lock file to avoid overlapping runs
+    File lockFile = new File("lock");
+    if (lockFile.exists()) {
+      BufferedReader br = new BufferedReader(new FileReader("lock"));
+      long runStarted = Long.parseLong(br.readLine());
+      br.close();
+      if (System.currentTimeMillis() - runStarted < 15L * 60L * 1000L) {
+        System.out.println("Warning: ERNIE is already running! Exiting.");
+        System.exit(1);
+      }
+    }
+    BufferedWriter bw = new BufferedWriter(new FileWriter("lock"));
+    bw.append("" + System.currentTimeMillis() + "\n");
+    bw.close();
+
     // Should we only import from disk or only download descriptors?
     boolean importOnly = args.length > 0
         && args[0].equals("import");
@@ -56,7 +71,6 @@ public class Main {
 
     // Read files in archives/ and bridges/ directory
     if (!downloadOnly) {
-// TODO prevent overlapping runs by cron and manually!!
       ArchiveReader ar = new ArchiveReader(rdp, "archives");
       SanitizedBridgesReader sbr = new SanitizedBridgesReader(bdp,
           "bridges", countries);
@@ -80,6 +94,9 @@ public class Main {
     bsfh.writeFile();
     csfh.writeFile();
     dsfh.writeFile();
+
+    // Remove lock file
+    lockFile.delete();
   }
 }
 
