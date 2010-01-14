@@ -44,7 +44,7 @@ public class Main {
     ConsensusStatsFileHandler csfh = new ConsensusStatsFileHandler(
         statsDirectory);
     BridgeStatsFileHandler bsfh = new BridgeStatsFileHandler(
-        statsDirectory);
+        statsDirectory, countries);
     DirreqStatsFileHandler dsfh = new DirreqStatsFileHandler(
         statsDirectory, countries);
 

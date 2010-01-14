@@ -54,19 +54,20 @@ public class BridgeDescriptorParser {
         long started = timeFormat.parse(geoipStartTimeLine.
             substring("geoip-start-time ".length())).getTime();
         long seconds = (published - started) / 1000L;
-        Map<String, Double> obs = new HashMap<String, Double>();
+        Map<String, String> obs = new HashMap<String, String>();
         String[] parts = line.split(" ")[1].split(",");
         for (String p : parts) {
           for (String c : countries) {
             if (p.startsWith(c)) {
-              obs.put(c, ((double) Long.parseLong(p.substring(3)) - 4L)
-                  * 86400.0D / ((double) seconds));
+              obs.put(c, String.format("%.2f",
+                  ((double) Long.parseLong(p.substring(3)) - 4L)
+                  * 86400.0D / ((double) seconds)));
             }
           }
         }
         String date = publishedLine.split(" ")[1];
         String time = publishedLine.split(" ")[2];
-        bsfh.addStats(date, time, hashedIdentity, obs);
+        bsfh.addObs(hashedIdentity, date, time, obs);
       }
     }
   }
