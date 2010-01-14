@@ -61,6 +61,9 @@ public class Main {
           directories.keySet());
       SanitizedBridgesReader sbr = new SanitizedBridgesReader(csfh, bsfh,
           "bridges", countries);
+      BridgeSnapshotReader bsr = new BridgeSnapshotReader(bsfh,
+          "bridge-directories", "stats/parsed-bridge-directories",
+          countries);
     }
 
     // Download current descriptors

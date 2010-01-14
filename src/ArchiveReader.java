@@ -10,7 +10,7 @@ public class ArchiveReader {
       ExtraInfoParser eip, String archivesDir, Set<String> directoryKeys)
       throws IOException {
     System.out.print("Parsing all files in directory " + archivesDir
-        + "/...");
+        + "/... ");
     Stack<File> filesInInputDir = new Stack<File>();
     filesInInputDir.add(new File(archivesDir));
     while (!filesInInputDir.isEmpty()) {

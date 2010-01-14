@@ -8,7 +8,7 @@ public class SanitizedBridgesReader {
       BridgeStatsFileHandler bsfh, String bridgesDir,
       SortedSet<String> countries) throws IOException, ParseException {
     System.out.print("Parsing all files in directory " + bridgesDir
-        + "/...");
+        + "/... ");
     SimpleDateFormat timeFormat = new SimpleDateFormat(
         "yyyy-MM-dd HH:mm:ss");
     timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
