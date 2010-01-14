@@ -66,15 +66,15 @@ public class ConsensusStatsFileHandler {
     while (it.hasNext() || !haveWrittenFinalLine) {
       String next = it.hasNext() ? it.next() : null;
       if (tempDate != null
-          && (next == null || !next.substring(0, 10).equals(tempDate))
-          && consensusesDay > 0) {
-// TODO set threshold of 12 (of 24 possible) here?
-        csAggr.put(tempDate, tempDate + ","
-            + (exitDay / consensusesDay) + ","
-            + (fastDay / consensusesDay) + ","
-            + (guardDay / consensusesDay) + ","
-            + (runningDay / consensusesDay) + ","
-            + (stableDay / consensusesDay));
+          && (next == null || !next.substring(0, 10).equals(tempDate))) {
+        if (consensusesDay > 11) {
+          csAggr.put(tempDate, tempDate + ","
+              + (exitDay / consensusesDay) + ","
+              + (fastDay / consensusesDay) + ","
+              + (guardDay / consensusesDay) + ","
+              + (runningDay / consensusesDay) + ","
+              + (stableDay / consensusesDay));
+        }
         exitDay = 0;
         fastDay = 0;
         guardDay = 0;
@@ -110,10 +110,10 @@ public class ConsensusStatsFileHandler {
     while (it.hasNext() || !haveWrittenFinalLine) {
       String next = it.hasNext() ? it.next() : null;
       if (tempDate != null
-          && (next == null || !next.substring(0, 10).equals(tempDate))
-          && bridgeStatusesDay > 0) {
-// TODO set threshold of 24 (of 48 possible) here?
-        bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay) + "\n");
+          && (next == null || !next.substring(0, 10).equals(tempDate))) {
+        if (bridgeStatusesDay > 23) {
+          bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay) + "\n");
+        }
         brunningDay = 0;
         bridgeStatusesDay = 0;
         if (next == null) {
