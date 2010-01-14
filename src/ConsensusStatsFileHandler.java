@@ -65,8 +65,10 @@ public class ConsensusStatsFileHandler {
     SortedMap<String, String> csAggr = new TreeMap<String, String>();
     while (it.hasNext() || !haveWrittenFinalLine) {
       String next = it.hasNext() ? it.next() : null;
-      if (tempDate != null && (next == null ||
-          !next.substring(0, 10).equals(tempDate))) {
+      if (tempDate != null
+          && (next == null || !next.substring(0, 10).equals(tempDate))
+          && consensusesDay > 0) {
+// TODO set threshold of 12 (of 24 possible) here?
         csAggr.put(tempDate, tempDate + ","
             + (exitDay / consensusesDay) + ","
             + (fastDay / consensusesDay) + ","
@@ -107,8 +109,10 @@ public class ConsensusStatsFileHandler {
     SortedMap<String, String> bcsAggr = new TreeMap<String, String>();
     while (it.hasNext() || !haveWrittenFinalLine) {
       String next = it.hasNext() ? it.next() : null;
-      if (tempDate != null && (next == null ||
-          !next.substring(0, 10).equals(tempDate))) {
+      if (tempDate != null
+          && (next == null || !next.substring(0, 10).equals(tempDate))
+          && bridgeStatusesDay > 0) {
+// TODO set threshold of 24 (of 48 possible) here?
         bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay) + "\n");
         brunningDay = 0;
         bridgeStatusesDay = 0;
