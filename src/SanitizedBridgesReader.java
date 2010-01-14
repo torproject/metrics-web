@@ -3,8 +3,8 @@ import java.text.*;
 import java.util.*;
 import org.apache.commons.codec.digest.*;
 
-public class BridgeReader {
-  public BridgeReader(ConsensusStatsFileHandler csfh,
+public class SanitizedBridgesReader {
+  public SanitizedBridgesReader(ConsensusStatsFileHandler csfh,
       BridgeStatsFileHandler bsfh, String bridgesDir,
       SortedSet<String> countries) throws IOException, ParseException {
     System.out.print("Parsing all files in directory " + bridgesDir
