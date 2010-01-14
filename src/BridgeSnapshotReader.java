@@ -26,7 +26,7 @@ public class BridgeSnapshotReader {
     }
     File bdDir = new File(bridgeDirectoriesDir);
     if (bdDir.exists()) {
-      System.out.print("Parsing all files in directory "
+      System.out.print("Importing files in directory "
           + bridgeDirectoriesDir + "/... ");
       Stack<File> filesInInputDir = new Stack<File>();
       filesInInputDir.add(bdDir);
