@@ -5,8 +5,8 @@ import java.net.*;
  * Download the current consensus and hand it to the consensus parser.
  */
 public class ConsensusDownloader {
-  public ConsensusDownloader(ConsensusParser cp,
-      String authority) throws IOException {
+  public ConsensusDownloader(RelayDescriptorParser rdp, String authority)
+      throws IOException {
     System.out.print("Downloading current consensus from " + authority
         + "... ");
     BufferedInputStream in = new BufferedInputStream(new URL("http://"
@@ -20,7 +20,7 @@ public class ConsensusDownloader {
     in.close();
     String consensus = sb.toString();
     System.out.println("done");
-    cp.parse(new BufferedReader(new StringReader(consensus)));
+    rdp.parse(new BufferedReader(new StringReader(consensus)));
   }
 }
 

@@ -12,20 +12,20 @@ public class BridgeSnapshotReader {
       String bridgeDirectoriesDir, String parsedBridgeDirectories,
       Set<String> countries) throws IOException, ParseException {
     SortedSet<String> parsed = new TreeSet<String>();
-    File pbdFile = new File(parsedBridgeDirectories);
-    if (pbdFile.exists()) {
-      System.out.print("Reading existing file " + parsedBridgeDirectories
-          + "... ");
-      BufferedReader br = new BufferedReader(new FileReader(pbdFile));
-      String line = null;
-      while ((line = br.readLine()) != null) {
-        parsed.add(line);
-      }
-      br.close();
-      System.out.println("done");
-    }
     File bdDir = new File(bridgeDirectoriesDir);
+    File pbdFile = new File(parsedBridgeDirectories);
     if (bdDir.exists()) {
+      if (pbdFile.exists()) {
+        System.out.print("Reading file " + parsedBridgeDirectories
+            + "... ");
+        BufferedReader br = new BufferedReader(new FileReader(pbdFile));
+        String line = null;
+        while ((line = br.readLine()) != null) {
+          parsed.add(line);
+        }
+        br.close();
+        System.out.println("done");
+      }
       System.out.print("Importing files in directory "
           + bridgeDirectoriesDir + "/... ");
       Stack<File> filesInInputDir = new Stack<File>();

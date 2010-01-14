@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.*;
 
 public class ExtraInfoDownloader {
-  public ExtraInfoDownloader(ExtraInfoParser eip,
+  public ExtraInfoDownloader(RelayDescriptorParser rdp,
       String authority, SortedMap<String, String> directories)
       throws IOException {
     System.out.print("Downloading extra-info descriptors from "
@@ -23,8 +23,7 @@ public class ExtraInfoDownloader {
       String extraInfo = sb.toString();
       if (extraInfo.length() > 0) {
         BufferedReader br = new BufferedReader(new StringReader(extraInfo));
-        String line = br.readLine();
-        eip.parse(line.split(" ")[2], br);
+        rdp.parse(br);
       }
     }
     System.out.println("done");

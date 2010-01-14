@@ -2,39 +2,32 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Read in all files in a given directory, decide what category they are
- * in, and pass them to the appropriate Parsers.
+ * Read in all files in a given directory and pass buffered readers of
+ * them to the relay descriptor parser.
  */
 public class ArchiveReader {
-  public ArchiveReader(ConsensusParser cp, ServerDescriptorParser sdp,
-      ExtraInfoParser eip, String archivesDir, Set<String> directoryKeys)
+  public ArchiveReader(RelayDescriptorParser rdp, String archivesDir)
       throws IOException {
-    System.out.print("Importing files in directory " + archivesDir
-        + "/... ");
-    Stack<File> filesInInputDir = new Stack<File>();
-    filesInInputDir.add(new File(archivesDir));
-    while (!filesInInputDir.isEmpty()) {
-      BufferedReader br = null;
-      File pop = filesInInputDir.pop();
-      if (pop.isDirectory()) {
-        for (File f : pop.listFiles()) {
-          filesInInputDir.add(f);
+    if (new File(archivesDir).exists()) {
+      System.out.print("Importing files in directory " + archivesDir
+          + "/... ");
+      Stack<File> filesInInputDir = new Stack<File>();
+      filesInInputDir.add(new File(archivesDir));
+      while (!filesInInputDir.isEmpty()) {
+        BufferedReader br = null;
+        File pop = filesInInputDir.pop();
+        if (pop.isDirectory()) {
+          for (File f : pop.listFiles()) {
+            filesInInputDir.add(f);
+          }
+        } else {
+          br = new BufferedReader(new FileReader(pop));
+          rdp.parse(br);
+          br.close();
         }
-      } else {
-        br = new BufferedReader(new FileReader(pop));
-        String line = br.readLine();
-        if (line.equals("network-status-version 3")) {
-          cp.parse(br);
-        } else if (line.startsWith("router ")) {
-          sdp.parse(br);
-        } else if (line.startsWith("extra-info ")
-            && directoryKeys.contains(line.split(" ")[2])) {
-          eip.parse(line.split(" ")[2], br);
-        }
-        br.close();
       }
+      System.out.println("done");
     }
-    System.out.println("done");
   }
 }
 

@@ -18,8 +18,7 @@ public class BridgeStatsFileHandler {
     this.bridgeStatsFile = new File(statsDir + "/bridge-stats");
     this.observations = new TreeMap<String, String>();
     if (this.bridgeStatsFile.exists()) {
-      System.out.print("Reading existing file " + statsDir
-          + "/bridge-stats... ");
+      System.out.print("Reading file " + statsDir + "/bridge-stats... ");
       BufferedReader br = new BufferedReader(new FileReader(
           this.bridgeStatsFile));
       String line = br.readLine();
@@ -46,7 +45,7 @@ public class BridgeStatsFileHandler {
     this.hashedRelayIdentitiesFile = new File(statsDir
         + "/hashed-relay-identities");
     if (this.hashedRelayIdentitiesFile.exists()) {
-      System.out.print("Reading existing file " + statsDir
+      System.out.print("Reading file " + statsDir
           + "/hashed-relay-identities... ");
       BufferedReader br = new BufferedReader(new FileReader(
           this.hashedRelayIdentitiesFile));

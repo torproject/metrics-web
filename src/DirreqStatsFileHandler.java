@@ -16,8 +16,7 @@ public class DirreqStatsFileHandler {
     this.dirreqStatsFile = new File(statsDir + "/dirreq-stats");
     this.observations = new TreeMap<String, String>();
     if (this.dirreqStatsFile.exists()) {
-      System.out.print("Reading existing file " + statsDir
-          + "/dirreq-stats... ");
+      System.out.print("Reading file " + statsDir + "/dirreq-stats... ");
       BufferedReader br = new BufferedReader(new FileReader(
           this.dirreqStatsFile));
       String line = br.readLine();

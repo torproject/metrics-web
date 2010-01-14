@@ -14,9 +14,10 @@ public class ConsensusStatsFileHandler {
   public ConsensusStatsFileHandler(String statsDir) throws IOException {
     this.statsDir = statsDir;
     this.consensusResults = new TreeMap<String, String>();
-    this.consensusStatsRawFile = new File(statsDir + "/consensus-stats-raw");
+    this.consensusStatsRawFile = new File(statsDir
+        + "/consensus-stats-raw");
     if (this.consensusStatsRawFile.exists()) {
-      System.out.print("Reading existing file " + statsDir
+      System.out.print("Reading file " + statsDir
           + "/consensus-stats-raw... ");
       BufferedReader br = new BufferedReader(new FileReader(
           this.consensusStatsRawFile));
@@ -31,7 +32,7 @@ public class ConsensusStatsFileHandler {
     this.bridgeConsensusStatsRawFile = new File(statsDir
         + "/bridge-consensus-stats-raw");
     if (this.bridgeConsensusStatsRawFile.exists()) {
-      System.out.print("Reading existing file " + statsDir
+      System.out.print("Reading file " + statsDir
           + "/bridge-consensus-stats-raw... ");
       BufferedReader br = new BufferedReader(new FileReader(
           this.bridgeConsensusStatsRawFile));

@@ -49,18 +49,15 @@ public class Main {
         statsDirectory, countries);
 
     // Initialize parsers
-    ConsensusParser cp = new ConsensusParser(csfh, bsfh);
-    ServerDescriptorParser sdp = new ServerDescriptorParser();
-    ExtraInfoParser eip = new ExtraInfoParser(dsfh, countries,
-        directories);
+    RelayDescriptorParser rdp = new RelayDescriptorParser(csfh, bsfh,
+        dsfh, countries, directories);
     BridgeDescriptorParser bdp = new BridgeDescriptorParser(csfh, bsfh,
         countries);
 
     // Read files in archives/ and bridges/ directory
     if (!downloadOnly) {
 // TODO prevent overlapping runs by cron and manually!!
-      ArchiveReader ar = new ArchiveReader(cp, sdp, eip, "archives",
-          directories.keySet());
+      ArchiveReader ar = new ArchiveReader(rdp, "archives");
       SanitizedBridgesReader sbr = new SanitizedBridgesReader(bdp,
           "bridges", countries);
       BridgeSnapshotReader bsr = new BridgeSnapshotReader(bdp,
@@ -70,12 +67,8 @@ public class Main {
 
     // Download current descriptors
     if (!importOnly) {
-      ConsensusDownloader cd = new ConsensusDownloader(cp, authority);
-/* TODO no downloading until parsing files on disk works!
-      ServerDescriptorDownloader sdd = new ServerDescriptorDownloader(sdp,
-          authority);
-*/
-      ExtraInfoDownloader eid = new ExtraInfoDownloader(eip, authority,
+      ConsensusDownloader cd = new ConsensusDownloader(rdp, authority);
+      ExtraInfoDownloader eid = new ExtraInfoDownloader(rdp, authority,
           directories);
     }
 
