@@ -18,7 +18,8 @@ public class Main {
       long runStarted = Long.parseLong(br.readLine());
       br.close();
       if (System.currentTimeMillis() - runStarted < 15L * 60L * 1000L) {
-        System.out.println("Warning: ERNIE is already running! Exiting.");
+        System.out.println("Warning: ERNIE is already running or has not "
+            + "exited cleanly! Exiting.");
         System.exit(1);
       }
     }
@@ -77,6 +78,7 @@ public class Main {
       BridgeSnapshotReader bsr = new BridgeSnapshotReader(bdp,
           "bridge-directories", "stats/parsed-bridge-directories",
           countries);
+      TorperfProcessor tp = new TorperfProcessor("stats", "torperf");
     }
 
     // Download current descriptors
@@ -85,10 +87,6 @@ public class Main {
       ExtraInfoDownloader eid = new ExtraInfoDownloader(rdp, authority,
           directories);
     }
-
-    // Parse torperf files
-    // TODO maybe convert them in a format that is easier to process for R than the current one?
-    // TorperfParser tp = new TorperfParser(tsfh);
 
     // Write updated stats files to disk
     bsfh.writeFile();

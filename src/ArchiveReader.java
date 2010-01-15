@@ -14,14 +14,13 @@ public class ArchiveReader {
       Stack<File> filesInInputDir = new Stack<File>();
       filesInInputDir.add(new File(archivesDir));
       while (!filesInInputDir.isEmpty()) {
-        BufferedReader br = null;
         File pop = filesInInputDir.pop();
         if (pop.isDirectory()) {
           for (File f : pop.listFiles()) {
             filesInInputDir.add(f);
           }
         } else {
-          br = new BufferedReader(new FileReader(pop));
+          BufferedReader br = new BufferedReader(new FileReader(pop));
           rdp.parse(br);
           br.close();
         }

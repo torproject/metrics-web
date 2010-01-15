@@ -133,7 +133,8 @@ public class ConsensusStatsFileHandler {
         + "/consensus-stats... ");
     BufferedWriter bwConsensusStats = new BufferedWriter(
         new FileWriter(this.consensusStatsFile));
-    bwConsensusStats.append("date,exit,fast,guard,running,stable,brunning\n");
+    bwConsensusStats.append("date,exit,fast,guard,running,stable,"
+        + "brunning\n");
     SortedSet<String> allDates = new TreeSet<String>();
     allDates.addAll(csAggr.keySet());
     allDates.addAll(bcsAggr.keySet());
