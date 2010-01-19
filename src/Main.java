@@ -76,9 +76,9 @@ public class Main {
       SanitizedBridgesReader sbr = new SanitizedBridgesReader(bdp,
           "bridges", countries);
       BridgeSnapshotReader bsr = new BridgeSnapshotReader(bdp,
-          "bridge-directories", "stats/parsed-bridge-directories",
-          countries);
-      TorperfProcessor tp = new TorperfProcessor("stats", "torperf");
+          "bridge-directories", statsDirectory, countries);
+      TorperfProcessor tp = new TorperfProcessor(statsDirectory,
+          "torperf");
     }
 
     // Download current descriptors

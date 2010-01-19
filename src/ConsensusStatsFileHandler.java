@@ -56,6 +56,7 @@ public class ConsensusStatsFileHandler {
   public void writeFile() throws IOException {
     System.out.print("Writing file " + this.statsDir
         + "/consensus-stats-raw... ");
+    new File(this.statsDir).mkdirs();
     BufferedWriter bwConsensusStatsRaw = new BufferedWriter(
         new FileWriter(this.consensusStatsRawFile));
     String tempDate = null;

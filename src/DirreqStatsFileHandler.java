@@ -55,6 +55,7 @@ public class DirreqStatsFileHandler {
   public void writeFile() throws IOException {
     System.out.print("Writing file " + this.statsDir
         + "/dirreq-stats... ");
+    new File(this.statsDir).mkdirs();
     BufferedWriter bwDirreqStats = new BufferedWriter(
         new FileWriter(this.dirreqStatsFile));
     bwDirreqStats.append("directory,date");

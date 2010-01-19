@@ -80,6 +80,7 @@ public class BridgeStatsFileHandler {
   public void writeFile() throws IOException {
     System.out.print("Writing file " + this.statsDir
         + "/hashed-relay-identities... ");
+    new File(this.statsDir).mkdirs();
     BufferedWriter bwRelayIdentities = new BufferedWriter(
         new FileWriter(this.hashedRelayIdentitiesFile));
     for (String hashedRelay : this.hashedRelays) {

@@ -82,6 +82,7 @@ public class TorperfProcessor {
     if (rawObs.size() > 0) {
       System.out.print("Writing file " + statsDirectory
           + "/torperf-raw... ");
+      new File(statsDirectory).mkdirs();
       BufferedWriter bw = new BufferedWriter(new FileWriter(rawFile));
       bw.append("source,date,start,completemillis\n");
       String tempSourceDate = null;

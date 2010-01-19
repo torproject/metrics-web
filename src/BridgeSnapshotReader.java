@@ -9,15 +9,16 @@ import org.apache.commons.compress.archivers.tar.*;
  */
 public class BridgeSnapshotReader {
   public BridgeSnapshotReader(BridgeDescriptorParser bdp,
-      String bridgeDirectoriesDir, String parsedBridgeDirectories,
+      String bridgeDirectoriesDir, String statsDirectory,
       Set<String> countries) throws IOException, ParseException {
     SortedSet<String> parsed = new TreeSet<String>();
     File bdDir = new File(bridgeDirectoriesDir);
-    File pbdFile = new File(parsedBridgeDirectories);
+    File pbdFile = new File(statsDirectory
+         + "/parsed-bridge-directories");
     if (bdDir.exists()) {
       if (pbdFile.exists()) {
-        System.out.print("Reading file " + parsedBridgeDirectories
-            + "... ");
+        System.out.print("Reading file " + statsDirectory
+            + "/parsed-bridge-directories... ");
         BufferedReader br = new BufferedReader(new FileReader(pbdFile));
         String line = null;
         while ((line = br.readLine()) != null) {
@@ -56,6 +57,7 @@ public class BridgeSnapshotReader {
         }
       }
       System.out.print("done\nWriting file " + pbdFile + "... ");
+      new File(statsDirectory).mkdirs();
       BufferedWriter bw = new BufferedWriter(new FileWriter(pbdFile));
       for (String f : parsed) {
         bw.append(f + "\n");
