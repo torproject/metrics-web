@@ -9,18 +9,26 @@ public class ConsensusDownloader {
       throws IOException {
     System.out.print("Downloading current consensus from " + authority
         + "... ");
-    BufferedInputStream in = new BufferedInputStream(new URL("http://"
-        + authority + "/tor/status-vote/current/consensus").openStream());
-    StringBuilder sb = new StringBuilder();
-    int len;
-    byte[] data = new byte[1024];
-    while ((len = in.read(data, 0, 1024)) >= 0) {
-      sb.append(new String(data, 0, len));
+    URL u = new URL("http://" + authority
+        + "/tor/status-vote/current/consensus");
+    HttpURLConnection huc = (HttpURLConnection) u.openConnection();
+    huc.setRequestMethod("GET");
+    huc.connect();
+    int response = huc.getResponseCode();
+    if (response == 200) {
+      BufferedInputStream in = new BufferedInputStream(
+          huc.getInputStream());
+      StringBuilder sb = new StringBuilder();
+      int len;
+      byte[] data = new byte[1024];
+      while ((len = in.read(data, 0, 1024)) >= 0) {
+        sb.append(new String(data, 0, len));
+      }
+      in.close();
+      String consensus = sb.toString();
+      rdp.parse(new BufferedReader(new StringReader(consensus)));
     }
-    in.close();
-    String consensus = sb.toString();
     System.out.println("done");
-    rdp.parse(new BufferedReader(new StringReader(consensus)));
   }
 }
 
