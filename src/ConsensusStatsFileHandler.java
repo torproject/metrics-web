@@ -135,7 +135,7 @@ public class ConsensusStatsFileHandler {
         }
       }
       bwBridgeConsensusStatsRaw.close();
-      System.out.print("done");
+      System.out.println("done");
     }
     if (!csAggr.isEmpty() || !bcsAggr.isEmpty()) {
       System.out.print("Writing file " + this.statsDir

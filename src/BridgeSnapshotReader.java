@@ -56,7 +56,7 @@ public class BridgeSnapshotReader {
           parsed.add(pop.getName());
         }
       }
-      System.out.print("done");
+      System.out.println("done");
       if (!parsed.isEmpty()) {
         System.out.print("Writing file " + pbdFile + "... ");
         new File(statsDirectory).mkdirs();
