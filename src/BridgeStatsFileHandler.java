@@ -102,6 +102,7 @@ public class BridgeStatsFileHandler {
       }
     }
     bwBridgeStats.close();
+    System.out.println("done");
   }
 }
 
