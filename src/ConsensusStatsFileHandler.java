@@ -54,105 +54,115 @@ public class ConsensusStatsFileHandler {
     bridgeConsensusResults.put(published, published + "," + running);
   }
   public void writeFile() throws IOException {
-    System.out.print("Writing file " + this.statsDir
-        + "/consensus-stats-raw... ");
-    new File(this.statsDir).mkdirs();
-    BufferedWriter bwConsensusStatsRaw = new BufferedWriter(
-        new FileWriter(this.consensusStatsRawFile));
-    String tempDate = null;
-    int exitDay = 0, fastDay = 0, guardDay = 0, runningDay = 0,
-        stableDay = 0, consensusesDay = 0;
-    Iterator<String> it = consensusResults.values().iterator();
-    boolean haveWrittenFinalLine = false;
     SortedMap<String, String> csAggr = new TreeMap<String, String>();
-    while (it.hasNext() || !haveWrittenFinalLine) {
-      String next = it.hasNext() ? it.next() : null;
-      if (tempDate != null
-          && (next == null || !next.substring(0, 10).equals(tempDate))) {
-        if (consensusesDay > 11) {
-          csAggr.put(tempDate, tempDate + ","
-              + (exitDay / consensusesDay) + ","
-              + (fastDay / consensusesDay) + ","
-              + (guardDay / consensusesDay) + ","
-              + (runningDay / consensusesDay) + ","
-              + (stableDay / consensusesDay));
-        }
-        exitDay = 0;
-        fastDay = 0;
-        guardDay = 0;
-        runningDay = 0;
-        stableDay = 0;
-        consensusesDay = 0;
-        if (next == null) {
-          haveWrittenFinalLine = true;
-        }
-      }
-      if (next != null) {
-        bwConsensusStatsRaw.append(next + "\n");
-        String[] parts = next.split(",");
-        tempDate = next.substring(0, 10);
-        consensusesDay++;
-        exitDay += Integer.parseInt(parts[1]);
-        fastDay += Integer.parseInt(parts[2]);
-        guardDay += Integer.parseInt(parts[3]);
-        runningDay += Integer.parseInt(parts[4]);
-        stableDay += Integer.parseInt(parts[5]);
-      }
-    }
-    bwConsensusStatsRaw.close();
-    System.out.print("done\nWriting file " + this.statsDir
-        + "/bridge-consensus-stats-raw... ");
-    BufferedWriter bwBridgeConsensusStatsRaw = new BufferedWriter(
-        new FileWriter(this.bridgeConsensusStatsRawFile));
-    tempDate = null;
-    int brunningDay = 0, bridgeStatusesDay = 0;
-    it = bridgeConsensusResults.values().iterator();
-    haveWrittenFinalLine = false;
     SortedMap<String, String> bcsAggr = new TreeMap<String, String>();
-    while (it.hasNext() || !haveWrittenFinalLine) {
-      String next = it.hasNext() ? it.next() : null;
-      if (tempDate != null
-          && (next == null || !next.substring(0, 10).equals(tempDate))) {
-        if (bridgeStatusesDay > 23) {
-          bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay) + "\n");
+    if (!consensusResults.isEmpty()) {
+      System.out.print("Writing file " + this.statsDir
+          + "/consensus-stats-raw... ");
+      new File(this.statsDir).mkdirs();
+      BufferedWriter bwConsensusStatsRaw = new BufferedWriter(
+          new FileWriter(this.consensusStatsRawFile));
+      String tempDate = null;
+      int exitDay = 0, fastDay = 0, guardDay = 0, runningDay = 0,
+          stableDay = 0, consensusesDay = 0;
+      Iterator<String> it = consensusResults.values().iterator();
+      boolean haveWrittenFinalLine = false;
+      while (it.hasNext() || !haveWrittenFinalLine) {
+        String next = it.hasNext() ? it.next() : null;
+        if (tempDate != null
+            && (next == null || !next.substring(0, 10).equals(tempDate))) {
+          if (consensusesDay > 11) {
+            csAggr.put(tempDate, tempDate + ","
+                + (exitDay / consensusesDay) + ","
+                + (fastDay / consensusesDay) + ","
+                + (guardDay / consensusesDay) + ","
+                + (runningDay / consensusesDay) + ","
+                + (stableDay / consensusesDay));
+          }
+          exitDay = 0;
+          fastDay = 0;
+          guardDay = 0;
+          runningDay = 0;
+          stableDay = 0;
+          consensusesDay = 0;
+          if (next == null) {
+            haveWrittenFinalLine = true;
+          }
         }
-        brunningDay = 0;
-        bridgeStatusesDay = 0;
-        if (next == null) {
-          haveWrittenFinalLine = true;
+        if (next != null) {
+          bwConsensusStatsRaw.append(next + "\n");
+          String[] parts = next.split(",");
+          tempDate = next.substring(0, 10);
+          consensusesDay++;
+          exitDay += Integer.parseInt(parts[1]);
+          fastDay += Integer.parseInt(parts[2]);
+          guardDay += Integer.parseInt(parts[3]);
+          runningDay += Integer.parseInt(parts[4]);
+          stableDay += Integer.parseInt(parts[5]);
         }
       }
-      if (next != null) {
-        bwBridgeConsensusStatsRaw.append(next + "\n");
-        tempDate = next.substring(0, 10);
-        bridgeStatusesDay++;
-        brunningDay += Integer.parseInt(next.split(",")[1]);
-      }
+      bwConsensusStatsRaw.close();
+      System.out.println("done");
     }
-    bwBridgeConsensusStatsRaw.close();
-    System.out.print("done\nWriting file " + this.statsDir
-        + "/consensus-stats... ");
-    BufferedWriter bwConsensusStats = new BufferedWriter(
-        new FileWriter(this.consensusStatsFile));
-    bwConsensusStats.append("date,exit,fast,guard,running,stable,"
-        + "brunning\n");
-    SortedSet<String> allDates = new TreeSet<String>();
-    allDates.addAll(csAggr.keySet());
-    allDates.addAll(bcsAggr.keySet());
-    for (String date : allDates) {
-      if (csAggr.containsKey(date)) {
-        bwConsensusStats.append(csAggr.get(date));
-      } else {
-        bwConsensusStats.append(date + ",NA,NA,NA,NA,NA");
+    if (!bridgeConsensusResults.isEmpty()) {
+      System.out.print("Writing file " + this.statsDir
+          + "/bridge-consensus-stats-raw... ");
+      new File(this.statsDir).mkdirs();
+      BufferedWriter bwBridgeConsensusStatsRaw = new BufferedWriter(
+          new FileWriter(this.bridgeConsensusStatsRawFile));
+      String tempDate = null;
+      int brunningDay = 0, bridgeStatusesDay = 0;
+      Iterator<String> it = bridgeConsensusResults.values().iterator();
+      boolean haveWrittenFinalLine = false;
+      while (it.hasNext() || !haveWrittenFinalLine) {
+        String next = it.hasNext() ? it.next() : null;
+        if (tempDate != null
+            && (next == null || !next.substring(0, 10).equals(tempDate))) {
+          if (bridgeStatusesDay > 23) {
+            bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay) + "\n");
+          }
+          brunningDay = 0;
+          bridgeStatusesDay = 0;
+          if (next == null) {
+            haveWrittenFinalLine = true;
+          }
+        }
+        if (next != null) {
+          bwBridgeConsensusStatsRaw.append(next + "\n");
+          tempDate = next.substring(0, 10);
+          bridgeStatusesDay++;
+          brunningDay += Integer.parseInt(next.split(",")[1]);
+        }
       }
-      if (bcsAggr.containsKey(date)) {
-        bwConsensusStats.append("," + bcsAggr.get(date));
-      } else {
-        bwConsensusStats.append(",NA\n");
-      }
+      bwBridgeConsensusStatsRaw.close();
+      System.out.print("done");
     }
-    bwConsensusStats.close();
-    System.out.println("done");
+    if (!csAggr.isEmpty() || !bcsAggr.isEmpty()) {
+      System.out.print("Writing file " + this.statsDir
+          + "/consensus-stats... ");
+      new File(this.statsDir).mkdirs();
+      BufferedWriter bwConsensusStats = new BufferedWriter(
+          new FileWriter(this.consensusStatsFile));
+      bwConsensusStats.append("date,exit,fast,guard,running,stable,"
+          + "brunning\n");
+      SortedSet<String> allDates = new TreeSet<String>();
+      allDates.addAll(csAggr.keySet());
+      allDates.addAll(bcsAggr.keySet());
+      for (String date : allDates) {
+        if (csAggr.containsKey(date)) {
+          bwConsensusStats.append(csAggr.get(date));
+        } else {
+          bwConsensusStats.append(date + ",NA,NA,NA,NA,NA");
+        }
+        if (bcsAggr.containsKey(date)) {
+          bwConsensusStats.append("," + bcsAggr.get(date));
+        } else {
+          bwConsensusStats.append(",NA\n");
+        }
+      }
+      bwConsensusStats.close();
+      System.out.println("done");
+    }
   }
 }
 

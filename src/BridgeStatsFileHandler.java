@@ -78,32 +78,38 @@ public class BridgeStatsFileHandler {
   }
 
   public void writeFile() throws IOException {
-    System.out.print("Writing file " + this.statsDir
-        + "/hashed-relay-identities... ");
-    new File(this.statsDir).mkdirs();
-    BufferedWriter bwRelayIdentities = new BufferedWriter(
-        new FileWriter(this.hashedRelayIdentitiesFile));
-    for (String hashedRelay : this.hashedRelays) {
-      bwRelayIdentities.append(hashedRelay + "\n");
-    }
-    bwRelayIdentities.close();
-    System.out.print("done\nWriting file " + this.statsDir
-        + "/bridge-stats...");
-    BufferedWriter bwBridgeStats = new BufferedWriter(
-        new FileWriter(this.bridgeStatsFile));
-    bwBridgeStats.append("bridge,date,time");
-    for (String c : this.countries) {
-      bwBridgeStats.append("," + c);
-    }
-    bwBridgeStats.append("\n");
-    for (String observation : this.observations.values()) {
-      String hashedBridgeIdentity = observation.split(",")[0];
-      if (!this.hashedRelays.contains(hashedBridgeIdentity)) {
-        bwBridgeStats.append(observation + "\n");
+    if (!this.hashedRelays.isEmpty()) {
+      System.out.print("Writing file " + this.statsDir
+          + "/hashed-relay-identities... ");
+      new File(this.statsDir).mkdirs();
+      BufferedWriter bwRelayIdentities = new BufferedWriter(
+          new FileWriter(this.hashedRelayIdentitiesFile));
+      for (String hashedRelay : this.hashedRelays) {
+        bwRelayIdentities.append(hashedRelay + "\n");
       }
+      bwRelayIdentities.close();
+      System.out.println("done");
     }
-    bwBridgeStats.close();
-    System.out.println("done");
+    if (!this.observations.isEmpty()) {
+      System.out.print("Writing file " + this.statsDir
+          + "/bridge-stats...");
+      new File(this.statsDir).mkdirs();
+      BufferedWriter bwBridgeStats = new BufferedWriter(
+          new FileWriter(this.bridgeStatsFile));
+      bwBridgeStats.append("bridge,date,time");
+      for (String c : this.countries) {
+        bwBridgeStats.append("," + c);
+      }
+      bwBridgeStats.append("\n");
+      for (String observation : this.observations.values()) {
+        String hashedBridgeIdentity = observation.split(",")[0];
+        if (!this.hashedRelays.contains(hashedBridgeIdentity)) {
+          bwBridgeStats.append(observation + "\n");
+        }
+      }
+      bwBridgeStats.close();
+      System.out.println("done");
+    }
   }
 }
 

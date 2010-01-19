@@ -56,14 +56,17 @@ public class BridgeSnapshotReader {
           parsed.add(pop.getName());
         }
       }
-      System.out.print("done\nWriting file " + pbdFile + "... ");
-      new File(statsDirectory).mkdirs();
-      BufferedWriter bw = new BufferedWriter(new FileWriter(pbdFile));
-      for (String f : parsed) {
-        bw.append(f + "\n");
+      System.out.print("done");
+      if (!parsed.isEmpty()) {
+        System.out.print("Writing file " + pbdFile + "... ");
+        new File(statsDirectory).mkdirs();
+        BufferedWriter bw = new BufferedWriter(new FileWriter(pbdFile));
+        for (String f : parsed) {
+          bw.append(f + "\n");
+        }
+        bw.close();
+        System.out.println("done");
       }
-      bw.close();
-      System.out.println("done");
     }
   }
 }

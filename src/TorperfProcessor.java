@@ -118,6 +118,7 @@ public class TorperfProcessor {
     if (stats.size() > 0) {
       System.out.print("Writing file " + statsDirectory
           + "/torperf-stats... ");
+      new File(statsDirectory).mkdirs();
       BufferedWriter bw = new BufferedWriter(new FileWriter(statsFile));
       bw.append("source,date,q1,md,q3\n");
       // TODO should we handle missing days?

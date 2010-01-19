@@ -53,21 +53,23 @@ public class DirreqStatsFileHandler {
     this.observations.put(obsKey, sb.toString());
   }
   public void writeFile() throws IOException {
-    System.out.print("Writing file " + this.statsDir
-        + "/dirreq-stats... ");
-    new File(this.statsDir).mkdirs();
-    BufferedWriter bwDirreqStats = new BufferedWriter(
-        new FileWriter(this.dirreqStatsFile));
-    bwDirreqStats.append("directory,date");
-    for (String country : this.countries) {
-      bwDirreqStats.append("," + country);
+    if (!this.observations.isEmpty()) {
+      System.out.print("Writing file " + this.statsDir
+          + "/dirreq-stats... ");
+      new File(this.statsDir).mkdirs();
+      BufferedWriter bwDirreqStats = new BufferedWriter(
+          new FileWriter(this.dirreqStatsFile));
+      bwDirreqStats.append("directory,date");
+      for (String country : this.countries) {
+        bwDirreqStats.append("," + country);
+      }
+      bwDirreqStats.append(",share\n");
+      for (String observation : this.observations.values()) {
+        bwDirreqStats.append(observation + "\n");
+      }
+      bwDirreqStats.close();
+      System.out.println("done");
     }
-    bwDirreqStats.append(",share\n");
-    for (String observation : this.observations.values()) {
-      bwDirreqStats.append(observation + "\n");
-    }
-    bwDirreqStats.close();
-    System.out.println("done");
   }
 }
 
