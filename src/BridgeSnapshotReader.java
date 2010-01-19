@@ -39,20 +39,25 @@ public class BridgeSnapshotReader {
           }
         } else if (!parsed.contains(pop.getName())) {
           FileInputStream in = new FileInputStream(pop);
-          GzipCompressorInputStream gcis =
-              new GzipCompressorInputStream(in);
-          TarArchiveInputStream tais = new TarArchiveInputStream(gcis);
-          InputStreamReader isr = new InputStreamReader(tais);
-          BufferedReader br = new BufferedReader(isr);
-          TarArchiveEntry en = null;
-          String fn = pop.getName();
-          String dateTime = fn.substring(11, 21) + " "
-                + fn.substring(22, 24) + ":" + fn.substring(24, 26) + ":"
-                + fn.substring(26, 28);
-          while ((en = tais.getNextTarEntry()) != null) {
-            bdp.parse(br, dateTime, false);
+          if (in.available() > 0) {
+            GzipCompressorInputStream gcis =
+                new GzipCompressorInputStream(in);
+            TarArchiveInputStream tais = new TarArchiveInputStream(gcis);
+            InputStreamReader isr = new InputStreamReader(tais);
+            BufferedReader br = new BufferedReader(isr);
+            TarArchiveEntry en = null;
+            String fn = pop.getName();
+            String dateTime = fn.substring(11, 21) + " "
+                  + fn.substring(22, 24) + ":" + fn.substring(24, 26) + ":"
+                  + fn.substring(26, 28);
+            while ((en = tais.getNextTarEntry()) != null) {
+              bdp.parse(br, dateTime, false);
+            }
+          } else {
+            // TODO take this out once we're sure that empty files are skipped
+            System.out.println("Skipping empty file " + pop.getName());
           }
-          br.close();
+          in.close();
           parsed.add(pop.getName());
         }
       }
