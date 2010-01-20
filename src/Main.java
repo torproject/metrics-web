@@ -42,7 +42,7 @@ public class Main {
     SortedMap<String, String> directories = new TreeMap<String, String>();
     directories.put("8522EB98C91496E80EC238E732594D1509158E77",
         "trusted");
-    directories.put("FFCB46DB1339DA84674C70D7CB586434C4370441",
+    directories.put("9695DFC35FFEB861329B9F1AB04C46397020CE31",
         "moria1");
 
     // Prepare stats file handlers which will be initialized by the
