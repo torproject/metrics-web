@@ -33,8 +33,17 @@ for (intervalInd in 1:length(intervals)) {
   for (i in 1:(length(monthticks) - 1))
     monthat <- c(monthat, (monthticks[i] + monthticks[i + 1]) / 2 + .5)
 
-  sources <- c("gabelmoo", "moria", "torperf")
-  colors <- c("#0000EE", "#EE0000", "#00CD00")
+  sources <- c()
+  colors <- c()
+  height <- 800
+  if (intervalInd == 1) {
+    sources <- c("gabelmoo", "moria", "torperf")
+    colors <- c("#0000EE", "#EE0000", "#00CD00")
+  } else {
+    sources <- c("torperf")
+    colors <- c("#00CD00")
+    height <- 400
+  }
   sizes <- c("5mb", "1mb", "50kb")
   sizePrint <- c("5 MiB", "1 MiB", "50 KiB")
 
@@ -42,8 +51,8 @@ for (intervalInd in 1:length(intervals)) {
     size <- sizes[sizeInd]
     sizePr <- sizePrint[sizeInd]
     png(paste("website/graphs/torperf-", size, "-", interval, ".png",
-        sep = ""), width=600, height=800)
-    par(mfrow=c(3, 1))
+        sep = ""), width=600, height=height)
+    par(mfrow=c(length(sources), 1))
     par(mar=c(4.3,3.1,2.1,0.1))
     maxY <- max(na.omit(subset(t, source %in% paste(sources, size,
         sep = "-"))$q3)) / 1e3 * .8
@@ -84,7 +93,8 @@ for (intervalInd in 1:length(intervals)) {
       colquart <- paste(color, "66", sep="")
 
       plot(medians_/1e3, ylim=c(0, maxY), type="l", col=colmed, lwd=2,
-          main=title, axes=FALSE, ylab="", xlab=xlab, cex.main=1.9)
+          main=title, axes=FALSE, ylab="", xlab=xlab,
+          cex.main=ifelse(intervalInd == 1, 1.9, 1.25))
       polygon(na.omit(xp2), na.omit(yp), col=colquart, lty=0)
 
       axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
@@ -94,7 +104,8 @@ for (intervalInd in 1:length(intervals)) {
       axis(2, las=1, at=c(0, maxY), lwd.ticks=0, labels=FALSE)
 
       legend(title = paste("Measured times on", sourceName, "per day"),
-          x=length(datesStr)/2, xjust=0.5, y=maxY, yjust=1, cex=1.5,
+          x=length(datesStr)/2, xjust=0.5, y=maxY, yjust=1,
+          cex=ifelse(intervalInd == 1, 1.5, 1),
           c("Median", "1st to 3rd quartile"), fill=c(colmed, colquart),
           bty="n", ncol=2)
     }
