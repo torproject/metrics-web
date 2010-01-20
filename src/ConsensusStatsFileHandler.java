@@ -129,37 +129,39 @@ public class ConsensusStatsFileHandler {
         System.out.println("failed");
       }
       if (!bridgeConsensusResults.isEmpty()) {
+        String tempDate = null;
+        int brunningDay = 0, bridgeStatusesDay = 0;
+        Iterator<String> it = bridgeConsensusResults.values().iterator();
+        boolean haveWrittenFinalLine = false;
+        while (it.hasNext() || !haveWrittenFinalLine) {
+          String next = it.hasNext() ? it.next() : null;
+          if (tempDate != null
+              && (next == null
+              || !next.substring(0, 10).equals(tempDate))) {
+            if (bridgeStatusesDay > 23) {
+              bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay)
+                  + "\n");
+            }
+            brunningDay = 0;
+            bridgeStatusesDay = 0;
+            if (next == null) {
+              haveWrittenFinalLine = true;
+            }
+          }
+          if (next != null) {
+            tempDate = next.substring(0, 10);
+            bridgeStatusesDay++;
+            brunningDay += Integer.parseInt(next.split(",")[1]);
+          }
+        }
         System.out.print("Writing file " + this.statsDir
             + "/bridge-consensus-stats-raw... ");
         try {
           new File(this.statsDir).mkdirs();
           BufferedWriter bwBridgeConsensusStatsRaw = new BufferedWriter(
               new FileWriter(this.bridgeConsensusStatsRawFile));
-          String tempDate = null;
-          int brunningDay = 0, bridgeStatusesDay = 0;
-          Iterator<String> it = bridgeConsensusResults.values().iterator();
-          boolean haveWrittenFinalLine = false;
-          while (it.hasNext() || !haveWrittenFinalLine) {
-            String next = it.hasNext() ? it.next() : null;
-            if (tempDate != null
-                && (next == null
-                || !next.substring(0, 10).equals(tempDate))) {
-              if (bridgeStatusesDay > 23) {
-                bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay)
-                    + "\n");
-              }
-              brunningDay = 0;
-              bridgeStatusesDay = 0;
-              if (next == null) {
-                haveWrittenFinalLine = true;
-              }
-            }
-            if (next != null) {
-              bwBridgeConsensusStatsRaw.append(next + "\n");
-              tempDate = next.substring(0, 10);
-              bridgeStatusesDay++;
-              brunningDay += Integer.parseInt(next.split(",")[1]);
-            }
+          for (String line : bridgeConsensusResults.values()) {
+            bwBridgeConsensusStatsRaw.append(line + "\n");
           }
           bwBridgeConsensusStatsRaw.close();
           System.out.println("done");
