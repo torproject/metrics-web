@@ -14,7 +14,7 @@ public class BridgeStatsFileHandler {
   private boolean initialized;
   private boolean modified;
   public BridgeStatsFileHandler(String statsDir,
-      SortedSet<String> countries) throws IOException {
+      SortedSet<String> countries) {
     this.statsDir = statsDir;
     this.countries = countries;
     this.bridgeStatsFile = new File(statsDir + "/bridge-stats");
@@ -95,41 +95,45 @@ public class BridgeStatsFileHandler {
     this.modified = true;
   }
 
-  public void writeFile() throws IOException {
+  public void writeFile() {
     if (!this.modified) {
       return;
     }
-    if (!this.hashedRelays.isEmpty()) {
-      System.out.print("Writing file " + this.statsDir
-          + "/hashed-relay-identities... ");
-      new File(this.statsDir).mkdirs();
-      BufferedWriter bwRelayIdentities = new BufferedWriter(
-          new FileWriter(this.hashedRelayIdentitiesFile));
-      for (String hashedRelay : this.hashedRelays) {
-        bwRelayIdentities.append(hashedRelay + "\n");
-      }
-      bwRelayIdentities.close();
-      System.out.println("done");
-    }
-    if (!this.observations.isEmpty()) {
-      System.out.print("Writing file " + this.statsDir
-          + "/bridge-stats...");
-      new File(this.statsDir).mkdirs();
-      BufferedWriter bwBridgeStats = new BufferedWriter(
-          new FileWriter(this.bridgeStatsFile));
-      bwBridgeStats.append("bridge,date,time");
-      for (String c : this.countries) {
-        bwBridgeStats.append("," + c);
-      }
-      bwBridgeStats.append("\n");
-      for (String observation : this.observations.values()) {
-        String hashedBridgeIdentity = observation.split(",")[0];
-        if (!this.hashedRelays.contains(hashedBridgeIdentity)) {
-          bwBridgeStats.append(observation + "\n");
+    try {
+      if (!this.hashedRelays.isEmpty()) {
+        System.out.print("Writing file " + this.statsDir
+            + "/hashed-relay-identities... ");
+        new File(this.statsDir).mkdirs();
+        BufferedWriter bwRelayIdentities = new BufferedWriter(
+            new FileWriter(this.hashedRelayIdentitiesFile));
+        for (String hashedRelay : this.hashedRelays) {
+          bwRelayIdentities.append(hashedRelay + "\n");
         }
+        bwRelayIdentities.close();
+        System.out.println("done");
       }
-      bwBridgeStats.close();
-      System.out.println("done");
+      if (!this.observations.isEmpty()) {
+        System.out.print("Writing file " + this.statsDir
+            + "/bridge-stats...");
+        new File(this.statsDir).mkdirs();
+        BufferedWriter bwBridgeStats = new BufferedWriter(
+            new FileWriter(this.bridgeStatsFile));
+        bwBridgeStats.append("bridge,date,time");
+        for (String c : this.countries) {
+          bwBridgeStats.append("," + c);
+        }
+        bwBridgeStats.append("\n");
+        for (String observation : this.observations.values()) {
+          String hashedBridgeIdentity = observation.split(",")[0];
+          if (!this.hashedRelays.contains(hashedBridgeIdentity)) {
+            bwBridgeStats.append(observation + "\n");
+          }
+        }
+        bwBridgeStats.close();
+        System.out.println("done");
+      }
+    } catch (IOException e) {
+      System.out.println("failed");
     }
   }
 }

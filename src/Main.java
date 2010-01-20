@@ -7,9 +7,7 @@ import java.util.*;
  * statistically relevant data for later processing with R.
  */
 public class Main {
-// TODO handle exceptions better!
-  public static void main(String[] args) throws IOException,
-      ParseException {
+  public static void main(String[] args) {
 
     // Use lock file to avoid overlapping runs
     LockFile lf = new LockFile();
@@ -75,9 +73,8 @@ public class Main {
 
     // Download current descriptors
     if (!importOnly) {
-      ConsensusDownloader cd = new ConsensusDownloader(rdp, authority);
-      ExtraInfoDownloader eid = new ExtraInfoDownloader(rdp, authority,
-          directories);
+      RelayDescriptorDownloader rdd = new RelayDescriptorDownloader(rdp,
+          authority, directories);
     }
 
     // Write updated stats files to disk

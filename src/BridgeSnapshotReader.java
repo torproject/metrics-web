@@ -10,27 +10,33 @@ import org.apache.commons.compress.archivers.tar.*;
 public class BridgeSnapshotReader {
   public BridgeSnapshotReader(BridgeDescriptorParser bdp,
       String bridgeDirectoriesDir, String statsDirectory,
-      Set<String> countries) throws IOException, ParseException {
+      Set<String> countries) {
     SortedSet<String> parsed = new TreeSet<String>();
     File bdDir = new File(bridgeDirectoriesDir);
     File pbdFile = new File(statsDirectory
          + "/parsed-bridge-directories");
+    boolean modified = false;
     if (bdDir.exists()) {
       if (pbdFile.exists()) {
         System.out.print("Reading file " + statsDirectory
             + "/parsed-bridge-directories... ");
-        BufferedReader br = new BufferedReader(new FileReader(pbdFile));
-        String line = null;
-        while ((line = br.readLine()) != null) {
-          parsed.add(line);
+        try {
+          BufferedReader br = new BufferedReader(new FileReader(pbdFile));
+          String line = null;
+          while ((line = br.readLine()) != null) {
+            parsed.add(line);
+          }
+          br.close();
+          System.out.println("done");
+        } catch (IOException e) {
+          System.out.println("failed");
         }
-        br.close();
-        System.out.println("done");
       }
       System.out.print("Importing files in directory "
           + bridgeDirectoriesDir + "/... ");
       Stack<File> filesInInputDir = new Stack<File>();
       filesInInputDir.add(bdDir);
+      List<File> problems = new ArrayList<File>();
       while (!filesInInputDir.isEmpty()) {
         File pop = filesInInputDir.pop();
         if (pop.isDirectory()) {
@@ -38,39 +44,65 @@ public class BridgeSnapshotReader {
             filesInInputDir.add(f);
           }
         } else if (!parsed.contains(pop.getName())) {
-          FileInputStream in = new FileInputStream(pop);
-          if (in.available() > 0) {
-            GzipCompressorInputStream gcis =
-                new GzipCompressorInputStream(in);
-            TarArchiveInputStream tais = new TarArchiveInputStream(gcis);
-            InputStreamReader isr = new InputStreamReader(tais);
-            BufferedReader br = new BufferedReader(isr);
-            TarArchiveEntry en = null;
-            String fn = pop.getName();
-            String dateTime = fn.substring(11, 21) + " "
-                  + fn.substring(22, 24) + ":" + fn.substring(24, 26) + ":"
-                  + fn.substring(26, 28);
-            while ((en = tais.getNextTarEntry()) != null) {
-              bdp.parse(br, dateTime, false);
+          try {
+            FileInputStream in = new FileInputStream(pop);
+            if (in.available() > 0) {
+              GzipCompressorInputStream gcis =
+                  new GzipCompressorInputStream(in);
+              TarArchiveInputStream tais = new TarArchiveInputStream(gcis);
+              InputStreamReader isr = new InputStreamReader(tais);
+              BufferedReader br = new BufferedReader(isr);
+              TarArchiveEntry en = null;
+              String fn = pop.getName();
+              String dateTime = fn.substring(11, 21) + " "
+                    + fn.substring(22, 24) + ":" + fn.substring(24, 26)
+                    + ":" + fn.substring(26, 28);
+              while ((en = tais.getNextTarEntry()) != null) {
+                bdp.parse(br, dateTime, false);
+              }
             }
-          } else {
-            // TODO take this out once we're sure that empty files are skipped
-            System.out.println("Skipping empty file " + pop.getName());
+            in.close();
+            parsed.add(pop.getName());
+            modified = true;
+          } catch (ParseException e) {
+            problems.add(pop);
+            if (problems.size() > 3) {
+              break;
+            }
+          } catch (IOException e) {
+            problems.add(pop);
+            if (problems.size() > 3) {
+              break;
+            }
           }
-          in.close();
-          parsed.add(pop.getName());
         }
       }
-      System.out.println("done");
-      if (!parsed.isEmpty()) {
-        System.out.print("Writing file " + pbdFile + "... ");
-        new File(statsDirectory).mkdirs();
-        BufferedWriter bw = new BufferedWriter(new FileWriter(pbdFile));
-        for (String f : parsed) {
-          bw.append(f + "\n");
-        }
-        bw.close();
+      if (problems.isEmpty()) {
         System.out.println("done");
+      } else {
+        System.out.println("failed");
+        int printed = 0;
+        for (File f : problems) {
+          System.out.println("  " + f.getAbsolutePath());
+          if (++printed >= 3) {
+            System.out.println("  ... more");
+            break;
+          }
+        }
+      }
+      if (!parsed.isEmpty() && modified) {
+        System.out.print("Writing file " + pbdFile + "... ");
+        try {
+          new File(statsDirectory).mkdirs();
+          BufferedWriter bw = new BufferedWriter(new FileWriter(pbdFile));
+          for (String f : parsed) {
+            bw.append(f + "\n");
+          }
+          bw.close();
+          System.out.println("done");
+        } catch (IOException e) {
+          System.out.println("failed");
+        }
       }
     }
   }

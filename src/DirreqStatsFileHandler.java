@@ -12,7 +12,7 @@ public class DirreqStatsFileHandler {
   private boolean initialized;
   private boolean modified;
   public DirreqStatsFileHandler(String statsDir,
-      SortedSet<String> countries) throws IOException {
+      SortedSet<String> countries) {
     this.statsDir = statsDir;
     this.countries = countries;
     this.dirreqStatsFile = new File(statsDir + "/dirreq-stats");
@@ -60,26 +60,30 @@ public class DirreqStatsFileHandler {
     this.observations.put(obsKey, sb.toString());
     this.modified = true;
   }
-  public void writeFile() throws IOException {
+  public void writeFile() {
     if (!this.modified) {
       return;
     }
-    if (!this.observations.isEmpty()) {
-      System.out.print("Writing file " + this.statsDir
-          + "/dirreq-stats... ");
-      new File(this.statsDir).mkdirs();
-      BufferedWriter bwDirreqStats = new BufferedWriter(
-          new FileWriter(this.dirreqStatsFile));
-      bwDirreqStats.append("directory,date");
-      for (String country : this.countries) {
-        bwDirreqStats.append("," + country);
+    try {
+      if (!this.observations.isEmpty()) {
+        System.out.print("Writing file " + this.statsDir
+            + "/dirreq-stats... ");
+        new File(this.statsDir).mkdirs();
+        BufferedWriter bwDirreqStats = new BufferedWriter(
+            new FileWriter(this.dirreqStatsFile));
+        bwDirreqStats.append("directory,date");
+        for (String country : this.countries) {
+          bwDirreqStats.append("," + country);
+        }
+        bwDirreqStats.append(",share\n");
+        for (String observation : this.observations.values()) {
+          bwDirreqStats.append(observation + "\n");
+        }
+        bwDirreqStats.close();
+        System.out.println("done");
       }
-      bwDirreqStats.append(",share\n");
-      for (String observation : this.observations.values()) {
-        bwDirreqStats.append(observation + "\n");
-      }
-      bwDirreqStats.close();
-      System.out.println("done");
+    } catch (IOException e) {
+      System.out.println("failed");
     }
   }
 }
