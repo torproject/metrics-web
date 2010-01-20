@@ -13,6 +13,10 @@ public class BridgeDescriptorParser {
     this.bsfh = bsfh;
     this.countries = countries;
   }
+  public void initialize() throws IOException {
+    this.csfh.initialize();
+    this.bsfh.initialize();
+  }
   public void parse(BufferedReader br, String dateTime, boolean sanitized)
       throws IOException, ParseException {
     SimpleDateFormat timeFormat = new SimpleDateFormat(

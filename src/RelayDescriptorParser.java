@@ -23,6 +23,11 @@ public class RelayDescriptorParser {
     this.countries = countries;
     this.directories = directories;
   }
+  public void initialize() throws IOException {
+    this.csfh.initialize();
+    this.bsfh.initialize();
+    this.dsfh.initialize();
+  }
   public void parse(BufferedReader br) throws IOException {
     String line = br.readLine();
     if (line.equals("network-status-version 3")) {

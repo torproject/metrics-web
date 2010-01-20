@@ -22,7 +22,10 @@ public class BridgeStatsFileHandler {
     this.hashedRelayIdentitiesFile = new File(statsDir
         + "/hashed-relay-identities");
   }
-  private void initialize() throws IOException {
+  public void initialize() throws IOException {
+    if (this.initialized) {
+      return;
+    }
     if (this.bridgeStatsFile.exists()) {
       System.out.print("Reading file " + statsDir + "/bridge-stats... ");
       BufferedReader br = new BufferedReader(new FileReader(
@@ -65,7 +68,7 @@ public class BridgeStatsFileHandler {
   public void addHashedRelay(String hashedRelayIdentity)
       throws IOException {
     if (!this.initialized) {
-      this.initialize();
+      throw new RuntimeException("Not initialized!");
     }
     this.hashedRelays.add(hashedRelayIdentity);
     this.modified = true;
@@ -73,14 +76,14 @@ public class BridgeStatsFileHandler {
   public boolean isKnownRelay(String hashedBridgeIdentity)
       throws IOException {
     if (!this.initialized) {
-      this.initialize();
+      throw new RuntimeException("Not initialized!");
     }
     return this.hashedRelays.contains(hashedBridgeIdentity);
   }
   public void addObs(String hashedIdentity, String date,
       String time, Map<String, String> obs) throws IOException {
     if (!this.initialized) {
-      this.initialize();
+      throw new RuntimeException("Not initialized!");
     }
     String key = hashedIdentity + "," + date;
     StringBuilder sb = new StringBuilder(key + "," + time);

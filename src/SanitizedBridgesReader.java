@@ -7,6 +7,11 @@ public class SanitizedBridgesReader {
   public SanitizedBridgesReader(BridgeDescriptorParser bdp,
       String bridgesDir, SortedSet<String> countries) {
     if (new File(bridgesDir).exists()) {
+      try {
+        bdp.initialize();
+      } catch (IOException e) {
+        return;
+      }
       System.out.print("Importing files in directory " + bridgesDir
           + "/... ");
       Stack<File> filesInInputDir = new Stack<File>();

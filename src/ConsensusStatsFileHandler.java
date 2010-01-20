@@ -23,7 +23,10 @@ public class ConsensusStatsFileHandler {
         + "/bridge-consensus-stats-raw");
     this.consensusStatsFile = new File(statsDir + "/consensus-stats");
   }
-  private void initialize() throws IOException {
+  public void initialize() throws IOException {
+    if (this.initialized) {
+      return;
+    }
     if (this.consensusStatsRawFile.exists()) {
       System.out.print("Reading file " + statsDir
           + "/consensus-stats-raw... ");
@@ -53,7 +56,7 @@ public class ConsensusStatsFileHandler {
   public void addConsensusResults(String validAfter, int exit, int fast,
       int guard, int running, int stable) throws IOException {
     if (!this.initialized) {
-      this.initialize();
+      throw new RuntimeException("Not initialized!");
     }
     consensusResults.put(validAfter, validAfter + "," + exit + "," + fast
         + "," + guard + "," + running + "," + stable);
@@ -62,7 +65,7 @@ public class ConsensusStatsFileHandler {
   public void addBridgeConsensusResults(String published, int running)
       throws IOException {
     if (!this.initialized) {
-      this.initialize();
+      throw new RuntimeException("Not initialized!");
     }
     bridgeConsensusResults.put(published, published + "," + running);
     this.modified = true;

@@ -18,7 +18,10 @@ public class DirreqStatsFileHandler {
     this.dirreqStatsFile = new File(statsDir + "/dirreq-stats");
     this.observations = new TreeMap<String, String>();
   }
-  private void initialize() throws IOException {
+  public void initialize() throws IOException {
+    if (this.initialized) {
+      return;
+    }
     if (this.dirreqStatsFile.exists()) {
       System.out.print("Reading file " + statsDir + "/dirreq-stats... ");
       BufferedReader br = new BufferedReader(new FileReader(
@@ -49,7 +52,7 @@ public class DirreqStatsFileHandler {
   public void addObs(String dirNickname, String date,
       Map<String, String> obs, String share) throws IOException {
     if (!this.initialized) {
-      this.initialize();
+      throw new RuntimeException("Not initialized!");
     }
     String obsKey = dirNickname + "," + date;
     StringBuilder sb = new StringBuilder(obsKey);

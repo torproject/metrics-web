@@ -8,6 +8,11 @@ import java.util.*;
 public class ArchiveReader {
   public ArchiveReader(RelayDescriptorParser rdp, String archivesDir) {
     if (new File(archivesDir).exists()) {
+      try {
+        rdp.initialize();
+      } catch (IOException e) {
+        return;
+      }
       System.out.print("Importing files in directory " + archivesDir
           + "/... ");
       Stack<File> filesInInputDir = new Stack<File>();

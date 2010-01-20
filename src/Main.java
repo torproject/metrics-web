@@ -45,7 +45,8 @@ public class Main {
     directories.put("FFCB46DB1339DA84674C70D7CB586434C4370441",
         "moria1");
 
-    // Prepare stats file handlers
+    // Prepare stats file handlers which will be initialized by the
+    // importing/downloading classes
     String statsDirectory = "stats";
     ConsensusStatsFileHandler csfh = new ConsensusStatsFileHandler(
         statsDirectory);
