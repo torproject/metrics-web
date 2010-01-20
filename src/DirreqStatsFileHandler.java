@@ -22,6 +22,7 @@ public class DirreqStatsFileHandler {
     if (this.initialized) {
       return;
     }
+    this.initialized = true;
     if (this.dirreqStatsFile.exists()) {
       System.out.print("Reading file " + statsDir + "/dirreq-stats... ");
       BufferedReader br = new BufferedReader(new FileReader(
@@ -47,7 +48,6 @@ public class DirreqStatsFileHandler {
       System.out.println("done");
       br.close();
     }
-    this.initialized = true;
   }
   public void addObs(String dirNickname, String date,
       Map<String, String> obs, String share) throws IOException {

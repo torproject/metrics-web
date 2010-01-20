@@ -27,6 +27,7 @@ public class ConsensusStatsFileHandler {
     if (this.initialized) {
       return;
     }
+    this.initialized = true;
     if (this.consensusStatsRawFile.exists()) {
       System.out.print("Reading file " + statsDir
           + "/consensus-stats-raw... ");
@@ -51,7 +52,6 @@ public class ConsensusStatsFileHandler {
       System.out.println("done");
       br.close();
     }
-    this.initialized = true;
   }
   public void addConsensusResults(String validAfter, int exit, int fast,
       int guard, int running, int stable) throws IOException {

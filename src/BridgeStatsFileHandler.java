@@ -26,6 +26,7 @@ public class BridgeStatsFileHandler {
     if (this.initialized) {
       return;
     }
+    this.initialized = true;
     if (this.bridgeStatsFile.exists()) {
       System.out.print("Reading file " + statsDir + "/bridge-stats... ");
       BufferedReader br = new BufferedReader(new FileReader(
@@ -63,7 +64,6 @@ public class BridgeStatsFileHandler {
       br.close();
       System.out.println("done");
     }
-    this.initialized = true;
   }
   public void addHashedRelay(String hashedRelayIdentity)
       throws IOException {
