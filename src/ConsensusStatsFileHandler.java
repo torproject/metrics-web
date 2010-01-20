@@ -11,11 +11,19 @@ public class ConsensusStatsFileHandler {
   private File consensusStatsFile;
   private SortedMap<String, String> consensusResults;
   private SortedMap<String, String> bridgeConsensusResults;
+  private boolean initialized;
+  private boolean modified;
   public ConsensusStatsFileHandler(String statsDir) throws IOException {
     this.statsDir = statsDir;
     this.consensusResults = new TreeMap<String, String>();
     this.consensusStatsRawFile = new File(statsDir
         + "/consensus-stats-raw");
+    this.bridgeConsensusResults = new TreeMap<String, String>();
+    this.bridgeConsensusStatsRawFile = new File(statsDir
+        + "/bridge-consensus-stats-raw");
+    this.consensusStatsFile = new File(statsDir + "/consensus-stats");
+  }
+  private void initialize() throws IOException {
     if (this.consensusStatsRawFile.exists()) {
       System.out.print("Reading file " + statsDir
           + "/consensus-stats-raw... ");
@@ -28,9 +36,6 @@ public class ConsensusStatsFileHandler {
       System.out.println("done");
       br.close();
     }
-    this.bridgeConsensusResults = new TreeMap<String, String>();
-    this.bridgeConsensusStatsRawFile = new File(statsDir
-        + "/bridge-consensus-stats-raw");
     if (this.bridgeConsensusStatsRawFile.exists()) {
       System.out.print("Reading file " + statsDir
           + "/bridge-consensus-stats-raw... ");
@@ -43,17 +48,29 @@ public class ConsensusStatsFileHandler {
       System.out.println("done");
       br.close();
     }
-    this.consensusStatsFile = new File(statsDir + "/consensus-stats");
+    this.initialized = true;
   }
   public void addConsensusResults(String validAfter, int exit, int fast,
-      int guard, int running, int stable) {
+      int guard, int running, int stable) throws IOException {
+    if (!this.initialized) {
+      this.initialize();
+    }
     consensusResults.put(validAfter, validAfter + "," + exit + "," + fast
         + "," + guard + "," + running + "," + stable);
+    this.modified = true;
   }
-  public void addBridgeConsensusResults(String published, int running) {
+  public void addBridgeConsensusResults(String published, int running)
+      throws IOException {
+    if (!this.initialized) {
+      this.initialize();
+    }
     bridgeConsensusResults.put(published, published + "," + running);
+    this.modified = true;
   }
   public void writeFile() throws IOException {
+    if (!this.modified) {
+      return;
+    }
     SortedMap<String, String> csAggr = new TreeMap<String, String>();
     SortedMap<String, String> bcsAggr = new TreeMap<String, String>();
     if (!consensusResults.isEmpty()) {
@@ -119,7 +136,8 @@ public class ConsensusStatsFileHandler {
         if (tempDate != null
             && (next == null || !next.substring(0, 10).equals(tempDate))) {
           if (bridgeStatusesDay > 23) {
-            bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay) + "\n");
+            bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay)
+                + "\n");
           }
           brunningDay = 0;
           bridgeStatusesDay = 0;

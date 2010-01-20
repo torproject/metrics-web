@@ -55,7 +55,7 @@ public class Main {
     directories.put("FFCB46DB1339DA84674C70D7CB586434C4370441",
         "moria1");
 
-    // Initialize stats file handlers
+    // Prepare stats file handlers
     String statsDirectory = "stats";
     ConsensusStatsFileHandler csfh = new ConsensusStatsFileHandler(
         statsDirectory);
@@ -64,7 +64,7 @@ public class Main {
     DirreqStatsFileHandler dsfh = new DirreqStatsFileHandler(
         statsDirectory, countries);
 
-    // Initialize parsers
+    // Prepare parsers
     RelayDescriptorParser rdp = new RelayDescriptorParser(csfh, bsfh,
         dsfh, countries, directories);
     BridgeDescriptorParser bdp = new BridgeDescriptorParser(csfh, bsfh,

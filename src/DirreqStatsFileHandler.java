@@ -9,12 +9,16 @@ public class DirreqStatsFileHandler {
   private SortedSet<String> countries;
   private File dirreqStatsFile;
   private SortedMap<String, String> observations;
+  private boolean initialized;
+  private boolean modified;
   public DirreqStatsFileHandler(String statsDir,
       SortedSet<String> countries) throws IOException {
     this.statsDir = statsDir;
     this.countries = countries;
     this.dirreqStatsFile = new File(statsDir + "/dirreq-stats");
     this.observations = new TreeMap<String, String>();
+  }
+  private void initialize() throws IOException {
     if (this.dirreqStatsFile.exists()) {
       System.out.print("Reading file " + statsDir + "/dirreq-stats... ");
       BufferedReader br = new BufferedReader(new FileReader(
@@ -40,10 +44,13 @@ public class DirreqStatsFileHandler {
       System.out.println("done");
       br.close();
     }
-
+    this.initialized = true;
   }
   public void addObs(String dirNickname, String date,
-      Map<String, String> obs, String share) {
+      Map<String, String> obs, String share) throws IOException {
+    if (!this.initialized) {
+      this.initialize();
+    }
     String obsKey = dirNickname + "," + date;
     StringBuilder sb = new StringBuilder(obsKey);
     for (String c : this.countries) {
@@ -51,8 +58,12 @@ public class DirreqStatsFileHandler {
     }
     sb.append("," + share);
     this.observations.put(obsKey, sb.toString());
+    this.modified = true;
   }
   public void writeFile() throws IOException {
+    if (!this.modified) {
+      return;
+    }
     if (!this.observations.isEmpty()) {
       System.out.print("Writing file " + this.statsDir
           + "/dirreq-stats... ");

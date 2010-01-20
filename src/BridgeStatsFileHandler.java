@@ -11,12 +11,18 @@ public class BridgeStatsFileHandler {
   private SortedSet<String> countries;
   private SortedSet<String> hashedRelays = new TreeSet<String>();
   private SortedMap<String, String> observations;
+  private boolean initialized;
+  private boolean modified;
   public BridgeStatsFileHandler(String statsDir,
       SortedSet<String> countries) throws IOException {
     this.statsDir = statsDir;
     this.countries = countries;
     this.bridgeStatsFile = new File(statsDir + "/bridge-stats");
     this.observations = new TreeMap<String, String>();
+    this.hashedRelayIdentitiesFile = new File(statsDir
+        + "/hashed-relay-identities");
+  }
+  private void initialize() throws IOException {
     if (this.bridgeStatsFile.exists()) {
       System.out.print("Reading file " + statsDir + "/bridge-stats... ");
       BufferedReader br = new BufferedReader(new FileReader(
@@ -42,8 +48,6 @@ public class BridgeStatsFileHandler {
       System.out.println("done");
       br.close();
     }
-    this.hashedRelayIdentitiesFile = new File(statsDir
-        + "/hashed-relay-identities");
     if (this.hashedRelayIdentitiesFile.exists()) {
       System.out.print("Reading file " + statsDir
           + "/hashed-relay-identities... ");
@@ -56,15 +60,28 @@ public class BridgeStatsFileHandler {
       br.close();
       System.out.println("done");
     }
+    this.initialized = true;
   }
-  public void addHashedRelay(String hashedRelayIdentity) {
+  public void addHashedRelay(String hashedRelayIdentity)
+      throws IOException {
+    if (!this.initialized) {
+      this.initialize();
+    }
     this.hashedRelays.add(hashedRelayIdentity);
+    this.modified = true;
   }
-  public boolean isKnownRelay(String hashedBridgeIdentity) {
+  public boolean isKnownRelay(String hashedBridgeIdentity)
+      throws IOException {
+    if (!this.initialized) {
+      this.initialize();
+    }
     return this.hashedRelays.contains(hashedBridgeIdentity);
   }
   public void addObs(String hashedIdentity, String date,
-      String time, Map<String, String> obs) {
+      String time, Map<String, String> obs) throws IOException {
+    if (!this.initialized) {
+      this.initialize();
+    }
     String key = hashedIdentity + "," + date;
     StringBuilder sb = new StringBuilder(key + "," + time);
     for (String c : countries) {
@@ -75,9 +92,13 @@ public class BridgeStatsFileHandler {
         || value.compareTo(this.observations.get(key)) > 0) {
       this.observations.put(key, value);
     }
+    this.modified = true;
   }
 
   public void writeFile() throws IOException {
+    if (!this.modified) {
+      return;
+    }
     if (!this.hashedRelays.isEmpty()) {
       System.out.print("Writing file " + this.statsDir
           + "/hashed-relay-identities... ");
