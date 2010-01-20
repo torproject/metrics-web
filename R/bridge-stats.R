@@ -32,7 +32,8 @@ plot_bridges <- function(country, people, filename, color) {
   plot(data, ylim=c(0, max(na.omit(data))), type="l", col=color, lwd=2,
       axes=FALSE, frame=FALSE,
       main=paste(people, "Tor users via bridges"),
-      xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC")), ylab="")
+      xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC"), "UTC"),
+      ylab="")
   axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
   axis(1, at=c(1, length(data)), labels=FALSE, lwd=1, lwd.ticks=0)
   axis(1, at=monthat, lwd=0, labels=monthlabels)

@@ -30,7 +30,7 @@ plot_moria1 <- function(country, people, filename, color) {
   par(mar = c(4.1, 3.9, 2.1, 0))
   plot(data, ylim=c(0, max(0, na.omit(data))), type="l", col=color, lwd=2,
       axes=FALSE, frame=FALSE, xlab=paste("Last updated:",
-      as.POSIXlt(Sys.time(), "UTC")),
+      as.POSIXlt(Sys.time(), "UTC"), "UTC"),
       ylab="", main=paste("New or returning, directly connecting", people,
       "Tor users"))
   axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
@@ -84,7 +84,7 @@ plot_trusted <- function(country, people, filename, color) {
   par(mar = c(4.1, 3.9, 2.1, 0))
   plot(data, ylim=c(0, max(0, na.omit(data))), type="l", col=color, lwd=2,
       axes=FALSE, frame=FALSE, xlab=paste("Last updated:",
-      as.POSIXlt(Sys.time(), "UTC")),
+      as.POSIXlt(Sys.time(), "UTC"), "UTC"),
       ylab="", main=paste("Recurring, directly connecting", people,
       "Tor users"))
   axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)

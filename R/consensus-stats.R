@@ -38,7 +38,8 @@ exitCol <- "darkgreen"
 plot(runningNum, ylim=c(0, max(na.omit(runningNum))), type="l",
     col=runningCol, lwd=2, axes=FALSE, frame=FALSE,
     main=paste("Number of exit relays"),
-    xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC")), ylab="")
+    xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC"), "UTC"),
+    ylab="")
 lines(exitNum, col=exitCol, lwd=2)
 mtext("All relays", side=4, line=0, las=1,
     at=tail(na.omit(runningNum), n=1), col=runningCol)
@@ -59,7 +60,8 @@ brunningCol <- "blue"
 plot(runningNum, ylim=c(0, max(na.omit(runningNum))), type="l",
     col=runningCol, lwd=2, axes=FALSE, frame=FALSE,
     main=paste("Number of relays and bridges"),
-    xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC")), ylab="")
+    xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC"), "UTC"),
+    ylab="")
 lines(brunningNum, col=brunningCol, lwd=2)
 mtext("Relays", side=4, line=0, las=1,
     at=tail(na.omit(runningNum), n=1), col=runningCol)
