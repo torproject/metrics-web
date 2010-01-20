@@ -11,21 +11,13 @@ public class Main {
   public static void main(String[] args) throws IOException,
       ParseException {
 
-    // use lock file to avoid overlapping runs
-    File lockFile = new File("lock");
-    if (lockFile.exists()) {
-      BufferedReader br = new BufferedReader(new FileReader("lock"));
-      long runStarted = Long.parseLong(br.readLine());
-      br.close();
-      if (System.currentTimeMillis() - runStarted < 15L * 60L * 1000L) {
-        System.out.println("Warning: ERNIE is already running or has not "
-            + "exited cleanly! Exiting.");
-        System.exit(1);
-      }
+    // Use lock file to avoid overlapping runs
+    LockFile lf = new LockFile();
+    if (!lf.acquireLock()) {
+      System.out.println("Warning: ERNIE is already running or has not "
+          + "exited cleanly! Exiting.");
+      System.exit(1);
     }
-    BufferedWriter bw = new BufferedWriter(new FileWriter("lock"));
-    bw.append("" + System.currentTimeMillis() + "\n");
-    bw.close();
 
     // Should we only import from disk or only download descriptors?
     boolean importOnly = args.length > 0
@@ -94,7 +86,7 @@ public class Main {
     dsfh.writeFile();
 
     // Remove lock file
-    lockFile.delete();
+    lf.releaseLock();
   }
 }
 
