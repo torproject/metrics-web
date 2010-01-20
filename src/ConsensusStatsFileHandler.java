@@ -76,10 +76,10 @@ public class ConsensusStatsFileHandler {
     }
     SortedMap<String, String> csAggr = new TreeMap<String, String>();
     SortedMap<String, String> bcsAggr = new TreeMap<String, String>();
-    try {
-      if (!consensusResults.isEmpty()) {
-        System.out.print("Writing file " + this.statsDir
-            + "/consensus-stats-raw... ");
+    if (!consensusResults.isEmpty()) {
+      System.out.print("Writing file " + this.statsDir
+          + "/consensus-stats-raw... ");
+      try {
         new File(this.statsDir).mkdirs();
         BufferedWriter bwConsensusStatsRaw = new BufferedWriter(
             new FileWriter(this.consensusStatsRawFile));
@@ -125,70 +125,78 @@ public class ConsensusStatsFileHandler {
         }
         bwConsensusStatsRaw.close();
         System.out.println("done");
+      } catch (IOException e) {
+        System.out.println("failed");
       }
       if (!bridgeConsensusResults.isEmpty()) {
         System.out.print("Writing file " + this.statsDir
             + "/bridge-consensus-stats-raw... ");
-        new File(this.statsDir).mkdirs();
-        BufferedWriter bwBridgeConsensusStatsRaw = new BufferedWriter(
-            new FileWriter(this.bridgeConsensusStatsRawFile));
-        String tempDate = null;
-        int brunningDay = 0, bridgeStatusesDay = 0;
-        Iterator<String> it = bridgeConsensusResults.values().iterator();
-        boolean haveWrittenFinalLine = false;
-        while (it.hasNext() || !haveWrittenFinalLine) {
-          String next = it.hasNext() ? it.next() : null;
-          if (tempDate != null
-              && (next == null
-              || !next.substring(0, 10).equals(tempDate))) {
-            if (bridgeStatusesDay > 23) {
-              bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay)
-                  + "\n");
+        try {
+          new File(this.statsDir).mkdirs();
+          BufferedWriter bwBridgeConsensusStatsRaw = new BufferedWriter(
+              new FileWriter(this.bridgeConsensusStatsRawFile));
+          String tempDate = null;
+          int brunningDay = 0, bridgeStatusesDay = 0;
+          Iterator<String> it = bridgeConsensusResults.values().iterator();
+          boolean haveWrittenFinalLine = false;
+          while (it.hasNext() || !haveWrittenFinalLine) {
+            String next = it.hasNext() ? it.next() : null;
+            if (tempDate != null
+                && (next == null
+                || !next.substring(0, 10).equals(tempDate))) {
+              if (bridgeStatusesDay > 23) {
+                bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay)
+                    + "\n");
+              }
+              brunningDay = 0;
+              bridgeStatusesDay = 0;
+              if (next == null) {
+                haveWrittenFinalLine = true;
+              }
             }
-            brunningDay = 0;
-            bridgeStatusesDay = 0;
-            if (next == null) {
-              haveWrittenFinalLine = true;
+            if (next != null) {
+              bwBridgeConsensusStatsRaw.append(next + "\n");
+              tempDate = next.substring(0, 10);
+              bridgeStatusesDay++;
+              brunningDay += Integer.parseInt(next.split(",")[1]);
             }
           }
-          if (next != null) {
-            bwBridgeConsensusStatsRaw.append(next + "\n");
-            tempDate = next.substring(0, 10);
-            bridgeStatusesDay++;
-            brunningDay += Integer.parseInt(next.split(",")[1]);
-          }
+          bwBridgeConsensusStatsRaw.close();
+          System.out.println("done");
+        } catch (IOException e) {
+          System.out.println("failed");
         }
-        bwBridgeConsensusStatsRaw.close();
-        System.out.println("done");
       }
       if (!csAggr.isEmpty() || !bcsAggr.isEmpty()) {
         System.out.print("Writing file " + this.statsDir
             + "/consensus-stats... ");
-        new File(this.statsDir).mkdirs();
-        BufferedWriter bwConsensusStats = new BufferedWriter(
-            new FileWriter(this.consensusStatsFile));
-        bwConsensusStats.append("date,exit,fast,guard,running,stable,"
-            + "brunning\n");
-        SortedSet<String> allDates = new TreeSet<String>();
-        allDates.addAll(csAggr.keySet());
-        allDates.addAll(bcsAggr.keySet());
-        for (String date : allDates) {
-          if (csAggr.containsKey(date)) {
-            bwConsensusStats.append(csAggr.get(date));
-          } else {
-            bwConsensusStats.append(date + ",NA,NA,NA,NA,NA");
+        try {
+          new File(this.statsDir).mkdirs();
+          BufferedWriter bwConsensusStats = new BufferedWriter(
+              new FileWriter(this.consensusStatsFile));
+          bwConsensusStats.append("date,exit,fast,guard,running,stable,"
+              + "brunning\n");
+          SortedSet<String> allDates = new TreeSet<String>();
+          allDates.addAll(csAggr.keySet());
+          allDates.addAll(bcsAggr.keySet());
+          for (String date : allDates) {
+            if (csAggr.containsKey(date)) {
+              bwConsensusStats.append(csAggr.get(date));
+            } else {
+              bwConsensusStats.append(date + ",NA,NA,NA,NA,NA");
+            }
+            if (bcsAggr.containsKey(date)) {
+              bwConsensusStats.append("," + bcsAggr.get(date));
+            } else {
+              bwConsensusStats.append(",NA\n");
+            }
           }
-          if (bcsAggr.containsKey(date)) {
-            bwConsensusStats.append("," + bcsAggr.get(date));
-          } else {
-            bwConsensusStats.append(",NA\n");
-          }
+          bwConsensusStats.close();
+          System.out.println("done");
+        } catch (IOException e) {
+          System.out.println("failed");
         }
-        bwConsensusStats.close();
-        System.out.println("done");
       }
-    } catch (IOException e) {
-      System.out.println("failed");
     }
   }
 }
