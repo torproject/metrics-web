@@ -65,7 +65,7 @@ for (intervalInd in 1:length(intervals)) {
         title <- paste("Time in seconds to complete", sizePr, "request")
       xlab <- ""
       if (sourceInd == length(sources))
-        xlab <- paste("Last updated:", date())
+        xlab <- paste("Last updated:", as.POSIXlt(Sys.time(), "UTC"))
 
       data <- subset(t, source %in% sourceStr)
 

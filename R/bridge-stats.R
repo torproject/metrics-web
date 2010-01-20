@@ -29,7 +29,10 @@ plot_bridges <- function(country, people, filename, color) {
     monthat <- c(monthat, (monthticks[i] + monthticks[i + 1]) / 2)
   png(filename, width=600, height=400)
   par(mar = c(4.1, 3.9, 2.1, 0))
-  plot(data, ylim=c(0, max(na.omit(data))), type="l", col=color, lwd=2, axes=FALSE, frame=FALSE, main=paste(people, "Tor users via bridges"), xlab=paste("Last updated:", date()), ylab="")
+  plot(data, ylim=c(0, max(na.omit(data))), type="l", col=color, lwd=2,
+      axes=FALSE, frame=FALSE,
+      main=paste(people, "Tor users via bridges"),
+      xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC")), ylab="")
   axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
   axis(1, at=c(1, length(data)), labels=FALSE, lwd=1, lwd.ticks=0)
   axis(1, at=monthat, lwd=0, labels=monthlabels)
