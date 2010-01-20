@@ -10,6 +10,11 @@ public class RelayDescriptorDownloader {
   public RelayDescriptorDownloader(RelayDescriptorParser rdp,
       String authority, SortedMap<String, String> directories) {
     try {
+      rdp.initialize();
+    } catch (IOException e) {
+      return;
+    }
+    try {
       System.out.print("Downloading current consensus from " + authority
           + "... ");
       URL u = new URL("http://" + authority
