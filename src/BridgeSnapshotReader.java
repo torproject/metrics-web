@@ -30,7 +30,13 @@ public class BridgeSnapshotReader {
           System.out.println("done");
         } catch (IOException e) {
           System.out.println("failed");
+          return;
         }
+      }
+      try {
+        bdp.initialize();
+      } catch (IOException e) {
+        return;
       }
       System.out.print("Importing files in directory "
           + bridgeDirectoriesDir + "/... ");
