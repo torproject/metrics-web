@@ -11,6 +11,10 @@ public class ConsensusStatsFileHandler {
   private File consensusStatsFile;
   private SortedMap<String, String> consensusResults;
   private SortedMap<String, String> bridgeConsensusResults;
+  private SortedMap<String, String> csAggr =
+      new TreeMap<String, String>();
+  private SortedMap<String, String> bcsAggr =
+      new TreeMap<String, String>();
   private boolean initialized;
   private boolean modified;
   public ConsensusStatsFileHandler(String statsDir) {
@@ -52,6 +56,22 @@ public class ConsensusStatsFileHandler {
       System.out.println("done");
       br.close();
     }
+    if (this.consensusStatsFile.exists()) {
+      System.out.print("Reading file " + statsDir
+          + "/consensus-stats... ");
+      BufferedReader br = new BufferedReader(new FileReader(
+          this.consensusStatsFile));
+      String line = br.readLine();
+      while ((line = br.readLine()) != null) {
+        String date = line.split(",")[0];
+        String relays = line.substring(0, line.lastIndexOf(","));
+        String bridges = line.substring(line.lastIndexOf(",") + 1) + "\n";
+        csAggr.put(date, relays);
+        bcsAggr.put(date, bridges);
+      }
+      br.close();
+      System.out.println("done");
+    }
   }
   public void addConsensusResults(String validAfter, int exit, int fast,
       int guard, int running, int stable) throws IOException {
@@ -74,8 +94,6 @@ public class ConsensusStatsFileHandler {
     if (!this.modified) {
       return;
     }
-    SortedMap<String, String> csAggr = new TreeMap<String, String>();
-    SortedMap<String, String> bcsAggr = new TreeMap<String, String>();
     if (!consensusResults.isEmpty()) {
       System.out.print("Writing file " + this.statsDir
           + "/consensus-stats-raw... ");
@@ -94,7 +112,7 @@ public class ConsensusStatsFileHandler {
                 && (next == null
                 || !next.substring(0, 10).equals(tempDate))) {
             if (consensusesDay > 11) {
-              csAggr.put(tempDate, tempDate + ","
+              this.csAggr.put(tempDate, tempDate + ","
                   + (exitDay / consensusesDay) + ","
                   + (fastDay / consensusesDay) + ","
                   + (guardDay / consensusesDay) + ","
@@ -139,8 +157,8 @@ public class ConsensusStatsFileHandler {
               && (next == null
               || !next.substring(0, 10).equals(tempDate))) {
             if (bridgeStatusesDay > 23) {
-              bcsAggr.put(tempDate, "" + (brunningDay / bridgeStatusesDay)
-                  + "\n");
+              this.bcsAggr.put(tempDate, ""
+                  + (brunningDay / bridgeStatusesDay) + "\n");
             }
             brunningDay = 0;
             bridgeStatusesDay = 0;
@@ -169,7 +187,7 @@ public class ConsensusStatsFileHandler {
           System.out.println("failed");
         }
       }
-      if (!csAggr.isEmpty() || !bcsAggr.isEmpty()) {
+      if (!this.csAggr.isEmpty() || !this.bcsAggr.isEmpty()) {
         System.out.print("Writing file " + this.statsDir
             + "/consensus-stats... ");
         try {
@@ -179,16 +197,16 @@ public class ConsensusStatsFileHandler {
           bwConsensusStats.append("date,exit,fast,guard,running,stable,"
               + "brunning\n");
           SortedSet<String> allDates = new TreeSet<String>();
-          allDates.addAll(csAggr.keySet());
-          allDates.addAll(bcsAggr.keySet());
+          allDates.addAll(this.csAggr.keySet());
+          allDates.addAll(this.bcsAggr.keySet());
           for (String date : allDates) {
-            if (csAggr.containsKey(date)) {
-              bwConsensusStats.append(csAggr.get(date));
+            if (this.csAggr.containsKey(date)) {
+              bwConsensusStats.append(this.csAggr.get(date));
             } else {
               bwConsensusStats.append(date + ",NA,NA,NA,NA,NA");
             }
-            if (bcsAggr.containsKey(date)) {
-              bwConsensusStats.append("," + bcsAggr.get(date));
+            if (this.bcsAggr.containsKey(date)) {
+              bwConsensusStats.append("," + this.bcsAggr.get(date));
             } else {
               bwConsensusStats.append(",NA\n");
             }
