@@ -87,7 +87,8 @@ public class TorperfProcessor {
         BufferedWriter bw = new BufferedWriter(new FileWriter(rawFile));
         bw.append("source,date,start,completemillis\n");
         String tempSourceDate = null;
-        Iterator<Map.Entry<String, String>> it = rawObs.entrySet().iterator();
+        Iterator<Map.Entry<String, String>> it =
+            rawObs.entrySet().iterator();
         List<Long> dlTimes = new ArrayList<Long>();
         boolean haveWrittenFinalLine = false;
         while (it.hasNext() || !haveWrittenFinalLine) {
@@ -95,13 +96,15 @@ public class TorperfProcessor {
           if (tempSourceDate != null
               && (next == null || !(next.getValue().split(",")[0] + ","
               + next.getValue().split(",")[1]).equals(tempSourceDate))) {
-            Collections.sort(dlTimes);
-            long q1 = dlTimes.get(dlTimes.size() / 4 - 1);
-            long md = dlTimes.get(dlTimes.size() / 2 - 1);
-            long q3 = dlTimes.get(dlTimes.size() * 3 / 4 - 1);
+            if (dlTimes.size() > 4) {
+              Collections.sort(dlTimes);
+              long q1 = dlTimes.get(dlTimes.size() / 4 - 1);
+              long md = dlTimes.get(dlTimes.size() / 2 - 1);
+              long q3 = dlTimes.get(dlTimes.size() * 3 / 4 - 1);
+              stats.put(tempSourceDate, tempSourceDate + "," + q1 + ","
+                  + md + "," + q3);
+            }
             dlTimes.clear();
-            stats.put(tempSourceDate, tempSourceDate + "," + q1 + "," + md
-                + "," + q3);
             if (next == null) {
               haveWrittenFinalLine = true;
             }
