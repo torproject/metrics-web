@@ -68,18 +68,6 @@ plot_months <- function(filenamePart, titlePart, years, months, rows,
   }
 }
 
-plot_exit <- function(filename, titlePart, limits) {
-  plot_consensus(filename, paste("Number of exit relays (", titlePart,
-    ")\n", sep = ""), limits, c(1, 2, 5),
-    c("running", "exit"), c("All relays", "Exit relays"))
-}
-
-plot_exit_year <- function(year) {
-  plot_exit(paste("exit-", year, ".png", sep = ""), year,
-    as.Date(c(paste(year, "-01-01", sep = ""),
-    paste(year, "-12-31", sep = ""))))
-}
-
 # TODO these need to be updated manually
 
 plot_pastdays("networksize", "Number of relays and bridges",
