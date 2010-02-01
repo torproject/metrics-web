@@ -1,149 +1,110 @@
+library(ggplot2)
 consensuses <- read.csv("stats/consensus-stats", header=TRUE,
     stringsAsFactors=FALSE);
-end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
-start <- seq(seq(from = end, length = 2,
-    by="-6 months")[2], length=2, by="1 day")[2]
-dates <- seq(from = start, to = end, by="1 day")
-datesStr <- as.character(dates)
-exitNum <- c()
-runningNum <- c()
-brunningNum <- c()
-for (i in datesStr) {
-  exitNum <- c(exitNum, ifelse(i %in% consensuses$date,
-      consensuses$exit[consensuses$date == i], NA))
-  runningNum <- c(runningNum, ifelse(i %in% consensuses$date,
-      consensuses$running[consensuses$date == i], NA))
-  brunningNum <- c(brunningNum, ifelse(i %in% consensuses$date,
-      consensuses$brunning[consensuses$date == i], NA))
+
+plot_consensus <- function(filename, title, limits, rows, breaks,
+    labels) {
+  c <- melt(consensuses[rows], id = "date")
+  ggplot(c, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
+    colour = variable)) + geom_line() + #stat_smooth() +
+    scale_x_date(name = "", limits = limits) +
+    #paste("\nhttp://metrics.torproject.org/ -- last updated:",
+    #  date(), "UTC"),
+    scale_y_continuous(name = "",
+    limits = c(0, max(c$value, na.rm = TRUE))) +
+    scale_colour_hue("", breaks = breaks, labels = labels) +
+    opts(title = title)
+  ggsave(filename = paste("website/graphs/", filename, sep = ""),
+    width = 8, height = 5, dpi = 72)
 }
-firstdays <- c()
-for (i in datesStr)
-  if (format(as.POSIXct(i, tz="GMT"), "%d") == "01")
-    firstdays <- c(firstdays, i)
-monthticks <- which(datesStr %in% firstdays)
-monthlabels <- c()
-for (i in monthticks[1:(length(monthticks) - 2)])
-  monthlabels <- c(monthlabels,
-      format(as.POSIXct(dates[i + 1], tz="GMT"), "%b"))
-monthlabels <- c(monthlabels,
-    format(as.POSIXct(dates[monthticks[length(monthticks) - 1] + 1]), "%b %y"))
-monthat <- c()
-for (i in 1:(length(monthticks) - 1))
-  monthat <- c(monthat, (monthticks[i] + monthticks[i + 1]) / 2)
 
-png("website/graphs/exit-6m.png", width=600, height=400)
-par(mar = c(4.1, 3.9, 2.1, 4.1))
-runningCol <- "red"
-exitCol <- "darkgreen"
-plot(runningNum, ylim=c(0, max(na.omit(runningNum))), type="l",
-    col=runningCol, lwd=2, axes=FALSE, frame=FALSE,
-    main=paste("Number of exit relays"),
-    xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC"), "UTC"),
-    ylab="")
-lines(exitNum, col=exitCol, lwd=2)
-mtext("All relays", side=4, line=0, las=1,
-    at=tail(na.omit(runningNum), n=1), col=runningCol)
-mtext("Exit relays", side=4, line=0, las=1,
-    at=tail(na.omit(exitNum), n=1), col=exitCol)
-axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
-axis(1, at=c(1, length(exitNum)), labels=FALSE, lwd=1, lwd.ticks=0)
-axis(1, at=monthat, lwd=0, labels=monthlabels)
-axis(2, las=1, lwd=0, lwd.ticks=1)
-axis(2, at=c(min(na.omit(runningNum)), max(na.omit(runningNum))), lwd.ticks=0, labels=FALSE)
-axis(2, at=c(min(na.omit(exitNum)), max(na.omit(exitNum))), lwd.ticks=0, labels=FALSE)
-dev.off()
-
-png("website/graphs/networksize-6m.png", width=600, height=400)
-par(mar = c(4.1, 3.9, 2.1, 4.1))
-runningCol <- "red"
-brunningCol <- "blue"
-plot(runningNum, ylim=c(0, max(na.omit(runningNum))), type="l",
-    col=runningCol, lwd=2, axes=FALSE, frame=FALSE,
-    main=paste("Number of relays and bridges"),
-    xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC"), "UTC"),
-    ylab="")
-lines(brunningNum, col=brunningCol, lwd=2)
-mtext("Relays", side=4, line=0, las=1,
-    at=tail(na.omit(runningNum), n=1), col=runningCol)
-mtext("Bridges", side=4, line=0, las=1,
-    at=tail(na.omit(brunningNum), n=1), col=brunningCol)
-axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
-axis(1, at=c(1, length(exitNum)), labels=FALSE, lwd=1, lwd.ticks=0)
-axis(1, at=monthat, lwd=0, labels=monthlabels)
-axis(2, las=1, lwd=0, lwd.ticks=1)
-axis(2, at=c(min(na.omit(runningNum)), max(na.omit(runningNum))), lwd.ticks=0, labels=FALSE)
-axis(2, at=c(min(na.omit(brunningNum)), max(na.omit(brunningNum))), lwd.ticks=0, labels=FALSE)
-dev.off()
-
-end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
-start <- as.Date(consensuses$date[1], "%Y-%m-%d")
-dates <- seq(from = start, to = end, by="1 day")
-datesStr <- as.character(dates)
-exitNum <- c()
-runningNum <- c()
-brunningNum <- c()
-for (i in datesStr) {
-  exitNum <- c(exitNum, ifelse(i %in% consensuses$date,
-      consensuses$exit[consensuses$date == i], NA))
-  runningNum <- c(runningNum, ifelse(i %in% consensuses$date,
-      consensuses$running[consensuses$date == i], NA))
-  brunningNum <- c(brunningNum, ifelse(i %in% consensuses$date,
-      consensuses$brunning[consensuses$date == i], NA))
+plot_pastdays <- function(filenamePart, titlePart, days, rows, breaks, labels) {
+  for (day in days) {
+    end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
+    start <- seq(from = end, length = 2, by = paste("-", day, " days", sep = ""))[2]
+    plot_consensus(paste(filenamePart, "-", day, "d.png", sep = ""),
+      paste(titlePart, "(past", day, "days)\n"), c(start, end),
+      rows, breaks, labels)
+  }
 }
-firstdays <- c()
-for (i in datesStr)
-  if (format(as.POSIXct(i, tz="GMT"), "%d") == "01"
-     && format(as.POSIXct(i, tz="GMT"), "%m")
-     %in% c("01"))
-    firstdays <- c(firstdays, i)
-monthticks <- which(datesStr %in% firstdays)
-monthlabels <- c()
-for (i in monthticks[1:(length(monthticks) - 1)])
-  monthlabels <- c(monthlabels,
-      format(as.POSIXct(dates[i + 1], tz="GMT"), "%Y"))
-monthat <- c()
-for (i in 1:(length(monthticks) - 1))
-  monthat <- c(monthat, (monthticks[i] + monthticks[i + 1]) / 2)
 
-png("website/graphs/exit-all.png", width=600, height=400)
-par(mar = c(4.1, 3.9, 2.1, 4.1))
-runningCol <- "red"
-exitCol <- "darkgreen"
-plot(runningNum, ylim=c(0, max(na.omit(runningNum))), type="l",
-    col=runningCol, lwd=1, axes=FALSE, frame=FALSE,
-    main=paste("Number of exit relays"),
-    xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC"), "UTC"),
-    ylab="")
-lines(exitNum, col=exitCol, lwd=1)
-mtext("All relays", side=4, line=0, las=1,
-    at=tail(na.omit(runningNum), n=1), col=runningCol)
-mtext("Exit relays", side=4, line=0, las=1,
-    at=tail(na.omit(exitNum), n=1), col=exitCol)
-axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
-axis(1, at=c(1, length(exitNum)), labels=FALSE, lwd=1, lwd.ticks=0)
-axis(1, at=monthat, lwd=0, labels=monthlabels)
-axis(2, las=1, lwd=0, lwd.ticks=1)
-axis(2, at=c(min(na.omit(exitNum)), max(na.omit(runningNum))), lwd.ticks=0, labels=FALSE)
-dev.off()
+plot_years <- function(filenamePart, titlePart, years, rows, breaks,
+    labels) {
+  for (year in years) {
+    plot_consensus(paste(filenamePart, "-", year, ".png", sep = ""),
+      paste(titlePart, " (", year, ")\n", sep = ""),
+      as.Date(c(paste(year, "-01-01", sep = ""),
+      paste(year, "-12-31", sep = ""))), rows, breaks, labels)
+  }
+}
 
-png("website/graphs/networksize-all.png", width=600, height=400)
-par(mar = c(4.1, 3.9, 2.1, 4.1))
-runningCol <- "red"
-brunningCol <- "blue"
-plot(runningNum, ylim=c(0, max(na.omit(runningNum))), type="l",
-    col=runningCol, lwd=1, axes=FALSE, frame=FALSE,
-    main=paste("Number of relays and bridges"),
-    xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC"), "UTC"),
-    ylab="")
-lines(brunningNum, col=brunningCol, lwd=1)
-mtext("Relays", side=4, line=0, las=1,
-    at=tail(na.omit(runningNum), n=1), col=runningCol)
-mtext("Bridges", side=4, line=0, las=1,
-    at=tail(na.omit(brunningNum), n=1), col=brunningCol)
-axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
-axis(1, at=c(1, length(exitNum)), labels=FALSE, lwd=1, lwd.ticks=0)
-axis(1, at=monthat, lwd=0, labels=monthlabels)
-axis(2, las=1, lwd=0, lwd.ticks=1)
-axis(2, at=c(min(na.omit(brunningNum)), max(na.omit(runningNum))), lwd.ticks=0, labels=FALSE)
-dev.off()
+plot_quarters <- function(filenamePart, titlePart, years, quarters, rows,
+    breaks, labels) {
+  for (year in years) {
+    for (quarter in quarters) {
+      start <- as.Date(paste(year, "-", (quarter - 1) * 3 + 1, "-01",
+        sep = ""))
+      end <- seq(seq(start, length = 2, by = "3 months")[2], length = 2,
+        by = "-1 day")[2]
+      plot_consensus(paste(filenamePart, "-", year, "-q", quarter, ".png",
+        sep = ""), paste(titlePart, " (Q", quarter, " ", year, ")\n",
+        sep = ""), c(start, end), rows, breaks, labels)
+    }
+  }
+}
+
+plot_months <- function(filenamePart, titlePart, years, months, rows,
+    breaks, labels) {
+  for (year in years) {
+    for (month in months) {
+      start <- as.Date(paste(year, "-", month, "-01", sep = ""))
+      end <- seq(seq(start, length = 2, by = "1 month")[2], length = 2,
+        by = "-1 day")[2]
+      plot_consensus(paste(filenamePart, "-", year, "-",
+        format(start, "%m"), ".png", sep = ""), paste(titlePart,
+        " (", format(start, "%B"), " ", year, ")\n", sep = ""),
+        c(start, end), rows, breaks, labels)
+    }
+  }
+}
+
+plot_exit <- function(filename, titlePart, limits) {
+  plot_consensus(filename, paste("Number of exit relays (", titlePart,
+    ")\n", sep = ""), limits, c(1, 2, 5),
+    c("running", "exit"), c("All relays", "Exit relays"))
+}
+
+plot_exit_year <- function(year) {
+  plot_exit(paste("exit-", year, ".png", sep = ""), year,
+    as.Date(c(paste(year, "-01-01", sep = ""),
+    paste(year, "-12-31", sep = ""))))
+}
+
+# TODO these need to be updated manually
+
+plot_pastdays("networksize", "Number of relays and bridges",
+  c(30, 90, 180), c(1, 5, 7), c("running", "brunning"),
+  c("Relays", "Bridges"))
+plot_years("networksize", "Number of relays and bridges",
+  "2010", c(1, 5, 7), c("running", "brunning"),
+  c("Relays", "Bridges"))
+plot_quarters("networksize", "Number of relays and bridges",
+  "2010", 1, c(1, 5, 7), c("running", "brunning"),
+  c("Relays", "Bridges"))
+plot_months("networksize", "Number of relays and bridges",
+  "2010", 2, c(1, 5, 7), c("running", "brunning"),
+  c("Relays", "Bridges"))
+
+plot_pastdays("exit", "Number of exit relays",
+  c(30, 90, 180), c(1, 5, 2), c("running", "exit"),
+  c("All relays", "Exit relays"))
+plot_years("exit", "Number of exit relays",
+  "2010", c(1, 5, 2), c("running", "exit"),
+  c("All relays", "Exit relays"))
+plot_quarters("exit", "Number of exit relays",
+  "2010", 1, c(1, 5, 2), c("running", "exit"),
+  c("All relays", "Exit relays"))
+plot_months("exit", "Number of exit relays",
+  "2010", 2, c(1, 5, 2), c("running", "exit"),
+  c("All relays", "Exit relays"))
 
