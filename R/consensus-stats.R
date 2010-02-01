@@ -1,6 +1,6 @@
 library(ggplot2)
-consensuses <- read.csv("stats/consensus-stats", header=TRUE,
-    stringsAsFactors=FALSE);
+consensuses <- read.csv("stats/consensus-stats", header = TRUE,
+    stringsAsFactors = FALSE);
 
 plot_consensus <- function(filename, title, limits, rows, breaks,
     labels) {
@@ -18,10 +18,12 @@ plot_consensus <- function(filename, title, limits, rows, breaks,
     width = 8, height = 5, dpi = 72)
 }
 
-plot_pastdays <- function(filenamePart, titlePart, days, rows, breaks, labels) {
+plot_pastdays <- function(filenamePart, titlePart, days, rows, breaks,
+    labels) {
   for (day in days) {
     end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
-    start <- seq(from = end, length = 2, by = paste("-", day, " days", sep = ""))[2]
+    start <- seq(from = end, length = 2, by = paste("-", day, " days",
+      sep = ""))[2]
     plot_consensus(paste(filenamePart, "-", day, "d.png", sep = ""),
       paste(titlePart, "(past", day, "days)\n"), c(start, end),
       rows, breaks, labels)
