@@ -110,149 +110,169 @@ public class ConsensusStatsFileHandler {
     this.bridgeConsensusResultsModified = true;
   }
   public void writeFile() {
-    if (!this.consensusResults.isEmpty()
-        && this.consensusResultsModified) {
-      this.logger.info("Writing file " + this.statsDir
-          + "/consensus-stats-raw...");
-      try {
+    boolean writeConsensusStatsRaw = false;
+    boolean writeBridgeConsensusStatsRaw = false;
+    boolean writeConsensusStats = false;
+    try {
+      BufferedWriter bwConsensusStatsRaw = null;
+      if (!this.consensusResults.isEmpty()
+          && this.consensusResultsModified) {
+        this.logger.info("Writing file " + this.statsDir
+            + "/consensus-stats-raw...");
+        writeConsensusStatsRaw = true;
         new File(this.statsDir).mkdirs();
-        BufferedWriter bwConsensusStatsRaw = new BufferedWriter(
+        bwConsensusStatsRaw = new BufferedWriter(
             new FileWriter(this.consensusStatsRawFile));
-        String tempDate = null;
-        int exitDay = 0, fastDay = 0, guardDay = 0, runningDay = 0,
-            stableDay = 0, consensusesDay = 0;
-        Iterator<String> it = this.consensusResults.values().iterator();
-        boolean haveWrittenFinalLine = false;
-          while (it.hasNext() || !haveWrittenFinalLine) {
-            String next = it.hasNext() ? it.next() : null;
-            if (tempDate != null
-                && (next == null
-                || !next.substring(0, 10).equals(tempDate))) {
-            if (consensusesDay > 11) {
-              this.csAggr.put(tempDate, tempDate + ","
-                  + (exitDay / consensusesDay) + ","
-                  + (fastDay / consensusesDay) + ","
-                  + (guardDay / consensusesDay) + ","
-                  + (runningDay / consensusesDay) + ","
-                  + (stableDay / consensusesDay));
-            }
-            exitDay = 0;
-            fastDay = 0;
-            guardDay = 0;
-            runningDay = 0;
-            stableDay = 0;
-            consensusesDay = 0;
-            if (next == null) {
-              haveWrittenFinalLine = true;
+      }
+      String tempDate = null;
+      int exitDay = 0, fastDay = 0, guardDay = 0, runningDay = 0,
+          stableDay = 0, consensusesDay = 0;
+      Iterator<String> it = this.consensusResults.values().iterator();
+      boolean haveWrittenFinalLine = false;
+      while (it.hasNext() || !haveWrittenFinalLine) {
+        String next = it.hasNext() ? it.next() : null;
+        if (tempDate != null
+            && (next == null
+            || !next.substring(0, 10).equals(tempDate))) {
+          if (consensusesDay > 11) {
+            String line = tempDate + ","
+                + (exitDay / consensusesDay) + ","
+                + (fastDay / consensusesDay) + ","
+                + (guardDay / consensusesDay) + ","
+                + (runningDay / consensusesDay) + ","
+                + (stableDay / consensusesDay);
+            if (!line.equals(this.csAggr.get(tempDate))) {
+              this.csAggr.put(tempDate, line);
+              writeConsensusStats = true;
             }
           }
-          if (next != null) {
-            bwConsensusStatsRaw.append(next + "\n");
-            String[] parts = next.split(",");
-            tempDate = next.substring(0, 10);
-            consensusesDay++;
-            exitDay += Integer.parseInt(parts[1]);
-            fastDay += Integer.parseInt(parts[2]);
-            guardDay += Integer.parseInt(parts[3]);
-            runningDay += Integer.parseInt(parts[4]);
-            stableDay += Integer.parseInt(parts[5]);
+          exitDay = 0;
+          fastDay = 0;
+          guardDay = 0;
+          runningDay = 0;
+          stableDay = 0;
+          consensusesDay = 0;
+          if (next == null) {
+            haveWrittenFinalLine = true;
           }
         }
+        if (next != null) {
+          if (writeConsensusStatsRaw) {
+            bwConsensusStatsRaw.append(next + "\n");
+          }
+          String[] parts = next.split(",");
+          tempDate = next.substring(0, 10);
+          consensusesDay++;
+          exitDay += Integer.parseInt(parts[1]);
+          fastDay += Integer.parseInt(parts[2]);
+          guardDay += Integer.parseInt(parts[3]);
+          runningDay += Integer.parseInt(parts[4]);
+          stableDay += Integer.parseInt(parts[5]);
+        }
+      }
+      if (writeConsensusStatsRaw) {
         bwConsensusStatsRaw.close();
         this.logger.info("Finished writing file " + this.statsDir
             + "/consensus-stats-raw.");
-      } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed writing file "
-            + this.statsDir + "/consensus-stats-raw!", e);
       }
+    } catch (IOException e) {
+      this.logger.log(Level.WARNING, "Failed writing file "
+          + this.statsDir + "/consensus-stats-raw!", e);
+      return;
+    }
+    try {
+      BufferedWriter bwBridgeConsensusStatsRaw = null;
       if (!this.bridgeConsensusResults.isEmpty()
           && this.bridgeConsensusResultsModified) {
-        String tempDate = null;
-        int brunningDay = 0, bridgeStatusesDay = 0;
-        Iterator<String> it = bridgeConsensusResults.values().iterator();
-        boolean haveWrittenFinalLine = false;
-        while (it.hasNext() || !haveWrittenFinalLine) {
-          String next = it.hasNext() ? it.next() : null;
-          if (tempDate != null
-              && (next == null
-              || !next.substring(0, 10).equals(tempDate))) {
-            if (bridgeStatusesDay > 23) {
-              this.bcsAggr.put(tempDate, ""
-                  + (brunningDay / bridgeStatusesDay) + "\n");
-            }
-            brunningDay = 0;
-            bridgeStatusesDay = 0;
-            if (next == null) {
-              haveWrittenFinalLine = true;
-            }
-          }
-          if (next != null) {
-            tempDate = next.substring(0, 10);
-            bridgeStatusesDay++;
-            brunningDay += Integer.parseInt(next.split(",")[1]);
-          }
-        }
         this.logger.info("Writing file " + this.statsDir
             + "/bridge-consensus-stats-raw...");
-        try {
-          new File(this.statsDir).mkdirs();
-          BufferedWriter bwBridgeConsensusStatsRaw = new BufferedWriter(
-              new FileWriter(this.bridgeConsensusStatsRawFile));
-          for (String line : bridgeConsensusResults.values()) {
-            bwBridgeConsensusStatsRaw.append(line + "\n");
+        writeBridgeConsensusStatsRaw = true;
+        new File(this.statsDir).mkdirs();
+        bwBridgeConsensusStatsRaw = new BufferedWriter(
+            new FileWriter(this.bridgeConsensusStatsRawFile));
+      }
+      String tempDate = null;
+      int brunningDay = 0, bridgeStatusesDay = 0;
+      Iterator<String> it = bridgeConsensusResults.values().iterator();
+      boolean haveWrittenFinalLine = false;
+      while (it.hasNext() || !haveWrittenFinalLine) {
+        String next = it.hasNext() ? it.next() : null;
+        if (tempDate != null
+            && (next == null
+            || !next.substring(0, 10).equals(tempDate))) {
+          if (bridgeStatusesDay > 23) {
+            String line = "" + (brunningDay / bridgeStatusesDay) + "\n";
+            if (!line.equals(this.bcsAggr.get(tempDate))) {
+              this.bcsAggr.put(tempDate, line);
+              writeConsensusStats = true;
+            }
           }
-          bwBridgeConsensusStatsRaw.close();
-          this.logger.info("Finished writing file " + this.statsDir
-              + "/bridge-consensus-stats-raw.");
-        } catch (IOException e) {
-          this.logger.log(Level.WARNING, "Failed writing file "
-              + this.statsDir + "/bridge-consensus-stats-raw!", e);
+          brunningDay = 0;
+          bridgeStatusesDay = 0;
+          if (next == null) {
+            haveWrittenFinalLine = true;
+          }
+        }
+        if (next != null) {
+          if (writeBridgeConsensusStatsRaw) {
+            bwBridgeConsensusStatsRaw.append(next + "\n");
+          }
+          tempDate = next.substring(0, 10);
+          bridgeStatusesDay++;
+          brunningDay += Integer.parseInt(next.split(",")[1]);
         }
       }
-      if ((!this.csAggr.isEmpty() && this.consensusResultsModified)
-          || (!this.bcsAggr.isEmpty())
-            && this.bridgeConsensusResultsModified) {
-        this.logger.info("Writing file " + this.statsDir
-            + "/consensus-stats...");
-        try {
-          new File(this.statsDir).mkdirs();
-          BufferedWriter bwConsensusStats = new BufferedWriter(
-              new FileWriter(this.consensusStatsFile));
-          bwConsensusStats.append("date,exit,fast,guard,running,stable,"
-              + "brunning\n");
-          SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-          format.setTimeZone(TimeZone.getTimeZone("UTC"));
-          long firstDate = Math.min(
-              format.parse(this.csAggr.firstKey()).getTime(),
-              format.parse(this.bcsAggr.firstKey()).getTime());
-          long lastDate = Math.max(
-              format.parse(this.csAggr.lastKey()).getTime(),
-              format.parse(this.bcsAggr.lastKey()).getTime());
-          long currentDate = firstDate;
-          while (currentDate <= lastDate) {
-            String date = format.format(new Date(currentDate));
-            if (this.csAggr.containsKey(date)) {
-              bwConsensusStats.append(this.csAggr.get(date));
-            } else {
-              bwConsensusStats.append(date + ",NA,NA,NA,NA,NA");
-            }
-            if (this.bcsAggr.containsKey(date)) {
-              bwConsensusStats.append("," + this.bcsAggr.get(date));
-            } else {
-              bwConsensusStats.append(",NA\n");
-            }
-            currentDate += 86400000L;
+      if (writeBridgeConsensusStatsRaw) {
+        bwBridgeConsensusStatsRaw.close();
+        this.logger.info("Finished writing file " + this.statsDir
+            + "/bridge-consensus-stats-raw.");
+      }
+    } catch (IOException e) {
+      this.logger.log(Level.WARNING, "Failed writing file "
+          + this.statsDir + "/bridge-consensus-stats-raw!", e);
+    }
+    if (writeConsensusStats) {
+      this.logger.info("Writing file " + this.statsDir
+          + "/consensus-stats...");
+      try {
+        new File(this.statsDir).mkdirs();
+        BufferedWriter bwConsensusStats = new BufferedWriter(
+            new FileWriter(this.consensusStatsFile));
+        bwConsensusStats.append("date,exit,fast,guard,running,stable,"
+            + "brunning\n");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        // TODO this is going to break if one of the maps is empty
+        long firstDate = Math.min(
+            format.parse(this.csAggr.firstKey()).getTime(),
+            format.parse(this.bcsAggr.firstKey()).getTime());
+        long lastDate = Math.max(
+            format.parse(this.csAggr.lastKey()).getTime(),
+            format.parse(this.bcsAggr.lastKey()).getTime());
+        long currentDate = firstDate;
+        while (currentDate <= lastDate) {
+          String date = format.format(new Date(currentDate));
+          if (this.csAggr.containsKey(date)) {
+            bwConsensusStats.append(this.csAggr.get(date));
+          } else {
+            bwConsensusStats.append(date + ",NA,NA,NA,NA,NA");
           }
-          bwConsensusStats.close();
-          this.logger.info("Finished writing file " + this.statsDir
-              + "/consensus-stats.");
-        } catch (IOException e) {
-          this.logger.log(Level.WARNING, "Failed writing file "
-              + this.statsDir + "/consensus-stats!", e);
-        } catch (ParseException e) {
-          this.logger.log(Level.WARNING, "Failed writing file "
-              + this.statsDir + "/consensus-stats!", e);
+          if (this.bcsAggr.containsKey(date)) {
+            bwConsensusStats.append("," + this.bcsAggr.get(date));
+          } else {
+            bwConsensusStats.append(",NA\n");
+          }
+          currentDate += 86400000L;
         }
+        bwConsensusStats.close();
+        this.logger.info("Finished writing file " + this.statsDir
+            + "/consensus-stats.");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed writing file "
+            + this.statsDir + "/consensus-stats!", e);
+      } catch (ParseException e) {
+        this.logger.log(Level.WARNING, "Failed writing file "
+            + this.statsDir + "/consensus-stats!", e);
       }
     }
   }
