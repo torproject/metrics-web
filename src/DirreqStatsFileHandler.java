@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.text.*;
 
 /**
  *
@@ -37,12 +38,14 @@ public class DirreqStatsFileHandler {
           String[] readData = line.split(",");
           String dirNickname = readData[0];
           String date = readData[1];
-          Map<String, String> obs = new HashMap<String, String>();
-          for (int i = 2; i < readData.length - 1; i++) {
-            obs.put(headers[i], readData[i]);
+          if (!readData[readData.length - 1].equals("NA")) {
+            Map<String, String> obs = new HashMap<String, String>();
+            for (int i = 2; i < readData.length - 1; i++) {
+              obs.put(headers[i], readData[i]);
+            }
+            String share = readData[readData.length - 1];
+            this.addObs(dirNickname, date, obs, share);
           }
-          String share = readData[readData.length - 1];
-          this.addObs(dirNickname, date, obs, share);
         }
       }
       System.out.println("done");
@@ -79,13 +82,34 @@ public class DirreqStatsFileHandler {
           bwDirreqStats.append("," + country);
         }
         bwDirreqStats.append(",share\n");
+        long lastDate = 0L;
+        String lastDirectory = null;
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+        timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         for (String observation : this.observations.values()) {
+          String currentDirectory = observation.split(",")[0];
+          long currentDate = timeFormat.parse(observation.split(",")[1]).
+              getTime();
+          while (currentDirectory.equals(lastDirectory)
+              && lastDate > 0L && currentDate - 86400000L > lastDate) {
+            lastDate += 86400000L;
+            bwDirreqStats.append(currentDirectory + ","
+                + timeFormat.format(new Date(lastDate)));
+            for (String country : this.countries) {
+              bwDirreqStats.append(",NA");
+            }
+            bwDirreqStats.append(",NA\n");
+          }
+          lastDate = currentDate;
+          lastDirectory = currentDirectory;
           bwDirreqStats.append(observation + "\n");
         }
         bwDirreqStats.close();
         System.out.println("done");
       }
     } catch (IOException e) {
+      System.out.println("failed");
+    } catch (ParseException e) {
       System.out.println("failed");
     }
   }
