@@ -1,4 +1,6 @@
-library(ggplot2)
+options(warn = -1)
+suppressPackageStartupMessages(library("ggplot2"))
+
 consensuses <- read.csv("stats/consensus-stats", header = TRUE,
     stringsAsFactors = FALSE);
 

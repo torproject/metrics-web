@@ -1,4 +1,5 @@
-library(ggplot2)
+options(warn = -1)
+suppressPackageStartupMessages(library("ggplot2"))
 
 dirreq <- read.csv("stats/dirreq-stats", header = TRUE,
   stringsAsFactors = FALSE)

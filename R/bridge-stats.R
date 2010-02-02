@@ -1,4 +1,6 @@
-library(ggplot2)
+options(warn = -1)
+suppressPackageStartupMessages(library("ggplot2"))
+
 bridge <- read.csv("stats/bridge-stats", header = TRUE,
   stringsAsFactors = FALSE)
 
