@@ -1,14 +1,18 @@
 import java.io.*;
+import java.util.logging.*;
 
 public class LockFile {
 
   private File lockFile;
+  private Logger logger;
 
   public LockFile() {
     this.lockFile = new File("lock");
+    this.logger = Logger.getLogger(LockFile.class.getName());
   }
 
   public boolean acquireLock() {
+    this.logger.info("Trying to acquire lock...");
     try {
       if (this.lockFile.exists()) {
         BufferedReader br = new BufferedReader(new FileReader("lock"));
@@ -21,14 +25,19 @@ public class LockFile {
       BufferedWriter bw = new BufferedWriter(new FileWriter("lock"));
       bw.append("" + System.currentTimeMillis() + "\n");
       bw.close();
+      this.logger.info("Acquired lock.");
       return true;
     } catch (IOException e) {
+      this.logger.warning("Caught exception while trying to acquire "
+          + "lock!");
       return false;
     }
   }
 
   public void releaseLock() {
+    this.logger.info("Releasing lock...");
     this.lockFile.delete();
+    this.logger.info("Released lock.");
   }
 }
 

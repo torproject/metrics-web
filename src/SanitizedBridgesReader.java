@@ -1,19 +1,21 @@
 import java.io.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.*;
 import org.apache.commons.codec.digest.*;
 
 public class SanitizedBridgesReader {
   public SanitizedBridgesReader(BridgeDescriptorParser bdp,
       String bridgesDir, SortedSet<String> countries) {
+    Logger logger =
+        Logger.getLogger(SanitizedBridgesReader.class.getName());
     if (new File(bridgesDir).exists()) {
       try {
         bdp.initialize();
       } catch (IOException e) {
         return;
       }
-      System.out.print("Importing files in directory " + bridgesDir
-          + "/... ");
+      logger.info("Importing files in directory " + bridgesDir + "/...");
       Stack<File> filesInInputDir = new Stack<File>();
       filesInInputDir.add(new File(bridgesDir));
       List<File> problems = new ArrayList<File>();
@@ -47,17 +49,20 @@ public class SanitizedBridgesReader {
         }
       }
       if (problems.isEmpty()) {
-        System.out.println("done");
+        logger.info("Finished importing files in directory " + bridgesDir
+            + "/.");
       } else {
-        System.out.println("failed");
+        StringBuilder sb = new StringBuilder("Failed importing files in "
+            + "directory " + bridgesDir + "/:");
         int printed = 0;
         for (File f : problems) {
-          System.out.println("  " + f.getAbsolutePath());
+          sb.append("\n  " + f.getAbsolutePath());
           if (++printed >= 3) {
-            System.out.println("  ... more");
+            sb.append("\n  ... more");
             break;
           }
         }
+        logger.warning(sb.toString());
       }
     }
   }

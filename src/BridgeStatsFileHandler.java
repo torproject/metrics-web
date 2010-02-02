@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  *
@@ -14,6 +15,7 @@ public class BridgeStatsFileHandler {
   private SortedMap<String, String> observations;
   private boolean initialized;
   private boolean modified;
+  private Logger logger;
   public BridgeStatsFileHandler(String statsDir,
       SortedSet<String> countries) {
     this.statsDir = statsDir;
@@ -23,6 +25,8 @@ public class BridgeStatsFileHandler {
     this.observations = new TreeMap<String, String>();
     this.hashedRelayIdentitiesFile = new File(statsDir
         + "/hashed-relay-identities");
+    this.logger =
+        Logger.getLogger(BridgeStatsFileHandler.class.getName());
   }
   public void initialize() throws IOException {
     if (this.initialized) {
@@ -30,8 +34,8 @@ public class BridgeStatsFileHandler {
     }
     this.initialized = true;
     if (this.bridgeStatsFile.exists()) {
-      System.out.print("Reading file " + statsDir
-          + "/bridge-stats-raw... ");
+      this.logger.info("Reading file " + statsDir
+          + "/bridge-stats-raw...");
       BufferedReader br = new BufferedReader(new FileReader(
           this.bridgeStatsFile));
       String line = br.readLine();
@@ -52,12 +56,13 @@ public class BridgeStatsFileHandler {
           this.addObs(hashedBridgeIdentity, date, time, obs);
         }
       }
-      System.out.println("done");
+      this.logger.info("Finished reading file " + statsDir
+          + "/bridge-stats-raw.");
       br.close();
     }
     if (this.hashedRelayIdentitiesFile.exists()) {
-      System.out.print("Reading file " + statsDir
-          + "/hashed-relay-identities... ");
+      this.logger.info("Reading file " + statsDir
+          + "/hashed-relay-identities...");
       BufferedReader br = new BufferedReader(new FileReader(
           this.hashedRelayIdentitiesFile));
       String line = null;
@@ -65,7 +70,8 @@ public class BridgeStatsFileHandler {
         this.hashedRelays.add(line);
       }
       br.close();
-      System.out.println("done");
+      this.logger.info("Finished reading file " + statsDir
+          + "/hashed-relay-identities.");
     }
   }
   public void addHashedRelay(String hashedRelayIdentity)
@@ -107,8 +113,8 @@ public class BridgeStatsFileHandler {
     }
     try {
       if (!this.hashedRelays.isEmpty()) {
-        System.out.print("Writing file " + this.statsDir
-            + "/hashed-relay-identities... ");
+        this.logger.info("Writing file " + this.statsDir
+            + "/hashed-relay-identities...");
         new File(this.statsDir).mkdirs();
         BufferedWriter bwRelayIdentities = new BufferedWriter(
             new FileWriter(this.hashedRelayIdentitiesFile));
@@ -116,11 +122,12 @@ public class BridgeStatsFileHandler {
           bwRelayIdentities.append(hashedRelay + "\n");
         }
         bwRelayIdentities.close();
-        System.out.println("done");
+        this.logger.info("Finished writing file " + this.statsDir
+            + "/hashed-relay-identities.");
       }
       if (!this.observations.isEmpty()) {
-        System.out.print("Writing file " + this.statsDir
-            + "/bridge-stats-raw... ");
+        this.logger.info("Writing file " + this.statsDir
+            + "/bridge-stats-raw...");
         new File(this.statsDir).mkdirs();
         BufferedWriter bwBridgeStats = new BufferedWriter(
             new FileWriter(this.bridgeStatsFile));
@@ -150,8 +157,10 @@ public class BridgeStatsFileHandler {
           }
         }
         bwBridgeStats.close();
-        System.out.print("done\nWriting file " + this.statsDir
-            + "/bridge-stats... ");
+        this.logger.info("Finished writing file " + this.statsDir
+            + "/bridge-stats-raw.");
+        this.logger.info("Writing file " + this.statsDir
+            + "/bridge-stats...");
         BufferedWriter bwBridgeStatsDate = new BufferedWriter(
             new FileWriter(this.bridgeStatsDateFile));
         bwBridgeStatsDate.append("date");
@@ -174,15 +183,19 @@ public class BridgeStatsFileHandler {
           }
           bwBridgeStatsDate.append(date);
           for (int i = 0; i < sums.length; i++) {
-            bwBridgeStatsDate.append("," + String.format("%.2f", sums[i]));
+            bwBridgeStatsDate.append(","
+                + String.format("%.2f", sums[i]));
           }
           bwBridgeStatsDate.append("\n");
         }
         bwBridgeStatsDate.close();
-        System.out.println("done");
+        this.logger.info("Finished writing file " + this.statsDir
+            + "/bridge-stats.");
       }
     } catch (IOException e) {
-      System.out.println("failed");
+      this.logger.log(Level.WARNING, "Failed writing " + this.statsDir
+          + "/{hashed-relay-identities|bridge-stats-raw|bridge-stats}!",
+          e);
     }
   }
 }

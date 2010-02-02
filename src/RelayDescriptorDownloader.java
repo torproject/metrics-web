@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  * Download the current consensus and relevant extra-info descriptors and
@@ -9,14 +10,16 @@ import java.util.*;
 public class RelayDescriptorDownloader {
   public RelayDescriptorDownloader(RelayDescriptorParser rdp,
       String authority, SortedMap<String, String> directories) {
+    Logger logger =
+        Logger.getLogger(RelayDescriptorDownloader.class.getName());
     try {
       rdp.initialize();
     } catch (IOException e) {
       return;
     }
     try {
-      System.out.print("Downloading current consensus from " + authority
-          + "... ");
+      logger.info("Downloading current consensus from " + authority
+          + "...");
       URL u = new URL("http://" + authority
           + "/tor/status-vote/current/consensus");
       HttpURLConnection huc = (HttpURLConnection) u.openConnection();
@@ -36,8 +39,10 @@ public class RelayDescriptorDownloader {
         String consensus = sb.toString();
         rdp.parse(new BufferedReader(new StringReader(consensus)));
       }
-      System.out.print("done\nDownloading extra-info descriptors from "
-          + authority + "... ");
+      logger.info("Finished downloading current consensus from "
+          + authority + ".");
+      logger.info("Downloading extra-info descriptors from " + authority
+          + "...");
       Stack<String> extraInfos = new Stack<String>();
       for (String fingerprint : directories.keySet()) {
         u = new URL("http://" + authority + "/tor/extra/fp/"
@@ -64,9 +69,12 @@ public class RelayDescriptorDownloader {
           }
         }
       }
-      System.out.println("done");
+      logger.info("Finished downloading extra-info descriptors from "
+          + authority + ".");
     } catch (IOException e) {
-      System.out.println("failed");
+      logger.log(Level.WARNING, "Failed downloading either current "
+          + "consensus or extra-info descriptors from " + authority
+          + "!", e);
     }
   }
 }

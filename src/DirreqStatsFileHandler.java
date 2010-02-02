@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 import java.text.*;
 
 /**
@@ -12,12 +13,15 @@ public class DirreqStatsFileHandler {
   private SortedMap<String, String> observations;
   private boolean initialized;
   private boolean modified;
+  private Logger logger;
   public DirreqStatsFileHandler(String statsDir,
       SortedSet<String> countries) {
     this.statsDir = statsDir;
     this.countries = countries;
     this.dirreqStatsFile = new File(statsDir + "/dirreq-stats");
     this.observations = new TreeMap<String, String>();
+    this.logger =
+        Logger.getLogger(DirreqStatsFileHandler.class.getName());
   }
   public void initialize() throws IOException {
     if (this.initialized) {
@@ -25,7 +29,7 @@ public class DirreqStatsFileHandler {
     }
     this.initialized = true;
     if (this.dirreqStatsFile.exists()) {
-      System.out.print("Reading file " + statsDir + "/dirreq-stats... ");
+      this.logger.info("Reading file " + statsDir + "/dirreq-stats...");
       BufferedReader br = new BufferedReader(new FileReader(
           this.dirreqStatsFile));
       String line = br.readLine();
@@ -48,8 +52,9 @@ public class DirreqStatsFileHandler {
           }
         }
       }
-      System.out.println("done");
       br.close();
+      this.logger.info("Finished reading file " + statsDir
+          + "/dirreq-stats...");
     }
   }
   public void addObs(String dirNickname, String date,
@@ -72,8 +77,8 @@ public class DirreqStatsFileHandler {
     }
     try {
       if (!this.observations.isEmpty()) {
-        System.out.print("Writing file " + this.statsDir
-            + "/dirreq-stats... ");
+        this.logger.info("Writing file " + this.statsDir
+            + "/dirreq-stats...");
         new File(this.statsDir).mkdirs();
         BufferedWriter bwDirreqStats = new BufferedWriter(
             new FileWriter(this.dirreqStatsFile));
@@ -105,12 +110,15 @@ public class DirreqStatsFileHandler {
           bwDirreqStats.append(observation + "\n");
         }
         bwDirreqStats.close();
-        System.out.println("done");
+        this.logger.info("Finished writing file " + this.statsDir
+            + "/dirreq-stats.");
       }
     } catch (IOException e) {
-      System.out.println("failed");
+      this.logger.log(Level.WARNING, "Failed writing file "
+          + this.statsDir + "/dirreq-stats!", e);
     } catch (ParseException e) {
-      System.out.println("failed");
+      this.logger.log(Level.WARNING, "Failed writing file "
+          + this.statsDir + "/dirreq-stats!", e);
     }
   }
 }

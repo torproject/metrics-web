@@ -1,17 +1,21 @@
 import java.io.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.*;
 import org.apache.commons.codec.digest.*;
 
 public class BridgeDescriptorParser {
   private ConsensusStatsFileHandler csfh;
   private BridgeStatsFileHandler bsfh;
-  SortedSet<String> countries;
+  private SortedSet<String> countries;
+  private Logger logger;
   public BridgeDescriptorParser(ConsensusStatsFileHandler csfh,
       BridgeStatsFileHandler bsfh, SortedSet<String> countries) {
     this.csfh = csfh;
     this.bsfh = bsfh;
     this.countries = countries;
+    this.logger =
+        Logger.getLogger(BridgeDescriptorParser.class.getName());
   }
   public void initialize() throws IOException {
     this.csfh.initialize();
@@ -47,7 +51,7 @@ public class BridgeDescriptorParser {
           && line.split(" ").length > 1) {
         if (publishedLine == null ||
             geoipStartTimeLine == null) {
-          System.out.println("Either published line or "
+          this.logger.warning("Either published line or "
               + "geoip-start-time line is not present in "
               + (sanitized ? "sanitized" : "non-sanitized")
               + " bridge descriptors from " + dateTime + ".");

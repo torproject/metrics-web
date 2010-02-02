@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  * Read in all files in a given directory and pass buffered readers of
@@ -7,14 +8,15 @@ import java.util.*;
  */
 public class ArchiveReader {
   public ArchiveReader(RelayDescriptorParser rdp, String archivesDir) {
+    Logger logger = Logger.getLogger(ArchiveReader.class.getName());
     if (new File(archivesDir).exists()) {
       try {
         rdp.initialize();
       } catch (IOException e) {
         return;
       }
-      System.out.print("Importing files in directory " + archivesDir
-          + "/... ");
+      logger.info("Importing files in directory " + archivesDir
+          + "/...");
       Stack<File> filesInInputDir = new Stack<File>();
       filesInInputDir.add(new File(archivesDir));
       List<File> problems = new ArrayList<File>();
@@ -38,14 +40,16 @@ public class ArchiveReader {
         }
       }
       if (problems.isEmpty()) {
-        System.out.println("done");
+        logger.info("Finished importing files in directory " + archivesDir
+            + "/.");
       } else {
-        System.out.println("failed");
+        StringBuilder sb = new StringBuilder("Failed importing files in "
+            + "directory " + archivesDir + "/:");
         int printed = 0;
         for (File f : problems) {
-          System.out.println("  " + f.getAbsolutePath());
+          sb.append("\n  " + f.getAbsolutePath());
           if (++printed >= 3) {
-            System.out.println("  ... more");
+            sb.append("\n  ... more");
             break;
           }
         }

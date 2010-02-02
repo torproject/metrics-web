@@ -1,6 +1,7 @@
 import java.io.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  *
@@ -18,6 +19,7 @@ public class ConsensusStatsFileHandler {
       new TreeMap<String, String>();
   private boolean initialized;
   private boolean modified;
+  private Logger logger;
   public ConsensusStatsFileHandler(String statsDir) {
     this.statsDir = statsDir;
     this.consensusResults = new TreeMap<String, String>();
@@ -27,6 +29,8 @@ public class ConsensusStatsFileHandler {
     this.bridgeConsensusStatsRawFile = new File(statsDir
         + "/bridge-consensus-stats-raw");
     this.consensusStatsFile = new File(statsDir + "/consensus-stats");
+    this.logger =
+        Logger.getLogger(ConsensusStatsFileHandler.class.getName());
   }
   public void initialize() throws IOException {
     if (this.initialized) {
@@ -34,32 +38,34 @@ public class ConsensusStatsFileHandler {
     }
     this.initialized = true;
     if (this.consensusStatsRawFile.exists()) {
-      System.out.print("Reading file " + statsDir
-          + "/consensus-stats-raw... ");
+      this.logger.info("Reading file " + statsDir
+          + "/consensus-stats-raw...");
       BufferedReader br = new BufferedReader(new FileReader(
           this.consensusStatsRawFile));
       String line = null;
       while ((line = br.readLine()) != null) {
         consensusResults.put(line.split(",")[0], line);
       }
-      System.out.println("done");
       br.close();
+      this.logger.info("Finished reading file " + statsDir
+          + "/consensus-stats-raw.");
     }
     if (this.bridgeConsensusStatsRawFile.exists()) {
-      System.out.print("Reading file " + statsDir
-          + "/bridge-consensus-stats-raw... ");
+      this.logger.info("Reading file " + statsDir
+          + "/bridge-consensus-stats-raw...");
       BufferedReader br = new BufferedReader(new FileReader(
           this.bridgeConsensusStatsRawFile));
       String line = null;
       while ((line = br.readLine()) != null) {
         bridgeConsensusResults.put(line.split(",")[0], line);
       }
-      System.out.println("done");
       br.close();
+      this.logger.info("Finished reading file " + statsDir
+          + "/bridge-consensus-stats-raw.");
     }
     if (this.consensusStatsFile.exists()) {
-      System.out.print("Reading file " + statsDir
-          + "/consensus-stats... ");
+      this.logger.info("Reading file " + statsDir
+          + "/consensus-stats...");
       BufferedReader br = new BufferedReader(new FileReader(
           this.consensusStatsFile));
       String line = br.readLine();
@@ -81,7 +87,8 @@ public class ConsensusStatsFileHandler {
         }
       }
       br.close();
-      System.out.println("done");
+      this.logger.info("Finished reading file " + statsDir
+          + "/consensus-stats.");
     }
   }
   public void addConsensusResults(String validAfter, int exit, int fast,
@@ -106,8 +113,8 @@ public class ConsensusStatsFileHandler {
       return;
     }
     if (!consensusResults.isEmpty()) {
-      System.out.print("Writing file " + this.statsDir
-          + "/consensus-stats-raw... ");
+      this.logger.info("Writing file " + this.statsDir
+          + "/consensus-stats-raw...");
       try {
         new File(this.statsDir).mkdirs();
         BufferedWriter bwConsensusStatsRaw = new BufferedWriter(
@@ -153,9 +160,11 @@ public class ConsensusStatsFileHandler {
           }
         }
         bwConsensusStatsRaw.close();
-        System.out.println("done");
+        this.logger.info("Finished writing file " + this.statsDir
+            + "/consensus-stats-raw.");
       } catch (IOException e) {
-        System.out.println("failed");
+        this.logger.log(Level.WARNING, "Failed writing file "
+            + this.statsDir + "/consensus-stats-raw!", e);
       }
       if (!bridgeConsensusResults.isEmpty()) {
         String tempDate = null;
@@ -183,8 +192,8 @@ public class ConsensusStatsFileHandler {
             brunningDay += Integer.parseInt(next.split(",")[1]);
           }
         }
-        System.out.print("Writing file " + this.statsDir
-            + "/bridge-consensus-stats-raw... ");
+        this.logger.info("Writing file " + this.statsDir
+            + "/bridge-consensus-stats-raw...");
         try {
           new File(this.statsDir).mkdirs();
           BufferedWriter bwBridgeConsensusStatsRaw = new BufferedWriter(
@@ -193,14 +202,16 @@ public class ConsensusStatsFileHandler {
             bwBridgeConsensusStatsRaw.append(line + "\n");
           }
           bwBridgeConsensusStatsRaw.close();
-          System.out.println("done");
+          this.logger.info("Finished writing file " + this.statsDir
+              + "/bridge-consensus-stats-raw.");
         } catch (IOException e) {
-          System.out.println("failed");
+          this.logger.log(Level.WARNING, "Failed writing file "
+              + this.statsDir + "/bridge-consensus-stats-raw!", e);
         }
       }
       if (!this.csAggr.isEmpty() || !this.bcsAggr.isEmpty()) {
-        System.out.print("Writing file " + this.statsDir
-            + "/consensus-stats... ");
+        this.logger.info("Writing file " + this.statsDir
+            + "/consensus-stats...");
         try {
           new File(this.statsDir).mkdirs();
           BufferedWriter bwConsensusStats = new BufferedWriter(
@@ -231,11 +242,14 @@ public class ConsensusStatsFileHandler {
             currentDate += 86400000L;
           }
           bwConsensusStats.close();
-          System.out.println("done");
+          this.logger.info("Finished writing file " + this.statsDir
+              + "/consensus-stats.");
         } catch (IOException e) {
-          System.out.println("failed");
+          this.logger.log(Level.WARNING, "Failed writing file "
+              + this.statsDir + "/consensus-stats!", e);
         } catch (ParseException e) {
-          System.out.println("failed");
+          this.logger.log(Level.WARNING, "Failed writing file "
+              + this.statsDir + "/consensus-stats!", e);
         }
       }
     }

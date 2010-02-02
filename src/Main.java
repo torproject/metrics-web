@@ -1,6 +1,7 @@
 import java.io.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  * Coordinate downloading and parsing of descriptors and extraction of
@@ -9,11 +10,14 @@ import java.util.*;
 public class Main {
   public static void main(String[] args) {
 
+    Logger logger = Logger.getLogger(Main.class.getName());
+    logger.info("Starting ERNIE...");
+
     // Use lock file to avoid overlapping runs
     LockFile lf = new LockFile();
     if (!lf.acquireLock()) {
-      System.out.println("Warning: ERNIE is already running or has not "
-          + "exited cleanly! Exiting.");
+      logger.severe("Warning: ERNIE is already running or has not exited "
+          + "cleanly! Exiting!");
       System.exit(1);
     }
 
@@ -24,7 +28,7 @@ public class Main {
         && args[0].equals("download");
 
     // Define which stats we are interested in
-    String authority = "86.59.21.38";
+    String authority = "194.109.206.212";
     SortedSet<String> countries = new TreeSet<String>();
     countries.add("bh");
     countries.add("cn");
@@ -63,6 +67,7 @@ public class Main {
 
     // Read files in archives/ and bridges/ directory
     if (!downloadOnly) {
+      logger.info("Importing data...");
       ArchiveReader ar = new ArchiveReader(rdp, "archives");
       SanitizedBridgesReader sbr = new SanitizedBridgesReader(bdp,
           "bridges", countries);
@@ -70,12 +75,15 @@ public class Main {
           "bridge-directories", statsDirectory, countries);
       TorperfProcessor tp = new TorperfProcessor(statsDirectory,
           "torperf");
+      logger.info("Finished importing data.");
     }
 
     // Download current descriptors
     if (!importOnly) {
+      logger.info("Downloading descriptors...");
       RelayDescriptorDownloader rdd = new RelayDescriptorDownloader(rdp,
           authority, directories);
+      logger.info("Finished downloading descriptors.");
     }
 
     // Write updated stats files to disk
@@ -85,6 +93,8 @@ public class Main {
 
     // Remove lock file
     lf.releaseLock();
+
+    logger.info("Terminating ERNIE.");
   }
 }
 

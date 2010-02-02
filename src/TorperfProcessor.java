@@ -1,10 +1,12 @@
 import java.io.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.*;
 
 public class TorperfProcessor {
   public TorperfProcessor(String statsDirectory,
       String torperfDirectory) {
+    Logger logger = Logger.getLogger(TorperfProcessor.class.getName());
     File rawFile = new File(statsDirectory + "/torperf-raw");
     File statsFile = new File(statsDirectory + "/torperf-stats");
     File torperfDir = new File(torperfDirectory);
@@ -12,8 +14,7 @@ public class TorperfProcessor {
     SortedMap<String, String> stats = new TreeMap<String, String>();
     try {
       if (rawFile.exists()) {
-        System.out.print("Reading file " + statsDirectory
-            + "/torperf-raw... ");
+        logger.info("Reading file " + statsDirectory + "/torperf-raw...");
         BufferedReader br = new BufferedReader(new FileReader(rawFile));
         String line = br.readLine(); // ignore header
         while ((line = br.readLine()) != null) {
@@ -21,11 +22,12 @@ public class TorperfProcessor {
           rawObs.put(key, line);
         }
         br.close();
-        System.out.println("done");
+        logger.info("Finished reading file " + statsDirectory
+            + "/torperf-raw.");
       }
       if (statsFile.exists()) {
-        System.out.print("Reading file " + statsDirectory
-            + "/torperf-stats... ");
+        logger.info("Reading file " + statsDirectory
+            + "/torperf-stats...");
         BufferedReader br = new BufferedReader(new FileReader(statsFile));
         String line = br.readLine(); // ignore header
         while ((line = br.readLine()) != null) {
@@ -33,11 +35,11 @@ public class TorperfProcessor {
           stats.put(key, line);
         }
         br.close();
-        System.out.println("done");
+        logger.info("Finished reading file " + statsDirectory
+            + "/torperf-stats.");
       }
       if (torperfDir.exists()) {
-        System.out.print("Importing files in " + torperfDirectory
-            + "/... ");
+        logger.info("Importing files in " + torperfDirectory + "/...");
         Stack<File> filesInInputDir = new Stack<File>();
         filesInInputDir.add(torperfDir);
         while (!filesInInputDir.isEmpty()) {
@@ -78,11 +80,11 @@ public class TorperfProcessor {
             br.close();
           }
         }
-        System.out.println("done");
+        logger.info("Finished importing files in " + torperfDirectory
+            + "/.");
       }
       if (rawObs.size() > 0) {
-        System.out.print("Writing file " + statsDirectory
-            + "/torperf-raw... ");
+        logger.info("Writing file " + statsDirectory + "/torperf-raw...");
         new File(statsDirectory).mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(rawFile));
         bw.append("source,date,start,completemillis\n");
@@ -117,11 +119,12 @@ public class TorperfProcessor {
           }
         }
         bw.close();
-        System.out.println("done");
+        logger.info("Finished writing file " + statsDirectory
+            + "/torperf-raw.");
       }
       if (stats.size() > 0) {
-        System.out.print("Writing file " + statsDirectory
-            + "/torperf-stats... ");
+        logger.info("Writing file " + statsDirectory
+            + "/torperf-stats...");
         new File(statsDirectory).mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(statsFile));
         bw.append("source,date,q1,md,q3\n");
@@ -130,47 +133,13 @@ public class TorperfProcessor {
           bw.append(s + "\n");
         }
         bw.close();
-        System.out.println("done");
+        logger.info("Finished writing file " + statsDirectory
+            + "/torperf-stats.");
       }
     } catch (IOException e) {
-      System.out.println("failed");
+      logger.log(Level.WARNING, "Failed writing " + statsDirectory
+          + "/torperf-{raw|stats}!", e);
     }
   }
 }
-
-/*
-    File tsFile = new File(torperfStatsFile);
-    List<String> sizeStr = new ArrayList<String>();
-    sizeStr.add("5mb");
-    sizeStr.add("1mb");
-    sizeStr.add("50kb");
-    for (String size : sizeStr) {
-      SortedMap<String, File> inFiles = new TreeMap<String, File>();
-      inFiles.put("gabelmoo", new File("gabelmoo-" + size + ".data"));
-      inFiles.put("moria", new File("moria-" + size + ".data"));
-      inFiles.put("torperf", new File("torperf-" + size + ".data"));
-      File out = new File(size + ".out");
-      BufferedWriter bw = new BufferedWriter(new FileWriter(out));
-      bw.append("date,complete,source\n");
-      Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-      for (Map.Entry<String, File> e : inFiles.entrySet()) {
-        BufferedReader br = new BufferedReader(new FileReader(
-            e.getValue()));
-        String line = null;
-        while ((line = br.readLine()) != null) {
-          String[] parts = line.split(" ");
-          Date date = new Date(Long.parseLong(parts[0]) * 1000L);
-          long start = Long.parseLong(parts[0]);
-          long complete = Long.parseLong(parts[16]);
-          if (complete - start >= 0) {
-            String s = formatter.format(date);
-            bw.append(s + "," + (complete - start) + "," + e.getKey()
-                + "\n");
-          }
-        }
-        br.close();
-      }
-      bw.close();
-    }
-*/
 

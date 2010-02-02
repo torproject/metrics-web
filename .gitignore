@@ -11,3 +11,6 @@ stats/
 # generated graphs
 website/graphs/*.png
 
+# logfiles
+log.*
+
