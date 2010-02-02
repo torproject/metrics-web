@@ -1,4 +1,5 @@
 import java.io.*;
+import java.text.*;
 import java.util.*;
 
 /**
@@ -63,11 +64,21 @@ public class ConsensusStatsFileHandler {
           this.consensusStatsFile));
       String line = br.readLine();
       while ((line = br.readLine()) != null) {
-        String date = line.split(",")[0];
-        String relays = line.substring(0, line.lastIndexOf(","));
-        String bridges = line.substring(line.lastIndexOf(",") + 1) + "\n";
-        csAggr.put(date, relays);
-        bcsAggr.put(date, bridges);
+        String[] parts = line.split(",");
+        String date = parts[0];
+        boolean foundOneNotNA = false;
+        for (int i = 1; i < parts.length - 1; i++) {
+          if (!parts[i].equals("NA")) {
+            foundOneNotNA = true;
+            break;
+          }
+        }
+        if (foundOneNotNA) {
+          String relays = line.substring(0, line.lastIndexOf(","));
+          String bridges = line.substring(line.lastIndexOf(",") + 1) + "\n";
+          csAggr.put(date, relays);
+          bcsAggr.put(date, bridges);
+        }
       }
       br.close();
       System.out.println("done");
@@ -196,10 +207,17 @@ public class ConsensusStatsFileHandler {
               new FileWriter(this.consensusStatsFile));
           bwConsensusStats.append("date,exit,fast,guard,running,stable,"
               + "brunning\n");
-          SortedSet<String> allDates = new TreeSet<String>();
-          allDates.addAll(this.csAggr.keySet());
-          allDates.addAll(this.bcsAggr.keySet());
-          for (String date : allDates) {
+          SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+          format.setTimeZone(TimeZone.getTimeZone("UTC"));
+          long firstDate = Math.min(
+              format.parse(this.csAggr.firstKey()).getTime(),
+              format.parse(this.bcsAggr.firstKey()).getTime());
+          long lastDate = Math.max(
+              format.parse(this.csAggr.lastKey()).getTime(),
+              format.parse(this.bcsAggr.lastKey()).getTime());
+          long currentDate = firstDate;
+          while (currentDate <= lastDate) {
+            String date = format.format(new Date(currentDate));
             if (this.csAggr.containsKey(date)) {
               bwConsensusStats.append(this.csAggr.get(date));
             } else {
@@ -210,10 +228,13 @@ public class ConsensusStatsFileHandler {
             } else {
               bwConsensusStats.append(",NA\n");
             }
+            currentDate += 86400000L;
           }
           bwConsensusStats.close();
           System.out.println("done");
         } catch (IOException e) {
+          System.out.println("failed");
+        } catch (ParseException e) {
           System.out.println("failed");
         }
       }
