@@ -47,7 +47,7 @@ plot_years <- function(filenamePart, titlePart, years, data, countries) {
       people <- countries[country, 2]
       filename <- countries[country, 3]
       plot_dirreq(paste(filename, filenamePart, "-", year, ".png",
-        sep = ""), paste(titlePart, " ", people, " (", year,
+        sep = ""), paste(titlePart, " ", people, " Tor users (", year,
         ")\n", sep = ""), as.Date(c(paste(year, "-01-01", sep = ""),
         paste(year, "-12-31", sep = ""))), data, code)
     }
@@ -67,8 +67,9 @@ plot_quarters <- function(filenamePart, titlePart, years, quarters, data,
         end <- seq(seq(start, length = 2, by = "3 months")[2], length = 2,
           by = "-1 day")[2]
         plot_dirreq(paste(filename, filenamePart, "-", year, "-q",
-          quarter, ".png", sep = ""), paste(titlePart, " ", people, " (Q",
-          quarter, " ", year, ")\n", sep = ""), c(start, end), data, code)
+          quarter, ".png", sep = ""), paste(titlePart, " ", people,
+          " Tor users (Q", quarter, " ", year, ")\n", sep = ""),
+          c(start, end), data, code)
       }
     }
   }
@@ -87,8 +88,8 @@ plot_months <- function(filenamePart, titlePart, years, months, data,
           by = "-1 day")[2]
         plot_dirreq(paste(filename, filenamePart, "-", year, "-",
           format(start, "%m"), ".png", sep = ""), paste(titlePart, " ",
-          people, " (", format(start, "%B"), " ", year, ")\n", sep = ""),
-          c(start, end), data, code)
+          people, " Tor users (", format(start, "%B"), " ", year, ")\n",
+          sep = ""), c(start, end), data, code)
       }
     }
   }
