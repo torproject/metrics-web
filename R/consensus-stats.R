@@ -71,30 +71,16 @@ plot_months <- function(filenamePart, titlePart, years, months, rows,
 }
 
 # TODO these need to be updated manually
+plot_current <- function(filenamePart, titlePart, rows, breaks, labels) {
+  plot_pastdays(filenamePart, titlePart, c(30, 90, 180), rows, breaks,
+    labels)
+  plot_years(filenamePart, titlePart, "2010", rows, breaks, labels)
+  plot_quarters(filenamePart, titlePart, "2010", 1, rows, breaks, labels)
+  plot_months(filenamePart, titlePart, "2010", 2, rows, breaks, labels)
+}
 
-plot_pastdays("networksize", "Number of relays and bridges",
-  c(30, 90, 180), c(1, 5, 7), c("running", "brunning"),
-  c("Relays", "Bridges"))
-plot_years("networksize", "Number of relays and bridges",
-  "2010", c(1, 5, 7), c("running", "brunning"),
-  c("Relays", "Bridges"))
-plot_quarters("networksize", "Number of relays and bridges",
-  "2010", 1, c(1, 5, 7), c("running", "brunning"),
-  c("Relays", "Bridges"))
-plot_months("networksize", "Number of relays and bridges",
-  "2010", 2, c(1, 5, 7), c("running", "brunning"),
-  c("Relays", "Bridges"))
-
-plot_pastdays("exit", "Number of exit relays",
-  c(30, 90, 180), c(1, 5, 2), c("running", "exit"),
-  c("All relays", "Exit relays"))
-plot_years("exit", "Number of exit relays",
-  "2010", c(1, 5, 2), c("running", "exit"),
-  c("All relays", "Exit relays"))
-plot_quarters("exit", "Number of exit relays",
-  "2010", 1, c(1, 5, 2), c("running", "exit"),
-  c("All relays", "Exit relays"))
-plot_months("exit", "Number of exit relays",
-  "2010", 2, c(1, 5, 2), c("running", "exit"),
-  c("All relays", "Exit relays"))
+plot_current("networksize", "Number of relays and bridges", c(1, 5, 7),
+  c("running", "brunning"), c("Relays", "Bridges"))
+plot_current("exit", "Number of exit relays", c(1, 5, 2),
+  c("running", "exit"), c("All relays", "Exit relays"))
 
