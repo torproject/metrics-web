@@ -28,7 +28,7 @@ public class Main {
         && args[0].equals("download");
 
     // Define which stats we are interested in
-    String authority = "194.109.206.212";
+    String authority = "86.59.21.38";
     SortedSet<String> countries = new TreeSet<String>();
     countries.add("bh");
     countries.add("cn");
