@@ -14,7 +14,8 @@ public class BridgeStatsFileHandler {
   private SortedSet<String> hashedRelays = new TreeSet<String>();
   private SortedMap<String, String> observations;
   private boolean initialized;
-  private boolean modified;
+  private boolean hashedRelaysModified;
+  private boolean observationsModified;
   private Logger logger;
   public BridgeStatsFileHandler(String statsDir,
       SortedSet<String> countries) {
@@ -56,9 +57,10 @@ public class BridgeStatsFileHandler {
           this.addObs(hashedBridgeIdentity, date, time, obs);
         }
       }
+      br.close();
+      this.observationsModified = false;
       this.logger.info("Finished reading file " + statsDir
           + "/bridge-stats-raw.");
-      br.close();
     }
     if (this.hashedRelayIdentitiesFile.exists()) {
       this.logger.info("Reading file " + statsDir
@@ -70,6 +72,7 @@ public class BridgeStatsFileHandler {
         this.hashedRelays.add(line);
       }
       br.close();
+      this.hashedRelaysModified = false;
       this.logger.info("Finished reading file " + statsDir
           + "/hashed-relay-identities.");
     }
@@ -80,7 +83,7 @@ public class BridgeStatsFileHandler {
       throw new RuntimeException("Not initialized!");
     }
     this.hashedRelays.add(hashedRelayIdentity);
-    this.modified = true;
+    this.hashedRelaysModified = true;
   }
   public boolean isKnownRelay(String hashedBridgeIdentity)
       throws IOException {
@@ -103,16 +106,13 @@ public class BridgeStatsFileHandler {
     if (!this.observations.containsKey(key)
         || value.compareTo(this.observations.get(key)) > 0) {
       this.observations.put(key, value);
+      this.observationsModified = true;
     }
-    this.modified = true;
   }
 
   public void writeFile() {
-    if (!this.modified) {
-      return;
-    }
-    try {
-      if (!this.hashedRelays.isEmpty()) {
+    if (!this.hashedRelays.isEmpty() && this.hashedRelaysModified) {
+      try {
         this.logger.info("Writing file " + this.statsDir
             + "/hashed-relay-identities...");
         new File(this.statsDir).mkdirs();
@@ -124,8 +124,13 @@ public class BridgeStatsFileHandler {
         bwRelayIdentities.close();
         this.logger.info("Finished writing file " + this.statsDir
             + "/hashed-relay-identities.");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed writing " + this.statsDir
+            + "/hashed-relay-identities!", e);
       }
-      if (!this.observations.isEmpty()) {
+    }
+    if (!this.observations.isEmpty() && this.observationsModified) {
+      try {
         this.logger.info("Writing file " + this.statsDir
             + "/bridge-stats-raw...");
         new File(this.statsDir).mkdirs();
@@ -191,11 +196,10 @@ public class BridgeStatsFileHandler {
         bwBridgeStatsDate.close();
         this.logger.info("Finished writing file " + this.statsDir
             + "/bridge-stats.");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed writing " + this.statsDir
+            + "/bridge-stats[-raw]!", e);
       }
-    } catch (IOException e) {
-      this.logger.log(Level.WARNING, "Failed writing " + this.statsDir
-          + "/{hashed-relay-identities|bridge-stats-raw|bridge-stats}!",
-          e);
     }
   }
 }

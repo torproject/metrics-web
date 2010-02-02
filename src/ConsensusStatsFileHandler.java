@@ -18,7 +18,8 @@ public class ConsensusStatsFileHandler {
   private SortedMap<String, String> bcsAggr =
       new TreeMap<String, String>();
   private boolean initialized;
-  private boolean modified;
+  private boolean consensusResultsModified;
+  private boolean bridgeConsensusResultsModified;
   private Logger logger;
   public ConsensusStatsFileHandler(String statsDir) {
     this.statsDir = statsDir;
@@ -44,7 +45,7 @@ public class ConsensusStatsFileHandler {
           this.consensusStatsRawFile));
       String line = null;
       while ((line = br.readLine()) != null) {
-        consensusResults.put(line.split(",")[0], line);
+        this.consensusResults.put(line.split(",")[0], line);
       }
       br.close();
       this.logger.info("Finished reading file " + statsDir
@@ -96,9 +97,9 @@ public class ConsensusStatsFileHandler {
     if (!this.initialized) {
       throw new RuntimeException("Not initialized!");
     }
-    consensusResults.put(validAfter, validAfter + "," + exit + "," + fast
+    this.consensusResults.put(validAfter, validAfter + "," + exit + "," + fast
         + "," + guard + "," + running + "," + stable);
-    this.modified = true;
+    this.consensusResultsModified = true;
   }
   public void addBridgeConsensusResults(String published, int running)
       throws IOException {
@@ -106,13 +107,11 @@ public class ConsensusStatsFileHandler {
       throw new RuntimeException("Not initialized!");
     }
     bridgeConsensusResults.put(published, published + "," + running);
-    this.modified = true;
+    this.bridgeConsensusResultsModified = true;
   }
   public void writeFile() {
-    if (!this.modified) {
-      return;
-    }
-    if (!consensusResults.isEmpty()) {
+    if (!this.consensusResults.isEmpty()
+        && this.consensusResultsModified) {
       this.logger.info("Writing file " + this.statsDir
           + "/consensus-stats-raw...");
       try {
@@ -122,7 +121,7 @@ public class ConsensusStatsFileHandler {
         String tempDate = null;
         int exitDay = 0, fastDay = 0, guardDay = 0, runningDay = 0,
             stableDay = 0, consensusesDay = 0;
-        Iterator<String> it = consensusResults.values().iterator();
+        Iterator<String> it = this.consensusResults.values().iterator();
         boolean haveWrittenFinalLine = false;
           while (it.hasNext() || !haveWrittenFinalLine) {
             String next = it.hasNext() ? it.next() : null;
@@ -166,7 +165,8 @@ public class ConsensusStatsFileHandler {
         this.logger.log(Level.WARNING, "Failed writing file "
             + this.statsDir + "/consensus-stats-raw!", e);
       }
-      if (!bridgeConsensusResults.isEmpty()) {
+      if (!this.bridgeConsensusResults.isEmpty()
+          && this.bridgeConsensusResultsModified) {
         String tempDate = null;
         int brunningDay = 0, bridgeStatusesDay = 0;
         Iterator<String> it = bridgeConsensusResults.values().iterator();
@@ -209,7 +209,9 @@ public class ConsensusStatsFileHandler {
               + this.statsDir + "/bridge-consensus-stats-raw!", e);
         }
       }
-      if (!this.csAggr.isEmpty() || !this.bcsAggr.isEmpty()) {
+      if ((!this.csAggr.isEmpty() && this.consensusResultsModified)
+          || (!this.bcsAggr.isEmpty())
+            && this.bridgeConsensusResultsModified) {
         this.logger.info("Writing file " + this.statsDir
             + "/consensus-stats...");
         try {
