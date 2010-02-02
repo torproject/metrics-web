@@ -1,58 +1,101 @@
-bridge <- read.csv("stats/bridge-stats", header = TRUE, stringsAsFactors = FALSE)
+library(ggplot2)
+bridge <- read.csv("stats/bridge-stats", header = TRUE,
+  stringsAsFactors = FALSE)
 
-plot_bridges <- function(country, people, filename, color) {
-  sums <- aggregate(bridge[[country]], list(Date = bridge$date), sum)
-  sums <- sums[1:(length(sums$Date)-1),]
-  end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
-  start <- seq(seq(from = end, length = 2,
-      by="-6 months")[2], length=2, by="1 day")[2]
-  dates <- seq(from = start, to = end, by="1 day")
-  datesStr <- as.character(dates)
-  data <- c()
-  for (i in datesStr) {
-    data <- c(data, ifelse(i %in% sums$Date,
-        sums$x[sums$Date == i], NA))
-  }
-  firstdays <- c()
-  for (i in datesStr)
-    if (format(as.POSIXct(i, tz="GMT"), "%d") == "01")
-      firstdays <- c(firstdays, i)
-  monthticks <- which(datesStr %in% firstdays)
-  monthlabels <- c()
-  for (i in monthticks[1:(length(monthticks) - 2)])
-    monthlabels <- c(monthlabels,
-        format(as.POSIXct(dates[i + 1], tz="GMT"), "%b"))
-  monthlabels <- c(monthlabels,
-      format(as.POSIXct(dates[monthticks[length(monthticks) - 1] + 1]), "%b %y"))
-  monthat <- c()
-  for (i in 1:(length(monthticks) - 1))
-    monthat <- c(monthat, (monthticks[i] + monthticks[i + 1]) / 2)
-  png(filename, width=600, height=400)
-  par(mar = c(4.1, 3.9, 2.1, 0))
-  plot(data, ylim=c(0, max(na.omit(data))), type="l", col=color, lwd=2,
-      axes=FALSE, frame=FALSE,
-      main=paste(people, "Tor users via bridges"),
-      xlab=paste("Last updated:", as.POSIXlt(Sys.time(), "UTC"), "UTC"),
-      ylab="")
-  axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
-  axis(1, at=c(1, length(data)), labels=FALSE, lwd=1, lwd.ticks=0)
-  axis(1, at=monthat, lwd=0, labels=monthlabels)
-  axis(2, las=1, lwd=0, lwd.ticks=1)
-  axis(2, las=1, at=c(min(na.omit(data)), max(na.omit(data))), lwd.ticks=0, labels=FALSE)
-  dev.off()
+plot_bridges <- function(filename, title, limits, code) {
+  c <- data.frame(date = bridge$date, users = bridge[[code]])
+  ggplot(c, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
+    geom_line() + scale_x_date(name = "", limits = limits) +
+    scale_y_continuous(name = "", limits = c(0, max(bridge[[code]],
+    na.rm = TRUE))) +
+    opts(title = title)
+  ggsave(filename = paste("website/graphs/", filename, sep = ""),
+    width = 8, height = 5, dpi = 72)
 }
-# TODO find better colors
-plot_bridges("bh", "Bahraini", "website/graphs/bahrain-bridges.png", "red")
-plot_bridges("cn", "Chinese", "website/graphs/china-bridges.png", "red")
-plot_bridges("cu", "Cuban", "website/graphs/cuba-bridges.png", "red")
-plot_bridges("et", "Ethiopian", "website/graphs/ethiopia-bridges.png", "red")
-plot_bridges("ir", "Iranian", "website/graphs/iran-bridges.png", "green3")
-plot_bridges("mm", "Burmese", "website/graphs/burma-bridges.png", "blue4")
-plot_bridges("sa", "Saudi", "website/graphs/saudi-bridges.png", "red")
-plot_bridges("sy", "Syrian", "website/graphs/syria-bridges.png", "red")
-plot_bridges("tn", "Tunisian", "website/graphs/tunisia-bridges.png", "red")
-plot_bridges("tm", "Turkmen", "website/graphs/turkmenistan-bridges.png", "red")
-plot_bridges("uz", "Uzbek", "website/graphs/uzbekistan-bridges.png", "red")
-plot_bridges("vn", "Vietnamese", "website/graphs/vietnam-bridges.png", "gold2")
-plot_bridges("ye", "Yemeni", "website/graphs/yemen-bridges.png", "gold2")
+
+plot_pastdays <- function(days, countries) {
+  for (day in days) {
+    for (country in 1:length(countries$code)) {
+      code <- countries[country, 1]
+      people <- countries[country, 2]
+      filename <- countries[country, 3]
+      end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
+      start <- seq(from = end, length = 2, by = paste("-", day, " days",
+        sep = ""))[2]
+      plot_bridges(paste(filename, "-bridges-", day, "d.png", sep = ""),
+        paste(people, "Tor users via bridges (past", day, "days)\n"),
+        c(start, end), code)
+    }
+  }
+}
+
+plot_years <- function(years, countries) {
+  for (year in years) {
+    for (country in 1:length(countries$code)) {
+      code <- countries[country, 1]
+      people <- countries[country, 2]
+      filename <- countries[country, 3]
+      plot_bridges(paste(filename, "-bridges-", year, ".png", sep = ""),
+        paste(people, " Tor users via bridges (", year, ")\n", sep = ""),
+        as.Date(c(paste(year, "-01-01", sep = ""), paste(year, "-12-31",
+        sep = ""))), code)
+    }
+  }
+}
+
+plot_quarters <- function(years, quarters, countries) {
+  for (year in years) {
+    for (quarter in quarters) {
+      for (country in 1:length(countries$code)) {
+        code <- countries[country, 1]
+        people <- countries[country, 2]
+        filename <- countries[country, 3]
+        start <- as.Date(paste(year, "-", (quarter - 1) * 3 + 1, "-01",
+          sep = ""))
+        end <- seq(seq(start, length = 2, by = "3 months")[2], length = 2,
+          by = "-1 day")[2]
+        plot_bridges(paste(filename, "-bridges-", year, "-q", quarter,
+          ".png", sep = ""), paste(people, " Tor users via bridges (Q",
+          quarter, " ", year, ")\n", sep = ""), c(start, end), code)
+      }
+    }
+  }
+}
+
+plot_months <- function(years, months, countries) {
+  for (year in years) {
+    for (month in months) {
+      for (country in 1:length(countries$code)) {
+        code <- countries[country, 1]
+        people <- countries[country, 2]
+        filename <- countries[country, 3]
+        start <- as.Date(paste(year, "-", month, "-01", sep = ""))
+        end <- seq(seq(start, length = 2, by = "1 month")[2], length = 2,
+          by = "-1 day")[2]
+        plot_bridges(paste(filename, "-bridges-", year, "-",
+          format(start, "%m"), ".png", sep = ""), paste(people,
+          " Tor users via bridges (", format(start, "%B"), " ", year,
+          ")\n", sep = ""), c(start, end), code)
+      }
+    }
+  }
+}
+
+# TODO these need to be updated manually
+plot_current <- function(countries) {
+  plot_pastdays(c(30, 90, 180), countries)
+  plot_years("2010", countries)
+  plot_quarters("2010", 1, countries)
+  plot_months("2010", 1:2, countries)
+}
+
+countries <- data.frame(code = c("bh", "cn", "cu", "et", "ir", "mm", "sa",
+  "sy", "tn", "tm", "uz", "vn", "ye"), people = c("Bahraini", "Chinese",
+  "Cuban", "Ethiopian", "Iranian", "Burmese", "Saudi", "Syrian",
+  "Tunisian", "Turkmen", "Uzbek", "Vietnamese", "Yemeni"), filename =
+  c("bahrain", "china", "cuba", "ethiopia", "iran", "burma", "saudi",
+  "syria", "tunisia", "turkmenistan", "uzbekistan", "vietnam", "yemen"),
+  stringsAsFactors = FALSE)
+
+plot_current(countries)
 
