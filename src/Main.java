@@ -87,9 +87,11 @@ public class Main {
     }
 
     // Write updated stats files to disk
+    logger.info("Writing updated stats files to disk...");
     bsfh.writeFile();
     csfh.writeFile();
     dsfh.writeFile();
+    logger.info("Finished writing updated stats files to disk.");
 
     // Remove lock file
     lf.releaseLock();
