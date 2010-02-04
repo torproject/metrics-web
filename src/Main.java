@@ -28,7 +28,6 @@ public class Main {
         && args[0].equals("download");
 
     // Define which stats we are interested in
-    String authority = "86.59.21.38";
     SortedSet<String> countries = new TreeSet<String>();
     countries.add("bh");
     countries.add("cn");
@@ -81,8 +80,10 @@ public class Main {
     // Download current descriptors
     if (!importOnly) {
       logger.info("Downloading descriptors...");
-      RelayDescriptorDownloader rdd = new RelayDescriptorDownloader(rdp,
-          authority, directories);
+      new RelayDescriptorDownloader(rdp, "86.59.21.38", directories);
+      new RelayDescriptorDownloader(rdp, "194.109.206.212", directories);
+      new RelayDescriptorDownloader(rdp, "80.190.246.100:8180",
+          directories);
       logger.info("Finished downloading descriptors.");
     }
 
