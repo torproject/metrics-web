@@ -72,6 +72,13 @@ plot_months <- function(filenamePart, titlePart, years, months, rows,
   }
 }
 
+plot_all <- function(filenamePart, titlePart, rows, breaks, labels) {
+  plot_consensus(paste(filenamePart, "-all.png", sep = ""),
+    paste(titlePart, " (all data)\n", sep = ""),
+    as.Date(c(min(consensuses$date), max(consensuses$date))), rows,
+    breaks, labels)
+}
+
 # TODO these need to be updated manually
 plot_current <- function(filenamePart, titlePart, rows, breaks, labels) {
   plot_pastdays(filenamePart, titlePart, c(30, 90, 180), rows, breaks,
@@ -79,6 +86,7 @@ plot_current <- function(filenamePart, titlePart, rows, breaks, labels) {
   plot_years(filenamePart, titlePart, "2010", rows, breaks, labels)
   plot_quarters(filenamePart, titlePart, "2010", 1, rows, breaks, labels)
   plot_months(filenamePart, titlePart, "2010", 2, rows, breaks, labels)
+  plot_all(filenamePart, titlePart, rows, breaks, labels)
 }
 
 plot_current("networksize", "Number of relays and bridges", c(1, 5, 7),
