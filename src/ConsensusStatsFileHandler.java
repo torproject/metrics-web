@@ -233,7 +233,8 @@ public class ConsensusStatsFileHandler {
       this.logger.log(Level.WARNING, "Failed writing file "
           + this.statsDir + "/bridge-consensus-stats-raw!", e);
     }
-    if (writeConsensusStats) {
+    if (writeConsensusStats &&
+        !(this.csAggr.isEmpty() && this.bcsAggr.isEmpty())) {
       this.logger.info("Writing file " + this.statsDir
           + "/consensus-stats...");
       try {
@@ -244,13 +245,21 @@ public class ConsensusStatsFileHandler {
             + "brunning\n");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        // TODO this is going to break if one of the maps is empty
-        long firstDate = Math.min(
-            format.parse(this.csAggr.firstKey()).getTime(),
-            format.parse(this.bcsAggr.firstKey()).getTime());
-        long lastDate = Math.max(
-            format.parse(this.csAggr.lastKey()).getTime(),
-            format.parse(this.bcsAggr.lastKey()).getTime());
+        long firstDate = 0L, lastDate = 0L;
+        if (this.csAggr.isEmpty()) {
+          firstDate = format.parse(this.bcsAggr.firstKey()).getTime();
+          lastDate = format.parse(this.bcsAggr.lastKey()).getTime();
+        } else if (this.bcsAggr.isEmpty()) {
+          firstDate = format.parse(this.csAggr.firstKey()).getTime();
+          lastDate = format.parse(this.csAggr.lastKey()).getTime();
+        } else {
+          firstDate = Math.min(
+              format.parse(this.csAggr.firstKey()).getTime(),
+              format.parse(this.bcsAggr.firstKey()).getTime());
+          lastDate = Math.max(
+              format.parse(this.csAggr.lastKey()).getTime(),
+              format.parse(this.bcsAggr.lastKey()).getTime());
+        }
         long currentDate = firstDate;
         while (currentDate <= lastDate) {
           String date = format.format(new Date(currentDate));
