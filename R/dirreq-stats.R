@@ -10,6 +10,11 @@ trustedSub <- subset(dirreq, directory %in% "trusted")
 trusted <- data.frame(date = trustedSub$date,
   floor(trustedSub[3:(length(trustedSub) - 1)] / trustedSub$share * 10))
 
+write.csv(moria1, "website/csv/new-users.csv", quote = FALSE,
+  row.names = FALSE)
+write.csv(trusted, "website/csv/recurring-users.csv", quote = FALSE,
+  row.names = FALSE)
+
 plot_dirreq <- function(filename, title, limits, data, code) {
   c <- data.frame(date = data$date, users = data[[code]])
   ggplot(c, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +

@@ -1,6 +1,7 @@
 # TODO this file is a hack! find a better solution with ggplot2?
 
 t <- read.csv("stats/torperf-stats")
+write.csv(t, "website/csv/torperf.csv", quote = FALSE, row.names = FALSE)
 
 intervals <- c("6m", "2w")
 intervalsStr <- c("-6 months", "-2 weeks")

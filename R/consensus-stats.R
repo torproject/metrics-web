@@ -3,6 +3,12 @@ suppressPackageStartupMessages(library("ggplot2"))
 
 consensuses <- read.csv("stats/consensus-stats", header = TRUE,
     stringsAsFactors = FALSE);
+write.csv(data.frame(date = consensuses$date,
+  relays = consensuses$running, bridges = consensuses$brunning),
+  "website/csv/networksize.csv", quote = FALSE, row.names = FALSE)
+write.csv(data.frame(date = consensuses$date,
+  all = consensuses$running, exit = consensuses$exit),
+  "website/csv/exit.csv", quote = FALSE, row.names = FALSE)
 
 plot_consensus <- function(filename, title, limits, rows, breaks,
     labels) {

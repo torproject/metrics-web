@@ -3,6 +3,8 @@ suppressPackageStartupMessages(library("ggplot2"))
 
 bridge <- read.csv("stats/bridge-stats", header = TRUE,
   stringsAsFactors = FALSE)
+write.csv(bridge, "website/csv/bridge-users.csv", quote = FALSE,
+  row.names = FALSE)
 
 plot_bridges <- function(filename, title, limits, code) {
   c <- data.frame(date = bridge$date, users = bridge[[code]])
