@@ -81,22 +81,38 @@ for (intervalInd in 1:length(intervals)) {
         q3s_ <- c(q3s_, ifelse(i %in% data$date, data$q3[data$date == i],
             NA))
       }
-      xp <- c(1:length(q1s_), length(q3s_):1)
-      yp <- c(q1s_/1e3, rev(q3s_/1e3))
-      xp2 <- c()
-      for (i in 1:length(xp)) {
-        if (is.na(yp[i]))
-          xp2 <- c(xp2, NA)
-        else
-          xp2 <- c(xp2, xp[i])
-      }
       colmed <- color
       colquart <- paste(color, "66", sep="")
 
       plot(medians_/1e3, ylim=c(0, maxY), type="l", col=colmed, lwd=2,
           main=title, axes=FALSE, ylab="", xlab=xlab,
           cex.main=ifelse(intervalInd == 1, 1.9, 1.25))
-      polygon(na.omit(xp2), na.omit(yp), col=colquart, lty=0)
+
+      xp <- c()
+      yp <- c()
+      for (i in 1:length(q1s_)) {
+        if (is.na(q1s_[i])) {
+          if (length(xp) > 0) {
+            for (j in xp[length(xp)]:xp[1]) {
+              xp <- c(xp, j)
+              yp <- c(yp, q3s_[j]/1e3)
+            }
+            polygon(na.omit(xp), na.omit(yp), col=colquart, lty=0)
+          }
+          xp <- c()
+          yp <- c()
+        } else {
+          xp <- c(xp, i)
+          yp <- c(yp, q1s_[i]/1e3)
+        }
+      }
+      if (length(xp) > 0) {
+        for (j in xp[length(xp)]:xp[1]) {
+          xp <- c(xp, j)
+          yp <- c(yp, q3s_[j]/1e3)
+        }
+        polygon(na.omit(xp), na.omit(yp), col=colquart, lty=0)
+      }
 
       axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
       axis(1, at=c(1, length(datesStr)), labels=FALSE, lwd=1, lwd.ticks=0)
