@@ -74,6 +74,7 @@ public class Main {
           "bridge-directories", statsDirectory, countries);
       TorperfProcessor tp = new TorperfProcessor(statsDirectory,
           "torperf");
+      GetTorProcessor gtp = new GetTorProcessor(statsDirectory);
       logger.info("Finished importing data.");
     }
 
