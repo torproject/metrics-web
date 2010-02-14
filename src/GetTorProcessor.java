@@ -8,13 +8,6 @@ public class GetTorProcessor {
       "http://gettor.torproject.org:8080/~gettor/gettor_stats.txt";
   public GetTorProcessor(String statsDirectory) {
     Logger logger = Logger.getLogger(TorperfProcessor.class.getName());
-    Calendar now = Calendar.getInstance();
-    now.setTime(new Date());
-    if (now.get(Calendar.HOUR_OF_DAY) % 6 != 0) {
-      // only download every 6th hour
-      logger.info("Skipping downloading gettor stats.");
-      return;
-    }
     String unparsed = null;
     try {
       logger.info("Downloading gettor stats...");
