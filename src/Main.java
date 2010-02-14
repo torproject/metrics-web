@@ -74,7 +74,6 @@ public class Main {
           "bridge-directories", statsDirectory, countries);
       TorperfProcessor tp = new TorperfProcessor(statsDirectory,
           "torperf");
-      GetTorProcessor gtp = new GetTorProcessor(statsDirectory);
       logger.info("Finished importing data.");
     }
 
@@ -85,6 +84,7 @@ public class Main {
       new RelayDescriptorDownloader(rdp, "194.109.206.212", directories);
       new RelayDescriptorDownloader(rdp, "80.190.246.100:8180",
           directories);
+      new GetTorProcessor(statsDirectory);
       logger.info("Finished downloading descriptors.");
     }
 
