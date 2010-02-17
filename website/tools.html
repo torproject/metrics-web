@@ -87,20 +87,20 @@
         <a id="bridgesan"/>
         <h3>Bridge descriptor sanitizer</h3>
         <br/>
-        <p>The bridge authority Tonga keeps a list of bridges in order to
-        serve bridge addresses and descriptors to its clients. Every half
-        hour, Tonga takes a snapshot of the known bridge descriptors for
-        later statistical analysis. As a guiding principle, the Tor
-        project makes all data that it uses for statistical analysis
-        available to the interested public, in order to maximize
-        transparency towards the community. However, the bridge
-        descriptors contain the IP addresses and other contact information
-        of bridges that must not be made public, or the purpose of bridges
-        as non-public entry points into the Tor network would be obsolete.
-        This script takes the half-hourly snapshots as input, removes all
-        possibly sensitive information from the descriptors, and puts out
-        the sanitized bridge descriptors that are safe to be
-        published.</p>
+        <p>The bridge authority Tonga maintains a list of bridges in order
+        to serve bridge addresses and descriptors to its clients. Every
+        half hour, Tonga takes a snapshot of the known bridge descriptors
+        and copies them to byblos for later statistical analysis. As a
+        guiding principle, the Tor project makes all data that it uses for
+        statistical analysis available to the interested public, in order
+        to maximize transparency towards the community. However, the
+        bridge descriptors contain the IP addresses and other contact
+        information of bridges that must not be made public, or the
+        purpose of bridges as non-public entry points into the Tor network
+        would be obsolete. This script takes the half-hourly snapshots as
+        input, removesall possibly sensitive information from the
+        descriptors, and puts out the sanitized bridge descriptors that
+        are safe to be published.</p>
         <ul>
           <li>Browse the
           <a href="https://svn.torproject.org/svn/projects/archives/trunk/bridge-desc-sanitizer/">SVN repository</a></li>
