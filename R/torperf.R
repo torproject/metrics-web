@@ -51,8 +51,8 @@ for (intervalInd in 1:length(intervals)) {
   for (sizeInd in 1:length(sizes)) {
     size <- sizes[sizeInd]
     sizePr <- sizePrint[sizeInd]
-    png(paste("website/graphs/torperf-", size, "-", interval, ".png",
-        sep = ""), width=600, height=height)
+    png(paste("website/graphs/torperf/torperf-", size, "-", interval,
+        ".png", sep = ""), width=600, height=height)
     par(mfrow=c(length(sources), 1))
     par(mar=c(4.3,3.1,2.1,0.1))
     maxY <- max(na.omit(subset(t, source %in% paste(sources, size,

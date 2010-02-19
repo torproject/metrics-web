@@ -15,7 +15,7 @@ write.csv(moria1, "website/csv/new-users.csv", quote = FALSE,
 write.csv(trusted, "website/csv/recurring-users.csv", quote = FALSE,
   row.names = FALSE)
 
-plot_dirreq <- function(filename, title, limits, data, code) {
+plot_dirreq <- function(directory, filename, title, limits, data, code) {
   c <- data.frame(date = data$date, users = data[[code]])
   ggplot(c, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
     geom_line() +
@@ -25,11 +25,11 @@ plot_dirreq <- function(filename, title, limits, data, code) {
     scale_y_continuous(name = "",
     limits = c(0, max(c$users, na.rm = TRUE))) +
     opts(title = title)
-  ggsave(filename = paste("website/graphs/", filename, sep = ""),
+  ggsave(filename = paste(directory, filename, sep = ""),
     width = 8, height = 5, dpi = 72)
 }
 
-plot_pastdays <- function(filenamePart, titlePart, days, data,
+plot_pastdays <- function(directory, filenamePart, titlePart, days, data,
     countries) {
   for (day in days) {
     for (country in 1:length(countries$code)) {
@@ -39,29 +39,30 @@ plot_pastdays <- function(filenamePart, titlePart, days, data,
       end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
       start <- seq(from = end, length = 2, by = paste("-", day, " days",
         sep = ""))[2]
-      plot_dirreq(paste(filename, filenamePart, "-", day, "d.png",
-        sep = ""), paste(titlePart, people, "Tor users (past", day,
-        "days)\n"), c(start, end), data, code)
+      plot_dirreq(directory, paste(filename, filenamePart, "-", day,
+        "d.png", sep = ""), paste(titlePart, people, "Tor users (past",
+        day, "days)\n"), c(start, end), data, code)
     }
   }
 }
 
-plot_years <- function(filenamePart, titlePart, years, data, countries) {
+plot_years <- function(directory, filenamePart, titlePart, years, data,
+    countries) {
   for (year in years) {
     for (country in 1:length(countries$code)) {
       code <- countries[country, 1]
       people <- countries[country, 2]
       filename <- countries[country, 3]
-      plot_dirreq(paste(filename, filenamePart, "-", year, ".png",
-        sep = ""), paste(titlePart, " ", people, " Tor users (", year,
-        ")\n", sep = ""), as.Date(c(paste(year, "-01-01", sep = ""),
+      plot_dirreq(directory, paste(filename, filenamePart, "-", year,
+        ".png", sep = ""), paste(titlePart, " ", people, " Tor users (",
+        year, ")\n", sep = ""), as.Date(c(paste(year, "-01-01", sep = ""),
         paste(year, "-12-31", sep = ""))), data, code)
     }
   }
 }
 
-plot_quarters <- function(filenamePart, titlePart, years, quarters, data,
-    countries) {
+plot_quarters <- function(directory, filenamePart, titlePart, years,
+    quarters, data, countries) {
   for (year in years) {
     for (quarter in quarters) {
       for (country in 1:length(countries$code)) {
@@ -72,8 +73,8 @@ plot_quarters <- function(filenamePart, titlePart, years, quarters, data,
           sep = ""))
         end <- seq(seq(start, length = 2, by = "3 months")[2], length = 2,
           by = "-1 day")[2]
-        plot_dirreq(paste(filename, filenamePart, "-", year, "-q",
-          quarter, ".png", sep = ""), paste(titlePart, " ", people,
+        plot_dirreq(directory, paste(filename, filenamePart, "-", year,
+          "-q", quarter, ".png", sep = ""), paste(titlePart, " ", people,
           " Tor users (Q", quarter, " ", year, ")\n", sep = ""),
           c(start, end), data, code)
       }
@@ -81,8 +82,8 @@ plot_quarters <- function(filenamePart, titlePart, years, quarters, data,
   }
 }
 
-plot_months <- function(filenamePart, titlePart, years, months, data,
-    countries) {
+plot_months <- function(directory, filenamePart, titlePart, years, months,
+    data, countries) {
   for (year in years) {
     for (month in months) {
       for (country in 1:length(countries$code)) {
@@ -92,21 +93,25 @@ plot_months <- function(filenamePart, titlePart, years, months, data,
         start <- as.Date(paste(year, "-", month, "-01", sep = ""))
         end <- seq(seq(start, length = 2, by = "1 month")[2], length = 2,
           by = "-1 day")[2]
-        plot_dirreq(paste(filename, filenamePart, "-", year, "-",
-          format(start, "%m"), ".png", sep = ""), paste(titlePart, " ",
-          people, " Tor users (", format(start, "%B"), " ", year, ")\n",
-          sep = ""), c(start, end), data, code)
+        plot_dirreq(directory, paste(filename, filenamePart, "-", year,
+          "-", format(start, "%m"), ".png", sep = ""), paste(titlePart,
+          " ", people, " Tor users (", format(start, "%B"), " ", year,
+          ")\n", sep = ""), c(start, end), data, code)
       }
     }
   }
 }
 
 # TODO these need to be updated manually
-plot_current <- function(filenamePart, titlePart, data, countries) {
-  plot_pastdays(filenamePart, titlePart, c(30, 90, 180), data, countries)
-  plot_years(filenamePart, titlePart, "2010", data, countries)
-  plot_quarters(filenamePart, titlePart, "2010", 1, data, countries)
-  plot_months(filenamePart, titlePart, "2010", 1:2, data, countries)
+plot_current <- function(directory, filenamePart, titlePart, data,
+    countries) {
+  plot_pastdays(directory, filenamePart, titlePart, c(30, 90, 180), data,
+    countries)
+  plot_years(directory, filenamePart, titlePart, "2010", data, countries)
+  plot_quarters(directory, filenamePart, titlePart, "2010", 1, data,
+    countries)
+  plot_months(directory, filenamePart, titlePart, "2010", 1:2, data,
+    countries)
 }
 
 countries <- data.frame(code = c("bh", "cn", "cu", "et", "ir", "mm", "sa",
@@ -117,8 +122,8 @@ countries <- data.frame(code = c("bh", "cn", "cu", "et", "ir", "mm", "sa",
   "syria", "tunisia", "turkmenistan", "uzbekistan", "vietnam", "yemen"),
   stringsAsFactors = FALSE)
 
-plot_current("-new", "New or returning, directly connecting", moria1,
-  countries)
-plot_current("-direct", "Recurring, directly connecting", trusted,
-  countries)
+plot_current("website/graphs/new-users/", "-new",
+  "New or returning, directly connecting", moria1, countries)
+plot_current("website/graphs/direct-users/", "-direct",
+  "Recurring, directly connecting", trusted, countries)
 

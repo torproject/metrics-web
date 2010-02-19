@@ -13,8 +13,8 @@ plot_bridges <- function(filename, title, limits, code) {
     scale_y_continuous(name = "", limits = c(0, max(bridge[[code]],
     na.rm = TRUE))) +
     opts(title = title)
-  ggsave(filename = paste("website/graphs/", filename, sep = ""),
-    width = 8, height = 5, dpi = 72)
+  ggsave(filename = paste("website/graphs/bridge-users/", filename,
+    sep = ""), width = 8, height = 5, dpi = 72)
 }
 
 plot_pastdays <- function(days, countries) {
