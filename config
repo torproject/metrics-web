@@ -1,0 +1,72 @@
+##
+## ERNIE performs its tasks in three phases:
+##
+## 1. Import files from the import/ directory that we didn't import yet
+##
+## 2. Download files that we want to learn about but didn't from importing
+##
+## 3. Write to disk what we learned
+##
+## Configuration options below are structured by these phases, starting
+## with the data we care about and want to write to disk (3.), followed by
+## the data we want to import (1.) or download (2.). Note that the default
+## for downloading data is set to off!
+############## TODO rethink this order
+##
+
+#### Data that we want to write to disk ####
+
+## Write consensus stats to disk
+#WriteConsensusStats 1
+
+## Write dirreq stats to disk
+#WriteDirreqStats 1
+
+## Comma-separated set of countries to be included in dirreq and bridge
+## graphs; note that after adding new countries, an import of the relevant
+## descriptor archives (relay and/or bridge) is necessary!
+#DirreqBridgeCountries bh,cn,cu,et,ir,mm,sa,sy,tn,tm,uz,vn,ye
+
+## Comma-separated set of fingerprints of directory mirrors to be included
+## in dirreq and bridge graphs; note that after adding new directories, an
+## import of the relevant descriptor archives (relay and/or bridge) is
+## necessary!
+#DirreqDirectories 8522EB98C91496E80EC238E732594D1509158E77,9695DFC35FFEB861329B9F1AB04C46397020CE31
+
+## Write bridge stats to disk
+#WriteBridgeStats 1
+
+## Write torperf stats to disk
+#WriteTorperfStats 1
+
+## Write GetTor stats to disk
+#WriteGettorStats 1
+
+## Write directory archives to disk
+#WriteDirectoryArchives 1
+
+## Import directory archives from disk, if available
+#ImportDirectoryArchives 1
+
+## Import sanitized bridges from disk, if available
+#ImportSanitizedBridges 1
+
+## Import bridge snapshots from disk, if available
+#ImportBridgeSnapshots 1
+
+## Import torperf stats from disk, if available
+#ImportTorperfStats 1
+
+## Download relay descriptors from directory authorities, if required
+#DownloadRelayDescriptors 0
+
+## Comma separated list of directory authority addresses (IP[:port]) to
+## download missing relay descriptors from
+#DownloadFromDirectoryAuthorities 86.59.21.38,194.109.206.212,80.190.246.100:8180
+
+## Download GetTor stats
+#DownloadGetTorStats 0
+
+## URL to download GetTor stats from
+#GetTorStatsURL = http://gettor.torproject.org:8080/~gettor/gettor_stats.txt
+

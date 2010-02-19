@@ -13,6 +13,9 @@ public class Main {
     Logger logger = Logger.getLogger(Main.class.getName());
     logger.info("Starting ERNIE...");
 
+    // Initialize configuration
+    Configuration config = new Configuration();
+
     // Use lock file to avoid overlapping runs
     LockFile lf = new LockFile();
     if (!lf.acquireLock()) {
