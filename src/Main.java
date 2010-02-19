@@ -42,11 +42,9 @@ public class Main {
     countries.add("uz");
     countries.add("vn");
     countries.add("ye");
-    SortedMap<String, String> directories = new TreeMap<String, String>();
-    directories.put("8522EB98C91496E80EC238E732594D1509158E77",
-        "trusted");
-    directories.put("9695DFC35FFEB861329B9F1AB04C46397020CE31",
-        "moria1");
+    SortedSet<String> directories = new TreeSet<String>();
+    directories.add("8522EB98C91496E80EC238E732594D1509158E77");
+    directories.add("9695DFC35FFEB861329B9F1AB04C46397020CE31");
 
     // Prepare stats file handlers which will be initialized by the
     // importing/downloading classes

@@ -12,11 +12,10 @@ public class RelayDescriptorParser {
   private ConsensusStatsFileHandler csfh;
   private BridgeStatsFileHandler bsfh;
   private SortedSet<String> countries;
-  private SortedMap<String, String> directories;
+  private SortedSet<String> directories;
   public RelayDescriptorParser(ConsensusStatsFileHandler csfh,
       BridgeStatsFileHandler bsfh, DirreqStatsFileHandler dsfh,
-      SortedSet<String> countries,
-      SortedMap<String, String> directories) {
+      SortedSet<String> countries, SortedSet<String> directories) {
     this.csfh = csfh;
     this.bsfh = bsfh;
     this.dsfh = dsfh;
@@ -55,7 +54,7 @@ public class RelayDescriptorParser {
     } else if (line.startsWith("router ")) {
       // in case we want to parse server descriptors in the future
     } else if (line.startsWith("extra-info ")
-        && directories.containsKey(line.split(" ")[2])) {
+        && directories.contains(line.split(" ")[2])) {
       String dir = line.split(" ")[2];
       String date = null, v3ips = null;
       boolean skip = false;
@@ -81,7 +80,7 @@ public class RelayDescriptorParser {
           }
           String share = line.substring("dirreq-v3-share ".length(),
               line.length() - 1);
-          dsfh.addObs(this.directories.get(dir), date, obs, share);
+          dsfh.addObs(dir, date, obs, share);
         }
       }
     }

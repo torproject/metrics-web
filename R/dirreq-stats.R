@@ -3,10 +3,12 @@ suppressPackageStartupMessages(library("ggplot2"))
 
 dirreq <- read.csv("stats/dirreq-stats", header = TRUE,
   stringsAsFactors = FALSE)
-moria1Sub <- subset(dirreq, directory %in% "moria1")
+moria1Sub <- subset(dirreq,
+  directory %in% "9695DFC35FFEB861329B9F1AB04C46397020CE31")
 moria1 <- data.frame(date = moria1Sub$date,
   moria1Sub[3:(length(moria1Sub) - 1)] * 6)
-trustedSub <- subset(dirreq, directory %in% "trusted")
+trustedSub <- subset(dirreq,
+  directory %in% "8522EB98C91496E80EC238E732594D1509158E77")
 trusted <- data.frame(date = trustedSub$date,
   floor(trustedSub[3:(length(trustedSub) - 1)] / trustedSub$share * 10))
 

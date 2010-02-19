@@ -9,7 +9,7 @@ import java.util.logging.*;
  */
 public class RelayDescriptorDownloader {
   public RelayDescriptorDownloader(RelayDescriptorParser rdp,
-      String authority, SortedMap<String, String> directories) {
+      String authority, SortedSet<String> directories) {
     Logger logger =
         Logger.getLogger(RelayDescriptorDownloader.class.getName());
     try {
@@ -44,7 +44,7 @@ public class RelayDescriptorDownloader {
       logger.info("Downloading extra-info descriptors from " + authority
           + "...");
       Stack<String> extraInfos = new Stack<String>();
-      for (String fingerprint : directories.keySet()) {
+      for (String fingerprint : directories) {
         u = new URL("http://" + authority + "/tor/extra/fp/"
             + fingerprint);
         huc = (HttpURLConnection) u.openConnection();
