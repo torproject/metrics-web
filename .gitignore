@@ -9,7 +9,19 @@ bin/
 stats/
 
 # generated graphs
-website/graphs/*.png
+website/graphs/bridge-users/*.png
+website/graphs/direct-users/*.png
+website/graphs/exit/*.png
+website/graphs/gettor/*.png
+website/graphs/networksize/*.png
+website/graphs/new-users/*.png
+website/graphs/torperf/*.png
+
+# generated CSV files
+website/csv/*.csv
+
+# papers and tech reports, not included in Git
+website/papers/*.pdf
 
 # logfiles
 log.*
