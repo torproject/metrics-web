@@ -96,6 +96,11 @@ public class Main {
       new GetTorProcessor(statsDirectory, config.getGetTorStatsUrl());
     }
 
+    // Download exit list and store it to disk
+    if (config.getDownloadExitList()) {
+      new ExitListDownloader();
+    }
+
     // Remove lock file
     lf.releaseLock();
 

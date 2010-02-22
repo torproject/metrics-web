@@ -29,6 +29,7 @@ public class Configuration {
   private boolean downloadProcessGetTorStats = false;
   private String getTorStatsUrl = "http://gettor.torproject.org:8080/"
       + "~gettor/gettor_stats.txt";
+  private boolean downloadExitList = false;
   public Configuration() {
     Logger logger = Logger.getLogger(Configuration.class.getName());
     File configFile = new File("config");
@@ -105,6 +106,9 @@ public class Configuration {
           // test if URL has correct format
           new URL(newUrl);
           this.getTorStatsUrl = newUrl;
+        } else if (line.startsWith("DownloadExitList")) {
+          this.downloadExitList = Integer.parseInt(
+              line.split(" ")[1]) != 0;
         } else {
           logger.severe("Configuration file contains unrecognized "
               + "configuration key in line '" + line + "'! Exiting!");
@@ -178,8 +182,8 @@ public class Configuration {
   public String getGetTorStatsUrl() {
     return this.getTorStatsUrl;
   }
-  public static void main(String[] args) {
-    new Configuration();
+  public boolean getDownloadExitList() {
+    return this.downloadExitList;
   }
 }
 

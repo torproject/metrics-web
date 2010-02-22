@@ -65,5 +65,8 @@
 #DownloadProcessGetTorStats 0
 
 ## URL to download GetTor stats from
-#GetTorStatsURL = http://gettor.torproject.org:8080/~gettor/gettor_stats.txt
+#GetTorStatsURL http://gettor.torproject.org:8080/~gettor/gettor_stats.txt
+
+## Download exit list and store it to disk
+#DownloadExitList 0
 
