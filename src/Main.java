@@ -40,8 +40,8 @@ public class Main {
 
     // Prepare parsers
     // TODO handle cases bsfh==NULL, csfh==NULL, dsfh==NULL
-    RelayDescriptorParser rdp = new RelayDescriptorParser(csfh, bsfh,
-        dsfh, countries, directories);
+    RelayDescriptorParser rdp = new RelayDescriptorParser(statsDirectory,
+        csfh, bsfh, dsfh, countries, directories);
     BridgeDescriptorParser bdp = new BridgeDescriptorParser(csfh, bsfh,
         countries);
 
