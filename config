@@ -39,6 +39,9 @@
 ## Write directory archives to disk
 #WriteDirectoryArchives 1
 
+## Read cached-* files from a local Tor client
+#ImportCachedRelayDescriptors 1
+
 ## Import directory archives from disk, if available
 #ImportDirectoryArchives 1
 

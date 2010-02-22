@@ -18,6 +18,7 @@ public class Configuration {
       + "9695DFC35FFEB861329B9F1AB04C46397020CE31"));
   private boolean writeBridgeStats = true;
   private boolean writeDirectoryArchives = true;
+  private boolean importCachedRelayDescriptors = true;
   private boolean importDirectoryArchives = true;
   private boolean importSanitizedBridges = true;
   private boolean importBridgeSnapshots = true;
@@ -64,6 +65,9 @@ public class Configuration {
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("WriteDirectoryArchives")) {
           this.writeDirectoryArchives = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("ImportCachedRelayDescriptors")) {
+          this.importCachedRelayDescriptors = Integer.parseInt(
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("ImportDirectoryArchives")) {
           this.importDirectoryArchives = Integer.parseInt(
@@ -146,6 +150,9 @@ public class Configuration {
   }
   public boolean getWriteDirectoryArchives() {
     return this.writeDirectoryArchives;
+  }
+  public boolean getImportCachedRelayDescriptors() {
+    return this.importCachedRelayDescriptors;
   }
   public boolean getImportDirectoryArchives() {
     return this.importDirectoryArchives;

@@ -9,9 +9,10 @@ import java.util.logging.*;
  */
 public class RelayDescriptorDownloader {
   public RelayDescriptorDownloader(RelayDescriptorParser rdp,
-      String authority, SortedSet<String> directories) {
+      ArchiveWriter aw, String authority, SortedSet<String> directories) {
     Logger logger =
         Logger.getLogger(RelayDescriptorDownloader.class.getName());
+    // TODO use aw
     try {
       rdp.initialize();
     } catch (IOException e) {

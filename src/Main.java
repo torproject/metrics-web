@@ -45,18 +45,25 @@ public class Main {
     BridgeDescriptorParser bdp = new BridgeDescriptorParser(csfh, bsfh,
         countries);
 
-    // TODO WriteDirectoryArchives
+    // Prepare writing relay descriptor archive to disk
+    ArchiveWriter aw = config.getWriteDirectoryArchives() ?
+        new ArchiveWriter() : null;
+    // TODO handle case aw==NULL below
 
     // import and/or download relay and bridge descriptors
+    if (config.getImportCachedRelayDescriptors()) {
+      new CachedRelayDescriptorReader(rdp, aw);
+    }
     if (config.getImportDirectoryArchives()) {
       new ArchiveReader(rdp, "archives");
     }
     if (config.getDownloadRelayDescriptors()) {
       // TODO make this smarter by letting rdd ask rdp which descriptors
       // are still missing and only download those
+      // TODO move iteration over dirauths from main() to class code
       for (String directoryAuthority : 
           config.getDownloadFromDirectoryAuthorities()) {
-        new RelayDescriptorDownloader(rdp, directoryAuthority,
+        new RelayDescriptorDownloader(rdp, aw, directoryAuthority,
             directories);
       }
     }
