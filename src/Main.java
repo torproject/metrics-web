@@ -85,6 +85,7 @@ public class Main {
     if (dsfh != null) {
       dsfh.writeFile();
     }
+    rdp.writeFile();
 
     // Import and process torperf stats
     if (config.getImportWriteTorperfStats()) {
