@@ -3,6 +3,8 @@ suppressPackageStartupMessages(library("ggplot2"))
 
 gettor <- read.csv("stats/gettor-stats", header = TRUE,
     stringsAsFactors = FALSE);
+start <- as.Date(min(gettor$date))
+end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
 total <- data.frame(date = gettor$date,
   packages = rowSums(gettor[2:length(gettor)]) - gettor$none)
 en <- data.frame(date = gettor$date,
@@ -23,7 +25,7 @@ write.csv(data.frame(date = gettor$date,
 
 plot_packages <- function(filename, title, data) {
   ggplot(data, aes(x = as.Date(date, "%Y-%m-%d"), y = packages)) + geom_line() +
-    scale_x_date(name = "") +
+    scale_x_date(name = "", limits = c(start, end)) +
     scale_y_continuous(name = "",
     limits = c(0, max(data$packages, na.rm = TRUE))) +
     opts(title = paste(title, "\n", sep = ""))
