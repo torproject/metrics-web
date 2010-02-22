@@ -100,10 +100,11 @@ public class RelayDescriptorParser {
     } else if (line.startsWith("extra-info ")
         && directories.contains(line.split(" ")[2])) {
       String dir = line.split(" ")[2];
-      String date = null, v3ips = null;
+      String statsEnd = null, date = null, v3ips = null;
       boolean skip = false;
       while ((line = br.readLine()) != null) {
         if (line.startsWith("dirreq-stats-end ")) {
+          statsEnd = line.split(" ")[1] + " " + line.split(" ")[2];
           date = line.split(" ")[1];
           // trusted had very strange dirreq-v3-shares here...
           skip = dir.equals("8522EB98C91496E80EC238E732594D1509158E77")
@@ -126,8 +127,9 @@ public class RelayDescriptorParser {
               line.length() - 1);
           dsfh.addObs(dir, date, obs, share);
           if (!this.lastParsedExtraInfos.containsKey(dir) ||
-              date.compareTo(this.lastParsedExtraInfos.get(dir)) > 0) {
-            this.lastParsedExtraInfos.put(dir, date);
+              statsEnd.compareTo(
+              this.lastParsedExtraInfos.get(dir)) > 0) {
+            this.lastParsedExtraInfos.put(dir, statsEnd);
             relayDescriptorParseHistoryModified = true;
           }
         }
