@@ -24,77 +24,70 @@ public class Main {
       System.exit(1);
     }
 
-    // Should we only import from disk or only download descriptors?
-    boolean importOnly = args.length > 0
-        && args[0].equals("import");
-    boolean downloadOnly = args.length > 0
-        && args[0].equals("download");
-
     // Define which stats we are interested in
-    SortedSet<String> countries = new TreeSet<String>();
-    countries.add("bh");
-    countries.add("cn");
-    countries.add("cu");
-    countries.add("et");
-    countries.add("ir");
-    countries.add("mm");
-    countries.add("sa");
-    countries.add("sy");
-    countries.add("tn");
-    countries.add("tm");
-    countries.add("uz");
-    countries.add("vn");
-    countries.add("ye");
-    SortedSet<String> directories = new TreeSet<String>();
-    directories.add("8522EB98C91496E80EC238E732594D1509158E77");
-    directories.add("9695DFC35FFEB861329B9F1AB04C46397020CE31");
+    SortedSet<String> countries = config.getDirreqBridgeCountries();
+    SortedSet<String> directories = config.getDirreqDirectories();
 
     // Prepare stats file handlers which will be initialized by the
     // importing/downloading classes
     String statsDirectory = "stats";
-    ConsensusStatsFileHandler csfh = new ConsensusStatsFileHandler(
-        statsDirectory);
-    BridgeStatsFileHandler bsfh = new BridgeStatsFileHandler(
-        statsDirectory, countries);
-    DirreqStatsFileHandler dsfh = new DirreqStatsFileHandler(
-        statsDirectory, countries);
+    ConsensusStatsFileHandler csfh = config.getWriteConsensusStats() ?
+        new ConsensusStatsFileHandler(statsDirectory) : null;
+    BridgeStatsFileHandler bsfh = config.getWriteBridgeStats() ?
+        new BridgeStatsFileHandler(statsDirectory, countries) : null;
+    DirreqStatsFileHandler dsfh = config.getWriteDirreqStats() ?
+        new DirreqStatsFileHandler(statsDirectory, countries) : null;
 
     // Prepare parsers
+    // TODO handle cases bsfh==NULL, csfh==NULL, dsfh==NULL
     RelayDescriptorParser rdp = new RelayDescriptorParser(csfh, bsfh,
         dsfh, countries, directories);
     BridgeDescriptorParser bdp = new BridgeDescriptorParser(csfh, bsfh,
         countries);
 
-    // Read files in archives/ and bridges/ directory
-    if (!downloadOnly) {
-      logger.info("Importing data...");
-      ArchiveReader ar = new ArchiveReader(rdp, "archives");
-      SanitizedBridgesReader sbr = new SanitizedBridgesReader(bdp,
-          "bridges", countries);
-      BridgeSnapshotReader bsr = new BridgeSnapshotReader(bdp,
-          "bridge-directories", statsDirectory, countries);
-      TorperfProcessor tp = new TorperfProcessor(statsDirectory,
-          "torperf");
-      logger.info("Finished importing data.");
-    }
+    // TODO WriteDirectoryArchives
 
-    // Download current descriptors
-    if (!importOnly) {
-      logger.info("Downloading descriptors...");
-      new RelayDescriptorDownloader(rdp, "86.59.21.38", directories);
-      new RelayDescriptorDownloader(rdp, "194.109.206.212", directories);
-      new RelayDescriptorDownloader(rdp, "80.190.246.100:8180",
-          directories);
-      new GetTorProcessor(statsDirectory);
-      logger.info("Finished downloading descriptors.");
+    // import and/or download relay and bridge descriptors
+    if (config.getImportDirectoryArchives()) {
+      new ArchiveReader(rdp, "archives");
+    }
+    if (config.getDownloadRelayDescriptors()) {
+      // TODO make this smarter by letting rdd ask rdp which descriptors
+      // are still missing and only download those
+      for (String directoryAuthority : 
+          config.getDownloadFromDirectoryAuthorities()) {
+        new RelayDescriptorDownloader(rdp, directoryAuthority,
+            directories);
+      }
+    }
+    if (config.getImportSanitizedBridges()) {
+      new SanitizedBridgesReader(bdp, "bridges", countries);
+    }
+    if (config.getImportBridgeSnapshots()) {
+      new BridgeSnapshotReader(bdp, "bridge-directories",
+          statsDirectory, countries);
     }
 
     // Write updated stats files to disk
-    logger.info("Writing updated stats files to disk...");
-    bsfh.writeFile();
-    csfh.writeFile();
-    dsfh.writeFile();
-    logger.info("Finished writing updated stats files to disk.");
+    if (bsfh != null) {
+      bsfh.writeFile();
+    }
+    if (csfh != null) {
+      csfh.writeFile();
+    }
+    if (dsfh != null) {
+      dsfh.writeFile();
+    }
+
+    // Import and process torperf stats
+    if (config.getImportWriteTorperfStats()) {
+      new TorperfProcessor(statsDirectory, "torperf");
+    }
+
+    // Download and process GetTor stats
+    if (config.getDownloadProcessGetTorStats()) {
+      new GetTorProcessor(statsDirectory, config.getGetTorStatsUrl());
+    }
 
     // Remove lock file
     lf.releaseLock();

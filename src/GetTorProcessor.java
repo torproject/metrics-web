@@ -4,9 +4,7 @@ import java.util.*;
 import java.util.logging.*;
 
 public class GetTorProcessor {
-  private final String gettorStatsUrl =
-      "http://gettor.torproject.org:8080/~gettor/gettor_stats.txt";
-  public GetTorProcessor(String statsDirectory) {
+  public GetTorProcessor(String statsDirectory, String gettorStatsUrl) {
     Logger logger = Logger.getLogger(TorperfProcessor.class.getName());
     String unparsed = null;
     try {

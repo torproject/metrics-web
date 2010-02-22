@@ -17,17 +17,15 @@ public class Configuration {
       Arrays.asList("8522EB98C91496E80EC238E732594D1509158E77,"
       + "9695DFC35FFEB861329B9F1AB04C46397020CE31"));
   private boolean writeBridgeStats = true;
-  private boolean writeTorperfStats = true;
-  private boolean writeGettorStats = true;
   private boolean writeDirectoryArchives = true;
   private boolean importDirectoryArchives = true;
   private boolean importSanitizedBridges = true;
   private boolean importBridgeSnapshots = true;
-  private boolean importTorperfStats = true;
+  private boolean importWriteTorperfStats = true;
   private boolean downloadRelayDescriptors = false;
   private List<String> downloadFromDirectoryAuthorities = Arrays.asList(
       "86.59.21.38,194.109.206.212,80.190.246.100:8180".split(","));
-  private boolean downloadGetTorStats = false;
+  private boolean downloadProcessGetTorStats = false;
   private String getTorStatsUrl = "http://gettor.torproject.org:8080/"
       + "~gettor/gettor_stats.txt";
   public Configuration() {
@@ -64,12 +62,6 @@ public class Configuration {
         } else if (line.startsWith("WriteBridgeStats")) {
           this.writeBridgeStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
-        } else if (line.startsWith("WriteTorperfStats")) {
-          this.writeTorperfStats = Integer.parseInt(
-              line.split(" ")[1]) != 0;
-        } else if (line.startsWith("WriteGettorStats")) {
-          this.writeGettorStats = Integer.parseInt(
-              line.split(" ")[1]) != 0;
         } else if (line.startsWith("WriteDirectoryArchives")) {
           this.writeDirectoryArchives = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -82,8 +74,8 @@ public class Configuration {
         } else if (line.startsWith("ImportBridgeSnapshots")) {
           this.importBridgeSnapshots = Integer.parseInt(
               line.split(" ")[1]) != 0;
-        } else if (line.startsWith("ImportTorperfStats")) {
-          this.importTorperfStats = Integer.parseInt(
+        } else if (line.startsWith("ImportWriteTorperfStats")) {
+          this.importWriteTorperfStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("DownloadRelayDescriptors")) {
           this.downloadRelayDescriptors = Integer.parseInt(
@@ -101,8 +93,8 @@ public class Configuration {
             new URL("http://" + dir + "/");
             this.downloadFromDirectoryAuthorities.add(dir);
           }
-        } else if (line.startsWith("DownloadGetTorStats")) {
-          this.downloadGetTorStats = Integer.parseInt(
+        } else if (line.startsWith("DownloadProcessGetTorStats")) {
+          this.downloadProcessGetTorStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("GetTorStatsURL")) {
           String newUrl = line.split(" ")[1];
@@ -152,12 +144,6 @@ public class Configuration {
   public boolean getWriteBridgeStats() {
     return this.writeBridgeStats;
   }
-  public boolean getWriteTorperfStats() {
-    return this.writeTorperfStats;
-  }
-  public boolean getWriteGettorStats() {
-    return this.writeGettorStats;
-  }
   public boolean getWriteDirectoryArchives() {
     return this.writeDirectoryArchives;
   }
@@ -170,8 +156,8 @@ public class Configuration {
   public boolean getImportBridgeSnapshots() {
     return this.importBridgeSnapshots;
   }
-  public boolean getImportTorperfStats() {
-    return this.importTorperfStats;
+  public boolean getImportWriteTorperfStats() {
+    return this.importWriteTorperfStats;
   }
   public boolean getDownloadRelayDescriptors() {
     return this.downloadRelayDescriptors;
@@ -179,8 +165,8 @@ public class Configuration {
   public List<String> getDownloadFromDirectoryAuthorities() {
     return this.downloadFromDirectoryAuthorities;
   }
-  public boolean getDownloadGetTorStats() {
-    return this.downloadGetTorStats;
+  public boolean getDownloadProcessGetTorStats() {
+    return this.downloadProcessGetTorStats;
   }
   public String getGetTorStatsUrl() {
     return this.getTorStatsUrl;

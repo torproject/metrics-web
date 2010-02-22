@@ -36,12 +36,6 @@
 ## Write bridge stats to disk
 #WriteBridgeStats 1
 
-## Write torperf stats to disk
-#WriteTorperfStats 1
-
-## Write GetTor stats to disk
-#WriteGettorStats 1
-
 ## Write directory archives to disk
 #WriteDirectoryArchives 1
 
@@ -54,8 +48,8 @@
 ## Import bridge snapshots from disk, if available
 #ImportBridgeSnapshots 1
 
-## Import torperf stats from disk, if available
-#ImportTorperfStats 1
+## Import torperf data, if available, and write stats to disk
+#ImportWriteTorperfStats 1
 
 ## Download relay descriptors from directory authorities, if required
 #DownloadRelayDescriptors 0
@@ -64,8 +58,8 @@
 ## download missing relay descriptors from
 #DownloadFromDirectoryAuthorities 86.59.21.38,194.109.206.212,80.190.246.100:8180
 
-## Download GetTor stats
-#DownloadGetTorStats 0
+## Download and process GetTor stats
+#DownloadProcessGetTorStats 0
 
 ## URL to download GetTor stats from
 #GetTorStatsURL = http://gettor.torproject.org:8080/~gettor/gettor_stats.txt
