@@ -14,8 +14,8 @@ public class Configuration {
   private SortedSet<String> dirreqBridgeCountries = new TreeSet<String>(
       Arrays.asList("bh,cn,cu,et,ir,mm,sa,sy,tn,tm,uz,vn,ye".split(",")));
   private SortedSet<String> dirreqDirectories = new TreeSet<String>(
-      Arrays.asList("8522EB98C91496E80EC238E732594D1509158E77,"
-      + "9695DFC35FFEB861329B9F1AB04C46397020CE31"));
+      Arrays.asList(("8522EB98C91496E80EC238E732594D1509158E77,"
+      + "9695DFC35FFEB861329B9F1AB04C46397020CE31").split(",")));
   private boolean writeBridgeStats = true;
   private boolean writeDirectoryArchives = true;
   private boolean importCachedRelayDescriptors = true;
