@@ -37,6 +37,9 @@ public class RelayDescriptorParser {
     this.logger = Logger.getLogger(RelayDescriptorParser.class.getName());
   }
   public void initialize() throws IOException {
+    if (this.initialized) {
+      return;
+    }
     this.csfh.initialize();
     this.bsfh.initialize();
     this.dsfh.initialize();
@@ -50,10 +53,10 @@ public class RelayDescriptorParser {
       String line = null;
       while ((line = br.readLine()) != null) {
         if (line.startsWith("consensus")) {
-          this.lastParsedConsensus = line.split(" ")[2];
+          this.lastParsedConsensus = line.split(",")[2];
         } else if (line.startsWith("extrainfo")) {
-          this.lastParsedExtraInfos.put(line.split(" ")[1],
-              line.split(" ")[2]);
+          this.lastParsedExtraInfos.put(line.split(",")[1],
+              line.split(",")[2]);
         }
       }
       br.close();
@@ -69,16 +72,13 @@ public class RelayDescriptorParser {
       while ((line = br.readLine()) != null) {
         if (line.startsWith("valid-after ")) {
           validAfter = line.substring("valid-after ".length());
-        } else if (line.startsWith("vote-status ")) {
-          if (line.equals("vote-status vote")) {
-            return;
-          } else {
-            if (this.lastParsedConsensus == null ||
-                validAfter.compareTo(this.lastParsedConsensus) > 0) {
-              this.lastParsedConsensus = validAfter;
-              relayDescriptorParseHistoryModified = true;
-            }
+          if (this.lastParsedConsensus == null ||
+              validAfter.compareTo(this.lastParsedConsensus) > 0) {
+            this.lastParsedConsensus = validAfter;
+            relayDescriptorParseHistoryModified = true;
           }
+        } else if (line.equals("vote-status vote")) {
+          return;
         } else if (line.startsWith("r ")) {
           String hashedRelay = DigestUtils.shaHex(Base64.decodeBase64(
               line.split(" ")[2] + "=")).toUpperCase();
@@ -105,11 +105,6 @@ public class RelayDescriptorParser {
       while ((line = br.readLine()) != null) {
         if (line.startsWith("dirreq-stats-end ")) {
           date = line.split(" ")[1];
-          if (this.lastParsedExtraInfos.get(dir) == null ||
-              date.compareTo(this.lastParsedExtraInfos.get(dir)) > 0) {
-            this.lastParsedExtraInfos.put(dir, date);
-            relayDescriptorParseHistoryModified = true;
-          }
           // trusted had very strange dirreq-v3-shares here...
           skip = dir.equals("8522EB98C91496E80EC238E732594D1509158E77")
               && (date.equals("2009-09-10") || date.equals("2009-09-11"));
@@ -130,6 +125,11 @@ public class RelayDescriptorParser {
           String share = line.substring("dirreq-v3-share ".length(),
               line.length() - 1);
           dsfh.addObs(dir, date, obs, share);
+          if (!this.lastParsedExtraInfos.containsKey(dir) ||
+              date.compareTo(this.lastParsedExtraInfos.get(dir)) > 0) {
+            this.lastParsedExtraInfos.put(dir, date);
+            relayDescriptorParseHistoryModified = true;
+          }
         }
       }
     }
@@ -174,7 +174,7 @@ public class RelayDescriptorParser {
     return urls;
   }
   public void writeFile() {
-    if (relayDescriptorParseHistoryModified) {
+    if (this.relayDescriptorParseHistoryModified) {
       try {
         this.logger.info("Writing file " + this.statsDir
             + "/relay-descriptor-parse-history...");
