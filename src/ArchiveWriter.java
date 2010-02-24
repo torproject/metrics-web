@@ -433,7 +433,6 @@ public class ArchiveWriter {
         new File(this.statsDir).mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(
             this.archiveWriterParseHistory));
-        bw.write("type,source,published\n");
         for (String line : this.missingDescriptors) {
           bw.write(line + "\n");
         }
