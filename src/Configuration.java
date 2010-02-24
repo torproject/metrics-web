@@ -18,6 +18,14 @@ public class Configuration {
       + "9695DFC35FFEB861329B9F1AB04C46397020CE31").split(",")));
   private boolean writeBridgeStats = true;
   private boolean writeDirectoryArchives = true;
+  private SortedSet<String> v3DirectoryAuthorities = new TreeSet<String>(
+      Arrays.asList(("14C131DFC5C6F93646BE72FA1401C02A8DF2E8B4,"
+      + "E8A9C45EDE6D711294FADF8E7951F4DE6CA56B58,"
+      + "D586D18309DED4CD6D57C18FDB97EFA96D330566,"
+      + "585769C78764D58426B8B52B6651A5A71137189A,"
+      + "27B6B5996C426270A5C95488AA5BCEB6BCC86956,"
+      + "80550987E1D626E3EBA5E5E75A458DE0626D088C,"
+      + "ED03BB616EB2F60BEC80151114BB25CEF515B226").split(",")));
   private boolean importCachedRelayDescriptors = true;
   private boolean importDirectoryArchives = true;
   private boolean importSanitizedBridges = true;
@@ -67,6 +75,9 @@ public class Configuration {
         } else if (line.startsWith("WriteDirectoryArchives")) {
           this.writeDirectoryArchives = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("V3DirectoryAuthorities")) {
+          this.v3DirectoryAuthorities = new TreeSet<String>(
+              Arrays.asList(line.split(" ")[1].split(",")));
         } else if (line.startsWith("ImportCachedRelayDescriptors")) {
           this.importCachedRelayDescriptors = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -154,6 +165,9 @@ public class Configuration {
   }
   public boolean getWriteDirectoryArchives() {
     return this.writeDirectoryArchives;
+  }
+  public SortedSet<String> getV3DirectoryAuthorities() {
+    return this.v3DirectoryAuthorities;
   }
   public boolean getImportCachedRelayDescriptors() {
     return this.importCachedRelayDescriptors;

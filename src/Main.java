@@ -47,7 +47,8 @@ public class Main {
 
     // Prepare writing relay descriptor archive to disk
     ArchiveWriter aw = config.getWriteDirectoryArchives() ?
-        new ArchiveWriter() : null;
+        new ArchiveWriter(statsDirectory,
+        config.getV3DirectoryAuthorities()) : null;
     // TODO handle case aw==NULL below
 
     // import and/or download relay and bridge descriptors
@@ -58,14 +59,9 @@ public class Main {
       new ArchiveReader(rdp, "archives");
     }
     if (config.getDownloadRelayDescriptors()) {
-      // TODO make this smarter by letting rdd ask rdp which descriptors
-      // are still missing and only download those
-      // TODO move iteration over dirauths from main() to class code
-      for (String directoryAuthority : 
-          config.getDownloadFromDirectoryAuthorities()) {
-        new RelayDescriptorDownloader(rdp, aw, directoryAuthority,
-            directories);
-      }
+      new RelayDescriptorDownloader(rdp, aw,
+          config.getDownloadFromDirectoryAuthorities(),
+          directories);
     }
     if (config.getImportSanitizedBridges()) {
       new SanitizedBridgesReader(bdp, "bridges", countries);
@@ -86,6 +82,7 @@ public class Main {
       dsfh.writeFile();
     }
     rdp.writeFile();
+    aw.writeFile();
 
     // Import and process torperf stats
     if (config.getImportWriteTorperfStats()) {

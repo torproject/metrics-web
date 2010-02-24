@@ -66,6 +66,10 @@ public class RelayDescriptorParser {
   }
   public void parse(BufferedReader br) throws IOException {
     String line = br.readLine();
+    if (line == null) {
+      this.logger.warning("Parsing empty file?");
+      return;
+    }
     if (line.equals("network-status-version 3")) {
       int exit = 0, fast = 0, guard = 0, running = 0, stable = 0;
       String validAfter = null;
@@ -162,15 +166,19 @@ public class RelayDescriptorParser {
     format.setTimeZone(TimeZone.getTimeZone("UTC"));
     long now = System.currentTimeMillis();
     for (String directory : this.directories) {
-      try {
-        long statsEnd = format.parse(this.lastParsedExtraInfos.get(
-            directory)).getTime();
-        if (statsEnd + 36L * 60L * 60L * 1000L < now) {
-          urls.add("/tor/extra/fp/" + directory);
+      if (!this.lastParsedExtraInfos.containsKey(directory)) {
+        urls.add("/tor/extra/fp/" + directory);
+      } else {
+        try {
+          long statsEnd = format.parse(this.lastParsedExtraInfos.get(
+              directory)).getTime();
+          if (statsEnd + 36L * 60L * 60L * 1000L < now) {
+            urls.add("/tor/extra/fp/" + directory);
+          }
+        } catch (ParseException e) {
+          this.logger.log(Level.WARNING, "Failed parsing timestamp in "
+              + this.statsDir + "/relay-descriptor-parse-history!", e);
         }
-      } catch (ParseException e) {
-        this.logger.log(Level.WARNING, "Failed parsing timestamp in "
-            + this.statsDir + "/relay-descriptor-parse-history!", e);
       }
     }
     return urls;
