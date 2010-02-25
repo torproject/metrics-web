@@ -8,24 +8,20 @@ import org.apache.commons.codec.binary.*;
 public class ArchiveWriter {
   private String statsDir;
   private SortedSet<String> v3DirectoryAuthorities;
-  private File archiveWriterParseHistory;
+  private File missingDescriptorsFile;
   private SortedSet<String> missingDescriptors;
-  private String lastParsedConsensus;
-  private boolean initialized = false;
-  private boolean archiveWriterParseHistoryModified = false;
+  private boolean missingDescriptorsFileModified = false;
   private Logger logger;
-  private String parseTime;
   public ArchiveWriter(String statsDir,
       SortedSet<String> v3DirectoryAuthorities) {
     this.statsDir = statsDir;
     this.v3DirectoryAuthorities = v3DirectoryAuthorities;
-    this.archiveWriterParseHistory = new File(statsDir
+    this.missingDescriptorsFile = new File(statsDir
         + "/archive-writer-parse-history");
     this.logger = Logger.getLogger(RelayDescriptorParser.class.getName());
     SimpleDateFormat parseFormat =
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     parseFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    this.parseTime = parseFormat.format(new Date());
     this.missingDescriptors = new TreeSet<String>();
     SimpleDateFormat consensusVoteFormat =
         new SimpleDateFormat("yyyy/MM/dd/yyyy-MM-dd-HH-mm-ss");
@@ -33,33 +29,32 @@ public class ArchiveWriter {
     SimpleDateFormat descriptorFormat =
         new SimpleDateFormat("yyyy/MM/");
     descriptorFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    if (this.archiveWriterParseHistory.exists()) {
+    if (this.missingDescriptorsFile.exists()) {
       this.logger.info("Reading file " + statsDir
           + "/archive-writer-parse-history...");
       try {
         BufferedReader br = new BufferedReader(new FileReader(
-            this.archiveWriterParseHistory));
+            this.missingDescriptorsFile));
         String line = null;
-        SimpleDateFormat publishedFormat =
-            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        publishedFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         long now = System.currentTimeMillis();
         while ((line = br.readLine()) != null) {
           // only add to download list if descriptors are still available
           // on directories
-          long published = publishedFormat.parse(line.split(",")[2]).
+          long published = parseFormat.parse(line.split(",")[2]).
               getTime();
           if (line.startsWith("consensus") &&
-              published + 55L * 60L * 1000L > now &&
-              !new File("directory-archive/consensus/"
-                + consensusVoteFormat.format(new Date(published))
-                + "-consensus").exists()) {
-            this.logger.fine("Initializing missing list with "
-                + "consensus: valid-after=" + line.split(",")[2]
-                + ", filename=directory-archive/consensus/"
+              published + 55L * 60L * 1000L > now) {
+            File consensusFile = new File("directory-archive/consensus/"
                 + consensusVoteFormat.format(new Date(published))
                 + "-consensus");
-            this.missingDescriptors.add(line);
+            if (!consensusFile.exists()) {
+              this.logger.fine("Initializing missing list with "
+                  + "consensus: valid-after=" + line.split(",")[2]
+                  + ", filename=directory-archive/consensus/"
+                  + consensusVoteFormat.format(new Date(published))
+                  + "-consensus");
+              this.missingDescriptors.add(line);
+            }
           } else if (line.startsWith("vote") &&
               published + 55L * 60L * 1000L > now) {
               // TODO is vote even available for 55 minutes after its
@@ -94,11 +89,12 @@ public class ArchiveWriter {
               // TODO are 24 hours okay?
             boolean isServerDesc = line.startsWith("server");
             String digest = line.split(",")[1].toLowerCase();
-            if (!new File("directory-archive/"
+            File descriptorFile = new File("directory-archive/"
                 + (isServerDesc ? "server-descriptor" : "extra-info")
                 + "/" + descriptorFormat.format(new Date(published))
                 + digest.substring(0, 1) + "/" + digest.substring(1, 2)
-                + "/" + digest).exists()) {
+                + "/" + digest);
+            if (!descriptorFile.exists()) {
               this.logger.fine("Initializing missing list with "
                   + (isServerDesc ? "server" : "extra-info")
                   + " descriptor: digest=" + digest
@@ -158,24 +154,23 @@ public class ArchiveWriter {
               + "-vote-" + authority + "-*");
           this.missingDescriptors.add("vote," + authority + ","
               + nowConsensusFormat);
-          this.archiveWriterParseHistoryModified = true;
+          this.missingDescriptorsFileModified = true;
         }
       }
     }
-    if (!new File("directory-archive/consensus/"
+    File consensusFile = new File("directory-archive/consensus/"
         + consensusVoteFormat.format(new Date(nowConsensus))
-        + "-consensus").exists()) {
-      if (!this.missingDescriptors.contains("consensus,NA,"
-          + nowConsensusFormat)) {
-        this.logger.fine("Adding consensus to missing list: valid-after="
-            + nowConsensusFormat
-            + ", filename=directory-archive/consensus/"
-            + consensusVoteFormat.format(new Date(nowConsensus))
-            + "-consensus");
-        this.missingDescriptors.add("consensus,NA,"
-            + nowConsensusFormat);
-        this.archiveWriterParseHistoryModified = true;
-      }
+        + "-consensus");
+    if (!this.missingDescriptors.contains("consensus,NA,"
+        + nowConsensusFormat) && !consensusFile.exists()) {
+      this.logger.fine("Adding consensus to missing list: valid-after="
+          + nowConsensusFormat
+          + ", filename=directory-archive/consensus/"
+          + consensusVoteFormat.format(new Date(nowConsensus))
+          + "-consensus");
+      this.missingDescriptors.add("consensus,NA,"
+          + nowConsensusFormat);
+      this.missingDescriptorsFileModified = true;
     }
   }
   public void store(byte[] data) throws IOException, ParseException {
@@ -213,7 +208,7 @@ public class ArchiveWriter {
           validAfter = parseFormat.parse(validAfterTime).getTime();
         } else if (line.startsWith("dir-source ") &&
             !this.v3DirectoryAuthorities.contains(
-            line.split(" ")[2]) && validAfter + 55L * 60L * 1000L < now) {
+            line.split(" ")[2]) && validAfter + 55L * 60L * 1000L > now) {
           this.logger.warning("Unknown v3 directory authority fingerprint "
               + "in consensus line '" + line + "'. You should update your "
               + "V3DirectoryAuthorities config option!");
@@ -248,7 +243,7 @@ public class ArchiveWriter {
                   + "-vote-" + fingerprint + "-*");
               this.missingDescriptors.add("vote," + fingerprint + ","
                   + parseFormat.format(new Date(nowConsensus)));
-              this.archiveWriterParseHistoryModified = true;
+              this.missingDescriptorsFileModified = true;
             }
           }
         } else if (line.startsWith("fingerprint ")) {
@@ -260,24 +255,23 @@ public class ArchiveWriter {
           String serverDesc = Hex.encodeHexString(Base64.decodeBase64(
               line.split(" ")[3] + "=")).toLowerCase();
           // TODO are 24 hours okay?
-          if (published + 24L * 60L * 60L * 1000L > now &&
-              !new File("directory-archive/server-descriptor/"
+          File descriptorFile = new File(
+              "directory-archive/server-descriptor/"
               + descriptorFormat.format(new Date(published))
               + serverDesc.substring(0, 1) + "/"
-              + serverDesc.substring(1, 2)
-              + "/" + serverDesc).exists()) {
-            if (!this.missingDescriptors.contains("server," + serverDesc
-                + "," + publishedTime)) {
-              this.logger.fine("Adding server descriptor to missing list: "
-                  + "digest=" + serverDesc
-                  + ", filename=directory-archive/server-descriptor/"
-                  + descriptorFormat.format(new Date(published))
-                  + serverDesc.substring(0, 1) + "/"
-                  + serverDesc.substring(1, 2) + "/" + serverDesc);
-              this.missingDescriptors.add("server," + serverDesc + ","
-                  + publishedTime);
-              this.archiveWriterParseHistoryModified = true;
-            }
+              + serverDesc.substring(1, 2) + "/" + serverDesc);
+          if (published + 24L * 60L * 60L * 1000L > now &&
+              !this.missingDescriptors.contains("server," + serverDesc
+                + "," + publishedTime) && !descriptorFile.exists()) {
+            this.logger.fine("Adding server descriptor to missing list: "
+                + "digest=" + serverDesc
+                + ", filename=directory-archive/server-descriptor/"
+                + descriptorFormat.format(new Date(published))
+                + serverDesc.substring(0, 1) + "/"
+                + serverDesc.substring(1, 2) + "/" + serverDesc);
+            this.missingDescriptors.add("server," + serverDesc + ","
+                + publishedTime);
+            this.missingDescriptorsFileModified = true;
           }
         }
       }
@@ -302,7 +296,7 @@ public class ArchiveWriter {
               + printFormat.format(new Date(validAfter)) + "-consensus");
           this.missingDescriptors.remove("consensus,NA,"
               + validAfterTime);
-          this.archiveWriterParseHistoryModified = true;
+          this.missingDescriptorsFileModified = true;
         } else {
           this.logger.info("Not storing consensus, because we already "
               + "have it: valid-after=" + validAfterTime
@@ -346,7 +340,7 @@ public class ArchiveWriter {
               + fingerprint + "-" + digest);
           this.missingDescriptors.remove("vote," + fingerprint + ","
               + validAfterTime);
-          this.archiveWriterParseHistoryModified = true;
+          this.missingDescriptorsFileModified = true;
         } else {
           this.logger.info("Not storing vote, because we already have "
               + "it: fingerprint=" + fingerprint + ", valid-after="
@@ -373,24 +367,24 @@ public class ArchiveWriter {
           SimpleDateFormat descriptorFormat =
               new SimpleDateFormat("yyyy/MM/");
           descriptorFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-          if (!new File("directory-archive/extra-info/"
+          File descriptorFile = new File("directory-archive/extra-info/"
               + descriptorFormat.format(new Date(published))
               + extraInfoDigest.substring(0, 1) + "/"
               + extraInfoDigest.substring(1, 2) + "/"
-              + extraInfoDigest).exists()) {
-            if (!this.missingDescriptors.contains("extra,"
-                + extraInfoDigest + "," + publishedTime)) {
-              this.logger.fine("Adding extra-info descriptor to missing "
-                  + "list: digest=" + extraInfoDigest
-                  + ", filename=directory-archive/extra-info/"
-                  + descriptorFormat.format(new Date(published))
-                  + extraInfoDigest.substring(0, 1) + "/"
-                  + extraInfoDigest.substring(1, 2) + "/"
-                  + extraInfoDigest);
-              this.missingDescriptors.add("extra," + extraInfoDigest + ","
-                  + publishedTime);
-              this.archiveWriterParseHistoryModified = true;
-            }
+              + extraInfoDigest);
+          if (!this.missingDescriptors.contains("extra,"
+              + extraInfoDigest + "," + publishedTime) &&
+              !descriptorFile.exists()) {
+            this.logger.fine("Adding extra-info descriptor to missing "
+                + "list: digest=" + extraInfoDigest
+                + ", filename=directory-archive/extra-info/"
+                + descriptorFormat.format(new Date(published))
+                + extraInfoDigest.substring(0, 1) + "/"
+                + extraInfoDigest.substring(1, 2) + "/"
+                + extraInfoDigest);
+            this.missingDescriptors.add("extra," + extraInfoDigest + ","
+                + publishedTime);
+            this.missingDescriptorsFileModified = true;
           }
         }
       }
@@ -442,7 +436,7 @@ public class ArchiveWriter {
           this.missingDescriptors.remove("extra," + digest + ","
               + publishedTime);
         }
-        this.archiveWriterParseHistoryModified = true;
+        this.missingDescriptorsFileModified = true;
       } else {
         this.logger.info("Not storing " + (isServerDescriptor ?
             "server descriptor" : "extra-info descriptor")
@@ -471,13 +465,13 @@ public class ArchiveWriter {
     return urls;
   }
   public void writeFile() {
-    if (this.archiveWriterParseHistoryModified) {
+    if (this.missingDescriptorsFileModified) {
       try {
         this.logger.info("Writing file " + this.statsDir
             + "/archive-writer-parse-history...");
         new File(this.statsDir).mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(
-            this.archiveWriterParseHistory));
+            this.missingDescriptorsFile));
         for (String line : this.missingDescriptors) {
           bw.write(line + "\n");
         }

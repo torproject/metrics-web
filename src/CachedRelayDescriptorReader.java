@@ -59,16 +59,16 @@ public class CachedRelayDescriptorReader {
               if (start < 0) {
                 break;
               }
-              sig = ascii.indexOf(sigToken, start)
-                  + sigToken.length();
+              sig = ascii.indexOf(sigToken, start);
               if (sig < 0) {
                 break;
               }
-              end = ascii.indexOf(endToken, sig)
-                  + endToken.length();
+              sig += sigToken.length();
+              end = ascii.indexOf(endToken, sig);
               if (end < 0) {
                 break;
               }
+              end += endToken.length();
               String desc = ascii.substring(start, end);
               byte[] forDigest = new byte[sig - start];
               System.arraycopy(allData, start, forDigest, 0, sig - start);
