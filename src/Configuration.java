@@ -17,7 +17,7 @@ public class Configuration {
       Arrays.asList(("8522EB98C91496E80EC238E732594D1509158E77,"
       + "9695DFC35FFEB861329B9F1AB04C46397020CE31").split(",")));
   private boolean writeBridgeStats = true;
-  private boolean writeDirectoryArchives = true;
+  private boolean writeDirectoryArchives = false;
   private SortedSet<String> v3DirectoryAuthorities = new TreeSet<String>(
       Arrays.asList(("14C131DFC5C6F93646BE72FA1401C02A8DF2E8B4,"
       + "E8A9C45EDE6D711294FADF8E7951F4DE6CA56B58,"
