@@ -61,20 +61,33 @@ public class ArchiveWriter {
                 + "-consensus");
             this.missingDescriptors.add(line);
           } else if (line.startsWith("vote") &&
-              published + 55L * 60L * 1000L > now &&
+              published + 55L * 60L * 1000L > now) {
               // TODO is vote even available for 55 minutes after its
               // publication?
-              !new File("directory-archive/vote/"
-                + consensusVoteFormat.format(new Date(published))
-                + "-vote-" + line.split(",")[1]).exists()) {
-            this.logger.fine("Initializing missing list with vote: "
-                + "fingerprint=" + line.split(",")[1]
-                + ", valid-after="
-                + consensusVoteFormat.format(new Date(published))
-                + ", filename=directory-archive/vote/"
+            File voteFile = new File("directory-archive/vote/"
                 + consensusVoteFormat.format(new Date(published))
                 + "-vote-" + line.split(",")[1]);
-            this.missingDescriptors.add(line);
+            File voteFileDir = voteFile.getParentFile();
+            String voteFileName = voteFile.getName();
+            boolean voteFileFound = false;
+            if (voteFileDir.exists()) {
+              for (File f : Arrays.asList(voteFileDir.listFiles())) {
+                if (f.getName().startsWith(voteFileName)) {
+                  voteFileFound = true;
+                  break;
+                }
+              }
+            }
+            if (!voteFileFound) {
+              this.logger.fine("Initializing missing list with vote: "
+                  + "fingerprint=" + line.split(",")[1]
+                  + ", valid-after="
+                  + consensusVoteFormat.format(new Date(published))
+                  + ", filename=directory-archive/vote/"
+                  + consensusVoteFormat.format(new Date(published))
+                  + "-vote-" + line.split(",")[1] + "-*");
+              this.missingDescriptors.add(line);
+            }
           } else if ((line.startsWith("server") ||
               line.startsWith("extra")) &&
               published + 24L * 60L * 60L * 1000L > now) {
@@ -120,17 +133,29 @@ public class ArchiveWriter {
     long nowConsensus = (System.currentTimeMillis() / (60L * 60L * 1000L))
         * (60L * 60L * 1000L);
     for (String authority : this.v3DirectoryAuthorities) {
-      if (!new File("directory-archive/vote/"
-            + consensusVoteFormat.format(new Date(nowConsensus))
-            + "-vote-" + authority).exists()) {
-        if (!this.missingDescriptors.contains("vote," + authority + ","
-            + nowConsensusFormat)) {
+      File voteFile = new File("directory-archive/vote/"
+          + consensusVoteFormat.format(new Date(nowConsensus))
+          + "-vote-" + authority);
+      if (!this.missingDescriptors.contains("vote," + authority + ","
+          + nowConsensusFormat)) {
+        File voteFileDir = voteFile.getParentFile();
+        String voteFileName = voteFile.getName();
+        boolean voteFileFound = false;
+        if (voteFileDir.exists()) {
+          for (File f : Arrays.asList(voteFileDir.listFiles())) {
+            if (f.getName().startsWith(voteFileName)) {
+              voteFileFound = true;
+              break;
+            }
+          }
+        }
+        if (!voteFileFound) {
           this.logger.fine("Adding vote to missing list: fingerprint="
               + authority + ", valid-after="
               + consensusVoteFormat.format(new Date(nowConsensus))
               + ", filename=directory-archive/vote/"
               + consensusVoteFormat.format(new Date(nowConsensus))
-              + "-vote-" + authority);
+              + "-vote-" + authority + "-*");
           this.missingDescriptors.add("vote," + authority + ","
               + nowConsensusFormat);
           this.archiveWriterParseHistoryModified = true;
@@ -188,8 +213,7 @@ public class ArchiveWriter {
           validAfter = parseFormat.parse(validAfterTime).getTime();
         } else if (line.startsWith("dir-source ") &&
             !this.v3DirectoryAuthorities.contains(
-            line.split(" ")[2]) && validAfter + 55L * 60L * 1000L <
-            System.currentTimeMillis()) {
+            line.split(" ")[2]) && validAfter + 55L * 60L * 1000L < now) {
           this.logger.warning("Unknown v3 directory authority fingerprint "
               + "in consensus line '" + line + "'. You should update your "
               + "V3DirectoryAuthorities config option!");
@@ -199,17 +223,29 @@ public class ArchiveWriter {
           SimpleDateFormat consensusVoteFormat =
               new SimpleDateFormat("yyyy/MM/dd/yyyy-MM-dd-HH-mm-ss");
           consensusVoteFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-          if (!new File("directory-archive/vote/"
+          File voteFile = new File("directory-archive/vote/"
                 + consensusVoteFormat.format(new Date(nowConsensus))
-                + "-vote-" + fingerprint).exists()) {
-            if (!this.missingDescriptors.contains("vote," + fingerprint
-                + "," + parseFormat.format(new Date(nowConsensus)))) {
+                + "-vote-" + fingerprint);
+          if (!this.missingDescriptors.contains("vote," + fingerprint
+              + "," + parseFormat.format(new Date(nowConsensus)))) {
+            File voteFileDir = voteFile.getParentFile();
+            String voteFileName = voteFile.getName();
+            boolean voteFileFound = false;
+            if (voteFileDir.exists()) {
+              for (File f : Arrays.asList(voteFileDir.listFiles())) {
+                if (f.getName().startsWith(voteFileName)) {
+                  voteFileFound = true;
+                  break;
+                }
+              }
+            }
+            if (!voteFileFound) {
               this.logger.fine("Adding vote to missing list: fingerprint="
                   + fingerprint + ", valid-after="
                   + parseFormat.format(new Date(nowConsensus))
                   + ", filename=directory-archive/vote/"
                   + consensusVoteFormat.format(new Date(nowConsensus))
-                  + "-vote-" + fingerprint);
+                  + "-vote-" + fingerprint + "-*");
               this.missingDescriptors.add("vote," + fingerprint + ","
                   + parseFormat.format(new Date(nowConsensus)));
               this.archiveWriterParseHistoryModified = true;
@@ -274,16 +310,29 @@ public class ArchiveWriter {
               + printFormat.format(new Date(validAfter)) + "-consensus");
         }
       } else {
+        String ascii = new String(data, "US-ASCII");
+        String startToken = "network-status-version ";
+        String sigToken = "directory-signature ";
+        int start = ascii.indexOf(startToken);
+        int sig = ascii.indexOf(sigToken);
+        if (start < 0 || sig < 0 || sig < start) {
+          this.logger.info("Cannot determine vote digest! Skipping.");
+          return;
+        }
+        sig += sigToken.length();
+        byte[] forDigest = new byte[sig - start];
+        System.arraycopy(data, start, forDigest, 0, sig - start);
+        String digest = DigestUtils.shaHex(forDigest).toUpperCase();
         File voteFile = new File("directory-archive/vote/"
             + printFormat.format(new Date(validAfter)) + "-vote-"
-            + fingerprint);
+            + fingerprint + "-" + digest);
         if (!voteFile.exists()) {
           this.logger.fine("Storing vote: fingerprint=" + fingerprint
               + ", valid-after="
               + printFormat.format(new Date(validAfter))
               + ", filename=directory-archive/vote/"
               + printFormat.format(new Date(validAfter)) + "-vote-"
-              + fingerprint);
+              + fingerprint + "-" + digest);
           voteFile.getParentFile().mkdirs();
           BufferedOutputStream bos = new BufferedOutputStream(
               new FileOutputStream(voteFile));
@@ -294,7 +343,7 @@ public class ArchiveWriter {
               + printFormat.format(new Date(validAfter))
               + ", filename=directory-archive/vote/"
               + printFormat.format(new Date(validAfter)) + "-vote-"
-              + fingerprint);
+              + fingerprint + "-" + digest);
           this.missingDescriptors.remove("vote," + fingerprint + ","
               + validAfterTime);
           this.archiveWriterParseHistoryModified = true;
@@ -304,7 +353,7 @@ public class ArchiveWriter {
               + printFormat.format(new Date(validAfter))
               + ", filename=directory-archive/vote/"
               + printFormat.format(new Date(validAfter)) + "-vote-"
-              + fingerprint);
+              + fingerprint + "-" + digest);
         }
       }
     } else if (line.startsWith("router ") ||
