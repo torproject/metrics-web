@@ -25,7 +25,9 @@ public class Configuration {
       + "585769C78764D58426B8B52B6651A5A71137189A,"
       + "27B6B5996C426270A5C95488AA5BCEB6BCC86956,"
       + "80550987E1D626E3EBA5E5E75A458DE0626D088C,"
-      + "ED03BB616EB2F60BEC80151114BB25CEF515B226").split(",")));
+      + "ED03BB616EB2F60BEC80151114BB25CEF515B226,"
+      + "81349FC1F2DBA2C2C11B45CB9706637D480AB913,"
+      + "E2A2AF570166665D738736D0DD58169CC61D8A8B").split(",")));
   private boolean importCachedRelayDescriptors = true;
   private boolean importDirectoryArchives = true;
   private boolean importSanitizedBridges = true;
