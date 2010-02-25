@@ -22,10 +22,22 @@ public class CachedRelayDescriptorReader {
       }
       for (File f : cachedDescDir.listFiles()) {
         try {
+          // descriptors may contain non-ASCII chars; read as bytes to
+          // determine digests
+          BufferedInputStream bis =
+              new BufferedInputStream(new FileInputStream(f));
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          int len;
+          byte[] data = new byte[1024];
+          while ((len = bis.read(data, 0, 1024)) >= 0) {
+            baos.write(data, 0, len);
+          }
+          bis.close();
+          byte[] allData = baos.toByteArray();
           if (f.getName().equals("cached-consensus")) {
             BufferedReader br = new BufferedReader(new FileReader(f));
             if (aw != null) {
-              aw.store(br);
+              aw.store(allData);
             }
             br.close();
             br = new BufferedReader(new FileReader(f));
@@ -35,41 +47,44 @@ public class CachedRelayDescriptorReader {
             br.close();
           } else if (f.getName().startsWith("cached-descriptors") ||
               f.getName().startsWith("cached-extrainfo")) {
-            BufferedReader br = new BufferedReader(new FileReader(f));
-            String line = null;
-            StringBuilder sb = new StringBuilder();
-            while ((line = br.readLine()) != null || sb != null) {
-              if (line == null && sb.length() < 1) {
-                continue; // empty file?
+            String ascii = new String(allData, "US-ASCII");
+            int start = -1, sig = -1, end = -1;
+            String startToken =
+                f.getName().startsWith("cached-descriptors") ?
+                "router " : "extra-info ";
+            String sigToken = "\nrouter-signature\n";
+            String endToken = "\n-----END SIGNATURE-----\n";
+            while (end < ascii.length()) {
+              start = ascii.indexOf(startToken, end);
+              if (start < 0) {
+                break;
               }
-              if (line == null || line.startsWith("router ") ||
-                  line.startsWith("extra-info ")) {
-                if (sb.length() > 0) {
-                  BufferedReader storeBr = new BufferedReader(
-                      new StringReader(sb.toString()));
-                  if (aw != null) {
-                    aw.store(storeBr);
-                  }
-                  storeBr.close();
-                  storeBr = new BufferedReader(
-                      new StringReader(sb.toString()));
-                  if (rdp != null) {
-                    rdp.parse(storeBr);
-                  }
-                  storeBr.close();
-                }
-                if (line == null) {
-                  sb = null;
-                  break;
-                } else {
-                  sb = new StringBuilder();
-                }
+              sig = ascii.indexOf(sigToken, start)
+                  + sigToken.length();
+              if (sig < 0) {
+                break;
               }
-              if (!line.startsWith("@")) {
-                sb.append(line + "\n");
+              end = ascii.indexOf(endToken, sig)
+                  + endToken.length();
+              if (end < 0) {
+                break;
+              }
+              String desc = ascii.substring(start, end);
+              byte[] forDigest = new byte[sig - start];
+              System.arraycopy(allData, start, forDigest, 0, sig - start);
+              String digest = DigestUtils.shaHex(forDigest);
+              byte[] descBytes = new byte[end - start];
+              System.arraycopy(allData, start, descBytes, 0, end - start);
+              if (aw != null) {
+                aw.store(descBytes);
+              }
+              if (rdp != null) {
+                BufferedReader storeBr = new BufferedReader(
+                    new StringReader(desc));
+                rdp.parse(storeBr);
+                storeBr.close();
               }
             }
-            br.close();
             logger.info("Finished reading cacheddesc/ directory.");
           }
         } catch (IOException e) {

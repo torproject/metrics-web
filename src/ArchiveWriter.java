@@ -153,8 +153,9 @@ public class ArchiveWriter {
       }
     }
   }
-  public void store(BufferedReader br) throws IOException,
-      ParseException {
+  public void store(byte[] data) throws IOException, ParseException {
+    BufferedReader br = new BufferedReader(new StringReader(new String(
+        data, "US-ASCII")));
     String line = br.readLine();
     if (line == null) {
       this.logger.warning("Someone gave us an empty file for storing!");
@@ -220,23 +221,24 @@ public class ArchiveWriter {
           String publishedTime = line.split(" ")[4] + " "
               + line.split(" ")[5];
           long published = parseFormat.parse(publishedTime).getTime();
-          String digest = Hex.encodeHexString(Base64.decodeBase64(
+          String serverDesc = Hex.encodeHexString(Base64.decodeBase64(
               line.split(" ")[3] + "=")).toLowerCase();
           // TODO are 24 hours okay?
           if (published + 24L * 60L * 60L * 1000L > now &&
               !new File("directory-archive/server-descriptor/"
               + descriptorFormat.format(new Date(published))
-              + digest.substring(0, 1) + "/" + digest.substring(1, 2)
-              + "/" + digest).exists()) {
-            if (!this.missingDescriptors.contains("server," + digest + ","
-                + publishedTime)) {
+              + serverDesc.substring(0, 1) + "/"
+              + serverDesc.substring(1, 2)
+              + "/" + serverDesc).exists()) {
+            if (!this.missingDescriptors.contains("server," + serverDesc
+                + "," + publishedTime)) {
               this.logger.fine("Adding server descriptor to missing list: "
-                  + "digest=" + digest
+                  + "digest=" + serverDesc
                   + ", filename=directory-archive/server-descriptor/"
                   + descriptorFormat.format(new Date(published))
-                  + digest.substring(0, 1) + "/" + digest.substring(1, 2)
-                  + "/" + digest);
-              this.missingDescriptors.add("server," + digest + ","
+                  + serverDesc.substring(0, 1) + "/"
+                  + serverDesc.substring(1, 2) + "/" + serverDesc);
+              this.missingDescriptors.add("server," + serverDesc + ","
                   + publishedTime);
               this.archiveWriterParseHistoryModified = true;
             }
@@ -254,15 +256,10 @@ public class ArchiveWriter {
               + validAfterTime + ", filename=directory-archive/consensus/"
               + printFormat.format(new Date(validAfter)) + "-consensus");
           consensusFile.getParentFile().mkdirs();
-          BufferedReader br2 = new BufferedReader(new StringReader(
-              sb.toString()));
-          BufferedWriter bw = new BufferedWriter(new FileWriter(
-              consensusFile));
-          while ((line = br2.readLine()) != null) {
-              bw.write(line + "\n");
-          }
-          bw.close();
-          br2.close();
+          BufferedOutputStream bos = new BufferedOutputStream(
+              new FileOutputStream(consensusFile));
+          bos.write(data, 0, data.length);
+          bos.close();
           this.logger.fine("Removing consensus from missing list: "
               + "valid-after=" + validAfterTime
               + ", filename=directory-archive/consensus/"
@@ -288,15 +285,10 @@ public class ArchiveWriter {
               + printFormat.format(new Date(validAfter)) + "-vote-"
               + fingerprint);
           voteFile.getParentFile().mkdirs();
-          BufferedReader br2 = new BufferedReader(new StringReader(
-              sb.toString()));
-          BufferedWriter bw = new BufferedWriter(new FileWriter(
-              voteFile));
-          while ((line = br2.readLine()) != null) {
-              bw.write(line + "\n");
-          }
-          bw.close();
-          br2.close();
+          BufferedOutputStream bos = new BufferedOutputStream(
+              new FileOutputStream(voteFile));
+          bos.write(data, 0, data.length);
+          bos.close();
           this.logger.fine("Removing vote from missing list: "
               + "fingerprint=" + fingerprint + ", valid-after="
               + printFormat.format(new Date(validAfter))
@@ -320,9 +312,7 @@ public class ArchiveWriter {
       boolean isServerDescriptor = line.startsWith("router ");
       String publishedTime = null;
       long published = -1L;
-      String digest = null;
       while ((line = br.readLine()) != null) {
-        sb.append(line + "\n");
         if (line.startsWith("published ")) {
           publishedTime = line.substring("published ".length());
           published = parseFormat.parse(publishedTime).getTime();
@@ -353,10 +343,21 @@ public class ArchiveWriter {
               this.archiveWriterParseHistoryModified = true;
             }
           }
-        } else if (line.equals("router-signature")) {
-          digest = DigestUtils.shaHex(sb.toString()).toLowerCase();
         }
       }
+      String ascii = new String(data, "US-ASCII");
+      String startToken = isServerDescriptor ?
+          "router " : "extra-info ";
+      String sigToken = "\nrouter-signature\n";
+      int start = ascii.indexOf(startToken);
+      int sig = ascii.indexOf(sigToken) + sigToken.length();
+      if (start < 0 || sig < 0 || sig < start) {
+        this.logger.info("Cannot determine descriptor digest! Skipping.");
+        return;
+      }
+      byte[] forDigest = new byte[sig - start];
+      System.arraycopy(data, start, forDigest, 0, sig - start);
+      String digest = DigestUtils.shaHex(forDigest);
       SimpleDateFormat printFormat = new SimpleDateFormat("yyyy/MM/");
       printFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
       File descriptorFile = new File("directory-archive/"
@@ -373,15 +374,10 @@ public class ArchiveWriter {
             + digest.substring(0, 1) + "/" + digest.substring(1, 2)
             + "/" + digest);
         descriptorFile.getParentFile().mkdirs();
-        BufferedReader br2 = new BufferedReader(new StringReader(
-            sb.toString()));
-        BufferedWriter bw = new BufferedWriter(new FileWriter(
-            descriptorFile));
-        while ((line = br2.readLine()) != null) {
-          bw.write(line + "\n");
-        }
-        bw.close();
-        br2.close();
+        BufferedOutputStream bos = new BufferedOutputStream(
+            new FileOutputStream(descriptorFile));
+        bos.write(data, 0, data.length);
+        bos.close();
         this.logger.fine("Removing " + (isServerDescriptor ?
             "server descriptor" : "extra-info descriptor")
             + " from missing list: digest=" + digest
