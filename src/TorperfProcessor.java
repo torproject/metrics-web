@@ -18,6 +18,11 @@ public class TorperfProcessor {
         BufferedReader br = new BufferedReader(new FileReader(rawFile));
         String line = br.readLine(); // ignore header
         while ((line = br.readLine()) != null) {
+          if (line.split(",").length != 4) {
+            logger.warning("Corrupt line in " + statsDirectory
+                + "/torperf-raw!");
+            break;
+          }
           String key = line.substring(0, line.lastIndexOf(","));
           rawObs.put(key, line);
         }
