@@ -28,8 +28,7 @@ public class Main {
     SortedSet<String> countries = config.getDirreqBridgeCountries();
     SortedSet<String> directories = config.getDirreqDirectories();
 
-    // Prepare stats file handlers which will be initialized by the
-    // importing/downloading classes
+    // Prepare stats file handlers (only if we are writing stats)
     String statsDirectory = "stats";
     ConsensusStatsFileHandler csfh = config.getWriteConsensusStats() ?
         new ConsensusStatsFileHandler(statsDirectory) : null;
@@ -38,20 +37,19 @@ public class Main {
     DirreqStatsFileHandler dsfh = config.getWriteDirreqStats() ?
         new DirreqStatsFileHandler(statsDirectory, countries) : null;
 
-    // Prepare parsers
-    // TODO handle cases bsfh==NULL, csfh==NULL, dsfh==NULL
-    RelayDescriptorParser rdp = new RelayDescriptorParser(statsDirectory,
-        csfh, bsfh, dsfh, countries, directories);
-    BridgeDescriptorParser bdp = new BridgeDescriptorParser(csfh, bsfh,
-        countries);
+    // Prepare relay descriptor parser (only if we are writing the
+    // stats)
+    RelayDescriptorParser rdp = config.getWriteConsensusStats() &&
+        config.getWriteBridgeStats() && config.getWriteDirreqStats() ?
+        new RelayDescriptorParser(statsDirectory, csfh, bsfh, dsfh,
+        countries, directories) : null;
 
     // Prepare writing relay descriptor archive to disk
     ArchiveWriter aw = config.getWriteDirectoryArchives() ?
         new ArchiveWriter(statsDirectory,
         config.getV3DirectoryAuthorities()) : null;
-    // TODO handle case aw==NULL below
 
-    // import and/or download relay and bridge descriptors
+    // Import/download relay descriptors from the various sources
     if (config.getImportCachedRelayDescriptors()) {
       new CachedRelayDescriptorReader(rdp, aw);
     }
@@ -63,6 +61,27 @@ public class Main {
           config.getDownloadFromDirectoryAuthorities(),
           directories);
     }
+
+    // Write output to disk that only depends on relay descriptors
+    if (aw != null) {
+      aw.writeFile();
+      aw = null;
+    }
+    if (rdp != null) {
+      rdp.writeFile();
+      rdp = null;
+    }
+    if (dsfh != null) {
+      dsfh.writeFile();
+      dsfh = null;
+    }
+
+    // Prepare bridge descriptor parser
+    BridgeDescriptorParser bdp = config.getWriteConsensusStats() &&
+        config.getWriteBridgeStats() ? new BridgeDescriptorParser(
+        csfh, bsfh, countries) : null;
+
+    // Import bridge descriptors
     if (config.getImportSanitizedBridges()) {
       new SanitizedBridgesReader(bdp, "bridges", countries);
     }
@@ -74,15 +93,12 @@ public class Main {
     // Write updated stats files to disk
     if (bsfh != null) {
       bsfh.writeFile();
+      bsfh = null;
     }
     if (csfh != null) {
       csfh.writeFile();
+      csfh = null;
     }
-    if (dsfh != null) {
-      dsfh.writeFile();
-    }
-    rdp.writeFile();
-    aw.writeFile();
 
     // Import and process torperf stats
     if (config.getImportWriteTorperfStats()) {

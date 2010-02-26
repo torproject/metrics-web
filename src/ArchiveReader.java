@@ -10,10 +10,12 @@ public class ArchiveReader {
   public ArchiveReader(RelayDescriptorParser rdp, String archivesDir) {
     Logger logger = Logger.getLogger(ArchiveReader.class.getName());
     if (new File(archivesDir).exists()) {
-      try {
-        rdp.initialize();
-      } catch (IOException e) {
-        return;
+      if (rdp != null) {
+        try {
+          rdp.initialize();
+        } catch (IOException e) {
+          return;
+        }
       }
       logger.info("Importing files in directory " + archivesDir
           + "/...");
@@ -27,14 +29,16 @@ public class ArchiveReader {
             filesInInputDir.add(f);
           }
         } else {
-          try {
-            BufferedReader br = new BufferedReader(new FileReader(pop));
-            rdp.parse(br);
-            br.close();
-          } catch (IOException e) {
-            problems.add(pop);
-            if (problems.size() > 3) {
-              break;
+          if (rdp != null) {
+            try {
+              BufferedReader br = new BufferedReader(new FileReader(pop));
+              rdp.parse(br);
+              br.close();
+            } catch (IOException e) {
+              problems.add(pop);
+              if (problems.size() > 3) {
+                break;
+              }
             }
           }
         }

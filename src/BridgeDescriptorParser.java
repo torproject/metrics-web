@@ -18,8 +18,12 @@ public class BridgeDescriptorParser {
         Logger.getLogger(BridgeDescriptorParser.class.getName());
   }
   public void initialize() throws IOException {
-    this.csfh.initialize();
-    this.bsfh.initialize();
+    if (this.csfh != null) {
+      this.csfh.initialize();
+    }
+    if (this.bsfh != null) {
+      this.bsfh.initialize();
+    }
   }
   public void parse(BufferedReader br, String dateTime, boolean sanitized)
       throws IOException, ParseException {
@@ -38,11 +42,15 @@ public class BridgeDescriptorParser {
             runningBridges++;
           }
         }
-        csfh.addBridgeConsensusResults(dateTime, runningBridges);
+        if (this.csfh != null) {
+          this.csfh.addBridgeConsensusResults(dateTime, runningBridges);
+        }
       } else if (line.startsWith("extra-info ")) {
         hashedIdentity = sanitized ? line.split(" ")[2]
             : DigestUtils.shaHex(line.split(" ")[2]).toUpperCase();
-        skip = bsfh.isKnownRelay(hashedIdentity);
+        if (this.bsfh != null) {
+          skip = this.bsfh.isKnownRelay(hashedIdentity);
+        }
       } else if (!skip && line.startsWith("published ")) {
         publishedLine = line;
       } else if (!skip && line.startsWith("geoip-start-time ")) {
@@ -75,7 +83,9 @@ public class BridgeDescriptorParser {
         }
         String date = publishedLine.split(" ")[1];
         String time = publishedLine.split(" ")[2];
-        bsfh.addObs(hashedIdentity, date, time, obs);
+        if (this.bsfh != null) {
+          bsfh.addObs(hashedIdentity, date, time, obs);
+        }
       }
     }
   }

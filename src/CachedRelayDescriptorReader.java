@@ -10,15 +10,19 @@ import org.apache.commons.codec.digest.*;
 public class CachedRelayDescriptorReader {
   public CachedRelayDescriptorReader(RelayDescriptorParser rdp,
       ArchiveWriter aw) {
+    // TODO check if files are stale; print out warning that Tor process
+    // might have died
     Logger logger = Logger.getLogger(
         CachedRelayDescriptorReader.class.getName());
     File cachedDescDir = new File("cacheddesc");
     if (cachedDescDir.exists()) {
       logger.info("Reading cacheddesc/ directory.");
-      try {
-        rdp.initialize(); // TODO get rid of this non-sense
-      } catch (IOException e) {
-        return;
+      if (rdp != null) {
+        try {
+          rdp.initialize(); // TODO get rid of this non-sense
+        } catch (IOException e) {
+          return;
+        }
       }
       for (File f : cachedDescDir.listFiles()) {
         try {

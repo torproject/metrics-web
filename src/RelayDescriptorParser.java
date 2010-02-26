@@ -40,9 +40,15 @@ public class RelayDescriptorParser {
     if (this.initialized) {
       return;
     }
-    this.csfh.initialize();
-    this.bsfh.initialize();
-    this.dsfh.initialize();
+    if (this.csfh != null) {
+      this.csfh.initialize();
+    }
+    if (this.bsfh != null) {
+      this.bsfh.initialize();
+    }
+    if (this.dsfh != null) {
+      this.dsfh.initialize();
+    }
     this.lastParsedConsensus = null;
     this.lastParsedExtraInfos = new TreeMap<String, String>();
     if (this.relayDescriptorParseHistory.exists()) {
@@ -83,10 +89,10 @@ public class RelayDescriptorParser {
           }
         } else if (line.equals("vote-status vote")) {
           return;
-        } else if (line.startsWith("r ")) {
+        } else if (line.startsWith("r ") && this.bsfh != null) {
           String hashedRelay = DigestUtils.shaHex(Base64.decodeBase64(
               line.split(" ")[2] + "=")).toUpperCase();
-          bsfh.addHashedRelay(hashedRelay);
+          this.bsfh.addHashedRelay(hashedRelay);
         } else if (line.startsWith("s ")) {
           if (line.contains(" Running")) {
             exit += line.contains(" Exit") ? 1 : 0;
@@ -97,12 +103,14 @@ public class RelayDescriptorParser {
           }
         }
       }
-      csfh.addConsensusResults(validAfter, exit, fast, guard, running,
+      if (this.csfh != null) {
+        csfh.addConsensusResults(validAfter, exit, fast, guard, running,
           stable);
+      }
     } else if (line.startsWith("router ")) {
       // in case we want to parse server descriptors in the future
-    } else if (line.startsWith("extra-info ")
-        && directories.contains(line.split(" ")[2])) {
+    } else if (line.startsWith("extra-info ") && this.dsfh != null &&
+        directories.contains(line.split(" ")[2])) {
       String dir = line.split(" ")[2];
       String statsEnd = null, date = null, v3ips = null;
       boolean skip = false;
@@ -129,7 +137,7 @@ public class RelayDescriptorParser {
           }
           String share = line.substring("dirreq-v3-share ".length(),
               line.length() - 1);
-          dsfh.addObs(dir, date, obs, share);
+          this.dsfh.addObs(dir, date, obs, share);
           if (!this.lastParsedExtraInfos.containsKey(dir) ||
               statsEnd.compareTo(
               this.lastParsedExtraInfos.get(dir)) > 0) {
