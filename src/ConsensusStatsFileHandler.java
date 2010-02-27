@@ -4,288 +4,494 @@ import java.util.*;
 import java.util.logging.*;
 
 /**
- *
+ * Generates statistics on the average number of relays and bridges per
+ * day. Accepts parse results from <code>RelayDescriptorParser</code> and
+ * <code>BridgeDescriptorParser</code> and stores them in intermediate
+ * result files <code>stats/consensus-stats-raw</code> and
+ * <code>stats/bridge-consensus-stats-raw</code>. Writes final results to
+ * <code>stats/consensus-stats</code> for all days for which at least half
+ * of the expected consensuses or statuses are known.
  */
 public class ConsensusStatsFileHandler {
+
+  /**
+   * Intermediate results file holding the number of relays with Exit,
+   * Fast, Guard, Running, and Stable flags per consensus.
+   */
   private File consensusStatsRawFile;
+
+  /**
+   * Number of relays in a given consensus with Exit, Fast, Guard,
+   * Running, and Stable flags set. Map keys are consensus valid-after
+   * times formatted as "yyyy-MM-dd HH:mm:ss", map values are lines as
+   * read from <code>stats/consensus-stats-raw</code>.
+   */
+  private SortedMap<String, String> relaysRaw;
+
+  /**
+   * Modification flag for <code>relaysRaw</code>. This flag is used to
+   * decide whether the contents of <code>relaysRaw</code> need to be
+   * written to disk during <code>writeFiles</code>.
+   */
+  private boolean relaysRawModified;
+
+  /**
+   * Intermediate results file holding the number of running bridges per
+   * bridge status.
+   */
   private File bridgeConsensusStatsRawFile;
+
+  /**
+   * Number of running bridges in a given bridge status. Map keys are
+   * bridge status times formatted as "yyyy-MM-dd HH:mm:ss", map values
+   * are lines as read from <code>stats/bridge-consensus-stats-raw</code>.
+   */
+  private SortedMap<String, String> bridgesRaw;
+
+  /**
+   * Modification flag for <code>bridgesRaw</code>. This flag is used to
+   * decide whether the contents of <code>bridgesRaw</code> need to be
+   * written to disk during <code>writeFiles</code>.
+   */
+  private boolean bridgesRawModified;
+
+  /**
+   * Final results file holding the average number of relays with Exit,
+   * Fast, Guard, Running, and Stable flags set and the number of running
+   * bridges per day.
+   */
   private File consensusStatsFile;
-  private SortedMap<String, String> consensusResults;
-  private SortedMap<String, String> bridgeConsensusResults;
-  private SortedMap<String, String> csAggr =
-      new TreeMap<String, String>();
-  private SortedMap<String, String> bcsAggr =
-      new TreeMap<String, String>();
-  private boolean consensusResultsModified;
-  private boolean bridgeConsensusResultsModified;
+
+  /**
+   * Average number of relays with Exit, Fast, Guard, Running, and Stable
+   * flags set per day. Map keys are dates formatted as "yyyy-MM-dd", map
+   * values are lines as written to <code>stats/consensus-stats</code>
+   * without the last column that contains the number of running bridges.
+   */
+  private SortedMap<String, String> relaysPerDay;
+
+  /**
+   * Average number of running bridges per day. Map keys are dates
+   * formatted as "yyyy-MM-dd", map values are the last column as written
+   * to <code>stats/consensus-stats</code>.
+   */
+  private SortedMap<String, String> bridgesPerDay;
+
+  /**
+   * Logger for this class.
+   */
   private Logger logger;
+
+ /**
+  * Initializes <code>ConsensusStatsFileHandler</code>, including reading
+  * in intermediate results files <code>stats/consensus-stats-raw</code>
+  * and <code>stats/bridge-consensus-stats-raw</code> and final results
+  * file <code>stats/consensus-stats</code>.
+  */
   public ConsensusStatsFileHandler() {
+
+    /* Initialize local data structures to hold intermediate and final
+     * results. */
+    this.relaysPerDay = new TreeMap<String, String>();
+    this.bridgesPerDay = new TreeMap<String, String>();
+    this.relaysRaw = new TreeMap<String, String>();
+    this.bridgesRaw = new TreeMap<String, String>();
+
+    /* Initialize file names for intermediate and final results files. */
     this.consensusStatsRawFile = new File("stats/consensus-stats-raw");
     this.bridgeConsensusStatsRawFile = new File(
         "stats/bridge-consensus-stats-raw");
     this.consensusStatsFile = new File("stats/consensus-stats");
-    this.consensusResults = new TreeMap<String, String>();
-    this.bridgeConsensusResults = new TreeMap<String, String>();
-    this.logger =
-        Logger.getLogger(ConsensusStatsFileHandler.class.getName());
+
+    /* Initialize logger. */
+    this.logger = Logger.getLogger(
+        ConsensusStatsFileHandler.class.getName());
+
+    /* Read in number of relays with flags set per consensus. */
     if (this.consensusStatsRawFile.exists()) {
-      this.logger.info("Reading file "
-          + this.consensusStatsRawFile.getAbsolutePath() + "...");
       try {
+        this.logger.info("Reading file "
+            + this.consensusStatsRawFile.getAbsolutePath() + "...");
         BufferedReader br = new BufferedReader(new FileReader(
             this.consensusStatsRawFile));
         String line = null;
         while ((line = br.readLine()) != null) {
-          this.consensusResults.put(line.split(",")[0], line);
+          if (line.startsWith("#") || line.startsWith("date")) {
+            continue;
+          }
+          String[] parts = line.split(",");
+          if (parts.length != 6) {
+            this.logger.warning("Corrupt line '" + line + "' in file "
+                + this.consensusStatsRawFile.getAbsolutePath()
+                + "! Aborting to read this file!");
+            break;
+          }
+          String dateTime = parts[0];
+          this.relaysRaw.put(dateTime, line);
         }
         br.close();
         this.logger.info("Finished reading file "
             + this.consensusStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed reading file "
+        this.logger.log(Level.WARNING, "Failed to read file "
             + this.consensusStatsRawFile.getAbsolutePath() + "!", e);
       }
     }
+
+    /* Read in number of running bridges per bridge status. */
     if (this.bridgeConsensusStatsRawFile.exists()) {
-      this.logger.info("Reading file "
-          + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
       try {
+        this.logger.info("Reading file "
+            + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
         BufferedReader br = new BufferedReader(new FileReader(
             this.bridgeConsensusStatsRawFile));
         String line = null;
         while ((line = br.readLine()) != null) {
-          bridgeConsensusResults.put(line.split(",")[0], line);
+          if (line.startsWith("#") || line.startsWith("date")) {
+            continue;
+          }
+          String[] parts = line.split(",");
+          if (parts.length != 2) {
+            this.logger.warning("Corrupt line '" + line + "' in file "
+                + this.bridgeConsensusStatsRawFile.getAbsolutePath()
+                + "! Aborting to read this file!");
+            break;
+          }
+          String dateTime = parts[0];
+          this.bridgesRaw.put(dateTime, line);
         }
         br.close();
         this.logger.info("Finished reading file "
             + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed reading file "
+        this.logger.log(Level.WARNING, "Failed to read file "
             + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "!",
             e);
       }
     }
+
+    /* Read in previous results on average numbers of relays and running
+     * bridges per day. */
     if (this.consensusStatsFile.exists()) {
-      this.logger.info("Reading file "
-          + this.consensusStatsFile.getAbsolutePath() + "...");
       try {
+        this.logger.info("Reading file "
+            + this.consensusStatsFile.getAbsolutePath() + "...");
         BufferedReader br = new BufferedReader(new FileReader(
             this.consensusStatsFile));
-        String line = br.readLine();
+        String line = null;
         while ((line = br.readLine()) != null) {
-          String[] parts = line.split(",");
-          String date = parts[0];
-          boolean foundOneNotNA = false;
-          for (int i = 1; i < parts.length - 1; i++) {
-            if (!parts[i].equals("NA")) {
-              foundOneNotNA = true;
-              break;
-            }
+          if (line.startsWith("#") || line.startsWith("date")) {
+            continue;
           }
-          if (foundOneNotNA) {
-            String relays = line.substring(0, line.lastIndexOf(","));
-            String bridges = line.substring(line.lastIndexOf(",") + 1) + "\n";
-            csAggr.put(date, relays);
-            bcsAggr.put(date, bridges);
+          String[] parts = line.split(",");
+          if (parts.length != 7) {
+            this.logger.warning("Corrupt line '" + line + "' in file "
+                + this.consensusStatsFile.getAbsolutePath()
+                + "! Aborting to read this file!");
+            break;
+          }
+          String date = parts[0];
+          /* Split line into relay and bridge part; the relay part ends
+           * with the last comma (excluding) and the bridge part starts at
+           * that comma (including). */
+          String relayPart = line.substring(0, line.lastIndexOf(","));
+          String bridgePart = line.substring(line.lastIndexOf(","));
+          if (!relayPart.endsWith(",NA,NA,NA,NA,NA")) {
+            this.relaysPerDay.put(date, relayPart);
+          }
+          if (!bridgePart.equals(",NA")) {
+            this.bridgesPerDay.put(date, bridgePart);
           }
         }
         br.close();
         this.logger.info("Finished reading file "
             + this.consensusStatsFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed reading file "
+        this.logger.log(Level.WARNING, "Failed to write file "
             + this.consensusStatsFile.getAbsolutePath() + "!", e);
       }
     }
+
+    /* Set modification flags to false. */
+    this.relaysRawModified = this.bridgesRawModified = false;
   }
+
+  /**
+   * Adds the intermediate results of the number of relays with certain
+   * flags in a given consensus to the existing observations.
+   */
   public void addConsensusResults(String validAfter, int exit, int fast,
       int guard, int running, int stable) throws IOException {
-    this.consensusResults.put(validAfter, validAfter + "," + exit + ","
-        + fast + "," + guard + "," + running + "," + stable);
-    this.consensusResultsModified = true;
+    String line = validAfter + "," + exit + "," + fast + "," + guard + ","
+        + running + "," + stable;
+    if (!this.relaysRaw.containsKey(validAfter)) {
+      this.logger.fine("Adding new relay numbers: " + line);
+      this.relaysRaw.put(validAfter, line);
+      this.relaysRawModified = true;
+    } else if (!line.equals(this.relaysRaw.get(validAfter))) {
+      this.logger.warning("The numbers of relays with Exit, Fast, "
+        + "Guard, Running, and Stable flag we were just given (" + line
+        + ") are different from what we learned before ("
+        + this.relaysRaw.get(validAfter) + ")! Overwriting!");
+      this.relaysRaw.put(validAfter, line);
+      this.relaysRawModified = true;
+    }
   }
+
+  /**
+   * Adds the intermediate results of the number of running bridges in a
+   * given bridge status to the existing observations.
+   */
   public void addBridgeConsensusResults(String published, int running)
       throws IOException {
-    bridgeConsensusResults.put(published, published + "," + running);
-    this.bridgeConsensusResultsModified = true;
+    String line = published + "," + running;
+    if (!this.bridgesRaw.containsKey(published)) {
+      this.logger.fine("Adding new bridge numbers: " + line);
+      this.bridgesRaw.put(published, line);
+      this.bridgesRawModified = true;
+    } else if (!line.equals(this.bridgesRaw.get(published))) {
+      this.logger.warning("The numbers of running bridges we were just "
+        + "given (" + line + ") are different from what we learned "
+        + "before (" + this.bridgesRaw.get(published) + ")! "
+        + "Overwriting!");
+      this.bridgesRaw.put(published, line);
+      this.bridgesRawModified = true;
+    }
   }
-  public void writeFile() {
-    boolean writeConsensusStatsRaw = false;
-    boolean writeBridgeConsensusStatsRaw = false;
+
+  /**
+   * Aggregates the raw observations on relay and bridge numbers and
+   * writes both raw and aggregate observations to disk.
+   */
+  public void writeFiles() {
+
+    /* Did we learn anything new about average relay or bridge numbers in
+     * this run? */
     boolean writeConsensusStats = false;
-    try {
-      BufferedWriter bwConsensusStatsRaw = null;
-      if (!this.consensusResults.isEmpty()) {
-        if (this.consensusResultsModified) {
-          this.logger.info("Writing file "
-              + this.consensusStatsRawFile.getAbsolutePath() + "...");
-          writeConsensusStatsRaw = true;
-          this.consensusStatsRawFile.getParentFile().mkdirs();
-          bwConsensusStatsRaw = new BufferedWriter(
-              new FileWriter(this.consensusStatsRawFile));
-        }
-        String tempDate = null;
-        int exitDay = 0, fastDay = 0, guardDay = 0, runningDay = 0,
-            stableDay = 0, consensusesDay = 0;
-        Iterator<String> it = this.consensusResults.values().iterator();
-        boolean haveWrittenFinalLine = false;
-        while (it.hasNext() || !haveWrittenFinalLine) {
-          String next = it.hasNext() ? it.next() : null;
-          if (tempDate != null
-              && (next == null
-              || !next.substring(0, 10).equals(tempDate))) {
-            if (consensusesDay > 11) {
-              String line = tempDate + ","
-                  + (exitDay / consensusesDay) + ","
-                  + (fastDay / consensusesDay) + ","
-                  + (guardDay / consensusesDay) + ","
-                  + (runningDay / consensusesDay) + ","
-                  + (stableDay / consensusesDay);
-              if (!line.equals(this.csAggr.get(tempDate))) {
-                this.csAggr.put(tempDate, line);
-                writeConsensusStats = true;
-              }
-            }
-            exitDay = 0;
-            fastDay = 0;
-            guardDay = 0;
-            runningDay = 0;
-            stableDay = 0;
-            consensusesDay = 0;
-            if (next == null) {
-              haveWrittenFinalLine = true;
+
+    /* Go through raw observations of numbers of relays in consensuses,
+     * calculate averages per day, and add these averages to final
+     * results. */
+    if (!this.relaysRaw.isEmpty()) {
+      String tempDate = null;
+      int exit = 0, fast = 0, guard = 0, running = 0, stable = 0,
+          consensuses = 0;
+      Iterator<String> it = this.relaysRaw.values().iterator();
+      boolean haveWrittenFinalLine = false;
+      while (it.hasNext() || !haveWrittenFinalLine) {
+        String next = it.hasNext() ? it.next() : null;
+        /* Finished reading a day or even all lines? */
+        if (tempDate != null && (next == null
+            || !next.substring(0, 10).equals(tempDate))) {
+          /* Only write results if we have seen at least half of all
+           * consensuses. */
+          if (consensuses >= 12) {
+            String line = tempDate + "," + (exit / consensuses) + ","
+                + (fast/ consensuses) + "," + (guard/ consensuses) + ","
+                + (running/ consensuses) + "," + (stable/ consensuses);
+            /* Are our results new? */
+            if (!this.relaysPerDay.containsKey(tempDate)) {
+              this.logger.fine("Adding new average relay numbers: "
+                  + line);
+              this.relaysPerDay.put(tempDate, line);
+              writeConsensusStats = true;
+            } else if (!line.equals(this.relaysPerDay.get(tempDate))) {
+              this.logger.info("Replacing existing average relay numbers "
+                  + "(" + this.relaysPerDay.get(tempDate) + " with new "
+                  + "numbers: " + line);
+              this.relaysPerDay.put(tempDate, line);
+              writeConsensusStats = true;
             }
           }
-          if (next != null) {
-            if (writeConsensusStatsRaw) {
-              bwConsensusStatsRaw.append(next + "\n");
-            }
-            String[] parts = next.split(",");
-            tempDate = next.substring(0, 10);
-            consensusesDay++;
-            exitDay += Integer.parseInt(parts[1]);
-            fastDay += Integer.parseInt(parts[2]);
-            guardDay += Integer.parseInt(parts[3]);
-            runningDay += Integer.parseInt(parts[4]);
-            stableDay += Integer.parseInt(parts[5]);
-          }
+          exit = fast = guard = running = stable = consensuses = 0;
+          haveWrittenFinalLine = (next == null);
         }
-        if (writeConsensusStatsRaw) {
-          bwConsensusStatsRaw.close();
-          this.logger.info("Finished writing file "
-              + this.consensusStatsRawFile.getAbsolutePath() + ".");
+        /* Sum up number of relays with given flags. */
+        if (next != null) {
+          String[] parts = next.split(",");
+          tempDate = next.substring(0, 10);
+          consensuses++;
+          exit += Integer.parseInt(parts[1]);
+          fast += Integer.parseInt(parts[2]);
+          guard += Integer.parseInt(parts[3]);
+          running += Integer.parseInt(parts[4]);
+          stable += Integer.parseInt(parts[5]);
         }
       }
-    } catch (IOException e) {
-      this.logger.log(Level.WARNING, "Failed writing file "
-          + this.consensusStatsRawFile.getAbsolutePath() + "!", e);
-      return;
     }
-    try {
-      BufferedWriter bwBridgeConsensusStatsRaw = null;
-      if (!this.bridgeConsensusResults.isEmpty()) {
-        if (this.bridgeConsensusResultsModified) {
-          this.logger.info("Writing file "
-              + this.bridgeConsensusStatsRawFile.getAbsolutePath()
-              + "...");
-          writeBridgeConsensusStatsRaw = true;
-          this.bridgeConsensusStatsRawFile.getParentFile().mkdirs();
-          bwBridgeConsensusStatsRaw = new BufferedWriter(
-              new FileWriter(this.bridgeConsensusStatsRawFile));
-        }
-        String tempDate = null;
-        int brunningDay = 0, bridgeStatusesDay = 0;
-        Iterator<String> it = bridgeConsensusResults.values().iterator();
-        boolean haveWrittenFinalLine = false;
-        while (it.hasNext() || !haveWrittenFinalLine) {
-          String next = it.hasNext() ? it.next() : null;
-          if (tempDate != null
-              && (next == null
-              || !next.substring(0, 10).equals(tempDate))) {
-            if (bridgeStatusesDay > 23) {
-              String line = "" + (brunningDay / bridgeStatusesDay) + "\n";
-              if (!line.equals(this.bcsAggr.get(tempDate))) {
-                this.bcsAggr.put(tempDate, line);
-                writeConsensusStats = true;
-              }
-            }
-            brunningDay = 0;
-            bridgeStatusesDay = 0;
-            if (next == null) {
-              haveWrittenFinalLine = true;
+
+    /* Go through raw observations of numbers of running bridges in bridge
+     * statuses, calculate averages per day, and add these averages to
+     * final results. */
+    if (!this.bridgesRaw.isEmpty()) {
+      String tempDate = null;
+      int brunning = 0, statuses = 0;
+      Iterator<String> it = this.bridgesRaw.values().iterator();
+      boolean haveWrittenFinalLine = false;
+      while (it.hasNext() || !haveWrittenFinalLine) {
+        String next = it.hasNext() ? it.next() : null;
+        /* Finished reading a day or even all lines? */
+        if (tempDate != null && (next == null
+            || !next.substring(0, 10).equals(tempDate))) {
+          /* Only write results if we have seen at least half of all
+           * statuses. */
+          if (statuses >= 24) {
+            String line = "," + (brunning / statuses);
+            /* Are our results new? */
+            if (!this.bridgesPerDay.containsKey(tempDate)) {
+              this.logger.fine("Adding new average bridge numbers: "
+                  + tempDate + line);
+              this.bridgesPerDay.put(tempDate, line);
+              writeConsensusStats = true;
+            } else if (!line.equals(this.bridgesPerDay.get(tempDate))) {
+              this.logger.info("Replacing existing average bridge "
+                  + "numbers (" + this.bridgesPerDay.get(tempDate)
+                  + " with new numbers: " + line);
+              this.bridgesPerDay.put(tempDate, line);
+              writeConsensusStats = true;
             }
           }
-          if (next != null) {
-            if (writeBridgeConsensusStatsRaw) {
-              bwBridgeConsensusStatsRaw.append(next + "\n");
-            }
-            tempDate = next.substring(0, 10);
-            bridgeStatusesDay++;
-            brunningDay += Integer.parseInt(next.split(",")[1]);
-          }
+          brunning = statuses = 0;
+          haveWrittenFinalLine = (next == null);
         }
-        if (writeBridgeConsensusStatsRaw) {
-          bwBridgeConsensusStatsRaw.close();
-          this.logger.info("Finished writing file "
-              + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
+        /* Sum up number of running bridges. */
+        if (next != null) {
+          tempDate = next.substring(0, 10);
+          statuses++;
+          brunning += Integer.parseInt(next.split(",")[1]);
         }
       }
-    } catch (IOException e) {
-      this.logger.log(Level.WARNING, "Failed writing file "
-          + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "!", e);
     }
-    if (writeConsensusStats &&
-        !(this.csAggr.isEmpty() && this.bcsAggr.isEmpty())) {
-      this.logger.info("Writing file "
-          + this.consensusStatsFile.getAbsolutePath() + "...");
+
+    /* Write raw numbers of relays with flags set to disk. */
+    if (this.relaysRawModified) {
       try {
+        this.logger.info("Writing file "
+            + this.consensusStatsRawFile.getAbsolutePath() + "...");
+        this.consensusStatsRawFile.getParentFile().mkdirs();
+        BufferedWriter bw = new BufferedWriter(new FileWriter(
+            this.consensusStatsRawFile));
+        bw.append("# Number of relays in a given consensus with Exit, "
+            + "Fast, Guard, Running,\n# and Stable flags set. Columns "
+            + "are:\n# - datetime: Date and time when the consensus was "
+            + "published as written in\n#   the valid-after line\n# - "
+            + "exit: Number of relays with the Running and the Exit "
+            + "flag\n# - fast: Number of relays with the Running and the "
+            + "Fast flag\n# - guard: Number of relays with the Running "
+            + "and the Guard flag\n# - running: Number of relays with "
+            + "the Running flag\n# - stable: Number of relays with the "
+            + "Running and the Stable flag\ndatetime,exit,fast,guard,"
+            + "running,stable\n");
+        for (String line : this.relaysRaw.values()) {
+          bw.append(line + "\n");
+        }
+        bw.close();
+        this.logger.info("Finished writing file "
+            + this.consensusStatsRawFile.getAbsolutePath() + ".");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed to write file "
+            + this.consensusStatsRawFile.getAbsolutePath() + "!", e);
+      }
+    } else {
+      this.logger.info("Not writing file "
+          + this.consensusStatsRawFile.getAbsolutePath() + ", because "
+          + "nothing has changed.");
+    }
+
+    /* Write raw numbers of running bridges to disk. */
+    if (this.bridgesRawModified) {
+      try {
+        this.logger.info("Writing file "
+            + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
+        this.bridgeConsensusStatsRawFile.getParentFile().mkdirs();
+        BufferedWriter bw = new BufferedWriter(
+            new FileWriter(this.bridgeConsensusStatsRawFile));
+        bw.append("# Number of running bridges in a given bridge status. "
+            + "Columns are:\n# - datetime: Date and time when the "
+            + "snapshot of this bridge status was\n#   taken\n# - "
+            + "brunning: Number of bridges with the Running flag\n"
+            + "datetime,brunning\n");
+        for (String line : this.bridgesRaw.values()) {
+          bw.append(line + "\n");
+        }
+        bw.close();
+        this.logger.info("Finished writing file "
+            + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed to write file "
+            + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "!",
+            e);
+      }
+    } else {
+      this.logger.info("Not writing file "
+          + this.bridgeConsensusStatsRawFile.getAbsolutePath()
+          + ", because nothing has changed.");
+    }
+
+    /* Write final results of relays with flags set and running bridges
+     * to disk. */
+    if (writeConsensusStats) {
+      try {
+        this.logger.info("Writing file "
+            + this.consensusStatsFile.getAbsolutePath() + "...");
         this.consensusStatsFile.getParentFile().mkdirs();
-        BufferedWriter bwConsensusStats = new BufferedWriter(
-            new FileWriter(this.consensusStatsFile));
-        bwConsensusStats.append("date,exit,fast,guard,running,stable,"
-            + "brunning\n");
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        long firstDate = 0L, lastDate = 0L;
-        if (this.csAggr.isEmpty()) {
-          firstDate = format.parse(this.bcsAggr.firstKey()).getTime();
-          lastDate = format.parse(this.bcsAggr.lastKey()).getTime();
-        } else if (this.bcsAggr.isEmpty()) {
-          firstDate = format.parse(this.csAggr.firstKey()).getTime();
-          lastDate = format.parse(this.csAggr.lastKey()).getTime();
-        } else {
-          firstDate = Math.min(
-              format.parse(this.csAggr.firstKey()).getTime(),
-              format.parse(this.bcsAggr.firstKey()).getTime());
-          lastDate = Math.max(
-              format.parse(this.csAggr.lastKey()).getTime(),
-              format.parse(this.bcsAggr.lastKey()).getTime());
-        }
-        long currentDate = firstDate;
-        while (currentDate <= lastDate) {
-          String date = format.format(new Date(currentDate));
-          if (this.csAggr.containsKey(date)) {
-            bwConsensusStats.append(this.csAggr.get(date));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(
+            this.consensusStatsFile));
+        bw.append("# Statistics on the average number of relays and "
+            + "bridges per day as\n# extracted from relay consensuses "
+            + "and bridge statuses. Columns are:\n# - date: Date when "
+            + "the relay consensuses or bridge statuses were\n#   "
+            + "published\n# - exit: Average number of relays with the "
+            + "Running and the Exit flag\n# - fast: Average number of "
+            + "relays with the Running and the Fast flag\n# - guard: "
+            + "Average number of relays with the Running and the Guard "
+            + "flag\n# - running: Average number of relays with the "
+            + "Running flag\n# - stable: Average number of relays with "
+            + "the Running and the Stable flag\n# - brunning: Average "
+            + "number of bridges with the Running flag\ndate,exit,fast,"
+            + "guard,running,stable,brunning\n");
+        /* Iterate over all days, including those for which we don't have
+         * observations for which we add NA's to all columns. */
+        SortedSet<String> allDates = new TreeSet<String>();
+        allDates.addAll(this.relaysPerDay.keySet());
+        allDates.addAll(this.bridgesPerDay.keySet());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        long firstDateMillis = dateFormat.parse(allDates.first()).
+            getTime();
+        long lastDateMillis = dateFormat.parse(allDates.last()).getTime();
+        long currentDateMillis = firstDateMillis;
+        while (currentDateMillis <= lastDateMillis) {
+          /* Write observations about relays, bridges, both, or none of
+           * them. */
+          String date = dateFormat.format(new Date(currentDateMillis));
+          if (this.relaysPerDay.containsKey(date)) {
+            bw.append(this.relaysPerDay.get(date));
           } else {
-            bwConsensusStats.append(date + ",NA,NA,NA,NA,NA");
+            bw.append(date + ",NA,NA,NA,NA,NA");
           }
-          if (this.bcsAggr.containsKey(date)) {
-            bwConsensusStats.append("," + this.bcsAggr.get(date));
+          if (this.bridgesPerDay.containsKey(date)) {
+            bw.append(this.bridgesPerDay.get(date) + "\n");
           } else {
-            bwConsensusStats.append(",NA\n");
+            bw.append(",NA\n");
           }
-          currentDate += 86400000L;
+          /* Advance by 1 day. */
+          currentDateMillis += 24L * 60L * 60L * 1000L;
         }
-        bwConsensusStats.close();
+        bw.close();
         this.logger.info("Finished writing file "
             + this.consensusStatsFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed writing file "
+        this.logger.log(Level.WARNING, "Failed to write file "
             + this.consensusStatsFile.getAbsolutePath() + "!", e);
       } catch (ParseException e) {
-        this.logger.log(Level.WARNING, "Failed writing file "
+        this.logger.log(Level.WARNING, "Failed to write file "
             + this.consensusStatsFile.getAbsolutePath() + "!", e);
       }
+    } else {
+      this.logger.info("Not writing file "
+          + this.consensusStatsFile.getAbsolutePath()
+          + ", because nothing has changed.");
     }
   }
 }

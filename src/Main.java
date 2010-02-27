@@ -93,7 +93,7 @@ public class Main {
       bsfh = null;
     }
     if (csfh != null) {
-      csfh.writeFile();
+      csfh.writeFiles();
       csfh = null;
     }
 
