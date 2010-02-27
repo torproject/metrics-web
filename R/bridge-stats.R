@@ -3,6 +3,7 @@ suppressPackageStartupMessages(library("ggplot2"))
 
 bridge <- read.csv("stats/bridge-stats", header = TRUE,
   stringsAsFactors = FALSE)
+bridge <- bridge[1:length(bridge$date)-1,]
 write.csv(bridge, "website/csv/bridge-users.csv", quote = FALSE,
   row.names = FALSE)
 
@@ -23,7 +24,7 @@ plot_pastdays <- function(days, countries) {
       code <- countries[country, 1]
       people <- countries[country, 2]
       filename <- countries[country, 3]
-      end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
+      end <- Sys.Date()
       start <- seq(from = end, length = 2, by = paste("-", day, " days",
         sep = ""))[2]
       plot_bridges(paste(filename, "-bridges-", day, "d.png", sep = ""),

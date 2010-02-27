@@ -3,6 +3,7 @@ suppressPackageStartupMessages(library("ggplot2"))
 
 consensuses <- read.csv("stats/consensus-stats", header = TRUE,
     stringsAsFactors = FALSE);
+consensuses <- consensuses[1:length(consensuses$date)-1,]
 write.csv(data.frame(date = consensuses$date,
   relays = consensuses$running, bridges = consensuses$brunning),
   "website/csv/networksize.csv", quote = FALSE, row.names = FALSE)
@@ -29,7 +30,7 @@ plot_consensus <- function(directory, filename, title, limits, rows, breaks,
 plot_pastdays <- function(directory, filenamePart, titlePart, days, rows,
     breaks, labels) {
   for (day in days) {
-    end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
+    end <- Sys.Date()
     start <- seq(from = end, length = 2, by = paste("-", day, " days",
       sep = ""))[2]
     plot_consensus(directory, paste(filenamePart, "-", day, "d.png",

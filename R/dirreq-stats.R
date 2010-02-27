@@ -7,10 +7,12 @@ moria1Sub <- subset(dirreq,
   directory %in% "9695DFC35FFEB861329B9F1AB04C46397020CE31")
 moria1 <- data.frame(date = moria1Sub$date,
   moria1Sub[3:(length(moria1Sub) - 1)] * 6)
+moria1 <- moria1[1:length(moria1$date)-1,]
 trustedSub <- subset(dirreq,
   directory %in% "8522EB98C91496E80EC238E732594D1509158E77")
 trusted <- data.frame(date = trustedSub$date,
   floor(trustedSub[3:(length(trustedSub) - 1)] / trustedSub$share * 10))
+trusted <- trusted[1:length(trusted$date)-1,]
 
 write.csv(moria1, "website/csv/new-users.csv", quote = FALSE,
   row.names = FALSE)
@@ -38,7 +40,7 @@ plot_pastdays <- function(directory, filenamePart, titlePart, days, data,
       code <- countries[country, 1]
       people <- countries[country, 2]
       filename <- countries[country, 3]
-      end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
+      end <- Sys.Date()
       start <- seq(from = end, length = 2, by = paste("-", day, " days",
         sep = ""))[2]
       plot_dirreq(directory, paste(filename, filenamePart, "-", day,
