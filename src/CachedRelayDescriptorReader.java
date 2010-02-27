@@ -17,13 +17,6 @@ public class CachedRelayDescriptorReader {
     File cachedDescDir = new File("cacheddesc");
     if (cachedDescDir.exists()) {
       logger.info("Reading cacheddesc/ directory.");
-      if (rdp != null) {
-        try {
-          rdp.initialize(); // TODO get rid of this non-sense
-        } catch (IOException e) {
-          return;
-        }
-      }
       for (File f : cachedDescDir.listFiles()) {
         try {
           // descriptors may contain non-ASCII chars; read as bytes to

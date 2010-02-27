@@ -17,14 +17,6 @@ public class BridgeDescriptorParser {
     this.logger =
         Logger.getLogger(BridgeDescriptorParser.class.getName());
   }
-  public void initialize() throws IOException {
-    if (this.csfh != null) {
-      this.csfh.initialize();
-    }
-    if (this.bsfh != null) {
-      this.bsfh.initialize();
-    }
-  }
   public void parse(BufferedReader br, String dateTime, boolean sanitized)
       throws IOException, ParseException {
     SimpleDateFormat timeFormat = new SimpleDateFormat(

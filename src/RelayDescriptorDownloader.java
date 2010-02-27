@@ -17,13 +17,6 @@ public class RelayDescriptorDownloader {
         RelayDescriptorDownloader.class.getName());
     List<String> remainingAuthorities =
         new ArrayList<String>(authorities);
-    if (rdp != null) {
-      try {
-        rdp.initialize(); // TODO get rid of this non-sense
-      } catch (IOException e) {
-        return;
-      }
-    }
     Set<String> urls = new HashSet<String>();
     Set<String> downloaded = new HashSet<String>();
     if (rdp != null) {

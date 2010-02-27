@@ -38,11 +38,6 @@ public class BridgeSnapshotReader {
           return;
         }
       }
-      try {
-        bdp.initialize();
-      } catch (IOException e) {
-        return;
-      }
       logger.info("Importing files in directory " + bridgeDirectoriesDir
          + "/...");
       Stack<File> filesInInputDir = new Stack<File>();

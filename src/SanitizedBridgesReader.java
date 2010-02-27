@@ -10,11 +10,6 @@ public class SanitizedBridgesReader {
     Logger logger =
         Logger.getLogger(SanitizedBridgesReader.class.getName());
     if (new File(bridgesDir).exists()) {
-      try {
-        bdp.initialize();
-      } catch (IOException e) {
-        return;
-      }
       logger.info("Importing files in directory " + bridgesDir + "/...");
       Stack<File> filesInInputDir = new Stack<File>();
       filesInInputDir.add(new File(bridgesDir));

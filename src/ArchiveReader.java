@@ -10,13 +10,6 @@ public class ArchiveReader {
   public ArchiveReader(RelayDescriptorParser rdp, String archivesDir) {
     Logger logger = Logger.getLogger(ArchiveReader.class.getName());
     if (new File(archivesDir).exists()) {
-      if (rdp != null) {
-        try {
-          rdp.initialize();
-        } catch (IOException e) {
-          return;
-        }
-      }
       logger.info("Importing files in directory " + archivesDir
           + "/...");
       Stack<File> filesInInputDir = new Stack<File>();

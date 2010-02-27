@@ -13,7 +13,6 @@ public class BridgeStatsFileHandler {
   private SortedSet<String> countries;
   private SortedSet<String> hashedRelays = new TreeSet<String>();
   private SortedMap<String, String> observations;
-  private boolean initialized;
   private boolean hashedRelaysModified;
   private boolean observationsModified;
   private Logger logger;
@@ -28,75 +27,70 @@ public class BridgeStatsFileHandler {
         + "/hashed-relay-identities");
     this.logger =
         Logger.getLogger(BridgeStatsFileHandler.class.getName());
-  }
-  public void initialize() throws IOException {
-    if (this.initialized) {
-      return;
-    }
-    this.initialized = true;
     if (this.bridgeStatsFile.exists()) {
       this.logger.info("Reading file " + statsDir
           + "/bridge-stats-raw...");
-      BufferedReader br = new BufferedReader(new FileReader(
-          this.bridgeStatsFile));
-      String line = br.readLine();
-      if (line != null) {
-        String[] headers = line.split(",");
-        for (int i = 3; i < headers.length; i++) {
-          this.countries.add(headers[i]);
-        }
-        while ((line = br.readLine()) != null) {
-          String[] readData = line.split(",");
-          String hashedBridgeIdentity = readData[0];
-          String date = readData[1];
-          String time = readData[2];
-          SortedMap<String, String> obs = new TreeMap<String, String>();
-          for (int i = 3; i < readData.length; i++) {
-            obs.put(headers[i], readData[i]);
+      try {
+        BufferedReader br = new BufferedReader(new FileReader(
+            this.bridgeStatsFile));
+        String line = br.readLine();
+        if (line != null) {
+          String[] headers = line.split(",");
+          for (int i = 3; i < headers.length; i++) {
+            this.countries.add(headers[i]);
           }
-          this.addObs(hashedBridgeIdentity, date, time, obs);
+          while ((line = br.readLine()) != null) {
+            String[] readData = line.split(",");
+            String hashedBridgeIdentity = readData[0];
+            String date = readData[1];
+            String time = readData[2];
+            SortedMap<String, String> obs = new TreeMap<String, String>();
+            for (int i = 3; i < readData.length; i++) {
+              obs.put(headers[i], readData[i]);
+            }
+            this.addObs(hashedBridgeIdentity, date, time, obs);
+          }
         }
+        br.close();
+        this.observationsModified = false;
+        this.logger.info("Finished reading file " + statsDir
+            + "/bridge-stats-raw.");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
+            + "/bridge-stats-raw!", e);
       }
-      br.close();
-      this.observationsModified = false;
-      this.logger.info("Finished reading file " + statsDir
-          + "/bridge-stats-raw.");
     }
     if (this.hashedRelayIdentitiesFile.exists()) {
       this.logger.info("Reading file " + statsDir
           + "/hashed-relay-identities...");
-      BufferedReader br = new BufferedReader(new FileReader(
-          this.hashedRelayIdentitiesFile));
-      String line = null;
-      while ((line = br.readLine()) != null) {
-        this.hashedRelays.add(line);
+      try {
+        BufferedReader br = new BufferedReader(new FileReader(
+            this.hashedRelayIdentitiesFile));
+        String line = null;
+        while ((line = br.readLine()) != null) {
+          this.hashedRelays.add(line);
+        }
+        br.close();
+        this.hashedRelaysModified = false;
+        this.logger.info("Finished reading file " + statsDir
+            + "/hashed-relay-identities.");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
+            + "/hashed-relay-identities!", e);
       }
-      br.close();
-      this.hashedRelaysModified = false;
-      this.logger.info("Finished reading file " + statsDir
-          + "/hashed-relay-identities.");
     }
   }
   public void addHashedRelay(String hashedRelayIdentity)
       throws IOException {
-    if (!this.initialized) {
-      throw new RuntimeException("Not initialized!");
-    }
     this.hashedRelays.add(hashedRelayIdentity);
     this.hashedRelaysModified = true;
   }
   public boolean isKnownRelay(String hashedBridgeIdentity)
       throws IOException {
-    if (!this.initialized) {
-      throw new RuntimeException("Not initialized!");
-    }
     return this.hashedRelays.contains(hashedBridgeIdentity);
   }
   public void addObs(String hashedIdentity, String date,
       String time, Map<String, String> obs) throws IOException {
-    if (!this.initialized) {
-      throw new RuntimeException("Not initialized!");
-    }
     String key = hashedIdentity + "," + date;
     StringBuilder sb = new StringBuilder(key + "," + time);
     for (String c : countries) {

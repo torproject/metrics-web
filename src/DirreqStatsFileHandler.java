@@ -11,7 +11,6 @@ public class DirreqStatsFileHandler {
   private SortedSet<String> countries;
   private File dirreqStatsFile;
   private SortedMap<String, String> observations;
-  private boolean initialized;
   private boolean modified;
   private Logger logger;
   public DirreqStatsFileHandler(String statsDir,
@@ -22,46 +21,42 @@ public class DirreqStatsFileHandler {
     this.observations = new TreeMap<String, String>();
     this.logger =
         Logger.getLogger(DirreqStatsFileHandler.class.getName());
-  }
-  public void initialize() throws IOException {
-    if (this.initialized) {
-      return;
-    }
-    this.initialized = true;
     if (this.dirreqStatsFile.exists()) {
       this.logger.info("Reading file " + statsDir + "/dirreq-stats...");
-      BufferedReader br = new BufferedReader(new FileReader(
-          this.dirreqStatsFile));
-      String line = br.readLine();
-      if (line != null) {
-        String[] headers = line.split(",");
-        for (int i = 2; i < headers.length - 1; i++) {
-          this.countries.add(headers[i]);
-        }
-        while ((line = br.readLine()) != null) {
-          String[] readData = line.split(",");
-          String dirNickname = readData[0];
-          String date = readData[1];
-          if (!readData[readData.length - 1].equals("NA")) {
-            Map<String, String> obs = new HashMap<String, String>();
-            for (int i = 2; i < readData.length - 1; i++) {
-              obs.put(headers[i], readData[i]);
+      try {
+        BufferedReader br = new BufferedReader(new FileReader(
+            this.dirreqStatsFile));
+        String line = br.readLine();
+        if (line != null) {
+          String[] headers = line.split(",");
+          for (int i = 2; i < headers.length - 1; i++) {
+            this.countries.add(headers[i]);
+          }
+          while ((line = br.readLine()) != null) {
+            String[] readData = line.split(",");
+            String dirNickname = readData[0];
+            String date = readData[1];
+            if (!readData[readData.length - 1].equals("NA")) {
+              Map<String, String> obs = new HashMap<String, String>();
+              for (int i = 2; i < readData.length - 1; i++) {
+                obs.put(headers[i], readData[i]);
+              }
+              String share = readData[readData.length - 1];
+              this.addObs(dirNickname, date, obs, share);
             }
-            String share = readData[readData.length - 1];
-            this.addObs(dirNickname, date, obs, share);
           }
         }
+        br.close();
+        this.logger.info("Finished reading file " + statsDir
+            + "/dirreq-stats...");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
+            + "/dirreq-stats!", e);
       }
-      br.close();
-      this.logger.info("Finished reading file " + statsDir
-          + "/dirreq-stats...");
     }
   }
   public void addObs(String dirNickname, String date,
       Map<String, String> obs, String share) throws IOException {
-    if (!this.initialized) {
-      throw new RuntimeException("Not initialized!");
-    }
     String obsKey = dirNickname + "," + date;
     StringBuilder sb = new StringBuilder(obsKey);
     for (String c : this.countries) {

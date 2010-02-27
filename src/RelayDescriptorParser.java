@@ -14,7 +14,6 @@ public class RelayDescriptorParser {
   private File relayDescriptorParseHistory;
   private SortedMap<String, String> lastParsedExtraInfos;
   private String lastParsedConsensus;
-  private boolean initialized = false;
   private boolean relayDescriptorParseHistoryModified = false;
   private DirreqStatsFileHandler dsfh;
   private ConsensusStatsFileHandler csfh;
@@ -35,39 +34,30 @@ public class RelayDescriptorParser {
     this.countries = countries;
     this.directories = directories;
     this.logger = Logger.getLogger(RelayDescriptorParser.class.getName());
-  }
-  public void initialize() throws IOException {
-    if (this.initialized) {
-      return;
-    }
-    if (this.csfh != null) {
-      this.csfh.initialize();
-    }
-    if (this.bsfh != null) {
-      this.bsfh.initialize();
-    }
-    if (this.dsfh != null) {
-      this.dsfh.initialize();
-    }
     this.lastParsedConsensus = null;
     this.lastParsedExtraInfos = new TreeMap<String, String>();
     if (this.relayDescriptorParseHistory.exists()) {
       this.logger.info("Reading file " + statsDir
           + "/relay-descriptor-parse-history...");
-      BufferedReader br = new BufferedReader(new FileReader(
-          this.relayDescriptorParseHistory));
-      String line = null;
-      while ((line = br.readLine()) != null) {
-        if (line.startsWith("consensus")) {
-          this.lastParsedConsensus = line.split(",")[2];
-        } else if (line.startsWith("extrainfo")) {
-          this.lastParsedExtraInfos.put(line.split(",")[1],
-              line.split(",")[2]);
+      try {
+        BufferedReader br = new BufferedReader(new FileReader(
+            this.relayDescriptorParseHistory));
+        String line = null;
+        while ((line = br.readLine()) != null) {
+          if (line.startsWith("consensus")) {
+            this.lastParsedConsensus = line.split(",")[2];
+          } else if (line.startsWith("extrainfo")) {
+            this.lastParsedExtraInfos.put(line.split(",")[1],
+                line.split(",")[2]);
+          }
         }
+        br.close();
+        this.logger.info("Finished reading file " + statsDir
+            + "/relay-descriptor-parse-history");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed reading file "
+            + statsDir + "/relay-descriptor-parse-history!", e);
       }
-      br.close();
-      this.logger.info("Finished reading file " + statsDir
-          + "/relay-descriptor-parse-history");
     }
   }
   public void parse(BufferedReader br) throws IOException {
