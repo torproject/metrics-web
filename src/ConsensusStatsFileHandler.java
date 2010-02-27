@@ -371,17 +371,7 @@ public class ConsensusStatsFileHandler {
         this.consensusStatsRawFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(
             this.consensusStatsRawFile));
-        bw.append("# Number of relays in a given consensus with Exit, "
-            + "Fast, Guard, Running,\n# and Stable flags set. Columns "
-            + "are:\n# - datetime: Date and time when the consensus was "
-            + "published as written in\n#   the valid-after line\n# - "
-            + "exit: Number of relays with the Running and the Exit "
-            + "flag\n# - fast: Number of relays with the Running and the "
-            + "Fast flag\n# - guard: Number of relays with the Running "
-            + "and the Guard flag\n# - running: Number of relays with "
-            + "the Running flag\n# - stable: Number of relays with the "
-            + "Running and the Stable flag\ndatetime,exit,fast,guard,"
-            + "running,stable\n");
+        bw.append("datetime,exit,fast,guard,running,stable\n");
         for (String line : this.relaysRaw.values()) {
           bw.append(line + "\n");
         }
@@ -406,11 +396,7 @@ public class ConsensusStatsFileHandler {
         this.bridgeConsensusStatsRawFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(
             new FileWriter(this.bridgeConsensusStatsRawFile));
-        bw.append("# Number of running bridges in a given bridge status. "
-            + "Columns are:\n# - datetime: Date and time when the "
-            + "snapshot of this bridge status was\n#   taken\n# - "
-            + "brunning: Number of bridges with the Running flag\n"
-            + "datetime,brunning\n");
+        bw.append("datetime,brunning\n");
         for (String line : this.bridgesRaw.values()) {
           bw.append(line + "\n");
         }
@@ -437,19 +423,7 @@ public class ConsensusStatsFileHandler {
         this.consensusStatsFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(
             this.consensusStatsFile));
-        bw.append("# Statistics on the average number of relays and "
-            + "bridges per day as\n# extracted from relay consensuses "
-            + "and bridge statuses. Columns are:\n# - date: Date when "
-            + "the relay consensuses or bridge statuses were\n#   "
-            + "published\n# - exit: Average number of relays with the "
-            + "Running and the Exit flag\n# - fast: Average number of "
-            + "relays with the Running and the Fast flag\n# - guard: "
-            + "Average number of relays with the Running and the Guard "
-            + "flag\n# - running: Average number of relays with the "
-            + "Running flag\n# - stable: Average number of relays with "
-            + "the Running and the Stable flag\n# - brunning: Average "
-            + "number of bridges with the Running flag\ndate,exit,fast,"
-            + "guard,running,stable,brunning\n");
+        bw.append("date,exit,fast,guard,running,stable,brunning\n");
         /* Iterate over all days, including those for which we don't have
          * observations for which we add NA's to all columns. */
         SortedSet<String> allDates = new TreeSet<String>();
