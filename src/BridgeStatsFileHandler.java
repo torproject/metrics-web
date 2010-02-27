@@ -6,9 +6,8 @@ import java.util.logging.*;
  *
  */
 public class BridgeStatsFileHandler {
-  private String statsDir;
+  private File bridgeStatsRawFile;
   private File bridgeStatsFile;
-  private File bridgeStatsDateFile;
   private File hashedRelayIdentitiesFile;
   private SortedSet<String> countries;
   private SortedSet<String> hashedRelays = new TreeSet<String>();
@@ -16,23 +15,21 @@ public class BridgeStatsFileHandler {
   private boolean hashedRelaysModified;
   private boolean observationsModified;
   private Logger logger;
-  public BridgeStatsFileHandler(String statsDir,
-      SortedSet<String> countries) {
-    this.statsDir = statsDir;
+  public BridgeStatsFileHandler(SortedSet<String> countries) {
+    this.bridgeStatsRawFile = new File("stats/bridge-stats-raw");
+    this.bridgeStatsFile = new File("stats/bridge-stats");
+    this.hashedRelayIdentitiesFile = new File(
+        "stats/hashed-relay-identities");
     this.countries = countries;
-    this.bridgeStatsFile = new File(statsDir + "/bridge-stats-raw");
-    this.bridgeStatsDateFile = new File(statsDir + "/bridge-stats");
     this.observations = new TreeMap<String, String>();
-    this.hashedRelayIdentitiesFile = new File(statsDir
-        + "/hashed-relay-identities");
     this.logger =
         Logger.getLogger(BridgeStatsFileHandler.class.getName());
-    if (this.bridgeStatsFile.exists()) {
-      this.logger.info("Reading file " + statsDir
-          + "/bridge-stats-raw...");
+    if (this.bridgeStatsRawFile.exists()) {
+      this.logger.info("Reading file "
+          + this.bridgeStatsRawFile.getAbsolutePath() + "...");
       try {
         BufferedReader br = new BufferedReader(new FileReader(
-            this.bridgeStatsFile));
+            this.bridgeStatsRawFile));
         String line = br.readLine();
         if (line != null) {
           String[] headers = line.split(",");
@@ -53,16 +50,16 @@ public class BridgeStatsFileHandler {
         }
         br.close();
         this.observationsModified = false;
-        this.logger.info("Finished reading file " + statsDir
-            + "/bridge-stats-raw.");
+        this.logger.info("Finished reading file "
+            + this.bridgeStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
-            + "/bridge-stats-raw!", e);
+        this.logger.log(Level.WARNING, "Failed reading file "
+            + this.bridgeStatsRawFile.getAbsolutePath() + "!", e);
       }
     }
     if (this.hashedRelayIdentitiesFile.exists()) {
-      this.logger.info("Reading file " + statsDir
-          + "/hashed-relay-identities...");
+      this.logger.info("Reading file "
+          + this.hashedRelayIdentitiesFile.getAbsolutePath() + "...");
       try {
         BufferedReader br = new BufferedReader(new FileReader(
             this.hashedRelayIdentitiesFile));
@@ -72,11 +69,11 @@ public class BridgeStatsFileHandler {
         }
         br.close();
         this.hashedRelaysModified = false;
-        this.logger.info("Finished reading file " + statsDir
-            + "/hashed-relay-identities.");
+        this.logger.info("Finished reading file "
+            + this.hashedRelayIdentitiesFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
-            + "/hashed-relay-identities!", e);
+        this.logger.log(Level.WARNING, "Failed reading file "
+            + this.hashedRelayIdentitiesFile.getAbsolutePath() + "!", e);
       }
     }
   }
@@ -107,29 +104,29 @@ public class BridgeStatsFileHandler {
   public void writeFile() {
     if (!this.hashedRelays.isEmpty() && this.hashedRelaysModified) {
       try {
-        this.logger.info("Writing file " + this.statsDir
-            + "/hashed-relay-identities...");
-        new File(this.statsDir).mkdirs();
+        this.logger.info("Writing file "
+            + this.hashedRelayIdentitiesFile.getAbsolutePath() + "...");
+        this.hashedRelayIdentitiesFile.getParentFile().mkdirs();
         BufferedWriter bwRelayIdentities = new BufferedWriter(
             new FileWriter(this.hashedRelayIdentitiesFile));
         for (String hashedRelay : this.hashedRelays) {
           bwRelayIdentities.append(hashedRelay + "\n");
         }
         bwRelayIdentities.close();
-        this.logger.info("Finished writing file " + this.statsDir
-            + "/hashed-relay-identities.");
+        this.logger.info("Finished writing file "
+            + this.hashedRelayIdentitiesFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed writing " + this.statsDir
-            + "/hashed-relay-identities!", e);
+        this.logger.log(Level.WARNING, "Failed writing "
+            + this.hashedRelayIdentitiesFile.getAbsolutePath() + "!", e);
       }
     }
     if (!this.observations.isEmpty() && this.observationsModified) {
       try {
-        this.logger.info("Writing file " + this.statsDir
-            + "/bridge-stats-raw...");
-        new File(this.statsDir).mkdirs();
+        this.logger.info("Writing file "
+            + this.bridgeStatsRawFile.getAbsolutePath() + "...");
+        this.bridgeStatsRawFile.getParentFile().mkdirs();
         BufferedWriter bwBridgeStats = new BufferedWriter(
-            new FileWriter(this.bridgeStatsFile));
+            new FileWriter(this.bridgeStatsRawFile));
         bwBridgeStats.append("bridge,date,time");
         for (String c : this.countries) {
           bwBridgeStats.append("," + c);
@@ -156,12 +153,13 @@ public class BridgeStatsFileHandler {
           }
         }
         bwBridgeStats.close();
-        this.logger.info("Finished writing file " + this.statsDir
-            + "/bridge-stats-raw.");
-        this.logger.info("Writing file " + this.statsDir
-            + "/bridge-stats...");
+        this.logger.info("Finished writing file "
+            + this.bridgeStatsRawFile.getAbsolutePath() + ".");
+        this.logger.info("Writing file "
+            + this.bridgeStatsRawFile.getAbsolutePath() + "...");
+        this.bridgeStatsFile.getParentFile().mkdirs();
         BufferedWriter bwBridgeStatsDate = new BufferedWriter(
-            new FileWriter(this.bridgeStatsDateFile));
+            new FileWriter(this.bridgeStatsFile));
         bwBridgeStatsDate.append("date");
         for (String c : this.countries) {
           bwBridgeStatsDate.append("," + c);
@@ -188,11 +186,12 @@ public class BridgeStatsFileHandler {
           bwBridgeStatsDate.append("\n");
         }
         bwBridgeStatsDate.close();
-        this.logger.info("Finished writing file " + this.statsDir
-            + "/bridge-stats.");
+        this.logger.info("Finished writing file "
+            + this.bridgeStatsFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed writing " + this.statsDir
-            + "/bridge-stats[-raw]!", e);
+        this.logger.log(Level.WARNING, "Failed writing "
+            + this.bridgeStatsRawFile.getAbsolutePath() + " or "
+            + this.bridgeStatsFile.getAbsolutePath() + "!", e);
       }
     }
   }

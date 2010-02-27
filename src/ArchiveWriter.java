@@ -6,18 +6,15 @@ import org.apache.commons.codec.digest.*;
 import org.apache.commons.codec.binary.*;
 
 public class ArchiveWriter {
-  private String statsDir;
   private SortedSet<String> v3DirectoryAuthorities;
   private File missingDescriptorsFile;
   private SortedSet<String> missingDescriptors;
   private boolean missingDescriptorsFileModified = false;
   private Logger logger;
-  public ArchiveWriter(String statsDir,
-      SortedSet<String> v3DirectoryAuthorities) {
-    this.statsDir = statsDir;
+  public ArchiveWriter(SortedSet<String> v3DirectoryAuthorities) {
     this.v3DirectoryAuthorities = v3DirectoryAuthorities;
-    this.missingDescriptorsFile = new File(statsDir
-        + "/archive-writer-parse-history");
+    this.missingDescriptorsFile = new File(
+        "stats/archive-writer-parse-history");
     this.logger = Logger.getLogger(RelayDescriptorParser.class.getName());
     SimpleDateFormat parseFormat =
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -30,8 +27,8 @@ public class ArchiveWriter {
         new SimpleDateFormat("yyyy/MM/");
     descriptorFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     if (this.missingDescriptorsFile.exists()) {
-      this.logger.info("Reading file " + statsDir
-          + "/archive-writer-parse-history...");
+      this.logger.info("Reading file "
+          + this.missingDescriptorsFile.getAbsolutePath() + "...");
       try {
         BufferedReader br = new BufferedReader(new FileReader(
             this.missingDescriptorsFile));
@@ -108,16 +105,18 @@ public class ArchiveWriter {
           }
         }
         br.close();
-        this.logger.info("Finished reading file " + statsDir
-            + "/archive-writer-parse-history");
+        this.logger.info("Finished reading file "
+            + this.missingDescriptorsFile.getAbsolutePath() + ".");
       } catch (ParseException e) {
-        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
-            + "/archive-writer-parse-history! This means that we might "
-            + "forget to dowload descriptors we are missing.", e);
+        this.logger.log(Level.WARNING, "Failed reading file "
+            + this.missingDescriptorsFile.getAbsolutePath()
+            + "! This means that we might forget to dowload descriptors "
+            + "we are missing.", e);
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
-            + "/archive-writer-parse-history! This means that we might "
-            + "forget to dowload descriptors we are missing.", e);
+        this.logger.log(Level.WARNING, "Failed reading file "
+            + this.missingDescriptorsFile.getAbsolutePath()
+            + "! This means that we might forget to dowload descriptors "
+            + "we are missing.", e);
       }
     }
     // add current consensus and votes to list
@@ -467,20 +466,20 @@ public class ArchiveWriter {
   public void writeFile() {
     if (this.missingDescriptorsFileModified) {
       try {
-        this.logger.info("Writing file " + this.statsDir
-            + "/archive-writer-parse-history...");
-        new File(this.statsDir).mkdirs();
+        this.logger.info("Writing file "
+            + this.missingDescriptorsFile.getAbsolutePath() + "...");
+        this.missingDescriptorsFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(
             this.missingDescriptorsFile));
         for (String line : this.missingDescriptors) {
           bw.write(line + "\n");
         }
         bw.close();
-        this.logger.info("Finished writing file " + this.statsDir
-            + "/archive-writer-parse-history.");
+        this.logger.info("Finished writing file "
+            + this.missingDescriptorsFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed writing " + this.statsDir
-            + "/archive-writer-parse-history!", e);
+        this.logger.log(Level.WARNING, "Failed writing "
+            + this.missingDescriptorsFile.getAbsolutePath() + "!", e);
       }
     }
   }

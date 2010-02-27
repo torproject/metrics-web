@@ -7,7 +7,6 @@ import java.util.logging.*;
  *
  */
 public class ConsensusStatsFileHandler {
-  private String statsDir;
   private File consensusStatsRawFile;
   private File bridgeConsensusStatsRawFile;
   private File consensusStatsFile;
@@ -20,20 +19,18 @@ public class ConsensusStatsFileHandler {
   private boolean consensusResultsModified;
   private boolean bridgeConsensusResultsModified;
   private Logger logger;
-  public ConsensusStatsFileHandler(String statsDir) {
-    this.statsDir = statsDir;
+  public ConsensusStatsFileHandler() {
+    this.consensusStatsRawFile = new File("stats/consensus-stats-raw");
+    this.bridgeConsensusStatsRawFile = new File(
+        "stats/bridge-consensus-stats-raw");
+    this.consensusStatsFile = new File("stats/consensus-stats");
     this.consensusResults = new TreeMap<String, String>();
-    this.consensusStatsRawFile = new File(statsDir
-        + "/consensus-stats-raw");
     this.bridgeConsensusResults = new TreeMap<String, String>();
-    this.bridgeConsensusStatsRawFile = new File(statsDir
-        + "/bridge-consensus-stats-raw");
-    this.consensusStatsFile = new File(statsDir + "/consensus-stats");
     this.logger =
         Logger.getLogger(ConsensusStatsFileHandler.class.getName());
     if (this.consensusStatsRawFile.exists()) {
-      this.logger.info("Reading file " + statsDir
-          + "/consensus-stats-raw...");
+      this.logger.info("Reading file "
+          + this.consensusStatsRawFile.getAbsolutePath() + "...");
       try {
         BufferedReader br = new BufferedReader(new FileReader(
             this.consensusStatsRawFile));
@@ -42,16 +39,16 @@ public class ConsensusStatsFileHandler {
           this.consensusResults.put(line.split(",")[0], line);
         }
         br.close();
-        this.logger.info("Finished reading file " + statsDir
-            + "/consensus-stats-raw.");
+        this.logger.info("Finished reading file "
+            + this.consensusStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
-            + "/consensus-stats-raw!", e);
+        this.logger.log(Level.WARNING, "Failed reading file "
+            + this.consensusStatsRawFile.getAbsolutePath() + "!", e);
       }
     }
     if (this.bridgeConsensusStatsRawFile.exists()) {
-      this.logger.info("Reading file " + statsDir
-          + "/bridge-consensus-stats-raw...");
+      this.logger.info("Reading file "
+          + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
       try {
         BufferedReader br = new BufferedReader(new FileReader(
             this.bridgeConsensusStatsRawFile));
@@ -60,16 +57,17 @@ public class ConsensusStatsFileHandler {
           bridgeConsensusResults.put(line.split(",")[0], line);
         }
         br.close();
-        this.logger.info("Finished reading file " + statsDir
-            + "/bridge-consensus-stats-raw.");
+        this.logger.info("Finished reading file "
+            + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
-            + "/bridge-consensus-stats-raw!", e);
+        this.logger.log(Level.WARNING, "Failed reading file "
+            + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "!",
+            e);
       }
     }
     if (this.consensusStatsFile.exists()) {
-      this.logger.info("Reading file " + statsDir
-          + "/consensus-stats...");
+      this.logger.info("Reading file "
+          + this.consensusStatsFile.getAbsolutePath() + "...");
       try {
         BufferedReader br = new BufferedReader(new FileReader(
             this.consensusStatsFile));
@@ -92,18 +90,18 @@ public class ConsensusStatsFileHandler {
           }
         }
         br.close();
-        this.logger.info("Finished reading file " + statsDir
-            + "/consensus-stats.");
+        this.logger.info("Finished reading file "
+            + this.consensusStatsFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
-            + "/consensus-stats.", e);
+        this.logger.log(Level.WARNING, "Failed reading file "
+            + this.consensusStatsFile.getAbsolutePath() + "!", e);
       }
     }
   }
   public void addConsensusResults(String validAfter, int exit, int fast,
       int guard, int running, int stable) throws IOException {
-    this.consensusResults.put(validAfter, validAfter + "," + exit + "," + fast
-        + "," + guard + "," + running + "," + stable);
+    this.consensusResults.put(validAfter, validAfter + "," + exit + ","
+        + fast + "," + guard + "," + running + "," + stable);
     this.consensusResultsModified = true;
   }
   public void addBridgeConsensusResults(String published, int running)
@@ -119,10 +117,10 @@ public class ConsensusStatsFileHandler {
       BufferedWriter bwConsensusStatsRaw = null;
       if (!this.consensusResults.isEmpty()) {
         if (this.consensusResultsModified) {
-          this.logger.info("Writing file " + this.statsDir
-              + "/consensus-stats-raw...");
+          this.logger.info("Writing file "
+              + this.consensusStatsRawFile.getAbsolutePath() + "...");
           writeConsensusStatsRaw = true;
-          new File(this.statsDir).mkdirs();
+          this.consensusStatsRawFile.getParentFile().mkdirs();
           bwConsensusStatsRaw = new BufferedWriter(
               new FileWriter(this.consensusStatsRawFile));
         }
@@ -174,23 +172,24 @@ public class ConsensusStatsFileHandler {
         }
         if (writeConsensusStatsRaw) {
           bwConsensusStatsRaw.close();
-          this.logger.info("Finished writing file " + this.statsDir
-              + "/consensus-stats-raw.");
+          this.logger.info("Finished writing file "
+              + this.consensusStatsRawFile.getAbsolutePath() + ".");
         }
       }
     } catch (IOException e) {
       this.logger.log(Level.WARNING, "Failed writing file "
-          + this.statsDir + "/consensus-stats-raw!", e);
+          + this.consensusStatsRawFile.getAbsolutePath() + "!", e);
       return;
     }
     try {
       BufferedWriter bwBridgeConsensusStatsRaw = null;
       if (!this.bridgeConsensusResults.isEmpty()) {
         if (this.bridgeConsensusResultsModified) {
-          this.logger.info("Writing file " + this.statsDir
-              + "/bridge-consensus-stats-raw...");
+          this.logger.info("Writing file "
+              + this.bridgeConsensusStatsRawFile.getAbsolutePath()
+              + "...");
           writeBridgeConsensusStatsRaw = true;
-          new File(this.statsDir).mkdirs();
+          this.bridgeConsensusStatsRawFile.getParentFile().mkdirs();
           bwBridgeConsensusStatsRaw = new BufferedWriter(
               new FileWriter(this.bridgeConsensusStatsRawFile));
         }
@@ -227,20 +226,20 @@ public class ConsensusStatsFileHandler {
         }
         if (writeBridgeConsensusStatsRaw) {
           bwBridgeConsensusStatsRaw.close();
-          this.logger.info("Finished writing file " + this.statsDir
-              + "/bridge-consensus-stats-raw.");
+          this.logger.info("Finished writing file "
+              + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
         }
       }
     } catch (IOException e) {
       this.logger.log(Level.WARNING, "Failed writing file "
-          + this.statsDir + "/bridge-consensus-stats-raw!", e);
+          + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "!", e);
     }
     if (writeConsensusStats &&
         !(this.csAggr.isEmpty() && this.bcsAggr.isEmpty())) {
-      this.logger.info("Writing file " + this.statsDir
-          + "/consensus-stats...");
+      this.logger.info("Writing file "
+          + this.consensusStatsFile.getAbsolutePath() + "...");
       try {
-        new File(this.statsDir).mkdirs();
+        this.consensusStatsFile.getParentFile().mkdirs();
         BufferedWriter bwConsensusStats = new BufferedWriter(
             new FileWriter(this.consensusStatsFile));
         bwConsensusStats.append("date,exit,fast,guard,running,stable,"
@@ -278,14 +277,14 @@ public class ConsensusStatsFileHandler {
           currentDate += 86400000L;
         }
         bwConsensusStats.close();
-        this.logger.info("Finished writing file " + this.statsDir
-            + "/consensus-stats.");
+        this.logger.info("Finished writing file "
+            + this.consensusStatsFile.getAbsolutePath() + ".");
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Failed writing file "
-            + this.statsDir + "/consensus-stats!", e);
+            + this.consensusStatsFile.getAbsolutePath() + "!", e);
       } catch (ParseException e) {
         this.logger.log(Level.WARNING, "Failed writing file "
-            + this.statsDir + "/consensus-stats!", e);
+            + this.consensusStatsFile.getAbsolutePath() + "!", e);
       }
     }
   }

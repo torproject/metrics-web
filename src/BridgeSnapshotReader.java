@@ -10,19 +10,16 @@ import org.apache.commons.compress.archivers.tar.*;
  */
 public class BridgeSnapshotReader {
   public BridgeSnapshotReader(BridgeDescriptorParser bdp,
-      String bridgeDirectoriesDir, String statsDirectory,
-      Set<String> countries) {
+      String bridgeDirectoriesDir, Set<String> countries) {
     Logger logger =
         Logger.getLogger(BridgeSnapshotReader.class.getName());
     SortedSet<String> parsed = new TreeSet<String>();
     File bdDir = new File(bridgeDirectoriesDir);
-    File pbdFile = new File(statsDirectory
-         + "/parsed-bridge-directories");
+    File pbdFile = new File("stats/parsed-bridge-directories");
     boolean modified = false;
     if (bdDir.exists()) {
       if (pbdFile.exists()) {
-        logger.info("Reading file " + statsDirectory
-            + "/parsed-bridge-directories...");
+        logger.info("Reading file " + pbdFile.getAbsolutePath() + "...");
         try {
           BufferedReader br = new BufferedReader(new FileReader(pbdFile));
           String line = null;
@@ -30,11 +27,11 @@ public class BridgeSnapshotReader {
             parsed.add(line);
           }
           br.close();
-          logger.info("Finished reading file " + statsDirectory
-              + "/parsed-bridge-directories.");
+          logger.info("Finished reading file "
+              + pbdFile.getAbsolutePath() + ".");
         } catch (IOException e) {
           logger.log(Level.WARNING, "Failed reading file "
-              + statsDirectory + "/parsed-bridge-directories!", e);
+              + pbdFile.getAbsolutePath() + "!", e);
           return;
         }
       }
@@ -100,18 +97,19 @@ public class BridgeSnapshotReader {
         logger.warning(sb.toString());
       }
       if (!parsed.isEmpty() && modified) {
-        logger.info("Writing file " + pbdFile + "...");
+        logger.info("Writing file " + pbdFile.getAbsolutePath() + "...");
         try {
-          new File(statsDirectory).mkdirs();
+          pbdFile.getParentFile().mkdirs();
           BufferedWriter bw = new BufferedWriter(new FileWriter(pbdFile));
           for (String f : parsed) {
             bw.append(f + "\n");
           }
           bw.close();
-          logger.info("Finished writing file " + pbdFile + ".");
+          logger.info("Finished writing file " + pbdFile.getAbsolutePath()
+              + ".");
         } catch (IOException e) {
           logger.log(Level.WARNING, "Failed writing file "
-              + pbdFile + "!", e);
+              + pbdFile.getAbsolutePath() + "!", e);
         }
       }
     }

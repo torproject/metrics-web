@@ -7,22 +7,20 @@ import java.text.*;
  *
  */
 public class DirreqStatsFileHandler {
-  private String statsDir;
   private SortedSet<String> countries;
   private File dirreqStatsFile;
   private SortedMap<String, String> observations;
   private boolean modified;
   private Logger logger;
-  public DirreqStatsFileHandler(String statsDir,
-      SortedSet<String> countries) {
-    this.statsDir = statsDir;
+  public DirreqStatsFileHandler(SortedSet<String> countries) {
+    this.dirreqStatsFile = new File("stats/dirreq-stats");
     this.countries = countries;
-    this.dirreqStatsFile = new File(statsDir + "/dirreq-stats");
     this.observations = new TreeMap<String, String>();
     this.logger =
         Logger.getLogger(DirreqStatsFileHandler.class.getName());
     if (this.dirreqStatsFile.exists()) {
-      this.logger.info("Reading file " + statsDir + "/dirreq-stats...");
+      this.logger.info("Reading file "
+          + this.dirreqStatsFile.getAbsolutePath() + "...");
       try {
         BufferedReader br = new BufferedReader(new FileReader(
             this.dirreqStatsFile));
@@ -47,11 +45,11 @@ public class DirreqStatsFileHandler {
           }
         }
         br.close();
-        this.logger.info("Finished reading file " + statsDir
-            + "/dirreq-stats...");
+        this.logger.info("Finished reading file "
+            + this.dirreqStatsFile.getAbsolutePath() + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed reading file " + statsDir
-            + "/dirreq-stats!", e);
+        this.logger.log(Level.WARNING, "Failed reading file "
+            + this.dirreqStatsFile.getAbsolutePath() + "!", e);
       }
     }
   }
@@ -67,14 +65,11 @@ public class DirreqStatsFileHandler {
     this.modified = true;
   }
   public void writeFile() {
-    if (!this.modified) {
-      return;
-    }
-    try {
-      if (!this.observations.isEmpty()) {
-        this.logger.info("Writing file " + this.statsDir
-            + "/dirreq-stats...");
-        new File(this.statsDir).mkdirs();
+    if (this.modified && !this.observations.isEmpty()) {
+      try {
+        this.logger.info("Writing file "
+            + this.dirreqStatsFile.getAbsolutePath() + "...");
+        this.dirreqStatsFile.getParentFile().mkdirs();
         BufferedWriter bwDirreqStats = new BufferedWriter(
             new FileWriter(this.dirreqStatsFile));
         bwDirreqStats.append("directory,date");
@@ -105,15 +100,15 @@ public class DirreqStatsFileHandler {
           bwDirreqStats.append(observation + "\n");
         }
         bwDirreqStats.close();
-        this.logger.info("Finished writing file " + this.statsDir
-            + "/dirreq-stats.");
+        this.logger.info("Finished writing file "
+            + this.dirreqStatsFile.getAbsolutePath() + ".");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed writing file "
+            + this.dirreqStatsFile.getAbsolutePath() + "!", e);
+      } catch (ParseException e) {
+        this.logger.log(Level.WARNING, "Failed writing file "
+            + this.dirreqStatsFile.getAbsolutePath() + "!", e);
       }
-    } catch (IOException e) {
-      this.logger.log(Level.WARNING, "Failed writing file "
-          + this.statsDir + "/dirreq-stats!", e);
-    } catch (ParseException e) {
-      this.logger.log(Level.WARNING, "Failed writing file "
-          + this.statsDir + "/dirreq-stats!", e);
     }
   }
 }

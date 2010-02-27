@@ -29,25 +29,23 @@ public class Main {
     SortedSet<String> directories = config.getDirreqDirectories();
 
     // Prepare stats file handlers (only if we are writing stats)
-    String statsDirectory = "stats";
     ConsensusStatsFileHandler csfh = config.getWriteConsensusStats() ?
-        new ConsensusStatsFileHandler(statsDirectory) : null;
+        new ConsensusStatsFileHandler() : null;
     BridgeStatsFileHandler bsfh = config.getWriteBridgeStats() ?
-        new BridgeStatsFileHandler(statsDirectory, countries) : null;
+        new BridgeStatsFileHandler(countries) : null;
     DirreqStatsFileHandler dsfh = config.getWriteDirreqStats() ?
-        new DirreqStatsFileHandler(statsDirectory, countries) : null;
+        new DirreqStatsFileHandler(countries) : null;
 
     // Prepare relay descriptor parser (only if we are writing the
     // stats)
     RelayDescriptorParser rdp = config.getWriteConsensusStats() &&
         config.getWriteBridgeStats() && config.getWriteDirreqStats() ?
-        new RelayDescriptorParser(statsDirectory, csfh, bsfh, dsfh,
-        countries, directories) : null;
+        new RelayDescriptorParser(csfh, bsfh, dsfh, countries,
+        directories) : null;
 
     // Prepare writing relay descriptor archive to disk
     ArchiveWriter aw = config.getWriteDirectoryArchives() ?
-        new ArchiveWriter(statsDirectory,
-        config.getV3DirectoryAuthorities()) : null;
+        new ArchiveWriter(config.getV3DirectoryAuthorities()) : null;
 
     // Import/download relay descriptors from the various sources
     if (config.getImportCachedRelayDescriptors()) {
@@ -86,8 +84,7 @@ public class Main {
       new SanitizedBridgesReader(bdp, "bridges", countries);
     }
     if (config.getImportBridgeSnapshots()) {
-      new BridgeSnapshotReader(bdp, "bridge-directories",
-          statsDirectory, countries);
+      new BridgeSnapshotReader(bdp, "bridge-directories", countries);
     }
 
     // Write updated stats files to disk
@@ -102,12 +99,12 @@ public class Main {
 
     // Import and process torperf stats
     if (config.getImportWriteTorperfStats()) {
-      new TorperfProcessor(statsDirectory, "torperf");
+      new TorperfProcessor("torperf");
     }
 
     // Download and process GetTor stats
     if (config.getDownloadProcessGetTorStats()) {
-      new GetTorProcessor(statsDirectory, config.getGetTorStatsUrl());
+      new GetTorProcessor(config.getGetTorStatsUrl());
     }
 
     // Download exit list and store it to disk

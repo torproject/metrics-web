@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.logging.*;
 
 public class GetTorProcessor {
-  public GetTorProcessor(String statsDirectory, String gettorStatsUrl) {
+  public GetTorProcessor(String gettorStatsUrl) {
     Logger logger = Logger.getLogger(TorperfProcessor.class.getName());
     String unparsed = null;
     try {
@@ -60,10 +60,10 @@ public class GetTorProcessor {
       return;
     }
 
-    logger.info("Writing file " + statsDirectory + "/gettor-stats...");
+    File statsFile = new File("stats/gettor-stats");
+    logger.info("Writing file " + statsFile.getAbsolutePath() + "...");
     try {
-      File statsFile = new File(statsDirectory + "/gettor-stats");
-      new File(statsDirectory).mkdirs();
+      statsFile.getParentFile().mkdirs();
       BufferedWriter bw = new BufferedWriter(new FileWriter(statsFile));
       bw.write("date");
       for (String column : columns) {
@@ -80,8 +80,8 @@ public class GetTorProcessor {
       }
       bw.close();
     } catch (IOException e) {
-      logger.log(Level.WARNING, "Failed writing " + statsDirectory
-          + "/gettor-stats!", e);
+      logger.log(Level.WARNING, "Failed writing "
+          + statsFile.getAbsolutePath() + "!", e);
     }
   }
 }

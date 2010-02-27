@@ -10,8 +10,7 @@ import org.apache.commons.codec.binary.*;
  * relevant contents to the stats file handlers.
  */
 public class RelayDescriptorParser {
-  private String statsDir;
-  private File relayDescriptorParseHistory;
+  private File relayDescriptorParseHistoryFile;
   private SortedMap<String, String> lastParsedExtraInfos;
   private String lastParsedConsensus;
   private boolean relayDescriptorParseHistoryModified = false;
@@ -21,13 +20,11 @@ public class RelayDescriptorParser {
   private SortedSet<String> countries;
   private SortedSet<String> directories;
   private Logger logger;
-  public RelayDescriptorParser(String statsDir,
-      ConsensusStatsFileHandler csfh, BridgeStatsFileHandler bsfh,
-      DirreqStatsFileHandler dsfh, SortedSet<String> countries,
-      SortedSet<String> directories) {
-    this.statsDir = statsDir;
-    this.relayDescriptorParseHistory = new File(statsDir
-        + "/relay-descriptor-parse-history");
+  public RelayDescriptorParser(ConsensusStatsFileHandler csfh,
+      BridgeStatsFileHandler bsfh, DirreqStatsFileHandler dsfh,
+      SortedSet<String> countries, SortedSet<String> directories) {
+    this.relayDescriptorParseHistoryFile = new File(
+        "stats/relay-descriptor-parse-history");
     this.csfh = csfh;
     this.bsfh = bsfh;
     this.dsfh = dsfh;
@@ -36,12 +33,13 @@ public class RelayDescriptorParser {
     this.logger = Logger.getLogger(RelayDescriptorParser.class.getName());
     this.lastParsedConsensus = null;
     this.lastParsedExtraInfos = new TreeMap<String, String>();
-    if (this.relayDescriptorParseHistory.exists()) {
-      this.logger.info("Reading file " + statsDir
-          + "/relay-descriptor-parse-history...");
+    if (this.relayDescriptorParseHistoryFile.exists()) {
+      this.logger.info("Reading file "
+          + this.relayDescriptorParseHistoryFile.getAbsolutePath()
+          + "...");
       try {
         BufferedReader br = new BufferedReader(new FileReader(
-            this.relayDescriptorParseHistory));
+            this.relayDescriptorParseHistoryFile));
         String line = null;
         while ((line = br.readLine()) != null) {
           if (line.startsWith("consensus")) {
@@ -52,11 +50,13 @@ public class RelayDescriptorParser {
           }
         }
         br.close();
-        this.logger.info("Finished reading file " + statsDir
-            + "/relay-descriptor-parse-history");
+        this.logger.info("Finished reading file "
+            + this.relayDescriptorParseHistoryFile.getAbsolutePath()
+            + ".");
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Failed reading file "
-            + statsDir + "/relay-descriptor-parse-history!", e);
+            + this.relayDescriptorParseHistoryFile.getAbsolutePath()
+            + "!", e);
       }
     }
   }
@@ -175,7 +175,8 @@ public class RelayDescriptorParser {
           }
         } catch (ParseException e) {
           this.logger.log(Level.WARNING, "Failed parsing timestamp in "
-              + this.statsDir + "/relay-descriptor-parse-history!", e);
+              + this.relayDescriptorParseHistoryFile.getAbsolutePath()
+              + "!", e);
         }
       }
     }
@@ -184,11 +185,12 @@ public class RelayDescriptorParser {
   public void writeFile() {
     if (this.relayDescriptorParseHistoryModified) {
       try {
-        this.logger.info("Writing file " + this.statsDir
-            + "/relay-descriptor-parse-history...");
-        new File(this.statsDir).mkdirs();
+        this.logger.info("Writing file "
+            + this.relayDescriptorParseHistoryFile.getAbsolutePath()
+            + "...");
+        this.relayDescriptorParseHistoryFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(
-            this.relayDescriptorParseHistory));
+            this.relayDescriptorParseHistoryFile));
         bw.write("type,source,published\n");
         if (this.lastParsedConsensus != null) {
           bw.write("consensus,NA," + this.lastParsedConsensus + "\n");
@@ -199,11 +201,13 @@ public class RelayDescriptorParser {
               + "\n");
         }
         bw.close();
-        this.logger.info("Finished writing file " + this.statsDir
-            + "/relay-descriptor-parse-history.");
+        this.logger.info("Finished writing file "
+            + this.relayDescriptorParseHistoryFile.getAbsolutePath()
+            + ".");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed writing " + this.statsDir
-            + "/relay-descriptor-parse-history!", e);
+        this.logger.log(Level.WARNING, "Failed writing "
+            + this.relayDescriptorParseHistoryFile.getAbsolutePath()
+            + "!", e);
       }
     }
   }

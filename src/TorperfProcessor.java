@@ -4,35 +4,34 @@ import java.util.*;
 import java.util.logging.*;
 
 public class TorperfProcessor {
-  public TorperfProcessor(String statsDirectory,
-      String torperfDirectory) {
+  public TorperfProcessor(String torperfDirectory) {
     Logger logger = Logger.getLogger(TorperfProcessor.class.getName());
-    File rawFile = new File(statsDirectory + "/torperf-raw");
-    File statsFile = new File(statsDirectory + "/torperf-stats");
+    File rawFile = new File("stats/torperf-raw");
+    File statsFile = new File("stats/torperf-stats");
     File torperfDir = new File(torperfDirectory);
     SortedMap<String, String> rawObs = new TreeMap<String, String>();
     SortedMap<String, String> stats = new TreeMap<String, String>();
     try {
       if (rawFile.exists()) {
-        logger.info("Reading file " + statsDirectory + "/torperf-raw...");
+        logger.info("Reading file " + rawFile.getAbsolutePath() + "...");
         BufferedReader br = new BufferedReader(new FileReader(rawFile));
         String line = br.readLine(); // ignore header
         while ((line = br.readLine()) != null) {
           if (line.split(",").length != 4) {
-            logger.warning("Corrupt line in " + statsDirectory
-                + "/torperf-raw!");
+            logger.warning("Corrupt line in " + rawFile.getAbsolutePath()
+                + "!");
             break;
           }
           String key = line.substring(0, line.lastIndexOf(","));
           rawObs.put(key, line);
         }
         br.close();
-        logger.info("Finished reading file " + statsDirectory
-            + "/torperf-raw.");
+        logger.info("Finished reading file " + rawFile.getAbsolutePath()
+            + ".");
       }
       if (statsFile.exists()) {
-        logger.info("Reading file " + statsDirectory
-            + "/torperf-stats...");
+        logger.info("Reading file " + statsFile.getAbsolutePath()
+            + "...");
         BufferedReader br = new BufferedReader(new FileReader(statsFile));
         String line = br.readLine(); // ignore header
         while ((line = br.readLine()) != null) {
@@ -40,8 +39,8 @@ public class TorperfProcessor {
           stats.put(key, line);
         }
         br.close();
-        logger.info("Finished reading file " + statsDirectory
-            + "/torperf-stats.");
+        logger.info("Finished reading file " + statsFile.getAbsolutePath()
+            + ".");
       }
       if (torperfDir.exists()) {
         logger.info("Importing files in " + torperfDirectory + "/...");
@@ -89,8 +88,8 @@ public class TorperfProcessor {
             + "/.");
       }
       if (rawObs.size() > 0) {
-        logger.info("Writing file " + statsDirectory + "/torperf-raw...");
-        new File(statsDirectory).mkdirs();
+        logger.info("Writing file " + rawFile.getAbsolutePath() + "...");
+        rawFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(rawFile));
         bw.append("source,date,start,completemillis\n");
         String tempSourceDate = null;
@@ -124,13 +123,13 @@ public class TorperfProcessor {
           }
         }
         bw.close();
-        logger.info("Finished writing file " + statsDirectory
-            + "/torperf-raw.");
+        logger.info("Finished writing file " + rawFile.getAbsolutePath()
+            + ".");
       }
       if (stats.size() > 0) {
-        logger.info("Writing file " + statsDirectory
-            + "/torperf-stats...");
-        new File(statsDirectory).mkdirs();
+        logger.info("Writing file " + statsFile.getAbsolutePath()
+            + "...");
+        statsFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(statsFile));
         bw.append("source,date,q1,md,q3\n");
         // TODO should we handle missing days?
@@ -138,12 +137,13 @@ public class TorperfProcessor {
           bw.append(s + "\n");
         }
         bw.close();
-        logger.info("Finished writing file " + statsDirectory
-            + "/torperf-stats.");
+        logger.info("Finished writing file " + statsFile.getAbsolutePath()
+            + ".");
       }
     } catch (IOException e) {
-      logger.log(Level.WARNING, "Failed writing " + statsDirectory
-          + "/torperf-{raw|stats}!", e);
+      logger.log(Level.WARNING, "Failed writing "
+          + rawFile.getAbsolutePath() + " or "
+          + statsFile.getAbsolutePath() + "!", e);
     }
   }
 }
