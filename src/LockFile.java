@@ -12,7 +12,7 @@ public class LockFile {
   }
 
   public boolean acquireLock() {
-    this.logger.info("Trying to acquire lock...");
+    this.logger.fine("Trying to acquire lock...");
     try {
       if (this.lockFile.exists()) {
         BufferedReader br = new BufferedReader(new FileReader("lock"));
@@ -25,7 +25,7 @@ public class LockFile {
       BufferedWriter bw = new BufferedWriter(new FileWriter("lock"));
       bw.append("" + System.currentTimeMillis() + "\n");
       bw.close();
-      this.logger.info("Acquired lock.");
+      this.logger.fine("Acquired lock.");
       return true;
     } catch (IOException e) {
       this.logger.warning("Caught exception while trying to acquire "
@@ -35,9 +35,9 @@ public class LockFile {
   }
 
   public void releaseLock() {
-    this.logger.info("Releasing lock...");
+    this.logger.fine("Releasing lock...");
     this.lockFile.delete();
-    this.logger.info("Released lock.");
+    this.logger.fine("Released lock.");
   }
 }
 

@@ -8,7 +8,7 @@ public class GetTorProcessor {
     Logger logger = Logger.getLogger(TorperfProcessor.class.getName());
     String unparsed = null;
     try {
-      logger.info("Downloading gettor stats...");
+      logger.fine("Downloading gettor stats...");
       URL u = new URL(gettorStatsUrl);
       HttpURLConnection huc = (HttpURLConnection) u.openConnection();
       huc.setRequestMethod("GET");
@@ -26,7 +26,7 @@ public class GetTorProcessor {
         in.close();
         unparsed = sb.toString();
       }   
-      logger.info("Finished downloading gettor stats.");
+      logger.fine("Finished downloading gettor stats.");
     } catch (IOException e) {
       logger.log(Level.WARNING, "Failed downloading gettor stats", e);
       return;
@@ -36,7 +36,7 @@ public class GetTorProcessor {
     SortedMap<String, Map<String, Integer>> data =
         new TreeMap<String, Map<String, Integer>>();
     try {
-      logger.info("Parsing downloaded gettor stats...");
+      logger.fine("Parsing downloaded gettor stats...");
       BufferedReader br = new BufferedReader(new StringReader(unparsed));
       String line = null;
       while ((line = br.readLine()) != null) {
@@ -61,7 +61,7 @@ public class GetTorProcessor {
     }
 
     File statsFile = new File("stats/gettor-stats");
-    logger.info("Writing file " + statsFile.getAbsolutePath() + "...");
+    logger.fine("Writing file " + statsFile.getAbsolutePath() + "...");
     try {
       statsFile.getParentFile().mkdirs();
       BufferedWriter bw = new BufferedWriter(new FileWriter(statsFile));

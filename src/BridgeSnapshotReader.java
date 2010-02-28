@@ -19,7 +19,7 @@ public class BridgeSnapshotReader {
     boolean modified = false;
     if (bdDir.exists()) {
       if (pbdFile.exists()) {
-        logger.info("Reading file " + pbdFile.getAbsolutePath() + "...");
+        logger.fine("Reading file " + pbdFile.getAbsolutePath() + "...");
         try {
           BufferedReader br = new BufferedReader(new FileReader(pbdFile));
           String line = null;
@@ -27,7 +27,7 @@ public class BridgeSnapshotReader {
             parsed.add(line);
           }
           br.close();
-          logger.info("Finished reading file "
+          logger.fine("Finished reading file "
               + pbdFile.getAbsolutePath() + ".");
         } catch (IOException e) {
           logger.log(Level.WARNING, "Failed reading file "
@@ -35,7 +35,7 @@ public class BridgeSnapshotReader {
           return;
         }
       }
-      logger.info("Importing files in directory " + bridgeDirectoriesDir
+      logger.fine("Importing files in directory " + bridgeDirectoriesDir
          + "/...");
       Stack<File> filesInInputDir = new Stack<File>();
       filesInInputDir.add(bdDir);
@@ -81,7 +81,7 @@ public class BridgeSnapshotReader {
         }
       }
       if (problems.isEmpty()) {
-        logger.info("Finished importing files in directory "
+        logger.fine("Finished importing files in directory "
             + bridgeDirectoriesDir + "/.");
       } else {
         StringBuilder sb = new StringBuilder("Failed importing files in "
@@ -97,7 +97,7 @@ public class BridgeSnapshotReader {
         logger.warning(sb.toString());
       }
       if (!parsed.isEmpty() && modified) {
-        logger.info("Writing file " + pbdFile.getAbsolutePath() + "...");
+        logger.fine("Writing file " + pbdFile.getAbsolutePath() + "...");
         try {
           pbdFile.getParentFile().mkdirs();
           BufferedWriter bw = new BufferedWriter(new FileWriter(pbdFile));
@@ -105,7 +105,7 @@ public class BridgeSnapshotReader {
             bw.append(f + "\n");
           }
           bw.close();
-          logger.info("Finished writing file " + pbdFile.getAbsolutePath()
+          logger.fine("Finished writing file " + pbdFile.getAbsolutePath()
               + ".");
         } catch (IOException e) {
           logger.log(Level.WARNING, "Failed writing file "

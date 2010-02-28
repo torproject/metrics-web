@@ -34,7 +34,7 @@ public class RelayDescriptorParser {
     this.lastParsedConsensus = null;
     this.lastParsedExtraInfos = new TreeMap<String, String>();
     if (this.relayDescriptorParseHistoryFile.exists()) {
-      this.logger.info("Reading file "
+      this.logger.fine("Reading file "
           + this.relayDescriptorParseHistoryFile.getAbsolutePath()
           + "...");
       try {
@@ -50,7 +50,7 @@ public class RelayDescriptorParser {
           }
         }
         br.close();
-        this.logger.info("Finished reading file "
+        this.logger.fine("Finished reading file "
             + this.relayDescriptorParseHistoryFile.getAbsolutePath()
             + ".");
       } catch (IOException e) {
@@ -185,7 +185,7 @@ public class RelayDescriptorParser {
   public void writeFile() {
     if (this.relayDescriptorParseHistoryModified) {
       try {
-        this.logger.info("Writing file "
+        this.logger.fine("Writing file "
             + this.relayDescriptorParseHistoryFile.getAbsolutePath()
             + "...");
         this.relayDescriptorParseHistoryFile.getParentFile().mkdirs();
@@ -201,7 +201,7 @@ public class RelayDescriptorParser {
               + "\n");
         }
         bw.close();
-        this.logger.info("Finished writing file "
+        this.logger.fine("Finished writing file "
             + this.relayDescriptorParseHistoryFile.getAbsolutePath()
             + ".");
       } catch (IOException e) {

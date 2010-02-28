@@ -16,7 +16,7 @@ public class CachedRelayDescriptorReader {
         CachedRelayDescriptorReader.class.getName());
     File cachedDescDir = new File("cacheddesc");
     if (cachedDescDir.exists()) {
-      logger.info("Reading cacheddesc/ directory.");
+      logger.fine("Reading cacheddesc/ directory.");
       for (File f : cachedDescDir.listFiles()) {
         try {
           // descriptors may contain non-ASCII chars; read as bytes to
@@ -82,7 +82,7 @@ public class CachedRelayDescriptorReader {
                 storeBr.close();
               }
             }
-            logger.info("Finished reading cacheddesc/ directory.");
+            logger.fine("Finished reading cacheddesc/ directory.");
           }
         } catch (IOException e) {
           logger.log(Level.WARNING, "Failed reading cacheddesc/ "

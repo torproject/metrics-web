@@ -27,7 +27,7 @@ public class ArchiveWriter {
         new SimpleDateFormat("yyyy/MM/");
     descriptorFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     if (this.missingDescriptorsFile.exists()) {
-      this.logger.info("Reading file "
+      this.logger.fine("Reading file "
           + this.missingDescriptorsFile.getAbsolutePath() + "...");
       try {
         BufferedReader br = new BufferedReader(new FileReader(
@@ -45,7 +45,7 @@ public class ArchiveWriter {
                 + consensusVoteFormat.format(new Date(published))
                 + "-consensus");
             if (!consensusFile.exists()) {
-              this.logger.fine("Initializing missing list with "
+              this.logger.finer("Initializing missing list with "
                   + "consensus: valid-after=" + line.split(",")[2]
                   + ", filename=directory-archive/consensus/"
                   + consensusVoteFormat.format(new Date(published))
@@ -71,7 +71,7 @@ public class ArchiveWriter {
               }
             }
             if (!voteFileFound) {
-              this.logger.fine("Initializing missing list with vote: "
+              this.logger.finer("Initializing missing list with vote: "
                   + "fingerprint=" + line.split(",")[1]
                   + ", valid-after="
                   + consensusVoteFormat.format(new Date(published))
@@ -92,7 +92,7 @@ public class ArchiveWriter {
                 + digest.substring(0, 1) + "/" + digest.substring(1, 2)
                 + "/" + digest);
             if (!descriptorFile.exists()) {
-              this.logger.fine("Initializing missing list with "
+              this.logger.finer("Initializing missing list with "
                   + (isServerDesc ? "server" : "extra-info")
                   + " descriptor: digest=" + digest
                   + ", filename=directory-archive/server-descriptor/"
@@ -105,7 +105,7 @@ public class ArchiveWriter {
           }
         }
         br.close();
-        this.logger.info("Finished reading file "
+        this.logger.fine("Finished reading file "
             + this.missingDescriptorsFile.getAbsolutePath() + ".");
       } catch (ParseException e) {
         this.logger.log(Level.WARNING, "Failed reading file "
@@ -145,7 +145,7 @@ public class ArchiveWriter {
           }
         }
         if (!voteFileFound) {
-          this.logger.fine("Adding vote to missing list: fingerprint="
+          this.logger.finer("Adding vote to missing list: fingerprint="
               + authority + ", valid-after="
               + consensusVoteFormat.format(new Date(nowConsensus))
               + ", filename=directory-archive/vote/"
@@ -162,7 +162,7 @@ public class ArchiveWriter {
         + "-consensus");
     if (!this.missingDescriptors.contains("consensus,NA,"
         + nowConsensusFormat) && !consensusFile.exists()) {
-      this.logger.fine("Adding consensus to missing list: valid-after="
+      this.logger.finer("Adding consensus to missing list: valid-after="
           + nowConsensusFormat
           + ", filename=directory-archive/consensus/"
           + consensusVoteFormat.format(new Date(nowConsensus))
@@ -234,8 +234,8 @@ public class ArchiveWriter {
               }
             }
             if (!voteFileFound) {
-              this.logger.fine("Adding vote to missing list: fingerprint="
-                  + fingerprint + ", valid-after="
+              this.logger.finer("Adding vote to missing list: "
+                  + "fingerprint=" + fingerprint + ", valid-after="
                   + parseFormat.format(new Date(nowConsensus))
                   + ", filename=directory-archive/vote/"
                   + consensusVoteFormat.format(new Date(nowConsensus))
@@ -262,7 +262,7 @@ public class ArchiveWriter {
           if (published + 24L * 60L * 60L * 1000L > now &&
               !this.missingDescriptors.contains("server," + serverDesc
                 + "," + publishedTime) && !descriptorFile.exists()) {
-            this.logger.fine("Adding server descriptor to missing list: "
+            this.logger.finer("Adding server descriptor to missing list: "
                 + "digest=" + serverDesc
                 + ", filename=directory-archive/server-descriptor/"
                 + descriptorFormat.format(new Date(published))
@@ -281,7 +281,7 @@ public class ArchiveWriter {
         File consensusFile = new File("directory-archive/consensus/"
             + printFormat.format(new Date(validAfter)) + "-consensus");
         if (!consensusFile.exists()) {
-          this.logger.fine("Storing consensus: valid-after="
+          this.logger.finer("Storing consensus: valid-after="
               + validAfterTime + ", filename=directory-archive/consensus/"
               + printFormat.format(new Date(validAfter)) + "-consensus");
           consensusFile.getParentFile().mkdirs();
@@ -289,7 +289,7 @@ public class ArchiveWriter {
               new FileOutputStream(consensusFile));
           bos.write(data, 0, data.length);
           bos.close();
-          this.logger.fine("Removing consensus from missing list: "
+          this.logger.finer("Removing consensus from missing list: "
               + "valid-after=" + validAfterTime
               + ", filename=directory-archive/consensus/"
               + printFormat.format(new Date(validAfter)) + "-consensus");
@@ -297,7 +297,7 @@ public class ArchiveWriter {
               + validAfterTime);
           this.missingDescriptorsFileModified = true;
         } else {
-          this.logger.info("Not storing consensus, because we already "
+          this.logger.finer("Not storing consensus, because we already "
               + "have it: valid-after=" + validAfterTime
               + ", filename=directory-archive/consensus/"
               + printFormat.format(new Date(validAfter)) + "-consensus");
@@ -309,7 +309,7 @@ public class ArchiveWriter {
         int start = ascii.indexOf(startToken);
         int sig = ascii.indexOf(sigToken);
         if (start < 0 || sig < 0 || sig < start) {
-          this.logger.info("Cannot determine vote digest! Skipping.");
+          this.logger.warning("Cannot determine vote digest! Skipping.");
           return;
         }
         sig += sigToken.length();
@@ -320,7 +320,7 @@ public class ArchiveWriter {
             + printFormat.format(new Date(validAfter)) + "-vote-"
             + fingerprint + "-" + digest);
         if (!voteFile.exists()) {
-          this.logger.fine("Storing vote: fingerprint=" + fingerprint
+          this.logger.finer("Storing vote: fingerprint=" + fingerprint
               + ", valid-after="
               + printFormat.format(new Date(validAfter))
               + ", filename=directory-archive/vote/"
@@ -331,7 +331,7 @@ public class ArchiveWriter {
               new FileOutputStream(voteFile));
           bos.write(data, 0, data.length);
           bos.close();
-          this.logger.fine("Removing vote from missing list: "
+          this.logger.finer("Removing vote from missing list: "
               + "fingerprint=" + fingerprint + ", valid-after="
               + printFormat.format(new Date(validAfter))
               + ", filename=directory-archive/vote/"
@@ -341,7 +341,7 @@ public class ArchiveWriter {
               + validAfterTime);
           this.missingDescriptorsFileModified = true;
         } else {
-          this.logger.info("Not storing vote, because we already have "
+          this.logger.finer("Not storing vote, because we already have "
               + "it: fingerprint=" + fingerprint + ", valid-after="
               + printFormat.format(new Date(validAfter))
               + ", filename=directory-archive/vote/"
@@ -374,7 +374,7 @@ public class ArchiveWriter {
           if (!this.missingDescriptors.contains("extra,"
               + extraInfoDigest + "," + publishedTime) &&
               !descriptorFile.exists()) {
-            this.logger.fine("Adding extra-info descriptor to missing "
+            this.logger.finer("Adding extra-info descriptor to missing "
                 + "list: digest=" + extraInfoDigest
                 + ", filename=directory-archive/extra-info/"
                 + descriptorFormat.format(new Date(published))
@@ -394,7 +394,8 @@ public class ArchiveWriter {
       int start = ascii.indexOf(startToken);
       int sig = ascii.indexOf(sigToken) + sigToken.length();
       if (start < 0 || sig < 0 || sig < start) {
-        this.logger.info("Cannot determine descriptor digest! Skipping.");
+        this.logger.warning("Cannot determine descriptor digest! "
+            + "Skipping.");
         return;
       }
       byte[] forDigest = new byte[sig - start];
@@ -408,7 +409,7 @@ public class ArchiveWriter {
           + digest.substring(0, 1) + "/" + digest.substring(1, 2) + "/"
           + digest);
       if (!descriptorFile.exists()) {
-        this.logger.fine("Storing " + (isServerDescriptor ?
+        this.logger.finer("Storing " + (isServerDescriptor ?
             "server descriptor" : "extra-info descriptor")
             + ": digest=" + digest + ", filename=directory-archive/"
             + (isServerDescriptor ? "server-descriptor" : "extra-info")
@@ -420,7 +421,7 @@ public class ArchiveWriter {
             new FileOutputStream(descriptorFile));
         bos.write(data, 0, data.length);
         bos.close();
-        this.logger.fine("Removing " + (isServerDescriptor ?
+        this.logger.finer("Removing " + (isServerDescriptor ?
             "server descriptor" : "extra-info descriptor")
             + " from missing list: digest=" + digest
             + ", filename=directory-archive/"
@@ -437,7 +438,7 @@ public class ArchiveWriter {
         }
         this.missingDescriptorsFileModified = true;
       } else {
-        this.logger.info("Not storing " + (isServerDescriptor ?
+        this.logger.finer("Not storing " + (isServerDescriptor ?
             "server descriptor" : "extra-info descriptor")
             + ", because we already have it: digest=" + digest
             + ", filename=directory-archive/"
@@ -466,7 +467,7 @@ public class ArchiveWriter {
   public void writeFile() {
     if (this.missingDescriptorsFileModified) {
       try {
-        this.logger.info("Writing file "
+        this.logger.fine("Writing file "
             + this.missingDescriptorsFile.getAbsolutePath() + "...");
         this.missingDescriptorsFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(
@@ -475,7 +476,7 @@ public class ArchiveWriter {
           bw.write(line + "\n");
         }
         bw.close();
-        this.logger.info("Finished writing file "
+        this.logger.fine("Finished writing file "
             + this.missingDescriptorsFile.getAbsolutePath() + ".");
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Failed writing "

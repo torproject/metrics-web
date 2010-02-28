@@ -73,7 +73,7 @@ public class RelayDescriptorDownloader {
               if (url.endsWith(digest)) {
                 verified = true;
               } else {
-                logger.info("Downloaded descriptor digest (" + digest
+                logger.warning("Downloaded descriptor digest (" + digest
                     + " doesn't match what we asked for (" + url + ")! "
                     + "Retrying.");
                 retryUrls.add(url);

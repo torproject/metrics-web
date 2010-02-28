@@ -8,7 +8,7 @@ public class ExitListDownloader {
   public ExitListDownloader() {
     Logger logger = Logger.getLogger(TorperfProcessor.class.getName());
     try {
-      logger.info("Downloading exit list...");
+      logger.fine("Downloading exit list...");
       String exitAddressesUrl =
           "http://exitlist.torproject.org/exitAddresses";
       URL u = new URL(exitAddressesUrl);
@@ -38,7 +38,7 @@ public class ExitListDownloader {
       }   
       in.close();
       bw.close();
-      logger.info("Finished downloading exit list.");
+      logger.fine("Finished downloading exit list.");
     } catch (IOException e) {
       logger.log(Level.WARNING, "Failed downloading exit list", e);
       return;

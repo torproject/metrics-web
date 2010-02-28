@@ -10,7 +10,7 @@ public class ArchiveReader {
   public ArchiveReader(RelayDescriptorParser rdp, String archivesDir) {
     Logger logger = Logger.getLogger(ArchiveReader.class.getName());
     if (new File(archivesDir).exists()) {
-      logger.info("Importing files in directory " + archivesDir
+      logger.fine("Importing files in directory " + archivesDir
           + "/...");
       Stack<File> filesInInputDir = new Stack<File>();
       filesInInputDir.add(new File(archivesDir));
@@ -37,7 +37,7 @@ public class ArchiveReader {
         }
       }
       if (problems.isEmpty()) {
-        logger.info("Finished importing files in directory " + archivesDir
+        logger.fine("Finished importing files in directory " + archivesDir
             + "/.");
       } else {
         StringBuilder sb = new StringBuilder("Failed importing files in "

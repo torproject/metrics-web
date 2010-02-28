@@ -10,7 +10,7 @@ public class SanitizedBridgesReader {
     Logger logger =
         Logger.getLogger(SanitizedBridgesReader.class.getName());
     if (new File(bridgesDir).exists()) {
-      logger.info("Importing files in directory " + bridgesDir + "/...");
+      logger.fine("Importing files in directory " + bridgesDir + "/...");
       Stack<File> filesInInputDir = new Stack<File>();
       filesInInputDir.add(new File(bridgesDir));
       List<File> problems = new ArrayList<File>();
@@ -44,7 +44,7 @@ public class SanitizedBridgesReader {
         }
       }
       if (problems.isEmpty()) {
-        logger.info("Finished importing files in directory " + bridgesDir
+        logger.fine("Finished importing files in directory " + bridgesDir
             + "/.");
       } else {
         StringBuilder sb = new StringBuilder("Failed importing files in "

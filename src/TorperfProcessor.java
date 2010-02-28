@@ -13,7 +13,7 @@ public class TorperfProcessor {
     SortedMap<String, String> stats = new TreeMap<String, String>();
     try {
       if (rawFile.exists()) {
-        logger.info("Reading file " + rawFile.getAbsolutePath() + "...");
+        logger.fine("Reading file " + rawFile.getAbsolutePath() + "...");
         BufferedReader br = new BufferedReader(new FileReader(rawFile));
         String line = br.readLine(); // ignore header
         while ((line = br.readLine()) != null) {
@@ -26,11 +26,11 @@ public class TorperfProcessor {
           rawObs.put(key, line);
         }
         br.close();
-        logger.info("Finished reading file " + rawFile.getAbsolutePath()
+        logger.fine("Finished reading file " + rawFile.getAbsolutePath()
             + ".");
       }
       if (statsFile.exists()) {
-        logger.info("Reading file " + statsFile.getAbsolutePath()
+        logger.fine("Reading file " + statsFile.getAbsolutePath()
             + "...");
         BufferedReader br = new BufferedReader(new FileReader(statsFile));
         String line = br.readLine(); // ignore header
@@ -39,11 +39,11 @@ public class TorperfProcessor {
           stats.put(key, line);
         }
         br.close();
-        logger.info("Finished reading file " + statsFile.getAbsolutePath()
+        logger.fine("Finished reading file " + statsFile.getAbsolutePath()
             + ".");
       }
       if (torperfDir.exists()) {
-        logger.info("Importing files in " + torperfDirectory + "/...");
+        logger.fine("Importing files in " + torperfDirectory + "/...");
         Stack<File> filesInInputDir = new Stack<File>();
         filesInInputDir.add(torperfDir);
         while (!filesInInputDir.isEmpty()) {
@@ -84,11 +84,11 @@ public class TorperfProcessor {
             br.close();
           }
         }
-        logger.info("Finished importing files in " + torperfDirectory
+        logger.fine("Finished importing files in " + torperfDirectory
             + "/.");
       }
       if (rawObs.size() > 0) {
-        logger.info("Writing file " + rawFile.getAbsolutePath() + "...");
+        logger.fine("Writing file " + rawFile.getAbsolutePath() + "...");
         rawFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(rawFile));
         bw.append("source,date,start,completemillis\n");
@@ -123,11 +123,11 @@ public class TorperfProcessor {
           }
         }
         bw.close();
-        logger.info("Finished writing file " + rawFile.getAbsolutePath()
+        logger.fine("Finished writing file " + rawFile.getAbsolutePath()
             + ".");
       }
       if (stats.size() > 0) {
-        logger.info("Writing file " + statsFile.getAbsolutePath()
+        logger.fine("Writing file " + statsFile.getAbsolutePath()
             + "...");
         statsFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(statsFile));
@@ -137,7 +137,7 @@ public class TorperfProcessor {
           bw.append(s + "\n");
         }
         bw.close();
-        logger.info("Finished writing file " + statsFile.getAbsolutePath()
+        logger.fine("Finished writing file " + statsFile.getAbsolutePath()
             + ".");
       }
     } catch (IOException e) {
