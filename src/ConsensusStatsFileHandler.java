@@ -83,10 +83,10 @@ public class ConsensusStatsFileHandler {
   private Logger logger;
 
  /**
-  * Initializes <code>ConsensusStatsFileHandler</code>, including reading
-  * in intermediate results files <code>stats/consensus-stats-raw</code>
-  * and <code>stats/bridge-consensus-stats-raw</code> and final results
-  * file <code>stats/consensus-stats</code>.
+  * Initializes this class, including reading in intermediate results
+  * files <code>stats/consensus-stats-raw</code> and
+  * <code>stats/bridge-consensus-stats-raw</code> and final results file
+  * <code>stats/consensus-stats</code>.
   */
   public ConsensusStatsFileHandler() {
 
@@ -110,13 +110,14 @@ public class ConsensusStatsFileHandler {
     /* Read in number of relays with flags set per consensus. */
     if (this.consensusStatsRawFile.exists()) {
       try {
-        this.logger.info("Reading file "
+        this.logger.fine("Reading file "
             + this.consensusStatsRawFile.getAbsolutePath() + "...");
         BufferedReader br = new BufferedReader(new FileReader(
             this.consensusStatsRawFile));
         String line = null;
         while ((line = br.readLine()) != null) {
-          if (line.startsWith("#") || line.startsWith("date")) {
+          if (line.startsWith("date")) {
+            /* Skip headers. */
             continue;
           }
           String[] parts = line.split(",");
@@ -130,7 +131,7 @@ public class ConsensusStatsFileHandler {
           this.relaysRaw.put(dateTime, line);
         }
         br.close();
-        this.logger.info("Finished reading file "
+        this.logger.fine("Finished reading file "
             + this.consensusStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Failed to read file "
@@ -141,13 +142,14 @@ public class ConsensusStatsFileHandler {
     /* Read in number of running bridges per bridge status. */
     if (this.bridgeConsensusStatsRawFile.exists()) {
       try {
-        this.logger.info("Reading file "
+        this.logger.fine("Reading file "
             + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
         BufferedReader br = new BufferedReader(new FileReader(
             this.bridgeConsensusStatsRawFile));
         String line = null;
         while ((line = br.readLine()) != null) {
-          if (line.startsWith("#") || line.startsWith("date")) {
+          if (line.startsWith("date")) {
+            /* Skip headers. */
             continue;
           }
           String[] parts = line.split(",");
@@ -161,7 +163,7 @@ public class ConsensusStatsFileHandler {
           this.bridgesRaw.put(dateTime, line);
         }
         br.close();
-        this.logger.info("Finished reading file "
+        this.logger.fine("Finished reading file "
             + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Failed to read file "
@@ -174,13 +176,14 @@ public class ConsensusStatsFileHandler {
      * bridges per day. */
     if (this.consensusStatsFile.exists()) {
       try {
-        this.logger.info("Reading file "
+        this.logger.fine("Reading file "
             + this.consensusStatsFile.getAbsolutePath() + "...");
         BufferedReader br = new BufferedReader(new FileReader(
             this.consensusStatsFile));
         String line = null;
         while ((line = br.readLine()) != null) {
-          if (line.startsWith("#") || line.startsWith("date")) {
+          if (line.startsWith("date")) {
+            /* Skip headers. */
             continue;
           }
           String[] parts = line.split(",");
@@ -204,7 +207,7 @@ public class ConsensusStatsFileHandler {
           }
         }
         br.close();
-        this.logger.info("Finished reading file "
+        this.logger.fine("Finished reading file "
             + this.consensusStatsFile.getAbsolutePath() + ".");
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Failed to write file "
@@ -221,11 +224,11 @@ public class ConsensusStatsFileHandler {
    * flags in a given consensus to the existing observations.
    */
   public void addConsensusResults(String validAfter, int exit, int fast,
-      int guard, int running, int stable) throws IOException {
+      int guard, int running, int stable) {
     String line = validAfter + "," + exit + "," + fast + "," + guard + ","
         + running + "," + stable;
     if (!this.relaysRaw.containsKey(validAfter)) {
-      this.logger.fine("Adding new relay numbers: " + line);
+      this.logger.finer("Adding new relay numbers: " + line);
       this.relaysRaw.put(validAfter, line);
       this.relaysRawModified = true;
     } else if (!line.equals(this.relaysRaw.get(validAfter))) {
@@ -242,11 +245,10 @@ public class ConsensusStatsFileHandler {
    * Adds the intermediate results of the number of running bridges in a
    * given bridge status to the existing observations.
    */
-  public void addBridgeConsensusResults(String published, int running)
-      throws IOException {
+  public void addBridgeConsensusResults(String published, int running) {
     String line = published + "," + running;
     if (!this.bridgesRaw.containsKey(published)) {
-      this.logger.fine("Adding new bridge numbers: " + line);
+      this.logger.finer("Adding new bridge numbers: " + line);
       this.bridgesRaw.put(published, line);
       this.bridgesRawModified = true;
     } else if (!line.equals(this.bridgesRaw.get(published))) {
@@ -291,12 +293,12 @@ public class ConsensusStatsFileHandler {
                 + (running/ consensuses) + "," + (stable/ consensuses);
             /* Are our results new? */
             if (!this.relaysPerDay.containsKey(tempDate)) {
-              this.logger.fine("Adding new average relay numbers: "
+              this.logger.finer("Adding new average relay numbers: "
                   + line);
               this.relaysPerDay.put(tempDate, line);
               writeConsensusStats = true;
             } else if (!line.equals(this.relaysPerDay.get(tempDate))) {
-              this.logger.info("Replacing existing average relay numbers "
+              this.logger.finer("Replacing existing average relay numbers "
                   + "(" + this.relaysPerDay.get(tempDate) + " with new "
                   + "numbers: " + line);
               this.relaysPerDay.put(tempDate, line);
@@ -339,12 +341,12 @@ public class ConsensusStatsFileHandler {
             String line = "," + (brunning / statuses);
             /* Are our results new? */
             if (!this.bridgesPerDay.containsKey(tempDate)) {
-              this.logger.fine("Adding new average bridge numbers: "
+              this.logger.finer("Adding new average bridge numbers: "
                   + tempDate + line);
               this.bridgesPerDay.put(tempDate, line);
               writeConsensusStats = true;
             } else if (!line.equals(this.bridgesPerDay.get(tempDate))) {
-              this.logger.info("Replacing existing average bridge "
+              this.logger.finer("Replacing existing average bridge "
                   + "numbers (" + this.bridgesPerDay.get(tempDate)
                   + " with new numbers: " + line);
               this.bridgesPerDay.put(tempDate, line);
@@ -366,7 +368,7 @@ public class ConsensusStatsFileHandler {
     /* Write raw numbers of relays with flags set to disk. */
     if (this.relaysRawModified) {
       try {
-        this.logger.info("Writing file "
+        this.logger.fine("Writing file "
             + this.consensusStatsRawFile.getAbsolutePath() + "...");
         this.consensusStatsRawFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(
@@ -376,14 +378,14 @@ public class ConsensusStatsFileHandler {
           bw.append(line + "\n");
         }
         bw.close();
-        this.logger.info("Finished writing file "
+        this.logger.fine("Finished writing file "
             + this.consensusStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Failed to write file "
             + this.consensusStatsRawFile.getAbsolutePath() + "!", e);
       }
     } else {
-      this.logger.info("Not writing file "
+      this.logger.fine("Not writing file "
           + this.consensusStatsRawFile.getAbsolutePath() + ", because "
           + "nothing has changed.");
     }
@@ -391,7 +393,7 @@ public class ConsensusStatsFileHandler {
     /* Write raw numbers of running bridges to disk. */
     if (this.bridgesRawModified) {
       try {
-        this.logger.info("Writing file "
+        this.logger.fine("Writing file "
             + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
         this.bridgeConsensusStatsRawFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(
@@ -401,7 +403,7 @@ public class ConsensusStatsFileHandler {
           bw.append(line + "\n");
         }
         bw.close();
-        this.logger.info("Finished writing file "
+        this.logger.fine("Finished writing file "
             + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Failed to write file "
@@ -409,7 +411,7 @@ public class ConsensusStatsFileHandler {
             e);
       }
     } else {
-      this.logger.info("Not writing file "
+      this.logger.fine("Not writing file "
           + this.bridgeConsensusStatsRawFile.getAbsolutePath()
           + ", because nothing has changed.");
     }
@@ -418,7 +420,7 @@ public class ConsensusStatsFileHandler {
      * to disk. */
     if (writeConsensusStats) {
       try {
-        this.logger.info("Writing file "
+        this.logger.fine("Writing file "
             + this.consensusStatsFile.getAbsolutePath() + "...");
         this.consensusStatsFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(
@@ -453,7 +455,7 @@ public class ConsensusStatsFileHandler {
           currentDateMillis += 24L * 60L * 60L * 1000L;
         }
         bw.close();
-        this.logger.info("Finished writing file "
+        this.logger.fine("Finished writing file "
             + this.consensusStatsFile.getAbsolutePath() + ".");
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Failed to write file "
@@ -463,10 +465,13 @@ public class ConsensusStatsFileHandler {
             + this.consensusStatsFile.getAbsolutePath() + "!", e);
       }
     } else {
-      this.logger.info("Not writing file "
+      this.logger.fine("Not writing file "
           + this.consensusStatsFile.getAbsolutePath()
           + ", because nothing has changed.");
     }
+
+    /* Set modification flags to false again. */
+    this.relaysRawModified = this.bridgesRawModified = false;
   }
 }
 

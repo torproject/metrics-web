@@ -89,7 +89,7 @@ public class Main {
 
     // Write updated stats files to disk
     if (bsfh != null) {
-      bsfh.writeFile();
+      bsfh.writeFiles();
       bsfh = null;
     }
     if (csfh != null) {
