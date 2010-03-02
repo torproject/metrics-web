@@ -35,12 +35,14 @@ public class Main {
         new BridgeStatsFileHandler(countries) : null;
     DirreqStatsFileHandler dsfh = config.getWriteDirreqStats() ?
         new DirreqStatsFileHandler(countries) : null;
+    ServerDescriptorStatsFileHandler sdsfh =
+        new ServerDescriptorStatsFileHandler();
 
     // Prepare relay descriptor parser (only if we are writing the
     // stats)
     RelayDescriptorParser rdp = config.getWriteConsensusStats() &&
         config.getWriteBridgeStats() && config.getWriteDirreqStats() ?
-        new RelayDescriptorParser(csfh, bsfh, dsfh, countries,
+        new RelayDescriptorParser(csfh, bsfh, dsfh, sdsfh, countries,
         directories) : null;
 
     // Prepare writing relay descriptor archive to disk
@@ -72,6 +74,10 @@ public class Main {
     if (dsfh != null) {
       dsfh.writeFile();
       dsfh = null;
+    }
+    if (sdsfh != null) {
+      sdsfh.writeFiles();
+      sdsfh = null;
     }
 
     // Prepare bridge descriptor parser

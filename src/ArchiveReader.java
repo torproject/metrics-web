@@ -24,9 +24,17 @@ public class ArchiveReader {
         } else {
           if (rdp != null) {
             try {
-              BufferedReader br = new BufferedReader(new FileReader(pop));
-              rdp.parse(br);
-              br.close();
+              BufferedInputStream bis =
+                  new BufferedInputStream(new FileInputStream(pop));
+              ByteArrayOutputStream baos = new ByteArrayOutputStream();
+              int len;
+              byte[] data = new byte[1024];
+              while ((len = bis.read(data, 0, 1024)) >= 0) {
+                baos.write(data, 0, len);
+              }
+              bis.close();
+              byte[] allData = baos.toByteArray();
+              rdp.parse(allData);
             } catch (IOException e) {
               problems.add(pop);
               if (problems.size() > 3) {

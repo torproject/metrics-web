@@ -32,16 +32,12 @@ public class CachedRelayDescriptorReader {
           bis.close();
           byte[] allData = baos.toByteArray();
           if (f.getName().equals("cached-consensus")) {
-            BufferedReader br = new BufferedReader(new FileReader(f));
             if (aw != null) {
               aw.store(allData);
             }
-            br.close();
-            br = new BufferedReader(new FileReader(f));
             if (rdp != null) {
-              rdp.parse(br);
+              rdp.parse(allData);
             }
-            br.close();
           } else if (f.getName().startsWith("cached-descriptors") ||
               f.getName().startsWith("cached-extrainfo")) {
             String ascii = new String(allData, "US-ASCII");
@@ -76,10 +72,7 @@ public class CachedRelayDescriptorReader {
                 aw.store(descBytes);
               }
               if (rdp != null) {
-                BufferedReader storeBr = new BufferedReader(
-                    new StringReader(desc));
-                rdp.parse(storeBr);
-                storeBr.close();
+                rdp.parse(descBytes);
               }
             }
             logger.fine("Finished reading cacheddesc/ directory.");

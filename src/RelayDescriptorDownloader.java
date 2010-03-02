@@ -84,21 +84,15 @@ public class RelayDescriptorDownloader {
             }
             if (verified) {
               if (rdp != null) {
-                BufferedReader br = new BufferedReader(new StringReader(
-                    result));
-                rdp.parse(br);
-                br.close();
+                rdp.parse(allData);
               }
               if (aw != null) {
-                BufferedReader br = new BufferedReader(new StringReader(
-                    result));
                 try {
                   aw.store(allData);
                 } catch (Exception e) {
                   e.printStackTrace();
                   //TODO find better way to handle this
                 }
-                br.close();
               }
             }
           } else {

@@ -17,17 +17,20 @@ public class RelayDescriptorParser {
   private DirreqStatsFileHandler dsfh;
   private ConsensusStatsFileHandler csfh;
   private BridgeStatsFileHandler bsfh;
+  private ServerDescriptorStatsFileHandler sdsfh;
   private SortedSet<String> countries;
   private SortedSet<String> directories;
   private Logger logger;
   public RelayDescriptorParser(ConsensusStatsFileHandler csfh,
       BridgeStatsFileHandler bsfh, DirreqStatsFileHandler dsfh,
-      SortedSet<String> countries, SortedSet<String> directories) {
+      ServerDescriptorStatsFileHandler sdsfh, SortedSet<String> countries,
+      SortedSet<String> directories) {
     this.relayDescriptorParseHistoryFile = new File(
         "stats/relay-descriptor-parse-history");
     this.csfh = csfh;
     this.bsfh = bsfh;
     this.dsfh = dsfh;
+    this.sdsfh = sdsfh;
     this.countries = countries;
     this.directories = directories;
     this.logger = Logger.getLogger(RelayDescriptorParser.class.getName());
@@ -60,7 +63,9 @@ public class RelayDescriptorParser {
       }
     }
   }
-  public void parse(BufferedReader br) throws IOException {
+  public void parse(byte[] data) throws IOException {
+    BufferedReader br = new BufferedReader(new StringReader(new String(
+        data, "US-ASCII")));
     String line = br.readLine();
     if (line == null) {
       this.logger.warning("Parsing empty file?");
@@ -68,7 +73,8 @@ public class RelayDescriptorParser {
     }
     if (line.equals("network-status-version 3")) {
       int exit = 0, fast = 0, guard = 0, running = 0, stable = 0;
-      String validAfter = null;
+      String validAfter = null, rLine = null;
+      StringBuilder descriptorIdentities = new StringBuilder();
       while ((line = br.readLine()) != null) {
         if (line.startsWith("valid-after ")) {
           validAfter = line.substring("valid-after ".length());
@@ -83,6 +89,7 @@ public class RelayDescriptorParser {
           String hashedRelay = DigestUtils.shaHex(Base64.decodeBase64(
               line.split(" ")[2] + "=")).toUpperCase();
           this.bsfh.addHashedRelay(hashedRelay);
+          rLine = line;
         } else if (line.startsWith("s ")) {
           if (line.contains(" Running")) {
             exit += line.contains(" Exit") ? 1 : 0;
@@ -90,15 +97,48 @@ public class RelayDescriptorParser {
             guard += line.contains(" Guard") ? 1 : 0;
             stable += line.contains(" Stable") ? 1 : 0;
             running++;
+            descriptorIdentities.append("," + rLine.split(" ")[3]);
           }
         }
       }
       if (this.csfh != null) {
-        csfh.addConsensusResults(validAfter, exit, fast, guard, running,
-          stable);
+        this.csfh.addConsensusResults(validAfter, exit, fast, guard,
+          running, stable);
+      }
+      if (this.sdsfh != null) {
+        this.sdsfh.addConsensus(validAfter,
+            descriptorIdentities.toString().substring(1));
       }
     } else if (line.startsWith("router ")) {
-      // in case we want to parse server descriptors in the future
+      String platformLine = null, publishedLine = null,
+          bandwidthLine = null;
+      while ((line = br.readLine()) != null) {
+        if (line.startsWith("platform ")) {
+          platformLine = line;
+        } else if (line.startsWith("published ")) {
+          publishedLine = line;
+        } else if (line.startsWith("bandwidth ")) {
+          bandwidthLine = line;
+        }
+      }
+      String ascii = new String(data, "US-ASCII");
+      String startToken = "router ";
+      String sigToken = "\nrouter-signature\n";
+      int start = ascii.indexOf(startToken);
+      int sig = ascii.indexOf(sigToken) + sigToken.length();
+      if (start < 0 || sig < 0 || sig < start) {
+        this.logger.warning("Cannot determine descriptor digest! "
+            + "Skipping.");
+        return;
+      }
+      byte[] forDigest = new byte[sig - start];
+      System.arraycopy(data, start, forDigest, 0, sig - start);
+      String descriptorIdentity = Base64.encodeBase64String(
+          DigestUtils.sha(forDigest)).substring(0, 27);
+      if (this.sdsfh != null) {
+        this.sdsfh.addServerDescriptor(descriptorIdentity, platformLine,
+            publishedLine, bandwidthLine);
+      }
     } else if (line.startsWith("extra-info ") && this.dsfh != null &&
         directories.contains(line.split(" ")[2])) {
       String dir = line.split(" ")[2];
