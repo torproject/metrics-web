@@ -40,8 +40,8 @@ public class Main {
 
     // Prepare relay descriptor parser (only if we are writing the
     // stats)
-    RelayDescriptorParser rdp = config.getWriteConsensusStats() &&
-        config.getWriteBridgeStats() && config.getWriteDirreqStats() ?
+    RelayDescriptorParser rdp = config.getWriteConsensusStats() ||
+        config.getWriteBridgeStats() || config.getWriteDirreqStats() ?
         new RelayDescriptorParser(csfh, bsfh, dsfh, sdsfh, countries,
         directories) : null;
 
