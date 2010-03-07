@@ -85,10 +85,12 @@ public class RelayDescriptorParser {
           }
         } else if (line.equals("vote-status vote")) {
           return;
-        } else if (line.startsWith("r ") && this.bsfh != null) {
-          String hashedRelay = DigestUtils.shaHex(Base64.decodeBase64(
-              line.split(" ")[2] + "=")).toUpperCase();
-          this.bsfh.addHashedRelay(hashedRelay);
+        } else if (line.startsWith("r ")) {
+          if (this.bsfh != null) {
+            String hashedRelay = DigestUtils.shaHex(Base64.decodeBase64(
+                line.split(" ")[2] + "=")).toUpperCase();
+            this.bsfh.addHashedRelay(hashedRelay);
+          }
           rLine = line;
         } else if (line.startsWith("s ")) {
           if (line.contains(" Running")) {
