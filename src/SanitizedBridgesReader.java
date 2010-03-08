@@ -2,7 +2,6 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.util.logging.*;
-import org.apache.commons.codec.digest.*;
 
 public class SanitizedBridgesReader {
   public SanitizedBridgesReader(BridgeDescriptorParser bdp,
