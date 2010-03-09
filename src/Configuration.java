@@ -17,6 +17,11 @@ public class Configuration {
       Arrays.asList(("8522EB98C91496E80EC238E732594D1509158E77,"
       + "9695DFC35FFEB861329B9F1AB04C46397020CE31").split(",")));
   private boolean writeBridgeStats = true;
+  private boolean writeServerDescriptorStats = true;
+  private List<String> relayVersions = new ArrayList<String>(Arrays.asList(
+      "0.1.2,0.2.0,0.2.1,0.2.2".split(",")));
+  private List<String> relayPlatforms = new ArrayList<String>(Arrays.asList(
+      "Linux,Windows,Darwin,FreeBSD".split(",")));
   private boolean writeDirectoryArchives = false;
   private SortedSet<String> v3DirectoryAuthorities = new TreeSet<String>(
       Arrays.asList(("14C131DFC5C6F93646BE72FA1401C02A8DF2E8B4,"
@@ -74,6 +79,15 @@ public class Configuration {
         } else if (line.startsWith("WriteBridgeStats")) {
           this.writeBridgeStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("WriteServerDescriptorStats")) {
+          this.writeServerDescriptorStats = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("RelayVersions")) {
+          this.relayVersions = new ArrayList<String>(
+              Arrays.asList(line.split(" ")[1].split(",")));
+        } else if (line.startsWith("RelayPlatforms")) {
+          this.relayPlatforms = new ArrayList<String>(
+              Arrays.asList(line.split(" ")[1].split(",")));
         } else if (line.startsWith("WriteDirectoryArchives")) {
           this.writeDirectoryArchives = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -164,6 +178,15 @@ public class Configuration {
   }
   public boolean getWriteBridgeStats() {
     return this.writeBridgeStats;
+  }
+  public boolean getWriteServerDescriptorStats() {
+    return this.writeServerDescriptorStats;
+  }
+  public List<String> getRelayVersions() {
+    return this.relayVersions;
+  }
+  public List<String> getRelayPlatforms() {
+    return this.relayPlatforms;
   }
   public boolean getWriteDirectoryArchives() {
     return this.writeDirectoryArchives;

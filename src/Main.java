@@ -34,12 +34,15 @@ public class Main {
     DirreqStatsFileHandler dsfh = config.getWriteDirreqStats() ?
         new DirreqStatsFileHandler(countries) : null;
     ServerDescriptorStatsFileHandler sdsfh =
-        new ServerDescriptorStatsFileHandler();
+        config.getWriteServerDescriptorStats() ?
+        new ServerDescriptorStatsFileHandler(config.getRelayVersions(),
+        config.getRelayPlatforms()) : null;
 
     // Prepare relay descriptor parser (only if we are writing the
     // stats)
     RelayDescriptorParser rdp = config.getWriteConsensusStats() ||
-        config.getWriteBridgeStats() || config.getWriteDirreqStats() ?
+        config.getWriteBridgeStats() || config.getWriteDirreqStats() ||
+        config.getWriteServerDescriptorStats() ?
         new RelayDescriptorParser(csfh, bsfh, dsfh, sdsfh, countries,
         directories) : null;
 
@@ -122,4 +125,3 @@ public class Main {
     logger.info("Terminating ERNIE.");
   }
 }
-

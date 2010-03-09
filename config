@@ -36,6 +36,16 @@
 ## Write bridge stats to disk
 #WriteBridgeStats 1
 
+## Write server descriptors stats to disk
+#WriteServerDescriptorStats 1
+
+## Comma-separated list of relay versions to be included in version-stats
+#RelayVersions 0.1.2,0.2.0,0.2.1,0.2.2
+
+## Comma-separated list of relay platforms to be included in
+## platform-stats
+#RelayPlatforms Linux,Windows,Darwin,FreeBSD
+
 ## Write directory archives to disk
 #WriteDirectoryArchives 0
 
