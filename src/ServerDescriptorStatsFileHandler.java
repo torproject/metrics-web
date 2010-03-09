@@ -462,12 +462,12 @@ public class ServerDescriptorStatsFileHandler {
             for (int i = 0; i < versionStats.length; i++) {
               versionWriter.write(",NA");
             }
-            versionWriter.write(",NA\n");
+            versionWriter.write("\n");
             platformWriter.write(date);
             for (int i = 0; i < platformStats.length; i++) {
               platformWriter.write(",NA");
             }
-            platformWriter.write(",NA\n");
+            platformWriter.write("\n");
             bandwidthWriter.write(date + ",NA\n");
           }
           /* Clear counters to collect next day's statistics. */
