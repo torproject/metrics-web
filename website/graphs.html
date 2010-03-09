@@ -39,6 +39,9 @@
           <li><a href="#bridgeusers">Tor users via bridges</a></li>
           <li><a href="#torperf">Time to complete requests</a></li>
           <li><a href="#gettor">Packages delivered by GetTor</a></li>
+          <li><a href="#versions">Relay versions</a></li>
+          <li><a href="#platforms">Relay platforms</a></li>
+          <li><a href="#bandwidth">Relay bandwidth</a></li>
         </ul>
         <br/>
         <a id="relays"/>
@@ -107,6 +110,33 @@
         <img src="graphs/gettor/gettor-total.png"/>
         <p>More graphs about specific packages can be found on a 
         <a href="gettor-graphs.html">separate page</a>.</p>
+        <br/>
+        <a id="versions"/>
+        <h3>Relay versions</h3>
+        <br/>
+        <p>Relays report the Tor version that they are running in their
+        server descriptors that they send to the directory authorities.
+        The following graph shows the number of relays running specific
+        Tor versions.</p>
+        <img src="graphs/descriptors/versions.png"/>
+        <br/>
+        <a id="platforms"/>
+        <h3>Relay platforms</h3>
+        <br/>
+        <p>Relays further report the operating systems in their server
+        descriptors that they send to the directory authorities. The
+        following graph shows the number of relays running specific
+        platforms.</p>
+        <img src="graphs/descriptors/platforms.png"/>
+        <br/>
+        <a id="bandwidth"/>
+        <h3>Relay bandwidth</h3>
+        <br/>
+        <p>Relays advertise how much bandwidth they are willing and
+        to contribute in their server descriptors. The following graph
+        shows the sum of advertised bandwidth of all relays in the
+        network.</p>
+        <img src="graphs/descriptors/bandwidth.png"/>
         <br/>
       </div>
     </div>
