@@ -51,23 +51,17 @@ for (intervalInd in 1:length(intervals)) {
   for (sizeInd in 1:length(sizes)) {
     size <- sizes[sizeInd]
     sizePr <- sizePrint[sizeInd]
-    png(paste("website/graphs/torperf/torperf-", size, "-", interval,
-        ".png", sep = ""), width=600, height=height)
-    par(mfrow=c(length(sources), 1))
-    par(mar=c(4.3,3.1,2.1,0.1))
-    maxY <- max(na.omit(subset(t, source %in% paste(sources, size,
-        sep = "-"))$q3)) / 1e3 * .8
     for (sourceInd in 1:length(sources)) {
       sourceStr <- paste(sources[sourceInd], size, sep = "-")
       sourceName <- sources[sourceInd]
+      png(paste("website/graphs/torperf/torperf-", size, "-", sourceName,
+          "-", interval, ".png", sep = ""), width=550, height=350)
+      par(mar=c(2.1,3.1,1.6,0.1))
+      maxY <- max(na.omit(subset(t, source %in% paste(sources, size,
+          sep = "-"))$q3)) / 1e3 * .8
       color <- colors[sourceInd]
-      title <- ""
-      if (sourceInd == 1)
-        title <- paste("Time in seconds to complete", sizePr, "request")
+      title <- paste("Time in seconds to complete", sizePr, "request")
       xlab <- ""
-      if (sourceInd == length(sources))
-        xlab <- paste("Last updated:", as.POSIXlt(Sys.time(), "UTC"),
-        "UTC")
 
       data <- subset(t, source %in% sourceStr)
 
@@ -86,8 +80,7 @@ for (intervalInd in 1:length(intervals)) {
       colquart <- paste(color, "66", sep="")
 
       plot(medians_/1e3, ylim=c(0, maxY), type="l", col=colmed, lwd=2,
-          main=title, axes=FALSE, ylab="", xlab=xlab,
-          cex.main=ifelse(intervalInd == 1, 1.9, 1.25))
+          main=title, axes=FALSE, ylab="", xlab=xlab)
 
       xp <- c()
       yp <- c()
@@ -123,11 +116,11 @@ for (intervalInd in 1:length(intervals)) {
 
       legend(title = paste("Measured times on", sourceName, "per day"),
           x=length(datesStr)/2, xjust=0.5, y=maxY, yjust=1,
-          cex=ifelse(intervalInd == 1, 1.5, 1),
+          #cex=ifelse(intervalInd == 1, 1.5, 1),
           c("Median", "1st to 3rd quartile"), fill=c(colmed, colquart),
           bty="n", ncol=2)
+      dev.off()
     }
-    dev.off()
   }
 }
 
