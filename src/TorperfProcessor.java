@@ -57,7 +57,9 @@ public class TorperfProcessor {
                 pop.getName().indexOf("."));
             BufferedReader br = new BufferedReader(new FileReader(pop));
             String line = null;
-            Format formatter = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
+            SimpleDateFormat formatter =
+                new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
             while ((line = br.readLine()) != null) {
               String[] parts = line.split(" ");
               // remove defective lines as they occurred on gabelmoo as well
