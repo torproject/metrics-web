@@ -10,6 +10,7 @@ stats/
 
 # generated graphs
 website/graphs/bridge-users/*.png
+website/graphs/descriptors/*.png
 website/graphs/direct-users/*.png
 website/graphs/exit/*.png
 website/graphs/gettor/*.png
