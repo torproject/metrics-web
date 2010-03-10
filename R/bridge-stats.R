@@ -91,7 +91,7 @@ plot_current <- function(countries) {
   plot_pastdays(c(30, 90, 180), countries)
   plot_years("2010", countries)
   plot_quarters("2010", 1, countries)
-  plot_months("2010", 1:2, countries)
+  plot_months("2010", 2:3, countries)
 }
 
 countries <- data.frame(code = c("bh", "cn", "cu", "et", "ir", "mm", "sa",

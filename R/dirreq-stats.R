@@ -114,7 +114,7 @@ plot_current <- function(directory, filenamePart, titlePart, data,
   plot_years(directory, filenamePart, titlePart, "2010", data, countries)
   plot_quarters(directory, filenamePart, titlePart, "2010", 1, data,
     countries)
-  plot_months(directory, filenamePart, titlePart, "2010", 1:2, data,
+  plot_months(directory, filenamePart, titlePart, "2010", 2:3, data,
     countries)
 }
 
