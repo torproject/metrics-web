@@ -15,7 +15,6 @@ ggplot(m, aes(x = as.POSIXct(datetime, tz = "GMT"), y = value,
   opts(title = "Number of exit relays (past 72 hours)\n")
 ggsave(filename = "website/graphs/exit/exit-72h.png",
   width = 8, height = 5, dpi = 72)
-slkdjf
 
 consensuses <- read.csv("stats/consensus-stats", header = TRUE,
     stringsAsFactors = FALSE);
