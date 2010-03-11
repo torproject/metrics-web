@@ -2,17 +2,20 @@ options(warn = -1)
 suppressPackageStartupMessages(library("ggplot2"))
 
 relaysDay <- read.csv("stats/consensus-stats-raw", stringsAsFactors = FALSE)
-from <- seq(from = max(as.POSIXct(relaysDay$datetime, tz = "GMT")), length = 2, by = "-3 days")[2]
+to <- Sys.time()
+from <- seq(from = to, length = 2, by = "-3 days")[2]
 relaysDay <- subset(relaysDay, as.POSIXct(datetime, tz = "GMT") >= from)
-m <- melt(relaysDay[,c(1, 2, 5)], id = "datetime")
+m <- melt(relaysDay[,c(1, 5, 2)], id = "datetime")
 ggplot(m, aes(x = as.POSIXct(datetime, tz = "GMT"), y = value,
-  colour = variable)) + geom_point() + scale_x_datetime(name = "") +
+  colour = variable)) + geom_point() +
+  scale_x_datetime(name = "", limits = c(from, to)) +
   scale_y_continuous(name = "") +
   scale_colour_hue("", breaks = c("running", "exit"),
   labels = c("All relays", "Exit relays")) +
   opts(title = "Number of exit relays (past 72 hours)\n")
 ggsave(filename = "website/graphs/exit/exit-72h.png",
   width = 8, height = 5, dpi = 72)
+slkdjf
 
 consensuses <- read.csv("stats/consensus-stats", header = TRUE,
     stringsAsFactors = FALSE);
