@@ -185,7 +185,7 @@ public class DirreqStatsFileHandler {
             lastDateMillis += 24L * 60L * 60L * 1000L;
             bw.append(currentDirectory + ","
                 + dateFormat.format(new Date(lastDateMillis)));
-            for (String country : this.countries) {
+            for (int i = 0; i < this.countries.size(); i++) {
               bw.append(",NA");
             }
             bw.append(",NA\n");

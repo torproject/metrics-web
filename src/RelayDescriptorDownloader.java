@@ -65,7 +65,7 @@ public class RelayDescriptorDownloader {
             digest = DigestUtils.shaHex(noSig);
             // TODO UTF-8 may be wrong, but we don't care about the fields
             // containing non-ASCII
-            String result = new String(allData, "UTF-8");
+            // String result = new String(allData, "UTF-8"); TODO
             boolean verified = false;
             if (url.contains("/tor/server/d/") ||
                 url.contains("/tor/extra/d/")) {

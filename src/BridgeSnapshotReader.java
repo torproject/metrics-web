@@ -55,12 +55,11 @@ public class BridgeSnapshotReader {
               TarArchiveInputStream tais = new TarArchiveInputStream(gcis);
               InputStreamReader isr = new InputStreamReader(tais);
               BufferedReader br = new BufferedReader(isr);
-              TarArchiveEntry en = null;
               String fn = pop.getName();
               String dateTime = fn.substring(11, 21) + " "
                     + fn.substring(22, 24) + ":" + fn.substring(24, 26)
                     + ":" + fn.substring(26, 28);
-              while ((en = tais.getNextTarEntry()) != null) {
+              while ((tais.getNextTarEntry()) != null) {
                 bdp.parse(br, dateTime, false);
               }
             }

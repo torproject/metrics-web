@@ -1,7 +1,7 @@
 import java.io.*;
 import java.text.*;
 import java.util.logging.*;
-import org.apache.commons.codec.digest.*;
+//import org.apache.commons.codec.digest.*; TODO currently unused
 
 /**
  * Parses all descriptors in local directory cacheddesc/ and sorts them
@@ -62,10 +62,11 @@ public class CachedRelayDescriptorReader {
                 break;
               }
               end += endToken.length();
-              String desc = ascii.substring(start, end);
+              /* String desc = ascii.substring(start, end);
               byte[] forDigest = new byte[sig - start];
               System.arraycopy(allData, start, forDigest, 0, sig - start);
               String digest = DigestUtils.shaHex(forDigest);
+              TODO this stuff is unused? */
               byte[] descBytes = new byte[end - start];
               System.arraycopy(allData, start, descBytes, 0, end - start);
               if (aw != null) {

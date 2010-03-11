@@ -338,7 +338,7 @@ public class BridgeStatsFileHandler {
               > lastDateMillis) {
             lastDateMillis += 24L * 60L * 60L * 1000L;
             bw.append(dateFormat.format(new Date(lastDateMillis)));
-            for (String c : this.countries) {
+            for (int i = 0; i < this.countries.size(); i++) {
               bw.append(",NA");
             }   
             bw.append("\n");
