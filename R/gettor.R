@@ -34,11 +34,11 @@ plot_packages <- function(filename, title, data) {
 }
 
 plot_packages("gettor-total.png",
-  "Total packages delivered by GetTor per day", total)
+  "Total packages requested from GetTor per day", total)
 plot_packages("gettor-en.png",
-  "Tor Browser Bundles (en) delivered by GetTor per day", en)
+  "Tor Browser Bundles (en) requested from GetTor per day", en)
 plot_packages("gettor-zh_cn.png",
-  "Tor Browser Bundles (zh_CN) delivered by GetTor per day", zh_cn)
+  "Tor Browser Bundles (zh_CN) requested from GetTor per day", zh_cn)
 plot_packages("gettor-fa.png",
-  "Tor Browser Bundles (fa) delivered by GetTor per day", fa)
+  "Tor Browser Bundles (fa) requested from GetTor per day", fa)
 
