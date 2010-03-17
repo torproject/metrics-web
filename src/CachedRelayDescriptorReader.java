@@ -1,15 +1,12 @@
 import java.io.*;
-import java.text.*;
 import java.util.logging.*;
-//import org.apache.commons.codec.digest.*; TODO currently unused
 
 /**
  * Parses all descriptors in local directory cacheddesc/ and sorts them
  * into directory structure in directory-archive/.
  */
 public class CachedRelayDescriptorReader {
-  public CachedRelayDescriptorReader(RelayDescriptorParser rdp,
-      ArchiveWriter aw) {
+  public CachedRelayDescriptorReader(RelayDescriptorParser rdp) {
     // TODO check if files are stale; print out warning that Tor process
     // might have died
     Logger logger = Logger.getLogger(
@@ -32,9 +29,6 @@ public class CachedRelayDescriptorReader {
           bis.close();
           byte[] allData = baos.toByteArray();
           if (f.getName().equals("cached-consensus")) {
-            if (aw != null) {
-              aw.store(allData);
-            }
             if (rdp != null) {
               rdp.parse(allData);
             }
@@ -62,16 +56,8 @@ public class CachedRelayDescriptorReader {
                 break;
               }
               end += endToken.length();
-              /* String desc = ascii.substring(start, end);
-              byte[] forDigest = new byte[sig - start];
-              System.arraycopy(allData, start, forDigest, 0, sig - start);
-              String digest = DigestUtils.shaHex(forDigest);
-              TODO this stuff is unused? */
               byte[] descBytes = new byte[end - start];
               System.arraycopy(allData, start, descBytes, 0, end - start);
-              if (aw != null) {
-                aw.store(descBytes);
-              }
               if (rdp != null) {
                 rdp.parse(descBytes);
               }
@@ -79,9 +65,6 @@ public class CachedRelayDescriptorReader {
             logger.fine("Finished reading cacheddesc/ directory.");
           }
         } catch (IOException e) {
-          logger.log(Level.WARNING, "Failed reading cacheddesc/ "
-              + "directory.", e);
-        } catch (ParseException e) {
           logger.log(Level.WARNING, "Failed reading cacheddesc/ "
               + "directory.", e);
         }

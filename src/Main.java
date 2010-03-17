@@ -38,40 +38,50 @@ public class Main {
         new ServerDescriptorStatsFileHandler(config.getRelayVersions(),
         config.getRelayPlatforms()) : null;
 
-    // Prepare relay descriptor parser (only if we are writing the
-    // stats)
-    RelayDescriptorParser rdp = config.getWriteConsensusStats() ||
-        config.getWriteBridgeStats() || config.getWriteDirreqStats() ||
-        config.getWriteServerDescriptorStats() ?
-        new RelayDescriptorParser(csfh, bsfh, dsfh, sdsfh, countries,
-        directories) : null;
-
     // Prepare writing relay descriptor archive to disk
     ArchiveWriter aw = config.getWriteDirectoryArchives() ?
-        new ArchiveWriter(config.getV3DirectoryAuthorities()) : null;
+        new ArchiveWriter() : null;
+
+    // Prepare relay descriptor parser (only if we are writing stats or
+    // directory archives to disk)
+    RelayDescriptorParser rdp = config.getWriteConsensusStats() ||
+        config.getWriteBridgeStats() || config.getWriteDirreqStats() ||
+        config.getWriteServerDescriptorStats() ||
+        config.getWriteDirectoryArchives() ?
+        new RelayDescriptorParser(csfh, bsfh, dsfh, sdsfh, aw, countries,
+        directories) : null;
 
     // Import/download relay descriptors from the various sources
-    if (config.getImportCachedRelayDescriptors()) {
-      new CachedRelayDescriptorReader(rdp, aw);
-    }
-    if (config.getImportDirectoryArchives()) {
-      new ArchiveReader(rdp, "archives");
-    }
-    if (config.getDownloadRelayDescriptors()) {
-      new RelayDescriptorDownloader(rdp, aw,
-          config.getDownloadFromDirectoryAuthorities(),
-          directories);
+    if (rdp != null) {
+      RelayDescriptorDownloader rdd = null;
+      if (config.getDownloadRelayDescriptors()) {
+        List<String> dirSources =
+            config.getDownloadFromDirectoryAuthorities();
+        boolean downloadCurrentConsensus = aw != null || csfh != null ||
+            bsfh != null || sdsfh != null;
+        boolean downloadCurrentVotes = aw != null;
+        boolean downloadAllServerDescriptors = aw != null || sdsfh != null;
+        boolean downloadAllExtraInfos = aw != null;
+        Set<String> downloadDescriptorsForRelays = directories;
+        rdd = new RelayDescriptorDownloader(rdp, dirSources,
+            downloadCurrentConsensus, downloadCurrentVotes,
+            downloadAllServerDescriptors, downloadAllExtraInfos,
+            downloadDescriptorsForRelays);
+        rdp.setRelayDescriptorDownloader(rdd);
+      }
+      if (config.getImportCachedRelayDescriptors()) {
+        new CachedRelayDescriptorReader(rdp);
+      }
+      if (config.getImportDirectoryArchives()) {
+        new ArchiveReader(rdp, "archives");
+      }
+      if (rdd != null) {
+        rdd.downloadMissingDescriptors();
+        rdd.writeFile();
+      }
     }
 
     // Write output to disk that only depends on relay descriptors
-    if (aw != null) {
-      aw.writeFile();
-      aw = null;
-    }
-    if (rdp != null) {
-      rdp.writeFile();
-      rdp = null;
-    }
     if (dsfh != null) {
       dsfh.writeFile();
       dsfh = null;

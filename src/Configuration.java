@@ -23,16 +23,6 @@ public class Configuration {
   private List<String> relayPlatforms = new ArrayList<String>(Arrays.asList(
       "Linux,Windows,Darwin,FreeBSD".split(",")));
   private boolean writeDirectoryArchives = false;
-  private SortedSet<String> v3DirectoryAuthorities = new TreeSet<String>(
-      Arrays.asList(("14C131DFC5C6F93646BE72FA1401C02A8DF2E8B4,"
-      + "E8A9C45EDE6D711294FADF8E7951F4DE6CA56B58,"
-      + "D586D18309DED4CD6D57C18FDB97EFA96D330566,"
-      + "585769C78764D58426B8B52B6651A5A71137189A,"
-      + "27B6B5996C426270A5C95488AA5BCEB6BCC86956,"
-      + "80550987E1D626E3EBA5E5E75A458DE0626D088C,"
-      + "ED03BB616EB2F60BEC80151114BB25CEF515B226,"
-      + "81349FC1F2DBA2C2C11B45CB9706637D480AB913,"
-      + "E2A2AF570166665D738736D0DD58169CC61D8A8B").split(",")));
   private boolean importCachedRelayDescriptors = true;
   private boolean importDirectoryArchives = true;
   private boolean importSanitizedBridges = true;
@@ -91,9 +81,6 @@ public class Configuration {
         } else if (line.startsWith("WriteDirectoryArchives")) {
           this.writeDirectoryArchives = Integer.parseInt(
               line.split(" ")[1]) != 0;
-        } else if (line.startsWith("V3DirectoryAuthorities")) {
-          this.v3DirectoryAuthorities = new TreeSet<String>(
-              Arrays.asList(line.split(" ")[1].split(",")));
         } else if (line.startsWith("ImportCachedRelayDescriptors")) {
           this.importCachedRelayDescriptors = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -190,9 +177,6 @@ public class Configuration {
   }
   public boolean getWriteDirectoryArchives() {
     return this.writeDirectoryArchives;
-  }
-  public SortedSet<String> getV3DirectoryAuthorities() {
-    return this.v3DirectoryAuthorities;
   }
   public boolean getImportCachedRelayDescriptors() {
     return this.importCachedRelayDescriptors;
