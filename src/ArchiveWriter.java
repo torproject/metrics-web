@@ -28,7 +28,7 @@ public class ArchiveWriter {
 
   public void storeConsensus(byte[] data, long validAfter) {
     SimpleDateFormat printFormat = new SimpleDateFormat(
-        "yyyy/MM/yyyy-MM-dd-HH-mm-ss");
+        "yyyy/MM/dd/yyyy-MM-dd-HH-mm-ss");
     printFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     String filename = "directory-archive/consensus/"
         + printFormat.format(new Date(validAfter)) + "-consensus";
@@ -38,7 +38,7 @@ public class ArchiveWriter {
   public void storeVote(byte[] data, long validAfter,
       String fingerprint, String digest) {
     SimpleDateFormat printFormat = new SimpleDateFormat(
-        "yyyy/MM/yyyy-MM-dd-HH-mm-ss");
+        "yyyy/MM/dd/yyyy-MM-dd-HH-mm-ss");
     printFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     String filename = "directory-archive/vote/"
         + printFormat.format(new Date(validAfter)) + "-vote-"
