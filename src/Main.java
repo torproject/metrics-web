@@ -90,6 +90,10 @@ public class Main {
       sdsfh.writeFiles();
       sdsfh = null;
     }
+    if (aw != null) {
+      aw.dumpStats();
+      aw = null;
+    }
 
     // Prepare bridge descriptor parser
     BridgeDescriptorParser bdp = config.getWriteConsensusStats() &&
