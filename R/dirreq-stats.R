@@ -7,12 +7,10 @@ moria1Sub <- subset(dirreq,
   directory %in% "9695DFC35FFEB861329B9F1AB04C46397020CE31")
 moria1 <- data.frame(date = moria1Sub$date,
   moria1Sub[3:(length(moria1Sub) - 1)] * 6)
-moria1 <- moria1[1:length(moria1$date),]
 trustedSub <- subset(dirreq,
   directory %in% "8522EB98C91496E80EC238E732594D1509158E77")
 trusted <- data.frame(date = trustedSub$date,
   floor(trustedSub[3:(length(trustedSub) - 1)] / trustedSub$share * 10))
-trusted <- trusted[1:length(trusted$date),]
 
 write.csv(moria1, "website/csv/new-users.csv", quote = FALSE,
   row.names = FALSE)
@@ -24,13 +22,25 @@ plot_dirreq <- function(directory, filename, title, limits, data, code) {
   ggplot(c, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
     geom_line() +
     scale_x_date(name = "", limits = limits) +
-    #paste("\nhttp://metrics.torproject.org/ -- last updated:",
-    #  date(), "UTC"),
     scale_y_continuous(name = "",
     limits = c(0, max(c$users, na.rm = TRUE))) +
     opts(title = title)
   ggsave(filename = paste(directory, filename, sep = ""),
     width = 8, height = 5, dpi = 72)
+}
+
+plot_alldata <- function(directory, filenamePart, titlePart, data,
+    countries) {
+  for (country in 1:length(countries$code)) {
+    code <- countries[country, 1]
+    people <- countries[country, 2]
+    filename <- countries[country, 3]
+    end <- Sys.Date()
+    start <- as.Date(data$date[1])
+    plot_dirreq(directory, paste(filename, filenamePart, "-all.png",
+      sep = ""), paste(titlePart, people, "Tor users (all data)\n"),
+      c(start, end), data, code)
+  }
 }
 
 plot_pastdays <- function(directory, filenamePart, titlePart, days, data,
@@ -109,6 +119,7 @@ plot_months <- function(directory, filenamePart, titlePart, years, months,
 # TODO these need to be updated manually
 plot_current <- function(directory, filenamePart, titlePart, data,
     countries) {
+  plot_alldata(directory, filenamePart, titlePart, data, countries)
   plot_pastdays(directory, filenamePart, titlePart, c(30, 90, 180), data,
     countries)
   plot_years(directory, filenamePart, titlePart, "2010", data, countries)

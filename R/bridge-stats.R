@@ -18,6 +18,19 @@ plot_bridges <- function(filename, title, limits, code) {
     sep = ""), width = 8, height = 5, dpi = 72)
 }
 
+plot_alldata <- function(countries) {
+  for (country in 1:length(countries$code)) {
+    code <- countries[country, 1]
+    people <- countries[country, 2]
+    filename <- countries[country, 3]
+    end <- Sys.Date()
+    start <- as.Date(bridge$date[1])
+    plot_bridges(paste(filename, "-bridges-all.png", sep = ""),
+      paste(people, "Tor users via bridges (all data)\n"),
+      c(start, end), code)
+  }
+}
+
 plot_pastdays <- function(days, countries) {
   for (day in days) {
     for (country in 1:length(countries$code)) {
@@ -88,6 +101,7 @@ plot_months <- function(years, months, countries) {
 
 # TODO these need to be updated manually
 plot_current <- function(countries) {
+  plot_alldata(countries)
   plot_pastdays(c(30, 90, 180), countries)
   plot_years("2010", countries)
   plot_quarters("2010", 1, countries)
