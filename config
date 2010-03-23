@@ -80,3 +80,13 @@
 ## Download exit list and store it to disk
 #DownloadExitList 0
 
+## Import local Maxmind GeoIP databases
+#ImportGeoIPDatabases 1
+
+## Download (commercial) Maxmind GeoIP database for sanitizing bridge
+## descriptors
+#DownloadGeoIPDatabase 0
+
+## Maxmind license key for downloading commercial GeoIP databases
+#MaxmindLicenseKey NA
+

@@ -95,6 +95,16 @@ public class Main {
       aw = null;
     }
 
+    // Import/download GeoIP databases
+    GeoIPDatabaseManager gd = new GeoIPDatabaseManager();
+    if (config.getDownloadGeoIPDatabase()) {
+      gd.downloadGeoIPDatabase(config.getMaxmindLicenseKey());
+    }
+    if (config.getImportGeoIPDatabases()) {
+      gd.importGeoIPDatabaseFromDisk("geoipdb/");
+      gd.writeCombinedDatabase();
+    }
+
     // Prepare bridge descriptor parser
     BridgeDescriptorParser bdp = config.getWriteConsensusStats() &&
         config.getWriteBridgeStats() ? new BridgeDescriptorParser(

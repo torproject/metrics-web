@@ -35,6 +35,9 @@ public class Configuration {
   private String getTorStatsUrl = "http://gettor.torproject.org:8080/"
       + "~gettor/gettor_stats.txt";
   private boolean downloadExitList = false;
+  private boolean importGeoIPDatabases = true;
+  private boolean downloadGeoIPDatabase = false;
+  private String maxmindLicenseKey = "";
   public Configuration() {
     Logger logger = Logger.getLogger(Configuration.class.getName());
     File configFile = new File("config");
@@ -123,6 +126,14 @@ public class Configuration {
         } else if (line.startsWith("DownloadExitList")) {
           this.downloadExitList = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("ImportGeoIPDatabases")) {
+          this.importGeoIPDatabases = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("DownloadGeoIPDatabase")) {
+          this.downloadGeoIPDatabase = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("MaxmindLicenseKey")) {
+          this.maxmindLicenseKey = line.split(" ")[1];
         } else {
           logger.severe("Configuration file contains unrecognized "
               + "configuration key in line '" + line + "'! Exiting!");
@@ -207,6 +218,15 @@ public class Configuration {
   }
   public boolean getDownloadExitList() {
     return this.downloadExitList;
+  }
+  public boolean getImportGeoIPDatabases() {
+    return this.importGeoIPDatabases;
+  }
+  public boolean getDownloadGeoIPDatabase() {
+    return this.downloadGeoIPDatabase;
+  }
+  public String getMaxmindLicenseKey() {
+    return this.maxmindLicenseKey;
   }
 }
 
