@@ -38,11 +38,11 @@ for (intervalInd in 1:length(intervals)) {
   colors <- c()
   height <- 800
   if (intervalInd == 1) {
-    sources <- c("gabelmoo", "moria", "torperf")
+    sources <- c("siv", "moria", "torperf")
     colors <- c("#0000EE", "#EE0000", "#00CD00")
   } else {
-    sources <- c("moria", "torperf")
-    colors <- c("#EE0000", "#00CD00")
+    sources <- c("siv", "moria", "torperf")
+    colors <- c("#0000EE", "#EE0000", "#00CD00")
     height <- 400
   }
   sizes <- c("5mb", "1mb", "50kb")
