@@ -23,6 +23,13 @@ public class TorperfProcessor {
             break;
           }
           String key = line.substring(0, line.lastIndexOf(","));
+          if (line.substring(line.lastIndexOf(",") + 1).startsWith("-")) {
+            /* If completion time is negative, this is because we had an
+             * integer overflow bug. Fix this. */
+            long newValue = Long.parseLong(line.substring(
+                line.lastIndexOf(",") + 1)) + 100000000L;
+            line = key + "," + newValue;
+          }
           rawObs.put(key, line);
         }
         br.close();
@@ -51,7 +58,7 @@ public class TorperfProcessor {
           if (pop.isDirectory()) {
             for (File f : pop.listFiles()) {
               filesInInputDir.add(f);
-            } 
+            }
           } else {
             String source = pop.getName().substring(0,
                 pop.getName().indexOf("."));
@@ -69,9 +76,9 @@ public class TorperfProcessor {
                 long startSec = Long.parseLong(parts[0]);
                 String dateTime = formatter.format(
                     new Date(startSec * 1000L));
-                long completeMillis = Long.parseLong(parts[16].substring(5))
+                long completeMillis = Long.parseLong(parts[16])
                     * 1000L + Long.parseLong(parts[17]) / 1000L
-                    - Long.parseLong(parts[0].substring(5)) * 1000L
+                    - Long.parseLong(parts[0]) * 1000L
                     + Long.parseLong(parts[1]) / 1000L;
                 String key = source + "," + dateTime;
                 String value = key + "," + completeMillis;
