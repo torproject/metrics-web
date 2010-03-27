@@ -3,48 +3,5 @@ ERNIE is the Enhanced R-based tor Network Intelligence Engine
 
 --------------------------------------------------------------------------
 
-Settings for deployed version of ERNIE on http://metrics.torproject.org/:
-
-Clone repository and see if it's working:
-$ git clone git://git.torproject.org/git/karsten/ernie
-$ cd ~/ernie/
-$ ./compile.sh
-$ ./import.sh
-$ ./download.sh
-$ ./plot.sh
-
-Link website directory:
-$ ln -s /home/karsten/ernie/website/ /var/www/metrics
-
-Link torperf files:
-$ cd ~/ernie/
-$ mkdir torperf
-$ ln -s /home/torperf/torperf/50kb.data torperf-50kb.data
-$ ln -s /home/torperf/torperf/1mb.data torperf-1mb.data
-$ ln -s /home/torperf/torperf/5mb.data torperf-5mb.data
-
-Install crontab to automatically plot new graphs:
-$ crontab -e
-# m h  dom mon dow   command
-15 * * * * cd ~/ernie/ && ./download.sh && ./import.sh
-30 * */2 * * cd ~/ernie/ && ./plot.sh
-
-# TODO this is temporary! csv files should be generated using R
-Link CSV files:
-$ cd ~/ernie/website/
-$ mkdir csv
-$ cd csv/
-$ ln -s ../../stats/consensus-stats consensus-stats.csv
-
---------------------------------------------------------------------------
-
-Importing descriptors
-
-Grepping relevant dirreq-stats from extra-info descriptors (speeds up
-  importing significantly!)
-
-$ grep -REl "^extra-info moria1|^extra-info trusted" extra-info/ \
-  | xargs -I {} mv {} relevant-extra-infos/
-$ mv relevant-extra-infos ~/ernie/archives
-$ cd ~/ernie/ && ./import.sh
+Please find documentation on ERNIE in website/ernie-howto.html and doc/ .
 
