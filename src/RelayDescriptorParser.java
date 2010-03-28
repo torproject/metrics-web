@@ -49,6 +49,12 @@ public class RelayDescriptorParser {
   private RelayDescriptorDownloader rdd;
 
   /**
+   * Relay descriptor database importer that stores relay descriptor
+   * contents for later evaluation.
+   */
+  private RelayDescriptorDatabaseImporter rddi;
+
+  /**
    * Countries that we care about for directory request and bridge
    * statistics.
    */
@@ -70,14 +76,19 @@ public class RelayDescriptorParser {
   public RelayDescriptorParser(ConsensusStatsFileHandler csfh,
       BridgeStatsFileHandler bsfh, DirreqStatsFileHandler dsfh,
       ServerDescriptorStatsFileHandler sdsfh, ArchiveWriter aw,
-      SortedSet<String> countries, SortedSet<String> directories) {
+      RelayDescriptorDatabaseImporter rddi, SortedSet<String> countries,
+      SortedSet<String> directories) {
     this.csfh = csfh;
     this.bsfh = bsfh;
     this.dsfh = dsfh;
     this.sdsfh = sdsfh;
     this.aw = aw;
+    this.rddi = rddi;
     this.countries = countries;
     this.directories = directories;
+
+    /* Initialize logger. */
+    this.logger = Logger.getLogger(RelayDescriptorParser.class.getName());
   }
 
   public void setRelayDescriptorDownloader(
@@ -107,7 +118,8 @@ public class RelayDescriptorParser {
         // consensuses
         boolean isConsensus = true;
         int exit = 0, fast = 0, guard = 0, running = 0, stable = 0;
-        String validAfterTime = null, descriptorIdentity = null;
+        String validAfterTime = null, descriptorIdentity = null,
+            serverDesc = null;
         StringBuilder descriptorIdentities = new StringBuilder();
         String fingerprint = null;
         long validAfter = -1L;
@@ -130,7 +142,7 @@ public class RelayDescriptorParser {
             String relayIdentity = Hex.encodeHexString(
                 Base64.decodeBase64(line.split(" ")[2] + "=")).
                 toLowerCase();
-            String serverDesc = Hex.encodeHexString(Base64.decodeBase64(
+            serverDesc = Hex.encodeHexString(Base64.decodeBase64(
                 line.split(" ")[3] + "=")).toLowerCase();
             serverDescriptors.add(publishedTime + "," + relayIdentity
                 + "," + serverDesc);
@@ -145,6 +157,15 @@ public class RelayDescriptorParser {
               stable += line.contains(" Stable") ? 1 : 0;
               running++;
               descriptorIdentities.append("," + descriptorIdentity);
+            }
+            if (this.rddi != null) {
+              SortedSet<String> flags = new TreeSet<String>();
+              if (line.length() > 2) {
+                for (String flag : line.substring(2).split(" ")) {
+                  flags.add(flag);
+                }
+              }
+              this.rddi.addStatusEntry(validAfter, serverDesc, flags);
             }
           }
         }
@@ -194,7 +215,11 @@ public class RelayDescriptorParser {
         String platformLine = null, publishedLine = null,
             publishedTime = null, bandwidthLine = null,
             extraInfoDigest = null, relayIdentifier = null;
-        long published = -1L;
+        String[] parts = line.split(" ");
+        String address = parts[2];
+        int orPort = Integer.parseInt(parts[3]);
+        int dirPort = Integer.parseInt(parts[4]);
+        long published = -1L, uptime = -1L;
         while ((line = br.readLine()) != null) {
           if (line.startsWith("platform ")) {
             platformLine = line;
@@ -214,6 +239,8 @@ public class RelayDescriptorParser {
             extraInfoDigest = line.startsWith("opt ") ?
                 line.split(" ")[2].toLowerCase() :
                 line.split(" ")[1].toLowerCase();
+          } else if (line.startsWith("uptime ")) {
+            uptime = Long.parseLong(line.substring("uptime ".length()));
           }
         }
         String ascii = new String(data, "US-ASCII");
@@ -239,6 +266,16 @@ public class RelayDescriptorParser {
         if (this.sdsfh != null && descriptorIdentity != null) {
           this.sdsfh.addServerDescriptor(descriptorIdentity, platformLine,
               publishedLine, bandwidthLine);
+        }
+        if (this.rddi != null && digest != null) {
+          String[] bwParts = bandwidthLine.split(" ");
+          long bandwidthAvg = Long.parseLong(bwParts[1]);
+          long bandwidthBurst = Long.parseLong(bwParts[2]);
+          long bandwidthObserved = Long.parseLong(bwParts[3]);
+          String platform = platformLine.substring("platform ".length());
+          this.rddi.addServerDescriptor(digest, address, orPort, dirPort,
+              bandwidthAvg, bandwidthBurst, bandwidthObserved, platform,
+              published, uptime);
         }
       } else if (line.startsWith("extra-info ")) {
         String publishedTime = null, relayIdentifier = line.split(" ")[2];

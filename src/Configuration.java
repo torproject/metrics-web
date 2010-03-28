@@ -25,6 +25,9 @@ public class Configuration {
   private boolean writeDirectoryArchives = false;
   private boolean importCachedRelayDescriptors = true;
   private boolean importDirectoryArchives = true;
+  private boolean writeRelayDescriptorDatabase = false;
+  private String relayDescriptorDatabaseJdbc = "jdbc:postgresql:tordir?"
+        + "user=ernie&password=password";
   private boolean importSanitizedBridges = true;
   private boolean importBridgeSnapshots = true;
   private boolean importWriteTorperfStats = true;
@@ -90,6 +93,11 @@ public class Configuration {
         } else if (line.startsWith("ImportDirectoryArchives")) {
           this.importDirectoryArchives = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("WriteRelayDescriptorDatabase")) {
+          this.writeRelayDescriptorDatabase = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("RelayDescriptorDatabaseJDBC")) {
+          this.relayDescriptorDatabaseJdbc = line.split(" ")[1];
         } else if (line.startsWith("ImportSanitizedBridges")) {
           this.importSanitizedBridges = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -194,6 +202,12 @@ public class Configuration {
   }
   public boolean getImportDirectoryArchives() {
     return this.importDirectoryArchives;
+  }
+  public boolean getWriteRelayDescriptorDatabase() {
+    return this.writeRelayDescriptorDatabase;
+  }
+  public String getRelayDescriptorDatabaseJDBC() {
+    return this.relayDescriptorDatabaseJdbc;
   }
   public boolean getImportSanitizedBridges() {
     return this.importSanitizedBridges;

@@ -55,6 +55,12 @@
 ## Import directory archives from disk, if available
 #ImportDirectoryArchives 1
 
+## Write relay descriptors to a database for later evaluation
+#WriteRelayDescriptorDatabase 0
+
+## JDBC string for relay descriptor database
+#RelayDescriptorDatabaseJDBC jdbc:postgresql:tordir?user=ernie&password=password
+
 ## Import sanitized bridges from disk, if available
 #ImportSanitizedBridges 1
 

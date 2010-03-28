@@ -42,14 +42,21 @@ public class Main {
     ArchiveWriter aw = config.getWriteDirectoryArchives() ?
         new ArchiveWriter() : null;
 
+    // Prepare writing relay descriptors to database
+    RelayDescriptorDatabaseImporter rddi =
+        config.getWriteRelayDescriptorDatabase() ?
+        new RelayDescriptorDatabaseImporter(
+        config.getRelayDescriptorDatabaseJDBC()) : null;
+
     // Prepare relay descriptor parser (only if we are writing stats or
     // directory archives to disk)
     RelayDescriptorParser rdp = config.getWriteConsensusStats() ||
         config.getWriteBridgeStats() || config.getWriteDirreqStats() ||
         config.getWriteServerDescriptorStats() ||
-        config.getWriteDirectoryArchives() ?
-        new RelayDescriptorParser(csfh, bsfh, dsfh, sdsfh, aw, countries,
-        directories) : null;
+        config.getWriteDirectoryArchives() ||
+        config.getWriteRelayDescriptorDatabase() ?
+        new RelayDescriptorParser(csfh, bsfh, dsfh, sdsfh, aw, rddi,
+            countries, directories) : null;
 
     // Import/download relay descriptors from the various sources
     if (rdp != null) {
@@ -58,9 +65,10 @@ public class Main {
         List<String> dirSources =
             config.getDownloadFromDirectoryAuthorities();
         boolean downloadCurrentConsensus = aw != null || csfh != null ||
-            bsfh != null || sdsfh != null;
+            bsfh != null || sdsfh != null || rddi != null;
         boolean downloadCurrentVotes = aw != null;
-        boolean downloadAllServerDescriptors = aw != null || sdsfh != null;
+        boolean downloadAllServerDescriptors = aw != null ||
+            sdsfh != null || rddi != null;
         boolean downloadAllExtraInfos = aw != null;
         Set<String> downloadDescriptorsForRelays = directories;
         rdd = new RelayDescriptorDownloader(rdp, dirSources,
