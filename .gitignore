@@ -31,3 +31,7 @@ log.*
 .classpath
 .project
 
+# Auxiliary LaTeX files
+doc/*.aux
+doc/*.log
+
