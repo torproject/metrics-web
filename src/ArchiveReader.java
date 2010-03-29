@@ -44,7 +44,6 @@ public class ArchiveReader {
           if (rdp != null) {
             try {
               BufferedInputStream bis = null;
-              System.out.println(pop.getName());
               if (keepImportHistory &&
                   archivesImportHistory.contains(pop.getName())) {
                 continue;
