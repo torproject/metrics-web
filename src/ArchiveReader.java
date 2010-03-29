@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
+import org.apache.commons.compress.compressors.bzip2.*;
 
 /**
  * Read in all files in a given directory and pass buffered readers of
@@ -24,8 +25,21 @@ public class ArchiveReader {
         } else {
           if (rdp != null) {
             try {
-              BufferedInputStream bis =
-                  new BufferedInputStream(new FileInputStream(pop));
+              BufferedInputStream bis = null;
+              System.out.println(pop.getName());
+              if (pop.getName().endsWith("\\.tar\\.bz2")) {
+                logger.warning("Cannot parse compressed tarball "
+                    + pop.getAbsolutePath() + ". Skipping.");
+                continue;
+              } else if (pop.getName().endsWith(".bz2")) {
+                FileInputStream fis = new FileInputStream(pop);
+                BZip2CompressorInputStream bcis =
+                    new BZip2CompressorInputStream(fis);
+                bis = new BufferedInputStream(bcis);
+              } else {
+                FileInputStream fis = new FileInputStream(pop);
+                bis = new BufferedInputStream(fis);
+              }
               ByteArrayOutputStream baos = new ByteArrayOutputStream();
               int len;
               byte[] data = new byte[1024];

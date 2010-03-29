@@ -23,7 +23,8 @@ public class ArchiveWriter {
         bos.close();
       }
     } catch (IOException e) {
-      // TODO handle
+      this.logger.log(Level.WARNING, "Could not store relay descriptor "
+          + filename, e);
     }
   }
 
