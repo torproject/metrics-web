@@ -8,8 +8,26 @@ import org.apache.commons.compress.compressors.bzip2.*;
  * them to the relay descriptor parser.
  */
 public class ArchiveReader {
-  public ArchiveReader(RelayDescriptorParser rdp, String archivesDir) {
+  public ArchiveReader(RelayDescriptorParser rdp, String archivesDir,
+      boolean keepImportHistory) {
     Logger logger = Logger.getLogger(ArchiveReader.class.getName());
+    SortedSet<String> archivesImportHistory = new TreeSet<String>();
+    File archivesImportHistoryFile =
+        new File("stats/archives-import-history");
+    if (keepImportHistory && archivesImportHistoryFile.exists()) {
+      try {
+        BufferedReader br = new BufferedReader(new FileReader(
+            archivesImportHistoryFile));
+        String line = null;
+        while ((line = br.readLine()) != null) {
+          archivesImportHistory.add(line);
+        }
+        br.close();
+      } catch (IOException e) {
+        logger.log(Level.WARNING, "Could not read in archives import "
+            + "history file. Skipping.");
+      }
+    }
     if (new File(archivesDir).exists()) {
       logger.fine("Importing files in directory " + archivesDir
           + "/...");
@@ -27,7 +45,10 @@ public class ArchiveReader {
             try {
               BufferedInputStream bis = null;
               System.out.println(pop.getName());
-              if (pop.getName().endsWith("\\.tar\\.bz2")) {
+              if (keepImportHistory &&
+                  archivesImportHistory.contains(pop.getName())) {
+                continue;
+              } else if (pop.getName().endsWith(".tar.bz2")) {
                 logger.warning("Cannot parse compressed tarball "
                     + pop.getAbsolutePath() + ". Skipping.");
                 continue;
@@ -39,6 +60,9 @@ public class ArchiveReader {
               } else {
                 FileInputStream fis = new FileInputStream(pop);
                 bis = new BufferedInputStream(fis);
+              }
+              if (keepImportHistory) {
+                archivesImportHistory.add(pop.getName());
               }
               ByteArrayOutputStream baos = new ByteArrayOutputStream();
               int len;
@@ -72,6 +96,20 @@ public class ArchiveReader {
             break;
           }
         }
+      }
+    }
+    if (keepImportHistory) {
+      try {
+        archivesImportHistoryFile.getParentFile().mkdirs();
+        BufferedWriter bw = new BufferedWriter(new FileWriter(
+            archivesImportHistoryFile));
+        for (String line : archivesImportHistory) {
+          bw.write(line + "\n");
+        }
+        bw.close();
+      } catch (IOException e) {
+        logger.log(Level.WARNING, "Could not write archives import "
+            + "history file.");
       }
     }
   }

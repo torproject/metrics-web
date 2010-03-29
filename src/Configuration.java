@@ -25,6 +25,7 @@ public class Configuration {
   private boolean writeDirectoryArchives = false;
   private boolean importCachedRelayDescriptors = true;
   private boolean importDirectoryArchives = true;
+  private boolean keepDirectoryArchiveImportHistory = false;
   private boolean writeRelayDescriptorDatabase = false;
   private String relayDescriptorDatabaseJdbc = "jdbc:postgresql:tordir?"
         + "user=ernie&password=password";
@@ -92,6 +93,9 @@ public class Configuration {
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("ImportDirectoryArchives")) {
           this.importDirectoryArchives = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("KeepDirectoryArchiveImportHistory")) {
+          this.keepDirectoryArchiveImportHistory = Integer.parseInt(
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("WriteRelayDescriptorDatabase")) {
           this.writeRelayDescriptorDatabase = Integer.parseInt(
@@ -202,6 +206,9 @@ public class Configuration {
   }
   public boolean getImportDirectoryArchives() {
     return this.importDirectoryArchives;
+  }
+  public boolean getKeepDirectoryArchiveImportHistory() {
+    return this.keepDirectoryArchiveImportHistory;
   }
   public boolean getWriteRelayDescriptorDatabase() {
     return this.writeRelayDescriptorDatabase;

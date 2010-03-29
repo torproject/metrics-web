@@ -81,7 +81,8 @@ public class Main {
         new CachedRelayDescriptorReader(rdp);
       }
       if (config.getImportDirectoryArchives()) {
-        new ArchiveReader(rdp, "archives");
+        new ArchiveReader(rdp, "archives",
+            config.getKeepDirectoryArchiveImportHistory());
       }
       if (rdd != null) {
         rdd.downloadMissingDescriptors();

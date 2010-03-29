@@ -55,6 +55,12 @@
 ## Import directory archives from disk, if available
 #ImportDirectoryArchives 1
 
+## Keep a history of imported directory archive files to know which files
+## have been imported before. This history can be useful when importing
+## from a changing source to avoid importing descriptors over and over
+## again, but it can be confusing to users who don't know about it.
+#KeepDirectoryArchiveImportHistory 0
+
 ## Write relay descriptors to a database for later evaluation
 #WriteRelayDescriptorDatabase 0
 
