@@ -27,8 +27,8 @@ public class Configuration {
   private boolean importDirectoryArchives = true;
   private boolean keepDirectoryArchiveImportHistory = false;
   private boolean writeRelayDescriptorDatabase = false;
-  private String relayDescriptorDatabaseJdbc = "jdbc:postgresql:tordir?"
-        + "user=ernie&password=password";
+  private String relayDescriptorDatabaseJdbc =
+      "jdbc:postgresql://localhost/tordir?user=ernie&password=password";
   private boolean importSanitizedBridges = true;
   private boolean importBridgeSnapshots = true;
   private boolean importWriteTorperfStats = true;

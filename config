@@ -65,7 +65,7 @@
 #WriteRelayDescriptorDatabase 0
 
 ## JDBC string for relay descriptor database
-#RelayDescriptorDatabaseJDBC jdbc:postgresql:tordir?user=ernie&password=password
+#RelayDescriptorDatabaseJDBC jdbc:postgresql://localhost/tordir?user=ernie&password=password
 
 ## Import sanitized bridges from disk, if available
 #ImportSanitizedBridges 1

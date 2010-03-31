@@ -26,6 +26,168 @@ If you want to learn more about the Tor network, regardless of whether you
 want to present your findings on a website (like ERNIE does) or include
 them in your next Tor paper, this user's guide is for you!
 
+\section{Installation instructions}
+
+ERNIE depends on various other software tools. ERNIE is developed in a
+\emph{Git} repository which is currently the only way to download it.
+ERNIE uses \emph{Java} for parsing data, \emph{R} for plotting graphs,
+and \emph{PostgreSQL} for importing data into a database.
+Which of these tools you need depends on what tasks you are planning to
+use ERNIE for.
+In most cases it is not required to install all these tools.
+For this tutorial, we assume Debian GNU/Linux 5.0 as operating system.
+Installation instructions for other platforms may vary.
+
+\subsection{Git 1.5.6.5}
+
+Currently, the only way to download ERNIE is to clone its Git branch.
+
+Install Git 1.5.6.5 (or higher) and check that it's working:
+
+\begin{verbatim}
+$ sudo apt-get install git-core
+$ git --version
+\end{verbatim}
+
+\subsection{Java 6}
+
+ERNIE requires Java to parse data from various data sources and write them
+to one or more data sinks. Java is required for most use cases of ERNIE.
+
+Add the non-free repository to the apt sources in
+\verb+/etc/apt/sources.list+ by changing the line (mirror URL may vary):
+
+\begin{verbatim}
+deb http://ftp.ca.debian.org/debian/ lenny main
+\end{verbatim}
+
+to
+
+\begin{verbatim}
+deb http://ftp.ca.debian.org/debian/ lenny main non-free
+\end{verbatim}
+
+Fetch the package list, install Sun Java 6, and set it as system default:
+
+\begin{verbatim}
+$ sudo apt-get update
+$ sudo apt-get install sun-java6-jdk
+$ sudo update-alternatives --set java
+      /usr/lib/jvm/java-6-sun/jre/bin/java
+$ sudo update-alternatives --set javac
+      /usr/lib/jvm/java-6-sun/bin/javac
+\end{verbatim}
+
+Check that Java 6 is installed and selected as default:
+
+\begin{verbatim}
+$ java -version
+$ javac -version
+\end{verbatim}
+
+\subsection{R 2.8 and ggplot2}
+
+ERNIE uses R and the R library \emph{ggplot2} to visualize anaylsis
+results for presentation on a website or for inclusion in publications.
+ggplot2 requires at least R version 2.8 to be installed.
+
+Add a new line to \verb+/etc/apt/sources.list+:
+
+\begin{verbatim}
+deb http://cran.cnr.berkeley.edu/bin/linux/debian lenny-cran/
+\end{verbatim}
+
+Download the package maintainer's public key (``Johannes Ranke (CRAN Debian
+archive) $<$jranke@uni-bremen.de$>$''):
+
+\begin{verbatim}
+$ gpg --keyserver pgpkeys.pca.dfn.de --recv-key 381BA480
+$ gpg --export 381BA480 | sudo apt-key add -
+\end{verbatim}
+
+Install the most recent R version:
+
+\begin{verbatim}
+$ sudo apt-get update
+$ sudo apt-get -t unstable install r-base
+\end{verbatim}
+
+Start R to check its version (must be 2.8 or higher) and install ggplot2.
+Do this as root, so that the installed package is available to all system
+users:
+
+\begin{verbatim}
+$ sudo R
+> install.packages("ggplot2")
+> q()
+\end{verbatim}
+
+Confirm that R and ggplot2 are installed:
+
+\begin{verbatim}
+$ R
+> library(ggplot2)
+> q()
+\end{verbatim}
+
+\subsection{PostgreSQL 8.3}
+\label{sec-install-postgres}
+
+ERNIE uses PostgreSQL to import data into a database for later analysis.
+This feature is not required for most use cases of ERNIE, but only for
+people who prefer having the network data in a database to execute custom
+queries.
+
+Install PostgreSQL 8.3 using apt-get:
+
+\begin{verbatim}
+$ sudo apt-get install postgresql-8.3
+\end{verbatim}
+
+Create a new database user \verb+ernie+ to insert data and run queries.
+This command is executed as unix user \verb+postgres+ and therefore as
+database superuser \verb+postgres+ via ident authentication. The
+\verb+-P+ flag issues a password prompt for the new user.
+There is no need to give the new user superuser privileges or allow it to
+create databases or new roles.
+
+\begin{verbatim}
+$ sudo -u postgres createuser -P ernie
+\end{verbatim}
+
+Create a new database schema \verb+tordir+ owned by user \verb+ernie+
+(using option \verb+-O+).
+Again, this command is executed as \verb+postgres+ system user to make use
+of ident authentication.
+
+\begin{verbatim}
+$ sudo -u postgres createdb -O ernie tordir
+\end{verbatim}
+
+Log into the database schema as user \verb+ernie+ to check that it's
+working.
+This time, ident authentication is not available, since there is no system
+user \verb+ernie+.
+Instead, we will use password authentication via a TCP connection to
+localhost (using option \verb+-h+) as database user \verb+ernie+ (using
+option \verb+-U+).
+
+\begin{verbatim}
+$ psql -h localhost -U ernie tordir
+tordir=> \q
+\end{verbatim}
+
+\subsection{ERNIE}
+
+Finally, you can install ERNIE by cloning its Git branch: 
+
+\begin{verbatim}
+$ git clone git://git.torproject.org/ernie
+\end{verbatim}
+
+This command should create a directory \verb+ernie/+ which we will
+consider the working directory of ERNIE.
+
 \section{Getting started with ERNIE}
 
 The ERNIE project was started as a simple tool to parse Tor relay
@@ -68,56 +230,19 @@ tutorial.
 
 The first step in importing relay descriptors into a database is to
 install a database management system.
-We won't go into the details of installing a database for the various
-operating systems in this tutorial.
-Please consult the tutorials and manuals that are out on the Web.
-For this tutorial, we assume that you have PostgreSQL 8.4 installed.
+See Section \ref{sec-install-postgres} for installation instructions of
+PostgreSQL 8.3 on Debian GNU/Linux 5.0.
 Note that in theory, any other relational database that has a working JDBC
 4 driver should work, too, possibly with minor modifications to ERNIE.
-We further assume a database user called \verb+ernie+ that is allowed to
-define, modify, and query database objects.
 
-First, create a new database schema \verb+tordir+ with two tables that we
-need for importing relay descriptors, plus two indexes to accelerate
-queries. Note that \verb+$+ denotes a shell prompt and \verb+tordir=>+ the
-database prompt.
+Import the database schema from file \verb+tordir.sql+ containing two
+tables that we need for importing relay descriptors plus two indexes to
+accelerate queries. Check that tables have been created.
 
 \begin{verbatim}
-$ createdb -U ernie -O ernie tordir
-$ psql -U ernie tordir
-tordir=> CREATE TABLE statusentry (
-  validafter TIMESTAMP NOT NULL,
-  descriptor CHAR(40) NOT NULL,
-  isauthority BOOLEAN NOT NULL DEFAULT false,
-  isbadexit BOOLEAN NOT NULL DEFAULT false,
-  isbaddirectory BOOLEAN NOT NULL DEFAULT false,
-  isexit BOOLEAN NOT NULL DEFAULT false,
-  isfast BOOLEAN NOT NULL DEFAULT false,
-  isguard BOOLEAN NOT NULL DEFAULT false,
-  ishsdir BOOLEAN NOT NULL DEFAULT false,
-  isnamed BOOLEAN NOT NULL DEFAULT false,
-  isstable BOOLEAN NOT NULL DEFAULT false,
-  isrunning BOOLEAN NOT NULL DEFAULT false,
-  isunnamed BOOLEAN NOT NULL DEFAULT false,
-  isvalid BOOLEAN NOT NULL DEFAULT false,
-  isv2dir BOOLEAN NOT NULL DEFAULT false,
-  isv3dir BOOLEAN NOT NULL DEFAULT false,
-  PRIMARY KEY (validafter, descriptor));
-tordir=> CREATE TABLE descriptor (
-  descriptor CHAR(40) NOT NULL PRIMARY KEY,
-  address VARCHAR(15) NOT NULL,
-  orport INTEGER NOT NULL,
-  dirport INTEGER NOT NULL,
-  bandwidthavg BIGINT NOT NULL,
-  bandwidthburst BIGINT NOT NULL,
-  bandwidthobserved BIGINT NOT NULL,
-  platform VARCHAR(256),
-  published TIMESTAMP NOT NULL,
-  uptime BIGINT);
-tordir=> CREATE INDEX statusvalidafter
-  ON statusentry (validafter);
-tordir=> CREATE INDEX descriptorid
-  ON descriptor (descriptor);
+$ psql -h localhost -U ernie -f tordir.sql tordir
+$ psql -h localhost -U ernie tordir
+tordir=> \dt
 tordir=> \q
 \end{verbatim}
 
@@ -192,24 +317,28 @@ might be (without line break):
 
 \begin{verbatim}
 RelayDescriptorDatabaseJDBC
-  jdbc:postgresql:tordir?user=ernie&password=password
+  jdbc:postgresql://localhost/tordir?user=ernie&password=password
 \end{verbatim}
 
 \subsubsection{Importing relay descriptors using ERNIE}
 
 Now you are ready to actually import relay descriptors using ERNIE.
-Compile the Java classes and run ERNIE.
+Create a directory for Java class files, compile the Java source files,
+and run ERNIE.
 
 \begin{verbatim}
-$ ./download.sh
+$ mkdir bin
+$ ./compile.sh
 $ ./run.sh
 \end{verbatim}
 
 Note that the import process might take between a few minutes and an hour,
 depending on your hardware.
-You will notice that ERNIE doesn't progress messages to the standard
-output.
-You can either change this behavior by setting
+You will notice that ERNIE doesn't write progress messages to the standard
+output, which is useful for unattended installations with only warnings
+being mailed out by cron.
+You can change this behavior and make messages on the standard output more
+verbose by setting
 \verb+java.util.logging.ConsoleHandler.level+ in
 \verb+logging.properties+ to \verb+INFO+ or \verb+FINE+.
 Alternately, you can look at the log file \verb+log.0+ that is created by
@@ -225,7 +354,7 @@ you will have problems starting it the next time.
 ERNIE uses a local lock file called \verb+lock+ to make sure that only a
 single instance of ERNIE is running at a time.
 If you are sure that the last ERNIE instance isn't running anymore, you
-can remove the lock file and start ERNIE again.
+can delete the lock file and start ERNIE again.
 
 If all goes well, you should now have the relay descriptors of 1 month in
 your database.
@@ -249,7 +378,7 @@ Second, we count all relays and those with the Exit flag and divide these
 numbers by the number of network status consensuses per day.
 
 \begin{verbatim}
-$ psql -U ernie tordir
+$ psql -h localhost -U ernie tordir
 tordir=> SELECT DATE(validafter),
     COUNT(*) / relay_statuses_per_day.count AS avg_running,
     SUM(CASE WHEN isexit IS TRUE THEN 1 ELSE 0 END) /
@@ -306,7 +435,7 @@ Obviously, this approach is prone to errors if the platform line format
 changes, but it should be sufficient for this example.
 
 \begin{verbatim}
-$ psql -U ernie tordir
+$ psql -h localhost -U ernie tordir
 tordir=> SELECT DATE(validafter) AS date,
     SUBSTRING(platform, 5, 5) AS version,
     COUNT(*) / relay_statuses_per_day.count AS count
