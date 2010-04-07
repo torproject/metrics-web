@@ -11,6 +11,10 @@ import java.util.zip.*;
  * Supports importing CSV-formatted databases from disk and downloading
  * the most recent commercial Maxmind GeoIP database from their server
  * using a license key.
+ *
+ * 0 databases: all requests answered with ZZ
+ * 1 database: all requests answered from that database
+ * 2+ databases: requests answered by most recent database at given date
  */
 public class GeoIPDatabaseManager {
 
@@ -69,6 +73,8 @@ public class GeoIPDatabaseManager {
    */
   private Logger logger;
 
+  private Set<String> unresolvedCountryCodes;
+
   /**
    * Initializes this class by reading in the database versions known so
    * far.
@@ -80,6 +86,8 @@ public class GeoIPDatabaseManager {
     this.combinedDatabase = new TreeMap<Long, DatabaseEntry>();
     this.allDatabases = new ArrayList<String>();
     this.combinedDatabaseModified = false;
+    this.unresolvedCountryCodes = new HashSet<String>(Arrays.asList(
+        "--,a1,a2,eu,ap".split(",")));
 
     /* Initialize logger. */
     this.logger = Logger.getLogger(RelayDescriptorParser.class.getName());
@@ -344,13 +352,48 @@ public class GeoIPDatabaseManager {
     }
   }
 
+  public String getCountryForIPOneWeek(String ipAddress, String date) {
+    SimpleDateFormat parseFormat = new SimpleDateFormat("yyyy-MM-dd");
+    parseFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    try {
+      String dateMinusOneWeek = parseFormat.format(new Date(
+          parseFormat.parse(date).getTime() -
+          7L * 24L * 60L * 60L * 1000L));
+      return this.getCountryForIP(ipAddress, dateMinusOneWeek);
+    } catch (ParseException e) {
+      this.logger.log(Level.WARNING, "Could not parse date '" + date
+          + "'.", e);
+      return null;
+    }
+  }
+
   /**
    * Returns the uppercase two-letter country code that was assigned to
    * <code>ipAddress</code> (in dotted notation) in the most recent
-   * commercial Maxmind GeoIP database published at least 1 day before
+   * commercial Maxmind GeoIP database published before or at
    * <code>date</code> (in the format yyyy-MM-dd).
    */
   public String getCountryForIP(String ipAddress, String date) {
+    if (this.allDatabases.isEmpty()) {
+      return "ZZ";
+    }
+    String dateShort = date.substring(0, 4) + date.substring(5, 7)
+        + date.substring(8, 10); // TODO put full date in allDatabases
+    String dbDate = null;
+    if (this.allDatabases.contains(dateShort)) {
+      dbDate = dateShort;
+    } else {
+      SortedSet<String> subset = new TreeSet<String>(this.allDatabases).
+          headSet(dateShort);
+      if (!subset.isEmpty()) {
+        dbDate = subset.last();
+      } else {
+        dbDate = this.allDatabases.get(0);
+      }
+    }
+    if (dbDate == null || !this.allDatabases.contains(dbDate)) {
+      return "ZZ";
+    }
     String[] parts = ipAddress.split("\\.");
     long ipNum = Long.parseLong(parts[0]) * 256 * 256 * 256 +
         Long.parseLong(parts[1]) * 256 * 256 +
@@ -364,14 +407,11 @@ public class GeoIPDatabaseManager {
     } else {
       return "ZZ";
     }
-    String dateShort = date.substring(0, 4) + date.substring(5, 7)
-        + date.substring(8, 10);
-    SortedSet<String> subset = new TreeSet<String>(this.allDatabases).
-        headSet(dateShort);
-    if (subset.isEmpty()) {
+    String countryCode = countries.substring(1).split(",")[
+        this.allDatabases.indexOf(dbDate)];
+    if (unresolvedCountryCodes.contains(countryCode)) {
       return "ZZ";
     }
-    int index = allDatabases.indexOf(subset.last());
-    return countries.substring(1).split(",")[index];
+    return countryCode;
   }
 }

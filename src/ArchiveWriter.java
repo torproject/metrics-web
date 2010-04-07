@@ -8,7 +8,7 @@ import org.apache.commons.codec.binary.*;
 public class ArchiveWriter {
   private Logger logger;
   public ArchiveWriter() {
-    this.logger = Logger.getLogger(RelayDescriptorParser.class.getName());
+    this.logger = Logger.getLogger(ArchiveWriter.class.getName());
   }
 
   private void store(byte[] data, String filename) {

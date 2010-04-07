@@ -114,17 +114,28 @@ public class Main {
       gd.writeCombinedDatabase();
     }
 
+    // Prepare sanitized bridge descriptor writer
+    SanitizedBridgesWriter sbw = config.getWriteSanitizedBridges() ?
+        new SanitizedBridgesWriter(gd, "sanitized-bridges") : null;
+
     // Prepare bridge descriptor parser
-    BridgeDescriptorParser bdp = config.getWriteConsensusStats() &&
-        config.getWriteBridgeStats() ? new BridgeDescriptorParser(
-        csfh, bsfh, countries) : null;
+    BridgeDescriptorParser bdp = config.getWriteConsensusStats() ||
+        config.getWriteBridgeStats() || config.getWriteSanitizedBridges()
+        ? new BridgeDescriptorParser(csfh, bsfh, sbw, countries) : null;
 
     // Import bridge descriptors
-    if (config.getImportSanitizedBridges()) {
+    if (bdp != null && config.getImportSanitizedBridges()) {
       new SanitizedBridgesReader(bdp, "bridges", countries);
     }
-    if (config.getImportBridgeSnapshots()) {
+    if (bdp != null && config.getImportBridgeSnapshots()) {
       new BridgeSnapshotReader(bdp, "bridge-directories", countries);
+    }
+    // TODO check configuration sanity: data source without sink?
+
+    // Finish writing sanitized bridge descriptors to disk
+    if (sbw != null) {
+      sbw.finishWriting();
+      sbw = null;
     }
 
     // Write updated stats files to disk

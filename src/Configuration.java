@@ -29,6 +29,7 @@ public class Configuration {
   private boolean writeRelayDescriptorDatabase = false;
   private String relayDescriptorDatabaseJdbc =
       "jdbc:postgresql://localhost/tordir?user=ernie&password=password";
+  private boolean writeSanitizedBridges = false;
   private boolean importSanitizedBridges = true;
   private boolean importBridgeSnapshots = true;
   private boolean importWriteTorperfStats = true;
@@ -102,6 +103,9 @@ public class Configuration {
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("RelayDescriptorDatabaseJDBC")) {
           this.relayDescriptorDatabaseJdbc = line.split(" ")[1];
+        } else if (line.startsWith("WriteSanitizedBridges")) {
+          this.writeSanitizedBridges = Integer.parseInt(
+              line.split(" ")[1]) != 0;
         } else if (line.startsWith("ImportSanitizedBridges")) {
           this.importSanitizedBridges = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -215,6 +219,9 @@ public class Configuration {
   }
   public String getRelayDescriptorDatabaseJDBC() {
     return this.relayDescriptorDatabaseJdbc;
+  }
+  public boolean getWriteSanitizedBridges() {
+    return this.writeSanitizedBridges;
   }
   public boolean getImportSanitizedBridges() {
     return this.importSanitizedBridges;

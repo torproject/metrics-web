@@ -1,5 +1,4 @@
 import java.io.*;
-import java.text.*;
 import java.util.*;
 import java.util.logging.*;
 import org.apache.commons.compress.compressors.gzip.*;
@@ -39,7 +38,6 @@ public class BridgeSnapshotReader {
          + "/...");
       Stack<File> filesInInputDir = new Stack<File>();
       filesInInputDir.add(bdDir);
-      List<File> problems = new ArrayList<File>();
       while (!filesInInputDir.isEmpty()) {
         File pop = filesInInputDir.pop();
         if (pop.isDirectory()) {
@@ -53,48 +51,74 @@ public class BridgeSnapshotReader {
               GzipCompressorInputStream gcis =
                   new GzipCompressorInputStream(in);
               TarArchiveInputStream tais = new TarArchiveInputStream(gcis);
-              InputStreamReader isr = new InputStreamReader(tais);
-              BufferedReader br = new BufferedReader(isr);
+              BufferedInputStream bis = new BufferedInputStream(tais);
               String fn = pop.getName();
               String dateTime = fn.substring(11, 21) + " "
                     + fn.substring(22, 24) + ":" + fn.substring(24, 26)
                     + ":" + fn.substring(26, 28);
               while ((tais.getNextTarEntry()) != null) {
-                bdp.parse(br, dateTime, false);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                int len;
+                byte[] data = new byte[1024];
+                while ((len = bis.read(data, 0, 1024)) >= 0) {
+                  baos.write(data, 0, len);
+                }
+                byte[] allData = baos.toByteArray();
+                String ascii = new String(allData, "US-ASCII");
+                BufferedReader br3 = new BufferedReader(new StringReader(
+                    ascii));
+                String firstLine = null;
+                while ((firstLine = br3.readLine()) != null) {
+                  if (firstLine.startsWith("@")) {
+                    continue;
+                  } else {
+                    break;
+                  }
+                }
+                if (firstLine.startsWith("r ")) {
+                  bdp.parse(allData, dateTime, false);
+                } else {
+                  int start = -1, sig = -1, end = -1;
+                  String startToken =
+                      firstLine.startsWith("router ") ?
+                      "router " : "extra-info ";
+                  String sigToken = "\nrouter-signature\n";
+                  String endToken = "\n-----END SIGNATURE-----\n";
+                  while (end < ascii.length()) {
+                    start = ascii.indexOf(startToken, end);
+                    if (start < 0) {
+                      break;
+                    }
+                    sig = ascii.indexOf(sigToken, start);
+                    if (sig < 0) {
+                      break;
+                    }
+                    sig += sigToken.length();
+                    end = ascii.indexOf(endToken, sig);
+                    if (end < 0) {
+                      break;
+                    }
+                    end += endToken.length();
+                    byte[] descBytes = new byte[end - start];
+                    System.arraycopy(allData, start, descBytes, 0,
+                        end - start);
+                    bdp.parse(descBytes, dateTime, false);
+                  }
+                }
               }
             }
             in.close();
             parsed.add(pop.getName());
             modified = true;
-          } catch (ParseException e) {
-            problems.add(pop);
-            if (problems.size() > 3) {
-              break;
-            }
           } catch (IOException e) {
-            problems.add(pop);
-            if (problems.size() > 3) {
-              break;
-            }
+            logger.log(Level.WARNING, "Could not parse bridge snapshot!",
+                e);
+            continue;
           }
         }
       }
-      if (problems.isEmpty()) {
-        logger.fine("Finished importing files in directory "
-            + bridgeDirectoriesDir + "/.");
-      } else {
-        StringBuilder sb = new StringBuilder("Failed importing files in "
-            + "directory " + bridgeDirectoriesDir + "/:");
-        int printed = 0;
-        for (File f : problems) {
-          sb.append("\n  " + f.getAbsolutePath());
-          if (++printed >= 3) {
-            sb.append("\n  ... more");
-            break;
-          }
-        }
-        logger.warning(sb.toString());
-      }
+      logger.fine("Finished importing files in directory "
+          + bridgeDirectoriesDir + "/.");
       if (!parsed.isEmpty() && modified) {
         logger.fine("Writing file " + pbdFile.getAbsolutePath() + "...");
         try {

@@ -22,18 +22,21 @@ public class SanitizedBridgesReader {
           continue;
         } else {
           try {
-            BufferedReader br = new BufferedReader(new FileReader(pop));
+            BufferedInputStream bis = new BufferedInputStream(
+                new FileInputStream(pop));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            int len;
+            byte[] data = new byte[1024];
+            while ((len = bis.read(data, 0, 1024)) >= 0) {
+              baos.write(data, 0, len);
+            }
+            bis.close();
+            byte[] allData = baos.toByteArray();
             String fn = pop.getName();
             String dateTime = fn.substring(0, 4) + "-" + fn.substring(4, 6)
                 + "-" + fn.substring(6, 8) + " " + fn.substring(9, 11)
                 + ":" + fn.substring(11, 13) + ":" + fn.substring(13, 15);
-            bdp.parse(br, dateTime, true);
-            br.close();
-          } catch (ParseException e) {
-            problems.add(pop);
-            if (problems.size() > 3) {
-              break;
-            }
+            bdp.parse(allData, dateTime, true);
           } catch (IOException e) {
             problems.add(pop);
             if (problems.size() > 3) {
