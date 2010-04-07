@@ -237,7 +237,9 @@ Note that in theory, any other relational database that has a working JDBC
 
 Import the database schema from file \verb+tordir.sql+ containing two
 tables that we need for importing relay descriptors plus two indexes to
-accelerate queries. Check that tables have been created.
+accelerate queries. Check that tables have been created using \verb+\dt+.
+You should see a list containing the two tables \verb+descriptor+ and
+\verb+statusentry+.
 
 \begin{verbatim}
 $ psql -h localhost -U ernie -f tordir.sql tordir
