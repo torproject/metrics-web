@@ -560,9 +560,8 @@ public class SanitizedBridgesWriter {
     /* Determine filename of sanitized server descriptor. */
     String dyear = mapping.published.substring(0, 4);
     String dmonth = mapping.published.substring(5, 7);
-    String dday = mapping.published.substring(8, 10);
     File newFile = new File(this.sanitizedBridgesDir + "/"
-        + dyear + "/" + dmonth + "/server-descriptors/" + dday
+        + dyear + "/" + dmonth + "/server-descriptors/"
         + "/" + scrubbedHash.charAt(0) + "/"
         + scrubbedHash.charAt(1) + "/"
         + scrubbedHash);
@@ -693,10 +692,9 @@ public class SanitizedBridgesWriter {
     /* Determine filename of sanitized server descriptor. */
     String dyear = mapping.published.substring(0, 4);
     String dmonth = mapping.published.substring(5, 7);
-    String dday = mapping.published.substring(8, 10);
     File newFile = new File(this.sanitizedBridgesDir + "/"
-        + dyear + "/" + dmonth + "/extra-infos/" + dday
-        + "/" + scrubbedDescHash.charAt(0) + "/"
+        + dyear + "/" + dmonth + "/extra-infos/"
+        + scrubbedDescHash.charAt(0) + "/"
         + scrubbedDescHash.charAt(1) + "/"
         + scrubbedDescHash);
 
@@ -850,10 +848,9 @@ public class SanitizedBridgesWriter {
       mapping.serverDescriptorIdentifier = scrubbedHash;
       String dyear = published.substring(0, 4);
       String dmonth = published.substring(5, 7);
-      String dday = published.substring(8, 10);
       File newFile = new File(this.sanitizedBridgesDir + "/"
-          + dyear + "/" + dmonth + "/server-descriptors/" + dday
-          + "/" + scrubbedHash.substring(0, 1) + "/"
+          + dyear + "/" + dmonth + "/server-descriptors/"
+          + scrubbedHash.substring(0, 1) + "/"
           + scrubbedHash.substring(1, 2) + "/"
           + scrubbedHash);
       this.logger.finer("Storing server descriptor "
@@ -914,9 +911,8 @@ public class SanitizedBridgesWriter {
       mapping.extraInfoDescriptorIdentifier = scrubbedHash;
       String dyear = published.substring(0, 4);
       String dmonth = published.substring(5, 7);
-      String dday = published.substring(8, 10);
       File newFile = new File(this.sanitizedBridgesDir + "/"
-          + dyear + "/" + dmonth + "/extra-infos/" + dday + "/"
+          + dyear + "/" + dmonth + "/extra-infos/"
           + scrubbedHash.substring(0, 1) + "/"
           + scrubbedHash.substring(1, 2) + "/"
           + scrubbedHash);
@@ -956,11 +952,10 @@ public class SanitizedBridgesWriter {
     try {
       String dyear = mapping.published.substring(0, 4);
       String dmonth = mapping.published.substring(5, 7);
-      String dday = mapping.published.substring(8, 10);
       File serverDescriptorFile = new File(
           this.sanitizedBridgesDir + "/"
-          + dyear + "/" + dmonth + "/server-descriptors/" + dday
-          + "/" + mapping.serverDescriptorIdentifier.substring(0, 1) + "/"
+          + dyear + "/" + dmonth + "/server-descriptors/"
+          + mapping.serverDescriptorIdentifier.substring(0, 1) + "/"
           + mapping.serverDescriptorIdentifier.substring(1, 2) + "/"
           + mapping.serverDescriptorIdentifier);
       FileInputStream fis = new FileInputStream(serverDescriptorFile);
@@ -987,10 +982,9 @@ public class SanitizedBridgesWriter {
     try {
       String dyear = mapping.published.substring(0, 4);
       String dmonth = mapping.published.substring(5, 7);
-      String dday = mapping.published.substring(8, 10);
       File extraInfoDescriptorFile = new File(
           this.sanitizedBridgesDir + "/"
-          + dyear + "/" + dmonth + "/extra-infos/" + dday + "/"
+          + dyear + "/" + dmonth + "/extra-infos/"
           + mapping.extraInfoDescriptorIdentifier.substring(0, 1) + "/"
           + mapping.extraInfoDescriptorIdentifier.substring(1, 2) + "/"
           + mapping.extraInfoDescriptorIdentifier);
