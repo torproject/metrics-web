@@ -108,6 +108,10 @@ public class BridgeSnapshotReader {
               }
             }
             in.close();
+
+            /* Let's give some memory back, or we'll run out of it. */
+            System.gc();
+
             parsed.add(pop.getName());
             modified = true;
           } catch (IOException e) {
