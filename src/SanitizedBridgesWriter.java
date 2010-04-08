@@ -725,10 +725,7 @@ public class SanitizedBridgesWriter {
           String hashedBridgeIdentity = Hex.encodeHexString(
               Base64.decodeBase64(line.split(" ")[2] + "==")).
               toLowerCase();
-          String hashedBridgeIdentityBase64 =
-              Base64.encodeBase64String(DigestUtils.sha(
-              Base64.decodeBase64(line.split(" ")[2] + "=="))).
-              substring(0, 27);
+          String hashedBridgeIdentityBase64 = line.split(" ")[2];
           String readServerDescId = Hex.encodeHexString(
               Base64.decodeBase64(line.split(" ")[3] + "==")).
               toLowerCase();
