@@ -1037,9 +1037,9 @@ public class SanitizedBridgesWriter {
      * descriptor. We keep the timestamp of the last re-written network
      * status in order to make sure we re-writing any network status at
      * most once. */
-    String lastRewrittenStatusMinus24Hours = "1970-01-01 00:00:00";
+    String lastDescriptorPublishedPlus24Hours = "1970-01-01 00:00:00";
     for (String published : this.descriptorPublicationTimes) {
-      if (published.compareTo(lastRewrittenStatusMinus24Hours) <= 0) {
+      if (published.compareTo(lastDescriptorPublishedPlus24Hours) <= 0) {
         continue;
       }
       // find statuses 24 hours after published
@@ -1061,6 +1061,7 @@ public class SanitizedBridgesWriter {
             listFiles()));
       }
       long plus24Hours = publishedTime + 24L * 60L * 60L * 1000L;
+      lastDescriptorPublishedPlus24Hours = dateFormat.format(plus24Hours);
       String[] dayTwo = dateFormat.format(plus24Hours).split("-");
       File publishedDayTwo = new File(this.sanitizedBridgesDir + "/"
           + dayTwo[0] + "/" + dayTwo[1] + "/statuses/" + dayTwo[2]);
@@ -1084,8 +1085,6 @@ public class SanitizedBridgesWriter {
         }
         this.rewriteNetworkStatus(status,
             dateTimeFormat.format(statusTime));
-        lastRewrittenStatusMinus24Hours = dateTimeFormat.format(
-            statusTime - 24L * 60L * 60L * 1000L);
       }
     }
 
