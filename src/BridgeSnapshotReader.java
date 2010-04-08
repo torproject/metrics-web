@@ -64,6 +64,9 @@ public class BridgeSnapshotReader {
                   baos.write(data, 0, len);
                 }
                 byte[] allData = baos.toByteArray();
+                if (allData.length == 0) {
+                  continue;
+                }
                 String ascii = new String(allData, "US-ASCII");
                 BufferedReader br3 = new BufferedReader(new StringReader(
                     ascii));
