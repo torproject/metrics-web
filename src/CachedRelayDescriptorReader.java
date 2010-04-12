@@ -1,4 +1,6 @@
 import java.io.*;
+import java.text.*;
+import java.util.*;
 import java.util.logging.*;
 
 /**
@@ -29,6 +31,30 @@ public class CachedRelayDescriptorReader {
           bis.close();
           byte[] allData = baos.toByteArray();
           if (f.getName().equals("cached-consensus")) {
+            /* Check if directory information is stale. */
+            BufferedReader br = new BufferedReader(new StringReader(
+                new String(allData, "US-ASCII")));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+              if (line.startsWith("valid-after ")) {
+                SimpleDateFormat dateTimeFormat =
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                if (dateTimeFormat.parse(line.substring("valid-after ".
+                    length())).getTime() < System.currentTimeMillis()
+                    - 6L * 60L * 60L * 1000L) {
+                  logger.warning("Cached descriptor files in "
+                      + cachedDescDir.getAbsolutePath() + " are stale. "
+                      + "The valid-after line in cached-consensus is '"
+                      + line + "'.");
+                }
+                break;
+              }
+            }
+            br.close();
+
+            /* Parse the cached consensus (regardless of whether it's
+             * stale or not. */
             if (rdp != null) {
               rdp.parse(allData);
             }
@@ -65,6 +91,9 @@ public class CachedRelayDescriptorReader {
             logger.fine("Finished reading cacheddesc/ directory.");
           }
         } catch (IOException e) {
+          logger.log(Level.WARNING, "Failed reading cacheddesc/ "
+              + "directory.", e);
+        } catch (ParseException e) {
           logger.log(Level.WARNING, "Failed reading cacheddesc/ "
               + "directory.", e);
         }
