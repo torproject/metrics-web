@@ -51,6 +51,12 @@ public class Configuration {
     /* Read config file, if present. */
     File configFile = new File("config");
     if (!configFile.exists()) {
+      logger.warning("Could not find config file. In the default "
+          + "configuration, we are not configured to read data from any "
+          + "data source or write data to any data sink. You need to "
+          + "create a config file (" + configFile.getAbsolutePath()
+          + ") and provide at least one data source and one data sink. "
+          + "Refer to the manual for more information.");
       return;
     }
     String line = null;
@@ -180,6 +186,22 @@ public class Configuration {
     }
 
     /** Make some checks if configuration is valid. */
+    if (!this.importCachedRelayDescriptors &&
+        !this.importDirectoryArchives && !this.downloadRelayDescriptors &&
+        !this.importSanitizedBridges && !this.importBridgeSnapshots &&
+        !this.importWriteTorperfStats &&
+        !this.downloadProcessGetTorStats && !this.downloadExitList &&
+        !this.writeDirectoryArchives &&
+        !this.writeRelayDescriptorDatabase &&
+        !this.writeSanitizedBridges && !this.writeConsensusStats &&
+        !this.writeDirreqStats && !this.writeBridgeStats &&
+        !this.writeServerDescriptorStats) {
+      logger.warning("We have not been configured to read data from any "
+          + "data source or write data to any data sink. You need to "
+          + "edit your config file (" + configFile.getAbsolutePath()
+          + ") and provide at least one data source and one data sink. "
+          + "Refer to the manual for more information.");
+    }
     if ((this.importCachedRelayDescriptors ||
         this.importDirectoryArchives || this.downloadRelayDescriptors) &&
         !(this.writeDirectoryArchives ||
