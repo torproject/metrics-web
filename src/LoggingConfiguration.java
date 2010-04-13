@@ -84,10 +84,10 @@ public class LoggingConfiguration {
             + "</td>\n"
             + "            <td>" + record.getMessage() + "</td>\n"
             + "          </tr>\n";
-        if (record.getLevel().equals(Level.WARNING)) {
-          this.warnings.append(msg);
-        } else {
+        if (record.getLevel().equals(Level.INFO)) {
           this.infos.append(msg);
+        } else {
+          this.warnings.append(msg);
         }
         return "";
       }
