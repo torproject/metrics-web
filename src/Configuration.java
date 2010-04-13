@@ -23,16 +23,25 @@ public class Configuration {
   private List<String> relayPlatforms = new ArrayList<String>(
       Arrays.asList("Linux,Windows,Darwin,FreeBSD".split(",")));
   private boolean writeDirectoryArchives = false;
+  private String directoryArchivesOutputDirectory = "directory-archive/";
   private boolean importCachedRelayDescriptors = false;
+  //this.cachedRelayDescriptorDirectory.add
+  private List<String> cachedRelayDescriptorsDirectory =
+      new ArrayList<String>(Arrays.asList("cacheddesc/".split(",")));
   private boolean importDirectoryArchives = false;
+  private String directoryArchivesDirectory = "archives/";
   private boolean keepDirectoryArchiveImportHistory = false;
   private boolean writeRelayDescriptorDatabase = false;
   private String relayDescriptorDatabaseJdbc =
       "jdbc:postgresql://localhost/tordir?user=ernie&password=password";
   private boolean writeSanitizedBridges = false;
+  private String sanitizedBridgesWriteDirectory = "sanitized-bridges/";
   private boolean importSanitizedBridges = false;
+  private String sanitizedBridgesDirectory = "bridges/";
   private boolean importBridgeSnapshots = false;
+  private String bridgeSnapshotsDirectory = "bridge-directories/";
   private boolean importWriteTorperfStats = false;
+  private String torperfDirectory = "torperf/";
   private boolean downloadRelayDescriptors = false;
   private List<String> downloadFromDirectoryAuthorities = Arrays.asList(
       "86.59.21.38,194.109.206.212,80.190.246.100:8180".split(","));
@@ -41,6 +50,7 @@ public class Configuration {
       + "~gettor/gettor_stats.txt";
   private boolean downloadExitList = false;
   private boolean importGeoIPDatabases = false;
+  private String geoIPDatabasesDirectory = "geoipdb/";
   private boolean downloadGeoIPDatabase = false;
   private String maxmindLicenseKey = "";
   public Configuration() {
@@ -60,6 +70,7 @@ public class Configuration {
       return;
     }
     String line = null;
+    boolean containsCachedRelayDescriptorsDirectory = false;
     try {
       BufferedReader br = new BufferedReader(new FileReader(configFile));
       while ((line = br.readLine()) != null) {
@@ -99,12 +110,22 @@ public class Configuration {
         } else if (line.startsWith("WriteDirectoryArchives")) {
           this.writeDirectoryArchives = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("DirectoryArchivesOutputDirectory")) {
+          this.directoryArchivesOutputDirectory = line.split(" ")[1];
         } else if (line.startsWith("ImportCachedRelayDescriptors")) {
           this.importCachedRelayDescriptors = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("CachedRelayDescriptorsDirectory")) {
+          if (!containsCachedRelayDescriptorsDirectory) {
+            this.cachedRelayDescriptorsDirectory.clear();
+            containsCachedRelayDescriptorsDirectory = true;
+          }
+          this.cachedRelayDescriptorsDirectory.add(line.split(" ")[1]);
         } else if (line.startsWith("ImportDirectoryArchives")) {
           this.importDirectoryArchives = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("DirectoryArchivesDirectory")) {
+          this.directoryArchivesDirectory = line.split(" ")[1];
         } else if (line.startsWith("KeepDirectoryArchiveImportHistory")) {
           this.keepDirectoryArchiveImportHistory = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -116,15 +137,23 @@ public class Configuration {
         } else if (line.startsWith("WriteSanitizedBridges")) {
           this.writeSanitizedBridges = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("SanitizedBridgesWriteDirectory")) {
+          this.sanitizedBridgesWriteDirectory = line.split(" ")[1];
         } else if (line.startsWith("ImportSanitizedBridges")) {
           this.importSanitizedBridges = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("SanitizedBridgesDirectory")) {
+          this.sanitizedBridgesDirectory = line.split(" ")[1];
         } else if (line.startsWith("ImportBridgeSnapshots")) {
           this.importBridgeSnapshots = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("BridgeSnapshotsDirectory")) {
+          this.bridgeSnapshotsDirectory = line.split(" ")[1];
         } else if (line.startsWith("ImportWriteTorperfStats")) {
           this.importWriteTorperfStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("TorperfDirectory")) {
+          this.torperfDirectory = line.split(" ")[1];
         } else if (line.startsWith("DownloadRelayDescriptors")) {
           this.downloadRelayDescriptors = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -155,6 +184,8 @@ public class Configuration {
         } else if (line.startsWith("ImportGeoIPDatabases")) {
           this.importGeoIPDatabases = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("GeoIPDatabasesDirectory")) {
+          this.geoIPDatabasesDirectory = line.split(" ")[1];
         } else if (line.startsWith("DownloadGeoIPDatabase")) {
           this.downloadGeoIPDatabase = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -264,11 +295,20 @@ public class Configuration {
   public boolean getWriteDirectoryArchives() {
     return this.writeDirectoryArchives;
   }
+  public String getDirectoryArchivesOutputDirectory() {
+    return this.directoryArchivesOutputDirectory;
+  }
   public boolean getImportCachedRelayDescriptors() {
     return this.importCachedRelayDescriptors;
   }
+  public List<String> getCachedRelayDescriptorDirectory() {
+    return this.cachedRelayDescriptorsDirectory;
+  }
   public boolean getImportDirectoryArchives() {
     return this.importDirectoryArchives;
+  }
+  public String getDirectoryArchivesDirectory() {
+    return this.directoryArchivesDirectory;
   }
   public boolean getKeepDirectoryArchiveImportHistory() {
     return this.keepDirectoryArchiveImportHistory;
@@ -282,14 +322,26 @@ public class Configuration {
   public boolean getWriteSanitizedBridges() {
     return this.writeSanitizedBridges;
   }
+  public String getSanitizedBridgesWriteDirectory() {
+    return this.sanitizedBridgesWriteDirectory;
+  }
   public boolean getImportSanitizedBridges() {
     return this.importSanitizedBridges;
+  }
+  public String getSanitizedBridgesDirectory() {
+    return this.sanitizedBridgesDirectory;
   }
   public boolean getImportBridgeSnapshots() {
     return this.importBridgeSnapshots;
   }
+  public String getBridgeSnapshotsDirectory() {
+    return this.bridgeSnapshotsDirectory;
+  }
   public boolean getImportWriteTorperfStats() {
     return this.importWriteTorperfStats;
+  }
+  public String getTorperfDirectory() {
+    return this.torperfDirectory;
   }
   public boolean getDownloadRelayDescriptors() {
     return this.downloadRelayDescriptors;
@@ -308,6 +360,9 @@ public class Configuration {
   }
   public boolean getImportGeoIPDatabases() {
     return this.importGeoIPDatabases;
+  }
+  public String getGeoIPDatabasesDirectory() {
+    return this.geoIPDatabasesDirectory;
   }
   public boolean getDownloadGeoIPDatabase() {
     return this.downloadGeoIPDatabase;

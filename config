@@ -3,8 +3,15 @@
 ## Read cached-* files from a local Tor data directory
 #ImportCachedRelayDescriptors 0
 #
+## Relative path to Tor data directory to read cached-* files from (can be
+## specified multiple times)
+#CachedRelayDescriptorsDirectory cacheddesc/
+#
 ## Import directory archives from disk, if available
 #ImportDirectoryArchives 0
+#
+## Relative path to directory to import directory archives from
+#DirectoryArchivesDirectory archives/
 #
 ## Keep a history of imported directory archive files to know which files
 ## have been imported before. This history can be useful when importing
@@ -22,11 +29,20 @@
 ## Import sanitized bridges from disk, if available
 #ImportSanitizedBridges 0
 #
+## Relative path to directory to import sanitized bridges from
+#SanitizedBridgesDirectory bridges/
+#
 ## Import bridge snapshots from disk, if available
 #ImportBridgeSnapshots 0
 #
+## Relative path to directory to import bridge descriptor snapshots from
+#BridgeSnapshotsDirectory bridge-directories/
+#
 ## Import local Maxmind GeoIP databases
 #ImportGeoIPDatabases 0
+#
+## Relative path to directory to import GeoIP databases from
+#GeoIPDatabasesDirectory geoipdb/
 #
 ## Download (commercial) Maxmind GeoIP database for sanitizing bridge
 ## descriptors
@@ -37,6 +53,9 @@
 #
 ## Import torperf data, if available, and write stats to disk
 #ImportWriteTorperfStats 0
+#
+## Relate path to directory to import torperf results from
+#TorperfDirectory torperf/
 #
 ## Download and process GetTor stats
 #DownloadProcessGetTorStats 0
@@ -52,6 +71,9 @@
 ## Write directory archives to disk
 #WriteDirectoryArchives 0
 #
+## Relative path to directory to write directory archives to
+#DirectoryArchivesOutputDirectory directory-archive/
+#
 ## Write relay descriptors to a database for later evaluation
 #WriteRelayDescriptorDatabase 0
 #
@@ -60,6 +82,9 @@
 #
 ## Write sanitized bridges to disk
 #WriteSanitizedBridges 0
+#
+## Relate path to directory to write sanitized bridges to
+#SanitizedBridgesWriteDirectory sanitized-bridges/
 #
 ## Write consensus stats to disk
 #WriteConsensusStats 0

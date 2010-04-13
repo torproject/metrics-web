@@ -40,7 +40,8 @@ public class Main {
 
     // Prepare writing relay descriptor archive to disk
     ArchiveWriter aw = config.getWriteDirectoryArchives() ?
-        new ArchiveWriter() : null;
+        new ArchiveWriter(config.getDirectoryArchivesOutputDirectory())
+        : null;
 
     // Prepare writing relay descriptors to database
     RelayDescriptorDatabaseImporter rddi =
@@ -78,10 +79,11 @@ public class Main {
         rdp.setRelayDescriptorDownloader(rdd);
       }
       if (config.getImportCachedRelayDescriptors()) {
-        new CachedRelayDescriptorReader(rdp);
+        new CachedRelayDescriptorReader(rdp,
+            config.getCachedRelayDescriptorDirectory());
       }
       if (config.getImportDirectoryArchives()) {
-        new ArchiveReader(rdp, "archives",
+        new ArchiveReader(rdp, config.getDirectoryArchivesDirectory(),
             config.getKeepDirectoryArchiveImportHistory());
       }
       if (rdd != null) {
@@ -105,18 +107,20 @@ public class Main {
     }
 
     // Import/download GeoIP databases
-    GeoIPDatabaseManager gd = new GeoIPDatabaseManager();
+    GeoIPDatabaseManager gd = new GeoIPDatabaseManager(
+        config.getGeoIPDatabasesDirectory());
     if (config.getDownloadGeoIPDatabase()) {
       gd.downloadGeoIPDatabase(config.getMaxmindLicenseKey());
     }
     if (config.getImportGeoIPDatabases()) {
-      gd.importGeoIPDatabaseFromDisk("geoipdb/");
+      gd.importGeoIPDatabaseFromDisk();
       gd.writeCombinedDatabase();
     }
 
     // Prepare sanitized bridge descriptor writer
     SanitizedBridgesWriter sbw = config.getWriteSanitizedBridges() ?
-        new SanitizedBridgesWriter(gd, "sanitized-bridges") : null;
+        new SanitizedBridgesWriter(gd,
+        config.getSanitizedBridgesWriteDirectory()) : null;
 
     // Prepare bridge descriptor parser
     BridgeDescriptorParser bdp = config.getWriteConsensusStats() ||
@@ -125,10 +129,12 @@ public class Main {
 
     // Import bridge descriptors
     if (bdp != null && config.getImportSanitizedBridges()) {
-      new SanitizedBridgesReader(bdp, "bridges", countries);
+      new SanitizedBridgesReader(bdp,
+          config.getSanitizedBridgesDirectory(), countries);
     }
     if (bdp != null && config.getImportBridgeSnapshots()) {
-      new BridgeSnapshotReader(bdp, "bridge-directories", countries);
+      new BridgeSnapshotReader(bdp, config.getBridgeSnapshotsDirectory(),
+          countries);
     }
 
     // Finish writing sanitized bridge descriptors to disk
@@ -149,7 +155,7 @@ public class Main {
 
     // Import and process torperf stats
     if (config.getImportWriteTorperfStats()) {
-      new TorperfProcessor("torperf");
+      new TorperfProcessor(config.getTorperfDirectory());
     }
 
     // Download and process GetTor stats

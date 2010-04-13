@@ -68,6 +68,8 @@ public class GeoIPDatabaseManager {
    */
   private String lastDownloadedTime;
 
+  private String geoipDir;
+
   /**
    * Logger for this class.
    */
@@ -79,9 +81,10 @@ public class GeoIPDatabaseManager {
    * Initializes this class by reading in the database versions known so
    * far.
    */
-  public GeoIPDatabaseManager() {
+  public GeoIPDatabaseManager(String geoipDir) {
 
     /* Initialize instance variables. */
+    this.geoipDir = geoipDir;
     this.combinedDatabaseFile = new File("stats/geoip-database");
     this.combinedDatabase = new TreeMap<Long, DatabaseEntry>();
     this.allDatabases = new ArrayList<String>();
@@ -192,7 +195,7 @@ public class GeoIPDatabaseManager {
       while ((entry = zis.getNextEntry()) != null) {
         if (!entry.isDirectory() &&
             entry.getName().endsWith("GeoIP-108.csv")) {
-          String filename = "geoipdb/GeoIP-108_" + date + ".csv";
+          String filename = geoipDir + "/GeoIP-108_" + date + ".csv";
           OutputStream out = new BufferedOutputStream(
               new FileOutputStream(filename));
           byte[] buffer = new byte[1024];
@@ -212,11 +215,11 @@ public class GeoIPDatabaseManager {
   }
 
   /**
-   * Imports the GeoIP databases from <code>directory</code> to include
-   * them in the combined GeoIP database.
+   * Imports the GeoIP databases to include them in the combined GeoIP
+   * database.
    */
-  public void importGeoIPDatabaseFromDisk(String directory) {
-    File databaseDirectory = new File(directory);
+  public void importGeoIPDatabaseFromDisk() {
+    File databaseDirectory = new File(this.geoipDir);
     if (!databaseDirectory.exists()) {
       return;
     }

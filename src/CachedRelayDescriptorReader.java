@@ -8,12 +8,19 @@ import java.util.logging.*;
  * into directory structure in directory-archive/.
  */
 public class CachedRelayDescriptorReader {
-  public CachedRelayDescriptorReader(RelayDescriptorParser rdp) {
+  public CachedRelayDescriptorReader(RelayDescriptorParser rdp,
+      List<String> inputDirectories) {
     Logger logger = Logger.getLogger(
         CachedRelayDescriptorReader.class.getName());
-    File cachedDescDir = new File("cacheddesc");
-    if (cachedDescDir.exists()) {
-      logger.fine("Reading cacheddesc/ directory.");
+    for (String inputDirectory : inputDirectories) {
+      File cachedDescDir = new File(inputDirectory);
+      if (!cachedDescDir.exists()) {
+        logger.warning("Directory " + cachedDescDir.getAbsolutePath()
+            + " does not exist. Skipping.");
+        continue;
+      }
+      logger.fine("Reading " + cachedDescDir.getAbsolutePath()
+          + " directory.");
       for (File f : cachedDescDir.listFiles()) {
         try {
           // descriptors may contain non-ASCII chars; read as bytes to
@@ -86,14 +93,15 @@ public class CachedRelayDescriptorReader {
                 rdp.parse(descBytes);
               }
             }
-            logger.fine("Finished reading cacheddesc/ directory.");
+            logger.fine("Finished reading "
+                + cachedDescDir.getAbsolutePath() + " directory.");
           }
         } catch (IOException e) {
-          logger.log(Level.WARNING, "Failed reading cacheddesc/ "
-              + "directory.", e);
+          logger.log(Level.WARNING, "Failed reading "
+              + cachedDescDir.getAbsolutePath() + " directory.", e);
         } catch (ParseException e) {
-          logger.log(Level.WARNING, "Failed reading cacheddesc/ "
-              + "directory.", e);
+          logger.log(Level.WARNING, "Failed reading "
+              + cachedDescDir.getAbsolutePath() + " directory.", e);
         }
       }
     }

@@ -7,8 +7,10 @@ import org.apache.commons.codec.binary.*;
 
 public class ArchiveWriter {
   private Logger logger;
-  public ArchiveWriter() {
+  private String outputDirectory;
+  public ArchiveWriter(String outputDirectory) {
     this.logger = Logger.getLogger(ArchiveWriter.class.getName());
+    this.outputDirectory = outputDirectory;
   }
 
   private void store(byte[] data, String filename) {
@@ -32,7 +34,7 @@ public class ArchiveWriter {
     SimpleDateFormat printFormat = new SimpleDateFormat(
         "yyyy/MM/dd/yyyy-MM-dd-HH-mm-ss");
     printFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    String filename = "directory-archive/consensus/"
+    String filename = outputDirectory + "/consensus/"
         + printFormat.format(new Date(validAfter)) + "-consensus";
     this.store(data, filename);
   }
@@ -42,7 +44,7 @@ public class ArchiveWriter {
     SimpleDateFormat printFormat = new SimpleDateFormat(
         "yyyy/MM/dd/yyyy-MM-dd-HH-mm-ss");
     printFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    String filename = "directory-archive/vote/"
+    String filename = outputDirectory + "/vote/"
         + printFormat.format(new Date(validAfter)) + "-vote-"
         + fingerprint + "-" + digest;
     this.store(data, filename);
@@ -52,7 +54,7 @@ public class ArchiveWriter {
       long published) {
     SimpleDateFormat printFormat = new SimpleDateFormat("yyyy/MM/");
     printFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    String filename = "directory-archive/server-descriptor/"
+    String filename = outputDirectory + "/server-descriptor/"
         + printFormat.format(new Date(published))
         + digest.substring(0, 1) + "/" + digest.substring(1, 2) + "/"
         + digest;
@@ -63,7 +65,7 @@ public class ArchiveWriter {
       String extraInfoDigest, long published) {
     SimpleDateFormat descriptorFormat = new SimpleDateFormat("yyyy/MM/");
     descriptorFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    String filename = "directory-archive/extra-info/"
+    String filename = outputDirectory + "/extra-info/"
         + descriptorFormat.format(new Date(published))
         + extraInfoDigest.substring(0, 1) + "/"
         + extraInfoDigest.substring(1, 2) + "/"
@@ -84,7 +86,7 @@ public class ArchiveWriter {
       } else if (pop.length() > 0) {
         String absPath = pop.getAbsolutePath().replaceAll(":", "-");
         String relPath = absPath.substring(absPath.indexOf(
-            "directory-archive/"));
+            outputDirectory + "/"));
         files.add(relPath);
       }
     }
@@ -98,13 +100,13 @@ public class ArchiveWriter {
   public void dumpStats() {
     try {
       SortedSet<String> votes = getFileNames(
-          new File("directory-archive/vote"));
+          new File(outputDirectory + "/vote"));
       SortedSet<String> serverDescs = getFileNames(
-          new File("directory-archive/server-descriptor"));
+          new File(outputDirectory + "/server-descriptor"));
       SortedSet<String> extraInfos = getFileNames(
-          new File("directory-archive/extra-info"));
+          new File(outputDirectory + "/extra-info"));
       SortedSet<String> consensuses = getFileNames(
-          new File("directory-archive/consensus"));
+          new File(outputDirectory + "/consensus"));
       SimpleDateFormat validAfterFormat =
           new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
       validAfterFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -134,7 +136,7 @@ public class ArchiveWriter {
             validAfterTime = line.substring("valid-after ".length());
             long validAfter = validAfterFormat.parse(
                 validAfterTime).getTime();
-            votePrefix = "directory-archive/vote/"
+            votePrefix = outputDirectory + "/vote/"
                 + consensusVoteFormat.format(new Date(validAfter))
                 + "-vote-";
           } else if (line.startsWith("dir-source ")) {
@@ -162,7 +164,8 @@ public class ArchiveWriter {
                   long published = validAfterFormat.parse(
                       line3.split(" ")[4] + " "
                       + line3.split(" ")[5]).getTime();
-                  String filename = "directory-archive/server-descriptor/"
+                  String filename = outputDirectory
+                      + "/server-descriptor/"
                       + descriptorFormat.format(new Date(published))
                       + digest.substring(0, 1) + "/"
                       + digest.substring(1, 2) + "/" + digest;
@@ -177,7 +180,8 @@ public class ArchiveWriter {
                         String extraInfoDigest = line2.startsWith("opt ") ?
                             line2.split(" ")[2].toLowerCase() :
                             line2.split(" ")[1].toLowerCase();
-                        String filename2 = "directory-archive/extra-info/"
+                        String filename2 = outputDirectory
+                            + "/extra-info/"
                             + descriptorFormat.format(new Date(published))
                             + extraInfoDigest.substring(0, 1) + "/"
                             + extraInfoDigest.substring(1, 2) + "/"
@@ -209,7 +213,7 @@ public class ArchiveWriter {
                 line.split(" ")[3] + "=")).toLowerCase();
             long published = validAfterFormat.parse(
                 line.split(" ")[4] + " " + line.split(" ")[5]).getTime();
-            String filename = "directory-archive/server-descriptor/"
+            String filename = outputDirectory + "/server-descriptor/"
                 + descriptorFormat.format(new Date(published))
                 + digest.substring(0, 1) + "/"
                 + digest.substring(1, 2) + "/" + digest;
@@ -224,7 +228,7 @@ public class ArchiveWriter {
                   String extraInfoDigest = line2.startsWith("opt ") ?
                       line2.split(" ")[2].toLowerCase() :
                       line2.split(" ")[1].toLowerCase();
-                  String filename2 = "directory-archive/extra-info/"
+                  String filename2 = outputDirectory + "/extra-info/"
                       + descriptorFormat.format(new Date(published))
                       + extraInfoDigest.substring(0, 1) + "/"
                       + extraInfoDigest.substring(1, 2) + "/"
