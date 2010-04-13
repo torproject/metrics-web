@@ -130,7 +130,6 @@ public class Main {
     if (bdp != null && config.getImportBridgeSnapshots()) {
       new BridgeSnapshotReader(bdp, "bridge-directories", countries);
     }
-    // TODO check configuration sanity: data source without sink?
 
     // Finish writing sanitized bridge descriptors to disk
     if (sbw != null) {

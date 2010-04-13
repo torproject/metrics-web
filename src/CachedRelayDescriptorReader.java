@@ -9,8 +9,6 @@ import java.util.logging.*;
  */
 public class CachedRelayDescriptorReader {
   public CachedRelayDescriptorReader(RelayDescriptorParser rdp) {
-    // TODO check if files are stale; print out warning that Tor process
-    // might have died
     Logger logger = Logger.getLogger(
         CachedRelayDescriptorReader.class.getName());
     File cachedDescDir = new File("cacheddesc");
