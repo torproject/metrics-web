@@ -8,6 +8,9 @@ import java.util.logging.*;
 public class Main {
   public static void main(String[] args) {
 
+    /* Initialize logging configuration. */
+    new LoggingConfiguration();
+
     Logger logger = Logger.getLogger(Main.class.getName());
     logger.info("Starting ERNIE...");
 
