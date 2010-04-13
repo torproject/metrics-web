@@ -85,6 +85,17 @@ $ java -version
 $ javac -version
 \end{verbatim}
 
+\subsection{Ant 1.7}
+
+ERNIE comes with an Ant build file that facilitates common build tasks.
+If you want to use Ant to build and run ERNIE, install Ant and check its
+installed version (tested with 1.7):
+
+\begin{verbatim}
+$ sudo apt-get install ant
+$ ant -version
+\end{verbatim}
+
 \subsection{R 2.8 and ggplot2}
 
 ERNIE uses R and the R library \emph{ggplot2} to visualize anaylsis
@@ -318,12 +329,11 @@ RelayDescriptorDatabaseJDBC
 
 Now you are ready to actually import relay descriptors using ERNIE.
 Create a directory for Java class files, compile the Java source files,
-and run ERNIE.
+and run ERNIE. All these steps are performed by the default target in the
+provided Ant task.
 
 \begin{verbatim}
-$ mkdir bin
-$ ./compile.sh
-$ ./run.sh
+$ ant
 \end{verbatim}
 
 Note that the import process might take between a few minutes and an hour,
