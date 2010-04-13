@@ -297,18 +297,10 @@ ERNIE can be used to read data from one or more data sources and write
 them to one or more data sinks.
 You need to configure ERNIE so that it knows to use the downloaded relay
 descriptors as data source and the database as data sink.
-You have implicitly accomplished the former by creating the
-\verb+archives/+ directory.
-By default, ERNIE looks for this directory and tries to import everything
-contained in it.
-You could change this behavior by explicitly telling ERNIE not to import
-data from the \verb+archives/+ directory by adding a line
-\verb+ImportDirectoryArchives 0+ to the config file, but this is not what
-we want in this tutorial.
-But you need to explicitly enable your database as a data sink.
-Add the following line to your \verb+config+ file:
+Add the following two lines to your \verb+config+ file:
 
 \begin{verbatim}
+ImportDirectoryArchives 1
 WriteRelayDescriptorDatabase 1
 \end{verbatim}
 

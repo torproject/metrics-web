@@ -2,37 +2,37 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.logging.*;
+
 /**
  * Initialize configuration with hard-coded defaults, overwrite with
- * configuration in config config file, if exists, and answer Main.java
- * about our configuration.
+ * configuration in config file, if exists, and answer Main.java about our
+ * configuration.
  */
 public class Configuration {
-  private boolean writeStats = true;
-  private boolean writeConsensusStats = true;
-  private boolean writeDirreqStats = true;
+  private boolean writeConsensusStats = false;
+  private boolean writeDirreqStats = false;
   private SortedSet<String> dirreqBridgeCountries = new TreeSet<String>(
       Arrays.asList("bh,cn,cu,et,ir,mm,sa,sy,tn,tm,uz,vn,ye".split(",")));
   private SortedSet<String> dirreqDirectories = new TreeSet<String>(
       Arrays.asList(("8522EB98C91496E80EC238E732594D1509158E77,"
       + "9695DFC35FFEB861329B9F1AB04C46397020CE31").split(",")));
-  private boolean writeBridgeStats = true;
-  private boolean writeServerDescriptorStats = true;
-  private List<String> relayVersions = new ArrayList<String>(Arrays.asList(
-      "0.1.2,0.2.0,0.2.1,0.2.2".split(",")));
-  private List<String> relayPlatforms = new ArrayList<String>(Arrays.asList(
-      "Linux,Windows,Darwin,FreeBSD".split(",")));
+  private boolean writeBridgeStats = false;
+  private boolean writeServerDescriptorStats = false;
+  private List<String> relayVersions = new ArrayList<String>(
+      Arrays.asList("0.1.2,0.2.0,0.2.1,0.2.2".split(",")));
+  private List<String> relayPlatforms = new ArrayList<String>(
+      Arrays.asList("Linux,Windows,Darwin,FreeBSD".split(",")));
   private boolean writeDirectoryArchives = false;
-  private boolean importCachedRelayDescriptors = true;
-  private boolean importDirectoryArchives = true;
+  private boolean importCachedRelayDescriptors = false;
+  private boolean importDirectoryArchives = false;
   private boolean keepDirectoryArchiveImportHistory = false;
   private boolean writeRelayDescriptorDatabase = false;
   private String relayDescriptorDatabaseJdbc =
       "jdbc:postgresql://localhost/tordir?user=ernie&password=password";
   private boolean writeSanitizedBridges = false;
-  private boolean importSanitizedBridges = true;
-  private boolean importBridgeSnapshots = true;
-  private boolean importWriteTorperfStats = true;
+  private boolean importSanitizedBridges = false;
+  private boolean importBridgeSnapshots = false;
+  private boolean importWriteTorperfStats = false;
   private boolean downloadRelayDescriptors = false;
   private List<String> downloadFromDirectoryAuthorities = Arrays.asList(
       "86.59.21.38,194.109.206.212,80.190.246.100:8180".split(","));
@@ -40,11 +40,15 @@ public class Configuration {
   private String getTorStatsUrl = "http://gettor.torproject.org:8080/"
       + "~gettor/gettor_stats.txt";
   private boolean downloadExitList = false;
-  private boolean importGeoIPDatabases = true;
+  private boolean importGeoIPDatabases = false;
   private boolean downloadGeoIPDatabase = false;
   private String maxmindLicenseKey = "";
   public Configuration() {
+
+    /* Initialize logger. */
     Logger logger = Logger.getLogger(Configuration.class.getName());
+
+    /* Read config file, if present. */
     File configFile = new File("config");
     if (!configFile.exists()) {
       return;
@@ -136,7 +140,7 @@ public class Configuration {
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("GetTorStatsURL")) {
           String newUrl = line.split(" ")[1];
-          // test if URL has correct format
+          /* Test if URL has correct format. */
           new URL(newUrl);
           this.getTorStatsUrl = newUrl;
         } else if (line.startsWith("DownloadExitList")) {
@@ -174,9 +178,42 @@ public class Configuration {
           + "file! Exiting!", e);
       System.exit(1);
     }
-  }
-  public boolean getWriteStats() {
-    return this.writeStats;
+
+    /** Make some checks if configuration is valid. */
+    if ((this.importCachedRelayDescriptors ||
+        this.importDirectoryArchives || this.downloadRelayDescriptors) &&
+        !(this.writeDirectoryArchives ||
+        this.writeRelayDescriptorDatabase || this.writeConsensusStats ||
+        this.writeDirreqStats || this.writeBridgeStats ||
+        this.writeServerDescriptorStats)) {
+      logger.warning("We are configured to import/download relay "
+          + "descriptors, but we don't have a single data sink to write "
+          + "relay descriptors to.");
+    }
+    if (!(this.importCachedRelayDescriptors ||
+        this.importDirectoryArchives || this.downloadRelayDescriptors) &&
+        (this.writeDirectoryArchives ||
+        this.writeRelayDescriptorDatabase || this.writeConsensusStats ||
+        this.writeDirreqStats || this.writeBridgeStats ||
+        this.writeServerDescriptorStats)) {
+      logger.warning("We are configured to write relay descriptor to at "
+          + "least one data sink, but we don't have a single data source "
+          + "containing relay descriptors.");
+    }
+    if ((this.importSanitizedBridges || this.importBridgeSnapshots) &&
+        !(this.writeSanitizedBridges || this.writeConsensusStats ||
+        this.writeBridgeStats)) {
+      logger.warning("We are configured to import/download bridge "
+          + "descriptors, but we don't have a single data sink to write "
+          + "bridge descriptors to.");
+    }
+    if (!(this.importSanitizedBridges || this.importBridgeSnapshots) &&
+        (this.writeSanitizedBridges || this.writeConsensusStats ||
+        this.writeBridgeStats)) {
+      logger.warning("We are configured to write bridge descriptor to at "
+          + "least one data sink, but we don't have a single data source "
+          + "containing bridge descriptors.");
+    }
   }
   public boolean getWriteConsensusStats() {
     return this.writeConsensusStats;
