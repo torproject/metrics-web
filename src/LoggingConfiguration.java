@@ -82,7 +82,9 @@ public class LoggingConfiguration {
             + "            <td>"
             + dateTimeFormat.format(new Date(record.getMillis()))
             + "</td>\n"
-            + "            <td>" + record.getMessage() + "</td>\n"
+            + "            <td>"
+            + record.getMessage().replaceAll("\n", "<br/>")
+            + "</td>\n"
             + "          </tr>\n";
         if (record.getLevel().equals(Level.INFO)) {
           this.infos.append(msg);
