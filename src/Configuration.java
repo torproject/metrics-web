@@ -246,12 +246,19 @@ public class Configuration {
     if (!(this.importCachedRelayDescriptors ||
         this.importDirectoryArchives || this.downloadRelayDescriptors) &&
         (this.writeDirectoryArchives ||
-        this.writeRelayDescriptorDatabase || this.writeConsensusStats ||
-        this.writeDirreqStats || this.writeBridgeStats ||
+        this.writeRelayDescriptorDatabase || this.writeDirreqStats ||
         this.writeServerDescriptorStats)) {
       logger.warning("We are configured to write relay descriptor to at "
           + "least one data sink, but we don't have a single data source "
           + "containing relay descriptors.");
+    }
+    if (!(this.importCachedRelayDescriptors ||
+        this.importDirectoryArchives || this.downloadRelayDescriptors ||
+        this.importSanitizedBridges || this.importBridgeSnapshots) &&
+        (this.writeBridgeStats || this.writeConsensusStats)) {
+      logger.warning("We are configured to write relay or bridge "
+          + "descriptors to at least one data sink, but we have neither "
+          + "data sources containing relay nor bridge descriptors.");
     }
     if ((this.importSanitizedBridges || this.importBridgeSnapshots) &&
         !(this.writeSanitizedBridges || this.writeConsensusStats ||
@@ -261,8 +268,7 @@ public class Configuration {
           + "bridge descriptors to.");
     }
     if (!(this.importSanitizedBridges || this.importBridgeSnapshots) &&
-        (this.writeSanitizedBridges || this.writeConsensusStats ||
-        this.writeBridgeStats)) {
+        (this.writeSanitizedBridges)) {
       logger.warning("We are configured to write bridge descriptor to at "
           + "least one data sink, but we don't have a single data source "
           + "containing bridge descriptors.");
