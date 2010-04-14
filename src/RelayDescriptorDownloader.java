@@ -198,6 +198,7 @@ public class RelayDescriptorDownloader {
             + "descriptors we are missing.", e);
       }
 
+      dumpStats = new StringBuilder();
       dumpStats.append("Finished downloading relay descriptors from the "
         + "directory authorities:\nAt the beginning of this execution, "
         + "we were missing " + missingConsensuses + " consensuses, "
