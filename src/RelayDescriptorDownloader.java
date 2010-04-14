@@ -370,7 +370,7 @@ public class RelayDescriptorDownloader {
      * we got. In every iteration, compile a new list of URLs, remove
      * those that we tried before, and download the remaining ones. Stop
      * when there are no new URLs anymore. */
-    do {
+    while (true) {
 
       /* Compile list of URLs to download in this iteration. */
       urls.clear();
@@ -404,6 +404,11 @@ public class RelayDescriptorDownloader {
         }
       }
       urls.removeAll(downloaded);
+
+      /* Stop if we don't have (new) URLs to download. */
+      if (urls.isEmpty()) {
+        break;
+      }
 
       for (String url : urls) {
         if (url.endsWith("consensus")) {
@@ -489,7 +494,7 @@ public class RelayDescriptorDownloader {
         }
       }
       downloaded.addAll(urls);
-    } while (!urls.isEmpty());
+    }
   }
 
   public void writeFile() {
