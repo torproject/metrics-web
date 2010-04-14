@@ -129,7 +129,8 @@ public class ArchiveWriter {
       }
       for (File f : consensuses) {
         BufferedReader br = new BufferedReader(new FileReader(f));
-        String line = null, validAfterTime = null, voteFilename = null;
+        String line = null, validAfterTime = null,
+            voteFilenamePrefix = null, dirSource = null;
         int allVotes = 0, foundVotes = 0,
             allServerDescs = 0, foundServerDescs = 0,
             allExtraInfos = 0, foundExtraInfos = 0;
@@ -138,15 +139,15 @@ public class ArchiveWriter {
             validAfterTime = line.substring("valid-after ".length());
             long validAfter = validAfterFormat.parse(
                 validAfterTime).getTime();
-            voteFilename = outputDirectory + "/vote/"
+            voteFilenamePrefix = outputDirectory + "/vote/"
                 + consensusVoteFormat.format(new Date(validAfter))
                 + "-vote-";
           } else if (line.startsWith("dir-source ")) {
-            voteFilename += line.split(" ")[2] + "-";
+            dirSource = line.split(" ")[2];
           } else if (line.startsWith("vote-digest ")) {
-            voteFilename += line.split(" ")[1];
             allVotes++;
-            File voteFile = new File(voteFilename);
+            File voteFile = new File(voteFilenamePrefix + dirSource + "-"
+                + line.split(" ")[1]);
             if (voteFile.exists()) {
               foundVotes++;
               BufferedReader vbr = new BufferedReader(new FileReader(
