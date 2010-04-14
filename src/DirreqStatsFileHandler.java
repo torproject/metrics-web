@@ -40,6 +40,8 @@ public class DirreqStatsFileHandler {
    */
   private Logger logger;
 
+  private int addedResults = 0;
+
   /**
    * Initializes this class, including reading in previous results from
    * <code>stats/dirreq-stats</code>.
@@ -139,6 +141,7 @@ public class DirreqStatsFileHandler {
       this.logger.finer("Adding new directory request numbers: " + value);
       this.dirreqs.put(key, value);
       this.dirreqsModified = true;
+      this.addedResults++;
     } else if (value.compareTo(this.dirreqs.get(key)) > 0) {
       this.logger.warning("The directory request numbers we were just "
           + "given (" + value + ") are different from what we learned "
@@ -213,6 +216,28 @@ public class DirreqStatsFileHandler {
 
     /* Set modification flag to false again. */
     this.dirreqsModified = false;
+
+    /* Write stats. */
+    StringBuilder dumpStats = new StringBuilder("Finished writing "
+        + "statistics on directory requests by country.\nAdded "
+        + this.addedResults + " new observations in this execution.\n"
+        + "Last known obserations by directory are:");
+    String lastDir = null;
+    String lastDate = null;
+    for (String line : this.dirreqs.keySet()) {
+      String[] parts = line.split(",");
+      if (lastDir == null) {
+        lastDir = parts[0];
+      } else if (!parts[0].equals(lastDir)) {
+        dumpStats.append("\n" + lastDir.substring(0, 8) + " " + lastDate);
+        lastDir = parts[0];
+      }
+      lastDate = parts[1];
+    }
+    if (lastDir != null) {
+      dumpStats.append("\n" + lastDir.substring(0, 8) + " " + lastDate);
+    }
+    logger.info(dumpStats.toString());
   }
 }
 

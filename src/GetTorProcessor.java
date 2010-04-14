@@ -83,6 +83,10 @@ public class GetTorProcessor {
       logger.log(Level.WARNING, "Failed writing "
           + statsFile.getAbsolutePath() + "!", e);
     }
+
+    logger.info("Finished downloading and processing statistics on Tor "
+        + "packages delivered by GetTor.\nDownloaded " + unparsed.length()
+        + " bytes. Last date in statistics is " + data.lastKey());
   }
 }
 

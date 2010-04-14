@@ -43,6 +43,37 @@ public class ExitListDownloader {
       logger.log(Level.WARNING, "Failed downloading exit list", e);
       return;
     }
+
+    /* Write stats. */
+    StringBuilder dumpStats = new StringBuilder("Finished downloading "
+        + "exit list.\nLast three exit lists are:");
+    Stack<File> filesInInputDir = new Stack<File>();
+    filesInInputDir.add(new File("exitlist"));
+    SortedSet<File> lastThreeExitLists = new TreeSet<File>();
+    while (!filesInInputDir.isEmpty()) {
+      File pop = filesInInputDir.pop();
+      if (pop.isDirectory()) {
+        SortedSet<File> lastThreeElements = new TreeSet<File>();
+        for (File f : pop.listFiles()) {
+          lastThreeElements.add(f);
+        }
+        while (lastThreeElements.size() > 3) {
+          lastThreeElements.remove(lastThreeElements.first());
+        }
+        for (File f : lastThreeElements) {
+          filesInInputDir.add(f);
+        }
+      } else {
+        lastThreeExitLists.add(pop);
+        while (lastThreeExitLists.size() > 3) {
+          lastThreeExitLists.remove(lastThreeExitLists.first());
+        }
+      }
+    }
+    for (File f : lastThreeExitLists) {
+      dumpStats.append("\n" + f.getName());
+    }
+    logger.info(dumpStats.toString());
   }
 }
 

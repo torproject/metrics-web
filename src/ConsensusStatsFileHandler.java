@@ -82,6 +82,8 @@ public class ConsensusStatsFileHandler {
    */
   private Logger logger;
 
+  private int relayResultsAdded = 0, bridgeResultsAdded = 0;
+
  /**
   * Initializes this class, including reading in intermediate results
   * files <code>stats/consensus-stats-raw</code> and
@@ -231,6 +233,7 @@ public class ConsensusStatsFileHandler {
       this.logger.finer("Adding new relay numbers: " + line);
       this.relaysRaw.put(validAfter, line);
       this.relaysRawModified = true;
+      this.relayResultsAdded++;
     } else if (!line.equals(this.relaysRaw.get(validAfter))) {
       this.logger.warning("The numbers of relays with Exit, Fast, "
         + "Guard, Running, and Stable flag we were just given (" + line
@@ -251,6 +254,7 @@ public class ConsensusStatsFileHandler {
       this.logger.finer("Adding new bridge numbers: " + line);
       this.bridgesRaw.put(published, line);
       this.bridgesRawModified = true;
+      this.bridgeResultsAdded++;
     } else if (!line.equals(this.bridgesRaw.get(published))) {
       this.logger.warning("The numbers of running bridges we were just "
         + "given (" + line + ") are different from what we learned "
@@ -472,6 +476,13 @@ public class ConsensusStatsFileHandler {
 
     /* Set modification flags to false again. */
     this.relaysRawModified = this.bridgesRawModified = false;
+
+    logger.info("Finished writing statistics on relay consensuses and "
+        + "bridge statuses to disk.\nAdded " + this.relayResultsAdded
+        + "relay consensuses and " + this.bridgeResultsAdded + " bridge "
+        + "statuses in this execution.\nLast known relay consensus was "
+        + "published "+ this.relaysRaw.lastKey() + ", last known bridge "
+        + "status was published " + this.bridgesRaw.lastKey());
   }
 }
 

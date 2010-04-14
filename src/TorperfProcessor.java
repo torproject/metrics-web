@@ -11,6 +11,7 @@ public class TorperfProcessor {
     File torperfDir = new File(torperfDirectory);
     SortedMap<String, String> rawObs = new TreeMap<String, String>();
     SortedMap<String, String> stats = new TreeMap<String, String>();
+    int addedRawObs = 0;
     try {
       if (rawFile.exists()) {
         logger.fine("Reading file " + rawFile.getAbsolutePath() + "...");
@@ -84,6 +85,7 @@ public class TorperfProcessor {
                 String value = key + "," + completeMillis;
                 if (!rawObs.containsKey(key)) {
                   rawObs.put(key, value);
+                  addedRawObs++;
                   // TODO if torperf-stats generation takes long, compile
                   // list of dates that have changes for torperf-stats and
                   // only re-generate those
@@ -154,6 +156,30 @@ public class TorperfProcessor {
           + rawFile.getAbsolutePath() + " or "
           + statsFile.getAbsolutePath() + "!", e);
     }
+
+    /* Write stats. */
+    StringBuilder dumpStats = new StringBuilder("Finished writing "
+        + "statistics on torperf results.\nAdded " + addedRawObs
+        + " new observations in this execution.\n"
+        + "Last known obserations by source and file size are:");
+    String lastSource = null;
+    String lastLine = null;
+    for (String s : rawObs.keySet()) {
+      String[] parts = s.split(",");
+      if (lastSource == null) {
+        lastSource = parts[0];
+      } else if (!parts[0].equals(lastSource)) {
+        dumpStats.append("\n" + lastSource + " " + lastLine.split(" ")[1]
+            + " " + lastLine.split(" ")[2]);
+        lastSource = parts[0];
+      }
+      lastLine = s;
+    }
+    if (lastSource != null) {
+      dumpStats.append("\n" + lastSource + " " + lastLine.split(" ")[1]
+          + " " + lastLine.split(" ")[2]);
+    }
+    logger.info(dumpStats.toString());
   }
 }
 

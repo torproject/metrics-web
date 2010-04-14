@@ -120,6 +120,8 @@ public class ServerDescriptorStatsFileHandler {
 
   // TODO should there be a modified flag, too?
 
+  private int addedConsensuses = 0, addedServerDescriptors = 0;
+
   /**
    * Initializes this class, without reading in any files. We're only
    * reading in files when writing results to disk in
@@ -164,6 +166,7 @@ public class ServerDescriptorStatsFileHandler {
     if (!this.consensuses.containsKey(validAfter)) {
       this.logger.finer("Adding consensus published at " + validAfter
           + ".");
+      this.addedConsensuses++;
     } else {
       this.logger.fine("We already learned about a consensus published "
           + "at " + validAfter + " in this execution. Overwriting.");
@@ -228,6 +231,7 @@ public class ServerDescriptorStatsFileHandler {
     if (!this.descriptors.containsKey(key)) {
       this.logger.finer("Adding server descriptor with identifier "
           + descriptorIdentity + ".");
+      this.addedServerDescriptors++;
     } else {
       this.logger.fine("We already learned about a server descriptor "
           + "with identifier " + descriptorIdentity + ", published at "
@@ -258,6 +262,8 @@ public class ServerDescriptorStatsFileHandler {
    * lines and another time for extracting statistics.
    */
   public void writeFiles() {
+
+   String lastWrittenDay = null;
 
    try {
 
@@ -432,6 +438,7 @@ public class ServerDescriptorStatsFileHandler {
            * least half of the possible 24 consensuses of that day, write
            * stats to disk. */
           if (consensusesAtThisDay >= 12) {
+            lastWrittenDay = statsDate;
             versionWriter.write(statsDate);
             for (int i = 0; i < versionStats.length; i++) {
               versionWriter.write("," + (versionStats[i] /
@@ -599,5 +606,17 @@ public class ServerDescriptorStatsFileHandler {
     } catch (Exception e) {
       this.logger.log(Level.WARNING, "Exception while writing files.", e);
     }
+
+    StringBuilder dumpStats = new StringBuilder("Finished writing "
+        + "statistics information contained in consensuses and server "
+        + "descriptors.\nAdded " + this.addedConsensuses + " consensuses "
+        + "and " + this.addedServerDescriptors + " in this execution.\n");
+    if (lastWrittenDay == null) {
+      dumpStats.append("No statistics written so far.");
+    } else {
+      dumpStats.append("Last written day of statistics was "
+          + lastWrittenDay);
+    }
+    this.logger.info(dumpStats.toString());
   }
 }
