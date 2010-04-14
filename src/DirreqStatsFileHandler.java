@@ -222,7 +222,7 @@ public class DirreqStatsFileHandler {
     StringBuilder dumpStats = new StringBuilder("Finished writing "
         + "statistics on directory requests by country.\nAdded "
         + this.addedResults + " new observations in this execution.\n"
-        + "Last known obserations by directory are:");
+        + "Last known observations by directory are:");
     String lastDir = null;
     String lastDate = null;
     for (String line : this.dirreqs.keySet()) {
