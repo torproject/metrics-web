@@ -321,7 +321,7 @@ public class SanitizedBridgesWriter {
          * status. If there is, we should probably learn before writing
          * anything to the sanitized descriptors. */
         } else {
-          this.logger.warning("Unknown line '" + line + "' in bridge "
+          this.logger.fine("Unknown line '" + line + "' in bridge "
               + "network status. Not writing to disk!");
           return;
         }
@@ -540,8 +540,7 @@ public class SanitizedBridgesWriter {
          * that we need to remove or replace for the sanitized descriptor
          * version. */
         } else {
-          this.logger.warning("Unrecognized line '" + line
-              + "'. Skipping.");
+          this.logger.fine("Unrecognized line '" + line + "'. Skipping.");
           return;
         }
       }
@@ -662,8 +661,7 @@ public class SanitizedBridgesWriter {
          * that we need to remove or replace for the sanitized descriptor
          * version. */
         } else {
-          this.logger.warning("Unrecognized line '" + line
-              + "'. Skipping");
+          this.logger.fine("Unrecognized line '" + line + "'. Skipping.");
           return;
         }
       }
