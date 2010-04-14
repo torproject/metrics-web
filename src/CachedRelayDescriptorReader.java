@@ -100,7 +100,7 @@ public class CachedRelayDescriptorReader {
                 parsedNum++;
               }
             }
-            dumpStats.append("\n" + f.getName() + ": " + parsedNum
+            dumpStats.append("\n" + f.getName() + ": " + parsedNum + " "
                 + (f.getName().startsWith("cached-descriptors") ?
                 "server" : "extra-info") + " descriptors");
             logger.fine("Finished reading "

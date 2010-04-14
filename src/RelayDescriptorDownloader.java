@@ -201,10 +201,10 @@ public class RelayDescriptorDownloader {
       dumpStats = new StringBuilder();
       dumpStats.append("Finished downloading relay descriptors from the "
         + "directory authorities:\nAt the beginning of this execution, "
-        + "we were missing " + missingConsensuses + " consensuses, "
-        + missingVotes + " votes, " + missingServerDescriptors
-        + " server descriptors, and " + missingExtraInfoDescriptors
-        + " extra-info descriptors.");
+        + "we were missing " + missingConsensuses + " consensus(es), "
+        + missingVotes + " vote(s), " + missingServerDescriptors
+        + " server descriptor(s), and " + missingExtraInfoDescriptors
+        + " extra-info descriptor(s).\n");
     }
   }
 
@@ -514,27 +514,27 @@ public class RelayDescriptorDownloader {
     }
 
     dumpStats.append("During this execution, we added "
-        + this.newMissingConsensuses + " consensuses, "
-        + this.newMissingVotes + " votes, "
-        + this.newMissingServerDescriptors + " server descriptors, and "
-        + this.newMissingExtraInfoDescriptors + " extra-info descriptors "
-        + "to the missing list.\n");
+        + this.newMissingConsensuses + " consensus(es), "
+        + this.newMissingVotes + " vote(s), "
+        + this.newMissingServerDescriptors + " server descriptor(s), and "
+        + this.newMissingExtraInfoDescriptors + " extra-info "
+        + "descriptor(s) to the missing list.\n");
     dumpStats.append("We attempted to download " + this.triedConsensuses
-        + " consensuses, " + this.triedVotes + " votes, "
-        + this.triedServerDescriptors + " server descriptors, and "
-        + this.triedExtraInfoDescriptors + " extra-info descriptors from "
-        + "the directory authorities.\n");
-    dumpStats.append("We successfully downloaded "
-        + this.downloadedConsensuses + " consensuses, "
-        + this.downloadedVotes + " votes, "
-        + this.downloadedServerDescriptors + " server descriptors, and "
-        + this.downloadedExtraInfoDescriptors + " extra-info descriptors "
+        + " consensus(es), " + this.triedVotes + " vote(s), "
+        + this.triedServerDescriptors + " server descriptor(s), and "
+        + this.triedExtraInfoDescriptors + " extra-info descriptor(s) "
         + "from the directory authorities.\n");
+    dumpStats.append("We successfully downloaded "
+        + this.downloadedConsensuses + " consensus(es), "
+        + this.downloadedVotes + " vote(s), "
+        + this.downloadedServerDescriptors + " server descriptor(s), and "
+        + this.downloadedExtraInfoDescriptors + " extra-info "
+        + "descriptor(s) from the directory authorities.\n");
     dumpStats.append("At the end of this execution, "
-      + "we are missing " + missingConsensuses + " consensuses, "
-      + missingVotes + " votes, " + missingServerDescriptors
-      + " server descriptors, and " + missingExtraInfoDescriptors
-      + " extra-info descriptors, some of which we may try in the next "
+      + "we are missing " + missingConsensuses + " consensus(es), "
+      + missingVotes + " vote(s), " + missingServerDescriptors
+      + " server descriptor(s), and " + missingExtraInfoDescriptors
+      + " extra-info descriptor(s), some of which we may try in the next "
       + "execution.");
     this.logger.info(dumpStats.toString());
   }

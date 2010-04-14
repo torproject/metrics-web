@@ -115,7 +115,7 @@ public class ArchiveReader {
       }
     }
     logger.info("Finished importing relay descriptors from local "
-        + "directory:\nParsed " + parsedFiles + " and ignored "
+        + "directory:\nParsed " + parsedFiles + ", ignored "
         + ignoredFiles + " files.");
   }
 }

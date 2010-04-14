@@ -93,10 +93,10 @@ public class ArchiveWriter {
   public void dumpStats() {
     StringBuilder sb = new StringBuilder("Finished writing relay "
         + "descriptors to disk:\nIn this execution, we stored "
-        + this.storedConsensuses + " consensuses, " + this.storedVotes
-        + " votes, " + this.storedServerDescriptors
-        + " server descriptors, and " + this.storedExtraInfoDescriptors
-        + " extra-info descriptors to disk.\n");
+        + this.storedConsensuses + " consensus(es), " + this.storedVotes
+        + " vote(s), " + this.storedServerDescriptors
+        + " server descriptor(s), and " + this.storedExtraInfoDescriptors
+        + " extra-info descriptor(s) to disk.\n");
     sb.append("Statistics on the completeness of written relay "
         + "descriptors of the past 12 consensuses (Consensus/Vote, "
         + "valid-after, votes, server descriptors, extra-infos):");
@@ -211,9 +211,8 @@ public class ArchiveWriter {
                 }
               }
               vbr.close();
-              sb.append(String.format("%nV %s               "
-                  + " %d/%d (%5.1f%%)  %d/%d (%5.1f%%)",
-                  validAfterTime,
+              sb.append(String.format("%nV, %s, NA, %d/%d (%5.1f%%), "
+                  + "%d/%d (%5.1f%%)", validAfterTime,
                   voteFoundServerDescs, voteAllServerDescs,
                   100.0D * (double) voteFoundServerDescs /
                     (double) voteAllServerDescs,
@@ -257,8 +256,8 @@ public class ArchiveWriter {
             }
           }
         }
-        sb.append(String.format("%nC %s  %d/%d (%5.1f%%)  %d/%d (%5.1f%%)  "
-            + "%d/%d (%5.1f%%)",
+        sb.append(String.format("%nC, %s, %d/%d (%5.1f%%), "
+            + "%d/%d (%5.1f%%), %d/%d (%5.1f%%)",
             validAfterTime, foundVotes, allVotes,
             100.0D * (double) foundVotes / (double) allVotes,
             foundServerDescs, allServerDescs,
