@@ -8,12 +8,15 @@ import org.apache.commons.codec.binary.*;
 public class ArchiveWriter {
   private Logger logger;
   private String outputDirectory;
+  private int storedConsensuses = 0, storedVotes = 0,
+      storedServerDescriptors = 0, storedExtraInfoDescriptors = 0;
+
   public ArchiveWriter(String outputDirectory) {
     this.logger = Logger.getLogger(ArchiveWriter.class.getName());
     this.outputDirectory = outputDirectory;
   }
 
-  private void store(byte[] data, String filename) {
+  private boolean store(byte[] data, String filename) {
     try {
       File file = new File(filename);
       if (!file.exists()) {
@@ -23,11 +26,13 @@ public class ArchiveWriter {
             new FileOutputStream(file));
         bos.write(data, 0, data.length);
         bos.close();
+        return true;
       }
     } catch (IOException e) {
       this.logger.log(Level.WARNING, "Could not store relay descriptor "
           + filename, e);
     }
+    return false;
   }
 
   public void storeConsensus(byte[] data, long validAfter) {
@@ -36,7 +41,9 @@ public class ArchiveWriter {
     printFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     String filename = outputDirectory + "/consensus/"
         + printFormat.format(new Date(validAfter)) + "-consensus";
-    this.store(data, filename);
+    if (this.store(data, filename)) {
+      this.storedConsensuses++;
+    }
   }
 
   public void storeVote(byte[] data, long validAfter,
@@ -47,7 +54,9 @@ public class ArchiveWriter {
     String filename = outputDirectory + "/vote/"
         + printFormat.format(new Date(validAfter)) + "-vote-"
         + fingerprint + "-" + digest;
-    this.store(data, filename);
+    if (this.store(data, filename)) {
+      this.storedVotes++;
+    }
   }
 
   public void storeServerDescriptor(byte[] data, String digest,
@@ -58,7 +67,9 @@ public class ArchiveWriter {
         + printFormat.format(new Date(published))
         + digest.substring(0, 1) + "/" + digest.substring(1, 2) + "/"
         + digest;
-    this.store(data, filename);
+    if (this.store(data, filename)) {
+      this.storedServerDescriptors++;
+    }
   }
 
   public void storeExtraInfoDescriptor(byte[] data,
@@ -70,27 +81,9 @@ public class ArchiveWriter {
         + extraInfoDigest.substring(0, 1) + "/"
         + extraInfoDigest.substring(1, 2) + "/"
         + extraInfoDigest;
-    this.store(data, filename);
-  }
-
-  private SortedSet<String> getFileNames(File dir) {
-    SortedSet<String> files = new TreeSet<String>();
-    Stack<File> leftToParse = new Stack<File>();
-    leftToParse.add(dir);
-    while (!leftToParse.isEmpty()) {
-      File pop = leftToParse.pop();
-      if (pop.isDirectory()) {
-        for (File f : pop.listFiles()) {
-          leftToParse.add(f);
-        }
-      } else if (pop.length() > 0) {
-        String absPath = pop.getAbsolutePath().replaceAll(":", "-");
-        String relPath = absPath.substring(absPath.indexOf(
-            outputDirectory + "/"));
-        files.add(relPath);
-      }
+    if (this.store(data, filename)) {
+      this.storedExtraInfoDescriptors++;
     }
-    return files;
   }
 
   /**
@@ -98,15 +91,16 @@ public class ArchiveWriter {
    * on level INFO.
    */
   public void dumpStats() {
+    StringBuilder sb = new StringBuilder("Finished writing relay "
+        + "descriptors to disk:\nIn this execution, we stored "
+        + this.storedConsensuses + " consensuses, " + this.storedVotes
+        + " votes, " + this.storedServerDescriptors
+        + " server descriptors, and " + this.storedExtraInfoDescriptors
+        + " extra-info descriptors to disk.\n");
+    sb.append("Statistics on the completeness of written relay "
+        + "descriptors of the past 12 consensuses (Consensus/Vote, "
+        + "valid-after, votes, server descriptors, extra-infos):");
     try {
-      SortedSet<String> votes = getFileNames(
-          new File(outputDirectory + "/vote"));
-      SortedSet<String> serverDescs = getFileNames(
-          new File(outputDirectory + "/server-descriptor"));
-      SortedSet<String> extraInfos = getFileNames(
-          new File(outputDirectory + "/extra-info"));
-      SortedSet<String> consensuses = getFileNames(
-          new File(outputDirectory + "/consensus"));
       SimpleDateFormat validAfterFormat =
           new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
       validAfterFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -116,17 +110,37 @@ public class ArchiveWriter {
       SimpleDateFormat descriptorFormat =
           new SimpleDateFormat("yyyy/MM/");
       descriptorFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-      StringBuilder sb = new StringBuilder();
-      sb.append("  valid-after          votes         "
-          + "server descriptors  extra-infos\n");
-      SortedSet<String> lastConsensuses = new TreeSet<String>();
-      for (int i = 0; !consensuses.isEmpty() && i < 12; i++) {
-        String last = consensuses.last();
-        lastConsensuses.add(last);
-        consensuses.remove(last);
+
+      SortedSet<File> consensuses = new TreeSet<File>();
+      Stack<File> leftToParse = new Stack<File>();
+      leftToParse.add(new File(outputDirectory + "/consensus"));
+      while (!leftToParse.isEmpty()) {
+        File pop = leftToParse.pop();
+        if (pop.isDirectory()) {
+          for (File f : pop.listFiles()) {
+            leftToParse.add(f);
+          }
+        } else if (pop.length() > 0) {
+          consensuses.add(pop);
+        }
+        while (consensuses.size() > 12) {
+          consensuses.remove(consensuses.first());
+        }
       }
-      for (String f : lastConsensuses) {
-        BufferedReader br = new BufferedReader(new FileReader(new File(f)));
+      leftToParse.add(new File(outputDirectory + "/vote"));
+      SortedSet<File> votes = new TreeSet<File>();
+      while (!leftToParse.isEmpty()) {
+        File pop = leftToParse.pop();
+        if (pop.isDirectory()) {
+          for (File f : pop.listFiles()) {
+            leftToParse.add(f);
+          }
+        } else if (pop.length() > 0) {
+          votes.add(pop);
+        }
+      }
+      for (File f : consensuses) {
+        BufferedReader br = new BufferedReader(new FileReader(f));
         String line = null, validAfterTime = null, votePrefix = null;
         int allVotes = 0, foundVotes = 0,
             allServerDescs = 0, foundServerDescs = 0,
@@ -143,9 +157,9 @@ public class ArchiveWriter {
             allVotes++;
             String pattern = votePrefix + line.split(" ")[2];
             String votefilename = null;
-            for (String v : votes) {
-              if (v.startsWith(pattern)) {
-                votefilename = v;
+            for (File v : votes) {
+              if (v.getName().startsWith(pattern)) {
+                votefilename = v.getName();
                 break;
               }
             }
@@ -169,7 +183,7 @@ public class ArchiveWriter {
                       + descriptorFormat.format(new Date(published))
                       + digest.substring(0, 1) + "/"
                       + digest.substring(1, 2) + "/" + digest;
-                  if (serverDescs.contains(filename)) {
+                  if (new File(filename).exists()) {
                     BufferedReader sbr = new BufferedReader(new FileReader(
                         new File(filename)));
                     String line2 = null;
@@ -186,7 +200,7 @@ public class ArchiveWriter {
                             + extraInfoDigest.substring(0, 1) + "/"
                             + extraInfoDigest.substring(1, 2) + "/"
                             + extraInfoDigest;
-                        if (extraInfos.contains(filename2)) {
+                        if (new File(filename2).exists()) {
                           voteFoundExtraInfos++;
                         }
                       }
@@ -197,8 +211,8 @@ public class ArchiveWriter {
                 }
               }
               vbr.close();
-              sb.append(String.format("V %s               "
-                  + " %d/%d (%5.1f%%)  %d/%d (%5.1f%%)%n",
+              sb.append(String.format("%nV %s               "
+                  + " %d/%d (%5.1f%%)  %d/%d (%5.1f%%)",
                   validAfterTime,
                   voteFoundServerDescs, voteAllServerDescs,
                   100.0D * (double) voteFoundServerDescs /
@@ -217,7 +231,7 @@ public class ArchiveWriter {
                 + descriptorFormat.format(new Date(published))
                 + digest.substring(0, 1) + "/"
                 + digest.substring(1, 2) + "/" + digest;
-            if (serverDescs.contains(filename)) {
+            if (new File (filename).exists()) {
               BufferedReader sbr = new BufferedReader(new FileReader(
                   new File(filename)));
               String line2 = null;
@@ -233,7 +247,7 @@ public class ArchiveWriter {
                       + extraInfoDigest.substring(0, 1) + "/"
                       + extraInfoDigest.substring(1, 2) + "/"
                       + extraInfoDigest;
-                  if (extraInfos.contains(filename2)) {
+                  if (new File (filename2).exists()) {
                     foundExtraInfos++;
                   }
                 }
@@ -243,8 +257,8 @@ public class ArchiveWriter {
             }
           }
         }
-        sb.append(String.format("C %s  %d/%d (%5.1f%%)  %d/%d (%5.1f%%)  "
-            + "%d/%d (%5.1f%%)%n",
+        sb.append(String.format("%nC %s  %d/%d (%5.1f%%)  %d/%d (%5.1f%%)  "
+            + "%d/%d (%5.1f%%)",
             validAfterTime, foundVotes, allVotes,
             100.0D * (double) foundVotes / (double) allVotes,
             foundServerDescs, allServerDescs,
@@ -252,8 +266,7 @@ public class ArchiveWriter {
             foundExtraInfos, allExtraInfos,
             100.0D * (double) foundExtraInfos / (double) allExtraInfos));
       }
-      this.logger.info("Statistics on relay descriptors from the last 12 "
-          + "known consensuses:\n" + sb.toString());
+      this.logger.info(sb.toString());
     } catch (IOException e) {
       this.logger.log(Level.WARNING, "Could not dump statistics to disk.",
           e);

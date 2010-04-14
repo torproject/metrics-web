@@ -10,6 +10,7 @@ import org.apache.commons.compress.compressors.bzip2.*;
 public class ArchiveReader {
   public ArchiveReader(RelayDescriptorParser rdp, String archivesDir,
       boolean keepImportHistory) {
+    int parsedFiles = 0, ignoredFiles = 0;
     Logger logger = Logger.getLogger(ArchiveReader.class.getName());
     SortedSet<String> archivesImportHistory = new TreeSet<String>();
     File archivesImportHistoryFile =
@@ -46,6 +47,7 @@ public class ArchiveReader {
               BufferedInputStream bis = null;
               if (keepImportHistory &&
                   archivesImportHistory.contains(pop.getName())) {
+                ignoredFiles++;
                 continue;
               } else if (pop.getName().endsWith(".tar.bz2")) {
                 logger.warning("Cannot parse compressed tarball "
@@ -72,6 +74,7 @@ public class ArchiveReader {
               bis.close();
               byte[] allData = baos.toByteArray();
               rdp.parse(allData);
+              parsedFiles++;
             } catch (IOException e) {
               problems.add(pop);
               if (problems.size() > 3) {
@@ -111,6 +114,9 @@ public class ArchiveReader {
             + "history file.");
       }
     }
+    logger.info("Finished importing relay descriptors from local "
+        + "directory:\nParsed " + parsedFiles + " and ignored "
+        + ignoredFiles + " files.");
   }
 }
 

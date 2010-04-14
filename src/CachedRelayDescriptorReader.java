@@ -10,6 +10,8 @@ import java.util.logging.*;
 public class CachedRelayDescriptorReader {
   public CachedRelayDescriptorReader(RelayDescriptorParser rdp,
       List<String> inputDirectories) {
+    StringBuilder dumpStats = new StringBuilder("Finished importing "
+        + "relay descriptors from local Tor data directories:");
     Logger logger = Logger.getLogger(
         CachedRelayDescriptorReader.class.getName());
     for (String inputDirectory : inputDirectories) {
@@ -42,6 +44,8 @@ public class CachedRelayDescriptorReader {
             String line = null;
             while ((line = br.readLine()) != null) {
               if (line.startsWith("valid-after ")) {
+                dumpStats.append("\n" + f.getName() + ": " + line.substring(
+                    "valid-after ".length()));
                 SimpleDateFormat dateTimeFormat =
                     new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -52,6 +56,7 @@ public class CachedRelayDescriptorReader {
                       + cachedDescDir.getAbsolutePath() + " are stale. "
                       + "The valid-after line in cached-consensus is '"
                       + line + "'.");
+                  dumpStats.append(" (stale!)");
                 }
                 break;
               }
@@ -72,6 +77,7 @@ public class CachedRelayDescriptorReader {
                 "router " : "extra-info ";
             String sigToken = "\nrouter-signature\n";
             String endToken = "\n-----END SIGNATURE-----\n";
+            int parsedNum = 0;
             while (end < ascii.length()) {
               start = ascii.indexOf(startToken, end);
               if (start < 0) {
@@ -91,8 +97,12 @@ public class CachedRelayDescriptorReader {
               System.arraycopy(allData, start, descBytes, 0, end - start);
               if (rdp != null) {
                 rdp.parse(descBytes);
+                parsedNum++;
               }
             }
+            dumpStats.append("\n" + f.getName() + ": " + parsedNum
+                + (f.getName().startsWith("cached-descriptors") ?
+                "server" : "extra-info") + " descriptors");
             logger.fine("Finished reading "
                 + cachedDescDir.getAbsolutePath() + " directory.");
           }
@@ -105,6 +115,7 @@ public class CachedRelayDescriptorReader {
         }
       }
     }
+    logger.info(dumpStats.toString());
   }
 }
 

@@ -92,10 +92,15 @@ public class Main {
       if (rdd != null) {
         rdd.downloadMissingDescriptors();
         rdd.writeFile();
+        rdd = null;
       }
     }
 
     // Write output to disk that only depends on relay descriptors
+    if (aw != null) {
+      aw.dumpStats();
+      aw = null;
+    }
     if (dsfh != null) {
       dsfh.writeFile();
       dsfh = null;
@@ -103,10 +108,6 @@ public class Main {
     if (sdsfh != null) {
       sdsfh.writeFiles();
       sdsfh = null;
-    }
-    if (aw != null) {
-      aw.dumpStats();
-      aw = null;
     }
 
     // Import/download GeoIP databases

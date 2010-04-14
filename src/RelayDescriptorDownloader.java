@@ -99,6 +99,13 @@ public class RelayDescriptorDownloader {
    */
   private Logger logger;
 
+  private StringBuilder dumpStats;
+  private int newMissingConsensuses = 0, newMissingVotes = 0,
+      newMissingServerDescriptors = 0, newMissingExtraInfoDescriptors = 0,
+      triedConsensuses = 0, triedVotes = 0, triedServerDescriptors = 0,
+      triedExtraInfoDescriptors = 0, downloadedConsensuses = 0,
+      downloadedVotes = 0, downloadedServerDescriptors = 0,
+      downloadedExtraInfoDescriptors = 0;
   /**
    * Initializes this class, including reading in missing descriptors from
    * <code>stats/missing-relay-descriptors</code>.
@@ -144,6 +151,8 @@ public class RelayDescriptorDownloader {
      * directory servers. */
     this.missingDescriptorsFile = new File(
         "stats/missing-relay-descriptors");
+    int missingConsensuses = 0, missingVotes = 0,
+        missingServerDescriptors = 0, missingExtraInfoDescriptors = 0;
     if (this.missingDescriptorsFile.exists()) {
       try {
         this.logger.fine("Reading file "
@@ -160,6 +169,15 @@ public class RelayDescriptorDownloader {
                 ((line.startsWith("server,") ||
                 line.startsWith("extra,")) &&
                 this.descriptorCutOff.compareTo(published) <= 0)) {
+              if (line.startsWith("consensus,")) {
+                missingConsensuses++;
+              } else if (line.startsWith("vote,")) {
+                missingVotes++;
+              } else if (line.startsWith("server,")) {
+                missingServerDescriptors++;
+              } else if (line.startsWith("extra,")) {
+                missingExtraInfoDescriptors++;
+              }
               int separateAt = line.lastIndexOf(",");
               this.missingDescriptors.put(line.substring(0,
                   separateAt), line.substring(separateAt + 1));
@@ -179,6 +197,13 @@ public class RelayDescriptorDownloader {
             + "! This means that we might forget to dowload relay "
             + "descriptors we are missing.", e);
       }
+
+      dumpStats.append("Finished downloading relay descriptors from the "
+        + "directory authorities:\nAt the beginning of this execution, "
+        + "we were missing " + missingConsensuses + " consensuses, "
+        + missingVotes + " votes, " + missingServerDescriptors
+        + " server descriptors, and " + missingExtraInfoDescriptors
+        + " extra-info descriptors.");
     }
   }
 
@@ -203,6 +228,7 @@ public class RelayDescriptorDownloader {
           String voteKey = "vote," + validAfter + "," + dirSource;
           if (!this.missingDescriptors.containsKey(voteKey)) {
             this.missingDescriptors.put(voteKey, "NA");
+            this.newMissingVotes++;
           }
         }
       }
@@ -222,6 +248,7 @@ public class RelayDescriptorDownloader {
             if (!this.missingDescriptors.containsKey(
                 serverDescriptorKey)) {
               this.missingDescriptors.put(serverDescriptorKey, "NA");
+              this.newMissingServerDescriptors++;
             }
           }
         }
@@ -254,6 +281,7 @@ public class RelayDescriptorDownloader {
             if (!this.missingDescriptors.containsKey(
                 serverDescriptorKey)) {
               this.missingDescriptors.put(serverDescriptorKey, "NA");
+              this.newMissingServerDescriptors++;
             }
           }
         }
@@ -286,6 +314,7 @@ public class RelayDescriptorDownloader {
             + relayIdentity + "," + extraInfoDigest;
         if (!this.missingDescriptors.containsKey(extraInfoKey)) {
           this.missingDescriptors.put(extraInfoKey, "NA");
+          this.newMissingExtraInfoDescriptors++;
         }
       }
     }
@@ -350,10 +379,12 @@ public class RelayDescriptorDownloader {
               this.downloadCurrentConsensus &&
               this.currentValidAfter.equals(parts[1])) {
             urls.add("/tor/status-vote/current/consensus");
+            this.triedConsensuses++;
           } else if (parts[0].equals("vote") &&
               this.downloadCurrentVotes &&
               this.currentValidAfter.equals(parts[1])) {
             urls.add("/tor/status-vote/current/" + parts[2]);
+            this.triedVotes++;
           } else if (parts[0].equals("server") &&
               (this.downloadAllServerDescriptors ||
               (this.downloadDescriptorsForRelays != null &&
@@ -361,6 +392,7 @@ public class RelayDescriptorDownloader {
               toUpperCase()))) &&
               this.descriptorCutOff.compareTo(parts[1]) <= 0) {
             urls.add("/tor/server/d/" + parts[3]);
+            this.triedServerDescriptors++;
           } else if (parts[0].equals("extra") &&
               (this.downloadAllExtraInfos ||
               (this.downloadDescriptorsForRelays != null &&
@@ -368,6 +400,7 @@ public class RelayDescriptorDownloader {
               toUpperCase()))) &&
               this.descriptorCutOff.compareTo(parts[1]) <= 0) {
             urls.add("/tor/extra/d/" + parts[3]);
+            this.triedExtraInfoDescriptors++;
           }
         }
       }
@@ -413,6 +446,15 @@ public class RelayDescriptorDownloader {
             in.close();
             byte[] allData = baos.toByteArray();
             rdp.parse(allData);
+            if (url.endsWith("consensus")) {
+              this.downloadedConsensuses++;
+            } else if (url.contains("status-vote")) {
+              this.downloadedVotes++;
+            } else if (url.contains("server")) {
+              this.downloadedServerDescriptors++;
+            } else if (url.contains("extra")) {
+              this.downloadedExtraInfoDescriptors++;
+            }
           } else {
             retryUrls.add(url);
           }
@@ -440,6 +482,8 @@ public class RelayDescriptorDownloader {
   }
 
   public void writeFile() {
+    int missingConsensuses = 0, missingVotes = 0,
+        missingServerDescriptors = 0, missingExtraInfoDescriptors = 0;
     try {
       this.logger.fine("Writing file "
           + this.missingDescriptorsFile.getAbsolutePath() + "...");
@@ -448,6 +492,16 @@ public class RelayDescriptorDownloader {
           this.missingDescriptorsFile));
       for (Map.Entry<String, String> e :
           this.missingDescriptors.entrySet()) {
+        String key = e.getKey();
+        if (key.startsWith("consensus,")) {
+          missingConsensuses++;
+        } else if (key.startsWith("vote,")) {
+          missingVotes++;
+        } else if (key.startsWith("server,")) {
+          missingServerDescriptors++;
+        } else if (key.startsWith("extra,")) {
+          missingExtraInfoDescriptors++;
+        }
         bw.write(e.getKey() + "," + e.getValue() + "\n");
       }
       bw.close();
@@ -457,5 +511,30 @@ public class RelayDescriptorDownloader {
       this.logger.log(Level.WARNING, "Failed writing "
           + this.missingDescriptorsFile.getAbsolutePath() + "!", e);
     }
+
+    dumpStats.append("During this execution, we added "
+        + this.newMissingConsensuses + " consensuses, "
+        + this.newMissingVotes + " votes, "
+        + this.newMissingServerDescriptors + " server descriptors, and "
+        + this.newMissingExtraInfoDescriptors + " extra-info descriptors "
+        + "to the missing list.\n");
+    dumpStats.append("We attempted to download " + this.triedConsensuses
+        + " consensuses, " + this.triedVotes + " votes, "
+        + this.triedServerDescriptors + " server descriptors, and "
+        + this.triedExtraInfoDescriptors + " extra-info descriptors from "
+        + "the directory authorities.\n");
+    dumpStats.append("We successfully downloaded "
+        + this.downloadedConsensuses + " consensuses, "
+        + this.downloadedVotes + " votes, "
+        + this.downloadedServerDescriptors + " server descriptors, and "
+        + this.downloadedExtraInfoDescriptors + " extra-info descriptors "
+        + "from the directory authorities.\n");
+    dumpStats.append("At the end of this execution, "
+      + "we are missing " + missingConsensuses + " consensuses, "
+      + missingVotes + " votes, " + missingServerDescriptors
+      + " server descriptors, and " + missingExtraInfoDescriptors
+      + " extra-info descriptors, some of which we may try in the next "
+      + "execution.");
+    this.logger.info(dumpStats.toString());
   }
 }
