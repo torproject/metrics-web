@@ -107,7 +107,7 @@ public class ArchiveWriter {
         + "descriptors to disk.\n");
     sb.append(intermediateStats.toString());
     sb.append("Statistics on the completeness of written relay "
-        + "descriptors of the past 12 consensuses (Consensus/Vote, "
+        + "descriptors of the last 3 consensuses (Consensus/Vote, "
         + "valid-after, votes, server descriptors, extra-infos):");
     try {
       SimpleDateFormat validAfterFormat =
@@ -132,7 +132,7 @@ public class ArchiveWriter {
         } else if (pop.length() > 0) {
           consensuses.add(pop);
         }
-        while (consensuses.size() > 12) {
+        while (consensuses.size() > 3) {
           consensuses.remove(consensuses.first());
         }
       }
