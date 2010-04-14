@@ -54,7 +54,7 @@
 ## Import torperf data, if available, and write stats to disk
 #ImportWriteTorperfStats 0
 #
-## Relate path to directory to import torperf results from
+## Relative path to directory to import torperf results from
 #TorperfDirectory torperf/
 #
 ## Download and process GetTor stats
@@ -83,7 +83,7 @@
 ## Write sanitized bridges to disk
 #WriteSanitizedBridges 0
 #
-## Relate path to directory to write sanitized bridges to
+## Relative path to directory to write sanitized bridges to
 #SanitizedBridgesWriteDirectory sanitized-bridges/
 #
 ## Write consensus stats to disk
