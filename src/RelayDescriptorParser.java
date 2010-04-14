@@ -121,7 +121,7 @@ public class RelayDescriptorParser {
         String validAfterTime = null, descriptorIdentity = null,
             serverDesc = null;
         StringBuilder descriptorIdentities = new StringBuilder();
-        String fingerprint = null;
+        String fingerprint = null, dirSource = null;
         long validAfter = -1L;
         SortedSet<String> dirSources = new TreeSet<String>();
         SortedSet<String> serverDescriptors = new TreeSet<String>();
@@ -133,7 +133,9 @@ public class RelayDescriptorParser {
             validAfterTime = line.substring("valid-after ".length());
             validAfter = parseFormat.parse(validAfterTime).getTime();
           } else if (line.startsWith("dir-source ")) {
-            dirSources.add(line.split(" ")[2]);
+            dirSource = line.split(" ")[2];
+          } else if (line.startsWith("vote-digest ")) {
+            dirSources.add(dirSource);
           } else if (line.startsWith("fingerprint ")) {
             fingerprint = line.split(" ")[1];
           } else if (line.startsWith("r ")) {
