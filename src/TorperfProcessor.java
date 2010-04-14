@@ -169,15 +169,15 @@ public class TorperfProcessor {
       if (lastSource == null) {
         lastSource = parts[0];
       } else if (!parts[0].equals(lastSource)) {
-        dumpStats.append("\n" + lastSource + " " + lastLine.split(" ")[1]
-            + " " + lastLine.split(" ")[2]);
+        dumpStats.append("\n" + lastSource + " " + lastLine.split(",")[1]
+            + " " + lastLine.split(",")[2]);
         lastSource = parts[0];
       }
       lastLine = s;
     }
     if (lastSource != null) {
-      dumpStats.append("\n" + lastSource + " " + lastLine.split(" ")[1]
-          + " " + lastLine.split(" ")[2]);
+      dumpStats.append("\n" + lastSource + " " + lastLine.split(",")[1]
+          + " " + lastLine.split(",")[2]);
     }
     logger.info(dumpStats.toString());
   }
