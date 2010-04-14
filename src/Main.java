@@ -84,15 +84,21 @@ public class Main {
       if (config.getImportCachedRelayDescriptors()) {
         new CachedRelayDescriptorReader(rdp,
             config.getCachedRelayDescriptorDirectory());
+        aw.intermediateStats("importing relay descriptors from local Tor "
+            + "data directories");
       }
       if (config.getImportDirectoryArchives()) {
         new ArchiveReader(rdp, config.getDirectoryArchivesDirectory(),
             config.getKeepDirectoryArchiveImportHistory());
+        aw.intermediateStats("importing relay descriptors from local "
+            + "directory");
       }
       if (rdd != null) {
         rdd.downloadMissingDescriptors();
         rdd.writeFile();
         rdd = null;
+        aw.intermediateStats("downloading relay descriptors from the "
+            + "directory authorities");
       }
     }
 

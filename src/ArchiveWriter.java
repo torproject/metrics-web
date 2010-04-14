@@ -86,17 +86,24 @@ public class ArchiveWriter {
     }
   }
 
+  private StringBuilder intermediateStats = new StringBuilder();
+  public void intermediateStats(String event) {
+    intermediateStats.append("While " + event + ", we stored "
+        + this.storedConsensuses + " consensus(es), " + this.storedVotes
+        + " vote(s), " + this.storedServerDescriptors
+        + " server descriptor(s), and " + this.storedExtraInfoDescriptors
+        + " extra-info descriptor(s) to disk. Resetting counters.\n");
+    this.storedConsensuses = 0;
+    this.storedVotes = 0;
+    this.storedServerDescriptors = 0;
+    this.storedExtraInfoDescriptors = 0;
+  }
   /**
    * Dump some statistics on the completeness of descriptors to the logs
    * on level INFO.
    */
   public void dumpStats() {
-    StringBuilder sb = new StringBuilder("Finished writing relay "
-        + "descriptors to disk:\nIn this execution, we stored "
-        + this.storedConsensuses + " consensus(es), " + this.storedVotes
-        + " vote(s), " + this.storedServerDescriptors
-        + " server descriptor(s), and " + this.storedExtraInfoDescriptors
-        + " extra-info descriptor(s) to disk.\n");
+    StringBuilder sb = new StringBuilder(intermediateStats.toString());
     sb.append("Statistics on the completeness of written relay "
         + "descriptors of the past 12 consensuses (Consensus/Vote, "
         + "valid-after, votes, server descriptors, extra-infos):");
