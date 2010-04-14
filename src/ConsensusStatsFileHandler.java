@@ -479,10 +479,11 @@ public class ConsensusStatsFileHandler {
 
     logger.info("Finished writing statistics on relay consensuses and "
         + "bridge statuses to disk.\nAdded " + this.relayResultsAdded
-        + "relay consensuses and " + this.bridgeResultsAdded + " bridge "
-        + "statuses in this execution.\nLast known relay consensus was "
-        + "published "+ this.relaysRaw.lastKey() + ", last known bridge "
-        + "status was published " + this.bridgesRaw.lastKey());
+        + " relay consensus(es) and " + this.bridgeResultsAdded
+        + " bridge status(es) in this execution.\nLast known relay "
+        + "consensus was published "+ this.relaysRaw.lastKey() + ", last "
+        + "known bridge status was published " + this.bridgesRaw.lastKey()
+        + ".");
   }
 }
 

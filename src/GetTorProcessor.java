@@ -86,7 +86,7 @@ public class GetTorProcessor {
 
     logger.info("Finished downloading and processing statistics on Tor "
         + "packages delivered by GetTor.\nDownloaded " + unparsed.length()
-        + " bytes. Last date in statistics is " + data.lastKey());
+        + " bytes. Last date in statistics is " + data.lastKey() + ".");
   }
 }
 

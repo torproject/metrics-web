@@ -119,8 +119,9 @@ public class DirreqStatsFileHandler {
       }
     }
 
-    /* Set modification flag to false. */
+    /* Set modification flag to false and counter for stats to zero. */
     this.dirreqsModified = false;
+    this.addedResults = 0;
   }
 
   /**

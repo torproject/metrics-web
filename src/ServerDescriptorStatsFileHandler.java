@@ -609,8 +609,9 @@ public class ServerDescriptorStatsFileHandler {
 
     StringBuilder dumpStats = new StringBuilder("Finished writing "
         + "statistics information contained in consensuses and server "
-        + "descriptors.\nAdded " + this.addedConsensuses + " consensuses "
-        + "and " + this.addedServerDescriptors + " in this execution.\n");
+        + "descriptors.\nAdded " + this.addedConsensuses
+        + " consensus(es) and " + this.addedServerDescriptors + " server "
+        + "descriptor(s) in this execution.\n");
     if (lastWrittenDay == null) {
       dumpStats.append("No statistics written so far.");
     } else {

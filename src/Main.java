@@ -12,7 +12,7 @@ public class Main {
     new LoggingConfiguration();
 
     Logger logger = Logger.getLogger(Main.class.getName());
-    logger.info("Starting ERNIE...");
+    logger.info("Starting ERNIE.");
 
     // Initialize configuration
     Configuration config = new Configuration();
