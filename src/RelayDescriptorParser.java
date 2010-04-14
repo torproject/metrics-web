@@ -208,8 +208,7 @@ public class RelayDescriptorParser {
               byte[] forDigest = new byte[sig - start];
               System.arraycopy(data, start, forDigest, 0, sig - start);
               String digest = DigestUtils.shaHex(forDigest).toUpperCase();
-              this.aw.storeVote(data, validAfter,
-                  new ArrayList<String>(dirSources).get(0), digest);
+              this.aw.storeVote(data, validAfter, dirSource, digest);
             }
           }
         }
