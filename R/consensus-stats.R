@@ -110,9 +110,9 @@ plot_current <- function(directory, filenamePart, titlePart, rows, breaks,
     breaks, labels)
   plot_years(directory, filenamePart, titlePart, "2010", rows, breaks,
     labels)
-  plot_quarters(directory, filenamePart, titlePart, "2010", 1, rows,
+  plot_quarters(directory, filenamePart, titlePart, "2010", 2, rows,
     breaks, labels)
-  plot_months(directory, filenamePart, titlePart, "2010", 2:3, rows, breaks,
+  plot_months(directory, filenamePart, titlePart, "2010", 4, rows, breaks,
     labels)
   plot_all(directory, filenamePart, titlePart, rows, breaks, labels)
 }
