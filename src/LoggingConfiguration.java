@@ -31,6 +31,9 @@ public class LoggingConfiguration {
     /* Disable logging of internal Sun classes. */
     Logger.getLogger("sun").setLevel(Level.OFF);
 
+    /* Set minimum log level we care about from INFO to FINER. */
+    Logger.getLogger("").setLevel(Level.FINER);
+
     /* Create log handler that writes messages on WARNING or higher to the
      * console. */
     final SimpleDateFormat dateTimeFormat =
