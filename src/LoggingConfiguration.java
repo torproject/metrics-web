@@ -200,7 +200,11 @@ public class LoggingConfiguration {
             + record.getMessage().replaceAll("\n", "<br/>")
             + "</td>\n"
             + "          </tr>\n";
-        if (record.getLevel().equals(Level.INFO)) {
+        if (record.getLevel().equals(Level.FINE) ||
+            record.getLevel().equals(Level.FINER) ||
+            record.getLevel().equals(Level.FINEST)) {
+          /* Ignore messages on FINE, FINER, and FINEST. */
+        } else if (record.getLevel().equals(Level.INFO)) {
           this.infos.append(logMessage);
         } else {
           this.warnings.append(logMessage);
