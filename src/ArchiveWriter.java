@@ -127,21 +127,9 @@ public class ArchiveWriter {
           consensuses.remove(consensuses.first());
         }
       }
-      leftToParse.add(new File(outputDirectory + "/vote"));
-      SortedSet<File> votes = new TreeSet<File>();
-      while (!leftToParse.isEmpty()) {
-        File pop = leftToParse.pop();
-        if (pop.isDirectory()) {
-          for (File f : pop.listFiles()) {
-            leftToParse.add(f);
-          }
-        } else if (pop.length() > 0) {
-          votes.add(pop);
-        }
-      }
       for (File f : consensuses) {
         BufferedReader br = new BufferedReader(new FileReader(f));
-        String line = null, validAfterTime = null, votePrefix = null;
+        String line = null, validAfterTime = null, voteFilename = null;
         int allVotes = 0, foundVotes = 0,
             allServerDescs = 0, foundServerDescs = 0,
             allExtraInfos = 0, foundExtraInfos = 0;
@@ -150,23 +138,19 @@ public class ArchiveWriter {
             validAfterTime = line.substring("valid-after ".length());
             long validAfter = validAfterFormat.parse(
                 validAfterTime).getTime();
-            votePrefix = outputDirectory + "/vote/"
+            voteFilename = outputDirectory + "/vote/"
                 + consensusVoteFormat.format(new Date(validAfter))
                 + "-vote-";
           } else if (line.startsWith("dir-source ")) {
+            voteFilename += line.split(" ")[2] + "-";
+          } else if (line.startsWith("vote-digest ")) {
+            voteFilename += line.split(" ")[1];
             allVotes++;
-            String pattern = votePrefix + line.split(" ")[2];
-            String votefilename = null;
-            for (File v : votes) {
-              if (v.getName().startsWith(pattern)) {
-                votefilename = v.getName();
-                break;
-              }
-            }
-            if (votefilename != null) {
+            File voteFile = new File(voteFilename);
+            if (voteFile.exists()) {
               foundVotes++;
               BufferedReader vbr = new BufferedReader(new FileReader(
-                  new File(votefilename)));
+                  voteFile));
               String line3 = null;
               int voteAllServerDescs = 0, voteFoundServerDescs = 0,
                   voteAllExtraInfos = 0, voteFoundExtraInfos = 0;
@@ -211,8 +195,8 @@ public class ArchiveWriter {
                 }
               }
               vbr.close();
-              sb.append(String.format("%nV, %s, NA, %d/%d (%5.1f%%), "
-                  + "%d/%d (%5.1f%%)", validAfterTime,
+              sb.append(String.format("%nV, %s, NA, %d/%d (%.1f%%), "
+                  + "%d/%d (%.1f%%)", validAfterTime,
                   voteFoundServerDescs, voteAllServerDescs,
                   100.0D * (double) voteFoundServerDescs /
                     (double) voteAllServerDescs,
@@ -256,8 +240,8 @@ public class ArchiveWriter {
             }
           }
         }
-        sb.append(String.format("%nC, %s, %d/%d (%5.1f%%), "
-            + "%d/%d (%5.1f%%), %d/%d (%5.1f%%)",
+        sb.append(String.format("%nC, %s, %d/%d (%.1f%%), "
+            + "%d/%d (%.1f%%), %d/%d (%.1f%%)",
             validAfterTime, foundVotes, allVotes,
             100.0D * (double) foundVotes / (double) allVotes,
             foundServerDescs, allServerDescs,

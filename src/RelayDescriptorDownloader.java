@@ -169,7 +169,9 @@ public class RelayDescriptorDownloader {
                 ((line.startsWith("server,") ||
                 line.startsWith("extra,")) &&
                 this.descriptorCutOff.compareTo(published) <= 0)) {
-              if (line.startsWith("consensus,")) {
+              if (!line.endsWith("NA")) {
+                /* Not missing. */
+              } else if (line.startsWith("consensus,")) {
                 missingConsensuses++;
               } else if (line.startsWith("vote,")) {
                 missingVotes++;
@@ -380,12 +382,10 @@ public class RelayDescriptorDownloader {
               this.downloadCurrentConsensus &&
               this.currentValidAfter.equals(parts[1])) {
             urls.add("/tor/status-vote/current/consensus");
-            this.triedConsensuses++;
           } else if (parts[0].equals("vote") &&
               this.downloadCurrentVotes &&
               this.currentValidAfter.equals(parts[1])) {
             urls.add("/tor/status-vote/current/" + parts[2]);
-            this.triedVotes++;
           } else if (parts[0].equals("server") &&
               (this.downloadAllServerDescriptors ||
               (this.downloadDescriptorsForRelays != null &&
@@ -393,7 +393,6 @@ public class RelayDescriptorDownloader {
               toUpperCase()))) &&
               this.descriptorCutOff.compareTo(parts[1]) <= 0) {
             urls.add("/tor/server/d/" + parts[3]);
-            this.triedServerDescriptors++;
           } else if (parts[0].equals("extra") &&
               (this.downloadAllExtraInfos ||
               (this.downloadDescriptorsForRelays != null &&
@@ -401,11 +400,22 @@ public class RelayDescriptorDownloader {
               toUpperCase()))) &&
               this.descriptorCutOff.compareTo(parts[1]) <= 0) {
             urls.add("/tor/extra/d/" + parts[3]);
-            this.triedExtraInfoDescriptors++;
           }
         }
       }
       urls.removeAll(downloaded);
+
+      for (String url : urls) {
+        if (url.endsWith("consensus")) {
+          this.triedConsensuses++;
+        } else if (url.contains("status-vote")) {
+          this.triedVotes++;
+        } else if (url.contains("server")) {
+          this.triedServerDescriptors++;
+        } else if (url.contains("extra")) {
+          this.triedExtraInfoDescriptors++;
+        }
+      }
 
       /* Log what we're downloading. */
       StringBuilder sb = new StringBuilder("Downloading " + urls.size()
@@ -494,7 +504,9 @@ public class RelayDescriptorDownloader {
       for (Map.Entry<String, String> e :
           this.missingDescriptors.entrySet()) {
         String key = e.getKey();
-        if (key.startsWith("consensus,")) {
+        if (!e.getValue().equals("NA")) {
+          /* Not missing. */
+        } else if (key.startsWith("consensus,")) {
           missingConsensuses++;
         } else if (key.startsWith("vote,")) {
           missingVotes++;
