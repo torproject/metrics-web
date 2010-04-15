@@ -334,6 +334,9 @@ public class BridgeStatsFileHandler {
         for (Map.Entry<String, double[]> e : bridgeUsersPerDay.entrySet()) {
           String date = e.getKey();
           long currentDateMillis = dateFormat.parse(date).getTime();
+          if (lastDateMillis == 0L) {
+            lastDateMillis = currentDateMillis;
+          }
           while (currentDateMillis - 24L * 60L * 60L * 1000L
               > lastDateMillis) {
             lastDateMillis += 24L * 60L * 60L * 1000L;
