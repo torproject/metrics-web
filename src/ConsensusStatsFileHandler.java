@@ -477,13 +477,25 @@ public class ConsensusStatsFileHandler {
     /* Set modification flags to false again. */
     this.relaysRawModified = this.bridgesRawModified = false;
 
-    logger.info("Finished writing statistics on relay consensuses and "
-        + "bridge statuses to disk.\nAdded " + this.relayResultsAdded
-        + " relay consensus(es) and " + this.bridgeResultsAdded
-        + " bridge status(es) in this execution.\nLast known relay "
-        + "consensus was published "+ this.relaysRaw.lastKey() + ", last "
-        + "known bridge status was published " + this.bridgesRaw.lastKey()
-        + ".");
+    /* Write stats. */
+    StringBuilder dumpStats = new StringBuilder("Finished writing "
+        + "statistics on relay consensuses and bridge statuses to disk.\n"
+        + "Added " + this.relayResultsAdded + " relay consensus(es) and "
+        + this.bridgeResultsAdded + " bridge status(es) in this "
+        + "execution.");
+    if (this.relaysRaw.isEmpty()) {
+      dumpStats.append("\nNo relay consensus known yet.");
+    } else {
+      dumpStats.append("\nLast known relay consensus was published "
+          + this.relaysRaw.lastKey() + ".");
+    }
+    if (this.bridgesRaw.isEmpty()) {
+      dumpStats.append("\nNo bridge status known yet.");
+    } else {
+      dumpStats.append("\nLast known bridge status was published "
+          + this.bridgesRaw.lastKey() + ".");
+    }
+    logger.info(dumpStats.toString());
   }
 }
 
