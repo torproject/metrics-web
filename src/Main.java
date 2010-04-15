@@ -41,6 +41,10 @@ public class Main {
         new ServerDescriptorStatsFileHandler(config.getRelayVersions(),
         config.getRelayPlatforms()) : null;
 
+    // Prepare consensus health checker
+    ConsensusHealthChecker chc = config.getWriteConsensusHealth() ?
+        new ConsensusHealthChecker() : null;
+
     // Prepare writing relay descriptor archive to disk
     ArchiveWriter aw = config.getWriteDirectoryArchives() ?
         new ArchiveWriter(config.getDirectoryArchivesOutputDirectory())
@@ -58,8 +62,9 @@ public class Main {
         config.getWriteBridgeStats() || config.getWriteDirreqStats() ||
         config.getWriteServerDescriptorStats() ||
         config.getWriteDirectoryArchives() ||
-        config.getWriteRelayDescriptorDatabase() ?
-        new RelayDescriptorParser(csfh, bsfh, dsfh, sdsfh, aw, rddi,
+        config.getWriteRelayDescriptorDatabase() ||
+        config.getWriteConsensusHealth() ?
+        new RelayDescriptorParser(csfh, bsfh, dsfh, sdsfh, aw, rddi, chc,
             countries, directories) : null;
 
     // Import/download relay descriptors from the various sources
@@ -69,8 +74,8 @@ public class Main {
         List<String> dirSources =
             config.getDownloadFromDirectoryAuthorities();
         boolean downloadCurrentConsensus = aw != null || csfh != null ||
-            bsfh != null || sdsfh != null || rddi != null;
-        boolean downloadCurrentVotes = aw != null;
+            bsfh != null || sdsfh != null || rddi != null || chc != null;
+        boolean downloadCurrentVotes = aw != null || chc != null;
         boolean downloadAllServerDescriptors = aw != null ||
             sdsfh != null || rddi != null;
         boolean downloadAllExtraInfos = aw != null;
@@ -109,6 +114,10 @@ public class Main {
     }
 
     // Write output to disk that only depends on relay descriptors
+    if (chc != null) {
+      chc.writeStatusWebsite();
+      chc = null;
+    }
     if (aw != null) {
       aw.dumpStats();
       aw = null;

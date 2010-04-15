@@ -80,6 +80,10 @@
 ## JDBC string for relay descriptor database
 #RelayDescriptorDatabaseJDBC jdbc:postgresql://localhost/tordir?user=ernie&password=password
 #
+## Write statistics about the current consensus and votes to the
+## website
+#WriteConsensusHealth 0
+#
 ## Write sanitized bridges to disk
 #WriteSanitizedBridges 0
 #

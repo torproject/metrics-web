@@ -54,6 +54,8 @@ public class RelayDescriptorParser {
    */
   private RelayDescriptorDatabaseImporter rddi;
 
+  private ConsensusHealthChecker chc;
+
   /**
    * Countries that we care about for directory request and bridge
    * statistics.
@@ -76,14 +78,15 @@ public class RelayDescriptorParser {
   public RelayDescriptorParser(ConsensusStatsFileHandler csfh,
       BridgeStatsFileHandler bsfh, DirreqStatsFileHandler dsfh,
       ServerDescriptorStatsFileHandler sdsfh, ArchiveWriter aw,
-      RelayDescriptorDatabaseImporter rddi, SortedSet<String> countries,
-      SortedSet<String> directories) {
+      RelayDescriptorDatabaseImporter rddi, ConsensusHealthChecker chc,
+      SortedSet<String> countries, SortedSet<String> directories) {
     this.csfh = csfh;
     this.bsfh = bsfh;
     this.dsfh = dsfh;
     this.sdsfh = sdsfh;
     this.aw = aw;
     this.rddi = rddi;
+    this.chc = chc;
     this.countries = countries;
     this.directories = directories;
 
@@ -192,6 +195,9 @@ public class RelayDescriptorParser {
           if (this.aw != null) {
             this.aw.storeConsensus(data, validAfter);
           }
+          if (this.chc != null) {
+            this.chc.processConsensus(validAfterTime, data);
+          }
         } else {
           if (this.rdd != null) {
             this.rdd.haveParsedVote(validAfterTime, fingerprint,
@@ -208,8 +214,13 @@ public class RelayDescriptorParser {
               byte[] forDigest = new byte[sig - start];
               System.arraycopy(data, start, forDigest, 0, sig - start);
               String digest = DigestUtils.shaHex(forDigest).toUpperCase();
-              this.aw.storeVote(data, validAfter, dirSource, digest);
+              if (this.aw != null) {
+                this.aw.storeVote(data, validAfter, dirSource, digest);
+              }
             }
+          }
+          if (this.chc != null) {
+            this.chc.processVote(validAfterTime, dirSource, data);
           }
         }
       } else if (line.startsWith("router ")) {

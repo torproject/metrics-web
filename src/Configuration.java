@@ -53,6 +53,7 @@ public class Configuration {
   private String geoIPDatabasesDirectory = "geoipdb/";
   private boolean downloadGeoIPDatabase = false;
   private String maxmindLicenseKey = "";
+  private boolean writeConsensusHealth = false;
   public Configuration() {
 
     /* Initialize logger. */
@@ -191,6 +192,9 @@ public class Configuration {
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("MaxmindLicenseKey")) {
           this.maxmindLicenseKey = line.split(" ")[1];
+        } else if (line.startsWith("WriteConsensusHealth")) {
+          this.writeConsensusHealth = Integer.parseInt(
+              line.split(" ")[1]) != 0;
         } else {
           logger.severe("Configuration file contains unrecognized "
               + "configuration key in line '" + line + "'! Exiting!");
@@ -226,7 +230,7 @@ public class Configuration {
         !this.writeRelayDescriptorDatabase &&
         !this.writeSanitizedBridges && !this.writeConsensusStats &&
         !this.writeDirreqStats && !this.writeBridgeStats &&
-        !this.writeServerDescriptorStats) {
+        !this.writeServerDescriptorStats && !this.writeConsensusHealth) {
       logger.warning("We have not been configured to read data from any "
           + "data source or write data to any data sink. You need to "
           + "edit your config file (" + configFile.getAbsolutePath()
@@ -238,7 +242,7 @@ public class Configuration {
         !(this.writeDirectoryArchives ||
         this.writeRelayDescriptorDatabase || this.writeConsensusStats ||
         this.writeDirreqStats || this.writeBridgeStats ||
-        this.writeServerDescriptorStats)) {
+        this.writeServerDescriptorStats || this.writeConsensusHealth)) {
       logger.warning("We are configured to import/download relay "
           + "descriptors, but we don't have a single data sink to write "
           + "relay descriptors to.");
@@ -375,6 +379,9 @@ public class Configuration {
   }
   public String getMaxmindLicenseKey() {
     return this.maxmindLicenseKey;
+  }
+  public boolean getWriteConsensusHealth() {
+    return this.writeConsensusHealth;
   }
 }
 
