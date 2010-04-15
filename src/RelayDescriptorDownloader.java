@@ -199,15 +199,15 @@ public class RelayDescriptorDownloader {
             + "! This means that we might forget to dowload relay "
             + "descriptors we are missing.", e);
       }
+    }
 
-      dumpStats = new StringBuilder();
-      dumpStats.append("Finished downloading relay descriptors from the "
+    dumpStats = new StringBuilder();
+    dumpStats.append("Finished downloading relay descriptors from the "
         + "directory authorities:\nAt the beginning of this execution, "
         + "we were missing " + missingConsensuses + " consensus(es), "
         + missingVotes + " vote(s), " + missingServerDescriptors
         + " server descriptor(s), and " + missingExtraInfoDescriptors
         + " extra-info descriptor(s).\n");
-    }
   }
 
   /**
