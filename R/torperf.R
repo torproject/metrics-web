@@ -3,8 +3,8 @@
 t <- read.csv("stats/torperf-stats")
 write.csv(t, "website/csv/torperf.csv", quote = FALSE, row.names = FALSE)
 
-intervals <- c("6m", "2w")
-intervalsStr <- c("-6 months", "-2 weeks")
+intervals <- c("12m", "6m", "2w")
+intervalsStr <- c("-12 months", "-6 months", "-2 weeks")
 
 for (intervalInd in 1:length(intervals)) {
   interval <- intervals[intervalInd]
@@ -17,34 +17,25 @@ for (intervalInd in 1:length(intervals)) {
   datesStr <- as.character(dates)
   firstdays <- c()
   for (i in datesStr)
-    if (intervalInd == 2 || format(as.POSIXct(i, tz="GMT"), "%d") == "01")
+    if (intervalInd == 3 || format(as.POSIXct(i, tz="GMT"), "%d") == "01")
       firstdays <- c(firstdays, i)
   monthticks <- which(datesStr %in% firstdays)
   monthlabels <- c() 
   for (i in monthticks[1:(length(monthticks) - 2)])
     monthlabels <- c(monthlabels,
         format(as.POSIXct(dates[i + 1], tz="GMT"),
-        ifelse(intervalInd == 1, "%b", "%b %d")))
+        ifelse(intervalInd == 3, "%b %d", "%b")))
   monthlabels <- c(monthlabels,
       format(as.POSIXct(dates[monthticks[length(monthticks) - 1] + 1]),
-      ifelse(intervalInd == 1, "%b %y", "%b %d")))
-  if (intervalInd == 2)
+      ifelse(intervalInd == 3, "%b %d", "%b %y")))
+  if (intervalInd == 3)
     monthlabels[length(monthlabels)] <- ""
   monthat <- c()
   for (i in 1:(length(monthticks) - 1))
     monthat <- c(monthat, (monthticks[i] + monthticks[i + 1]) / 2 + .5)
 
-  sources <- c()
-  colors <- c()
-  height <- 800
-  if (intervalInd == 1) {
-    sources <- c("siv", "moria", "torperf")
-    colors <- c("#0000EE", "#EE0000", "#00CD00")
-  } else {
-    sources <- c("siv", "moria", "torperf")
-    colors <- c("#0000EE", "#EE0000", "#00CD00")
-    height <- 400
-  }
+  sources <- c("siv", "moria", "torperf")
+  colors <- c("#0000EE", "#EE0000", "#00CD00")
   sizes <- c("5mb", "1mb", "50kb")
   sizePrint <- c("5 MiB", "1 MiB", "50 KiB")
 
