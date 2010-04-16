@@ -226,6 +226,20 @@ public class ConsensusHealthChecker {
 
     try {
 
+      /* Keep the past two consensus health statuses. */
+      File file0 = new File("website/consensus-health.html");
+      File file1 = new File("website/consensus-health-1.html");
+      File file2 = new File("website/consensus-health-2.html");
+      if (file2.exists()) {
+        file2.delete();
+      }
+      if (file1.exists()) {
+        file1.renameTo(file2);
+      }
+      if (file0.exists()) {
+        file0.renameTo(file1);
+      }
+
       /* Start writing web page. */
       BufferedWriter bw = new BufferedWriter(
           new FileWriter("website/consensus-health.html"));
