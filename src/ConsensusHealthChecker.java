@@ -67,6 +67,15 @@ public class ConsensusHealthChecker {
         new TreeMap<String, String>();
     SortedMap<String, SortedSet<String>> votesAssignedFlags =
         new TreeMap<String, SortedSet<String>>();
+    SortedMap<String, String> votesKnownFlags =
+        new TreeMap<String, String>();
+    SortedMap<String, SortedMap<String, Integer>> flagsAgree =
+        new TreeMap<String, SortedMap<String, Integer>>();
+    SortedMap<String, SortedMap<String, Integer>> flagsLost =
+        new TreeMap<String, SortedMap<String, Integer>>();
+    SortedMap<String, SortedMap<String, Integer>> flagsMissing =
+        new TreeMap<String, SortedMap<String, Integer>>();
+
 
     /* Read consensus and parse all information that we want to compare to
      * votes. */
@@ -158,6 +167,7 @@ public class ConsensusHealthChecker {
           + "            <td>" + dirSource + "</td>\n"
           + "            <td>" + voteKnownFlags + "</td>\n"
           + "          </tr>\n");
+      votesKnownFlags.put(dirSource, voteKnownFlags);
       for (String flag : voteKnownFlags.substring(
           "known-flags ".length()).split(" ")) {
         allKnownFlags.add(flag);
@@ -571,14 +581,28 @@ public class ConsensusHealthChecker {
             int flagsWritten = 0;
             for (String flag : relevantFlags) {
               bw.write(flagsWritten++ > 0 ? "<br/>" : "");
+              SortedMap<String, SortedMap<String, Integer>> sums = null;
               if (flags.contains(" " + flag)) {
                 if (consensusFlags == null ||
                   consensusFlags.contains(" " + flag)) {
                   bw.write(flag);
+                  sums = flagsAgree;
                 } else {
                   bw.write("<font color=\"red\">" + flag + "</font>");
+                  sums = flagsLost;
                 }
+              } else {
+                sums = flagsMissing;
               }
+              SortedMap<String, Integer> sum = null;
+              if (sums.containsKey(dir)) {
+                sum = sums.get(dir);
+              } else {
+                sum = new TreeMap<String, Integer>();
+                sums.put(dir, sum);
+              }
+              sum.put(flag, sum.containsKey(flag) ?
+                  sum.get(flag) + 1 : 1);
             }
             bw.write("</td>\n");
           } else {
@@ -599,6 +623,59 @@ public class ConsensusHealthChecker {
           bw.write("            <td/>\n");
         }
         bw.write("          </tr>\n");
+      }
+      bw.write("        </table>\n");
+
+      /* Write bandwidth scanner status. */
+      bw.write("        <br/>\n"
+           + "        <h3>Overlap between votes and consensus</h3>\n"
+          + "        <br/>\n"
+          + "        <table border=\"0\" cellpadding=\"4\" "
+          + "cellspacing=\"0\" summary=\"\">\n"
+          + "          <colgroup>\n"
+          + "            <col width=\"160\">\n"
+          + "            <col width=\"210\">\n"
+          + "            <col width=\"210\">\n"
+          + "            <col width=\"210\">\n"
+          + "          </colgroup>\n");
+      bw.write("          <tr><td/><td><b>only in vote</b></td>"
+            + "<td><b>in vote and consensus</b></td>"
+            + "<td><b>only in consensus</b></td>\n");
+      for (String dir : allKnownVotes) {
+        boolean firstFlagWritten = false;
+        String[] flags = votesKnownFlags.get(dir).substring(
+            "known-flags ".length()).split(" ");
+        for (String flag : flags) {
+          bw.write("          <tr>\n");
+          if (firstFlagWritten) {
+            bw.write("            <td/>\n");
+          } else {
+            bw.write("            <td>" + dir + "</td>\n");
+            firstFlagWritten = true;
+          }
+          if (flagsLost.containsKey(dir) &&
+              flagsLost.get(dir).containsKey(flag)) {
+            bw.write("            <td>" + flagsLost.get(dir).get(flag)
+                  + " " + flag + "</td>\n");
+          } else {
+            bw.write("            <td/>\n");
+          }
+          if (flagsAgree.containsKey(dir) &&
+              flagsAgree.get(dir).containsKey(flag)) {
+            bw.write("            <td>" + flagsAgree.get(dir).get(flag)
+                  + " " + flag + "</td>\n");
+          } else {
+            bw.write("            <td/>\n");
+          }
+          if (flagsMissing.containsKey(dir) &&
+              flagsMissing.get(dir).containsKey(flag)) {
+            bw.write("            <td>" + flagsMissing.get(dir).get(flag)
+                  + " " + flag + "</td>\n");
+          } else {
+            bw.write("            <td/>\n");
+          }
+          bw.write("          </tr>\n");
+        }
       }
       bw.write("        </table>\n");
 
