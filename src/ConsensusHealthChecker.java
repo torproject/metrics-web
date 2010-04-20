@@ -522,7 +522,29 @@ public class ConsensusHealthChecker {
 
       /* Write (huge) table with all flags. */
       bw.write("        <br/>\n"
-           + "        <h3>Relay flags</h3>\n"
+          + "        <h3>Relay flags</h3>\n"
+          + "        <br/>\n"
+          + "        <p>The semantics of flags written in the table is "
+            + "as follows:</p>\n"
+          + "        <ul>\n"
+          + "          <li><b>In vote and consensus:</b> Flag in vote "
+            + "matches flag in consensus, or relay is not listed in "
+            + "consensus (because it doesn't have the Running "
+            + "flag)</li>\n"
+          + "          <li><b><font color=\"red\">Only in "
+            + "vote:</font></b> Flag in vote, but missing in the "
+            + "consensus, because there was no majority for the flag or "
+            + "the flag was invalidated (e.g., Named gets invalidated by "
+            + "Unnamed)</li>\n"
+          + "          <li><b><font color=\"gray\"><s>Only in "
+            + "consensus:</s></font></b> Flag in consensus, but missing "
+            + "in a vote of a directory authority voting on this "
+            + "flag</li>\n"
+          + "          <li><b><font color=\"blue\">In "
+            + "consensus:</font></b> Flag in consensus</li>\n"
+          + "        </ul>\n"
+          + "        <br/>\n"
+          + "        <p>See also the summary below the table.</p>\n"
           + "        <table border=\"0\" cellpadding=\"4\" "
           + "cellspacing=\"0\" summary=\"\">\n"
           + "          <colgroup>\n"
@@ -543,7 +565,7 @@ public class ConsensusHealthChecker {
                 dir.substring(0, 5) + "." : dir;
             bw.write("<td><br/><b>" + shortDirName + "</b></td>");
           }
-          bw.write("</tr>\n");
+          bw.write("<td><br/><b>consensus</b></td></tr>\n");
         }
         String relayKey = e.getKey();
         SortedSet<String> votes = e.getValue();
@@ -591,18 +613,24 @@ public class ConsensusHealthChecker {
                   bw.write("<font color=\"red\">" + flag + "</font>");
                   sums = flagsLost;
                 }
-              } else {
+              } else if (consensusFlags != null &&
+                  votesKnownFlags.get(dir).contains(" " + flag) &&
+                  consensusFlags.contains(" " + flag)) {
+                bw.write("<font color=\"gray\"><s>" + flag
+                    + "</s></font>");
                 sums = flagsMissing;
               }
-              SortedMap<String, Integer> sum = null;
-              if (sums.containsKey(dir)) {
-                sum = sums.get(dir);
-              } else {
-                sum = new TreeMap<String, Integer>();
-                sums.put(dir, sum);
+              if (sums != null) {
+                SortedMap<String, Integer> sum = null;
+                if (sums.containsKey(dir)) {
+                  sum = sums.get(dir);
+                } else {
+                  sum = new TreeMap<String, Integer>();
+                  sums.put(dir, sum);
+                }
+                sum.put(flag, sum.containsKey(flag) ?
+                    sum.get(flag) + 1 : 1);
               }
-              sum.put(flag, sum.containsKey(flag) ?
-                  sum.get(flag) + 1 : 1);
             }
             bw.write("</td>\n");
           } else {
@@ -626,9 +654,27 @@ public class ConsensusHealthChecker {
       }
       bw.write("        </table>\n");
 
-      /* Write bandwidth scanner status. */
+      /* Write summary of overlap between votes and consensus. */
       bw.write("        <br/>\n"
            + "        <h3>Overlap between votes and consensus</h3>\n"
+          + "        <br/>\n"
+          + "        <p>The semantics of columns is similar to the "
+            + "table above:</p>\n"
+          + "        <ul>\n"
+          + "          <li><b>In vote and consensus:</b> Flag in vote "
+            + "matches flag in consensus, or relay is not listed in "
+            + "consensus (because it doesn't have the Running "
+            + "flag)</li>\n"
+          + "          <li><b><font color=\"red\">Only in "
+            + "vote:</font></b> Flag in vote, but missing in the "
+            + "consensus, because there was no majority for the flag or "
+            + "the flag was invalidated (e.g., Named gets invalidated by "
+            + "Unnamed)</li>\n"
+          + "          <li><b><font color=\"gray\"><s>Only in "
+            + "consensus:</s></font></b> Flag in consensus, but missing "
+            + "in a vote of a directory authority voting on this "
+            + "flag</li>\n"
+          + "        </ul>\n"
           + "        <br/>\n"
           + "        <table border=\"0\" cellpadding=\"4\" "
           + "cellspacing=\"0\" summary=\"\">\n"
@@ -638,9 +684,9 @@ public class ConsensusHealthChecker {
           + "            <col width=\"210\">\n"
           + "            <col width=\"210\">\n"
           + "          </colgroup>\n");
-      bw.write("          <tr><td/><td><b>only in vote</b></td>"
-            + "<td><b>in vote and consensus</b></td>"
-            + "<td><b>only in consensus</b></td>\n");
+      bw.write("          <tr><td/><td><b>Only in vote</b></td>"
+            + "<td><b>In vote and consensus</b></td>"
+            + "<td><b>Only in consensus</b></td>\n");
       for (String dir : allKnownVotes) {
         boolean firstFlagWritten = false;
         String[] flags = votesKnownFlags.get(dir).substring(
@@ -655,8 +701,9 @@ public class ConsensusHealthChecker {
           }
           if (flagsLost.containsKey(dir) &&
               flagsLost.get(dir).containsKey(flag)) {
-            bw.write("            <td>" + flagsLost.get(dir).get(flag)
-                  + " " + flag + "</td>\n");
+            bw.write("            <td><font color=\"red\"> "
+                  + flagsLost.get(dir).get(flag) + " " + flag
+                  + "</font></td>\n");
           } else {
             bw.write("            <td/>\n");
           }
@@ -669,8 +716,9 @@ public class ConsensusHealthChecker {
           }
           if (flagsMissing.containsKey(dir) &&
               flagsMissing.get(dir).containsKey(flag)) {
-            bw.write("            <td>" + flagsMissing.get(dir).get(flag)
-                  + " " + flag + "</td>\n");
+            bw.write("            <td><font color=\"gray\"><s>"
+                  + flagsMissing.get(dir).get(flag) + " " + flag
+                  + "</s></font></td>\n");
           } else {
             bw.write("            <td/>\n");
           }
