@@ -2,6 +2,7 @@ import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.apache.commons.codec.binary.*;
 
 /*
  * TODO Possible extensions:
@@ -60,12 +61,18 @@ public class ConsensusHealthChecker {
     StringBuilder paramsResults = new StringBuilder();
     StringBuilder authorityKeysResults = new StringBuilder();
     StringBuilder bandwidthScannersResults = new StringBuilder();
+    SortedSet<String> allKnownFlags = new TreeSet<String>();
+    SortedSet<String> allKnownVotes = new TreeSet<String>();
+    SortedMap<String, String> consensusAssignedFlags =
+        new TreeMap<String, String>();
+    SortedMap<String, SortedSet<String>> votesAssignedFlags =
+        new TreeMap<String, SortedSet<String>>();
 
     /* Read consensus and parse all information that we want to compare to
      * votes. */
     String consensusConsensusMethod = null, consensusKnownFlags = null,
         consensusClientVersions = null, consensusServerVersions = null,
-        consensusParams = null;
+        consensusParams = null, rLineTemp = null;
     int consensusTotalRelays = 0, consensusRunningRelays = 0;
     Scanner s = new Scanner(new String(this.mostRecentConsensus));
     while (s.hasNextLine()) {
@@ -80,11 +87,16 @@ public class ConsensusHealthChecker {
         consensusKnownFlags = line;
       } else if (line.startsWith("params ")) {
         consensusParams = line;
+      } else if (line.startsWith("r ")) {
+        rLineTemp = line;
       } else if (line.startsWith("s ")) {
         consensusTotalRelays++;
         if (line.contains(" Running")) {
           consensusRunningRelays++;
         }
+        consensusAssignedFlags.put(Hex.encodeHexString(
+            Base64.decodeBase64(rLineTemp.split(" ")[2] + "=")).
+            toUpperCase() + " " + rLineTemp.split(" ")[1], line);
       }
     }
     s.close();
@@ -94,8 +106,7 @@ public class ConsensusHealthChecker {
     for (byte[] voteBytes : this.mostRecentVotes.values()) {
       String voteConsensusMethods = null, voteKnownFlags = null,
           voteClientVersions = null, voteServerVersions = null,
-          voteParams = null, voteDirSourceLine = null,
-          voteDirKeyExpires = null;
+          voteParams = null, dirSource = null, voteDirKeyExpires = null;
       int voteTotalRelays = 0, voteRunningRelays = 0,
           voteContainsBandwidthWeights = 0;
       s = new Scanner(new String(voteBytes));
@@ -112,14 +123,28 @@ public class ConsensusHealthChecker {
         } else if (line.startsWith("params ")) {
           voteParams = line;
         } else if (line.startsWith("dir-source ")) {
-          voteDirSourceLine = line;
+          dirSource = line.split(" ")[1];
+          allKnownVotes.add(dirSource);
         } else if (line.startsWith("dir-key-expires ")) {
           voteDirKeyExpires = line;
+        } else if (line.startsWith("r ")) {
+          rLineTemp = line;
         } else if (line.startsWith("s ")) {
           voteTotalRelays++;
           if (line.contains(" Running")) {
             voteRunningRelays++;
           }
+          String relayKey = Hex.encodeHexString(Base64.decodeBase64(
+              rLineTemp.split(" ")[2] + "=")).toUpperCase() + " "
+              + rLineTemp.split(" ")[1];
+          SortedSet<String> sLines = null;
+          if (votesAssignedFlags.containsKey(relayKey)) {
+            sLines = votesAssignedFlags.get(relayKey);
+          } else {
+            sLines = new TreeSet<String>();
+            votesAssignedFlags.put(relayKey, sLines);
+          }
+          sLines.add(dirSource + " " + line);
         } else if (line.startsWith("w ")) {
           if (line.contains(" Measured")) {
             voteContainsBandwidthWeights++;
@@ -128,14 +153,15 @@ public class ConsensusHealthChecker {
       }
       s.close();
 
-      /* Remember authority nickname. */
-      String dirSource = voteDirSourceLine.split(" ")[1];
-
       /* Write known flags. */
       knownFlagsResults.append("          <tr>\n"
           + "            <td>" + dirSource + "</td>\n"
           + "            <td>" + voteKnownFlags + "</td>\n"
           + "          </tr>\n");
+      for (String flag : voteKnownFlags.substring(
+          "known-flags ".length()).split(" ")) {
+        allKnownFlags.add(flag);
+      }
 
       /* Write number of relays voted about. */
       numRelaysVotesResults.append("          <tr>\n"
@@ -481,6 +507,98 @@ public class ConsensusHealthChecker {
         bw.write("          <tr><td>(No votes.)</td><td/></tr>\n");
       } else {
         bw.write(bandwidthScannersResults.toString());
+      }
+      bw.write("        </table>\n");
+
+      /* Write (huge) table with all flags. */
+      bw.write("        <br/>\n"
+           + "        <h3>Relay flags</h3>\n"
+          + "        <table border=\"0\" cellpadding=\"4\" "
+          + "cellspacing=\"0\" summary=\"\">\n"
+          + "          <colgroup>\n"
+          + "            <col width=\"120\">\n"
+          + "            <col width=\"80\">\n");
+      for (int i = 0; i < allKnownVotes.size(); i++) {
+        bw.write("            <col width=\""
+            + (640 / allKnownVotes.size()) + "\">\n");
+      }
+      bw.write("          </colgroup>\n");
+      int linesWritten = 0;
+      for (Map.Entry<String, SortedSet<String>> e :
+          votesAssignedFlags.entrySet()) {
+        if (linesWritten++ % 10 == 0) {
+          bw.write("          <tr><td/><td/>\n");
+          for (String dir : allKnownVotes) {
+            String shortDirName = dir.length() > 6 ?
+                dir.substring(0, 5) + "." : dir;
+            bw.write("<td><br/><b>" + shortDirName + "</b></td>");
+          }
+          bw.write("</tr>\n");
+        }
+        String relayKey = e.getKey();
+        SortedSet<String> votes = e.getValue();
+        String fingerprint = relayKey.split(" ")[0].substring(0, 8);
+        String nickname = relayKey.split(" ")[1];
+        bw.write("          <tr>\n"
+            + "            <td>" + fingerprint + "</td>\n"
+            + "            <td>" + nickname + "</td>\n");
+        SortedSet<String> relevantFlags = new TreeSet<String>();
+        for (String vote : votes) {
+          String[] parts = vote.split(" ");
+          for (int j = 2; j < parts.length; j++) {
+            relevantFlags.add(parts[j]);
+          }
+        }
+        String consensusFlags = null;
+        if (consensusAssignedFlags.containsKey(relayKey)) {
+          consensusFlags = consensusAssignedFlags.get(relayKey);
+          String[] parts = consensusFlags.split(" ");
+          for (int j = 1; j < parts.length; j++) {
+            relevantFlags.add(parts[j]);
+          }
+        }
+        for (String dir : allKnownVotes) {
+          String flags = null;
+          for (String vote : votes) {
+            if (vote.startsWith(dir)) {
+              flags = vote;
+              break;
+            }
+          }
+          if (flags != null) {
+            votes.remove(flags);
+            bw.write("            <td>");
+            int flagsWritten = 0;
+            for (String flag : relevantFlags) {
+              bw.write(flagsWritten++ > 0 ? "<br/>" : "");
+              if (flags.contains(" " + flag)) {
+                if (consensusFlags == null ||
+                  consensusFlags.contains(" " + flag)) {
+                  bw.write(flag);
+                } else {
+                  bw.write("<font color=\"red\">" + flag + "</font>");
+                }
+              }
+            }
+            bw.write("</td>\n");
+          } else {
+            bw.write("            <td/>\n");
+          }
+        }
+        if (consensusFlags != null) {
+          bw.write("            <td>");
+          int flagsWritten = 0;
+          for (String flag : relevantFlags) {
+            bw.write(flagsWritten++ > 0 ? "<br/>" : "");
+            if (consensusFlags.contains(" " + flag)) {
+              bw.write("<font color=\"blue\">" + flag + "</font>");
+            }
+          }
+          bw.write("</td>\n");
+        } else {
+          bw.write("            <td/>\n");
+        }
+        bw.write("          </tr>\n");
       }
       bw.write("        </table>\n");
 
