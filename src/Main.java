@@ -79,7 +79,8 @@ public class Main {
         boolean downloadAllServerDescriptors = aw != null ||
             sdsfh != null || rddi != null;
         boolean downloadAllExtraInfos = aw != null;
-        Set<String> downloadDescriptorsForRelays = directories;
+        Set<String> downloadDescriptorsForRelays = bsfh != null ||
+            dsfh != null ? directories : new HashSet<String>();
         rdd = new RelayDescriptorDownloader(rdp, dirSources,
             downloadCurrentConsensus, downloadCurrentVotes,
             downloadAllServerDescriptors, downloadAllExtraInfos,

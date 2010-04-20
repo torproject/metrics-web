@@ -361,8 +361,11 @@ public class RelayDescriptorDownloader {
     /* URLs of descriptors we want to download. */
     SortedSet<String> urls = new TreeSet<String>();
 
-    /* URLs of descriptors we have downloaded or at least tried to
-     * download. */
+    /* Complete URLs of authorities and descriptors we have downloaded or
+     * tried to download. Ensures that we're not attempting to download
+     * the same thing from an authority more than once. There are edge
+     * cases when an authority returns a valid response to something we
+     * asked for, but which is not what we wanted (e.g. old consensus). */
     SortedSet<String> downloaded = new TreeSet<String>();
 
     /* We might need more than one iteration for downloading descriptors,
@@ -403,7 +406,6 @@ public class RelayDescriptorDownloader {
           }
         }
       }
-      urls.removeAll(downloaded);
 
       /* Stop if we don't have (new) URLs to download. */
       if (urls.isEmpty()) {
@@ -426,7 +428,7 @@ public class RelayDescriptorDownloader {
       StringBuilder sb = new StringBuilder("Downloading " + urls.size()
           + " descriptors:");
       for (String url : urls) {
-        sb.append(url + "\n");
+        sb.append("\n" + url);
       }
       this.logger.fine(sb.toString());
 
@@ -438,62 +440,75 @@ public class RelayDescriptorDownloader {
       SortedSet<String> currentDirSources =
           new TreeSet<String>(remainingDirSources);
       SortedSet<String> retryUrls = new TreeSet<String>();
+      int numDownloaded = 0;
       while (!currentDirSources.isEmpty() && !urls.isEmpty()) {
         String authority = currentDirSources.first();
         String url = urls.first();
-        try {
-          URL u = new URL("http://" + authority + url);
-          HttpURLConnection huc =
-              (HttpURLConnection) u.openConnection();
-          huc.setRequestMethod("GET");
-          huc.connect();
-          int response = huc.getResponseCode();
-          logger.finer("Downloading http://" + authority + url + " -> "
-              + response);
-          if (response == 200) {
-            BufferedInputStream in = new BufferedInputStream(
-                huc.getInputStream());
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            int len;
-            byte[] data = new byte[1024];
-            while ((len = in.read(data, 0, 1024)) >= 0) {
-              baos.write(data, 0, len);
+        String fullUrl = "http://" + authority + url;
+        byte[] allData = null;
+        if (!downloaded.contains(fullUrl)) {
+          downloaded.add(fullUrl);
+          numDownloaded++;
+          try {
+            URL u = new URL(fullUrl);
+            HttpURLConnection huc =
+                (HttpURLConnection) u.openConnection();
+            huc.setRequestMethod("GET");
+            huc.connect();
+            int response = huc.getResponseCode();
+            logger.fine("Downloading http://" + authority + url + " -> "
+                + response);
+            if (response == 200) {
+              BufferedInputStream in = new BufferedInputStream(
+                  huc.getInputStream());
+              ByteArrayOutputStream baos = new ByteArrayOutputStream();
+              int len;
+              byte[] data = new byte[1024];
+              while ((len = in.read(data, 0, 1024)) >= 0) {
+                baos.write(data, 0, len);
+              }
+              in.close();
+              allData = baos.toByteArray();
+              rdp.parse(allData);
+              if (url.endsWith("consensus")) {
+                this.downloadedConsensuses++;
+              } else if (url.contains("status-vote")) {
+                this.downloadedVotes++;
+              } else if (url.contains("server")) {
+                this.downloadedServerDescriptors++;
+              } else if (url.contains("extra")) {
+                this.downloadedExtraInfoDescriptors++;
+              }
             }
-            in.close();
-            byte[] allData = baos.toByteArray();
-            rdp.parse(allData);
-            if (url.endsWith("consensus")) {
-              this.downloadedConsensuses++;
-            } else if (url.contains("status-vote")) {
-              this.downloadedVotes++;
-            } else if (url.contains("server")) {
-              this.downloadedServerDescriptors++;
-            } else if (url.contains("extra")) {
-              this.downloadedExtraInfoDescriptors++;
-            }
-          } else {
-            retryUrls.add(url);
-          }
-          urls.remove(url);
-          if (urls.isEmpty()) {
+          } catch (IOException e) {
+            remainingDirSources.remove(authority);
             currentDirSources.remove(authority);
-            urls.addAll(retryUrls);
-            retryUrls.clear();
-          }
-        } catch (IOException e) {
-          remainingDirSources.remove(authority);
-          currentDirSources.remove(authority);
-          if (!remainingDirSources.isEmpty()) {
-            logger.log(Level.FINE, "Failed downloading from "
-                + authority + "!", e);
-          } else {
-            logger.log(Level.WARNING, "Failed downloading from "
-                + authority + "! We have no authorities left to download "
-                + "from!", e);
+            if (!remainingDirSources.isEmpty()) {
+              logger.log(Level.FINE, "Failed downloading from "
+                  + authority + "!", e);
+            } else {
+              logger.log(Level.WARNING, "Failed downloading from "
+                  + authority + "! We have no authorities left to download "
+                  + "from!", e);
+            }
           }
         }
+        if (allData == null) {
+          retryUrls.add(url);
+        }
+        urls.remove(url);
+        if (urls.isEmpty()) {
+          currentDirSources.remove(authority);
+          urls.addAll(retryUrls);
+          retryUrls.clear();
+        }
       }
-      downloaded.addAll(urls);
+
+      /* If we haven't downloaded a single descriptor in this iteration,
+       * we cannot have learned something new, so we're done. */
+      if (numDownloaded < 1) {
+        break;
+      }
     }
   }
 
