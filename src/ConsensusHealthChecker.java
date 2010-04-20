@@ -54,17 +54,19 @@ public class ConsensusHealthChecker {
         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     StringBuilder knownFlagsResults = new StringBuilder();
+    StringBuilder numRelaysVotesResults = new StringBuilder();
     StringBuilder consensusMethodsResults = new StringBuilder();
     StringBuilder versionsResults = new StringBuilder();
     StringBuilder paramsResults = new StringBuilder();
     StringBuilder authorityKeysResults = new StringBuilder();
     StringBuilder bandwidthScannersResults = new StringBuilder();
-    
+
     /* Read consensus and parse all information that we want to compare to
      * votes. */
     String consensusConsensusMethod = null, consensusKnownFlags = null,
         consensusClientVersions = null, consensusServerVersions = null,
         consensusParams = null;
+    int consensusTotalRelays = 0, consensusRunningRelays = 0;
     Scanner s = new Scanner(new String(this.mostRecentConsensus));
     while (s.hasNextLine()) {
       String line = s.nextLine();
@@ -78,6 +80,11 @@ public class ConsensusHealthChecker {
         consensusKnownFlags = line;
       } else if (line.startsWith("params ")) {
         consensusParams = line;
+      } else if (line.startsWith("s ")) {
+        consensusTotalRelays++;
+        if (line.contains(" Running")) {
+          consensusRunningRelays++;
+        }
       }
     }
     s.close();
@@ -89,7 +96,8 @@ public class ConsensusHealthChecker {
           voteClientVersions = null, voteServerVersions = null,
           voteParams = null, voteDirSourceLine = null,
           voteDirKeyExpires = null;
-      int voteContainsBandwidthWeights = 0;
+      int voteTotalRelays = 0, voteRunningRelays = 0,
+          voteContainsBandwidthWeights = 0;
       s = new Scanner(new String(voteBytes));
       while (s.hasNextLine()) {
         String line = s.nextLine();
@@ -107,6 +115,11 @@ public class ConsensusHealthChecker {
           voteDirSourceLine = line;
         } else if (line.startsWith("dir-key-expires ")) {
           voteDirKeyExpires = line;
+        } else if (line.startsWith("s ")) {
+          voteTotalRelays++;
+          if (line.contains(" Running")) {
+            voteRunningRelays++;
+          }
         } else if (line.startsWith("w ")) {
           if (line.contains(" Measured")) {
             voteContainsBandwidthWeights++;
@@ -123,7 +136,14 @@ public class ConsensusHealthChecker {
           + "            <td>" + dirSource + "</td>\n"
           + "            <td>" + voteKnownFlags + "</td>\n"
           + "          </tr>\n");
-      
+
+      /* Write number of relays voted about. */
+      numRelaysVotesResults.append("          <tr>\n"
+          + "            <td>" + dirSource + "</td>\n"
+          + "            <td>" + voteTotalRelays + " total</td>\n"
+          + "            <td>" + voteRunningRelays + " Running</td>\n"
+          + "          </tr>\n");
+
       /* Write supported consensus methods. */
       if (!voteConsensusMethods.contains(consensusConsensusMethod.
           split(" ")[1])) {
@@ -187,7 +207,7 @@ public class ConsensusHealthChecker {
             + "            <td>" + voteParams + "</td>\n"
             + "          </tr>\n");
       }
-      
+
       /* Write authority key expiration date. */
       if (voteDirKeyExpires != null) {
         boolean expiresIn14Days = false;
@@ -320,10 +340,37 @@ public class ConsensusHealthChecker {
       } else {
         bw.write(knownFlagsResults.toString());
       }
-      bw.write("          <td><font color=\"blue\">consensus</font>"
+      bw.write("          <tr>\n"
+          + "            <td><font color=\"blue\">consensus</font>"
             + "</td>\n"
           + "            <td><font color=\"blue\">"
             + consensusKnownFlags + "</font></td>\n"
+          + "          </tr>\n");
+      bw.write("        </table>\n");
+
+      /* Write number of relays voted about. */
+      bw.write("        <br/>\n"
+          + "        <h3>Number of relays voted about</h3>\n"
+          + "        <br/>\n"
+          + "        <table border=\"0\" cellpadding=\"4\" "
+          + "cellspacing=\"0\" summary=\"\">\n"
+          + "          <colgroup>\n"
+          + "            <col width=\"160\">\n"
+          + "            <col width=\"320\">\n"
+          + "            <col width=\"320\">\n"
+          + "          </colgroup>\n");
+      if (numRelaysVotesResults.length() < 1) {
+        bw.write("          <tr><td>(No votes.)</td><td/><td/></tr>\n");
+      } else {
+        bw.write(numRelaysVotesResults.toString());
+      }
+      bw.write("          <tr>\n"
+          + "            <td><font color=\"blue\">consensus</font>"
+            + "</td>\n"
+          + "            <td><font color=\"blue\">"
+            + consensusTotalRelays + " total</font></td>\n"
+          + "            <td><font color=\"blue\">"
+            + consensusRunningRelays + " Running</font></td>\n"
           + "          </tr>\n");
       bw.write("        </table>\n");
 
@@ -342,13 +389,14 @@ public class ConsensusHealthChecker {
       } else {
         bw.write(consensusMethodsResults.toString());
       }
-      bw.write("          <td><font color=\"blue\">consensus</font>"
+      bw.write("          <tr>\n"
+          + "            <td><font color=\"blue\">consensus</font>"
             + "</td>\n"
           + "            <td><font color=\"blue\">"
             + consensusConsensusMethod + "</font></td>\n"
           + "          </tr>\n");
       bw.write("        </table>\n");
-        
+
       /* Write recommended versions. */
       bw.write("        <br/>\n"
           + "        <h3>Recommended versions</h3>\n"
@@ -364,7 +412,8 @@ public class ConsensusHealthChecker {
       } else {
         bw.write(versionsResults.toString());
       }
-      bw.write("          <td><font color=\"blue\">consensus</font>"
+      bw.write("          <tr>\n"
+          + "            <td><font color=\"blue\">consensus</font>"
           + "</td>\n"
           + "            <td><font color=\"blue\">"
             + consensusClientVersions + "</font></td>\n"
@@ -374,7 +423,7 @@ public class ConsensusHealthChecker {
           + consensusServerVersions + "</font></td>\n"
         + "          </tr>\n");
       bw.write("        </table>\n");
-        
+
       /* Write consensus parameters. */
       bw.write("        <br/>\n"
           + "        <h3>Consensus parameters</h3>\n"
@@ -396,7 +445,7 @@ public class ConsensusHealthChecker {
           + consensusParams + "</font></td>\n"
         + "          </tr>\n");
       bw.write("        </table>\n");
-        
+
       /* Write authority keys. */
       bw.write("        <br/>\n"
           + "        <h3>Authority keys</h3>\n"
@@ -417,7 +466,7 @@ public class ConsensusHealthChecker {
           + "        <p><i>Note that expiration dates of legacy keys are "
             + "not included in votes and therefore not listed here!</i>"
             + "</p>\n");
-        
+
       /* Write bandwidth scanner status. */
       bw.write("        <br/>\n"
            + "        <h3>Bandwidth scanner status</h3>\n"
