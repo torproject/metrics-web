@@ -35,3 +35,6 @@ log.*
 doc/*.aux
 doc/*.log
 
+# Generated websites
+website/consensus-health*.html
+
