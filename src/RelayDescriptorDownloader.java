@@ -44,6 +44,11 @@ public class RelayDescriptorDownloader {
   private List<String> dirSources;
 
   /**
+   * Number of descriptors requested by directory to be included in logs.
+   */
+  private Map<String, Integer> dirRequests;
+
+  /**
    * Should we try to download the current consensus if we don't have it?
    */
   private boolean downloadCurrentConsensus;
@@ -208,6 +213,11 @@ public class RelayDescriptorDownloader {
         + missingVotes + " vote(s), " + missingServerDescriptors
         + " server descriptor(s), and " + missingExtraInfoDescriptors
         + " extra-info descriptor(s).\n");
+
+    dirRequests = new HashMap<String, Integer>();
+    for (String dirSource : dirSources) {
+      dirRequests.put(dirSource, 0);
+    }
   }
 
   /**
@@ -449,6 +459,7 @@ public class RelayDescriptorDownloader {
         if (!downloaded.contains(fullUrl)) {
           downloaded.add(fullUrl);
           numDownloaded++;
+          this.dirRequests.put(authority, dirRequests.get(authority) + 1);
           try {
             URL u = new URL(fullUrl);
             HttpURLConnection huc =
@@ -556,7 +567,13 @@ public class RelayDescriptorDownloader {
         + this.triedServerDescriptors + " server descriptor(s), and "
         + this.triedExtraInfoDescriptors + " extra-info descriptor(s) "
         + "from the directory authorities.\n");
-    dumpStats.append("We successfully downloaded "
+    dumpStats.append("Requests were sent to these directory "
+        + "authorities:");
+    for (String dirSource : this.dirSources) {
+      dumpStats.append(" " + dirSource + "="
+         + this.dirRequests.get(dirSource));
+    }
+    dumpStats.append("\nWe successfully downloaded "
         + this.downloadedConsensuses + " consensus(es), "
         + this.downloadedVotes + " vote(s), "
         + this.downloadedServerDescriptors + " server descriptor(s), and "
