@@ -218,7 +218,7 @@ public class ConsensusHealthChecker {
         versionsResults.append("          <tr>\n"
             + "            <td/>\n"
             + "            <td><font color=\"red\">"
-              + voteClientVersions + "</font></td>\n"
+              + voteServerVersions + "</font></td>\n"
             + "          </tr>\n");
       } else {
         versionsResults.append("          <tr>\n"
