@@ -83,32 +83,37 @@ public class ConsensusHealthChecker {
         consensusClientVersions = null, consensusServerVersions = null,
         consensusParams = null, rLineTemp = null;
     int consensusTotalRelays = 0, consensusRunningRelays = 0;
-    Scanner s = new Scanner(new String(this.mostRecentConsensus));
-    while (s.hasNextLine()) {
-      String line = s.nextLine();
-      if (line.startsWith("consensus-method ")) {
-        consensusConsensusMethod = line;
-      } else if (line.startsWith("client-versions ")) {
-        consensusClientVersions = line;
-      } else if (line.startsWith("server-versions ")) {
-        consensusServerVersions = line;
-      } else if (line.startsWith("known-flags ")) {
-        consensusKnownFlags = line;
-      } else if (line.startsWith("params ")) {
-        consensusParams = line;
-      } else if (line.startsWith("r ")) {
-        rLineTemp = line;
-      } else if (line.startsWith("s ")) {
-        consensusTotalRelays++;
-        if (line.contains(" Running")) {
-          consensusRunningRelays++;
+    try {
+      BufferedReader br = new BufferedReader(new StringReader(new String(
+          this.mostRecentConsensus)));
+      String line = null;
+      while ((line = br.readLine()) != null) {
+        if (line.startsWith("consensus-method ")) {
+          consensusConsensusMethod = line;
+        } else if (line.startsWith("client-versions ")) {
+          consensusClientVersions = line;
+        } else if (line.startsWith("server-versions ")) {
+          consensusServerVersions = line;
+        } else if (line.startsWith("known-flags ")) {
+          consensusKnownFlags = line;
+        } else if (line.startsWith("params ")) {
+          consensusParams = line;
+        } else if (line.startsWith("r ")) {
+          rLineTemp = line;
+        } else if (line.startsWith("s ")) {
+          consensusTotalRelays++;
+          if (line.contains(" Running")) {
+            consensusRunningRelays++;
+          }
+          consensusAssignedFlags.put(Hex.encodeHexString(
+              Base64.decodeBase64(rLineTemp.split(" ")[2] + "=")).
+              toUpperCase() + " " + rLineTemp.split(" ")[1], line);
         }
-        consensusAssignedFlags.put(Hex.encodeHexString(
-            Base64.decodeBase64(rLineTemp.split(" ")[2] + "=")).
-            toUpperCase() + " " + rLineTemp.split(" ")[1], line);
       }
+      br.close();
+    } catch (IOException e) {
+      /* There should be no I/O taking place when reading a String. */
     }
-    s.close();
 
     /* Read votes and parse all information to compare with the
      * consensus. */
@@ -118,49 +123,54 @@ public class ConsensusHealthChecker {
           voteParams = null, dirSource = null, voteDirKeyExpires = null;
       int voteTotalRelays = 0, voteRunningRelays = 0,
           voteContainsBandwidthWeights = 0;
-      s = new Scanner(new String(voteBytes));
-      while (s.hasNextLine()) {
-        String line = s.nextLine();
-        if (line.startsWith("consensus-methods ")) {
-          voteConsensusMethods = line;
-        } else if (line.startsWith("client-versions ")) {
-          voteClientVersions = line;
-        } else if (line.startsWith("server-versions ")) {
-          voteServerVersions = line;
-        } else if (line.startsWith("known-flags ")) {
-          voteKnownFlags = line;
-        } else if (line.startsWith("params ")) {
-          voteParams = line;
-        } else if (line.startsWith("dir-source ")) {
-          dirSource = line.split(" ")[1];
-          allKnownVotes.add(dirSource);
-        } else if (line.startsWith("dir-key-expires ")) {
-          voteDirKeyExpires = line;
-        } else if (line.startsWith("r ")) {
-          rLineTemp = line;
-        } else if (line.startsWith("s ")) {
-          voteTotalRelays++;
-          if (line.contains(" Running")) {
-            voteRunningRelays++;
-          }
-          String relayKey = Hex.encodeHexString(Base64.decodeBase64(
-              rLineTemp.split(" ")[2] + "=")).toUpperCase() + " "
-              + rLineTemp.split(" ")[1];
-          SortedSet<String> sLines = null;
-          if (votesAssignedFlags.containsKey(relayKey)) {
-            sLines = votesAssignedFlags.get(relayKey);
-          } else {
-            sLines = new TreeSet<String>();
-            votesAssignedFlags.put(relayKey, sLines);
-          }
-          sLines.add(dirSource + " " + line);
-        } else if (line.startsWith("w ")) {
-          if (line.contains(" Measured")) {
-            voteContainsBandwidthWeights++;
+      try {
+        BufferedReader br = new BufferedReader(new StringReader(
+            new String(voteBytes)));
+        String line = null;
+        while ((line = br.readLine()) != null) {
+          if (line.startsWith("consensus-methods ")) {
+            voteConsensusMethods = line;
+          } else if (line.startsWith("client-versions ")) {
+            voteClientVersions = line;
+          } else if (line.startsWith("server-versions ")) {
+            voteServerVersions = line;
+          } else if (line.startsWith("known-flags ")) {
+            voteKnownFlags = line;
+          } else if (line.startsWith("params ")) {
+            voteParams = line;
+          } else if (line.startsWith("dir-source ")) {
+            dirSource = line.split(" ")[1];
+            allKnownVotes.add(dirSource);
+          } else if (line.startsWith("dir-key-expires ")) {
+            voteDirKeyExpires = line;
+          } else if (line.startsWith("r ")) {
+            rLineTemp = line;
+          } else if (line.startsWith("s ")) {
+            voteTotalRelays++;
+            if (line.contains(" Running")) {
+              voteRunningRelays++;
+            }
+            String relayKey = Hex.encodeHexString(Base64.decodeBase64(
+                rLineTemp.split(" ")[2] + "=")).toUpperCase() + " "
+                + rLineTemp.split(" ")[1];
+            SortedSet<String> sLines = null;
+            if (votesAssignedFlags.containsKey(relayKey)) {
+              sLines = votesAssignedFlags.get(relayKey);
+            } else {
+              sLines = new TreeSet<String>();
+              votesAssignedFlags.put(relayKey, sLines);
+            }
+            sLines.add(dirSource + " " + line);
+          } else if (line.startsWith("w ")) {
+            if (line.contains(" Measured")) {
+              voteContainsBandwidthWeights++;
+            }
           }
         }
+        br.close();
+      } catch (IOException e) {
+        /* There should be no I/O taking place when reading a String. */
       }
-      s.close();
 
       /* Write known flags. */
       knownFlagsResults.append("          <tr>\n"
