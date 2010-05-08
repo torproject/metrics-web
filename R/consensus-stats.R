@@ -108,12 +108,35 @@ plot_current <- function(directory, filenamePart, titlePart, rows, breaks,
     labels) {
   plot_pastdays(directory, filenamePart, titlePart, c(30, 90, 180), rows,
     breaks, labels)
-  plot_years(directory, filenamePart, titlePart, "2010", rows, breaks,
-    labels)
-  plot_quarters(directory, filenamePart, titlePart, "2010", 2, rows,
-    breaks, labels)
-  plot_months(directory, filenamePart, titlePart, "2010", 4, rows, breaks,
-    labels)
+  today <- as.POSIXct(Sys.Date(), tz = "GMT")
+  one_week_ago <- seq(from = today, length = 2, by = "-7 days")[2]
+  year_today <- format(today, "%Y")
+  year_one_week_ago <- format(one_week_ago, "%Y")
+  quarter_today <- 1 + floor((as.numeric(format(today, "%m")) - 1) / 3)
+  quarter_one_week_ago <- 1 + floor((as.numeric(format(one_week_ago,
+    "%m")) - 1) / 3)
+  month_today <- as.numeric(format(today, "%m"))
+  month_one_week_ago <- as.numeric(format(one_week_ago, "%m"))
+  plot_years(directory, filenamePart, titlePart, union(year_today,
+    year_one_week_ago), rows, breaks, labels)
+  if (year_today == year_one_week_ago) {
+    plot_quarters(directory, filenamePart, titlePart, year_today,
+      union(quarter_today, quarter_one_week_ago), rows, breaks, labels)
+  } else {
+    plot_quarters(directory, filenamePart, titlePart, year_today,
+      quarter_today, rows, breaks, labels)
+    plot_quarters(directory, filenamePart, titlePart, year_one_week_ago,
+      quarter_one_week_ago, rows, breaks, labels)
+  }
+  if (year_today == year_one_week_ago) {
+    plot_months(directory, filenamePart, titlePart, year_today,
+      union(month_today, month_one_week_ago), rows, breaks, labels)
+  } else {
+    plot_months(directory, filenamePart, titlePart, year_today, month_today,
+      rows, breaks, labels)
+    plot_months(directory, filenamePart, titlePart, year_one_week_ago,
+      month_one_week_ago, rows, breaks, labels)
+  }
   plot_all(directory, filenamePart, titlePart, rows, breaks, labels)
 }
 

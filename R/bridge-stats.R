@@ -99,13 +99,33 @@ plot_months <- function(years, months, countries) {
   }
 }
 
-# TODO these need to be updated manually
 plot_current <- function(countries) {
   plot_alldata(countries)
   plot_pastdays(c(30, 90, 180), countries)
-  plot_years("2010", countries)
-  plot_quarters("2010", 2, countries)
-  plot_months("2010", 4, countries)
+  today <- as.POSIXct(Sys.Date(), tz = "GMT")
+  one_week_ago <- seq(from = today, length = 2, by = "-7 days")[2]
+  year_today <- format(today, "%Y")
+  year_one_week_ago <- format(one_week_ago, "%Y")
+  quarter_today <- 1 + floor((as.numeric(format(today, "%m")) - 1) / 3)
+  quarter_one_week_ago <- 1 + floor((as.numeric(format(one_week_ago,
+    "%m")) - 1) / 3)
+  month_today <- as.numeric(format(today, "%m"))
+  month_one_week_ago <- as.numeric(format(one_week_ago, "%m"))
+  plot_years(union(year_today, year_one_week_ago), countries)
+  if (year_today == year_one_week_ago) {
+    plot_quarters(year_today, union(quarter_today, quarter_one_week_ago),
+      countries)
+  } else {
+    plot_quarters(year_today, quarter_today, countries)
+    plot_quarters(year_one_week_ago, quarter_one_week_ago, countries)
+  }
+  if (year_today == year_one_week_ago) {
+    plot_months(year_today, union(month_today, month_one_week_ago),
+      countries)
+  } else {
+    plot_months(year_today, month_today, countries)
+    plot_months(year_one_week_ago, month_one_week_ago, countries)
+  }
 }
 
 countries <- data.frame(code = c("bh", "cn", "cu", "et", "ir", "mm", "sa",

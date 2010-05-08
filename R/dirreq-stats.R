@@ -118,17 +118,40 @@ plot_months <- function(directory, filenamePart, titlePart, years, months,
   }
 }
 
-# TODO these need to be updated manually
 plot_current <- function(directory, filenamePart, titlePart, data,
     countries) {
   plot_alldata(directory, filenamePart, titlePart, data, countries)
   plot_pastdays(directory, filenamePart, titlePart, c(30, 90, 180), data,
     countries)
-  plot_years(directory, filenamePart, titlePart, "2010", data, countries)
-  plot_quarters(directory, filenamePart, titlePart, "2010", 2, data,
-    countries)
-  plot_months(directory, filenamePart, titlePart, "2010", 4, data,
-    countries)
+  today <- as.POSIXct(Sys.Date(), tz = "GMT")
+  one_week_ago <- seq(from = today, length = 2, by = "-7 days")[2]
+  year_today <- format(today, "%Y")
+  year_one_week_ago <- format(one_week_ago, "%Y")
+  quarter_today <- 1 + floor((as.numeric(format(today, "%m")) - 1) / 3)
+  quarter_one_week_ago <- 1 + floor((as.numeric(format(one_week_ago,
+    "%m")) - 1) / 3)
+  month_today <- as.numeric(format(today, "%m"))
+  month_one_week_ago <- as.numeric(format(one_week_ago, "%m"))
+  plot_years(directory, filenamePart, titlePart, union(year_today,
+    year_one_week_ago), data, countries)
+  if (year_today == year_one_week_ago) {
+    plot_quarters(directory, filenamePart, titlePart, year_today,
+      union(quarter_today, quarter_one_week_ago), data, countries)
+  } else {
+    plot_quarters(directory, filenamePart, titlePart, year_today,
+      quarter_today, data, countries)
+    plot_quarters(directory, filenamePart, titlePart, year_one_week_ago,
+      quarter_one_week_ago, data, countries)
+  }
+  if (year_today == year_one_week_ago) {
+    plot_months(directory, filenamePart, titlePart, year_today,
+      union(month_today, month_one_week_ago), data, countries)
+  } else {
+    plot_months(directory, filenamePart, titlePart, year_today,
+      month_today, data, countries)
+    plot_months(directory, filenamePart, titlePart, year_one_week_ago,
+      month_one_week_ago, data, countries)
+  }
 }
 
 countries <- data.frame(code = c("bh", "cn", "cu", "et", "ir", "mm", "sa",
