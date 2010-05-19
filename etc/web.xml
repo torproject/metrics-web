@@ -2,7 +2,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
-  <servlet>
+  <!--<servlet>
     <servlet-name>NetworkSize</servlet-name>
     <servlet-class>org.torproject.ernie.web.NetworkSizeServlet</servlet-class>
   </servlet>
@@ -17,6 +17,6 @@
   <servlet-mapping>
     <servlet-name>Image</servlet-name>
     <url-pattern>/graphs/*</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping>-->
 </web-app>
 
