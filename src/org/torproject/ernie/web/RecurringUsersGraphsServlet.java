@@ -73,6 +73,12 @@ public class RecurringUsersGraphsServlet extends HttpServlet {
         + "        <ul>\n"
         + "          <li><a href=\"csv/recurring-users.csv\">CSV</a> file containing\n"
         + "             all data.</li>\n"
+        + "          <li><a href=\"csv/monthly-users-peak.csv\">CSV</a> "
+          + "file containing peak daily Tor users (recurring and bridge) "
+          + "per month by country.</li>\n"
+        + "          <li><a href=\"csv/monthly-users-average.csv\">"
+          + "CSV</a> file containing average daily Tor users (recurring "
+          + "and bridge) per month by country.</li>\n"
         + "        </ul>\n"
         + "        ");
     List<String> countries = Arrays.asList((

@@ -71,6 +71,12 @@ public class BridgeUsersGraphsServlet extends HttpServlet {
         + "        <ul>\n"
         + "          <li><a href=\"csv/bridge-users.csv\">CSV</a> file containing all\n"
         + "             data.</li>\n"
+        + "          <li><a href=\"csv/monthly-users-peak.csv\">CSV</a> "
+          + "file containing peak daily Tor users (recurring and bridge) "
+          + "per month by country.</li>\n"
+        + "          <li><a href=\"csv/monthly-users-average.csv\">"
+          + "CSV</a> file containing average daily Tor users (recurring "
+          + "and bridge) per month by country.</li>\n"
         + "        </ul>"
         + "        ");
     List<String> countries = Arrays.asList((
