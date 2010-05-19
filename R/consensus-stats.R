@@ -103,7 +103,6 @@ plot_all <- function(directory, filenamePart, titlePart, rows, breaks,
     breaks, labels)
 }
 
-# TODO these need to be updated manually
 plot_current <- function(directory, filenamePart, titlePart, rows, breaks,
     labels) {
   plot_pastdays(directory, filenamePart, titlePart, c(30, 90, 180), rows,
