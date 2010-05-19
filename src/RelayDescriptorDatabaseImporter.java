@@ -5,7 +5,19 @@ import java.util.logging.*;
 /**
  * Parse directory data.
  */
+
 public final class RelayDescriptorDatabaseImporter {
+
+  /**
+   * How many records to commit with each database transaction.
+   */
+  private final long autoCommitCount = 500;
+
+  /**
+   * Keep track of the number of records committed before each transaction
+   */
+  private int rdsCount = 0;
+  private int rrsCount = 0;
 
   /**
    * Relay descriptor database connection.
@@ -53,6 +65,9 @@ public final class RelayDescriptorDatabaseImporter {
     try {
       /* Connect to database. */
       this.conn = DriverManager.getConnection(connectionURL);
+
+      /* Turn autocommit off */
+      this.conn.setAutoCommit(false);
 
       /* Prepare statements. */
       this.psRs = conn.prepareStatement("SELECT COUNT(*) "
@@ -110,7 +125,13 @@ public final class RelayDescriptorDatabaseImporter {
       this.psR.setBoolean(14, flags.contains("Valid"));
       this.psR.setBoolean(15, flags.contains("V2Dir"));
       this.psR.setBoolean(16, flags.contains("V3Dir"));
-      this.psR.execute();
+      this.psR.executeUpdate();
+      rrsCount++;
+      if (rrsCount % autoCommitCount == 0)  {
+        this.conn.commit();
+        rrsCount = 0;
+      }
+
     } catch (SQLException e) {
       this.logger.log(Level.WARNING, "Could not add network status "
           + "consensus entry.", e);
@@ -146,7 +167,13 @@ public final class RelayDescriptorDatabaseImporter {
       this.psD.setString(8, platform);
       this.psD.setTimestamp(9, new Timestamp(published), cal);
       this.psD.setLong(10, uptime);
-      this.psD.execute();
+      this.psD.executeUpdate();
+      rdsCount++;
+      if (rdsCount % autoCommitCount == 0)  {
+        this.conn.commit();
+        rdsCount = 0;
+      }
+
     } catch (SQLException e) {
       this.logger.log(Level.WARNING, "Could not add server descriptor.",
           e);
@@ -157,6 +184,13 @@ public final class RelayDescriptorDatabaseImporter {
    * Close the relay descriptor database connection.
    */
   public void closeConnection() {
+    /* commit any stragglers before closing */
+    try {
+      this.conn.commit();
+    }
+    catch (SQLException e)  {
+      this.logger.log(Level.WARNING, "Could not commit final records to database", e);
+    }
     try {
       this.conn.close();
     } catch (SQLException e) {
@@ -165,4 +199,3 @@ public final class RelayDescriptorDatabaseImporter {
     }
   }
 }
-
