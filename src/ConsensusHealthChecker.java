@@ -333,7 +333,6 @@ public class ConsensusHealthChecker {
           + "          <td class=\"banner-middle\">\n"
           + "            <a href=\"/\">Home</a>\n"
           + "            <a href=\"graphs.html\">Graphs</a>\n"
-          + "            <a href=\"reports.html\">Reports</a>\n"
           + "            <a href=\"papers.html\">Papers</a>\n"
           + "            <a href=\"data.html\">Data</a>\n"
           + "            <a href=\"tools.html\">Tools</a>\n"
