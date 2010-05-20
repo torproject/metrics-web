@@ -41,17 +41,16 @@
     <copy todir="dist/WEB-INF">
       <fileset dir="R"/>
     </copy>-->
-<!-- We could copy static files (HTML, JSP), too, but right now we don't
-     have any such files.
     <copy todir="dist">
-      <fileset dir="web"/>
+      <fileset dir="website">
+        <include name="*.html"/>
+        <exclude name="consensus-health.html"/>
+        <exclude name="consensus-health-1.html"/>
+        <exclude name="consensus-health-2.html"/>
+        <exclude name="log.html"/>
+      </fileset>
     </copy>
--->
-<!-- We could copy libraries (JDBC Postgres driver, Commons, etc.), too,
-     but right now we don't require libraries
-    <copy todir="dist/WEB-INF/lib">
-      <fileset dir="lib"/>
-    </copy>-->
+    <copy todir="dist/WEB-INF/lib" file="lib/commons-codec-1.4.jar"/>
     <jar jarfile="ernie.war" basedir="dist"/>
   </target>
 
