@@ -36,10 +36,8 @@
         <a href="graphs.html">graphs</a>.</p>
         <ul>
           <li><a href="#ernie">Metrics portal software</a></li>
-          <li><a href="#descdb">Descriptor database</a></li>
           <li><a href="#dirarch">Directory-archive script</a></li>
           <li><a href="#bridgesan">Bridge descriptor sanitizer</a></li>
-          <li><a href="#aggregator">Descriptor aggregator</a></li>
           <li><a href="#torperf">Torperf</a></li>
         </ul>
         <br/>
@@ -53,7 +51,9 @@
         the various input data formats and writes CSV files and R code
         that processes the CSV files to generate graphs. Of course, ERNIE
         can be used to generate customized graphs without the need to put
-        them on a website.</p>
+        them on a website. ERNIE can further import descriptors into a
+        database for further analysis and aggregate descriptors to make
+        tarballs.</p>
         <ul>
           <li>Browse the
           <a href="http://gitweb.torproject.org//ernie.git">Git repository</a></li>
@@ -61,19 +61,6 @@
           <li>Read the <a href="ernie-howto.html">HOWTO</a>
         </ul>
         <br/>
-        <font color="gray"><a id="descdb"/>
-        <h3>Descriptor database</h3>
-        <br/>
-        <p>An alternative approach for analyzing the statistical
-        <a href="data.html">data</a> is to import them into a local
-        database and query it. The descriptor database consist of a
-        database schema for PostgreSQL and/or MySQL, Java code to import
-        data, and example SQL queries.</p>
-        <ul>
-          <li><i>(functionality will be included in the <a href="#ernie">metrics portal software</a>)</i></li>
-        </ul>
-        <br/></font>
-        <font color="gray"><a id="dirarch"/>
         <h3>Directory-archive script</h3>
         <br/>
         <p>The directory-archive script consists of a bunch of shell
@@ -84,14 +71,14 @@
         exceptions: the provided tarballs are the result of combining two
         directory-archive script outputs, splitting v3 votes and v3
         consensuses into separate tarballs and replacing all colons in
-        filenames with dashes.</p>
+        filenames with dashes. The
+        <a href="#ernie">metrics portal software</a> contains similar
+        functionality.</p>
         <ul>
           <li>Browse the <a href="http://gitweb.torproject.org//tor.git?a=tree;f=contrib/directory-archive;h=095a4216c06b5afc6274eddd39f0238067377fe4;hb=HEAD">contrib/directory-archive/</a> subdirectory in the Tor sources</a></li>
           <li><tt>git clone git://git.torproject.org/git/tor</tt></li>
-          <li><i>(functionality will be included in the <a href="#ernie">metrics portal software</a>)</i></li>
         </ul>
-        <br/></font>
-        <font color="gray"><a id="bridgesan"/>
+        <br/>
         <h3>Bridge descriptor sanitizer</h3>
         <br/>
         <p>The bridge authority Tonga maintains a list of bridges in order
@@ -107,28 +94,16 @@
         would be obsolete. This script takes the half-hourly snapshots as
         input, removesall possibly sensitive information from the
         descriptors, and puts out the sanitized bridge descriptors that
-        are safe to be published.</p>
+        are safe to be published. The
+        <a href="#ernie">metrics portal software</a> contains similar
+        functionality and will soon make this bridge descriptor sanitizer
+        obsolete.</p>
         <ul>
           <li>Browse the
           <a href="https://svn.torproject.org/svn/projects/archives/trunk/bridge-desc-sanitizer/">SVN repository</a></li>
           <li><tt>svn co https://svn.torproject.org/svn/projects/archives/trunk/bridge-desc-sanitizer</tt></li>
-          <li><i>(functionality will be included in the <a href="#ernie">metrics portal software</a>)</i></li>
         </ul>
-        <br/></font>
-        <font color="gray"><a id="aggregator"/>
-        <h3>Descriptor aggregator</h3>
         <br/>
-        <p>The descriptor aggregator is a Java application that combines
-        the functionality of the directory-archive script (including the
-        postprocessing tasks of merging, splitting, and renaming) and the
-        bridge descriptor sanitizer. The descriptor aggregator runs on a
-        node that has access to non-sanitized bridge descriptors and
-        produces monthly tarballs plus daily updated partial tarballs for
-        the current month.</p>
-        <ul>
-          <li><i>(functionality will be included in the <a href="#ernie">metrics portal software</a>)</i></li>
-        </ul>
-        <br/></font>
         <a id="torperf"/>
         <h3>Torperf</h3>
         <br/>
