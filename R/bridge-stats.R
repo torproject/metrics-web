@@ -1,12 +1,6 @@
 options(warn = -1)
 suppressPackageStartupMessages(library("ggplot2"))
 
-bridge <- read.csv("stats/bridge-stats", header = TRUE,
-  stringsAsFactors = FALSE)
-bridge <- bridge[1:length(bridge$date)-1,]
-write.csv(bridge, "website/csv/bridge-users.csv", quote = FALSE,
-  row.names = FALSE)
-
 plot_bridges <- function(filename, title, limits, code) {
   c <- data.frame(date = bridge$date, users = bridge[[code]])
   ggplot(c, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
@@ -136,5 +130,12 @@ countries <- data.frame(code = c("bh", "cn", "cu", "et", "ir", "mm", "sa",
   "syria", "tunisia", "turkmenistan", "uzbekistan", "vietnam", "yemen"),
   stringsAsFactors = FALSE)
 
-plot_current(countries)
+if (file.exists("stats/bridge-stats")) {
+  bridge <- read.csv("stats/bridge-stats", header = TRUE,
+    stringsAsFactors = FALSE)
+  bridge <- bridge[1:length(bridge$date)-1,]
+  write.csv(bridge, "website/csv/bridge-users.csv", quote = FALSE,
+    row.names = FALSE)
+  plot_current(countries)
+}
 
