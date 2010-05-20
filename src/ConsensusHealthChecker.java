@@ -340,7 +340,7 @@ public class ConsensusHealthChecker {
           + "            <font size=\"2\">\n"
           + "              <a href=\"ernie-howto.html\">ERNIE Howto</a>\n"
           + "              <a href=\"log.html\">Last log</a>\n"
-          + "              <a href=\"consensus-health.html\">Consensus health</a>\n"
+          + "              <a class=\"current\">Consensus health</a>\n"
           + "            </font>\n"
           + "          </td>\n"
           + "          <td class=\"banner-right\"></td>\n"
