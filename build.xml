@@ -4,6 +4,14 @@
   <property name="docs" value="javadoc/"/>
   <target name="init">
     <mkdir dir="${classes}"/>
+    <mkdir dir="website/csv"/>
+    <mkdir dir="website/graphs/descriptors"/>
+    <mkdir dir="website/graphs/direct-users"/>
+    <mkdir dir="website/graphs/exit"/>
+    <mkdir dir="website/graphs/gettor"/>
+    <mkdir dir="website/graphs/networksize"/>
+    <mkdir dir="website/graphs/new-users"/>
+    <mkdir dir="website/graphs/torperf"/>
   </target>
   <target name="compile" depends="init"> 
     <javac srcdir="${sources}"
@@ -13,7 +21,7 @@
            classpath="lib/commons-codec-1.4.jar;lib/commons-compress-1.0.jar"/>
   </target>
   <target name="run" depends="compile">
-    <java classpath="${classes};lib/commons-codec-1.4.jar:lib/commons-compress-1.0.jar;postgresql-8.4-701.jdbc4.jar"
+    <java classpath="${classes};lib/commons-codec-1.4.jar:lib/commons-compress-1.0.jar;lib/postgresql-8.4-701.jdbc4.jar"
           fork="true"
           maxmemory="1024m"
           classname="Main"/>
