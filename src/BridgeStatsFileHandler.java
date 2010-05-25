@@ -32,13 +32,6 @@ public class BridgeStatsFileHandler {
   private SortedMap<String, String> bridgeUsersRaw;
 
   /**
-   * Modification flag for <code>bridgeUsersRaw</code>. This flag is used to
-   * decide whether the contents of <code>bridgeUsersRaw</code> need to be
-   * written to disk during <code>writeFiles</code>.
-   */
-  private boolean bridgeUsersRawModified;
-
-  /**
    * Helper file containing the hashed relay identities of all known
    * relays. These hashes are compared to the bridge identity hashes to
    * exclude bridges that have been known as relays from the statistics.
@@ -50,13 +43,6 @@ public class BridgeStatsFileHandler {
    * running as relays.
    */
   private SortedSet<String> hashedRelays;
-
-  /**
-   * Modification flag for <code>hashedRelays</code>. This flag is used to
-   * decide whether the contents of <code>hashedRelays</code> need to be
-   * written to disk during <code>writeFiles</code>.
-   */
-  private boolean hashedRelaysModified;
 
   /**
    * Final results file containing the number of bridge users per country
@@ -168,9 +154,6 @@ public class BridgeStatsFileHandler {
         this.logger.log(Level.WARNING, "Failed to read file "
             + this.hashedRelayIdentitiesFile.getAbsolutePath() + "!", e);
       }
-
-      /* Set modification flags to false. */
-      this.bridgeUsersRawModified = this.hashedRelaysModified = false;
     }
   }
 
@@ -185,7 +168,6 @@ public class BridgeStatsFileHandler {
       this.logger.finer("Adding new hashed relay identity: "
           + hashedRelayIdentity);
       this.hashedRelays.add(hashedRelayIdentity);
-      this.hashedRelaysModified = true;
     }
   }
 
@@ -218,13 +200,11 @@ public class BridgeStatsFileHandler {
     if (!this.bridgeUsersRaw.containsKey(key)) {
       this.logger.finer("Adding new bridge user numbers: " + value);
       this.bridgeUsersRaw.put(key, value);
-      this.bridgeUsersRawModified = true;
     } else if (value.compareTo(this.bridgeUsersRaw.get(key)) > 0) {
       this.logger.finer("Replacing existing bridge user numbers (" +
           this.bridgeUsersRaw.get(key) + " with new numbers: "
           + value);
       this.bridgeUsersRaw.put(key, value);
-      this.bridgeUsersRawModified = true;
     } else {
       this.logger.finer("Not replacing existing bridge user numbers (" +
           this.bridgeUsersRaw.get(key) + " with new numbers (" + value
@@ -240,139 +220,121 @@ public class BridgeStatsFileHandler {
   public void writeFiles() {
 
     /* Write hashed relay identities to disk. */
-    if (this.hashedRelaysModified) {
-      try {
-        this.logger.fine("Writing file "
-            + this.hashedRelayIdentitiesFile.getAbsolutePath() + "...");
-        this.hashedRelayIdentitiesFile.getParentFile().mkdirs();
-        BufferedWriter bw = new BufferedWriter(new FileWriter(
-            this.hashedRelayIdentitiesFile));
-        for (String hashedRelay : this.hashedRelays) {
-          bw.append(hashedRelay + "\n");
-        }
-        bw.close();
-        this.logger.fine("Finished writing file "
-            + this.hashedRelayIdentitiesFile.getAbsolutePath() + ".");
-      } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed to write "
-            + this.hashedRelayIdentitiesFile.getAbsolutePath() + "!", e);
+    try {
+      this.logger.fine("Writing file "
+          + this.hashedRelayIdentitiesFile.getAbsolutePath() + "...");
+      this.hashedRelayIdentitiesFile.getParentFile().mkdirs();
+      BufferedWriter bw = new BufferedWriter(new FileWriter(
+          this.hashedRelayIdentitiesFile));
+      for (String hashedRelay : this.hashedRelays) {
+        bw.append(hashedRelay + "\n");
       }
-    } else {
-      this.logger.fine("Not writing file "
-          + this.hashedRelayIdentitiesFile.getAbsolutePath()
-          + ", because nothing has changed.");
+      bw.close();
+      this.logger.fine("Finished writing file "
+          + this.hashedRelayIdentitiesFile.getAbsolutePath() + ".");
+    } catch (IOException e) {
+      this.logger.log(Level.WARNING, "Failed to write "
+          + this.hashedRelayIdentitiesFile.getAbsolutePath() + "!", e);
     }
 
     /* Write observations made by single bridges to disk. */
-    if (this.bridgeUsersRawModified) {
-      try {
-        this.logger.fine("Writing file "
-            + this.bridgeStatsRawFile.getAbsolutePath() + "...");
-        this.bridgeStatsRawFile.getParentFile().mkdirs();
-        BufferedWriter bw = new BufferedWriter(new FileWriter(
-            this.bridgeStatsRawFile));
-        bw.append("bridge,date,time");
-        for (String c : this.countries) {
-          bw.append("," + c);
-        }
-        bw.append("\n");
-        for (String line : this.bridgeUsersRaw.values()) {
-          String hashedBridgeIdentity = line.split(",")[0];
-          if (!this.hashedRelays.contains(hashedBridgeIdentity)) {
-            bw.append(line + "\n");
-          }
-        }
-        bw.close();
-        this.logger.fine("Finished writing file "
-            + this.bridgeStatsRawFile.getAbsolutePath() + ".");
-      } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed to write "
-            + this.bridgeStatsRawFile.getAbsolutePath() + "!", e);
+    try {
+      this.logger.fine("Writing file "
+          + this.bridgeStatsRawFile.getAbsolutePath() + "...");
+      this.bridgeStatsRawFile.getParentFile().mkdirs();
+      BufferedWriter bw = new BufferedWriter(new FileWriter(
+          this.bridgeStatsRawFile));
+      bw.append("bridge,date,time");
+      for (String c : this.countries) {
+        bw.append("," + c);
       }
-    } else {
-      this.logger.fine("Not writing file "
-          + this.bridgeStatsRawFile.getAbsolutePath() + ", because "
-          + "nothing has changed.");
+      bw.append("\n");
+      for (String line : this.bridgeUsersRaw.values()) {
+        String hashedBridgeIdentity = line.split(",")[0];
+        if (!this.hashedRelays.contains(hashedBridgeIdentity)) {
+          bw.append(line + "\n");
+        }
+      }
+      bw.close();
+      this.logger.fine("Finished writing file "
+          + this.bridgeStatsRawFile.getAbsolutePath() + ".");
+    } catch (IOException e) {
+      this.logger.log(Level.WARNING, "Failed to write "
+          + this.bridgeStatsRawFile.getAbsolutePath() + "!", e);
     }
 
     /* Aggregate per-day statistics. */
-    if (this.hashedRelaysModified || this.bridgeUsersRawModified) {
-      SortedMap<String, double[]> bridgeUsersPerDay =
-          new TreeMap<String, double[]>();
-      for (String line : this.bridgeUsersRaw.values()) {
-        String[] parts = line.split(",");
-        String hashedBridgeIdentity = parts[0];
-        if (!this.hashedRelays.contains(hashedBridgeIdentity)) {
-          String date = parts[1];
-          double[] users = bridgeUsersPerDay.get(date);
-          if (users == null) {
-            users = new double[countries.size()];
-            bridgeUsersPerDay.put(date, users);
-          }
-          for (int i = 3; i < parts.length; i++) {
-            users[i - 3] += Double.parseDouble(parts[i]);
-          }
+    SortedMap<String, double[]> bridgeUsersPerDay =
+        new TreeMap<String, double[]>();
+    for (String line : this.bridgeUsersRaw.values()) {
+      String[] parts = line.split(",");
+      String hashedBridgeIdentity = parts[0];
+      if (!this.hashedRelays.contains(hashedBridgeIdentity)) {
+        String date = parts[1];
+        double[] users = bridgeUsersPerDay.get(date);
+        if (users == null) {
+          users = new double[countries.size()];
+          bridgeUsersPerDay.put(date, users);
+        }
+        for (int i = 3; i < parts.length; i++) {
+          users[i - 3] += Double.parseDouble(parts[i]);
         }
       }
-      /* Write final results of bridge users per day and country to
-       * <code>stats/bridge-stats</code>. */
-      try {
-        this.logger.fine("Writing file "
-            + this.bridgeStatsRawFile.getAbsolutePath() + "...");
-        this.bridgeStatsFile.getParentFile().mkdirs();
-        BufferedWriter bw = new BufferedWriter(new FileWriter(
-            this.bridgeStatsFile));
-        bw.append("date");
-        for (String c : this.countries) {
-          bw.append("," + c);
-        }
-        bw.append("\n");
-        /* Memorize last written date fill missing dates with NA's. */
-        long lastDateMillis = 0L; 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        for (Map.Entry<String, double[]> e : bridgeUsersPerDay.entrySet()) {
-          String date = e.getKey();
-          long currentDateMillis = dateFormat.parse(date).getTime();
-          if (lastDateMillis == 0L) {
-            lastDateMillis = currentDateMillis;
-          }
-          while (currentDateMillis - 24L * 60L * 60L * 1000L
-              > lastDateMillis) {
-            lastDateMillis += 24L * 60L * 60L * 1000L;
-            bw.append(dateFormat.format(new Date(lastDateMillis)));
-            for (int i = 0; i < this.countries.size(); i++) {
-              bw.append(",NA");
-            }   
-            bw.append("\n");
-          }
+    }
+
+    /* Write final results of bridge users per day and country to
+     * <code>stats/bridge-stats</code>. */
+    try {
+      this.logger.fine("Writing file "
+          + this.bridgeStatsRawFile.getAbsolutePath() + "...");
+      this.bridgeStatsFile.getParentFile().mkdirs();
+      BufferedWriter bw = new BufferedWriter(new FileWriter(
+          this.bridgeStatsFile));
+      bw.append("date");
+      for (String c : this.countries) {
+        bw.append("," + c);
+      }
+      bw.append("\n");
+
+      /* Memorize last written date fill missing dates with NA's. */
+      long lastDateMillis = 0L;
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+      dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+      for (Map.Entry<String, double[]> e : bridgeUsersPerDay.entrySet()) {
+        String date = e.getKey();
+        long currentDateMillis = dateFormat.parse(date).getTime();
+        if (lastDateMillis == 0L) {
           lastDateMillis = currentDateMillis;
-          /* Write current observation. */
-          bw.append(date);
-          double[] users = e.getValue();
-          for (int i = 0; i < users.length; i++) {
-            bw.append("," + String.format("%.2f", users[i]));
+        }
+        while (currentDateMillis - 24L * 60L * 60L * 1000L
+            > lastDateMillis) {
+          lastDateMillis += 24L * 60L * 60L * 1000L;
+          bw.append(dateFormat.format(new Date(lastDateMillis)));
+          for (int i = 0; i < this.countries.size(); i++) {
+            bw.append(",NA");
           }
           bw.append("\n");
         }
-        bw.close();
-        this.logger.fine("Finished writing file "
-            + this.bridgeStatsFile.getAbsolutePath() + ".");
-      } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed to write "
-            + this.bridgeStatsFile.getAbsolutePath() + "!", e);
-      } catch (ParseException e) {
-        this.logger.log(Level.WARNING, "Failed to write "
-            + this.bridgeStatsFile.getAbsolutePath() + "!", e);
-      }
-    } else {
-      this.logger.fine("Not writing file "
-          + this.bridgeStatsFile.getAbsolutePath() + ", because nothing "
-          + "has changed.");
-    }
+        lastDateMillis = currentDateMillis;
 
-    /* Set modification flags to false again. */
-    this.bridgeUsersRawModified = this.hashedRelaysModified = false;
+        /* Write current observation. */
+        bw.append(date);
+        double[] users = e.getValue();
+        for (int i = 0; i < users.length; i++) {
+          bw.append("," + String.format("%.2f", users[i]));
+        }
+        bw.append("\n");
+      }
+      bw.close();
+      this.logger.fine("Finished writing file "
+          + this.bridgeStatsFile.getAbsolutePath() + ".");
+    } catch (IOException e) {
+      this.logger.log(Level.WARNING, "Failed to write "
+          + this.bridgeStatsFile.getAbsolutePath() + "!", e);
+    } catch (ParseException e) {
+      this.logger.log(Level.WARNING, "Failed to write "
+          + this.bridgeStatsFile.getAbsolutePath() + "!", e);
+    }
   }
 }
 
