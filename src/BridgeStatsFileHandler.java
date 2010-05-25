@@ -248,7 +248,8 @@ public class BridgeStatsFileHandler {
     String key = hashedIdentity + "," + date;
     StringBuilder sb = new StringBuilder(key + "," + time);
     for (String c : countries) {
-      sb.append("," + (obs.containsKey(c) ? obs.get(c) : "0.0"));
+      sb.append("," + (obs.containsKey(c) && !obs.get(c).startsWith("-")
+          ? obs.get(c) : "0.0"));
     }
     String value = sb.toString();
     if (!this.bridgeUsersRaw.containsKey(key)) {
