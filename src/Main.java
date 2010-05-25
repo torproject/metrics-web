@@ -156,7 +156,8 @@ public class Main {
     // Import bridge descriptors
     if (bdp != null && config.getImportSanitizedBridges()) {
       new SanitizedBridgesReader(bdp,
-          config.getSanitizedBridgesDirectory(), countries);
+          config.getSanitizedBridgesDirectory(), countries,
+          config.getKeepSanitizedBridgesImportHistory());
     }
     if (bdp != null && config.getImportBridgeSnapshots()) {
       new BridgeSnapshotReader(bdp, config.getBridgeSnapshotsDirectory(),

@@ -32,6 +32,12 @@
 ## Relative path to directory to import sanitized bridges from
 #SanitizedBridgesDirectory bridges/
 #
+## Keep a history of imported sanitized bridge descriptors. This history
+## can be useful when importing from a changing data source to avoid
+## importing descriptors more than once, but it can be confusing to users
+## who don't know about it.
+#KeepSanitizedBridgesImportHistory 0
+#
 ## Import bridge snapshots from disk, if available
 #ImportBridgeSnapshots 0
 #

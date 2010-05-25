@@ -38,6 +38,7 @@ public class Configuration {
   private String sanitizedBridgesWriteDirectory = "sanitized-bridges/";
   private boolean importSanitizedBridges = false;
   private String sanitizedBridgesDirectory = "bridges/";
+  private boolean keepSanitizedBridgesImportHistory = false;
   private boolean importBridgeSnapshots = false;
   private String bridgeSnapshotsDirectory = "bridge-directories/";
   private boolean importWriteTorperfStats = false;
@@ -145,6 +146,9 @@ public class Configuration {
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("SanitizedBridgesDirectory")) {
           this.sanitizedBridgesDirectory = line.split(" ")[1];
+        } else if (line.startsWith("KeepSanitizedBridgesImportHistory")) {
+          this.keepSanitizedBridgesImportHistory = Integer.parseInt(
+              line.split(" ")[1]) != 0;
         } else if (line.startsWith("ImportBridgeSnapshots")) {
           this.importBridgeSnapshots = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -340,6 +344,9 @@ public class Configuration {
   }
   public String getSanitizedBridgesDirectory() {
     return this.sanitizedBridgesDirectory;
+  }
+  public boolean getKeepSanitizedBridgesImportHistory() {
+    return this.keepSanitizedBridgesImportHistory;
   }
   public boolean getImportBridgeSnapshots() {
     return this.importBridgeSnapshots;
