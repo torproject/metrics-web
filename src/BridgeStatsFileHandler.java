@@ -45,10 +45,23 @@ public class BridgeStatsFileHandler {
   private SortedSet<String> hashedRelays;
 
   /**
+   * Helper file containing extra-info descriptors published by 0.2.2.x
+   * bridges. If these descriptors contain geoip-stats, they are not
+   * included in the results, because stats are very likely broken.
+   */
+  private File zeroTwoTwoDescriptorsFile;
+
+  /**
+   * Extra-info descriptors published by 0.2.2.x bridges. If these
+   * descriptors contain geoip-stats, they are not included in the
+   * results, because stats are very likely broken.
+   */
+  private SortedSet<String> zeroTwoTwoDescriptors;
+
+  /**
    * Final results file containing the number of bridge users per country
-   * and day. If this file exists on disk, it is not read in during
-   * initialization, but overwritten if either <code>bridgeUsersRaw</code>
-   * or <code>hashedRelays</code> have been modified.
+   * and day. This file is not read in during initialization, but
+   * overwritten at the end of the execution.
    */
   private File bridgeStatsFile;
 
@@ -70,12 +83,15 @@ public class BridgeStatsFileHandler {
     /* Initialize local data structures to hold results. */
     this.bridgeUsersRaw = new TreeMap<String, String>();
     this.hashedRelays = new TreeSet<String>();
+    this.zeroTwoTwoDescriptors = new TreeSet<String>();
 
     /* Initialize file names for intermediate and final results. */
     this.bridgeStatsRawFile = new File("stats/bridge-stats-raw");
     this.bridgeStatsFile = new File("stats/bridge-stats");
     this.hashedRelayIdentitiesFile = new File(
         "stats/hashed-relay-identities");
+    this.zeroTwoTwoDescriptorsFile = new File(
+        "stats/v022-bridge-descriptors");
 
     /* Initialize logger. */
     this.logger = Logger.getLogger(
@@ -112,7 +128,7 @@ public class BridgeStatsFileHandler {
                     + this.bridgeStatsRawFile.getAbsolutePath()
                     + "! Aborting to read this file!");
                 break;
-              } 
+              }
               String hashedBridgeIdentity = parts[0];
               String date = parts[1];
               String time = parts[2];
@@ -155,6 +171,28 @@ public class BridgeStatsFileHandler {
             + this.hashedRelayIdentitiesFile.getAbsolutePath() + "!", e);
       }
     }
+
+    /* Read in known extra-info descriptors published by 0.2.2.x
+     * bridges. */
+    if (this.zeroTwoTwoDescriptorsFile.exists()) {
+      try {
+        this.logger.fine("Reading file "
+            + this.zeroTwoTwoDescriptorsFile.getAbsolutePath() + "...");
+        BufferedReader br = new BufferedReader(new FileReader(
+            this.zeroTwoTwoDescriptorsFile));
+        String line = null;
+        /* Read in all lines from the file and memorize them. */
+        while ((line = br.readLine()) != null) {
+          this.zeroTwoTwoDescriptors.add(line);
+        }
+        br.close();
+        this.logger.fine("Finished reading file "
+            + this.zeroTwoTwoDescriptorsFile.getAbsolutePath() + ".");
+      } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed to read file "
+            + this.zeroTwoTwoDescriptorsFile.getAbsolutePath() + "!", e);
+      }
+    }
   }
 
   /**
@@ -168,6 +206,22 @@ public class BridgeStatsFileHandler {
       this.logger.finer("Adding new hashed relay identity: "
           + hashedRelayIdentity);
       this.hashedRelays.add(hashedRelayIdentity);
+    }
+  }
+
+  /**
+   * Adds an extra-info descriptor identifier published by an 0.2.2.x
+   * bridges. If this extra-info descriptor contains geoip-stats, they are
+   * not included in the results, because stats are very likely broken.
+   */
+  public void addZeroTwoTwoDescriptor(String hashedBridgeIdentity,
+      String date, String time) {
+    String value = hashedBridgeIdentity.toUpperCase() + "," + date + ","
+        + time;
+    if (!this.zeroTwoTwoDescriptors.contains(value)) {
+      this.logger.finer("Adding new bridge 0.2.2.x extra-info "
+          + "descriptor: " + value);
+      this.zeroTwoTwoDescriptors.add(value);
     }
   }
 
@@ -189,8 +243,8 @@ public class BridgeStatsFileHandler {
    * bridge and day, we keep the one with the later publication time and
    * discard the other one.
    */
-  public void addObs(String hashedIdentity, String date,
-      String time, Map<String, String> obs) {
+  public void addObs(String hashedIdentity, String date, String time,
+      Map<String, String> obs) {
     String key = hashedIdentity + "," + date;
     StringBuilder sb = new StringBuilder(key + "," + time);
     for (String c : countries) {
@@ -237,6 +291,24 @@ public class BridgeStatsFileHandler {
           + this.hashedRelayIdentitiesFile.getAbsolutePath() + "!", e);
     }
 
+    /* Write bridge extra-info descriptor identifiers to disk. */
+    try {
+      this.logger.fine("Writing file "
+          + this.zeroTwoTwoDescriptorsFile.getAbsolutePath() + "...");
+      this.zeroTwoTwoDescriptorsFile.getParentFile().mkdirs();
+      BufferedWriter bw = new BufferedWriter(new FileWriter(
+          this.zeroTwoTwoDescriptorsFile));
+      for (String descriptorIdentifier : this.zeroTwoTwoDescriptors) {
+        bw.append(descriptorIdentifier + "\n");
+      }
+      bw.close();
+      this.logger.fine("Finished writing file "
+          + this.zeroTwoTwoDescriptorsFile.getAbsolutePath() + ".");
+    } catch (IOException e) {
+      this.logger.log(Level.WARNING, "Failed to write "
+          + this.zeroTwoTwoDescriptorsFile.getAbsolutePath() + "!", e);
+    }
+
     /* Write observations made by single bridges to disk. */
     try {
       this.logger.fine("Writing file "
@@ -250,8 +322,13 @@ public class BridgeStatsFileHandler {
       }
       bw.append("\n");
       for (String line : this.bridgeUsersRaw.values()) {
-        String hashedBridgeIdentity = line.split(",")[0];
-        if (!this.hashedRelays.contains(hashedBridgeIdentity)) {
+        String[] parts = line.split(",");
+        String hashedBridgeIdentity = parts[0];
+        String date = parts[1];
+        String time = parts[2];
+        if (!this.hashedRelays.contains(hashedBridgeIdentity) &&
+            !this.zeroTwoTwoDescriptors.contains(hashedBridgeIdentity
+            + "," + date + "," + time)) {
           bw.append(line + "\n");
         }
       }
@@ -269,8 +346,11 @@ public class BridgeStatsFileHandler {
     for (String line : this.bridgeUsersRaw.values()) {
       String[] parts = line.split(",");
       String hashedBridgeIdentity = parts[0];
-      if (!this.hashedRelays.contains(hashedBridgeIdentity)) {
-        String date = parts[1];
+      String date = parts[1];
+      String time = parts[2];
+      if (!this.hashedRelays.contains(hashedBridgeIdentity) &&
+          !this.zeroTwoTwoDescriptors.contains(hashedBridgeIdentity + ","
+          + date + "," + time)) {
         double[] users = bridgeUsersPerDay.get(date);
         if (users == null) {
           users = new double[countries.size()];
