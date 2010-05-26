@@ -132,20 +132,9 @@ public class Main {
       sdsfh = null;
     }
 
-    // Import/download GeoIP databases
-    GeoIPDatabaseManager gd = new GeoIPDatabaseManager(
-        config.getGeoIPDatabasesDirectory());
-    if (config.getDownloadGeoIPDatabase()) {
-      gd.downloadGeoIPDatabase(config.getMaxmindLicenseKey());
-    }
-    if (config.getImportGeoIPDatabases()) {
-      gd.importGeoIPDatabaseFromDisk();
-      gd.writeCombinedDatabase();
-    }
-
     // Prepare sanitized bridge descriptor writer
     SanitizedBridgesWriter sbw = config.getWriteSanitizedBridges() ?
-        new SanitizedBridgesWriter(gd,
+        new SanitizedBridgesWriter(
         config.getSanitizedBridgesWriteDirectory()) : null;
 
     // Prepare bridge descriptor parser

@@ -26,49 +26,43 @@ import org.apache.commons.codec.binary.*;
  * from server descriptors, and server descriptors are referenced from
  * network statuses. These references need to be changed during the
  * sanitizing process, because descriptor contents change and so do the
- * descriptor digests. Furthermore, extra-info descriptors require either
- * the network status or server descriptor to be parsed first to learn the
- * bridge's country code that is part of its new nickname.
+ * descriptor digests.
  *
- * As a result, there is no possible order in which bridge descriptors can
- * be parsed without having to update a previously written bridge
- * descriptor. The approach taken here is to sanitize bridge descriptors
- * even with incomplete knowledge about references or country codes and to
- * update them as soon as these information get known. We are keeping a
- * persistent data structure, the bridge descriptor mapping, to hold
- * information about every single descriptor. The idea is that every
- * descriptor is (a) referenced from a network status and consists of
- * (b) a server descriptor and (c) an extra-info descriptor, both of which
- * are published at the same time. Using this data structure, we can
- * repair references as soon as we learn more about the descriptor and
- * regardless of the order of incoming bridge descriptors.
+ * No assumptions are made about the order in which bridge descriptors are
+ * parsed. The approach taken here is to sanitize bridge descriptors even
+ * with incomplete knowledge about references and to update them as soon
+ * as these information get known. We are keeping a persistent data
+ * structure, the bridge descriptor mapping, to hold information about
+ * every single descriptor. The idea is that every descriptor is (a)
+ * referenced from a network status and consists of (b) a server
+ * descriptor and (c) an extra-info descriptor, both of which are
+ * published at the same time. Using this data structure, we can repair
+ * references as soon as we learn more about the descriptor and regardless
+ * of the order of incoming bridge descriptors.
  *
  * The process of sanitizing a bridge descriptor is as follows, depending
  * on the type of descriptor:
  *
  * Network statuses are processed by sanitizing every r line separately
  * and looking up whether the descriptor mapping contains a bridge with
- * given identity hash and descriptor publication time. If either server
- * descriptor or extra-info descriptor have been published before and if
- * the GeoIP lookup of the bridge's IP address reveals a new country code
- * for this bridge, extra-info descriptor and server descriptor are
- * re-written.
+ * given identity hash and descriptor publication time. If so, the new
+ * server descriptor identifier can be added. If not, we're adding all
+ * 0's.
  *
- * Server descriptors are processed by looking up their bridge identity
- * hash and publication time in the descriptor mapping. If the GeoIP
- * lookup reveals a new country code and if the extra-info descriptor was
- * parsed before, the extra-info descriptor is re-written. After
- * sanitizing a server descriptor, its publication time is noted down, so
- * that all network statuses that might be referencing this server
- * descriptor can be re-written at the end of the sanitizing procedure.
+ * While sanitizing a server descriptor, its identity hash and publication
+ * time are looked up in order to put in the extra-info descriptor
+ * identifier in case the corresponding extra-info descriptor was
+ * sanitized before. Further, its publication time is noted down, so that
+ * all network statuses that might be referencing this server descriptor
+ * can be re-written at the end of the sanitizing procedure.
  *
- * Extra-info descriptors are also processed by looking up their bridge
- * identity hash and publication time in the descriptor mapping. If the
- * corresponding server descriptor was sanitized before, it is re-written
- * to include the new extra-info descriptor digest. The publication time
- * is noted down, too, so that all network statuses possibly referencing
- * this extra-info descriptor and its corresponding server descriptor can
- * be re-written at the end of the sanitizing procedure.
+ * Extra-info descriptors are processed by looking up their identity hash
+ * and publication time in the descriptor mapping. If the corresponding
+ * server descriptor was sanitized before, the server descriptor is
+ * re-written to include the new extra-info descriptor digest, and the
+ * publication time is noted down in order to re-write the network
+ * statuses possibly referencing this extra-info descriptor and its
+ * corresponding server descriptor at the end of the sanitizing process.
  *
  * After sanitizing all bridge descriptors, the network statuses that
  * might be referencing server descriptors which have been (re-)written
@@ -86,8 +80,7 @@ public class SanitizedBridgesWriter {
 
   /**
    * Mapping between a descriptor as referenced from a network status to
-   * a country code and the digests of server descriptor and extra-info
-   * descriptor.
+   * the digests of server descriptor and extra-info descriptor.
    */
   private static class DescriptorMapping {
 
@@ -99,27 +92,23 @@ public class SanitizedBridgesWriter {
       String[] parts = commaSeparatedValues.split(",");
       this.hashedBridgeIdentity = parts[0];
       this.published = parts[1];
-      this.countryCode = parts[2];
-      this.serverDescriptorIdentifier = parts[3];
-      this.extraInfoDescriptorIdentifier = parts[4];
+      this.serverDescriptorIdentifier = parts[2];
+      this.extraInfoDescriptorIdentifier = parts[3];
     }
 
     /**
      * Creates a new mapping for a given identity hash and descriptor
-     * publication time that has ZZ as country code and all 0's as
-     * descriptor digests.
+     * publication time that has all 0's as descriptor digests.
      */
     private DescriptorMapping(String hashedBridgeIdentity,
         String published) {
       this.hashedBridgeIdentity = hashedBridgeIdentity;
       this.published = published;
-      this.countryCode = "ZZ";
       this.serverDescriptorIdentifier = NULL_REFERENCE;
       this.extraInfoDescriptorIdentifier = NULL_REFERENCE;
     }
     private String hashedBridgeIdentity;
     private String published;
-    private String countryCode;
     private String serverDescriptorIdentifier;
     private String extraInfoDescriptorIdentifier;
 
@@ -129,7 +118,7 @@ public class SanitizedBridgesWriter {
      */
     public String toString() {
       return this.hashedBridgeIdentity + "," + this.published + ","
-      + this.countryCode + "," + this.serverDescriptorIdentifier + ","
+      + this.serverDescriptorIdentifier + ","
       + this.extraInfoDescriptorIdentifier;
     }
   }
@@ -148,16 +137,10 @@ public class SanitizedBridgesWriter {
    * sanitizing, because descriptor contents change and so do the
    * descriptor digests that are used for referencing. Map key contains
    * hashed bridge identity and descriptor publication time, map value
-   * contains map key plus country code, new server descriptor identifier,
-   * and new extra-info descriptor identifier.
+   * contains map key plus new server descriptor identifier and new
+   * extra-info descriptor identifier.
    */
   private SortedMap<String, DescriptorMapping> bridgeDescriptorMappings;
-
-  /**
-   * GeoIP database used for resolving bridge IP addresses to two-letter
-   * country codes.
-   */
-  private GeoIPDatabaseManager gd;
 
   /**
    * Logger for this class.
@@ -180,10 +163,9 @@ public class SanitizedBridgesWriter {
    * Initializes this class, including reading in the known descriptor
    * mapping.
    */
-  public SanitizedBridgesWriter(GeoIPDatabaseManager gd, String dir) {
+  public SanitizedBridgesWriter(String dir) {
 
     /* Memorize argument values. */
-    this.gd = gd;
     this.sanitizedBridgesDir = dir;
 
     /* Initialize logger. */
@@ -204,14 +186,13 @@ public class SanitizedBridgesWriter {
             this.bridgeDescriptorMappingsFile));
         String line = null;
         while ((line = br.readLine()) != null) {
-          if (line.split(",").length == 5) {
+          if (line.split(",").length == 4) {
             String[] parts = line.split(",");
             DescriptorMapping dm = new DescriptorMapping(line);
             dm.hashedBridgeIdentity = parts[0];
             dm.published = parts[1];
-            dm.countryCode = parts[2];
-            dm.serverDescriptorIdentifier = parts[3];
-            dm.extraInfoDescriptorIdentifier = parts[4];
+            dm.serverDescriptorIdentifier = parts[2];
+            dm.extraInfoDescriptorIdentifier = parts[3];
             this.bridgeDescriptorMappings.put(line.split(",")[0] + ","
                 + line.split(",")[1], dm);
           } else {
@@ -234,12 +215,7 @@ public class SanitizedBridgesWriter {
   /**
    * Sanitizes a network status and writes it to disk. Processes every r
    * line separately and looks up whether the descriptor mapping contains
-   * a bridge with given identity hash and descriptor publication time. If
-   * either server descriptor or extra-info descriptor have been published
-   * before and if the GeoIP lookup of the bridge's IP address reveals a
-   * new country code for this bridge, extra-info descriptor and server
-   * descriptor are re-written.
-   */
+   * a bridge with given identity hash and descriptor publication time. */
   public void sanitizeAndStoreNetworkStatus(byte[] data,
       String publicationTime) {
 
@@ -259,7 +235,6 @@ public class SanitizedBridgesWriter {
           String[] parts = line.split(" ");
           String bridgeIdentity = parts[2];
           String descPublicationTime = parts[4] + " " + parts[5];
-          String ipAddress = parts[6];
           String orPort = parts[7];
           String dirPort = parts[8];
 
@@ -279,36 +254,14 @@ public class SanitizedBridgesWriter {
             this.bridgeDescriptorMappings.put(mappingKey, mapping);
           }
 
-          /* Look up the bridge's IP address in the GeoIP database. */
-          String newCountryCode = this.gd.getCountryForIPOneWeek(
-              ipAddress, descPublicationTime);
-
-          /* If we just learned a new IP address, we might have to
-           * re-write the (indirectly) referenced extra-info descriptor
-           * that has UnnamedZZ as its nickname and the corresponding
-           * server descriptor that gets an updated extra-info-digest
-           * line. */
-          if (!newCountryCode.equals(mapping.countryCode)) {
-            mapping.countryCode = newCountryCode;
-            if (!mapping.extraInfoDescriptorIdentifier.equals(
-                NULL_REFERENCE)) {
-              this.rewriteExtraInfoDescriptor(mapping);
-            }
-            if (!mapping.serverDescriptorIdentifier.equals(
-                NULL_REFERENCE)) {
-              this.rewriteServerDescriptor(mapping);
-            }
-          }
-
           /* Write scrubbed r line to buffer. */
-          String nickname = "Unnamed" + mapping.countryCode;
           String hashedBridgeIdentityBase64 = Base64.encodeBase64String(
               DigestUtils.sha(Base64.decodeBase64(bridgeIdentity
               + "=="))).substring(0, 27);
           String sdi = Base64.encodeBase64String(Hex.decodeHex(
                 mapping.serverDescriptorIdentifier.toCharArray())).
                 substring(0, 27);
-          scrubbed.append("r " + nickname + " "
+          scrubbed.append("r Unnamed "
               + hashedBridgeIdentityBase64 + " " + sdi + " "
               + descPublicationTime + " 127.0.0.1 " + orPort + " "
               + dirPort + "\n");
@@ -371,12 +324,10 @@ public class SanitizedBridgesWriter {
   /**
    * Sanitizes a bridge server descriptor and writes it to disk. Looks up
    * up bridge identity hash and publication time in the descriptor
-   * mapping. If the GeoIP lookup reveals a new country code and if the
-   * corresponding extra-info descriptor was parsed before, the extra-info
-   * descriptor is re-written. After sanitizing a server descriptor, its
-   * publication time is noted down, so that all network statuses that
-   * might be referencing this server descriptor can be re-written at the
-   * end of the sanitizing procedure.
+   * mapping. After sanitizing a server descriptor, its publication time
+   * is noted down, so that all network statuses that might be referencing
+   * this server descriptor can be re-written at the end of the sanitizing
+   * procedure.
    */
   public void sanitizeAndStoreServerDescriptor(byte[] data) {
 
@@ -388,9 +339,9 @@ public class SanitizedBridgesWriter {
       BufferedReader br = new BufferedReader(new StringReader(
           new String(data, "US-ASCII")));
       StringBuilder scrubbed = new StringBuilder();
-      String line = null, ipAddress = null, hashedBridgeIdentity = null,
+      String line = null, hashedBridgeIdentity = null,
           published = null;
-      boolean skipCrypto = false, contactWritten = false;
+      boolean skipCrypto = false;
       while ((line = br.readLine()) != null) {
 
         /* When we have parsed both published and fingerprint line, look
@@ -406,20 +357,6 @@ public class SanitizedBridgesWriter {
                 published);
             this.bridgeDescriptorMappings.put(mappingKey, mapping);
           }
-
-          /* Look up IP address in the GeoIP database. If our knowledge
-           * about the bridge's country code has changed, we might have to
-           * re-write the extra-info descriptor corresponding to this
-           * server descriptor. */
-          String newCountryCode = this.gd.getCountryForIPOneWeek(ipAddress,
-              published);
-          if (!newCountryCode.equals(mapping.countryCode)) {
-            mapping.countryCode = newCountryCode;
-            if (!mapping.extraInfoDescriptorIdentifier.equals(
-                NULL_REFERENCE)) {
-              this.rewriteExtraInfoDescriptor(mapping);
-            }
-          }
         }
 
         /* Skip all crypto parts that might be used to derive the bridge's
@@ -431,10 +368,9 @@ public class SanitizedBridgesWriter {
          * database and replace it with 127.0.0.1 in the scrubbed
          * version. */
         } else if (line.startsWith("router ")) {
-          ipAddress = line.split(" ")[2];
-          scrubbed = new StringBuilder("127.0.0.1 " + line.split(" ")[3]
-              + " " + line.split(" ")[4] + " " + line.split(" ")[5]
-              + "\n");
+          scrubbed = new StringBuilder("router Unnamed 127.0.0.1 "
+              + line.split(" ")[3] + " " + line.split(" ")[4] + " "
+              + line.split(" ")[5] + "\n");
 
         /* Parse the publication time and add it to the list of descriptor
          * publication times to re-write network statuses at the end of
@@ -458,19 +394,14 @@ public class SanitizedBridgesWriter {
                 4 * (i + 1)).toUpperCase());
           scrubbed.append("\n");
 
-        /* Replace the contact line (if present) with a generic line that
-         * contains the bridge's country code as last two characters. */
+        /* Replace the contact line (if present) with a generic one. */
         } else if (line.startsWith("contact ")) {
-          scrubbed.append("contact somebody at example dot "
-              + mapping.countryCode.toLowerCase() + "\n");
-          contactWritten = true;
+          scrubbed.append("contact somebody\n");
 
         /* When we reach the signature, we're done. Write the sanitized
          * descriptor to disk below. */
         } else if (line.startsWith("router-signature")) {
-          scrubbedDesc = "router Unnamed"
-              + mapping.countryCode.toUpperCase() + " "
-              + scrubbed.toString();
+          scrubbedDesc = scrubbed.toString();
           break;
 
         /* Replace extra-info digest with the one we know from our
@@ -481,22 +412,11 @@ public class SanitizedBridgesWriter {
               + mapping.extraInfoDescriptorIdentifier.toUpperCase()
               + "\n");
 
-        /* Before writing the exit policy, check if we wrote a contact
-         * line before. If not, there was no contact line in the original
-         * descriptor. In that case, add a generic contact line with the
-         * bridge's country code as last two characters. */
-        } else if (line.startsWith("reject ")
-            || line.startsWith("accept ")) {
-          if (!contactWritten) {
-            scrubbed.append("contact nobody at example dot "
-                + mapping.countryCode.toLowerCase() + "\n");
-            contactWritten = true;
-          }
-          scrubbed.append(line + "\n");
-
         /* Write the following lines unmodified to the sanitized
          * descriptor. */
-        } else if (line.startsWith("platform ")
+        } else if (line.startsWith("reject ")
+            || line.startsWith("accept ")
+            || line.startsWith("platform ")
             || line.startsWith("opt protocols ")
             || line.startsWith("uptime ")
             || line.startsWith("bandwidth ")
@@ -583,8 +503,8 @@ public class SanitizedBridgesWriter {
    * Sanitizes an extra-info descriptor and writes it to disk. Looks up
    * the bridge identity hash and publication time in the descriptor
    * mapping. If the corresponding server descriptor was sanitized before,
-   * it is re-written to include the new extra-info descriptor digest.
-   * The publication time is noted down, too, so that all network statuses
+   * it is re-written to include the new extra-info descriptor digest and
+   * the publication time is noted down, too, so that all network statuses
    * possibly referencing this extra-info descriptor and its corresponding
    * server descriptor can be re-written at the end of the sanitizing
    * procedure.
@@ -593,14 +513,14 @@ public class SanitizedBridgesWriter {
 
     /* Parse descriptor to generate a sanitized version and to look it up
      * in the descriptor mapping. */
-    String scrubbedDesc = null;
+    String scrubbedDesc = null, published = null;
     DescriptorMapping mapping = null;
     try {
       BufferedReader br = new BufferedReader(new StringReader(new String(
           data, "US-ASCII")));
       String line = null;
       StringBuilder scrubbed = null;
-      String hashedBridgeIdentity = null, published = null;
+      String hashedBridgeIdentity = null;
       while ((line = br.readLine()) != null) {
 
         /* When we have parsed both published and fingerprint line, look
@@ -623,8 +543,8 @@ public class SanitizedBridgesWriter {
         if (line.startsWith("extra-info ")) {
           hashedBridgeIdentity = DigestUtils.shaHex(Hex.decodeHex(
               line.split(" ")[2].toCharArray())).toLowerCase();
-          scrubbed = new StringBuilder(hashedBridgeIdentity.toUpperCase()
-              + "\n");
+          scrubbed = new StringBuilder("extra-info Unnamed "
+              + hashedBridgeIdentity.toUpperCase() + "\n");
 
         /* Parse the publication time and add it to the list of descriptor
          * publication times to re-write network statuses at the end of
@@ -632,7 +552,6 @@ public class SanitizedBridgesWriter {
         } else if (line.startsWith("published ")) {
           scrubbed.append(line + "\n");
           published = line.substring("published ".length());
-          this.descriptorPublicationTimes.add(published);
 
         /* Write the following lines unmodified to the sanitized
          * descriptor. */
@@ -647,8 +566,7 @@ public class SanitizedBridgesWriter {
         /* When we reach the signature, we're done. Write the sanitized
          * descriptor to disk below. */
         } else if (line.startsWith("router-signature")) {
-          scrubbedDesc = "extra-info Unnamed"
-              + mapping.countryCode + " " + scrubbed.toString();
+          scrubbedDesc = scrubbed.toString();
           break;
         /* Don't include statistics that should only be contained in relay
          * extra-info descriptors. */
@@ -685,6 +603,7 @@ public class SanitizedBridgesWriter {
     if (extraInfoDescriptorIdentifierHasChanged &&
         !mapping.serverDescriptorIdentifier.equals(NULL_REFERENCE)) {
       this.rewriteServerDescriptor(mapping);
+      this.descriptorPublicationTimes.add(published);
     }
 
     /* Determine filename of sanitized server descriptor. */
@@ -718,8 +637,6 @@ public class SanitizedBridgesWriter {
       String line = null;
       while ((line = br2.readLine()) != null) {
         if (line.startsWith("r ")) {
-          String readCountryCode = line.split(" ")[1].substring(
-              "Unnamed".length());
           String hashedBridgeIdentity = Hex.encodeHexString(
               Base64.decodeBase64(line.split(" ")[2] + "==")).
               toLowerCase();
@@ -737,17 +654,15 @@ public class SanitizedBridgesWriter {
           } else {
             mapping = new DescriptorMapping(hashedBridgeIdentity.
                 toLowerCase(), descPublished);
-            mapping.countryCode = readCountryCode;
-             mapping.serverDescriptorIdentifier = readServerDescId;
+            mapping.serverDescriptorIdentifier = readServerDescId;
             this.bridgeDescriptorMappings.put(mappingKey, mapping);
           }
-          String nickname = "Unnamed" + mapping.countryCode;
           String sdi = Base64.encodeBase64String(Hex.decodeHex(
               mapping.serverDescriptorIdentifier.toCharArray())).
               substring(0, 27);
           String orPort = line.split(" ")[7];
           String dirPort = line.split(" ")[8];
-          sb.append("r " + nickname + " "
+          sb.append("r Unnamed "
               + hashedBridgeIdentityBase64 + " " + sdi + " "
               + descPublished + " 127.0.0.1 " + orPort + " "
               + dirPort + "\n");
@@ -816,8 +731,8 @@ public class SanitizedBridgesWriter {
           }
         }
         if (line2.startsWith("router ")) {
-          sb.append(" 127.0.0.1 " + line2.split(" ")[3] + " "
-              + line2.split(" ")[4] + " " + line2.split(" ")[5]
+          sb.append("router Unnamed 127.0.0.1 " + line2.split(" ")[3]
+              + " " + line2.split(" ")[4] + " " + line2.split(" ")[5]
               + "\n");
         } else if (line2.startsWith("published ")) {
           published = line2.substring("published ".length());
@@ -836,8 +751,7 @@ public class SanitizedBridgesWriter {
         }
       }
       br2.close();
-      String scrubbedDesc = "router Unnamed" + mapping.countryCode
-          + sb.toString();
+      String scrubbedDesc = sb.toString();
       String scrubbedHash = DigestUtils.shaHex(scrubbedDesc);
 
       mapping.serverDescriptorIdentifier = scrubbedHash;
@@ -884,24 +798,18 @@ public class SanitizedBridgesWriter {
         }
         if (line2.startsWith("extra-info ")) {
           hashedBridgeIdentity = line2.split(" ")[2];
-          sb.append(hashedBridgeIdentity + "\n");
+          sb.append("extra-info Unnamed " + hashedBridgeIdentity
+              + "\n");
         } else if (line2.startsWith("published ")) {
           sb.append(line2 + "\n");
           published = line2.substring("published ".length());
           this.descriptorPublicationTimes.add(published);
-        } else if (line2.startsWith(
-            "contact somebody at example dot ") ||
-            line2.startsWith("contact nobody at example dot ")) {
-          sb.append(line2.substring(0, line2.indexOf("dot ")
-              + "dot ".length()) + mapping.countryCode.toLowerCase()
-              + "\n");
         } else {
           sb.append(line2 + "\n");
         }
       }
       br2.close();
-      String scrubbedDesc = "extra-info Unnamed"
-          + mapping.countryCode.toUpperCase() + " " + sb.toString();
+      String scrubbedDesc = sb.toString();
       String scrubbedHash = DigestUtils.shaHex(scrubbedDesc);
       mapping.extraInfoDescriptorIdentifier = scrubbedHash;
       String dyear = published.substring(0, 4);
@@ -970,35 +878,6 @@ public class SanitizedBridgesWriter {
     } catch (IOException e) {
       this.logger.log(Level.WARNING, "Could not rewrite server "
           + "descriptor.", e);
-    }
-  }
-
-  private void rewriteExtraInfoDescriptor(DescriptorMapping mapping) {
-    try {
-      String dyear = mapping.published.substring(0, 4);
-      String dmonth = mapping.published.substring(5, 7);
-      File extraInfoDescriptorFile = new File(
-          this.sanitizedBridgesDir + "/"
-          + dyear + "/" + dmonth + "/extra-infos/"
-          + mapping.extraInfoDescriptorIdentifier.substring(0, 1) + "/"
-          + mapping.extraInfoDescriptorIdentifier.substring(1, 2) + "/"
-          + mapping.extraInfoDescriptorIdentifier);
-      FileInputStream fis = new FileInputStream(extraInfoDescriptorFile);
-      BufferedInputStream bis = new BufferedInputStream(fis);
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      int len;
-      byte[] data2 = new byte[1024];
-      while ((len = bis.read(data2, 0, 1024)) >= 0) {
-        baos.write(data2, 0, len);
-      }
-      fis.close();
-      byte[] allData = baos.toByteArray();
-      this.storeSanitizedExtraInfoDescriptor(allData);
-      extraInfoDescriptorFile.delete();
-      this.logger.finer("Deleting extra-info descriptor "
-          + extraInfoDescriptorFile.getAbsolutePath());
-    } catch (IOException e) {
-      e.printStackTrace();
     }
   }
 
