@@ -118,8 +118,8 @@ public class BridgeSnapshotReader {
             parsed.add(pop.getName());
             modified = true;
           } catch (IOException e) {
-            logger.log(Level.WARNING, "Could not parse bridge snapshot!",
-                e);
+            logger.log(Level.WARNING, "Could not parse bridge snapshot "
+                + pop.getName() + "!", e);
             continue;
           }
         }
