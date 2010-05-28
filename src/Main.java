@@ -187,6 +187,11 @@ public class Main {
     // Remove lock file
     lf.releaseLock();
 
+    // Close database connection (if active)
+    if (config.getWriteRelayDescriptorDatabase())   {
+        rddi.closeConnection();
+    }
+
     logger.info("Terminating ERNIE.");
   }
 }
