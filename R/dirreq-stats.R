@@ -152,9 +152,10 @@ if (file.exists("stats/dirreq-stats")) {
       "F2044413DAC2E02E3D6BCF4735A19BCA1DE97281"))
   gabelmoo <- data.frame(date = gabelmooSub$date,
     gabelmooSub[3:(length(gabelmooSub) - 1)] * 6)
-  trustedSub <- subset(dirreq,
-    directory %in% "8522EB98C91496E80EC238E732594D1509158E77")
-  trustedSub[na.omit(trustedSub$share) == 0,3:length(trustedSub)] <- NA
+  trustedSub <- dirreq[dirreq$directory ==
+    "8522EB98C91496E80EC238E732594D1509158E77",]
+  trustedSub[!is.na(trustedSub$share) & trustedSub$share < 0.01,
+    3:length(trustedSub)] <- NA
   trusted <- data.frame(date = trustedSub$date,
     floor(trustedSub[3:(length(trustedSub) - 1)] / trustedSub$share * 10))
 
