@@ -114,6 +114,11 @@ public class Main {
       }
     }
 
+    // Close database connection (if active)
+    if (rddi != null)   {
+      rddi.closeConnection();
+    }
+
     // Write output to disk that only depends on relay descriptors
     if (chc != null) {
       chc.writeStatusWebsite();
@@ -186,11 +191,6 @@ public class Main {
 
     // Remove lock file
     lf.releaseLock();
-
-    // Close database connection (if active)
-    if (config.getWriteRelayDescriptorDatabase())   {
-        rddi.closeConnection();
-    }
 
     logger.info("Terminating ERNIE.");
   }
