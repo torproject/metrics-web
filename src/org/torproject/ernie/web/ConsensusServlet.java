@@ -17,19 +17,18 @@ public class ConsensusServlet extends HttpServlet {
 
     /* Check if we have a descriptors directory. */
     // TODO make this configurable!
-    File archiveDirectory = new File("/srv/metrics.torproject.org/archives");
+    File archiveDirectory = new File("/srv/metrics.torproject.org/ernie/"
+        + "directory-archive/consensus");
     if (!archiveDirectory.exists() || !archiveDirectory.isDirectory()) {
       /* Oops, we don't have any descriptors to serve. */
-// TODO change to internal server error
-      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
 
     /* Check valid-after parameter. */
     if (validAfterParameter == null ||
         validAfterParameter.length() < "yyyy-MM-dd-HH-mm-ss".length()) {
-// TODO is there something like "wrong parameter"?
-      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
     SimpleDateFormat timeFormat = new SimpleDateFormat(
@@ -39,17 +38,15 @@ public class ConsensusServlet extends HttpServlet {
     try {
       parsedTimestamp = timeFormat.parse(validAfterParameter);
     } catch (ParseException e) {
-// TODO is there something like "wrong parameter"?
-      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
     if (parsedTimestamp == null) {
-// TODO is there something like "wrong parameter"?
-      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
     String consensusFilename = archiveDirectory.getAbsolutePath()
-        + "/consensuses-" + validAfterParameter.substring(0, 4) + "-"
+        + "/" + validAfterParameter.substring(0, 4) + "/"
         + validAfterParameter.substring(5, 7) + "/"
         + validAfterParameter.substring(8, 10) + "/"
         + validAfterParameter + "-consensus";

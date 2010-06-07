@@ -82,9 +82,13 @@ public class ExoneraTorServlet extends HttpServlet {
   }
 
   // TODO make this configurable!
-  public final String ARCHIVES_DIRECTORY = "/home/karsten/archives";
+  public final String CONSENSUS_DIRECTORY =
+      "/srv/metrics.torproject.org/ernie/directory-archive/consensus";
+  public final String SERVER_DESCRIPTOR_DIRECTORY =
+      "/srv/metrics.torproject.org/ernie/directory-archive/"
+      + "server-descriptor";
 
-  private static final boolean TEST_MODE = false;
+  private static final boolean TEST_MODE = false; // TODO take me out
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException,
@@ -97,21 +101,14 @@ public class ExoneraTorServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
     writeHeader(out);
 
-    SortedSet<File> consensusDirectories = new TreeSet<File>();
-    SortedSet<File> serverDescriptorDirectories = new TreeSet<File>();
-
     /* Check if we have a descriptors directory. */
-    File archiveDirectory = new File("/srv/metrics.torproject.org/archives");
-    if (!archiveDirectory.exists() || !archiveDirectory.isDirectory()) {
-      /* Leave sets with consensus and server descriptor directories
-         empty. */
-      return;
-    }
-    for (File dir : archiveDirectory.listFiles()) {
-      if (dir.getName().startsWith("consensuses-")) {
-        consensusDirectories.add(dir);
-      } else if (dir.getName().startsWith("server-descriptors-")) {
-        serverDescriptorDirectories.add(dir);
+    File consensusDirectory = new File(CONSENSUS_DIRECTORY);
+    SortedSet<File> consensusDirectories = new TreeSet<File>();
+    if (consensusDirectory.exists() && consensusDirectory.isDirectory()) {
+      for (File yearFile : consensusDirectory.listFiles()) {
+        for (File monthFile : yearFile.listFiles()) {
+          consensusDirectories.add(monthFile);
+        }
       }
     }
 
@@ -124,14 +121,18 @@ public class ExoneraTorServlet extends HttpServlet {
       writeFooter(out);
       return;
     }
-    String firstDay = consensusDirectories.first().getName().
-        substring("consensuses-".length()) + "-" + new TreeSet<File>(
-        Arrays.asList(consensusDirectories.first().listFiles())).
-        first().getName();
-    String lastDay = consensusDirectories.last().getName().
-        substring("consensuses-".length()) + "-" + new TreeSet<File>(
-        Arrays.asList(consensusDirectories.last().listFiles())).
-        last().getName();
+    String firstConsensus = new TreeSet<File>(Arrays.asList(
+        new TreeSet<File>(Arrays.asList(consensusDirectories.first().
+        listFiles())).first().listFiles())).first().getName().substring(0,
+        13);
+    firstConsensus = firstConsensus.substring(0, 10) + " "
+        + firstConsensus.substring(11, 13) + ":00";
+    String lastConsensus = new TreeSet<File>(Arrays.asList(
+        new TreeSet<File>(Arrays.asList(consensusDirectories.last().
+        listFiles())).last().listFiles())).last().getName().substring(0,
+        13);
+    lastConsensus = lastConsensus.substring(0, 10) + " "
+        + lastConsensus.substring(11, 13) + ":00";
 
     out.println("<a id=\"relay\"/><h3>Was there a Tor relay running on "
         + "this IP address?</h3>");
@@ -169,13 +170,13 @@ public class ExoneraTorServlet extends HttpServlet {
     if (timestampParameter != null && timestampParameter.length() > 0) {
       try {
         Date parsedTimestamp = parseTimeFormat.parse(timestampParameter);
-        if (timestampParameter.compareTo(firstDay) >= 0 &&
-            timestampParameter.compareTo(lastDay) <= 0) {
+        if (timestampParameter.compareTo(firstConsensus) >= 0 &&
+            timestampParameter.compareTo(lastConsensus) <= 0) {
           timestamp = parsedTimestamp.getTime();
           timestampStr = parseTimeFormat.format(timestamp);
         } else {
-          timestampWarning = "Please pick a value between \"" + firstDay
-              + " 03:00\" and \"" + lastDay + " 21:00\".";
+          timestampWarning = "Please pick a value between \""
+              + firstConsensus + "\" and \"" + lastConsensus + "\".";
         }
       } catch (ParseException e) {
         /* We have no way to handle this exception, other than leaving
@@ -330,8 +331,8 @@ public class ExoneraTorServlet extends HttpServlet {
     SortedSet<File> relevantConsensuses = new TreeSet<File>();
     SortedSet<File> tooNewConsensuses = new TreeSet<File>();
     for (File consensusMonth : consensusDirectories) {
-      String month = consensusMonth.getName().substring(
-          "consensuses-".length());
+      String month = consensusMonth.getParentFile().getName() + "-"
+          + consensusMonth.getName();
       if (month.compareTo(fromMonth) < 0 ||
           month.compareTo(toMonth) > 0) {
         continue;
@@ -532,6 +533,18 @@ public class ExoneraTorServlet extends HttpServlet {
     /* Second part: target */
     out.println("<br/><a id=\"exit\"/><h3>Was this relay configured to "
         + "permit exiting to a given target?</h3>");
+
+    File serverDescriptorDirectory =
+        new File(SERVER_DESCRIPTOR_DIRECTORY);
+    SortedSet<File> serverDescriptorDirectories = new TreeSet<File>();
+    if (serverDescriptorDirectory.exists() &&
+        serverDescriptorDirectory.isDirectory()) {
+      for (File yearFile : serverDescriptorDirectory.listFiles()) {
+        for (File monthFile : yearFile.listFiles()) {
+          serverDescriptorDirectories.add(monthFile);
+        }
+      }
+    }
 
     if (serverDescriptorDirectories.isEmpty()) {
       out.println("<p><font color=\"red\"><b>Warning: </b></font>This "
