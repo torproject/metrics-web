@@ -31,8 +31,9 @@ public class ServerDescriptorServlet extends HttpServlet {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
+    String descId = descIdParameter.toLowerCase();
     Pattern descIdPattern = Pattern.compile("^[0-9a-f]+$");
-    Matcher descIdMatcher = descIdPattern.matcher(descIdParameter);
+    Matcher descIdMatcher = descIdPattern.matcher(descId);
     if (!descIdMatcher.matches()) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
@@ -41,12 +42,10 @@ public class ServerDescriptorServlet extends HttpServlet {
     for (File yearFile : archiveDirectory.listFiles()) {
       for (File monthFile : yearFile.listFiles()) {
         File subDirectory = new File(monthFile.getAbsolutePath() + "/"
-            + descIdParameter.substring(0, 1) + "/"
-            + descIdParameter.substring(1, 2));
+            + descId.substring(0, 1) + "/" + descId.substring(1, 2));
         if (subDirectory.exists()) {
           for (File serverDescriptorFile : subDirectory.listFiles()) {
-            if (!serverDescriptorFile.getName().startsWith(
-                descIdParameter)) {
+            if (!serverDescriptorFile.getName().startsWith(descId)) {
               continue;
             }
 
