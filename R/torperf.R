@@ -1,7 +1,10 @@
-# TODO this file is a hack! find a better solution with ggplot2?
+options(warn = -1)
+suppressPackageStartupMessages(library("ggplot2"))
 
 if (file.exists("stats/torperf-stats")) {
-  t <- read.csv("stats/torperf-stats")
+
+  t <- read.csv("stats/torperf-stats", colClasses = c("character", "Date",
+    "integer", "integer", "integer"))
   write.csv(t, "website/csv/torperf.csv", quote = FALSE, row.names = FALSE)
 
   intervals <- c("12m", "6m", "2w")
@@ -14,26 +17,8 @@ if (file.exists("stats/torperf-stats")) {
     end <- seq(from = Sys.Date(), length = 2, by = "-1 day")[2]
     start <- seq(seq(from = end, length = 2,
         by=intervalStr)[2], length=2, by="1 day")[2]
+
     dates <- seq(from = start, to = end, by="1 day")
-    datesStr <- as.character(dates)
-    firstdays <- c()
-    for (i in datesStr)
-      if (intervalInd == 3 || format(as.POSIXct(i, tz="GMT"), "%d") == "01")
-        firstdays <- c(firstdays, i)
-    monthticks <- which(datesStr %in% firstdays)
-    monthlabels <- c()
-    for (i in monthticks[1:(length(monthticks) - 2)])
-      monthlabels <- c(monthlabels,
-          format(as.POSIXct(dates[i + 1], tz="GMT"),
-          ifelse(intervalInd == 3, "%b %d", "%b")))
-    monthlabels <- c(monthlabels,
-        format(as.POSIXct(dates[monthticks[length(monthticks) - 1] + 1]),
-        ifelse(intervalInd == 3, "%b %d", "%b %y")))
-    if (intervalInd == 3)
-      monthlabels[length(monthlabels)] <- ""
-    monthat <- c()
-    for (i in 1:(length(monthticks) - 1))
-      monthat <- c(monthat, (monthticks[i] + monthticks[i + 1]) / 2 + .5)
 
     sources <- c("siv", "moria", "torperf")
     colors <- c("#0000EE", "#EE0000", "#00CD00")
@@ -46,72 +31,31 @@ if (file.exists("stats/torperf-stats")) {
       for (sourceInd in 1:length(sources)) {
         sourceStr <- paste(sources[sourceInd], size, sep = "-")
         sourceName <- sources[sourceInd]
-        png(paste("website/graphs/torperf/torperf-", size, "-", sourceName,
-            "-", interval, ".png", sep = ""), width=550, height=350)
-        par(mar=c(2.1,3.1,1.6,0.1))
-        maxY <- max(na.omit(subset(t, source %in% paste(sources, size,
-            sep = "-"))$q3)) / 1e3 * .8
-        color <- colors[sourceInd]
-        title <- paste("Time in seconds to complete", sizePr, "request")
-        xlab <- ""
 
-        data <- subset(t, source %in% sourceStr)
-
-        q1s_ <- c()
-        medians_ <- c()
-        q3s_ <- c()
-        for (i in datesStr) {
-          q1s_ <- c(q1s_, ifelse(i %in% data$date, data$q1[data$date == i],
-              NA))
-          medians_ <- c(medians_, ifelse(i %in% data$date,
-              data$md[data$date == i], NA))
-          q3s_ <- c(q3s_, ifelse(i %in% data$date, data$q3[data$date == i],
-              NA))
+        u <- t[t$source == sourceStr & t$date >= start & t$date <= end, 2:5]
+        missing <- setdiff(dates, u$date)
+        if (length(missing) > 0) {
+          u <- rbind(u, data.frame(date = as.Date(missing, origin = "1970-01-01"),
+              q1 = NA, md = NA, q3 = NA))
         }
-        colmed <- color
-        colquart <- paste(color, "66", sep="")
-
-        plot(medians_/1e3, ylim=c(0, maxY), type="l", col=colmed, lwd=2,
-            main=title, axes=FALSE, ylab="", xlab=xlab)
-
-        xp <- c()
-        yp <- c()
-        for (i in 1:length(q1s_)) {
-          if (is.na(q1s_[i])) {
-            if (length(xp) > 0) {
-              for (j in xp[length(xp)]:xp[1]) {
-                xp <- c(xp, j)
-                yp <- c(yp, q3s_[j]/1e3)
-              }
-              polygon(na.omit(xp), na.omit(yp), col=colquart, lty=0)
-            }
-            xp <- c()
-            yp <- c()
-          } else {
-            xp <- c(xp, i)
-            yp <- c(yp, q1s_[i]/1e3)
-          }
-        }
-        if (length(xp) > 0) {
-          for (j in xp[length(xp)]:xp[1]) {
-            xp <- c(xp, j)
-            yp <- c(yp, q3s_[j]/1e3)
-          }
-          polygon(na.omit(xp), na.omit(yp), col=colquart, lty=0)
-        }
-
-        axis(1, at=monthticks - 0.5, labels=FALSE, lwd=0, lwd.ticks=1)
-        axis(1, at=c(1, length(datesStr)), labels=FALSE, lwd=1, lwd.ticks=0)
-        axis(1, at=monthat, lwd=0, labels=monthlabels)
-        axis(2, las=1, lwd=0, lwd.ticks=1)
-        axis(2, las=1, at=c(0, maxY), lwd.ticks=0, labels=FALSE)
-
-        legend(title = paste("Measured times on", sourceName, "per day"),
-            x=length(datesStr)/2, xjust=0.5, y=maxY, yjust=1,
-            #cex=ifelse(intervalInd == 1, 1.5, 1),
-            c("Median", "1st to 3rd quartile"), fill=c(colmed, colquart),
-            bty="n", ncol=2)
-        dev.off()
+        maxy <- max(t[t$source %in% paste(sources, "-", size, sep = ""),5],
+            na.rm = TRUE)
+        ggplot(u, aes(x = as.Date(date), y = md/1e3, fill = "line")) +
+          geom_line(colour = colors[sourceInd], size = 0.75) +
+          geom_ribbon(data = u, aes(x = date, ymin = q1/1e3,
+            ymax = q3/1e3, fill = "ribbon")) +
+          scale_x_date(name = "") +
+          scale_y_continuous(name = "", limits = c(0, maxy / 1e3)) +
+          coord_cartesian(ylim = c(0, 0.8 * maxy / 1e3)) +
+          scale_fill_manual(name = paste("Measured times on",
+              sources[sourceInd], "per day"),
+            breaks = c("line", "ribbon"),
+            labels = c("Median", "1st to 3rd quartile"),
+            values = paste(colors[sourceInd], c("", "66"), sep = "")) +
+          opts(title = paste("Time in seconds to complete", sizePr, "request"), legend.position = "top")
+        ggsave(filename = paste("website/graphs/torperf/torperf-", size, "-",
+            sourceName, "-", interval, ".png", sep = ""), width = 8, height = 5,
+            dpi = 72)
       }
     }
   }
