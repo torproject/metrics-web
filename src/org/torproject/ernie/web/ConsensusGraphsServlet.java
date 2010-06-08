@@ -77,9 +77,7 @@ public class ConsensusGraphsServlet extends HttpServlet {
         + "%1$tb %1$tY</a>,%n", now);
     out.printf("              <a href=\"#networksize-%1$tY-%1$tm\">"
         + "%1$tb %1$tY</a></li>%n", lastMonth);
-    out.print("          <li><a href=\"graphs/networksize/\">More graphs</a> of past\n"
-        + "              quarters and months</li>\n"
-        + "          <li><a href=\"csv/networksize.csv\">CSV</a> file\n"
+    out.print("          <li><a href=\"csv/networksize.csv\">CSV</a> file\n"
         + "              containing raw data</li>\n"
         + "        </ul>\n"
         + "        <p><a id=\"networksize-30d\"/>\n"
