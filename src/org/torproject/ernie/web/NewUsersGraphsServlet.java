@@ -33,6 +33,7 @@ public class NewUsersGraphsServlet extends HttpServlet {
         + "            <br/>\n"
         + "            <font size=\"2\">\n"
         + "              <a href=\"consensus-graphs.html\">Network size</a>\n"
+        + "              <a href=\"exit-relays-graphs.html\">Exit relays</a>\n"
         + "              <a class=\"current\">New users</a>\n"
         + "              <a href=\"recurring-users-graphs.html\">Recurring users</a>\n"
         + "              <a href=\"bridge-users-graphs.html\">Bridge users</a>\n"

@@ -91,6 +91,14 @@
     <url-pattern>/bridge-users-graphs.html</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>ExitRelaysGraphsServlet</servlet-name>
+    <servlet-class>org.torproject.ernie.web.ExitRelaysGraphsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExitRelaysGraphsServlet</servlet-name>
+    <url-pattern>/exit-relays-graphs.html</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>ConsensusGraphsServlet</servlet-name>
     <servlet-class>org.torproject.ernie.web.ConsensusGraphsServlet</servlet-class>
   </servlet>

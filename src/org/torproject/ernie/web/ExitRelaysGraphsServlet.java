@@ -5,7 +5,7 @@ import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
 
-public class ConsensusGraphsServlet extends HttpServlet {
+public class ExitRelaysGraphsServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException,
@@ -15,7 +15,7 @@ public class ConsensusGraphsServlet extends HttpServlet {
     out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n"
         + "<html>\n"
         + "  <head>\n"
-        + "    <title>Tor Metrics Portal: Relays and bridges in the Tor network</title>\n"
+        + "    <title>Tor Metrics Portal: Exit relays in the Tor network</title>\n"
         + "    <meta http-equiv=Content-Type content=\"text/html; charset=iso-8859-1\">\n"
         + "    <link href=\"http://www.torproject.org/stylesheet-ltr.css\" type=text/css rel=stylesheet>\n"
         + "    <link href=\"http://www.torproject.org/favicon.ico\" type=image/x-icon rel=\"shortcut icon\">\n"
@@ -32,8 +32,8 @@ public class ConsensusGraphsServlet extends HttpServlet {
         + "            <a href=\"status.html\">Status</a>\n"
         + "            <br/>\n"
         + "            <font size=\"2\">\n"
-        + "              <a class=\"current\">Network size</a>\n"
-        + "              <a href=\"exit-relays-graphs.html\">Exit relays</a>\n"
+        + "              <a href=\"consensus-graphs.html\">Network size</a>\n"
+        + "              <a class=\"current\">Exit relays</a>\n"
         + "              <a href=\"new-users-graphs.html\">New users</a>\n"
         + "              <a href=\"recurring-users-graphs.html\">Recurring users</a>\n"
         + "              <a href=\"bridge-users-graphs.html\">Bridge users</a>\n"
@@ -47,15 +47,17 @@ public class ConsensusGraphsServlet extends HttpServlet {
         + "      <div class=\"main-column\">\n"
         + "        <h2>Tor Metrics Portal: Graphs</h2>\n"
         + "        <br/>\n"
-        + "        <h3>Relays and bridges in the Tor network</h3>\n"
+        + "        <h3>Exit relays in the Tor network</h3>\n"
         + "        <br/>\n"
-        + "        <p>The number of relays and bridges in the Tor network can be extracted from\n"
-        + "        the hourly published network status consensuses and sanitized bridge statuses.</p>\n"
+        + "        <p>The number of exit relays in the Tor network can be extracted from\n"
+        + "        the hourly published network status consensuses.</p>\n"
         + "        <ul>\n"
-        + "          <li>Past <a href=\"#networksize-30d\">30</a>,\n"
-        + "              <a href=\"#networksize-90d\">90</a>,\n"
-        + "              <a href=\"#networksize-180d\">180</a> days</li>\n"
-        + "          <li><a href=\"#networksize-all\">All data</a> up to today</li>\n"
+        + "          <li>Past <a href=\"#exit-72h\">72 hours</a> up to\n"
+        + "              now</li>\n"
+        + "          <li>Past <a href=\"#exit-30d\">30</a>,\n"
+        + "              <a href=\"#exit-90d\">90</a>,\n"
+        + "              <a href=\"#exit-180d\">180</a> days</li>\n"
+        + "          <li><a href=\"#exit-all\">All data</a> up to today</li>\n"
         + "          <li>Annual graphs of\n");
     Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     Calendar lastQuarter = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -63,49 +65,38 @@ public class ConsensusGraphsServlet extends HttpServlet {
     Calendar lastMonth = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     lastMonth.add(Calendar.MONTH, -1);
     for (int i = now.get(Calendar.YEAR); i > 2006; i--) {
-      out.print("              <a href=\"#networksize-" + i + "\">"
+      out.print("              <a href=\"#exit-" + i + "\">"
           + i + "</a>,\n");
     }
-    out.print("              <a href=\"#networksize-2006\">2006</a></li>\n");
+    out.print("              <a href=\"#exit-2006\">2006</a></li>\n");
     out.print("          <li>Quarterly graphs of\n");
-    out.printf("              <a href=\"#networksize-%1$tY-q%2$d\">"
+    out.printf("              <a href=\"#exit-%1$tY-q%2$d\">"
         + "Q%2$d %1$tY</a>,%n", now, 1 + now.get(Calendar.MONTH) / 3);
-    out.printf("              <a href=\"#networksize-%1$tY-q%2$d\">"
+    out.printf("              <a href=\"#exit-%1$tY-q%2$d\">"
         + "Q%2$d %1$tY</a></li>%n", lastQuarter, 1 + lastQuarter.get(Calendar.MONTH) / 3);
     out.print("          <li>Monthly graphs of\n");
-    out.printf("              <a href=\"#networksize-%1$tY-%1$tm\">"
+    out.printf("              <a href=\"#exit-%1$tY-%1$tm\">"
         + "%1$tb %1$tY</a>,%n", now);
-    out.printf("              <a href=\"#networksize-%1$tY-%1$tm\">"
+    out.printf("              <a href=\"#exit-%1$tY-%1$tm\">"
         + "%1$tb %1$tY</a></li>%n", lastMonth);
-    out.print("          <li><a href=\"graphs/networksize/\">More graphs</a> of past\n"
-        + "              quarters and months</li>\n"
-        + "          <li><a href=\"csv/networksize.csv\">CSV</a> file\n"
+    out.print("          <li><a href=\"csv/exit.csv\">CSV</a> file\n"
         + "              containing raw data</li>\n"
-        + "        </ul>\n"
-        + "        <p><a id=\"networksize-30d\"/>\n"
-        + "          <img src=\"graphs/networksize/networksize-30d.png\"/>\n"
-        + "        </p><p><a id=\"networksize-90d\"/>\n"
-        + "          <img src=\"graphs/networksize/networksize-90d.png\"/>\n"
-        + "        </p><p><a id=\"networksize-180d\"/>\n"
-        + "          <img src=\"graphs/networksize/networksize-180d.png\"/>\n"
-        + "        </p><p><a id=\"networksize-all\"/>\n"
-        + "          <img src=\"graphs/networksize/networksize-all.png\"/>\n");
+        + "        </ul>\n");
+    out.print("        </p><p><a id=\"exit-72h\"/><img src=\"graphs/exit/exit-72h.png\"/>\n"
+        + "        </p><p><a id=\"exit-30d\"/><img src=\"graphs/exit/exit-30d.png\"/>\n"
+        + "        </p><p><a id=\"exit-90d\"/><img src=\"graphs/exit/exit-90d.png\"/>\n"
+        + "        </p><p><a id=\"exit-180d\"/><img src=\"graphs/exit/exit-180d.png\"/>\n"
+        + "        </p><p><a id=\"exit-all\"/><img src=\"graphs/exit/exit-all.png\"/>\n");
     for (int i = now.get(Calendar.YEAR); i > 2006; i--) {
-      out.print("        </p><p><a id=\"networksize-" + i + "\"/>\n"
-        + "          <img src=\"graphs/networksize/networksize-" + i + ".png\"/>\n");
+      out.print("        </p><p><a id=\"exit-" + i + "\"/><img src=\"graphs/exit/exit-" + i + ".png\"/>\n");
     }
-    out.print("        </p><p><a id=\"networksize-2006\"/>\n"
-        + "          <img src=\"graphs/networksize/networksize-2006.png\"/>\n");
-    out.printf("        </p><p><a id=\"networksize-%1$tY-q%2$d\"/>\n"
-        + "          <img src=\"graphs/networksize/networksize-%1$tY-q%2$d.png\"/>\n",
+    out.print("        </p><p><a id=\"exit-2006\"/><img src=\"graphs/exit/exit-2006.png\"/>\n");
+    out.printf("        </p><p><a id=\"exit-%1$tY-q%2$d\"/><img src=\"graphs/exit/exit-%1$tY-q%2$d.png\"/>\n",
         now, 1 + now.get(Calendar.MONTH) / 3);
-    out.printf("        </p><p><a id=\"networksize-%1$tY-q%2$d\"/>\n"
-        + "          <img src=\"graphs/networksize/networksize-%1$tY-q%2$d.png\"/>\n",
+    out.printf("        </p><p><a id=\"exit-%1$tY-q%2$d\"/><img src=\"graphs/exit/exit-%1$tY-q%2$d.png\"/>\n",
         lastQuarter, 1 + lastQuarter.get(Calendar.MONTH) / 3);
-    out.printf("        </p><p><a id=\"networksize-%1$tY-%1$tm\"/>\n"
-        + "          <img src=\"graphs/networksize/networksize-%1$tY-%1$tm.png\"/>\n", now);
-    out.printf("        </p><p><a id=\"networksize-%1$tY-%1$tm\"/>\n"
-        + "          <img src=\"graphs/networksize/networksize-%1$tY-%1$tm.png\"/>\n", lastMonth);
+    out.printf("        </p><p><a id=\"exit-%1$tY-%1$tm\"/><img src=\"graphs/exit/exit-%1$tY-%1$tm.png\"/>\n", now);
+    out.printf("        </p><p><a id=\"exit-%1$tY-%1$tm\"/><img src=\"graphs/exit/exit-%1$tY-%1$tm.png\"/>\n", lastMonth);
     out.print("        </p><br/>\n"
         + "      </div>\n"
         + "    </div>\n"
