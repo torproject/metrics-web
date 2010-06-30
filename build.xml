@@ -1,7 +1,54 @@
 <project default="run" name="ERNIE" basedir=".">
+  <!-- ERNIE specific build properties -->
   <property name="sources" value="src/"/>
   <property name="classes" value="bin/"/>
   <property name="docs" value="javadoc/"/>
+  <property name="config" value="etc/"/>
+  <property name="name" value="ERNIE"/>
+
+  <!--JSP specific build properties -->
+  <property file="${config}/build.properties"/>
+  <property name="jsp-basedir" value="jsp"/>
+  <property name="jsp-srcdir" value="${jsp-basedir}/src"/>
+  <property name="jsp-webdir" value="${jsp-basedir}/war"/>
+  <property name="jsp-builddir" value="${jsp-webdir}/WEB-INF/classes"/>
+  <property name="jsp-name" value="ernie"/>
+
+  <path id="jsp-master-classpath">
+    <fileset dir="${jsp-webdir}/WEB-INF/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <!-- We need the servlet API classes: -->
+    <!--  * for Tomcat 5/6 use servlet-api.jar -->
+    <!--  * for other app servers - check the docs -->
+    <fileset dir="${appserver.lib}">
+        <include name="servlet*.jar"/>
+    </fileset>
+    <pathelement path="${jsp-builddir}"/>
+  </path>
+
+<!-- Usage target -->
+  <target name="usage">
+    <echo message=""/>
+    <echo message="${name} build file"/>
+    <echo message="-----------------------------------"/>
+    <echo message=""/>
+
+    <echo message="init      --> Compile ERNIE"/>
+    <echo message="run       --> Run ERNIE"/>
+    <echo message="docs      --> Generate ERNIE javadoc tree to javadoc/"/>
+    <echo message=""/>
+    <echo message="${jsp-name} JSP website build file"/>
+    <echo message="-----------------------------------"/>
+    <echo message=""/>
+
+    <echo message="jsp-build      --> Build JSP website from jsp/"/>
+    <echo message="jsp-deploy     --> Deploy JSP website (depends on etc/build.properties)"/>
+    <echo message="jsp-war        --> Deploy JSP website in web archive (.war)"/>
+    <echo message=""/>
+  </target>
+
+<!--ERNIE-specific targets -->
   <target name="init">
     <mkdir dir="${classes}"/>
     <mkdir dir="website/csv"/>
@@ -34,33 +81,78 @@
     </javadoc>
   </target>
 
-  <!-- This target is a hack -->
-  <target name="tomcat">
-    <mkdir dir="dist"/>
-    <mkdir dir="dist/WEB-INF"/>
-    <mkdir dir="dist/WEB-INF/classes"/>
-    <javac srcdir="src/org/torproject/ernie"
-          destdir="dist/WEB-INF/classes"
-          debug="true" debuglevel="lines,source"
-          classpath="lib/commons-codec-1.4.jar;lib/commons-compress-1.0.jar;lib/servlet-api.jar"/>
-    <copy todir="dist/WEB-INF" file="etc/web.xml"/>
-    <copy todir="dist/WEB-INF" file="R/consensus.R"/>
-<!-- We could copy all R files, but we don't need them.
-    <copy todir="dist/WEB-INF">
-      <fileset dir="R"/>
-    </copy>-->
-    <copy todir="dist">
-      <fileset dir="website">
-        <include name="*.html"/>
-        <exclude name="consensus-health.html"/>
-        <exclude name="consensus-health-1.html"/>
-        <exclude name="consensus-health-2.html"/>
-        <exclude name="log.html"/>
+<!--JSP website-specific targets -->
+  <target name="jsp-build" description="Build JSP application">
+    <mkdir dir="${jsp-builddir}"/>
+    <mkdir dir="${jsp-webdir}/images/graphs/descriptors"/>
+    <mkdir dir="${jsp-webdir}/images/graphs/direct-users"/>
+    <mkdir dir="${jsp-webdir}/images/graphs/exit"/>
+    <mkdir dir="${jsp-webdir}/images/graphs/gettor"/>
+    <mkdir dir="${jsp-webdir}/images/graphs/networksize"/>
+    <mkdir dir="${jsp-webdir}/images/graphs/new-users"/>
+    <mkdir dir="${jsp-webdir}/images/graphs/torperf"/>
+    <mkdir dir="${jsp-webdir}/images/graphs/torperf"/>
+    <mkdir dir="${jsp-webdir}/csv"/>
+    <javac destdir="${jsp-builddir}"
+            source="1.5"
+            target="1.5" debug="true"
+            deprecation="true"
+            optimize="false"
+            failonerror="true"
+            classpath="${jsp-webdir}/WEB-INF/lib/postgresql-8.4-701.jdbc4.jar">
+      <src path="${jsp-srcdir}"/>
+      <classpath refid="jsp-master-classpath"/>
+    </javac>
+  </target>
+
+  <target name="jsp-deploy" depends="jsp-build" description="Deploy JSP application">
+    <copy todir="${deploy.path}/${jsp-name}" preservelastmodified="true">
+      <fileset dir="${jsp-webdir}">
+        <include name="**/*.*"/>
       </fileset>
     </copy>
-    <copy todir="dist/WEB-INF/lib" file="lib/commons-codec-1.4.jar"/>
-    <jar jarfile="ernie.war" basedir="dist"/>
+  </target>
+
+  <target name="jsp-war" depends="jsp-build" description="Deploy JSP application as .war file">
+    <war destfile="${jsp-name}.war"
+      webxml="${jsp-webdir}/WEB-INF/web.xml">
+      <fileset dir="${jsp-webdir}">
+        <include name="**/*.*"/>
+      </fileset>
+    </war>
+    <copy todir="${deploy.path}" preservelastmodified="true">
+      <fileset dir=".">
+        <include name="*.war"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!--Tomcat specific targets for application management-->
+  <target name="reload" description="Reload application in Tomcat">
+    <reload url="${tomcat.manager.url}"
+            username="${tomcat.manager.username}"
+            password="${tomcat.manager.password}"
+            path="/${jsp-name}"/>
+  </target>
+
+  <target name="start" description="Start Tomcat application">
+    <start url="${tomcat.manager.url}"
+           username="${tomcat.manager.username}"
+           password="${tomcat.manager.password}"
+           path="/${jsp-name}"/>
+  </target>
+
+  <target name="stop" description="Stop Tomcat application">
+    <stop url="${tomcat.manager.url}"
+          username="${tomcat.manager.username}"
+          password="${tomcat.manager.password}"
+          path="/${jsp-name}"/>
+  </target>
+
+  <target name="list" description="List Tomcat applications">
+    <list url="${tomcat.manager.url}"
+          username="${tomcat.manager.username}"
+          password="${tomcat.manager.password}"/>
   </target>
 
 </project>
-

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+        "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
+<!--
+    Configuration file for UrlRewriteFilter
+    http://tuckey.org/urlrewrite/
+-->
+<urlrewrite>
+    <!--This rewrite rule rewrites any incoming .html request to go to the .jsp page silently -->
+    <!--This rule is too general with servlets right now. We have to rewrite them individually -->
+<!--
+    <rule>
+        <from>([a-zA-Z0-9\_\.]+).html$</from>
+        <to>$1.jsp</to>
+    </rule>
+-->
+    <rule>
+      <from>/index.html</from>
+      <to>/index.jsp</to>
+    </rule>
+    <rule>
+      <from>/graphs.html</from>
+      <to>/graphs.jsp</to>
+    </rule>
+    <rule>
+      <from>/research.html</from>
+      <to>/research.jsp</to>
+    </rule>
+    <rule>
+      <from>/status.html</from>
+      <to>/status.jsp</to>
+    </rule>
+    <rule>
+      <from>/consensus-graphs.html</from>
+      <to>/consensus-graphs.jsp</to>
+    </rule>
+    <rule>
+      <from>/exit-relays-graphs.html</from>
+      <to>/exit-relays-graphs.jsp</to>
+    </rule>
+    <rule>
+      <from>/new-users-graphs.html</from>
+      <to>/new-users-graphs.jsp</to>
+    </rule>
+    <rule>
+      <from>/recurring-users-graphs.html</from>
+      <to>/recurring-users-graphs.jsp</to>
+    </rule>
+    <rule>
+      <from>/bridge-users-graphs.html</from>
+      <to>/bridge-users-graphs.jsp</to>
+    </rule>
+    <rule>
+      <from>/torperf-graphs.html</from>
+      <to>/torperf-graphs.jsp</to>
+    </rule>
+    <rule>
+      <from>/gettor-graphs.html</from>
+      <to>/gettor-graphs.jsp</to>
+    </rule>
+    <rule>
+      <from>/papers.html</from>
+      <to>/papers.jsp</to>
+    </rule>
+    <rule>
+      <from>/data.html</from>
+      <to>/data.jsp</to>
+    </rule>
+    <rule>
+      <from>/tools.html</from>
+      <to>/tools.jsp</to>
+    </rule>
+    <rule>
+      <from>/status.html</from>
+      <to>/status.jsp</to>
+    </rule>
+</urlrewrite>
