@@ -1,4 +1,3 @@
-<div>
         <h2>Tor Metrics Portal</h2>
         <br/>
         <p>The Tor Metrics Portal aggregates all kinds of interesting
@@ -60,4 +59,3 @@
           <a href="csv/monthly-users-average.csv">average</a>
           daily users per month by country.</li>
         </ul>
-</div>

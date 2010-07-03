@@ -1,4 +1,3 @@
-      <div>
         <h2>Tor Metrics Portal: Tools</h2>
         <br/>
         <p>This page contains a collection of tools that can be used to
@@ -86,4 +85,3 @@
           <a href="https://svn.torproject.org/svn/torperf/trunk/">SVN repository</a></li>
           <li><tt>svn co https://svn.torproject.org/svn/torperf/trunk torperf</tt></li>
         </ul>
-      </div>

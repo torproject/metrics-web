@@ -1,4 +1,3 @@
-<div>
         <h2>Tor Metrics Portal: Papers</h2>
         <br/>
         <p>The <a href="#papers">papers</a> and
@@ -64,4 +63,3 @@
           (<a href="papers/geoipdbcomp-2009-10-23.pdf">PDF</a>,
           546K from October 23, 2009).</li>
         </ul>
-</div>

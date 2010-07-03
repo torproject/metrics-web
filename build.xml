@@ -3,19 +3,19 @@
   <property name="sources" value="src/"/>
   <property name="classes" value="bin/"/>
   <property name="docs" value="javadoc/"/>
-  <property name="config" value="etc/"/>
   <property name="name" value="ERNIE"/>
 
   <!--JSP specific build properties -->
-  <property file="${config}/build.properties"/>
+  <property file="${jsp-basedir}/etc/build.properties"/>
   <property name="jsp-basedir" value="jsp"/>
   <property name="jsp-srcdir" value="${jsp-basedir}/src"/>
   <property name="jsp-webdir" value="${jsp-basedir}/war"/>
+  <property name="jsp-libdir" value="${jsp-webdir}/WEB-INF/lib">
   <property name="jsp-builddir" value="${jsp-webdir}/WEB-INF/classes"/>
   <property name="jsp-name" value="ernie"/>
 
   <path id="jsp-master-classpath">
-    <fileset dir="${jsp-webdir}/WEB-INF/lib">
+    <fileset dir="${jsp-libdir}">
       <include name="*.jar"/>
     </fileset>
     <!-- We need the servlet API classes: -->
@@ -34,7 +34,8 @@
     <echo message="-----------------------------------"/>
     <echo message=""/>
 
-    <echo message="init      --> Compile ERNIE"/>
+    <echo message="init      --> Initialize ERNIE directories"/>
+    <echo message="compile   --> Compile ERNIE"/>
     <echo message="run       --> Run ERNIE"/>
     <echo message="docs      --> Generate ERNIE javadoc tree to javadoc/"/>
     <echo message=""/>
@@ -43,7 +44,7 @@
     <echo message=""/>
 
     <echo message="jsp-build      --> Build JSP website from jsp/"/>
-    <echo message="jsp-deploy     --> Deploy JSP website (depends on etc/build.properties)"/>
+    <echo message="jsp-deploy     --> Deploy JSP website (depends on jsp/etc/build.properties)"/>
     <echo message="jsp-war        --> Deploy JSP website in web archive (.war)"/>
     <echo message=""/>
   </target>
@@ -99,7 +100,7 @@
             deprecation="true"
             optimize="false"
             failonerror="true"
-            classpath="${jsp-webdir}/WEB-INF/lib/postgresql-8.4-701.jdbc4.jar">
+            classpath="${jsp-libdir}/postgresql-8.4-701.jdbc4.jar">
       <src path="${jsp-srcdir}"/>
       <classpath refid="jsp-master-classpath"/>
     </javac>
@@ -120,11 +121,8 @@
         <include name="**/*.*"/>
       </fileset>
     </war>
-    <copy todir="${deploy.path}" preservelastmodified="true">
-      <fileset dir=".">
-        <include name="*.war"/>
-      </fileset>
-    </copy>
+    <copy todir="${deploy.path}" file="${jsp-name}.war"
+          preservelastmodified="true"/>
   </target>
 
   <!--Tomcat specific targets for application management-->

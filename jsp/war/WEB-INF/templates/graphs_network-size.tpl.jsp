@@ -1,24 +1,24 @@
 <%@page import="java.util.*" %>
 <%@page import="java.io.*" %>
-<div>
+        <h2>Tor Metrics Portal: Graphs</h2>
+        <br/>
+        <h3>Relays and bridges in the Tor network</h3>
+        <br/>
+        <p>The number of relays and bridges in the Tor network can be
+        extracted from the hourly published network status consensuses
+        and sanitized bridge statuses.</p>
+        <ul>
+          <li>Past <a href=\"#networksize-30d\">30</a>,
+              <a href=\"#networksize-90d\">90</a>,
+              <a href=\"#networksize-180d\">180</a> days</li>
+          <li><a href=\"#networksize-all\">All data</a> up to today</li>
 <%
-        out.print("        <h2>Tor Metrics Portal: Graphs</h2>\n"
-        + "        <br/>\n"
-        + "        <h3>Relays and bridges in the Tor network</h3>\n"
-        + "        <br/>\n"
-        + "        <p>The number of relays and bridges in the Tor network can be extracted from\n"
-        + "        the hourly published network status consensuses and sanitized bridge statuses.</p>\n"
-        + "        <ul>\n"
-        + "          <li>Past <a href=\"#networksize-30d\">30</a>,\n"
-        + "              <a href=\"#networksize-90d\">90</a>,\n"
-        + "              <a href=\"#networksize-180d\">180</a> days</li>\n"
-        + "          <li><a href=\"#networksize-all\">All data</a> up to today</li>\n"
-        + "          <li>Annual graphs of\n");
     Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     Calendar lastQuarter = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     lastQuarter.add(Calendar.MONTH, -3);
     Calendar lastMonth = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     lastMonth.add(Calendar.MONTH, -1);
+    out.print("          <li>Annual graphs of\n");
     for (int i = now.get(Calendar.YEAR); i > 2006; i--) {
       out.print("              <a href=\"#networksize-" + i + "\">"
           + i + "</a>,\n");
@@ -63,4 +63,3 @@
         + "          <img src=\"graphs/networksize/networksize-%1$tY-%1$tm.png\"/>\n", lastMonth));
     out.print("        </p><br/>\n");
 %>
-</div>

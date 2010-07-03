@@ -1,4 +1,3 @@
-<div>
         <h2>Tor Metrics Portal: Data</h2>
         <br/>
         <p>One of the main goals of the Tor Metrics Project is to make all
@@ -1258,4 +1257,3 @@
             <td><a href="data/siv-5mb.data">5 MiB requests</a></td>
           </tr>
         </table>
-</div>
