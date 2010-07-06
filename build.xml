@@ -6,11 +6,11 @@
   <property name="name" value="ERNIE"/>
 
   <!--JSP specific build properties -->
-  <property file="${jsp-basedir}/etc/build.properties"/>
   <property name="jsp-basedir" value="jsp"/>
+  <property file="${jsp-basedir}/etc/build.properties"/>
   <property name="jsp-srcdir" value="${jsp-basedir}/src"/>
   <property name="jsp-webdir" value="${jsp-basedir}/war"/>
-  <property name="jsp-libdir" value="${jsp-webdir}/WEB-INF/lib">
+  <property name="jsp-libdir" value="${jsp-webdir}/WEB-INF/lib"/>
   <property name="jsp-builddir" value="${jsp-webdir}/WEB-INF/classes"/>
   <property name="jsp-name" value="ernie"/>
 
