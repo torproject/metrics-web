@@ -18,12 +18,6 @@
     <fileset dir="${jsp-libdir}">
       <include name="*.jar"/>
     </fileset>
-    <!-- We need the servlet API classes: -->
-    <!--  * for Tomcat 5/6 use servlet-api.jar -->
-    <!--  * for other app servers - check the docs -->
-    <fileset dir="${appserver.lib}">
-        <include name="servlet*.jar"/>
-    </fileset>
     <pathelement path="${jsp-builddir}"/>
   </path>
 
@@ -85,22 +79,12 @@
 <!--JSP website-specific targets -->
   <target name="jsp-build" description="Build JSP application">
     <mkdir dir="${jsp-builddir}"/>
-    <mkdir dir="${jsp-webdir}/images/graphs/descriptors"/>
-    <mkdir dir="${jsp-webdir}/images/graphs/direct-users"/>
-    <mkdir dir="${jsp-webdir}/images/graphs/exit"/>
-    <mkdir dir="${jsp-webdir}/images/graphs/gettor"/>
-    <mkdir dir="${jsp-webdir}/images/graphs/networksize"/>
-    <mkdir dir="${jsp-webdir}/images/graphs/new-users"/>
-    <mkdir dir="${jsp-webdir}/images/graphs/torperf"/>
-    <mkdir dir="${jsp-webdir}/images/graphs/torperf"/>
-    <mkdir dir="${jsp-webdir}/csv"/>
     <javac destdir="${jsp-builddir}"
             source="1.5"
             target="1.5" debug="true"
             deprecation="true"
             optimize="false"
-            failonerror="true"
-            classpath="${jsp-libdir}/postgresql-8.4-701.jdbc4.jar">
+            failonerror="true">
       <src path="${jsp-srcdir}"/>
       <classpath refid="jsp-master-classpath"/>
     </javac>
