@@ -1,4 +1,4 @@
-<jsp:useBean id="template" class="ernie.TemplateController" scope="request" />
+<jsp:useBean id="template" class="org.torproject.ernie.web.TemplateController" scope="request" />
 <table class="banner" border="0" cellpadding="0" cellspacing="0" summary="">
 <tr>
   <td class="banner-left"><a href="/index.html"><img src="/images/top-left.png" alt="Click to go to home page" width="193" heigth="79"></a></td>

@@ -1,4 +1,4 @@
-package ernie;
+package org.torproject.ernie.web;
 
 public class TemplateController {
 
