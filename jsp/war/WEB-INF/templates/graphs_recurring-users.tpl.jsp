@@ -1,3 +1,4 @@
+<%@ page import="java.util.*" %>
         <h2>Tor Metrics Portal: Graphs</h2>
         <br/>
         <h3>Recurring, directly connecting Tor users</h3>

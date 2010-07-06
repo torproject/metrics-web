@@ -1,3 +1,4 @@
+<%@page import="java.util.*" %>
         <h2>Tor Metrics Portal: Graphs</h2>
         <br/>
         <h3>New or returning, directly connecting Tor users</h3>
@@ -46,5 +47,6 @@
             + "-new-" + suffix + ".png\"/>\n");
       }
       out.print("        </p>");
+    }
 %>
         <br/>
