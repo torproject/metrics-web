@@ -120,7 +120,7 @@ public class LoggingConfiguration {
               + "            <font size=\"2\">\n"
               + "              <a href=\"exonerator.html\">ExoneraTor</a>\n"
               + "              <a href=\"consensus-health.html\">Consensus Health</a>\n"
-              + "              <a class=\"current\">Last log</a>\n"
+              + "              <a class=\"current\">Last Log</a>\n"
               + "            </font>\n"
               + "          </td>\n"
               + "          <td class=\"banner-right\"></td>\n"

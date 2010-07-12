@@ -7,12 +7,12 @@
         <p>The number of exit relays in the Tor network can be extracted from
         the hourly published network status consensuses.</p>
         <ul>
-          <li>Past <a href=\"#exit-72h\">72 hours</a> up to
+          <li>Past <a href="#exit-72h">72 hours</a> up to
               now</li>
-          <li>Past <a href=\"#exit-30d\">30</a>,
-              <a href=\"#exit-90d\">90</a>,
-              <a href=\"#exit-180d\">180</a> days</li>
-          <li><a href=\"#exit-all\">All data</a> up to today</li>
+          <li>Past <a href="#exit-30d">30</a>,
+              <a href="#exit-90d">90</a>,
+              <a href="#exit-180d">180</a> days</li>
+          <li><a href="#exit-all">All data</a> up to today</li>
 <%
     Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     Calendar lastQuarter = Calendar.getInstance(TimeZone.getTimeZone("UTC"));

@@ -8,10 +8,10 @@
         extracted from the hourly published network status consensuses
         and sanitized bridge statuses.</p>
         <ul>
-          <li>Past <a href=\"#networksize-30d\">30</a>,
-              <a href=\"#networksize-90d\">90</a>,
-              <a href=\"#networksize-180d\">180</a> days</li>
-          <li><a href=\"#networksize-all\">All data</a> up to today</li>
+          <li>Past <a href="#networksize-30d">30</a>,
+              <a href="#networksize-90d">90</a>,
+              <a href="#networksize-180d">180</a> days</li>
+          <li><a href="#networksize-all">All data</a> up to today</li>
 <%
     Calendar now = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     Calendar lastQuarter = Calendar.getInstance(TimeZone.getTimeZone("UTC"));

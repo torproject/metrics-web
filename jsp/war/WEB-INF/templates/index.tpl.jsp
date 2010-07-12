@@ -12,9 +12,9 @@
           <li>Read <a href="papers.html">papers</a> and technical reports
           on the measurement techniques and results of statistical
           analysis of metrics data</li>
-          <li>Download the <a href="/research/data.html">data</a> that is behind the
+          <li>Download the <a href="data.html">data</a> that is behind the
           graphs and reports to make your own evaluations</li>
-          <li>Try out the <a href="/research/tools.html">tools</a> to parse and
+          <li>Try out the <a href="tools.html">tools</a> to parse and
           evaluate the metrics data</li>
         </ul>
         <br/>
@@ -39,8 +39,8 @@
           transition to ggplot2 and will greatly facilitate dynamic graph
           generation in the future.</li>
           <li>May 26, 2010: The monthly
-          <a href="/research/data.html#relaydesc">relay</a> and
-          <a href="/research/data.html#bridgedesc">bridge descriptor tarballs</a>
+          <a href="data.html#relaydesc">relay</a> and
+          <a href="data.html#bridgedesc">bridge descriptor tarballs</a>
           are now updated every day. Beginning with May 2010, the bridge
           descriptor tarballs do not contain country codes anymore,
           because it was tough to maintain. If your research requires this
