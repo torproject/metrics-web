@@ -238,9 +238,18 @@ public class ConsensusHealthChecker {
       }
 
       /* Write consensus parameters. */
+      boolean conflict = false;
       if (voteParams == null) {
         /* Authority doesn't set consensus parameters. */
-      } else if (!voteParams.equals(consensusParams)) {
+      } else {
+        for (String param : voteParams.split(" ")) {
+          if (!consensusParams.contains(param)) {
+            conflict = true;
+            break;
+          }
+        }
+      }
+      if (conflict) {
         paramsResults.append("          <tr>\n"
             + "            <td><font color=\"red\">" + dirSource
               + "</font></td>\n"
