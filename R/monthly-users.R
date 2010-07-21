@@ -8,9 +8,14 @@ if (file.exists("stats/dirreq-stats") &
   # Read direct user numbers
   dirreq <- read.csv("stats/dirreq-stats", header = TRUE,
     stringsAsFactors = FALSE)
-  trustedSub <- subset(dirreq,
-    directory %in% "8522EB98C91496E80EC238E732594D1509158E77")
-  trustedSub[na.omit(trustedSub$share) == 0,3:length(trustedSub)] <- NA
+  trustedSub <- dirreq[dirreq$directory ==
+    "8522EB98C91496E80EC238E732594D1509158E77",]
+  trustedSub[!is.na(trustedSub$share) & trustedSub$share < 0.01,
+    3:length(trustedSub)] <- NA
+  # Take out values in June 2010 when we had problems with dirreq-shares
+  trustedSub[!is.na(trustedSub$share) & trustedSub$date > "2010-05-26"
+             & trustedSub$date < "2010-06-24",
+    3:length(trustedSub)] <- NA
   trusted <- data.frame(date = trustedSub$date,
     floor(trustedSub[3:(length(trustedSub) - 1)] / trustedSub$share * 10))
 
