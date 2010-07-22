@@ -31,6 +31,38 @@
     <url-pattern>/relay-search.html</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>NetworkSizeImageServlet</servlet-name>
+    <servlet-class>org.torproject.ernie.web.NetworkSizeImageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NetworkSizeImageServlet</servlet-name>
+    <url-pattern>/networksize.png</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>RelayPlatformsImageServlet</servlet-name>
+    <servlet-class>org.torproject.ernie.web.RelayPlatformsImageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RelayPlatformsImageServlet</servlet-name>
+    <url-pattern>/platforms.png</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>RelayVersionsImageServlet</servlet-name>
+    <servlet-class>org.torproject.ernie.web.RelayVersionsImageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RelayVersionsImageServlet</servlet-name>
+    <url-pattern>/versions.png</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>RelayBandwidthImageServlet</servlet-name>
+    <servlet-class>org.torproject.ernie.web.RelayBandwidthImageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RelayBandwidthImageServlet</servlet-name>
+    <url-pattern>/bandwidth.png</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>ExoneraTor</servlet-name>
     <servlet-class>org.torproject.ernie.web.ExoneraTorServlet</servlet-class>
   </servlet>

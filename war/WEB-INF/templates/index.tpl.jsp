@@ -20,6 +20,9 @@
         <br/>
         <h3>News</h3>
         <ul>
+          <li>September 9, 2010: <a href="custom-graph.html">Custom
+          graphs</a> on network size, relay platforms, versions, and
+          observed bandwidth available. Implemented by Kevin Berry.</li>
           <li>September 2, 2010: New <a href="relay-search.html">relay
           search</a> feature available.</li>
           <li>August 31, 2010: Named relays can now be found more easily

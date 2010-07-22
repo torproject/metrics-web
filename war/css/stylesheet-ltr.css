@@ -451,15 +451,72 @@ hr {
 	padding:5px 0;
 }
 
-div#graphmenu {float:left;margin-top:20px;background:#e5e5e5;width:100%;padding:5px;}
-#graphmenu .formrow {clear:both;}
-#graphmenu .formrow label {float:left;width:150px;text-align:right;margin-right:50px;}
-#graphmenu .formrow input {float:left;width:100px;}
-#graphmenu .formrow .submit {margin-left:20px;}
-#graphmenu .formrow select {float:left;width:100px;}
-#graphmenu .break {clear:both;}
-#graphmenu .note {float:left;font-size:.8em;font-style:italic;}
+div#graphmenu {
+  float:left;
+  margin-top:20px;
+  width:100%;
+  padding:5px;
+}
 
-div#graphimg {}
+#graphmenu div.formrow {
+  clear:both;
+}
 
-.error {color:red;}
+#graphmenu .formrow p {
+  float:left;
+}
+
+#graphmenu .formrow label {
+  float:left;
+  width:100px;
+  margin:0px 5px 0px 0px;
+  text-align:right;
+}
+
+#graphmenu .formrow label.graphname {
+  float:left;
+  width:100px;
+  margin:0px;
+  text-align:right;
+}
+
+#graphmenu .formrow label.startend {
+  width:50px;
+  margin:0px 10px 0px 0px;
+  text-align:right;
+}
+
+#graphmenu .formrow input {
+  float:left;width:100px;
+}
+
+#graphmenu .formrow input.submit {
+  width:100px;
+  margin:0px 0px 0px 10px;
+}
+
+#graphmenu .break {
+  clear:both;
+}
+
+#graphmenu .note {
+  float:left;
+  font-size:.8em;
+  font-style:italic;
+}
+
+#graphmenu div#torperfopts {
+  float:left;
+}
+
+#graphmenu div#gettoropts {
+  float:left;
+}
+
+#graphmenu div#regularopts {
+  float:left;
+}
+
+.error {
+  color:red;
+}

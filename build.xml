@@ -7,6 +7,7 @@
   <property name="jsp-libdir" value="${jsp-webdir}/WEB-INF/lib"/>
   <property name="jsp-builddir" value="${jsp-webdir}/WEB-INF/classes"/>
   <property name="jsp-name" value="ernie"/>
+  <property name="jsp-confdir" value="etc"/>
 
   <path id="jsp-master-classpath">
     <fileset dir="${jsp-libdir}">
@@ -40,6 +41,10 @@
       <src path="${jsp-srcdir}"/>
       <classpath refid="jsp-master-classpath"/>
     </javac>
+    <copy file="${jsp-confdir}/ernie.properties"
+          todir="${jsp-builddir}" />
+    <copy file="${jsp-confdir}/logging.properties"
+          todir="${jsp-builddir}" />
   </target>
 
   <target name="jsp-deploy" depends="jsp-build" description="Deploy JSP application">

@@ -59,6 +59,10 @@
       <to>/gettor-graphs.jsp</to>
     </rule>
     <rule>
+      <from>/custom-graph.html</from>
+      <to>/custom-graph.jsp</to>
+    </rule>
+    <rule>
       <from>/papers.html</from>
       <to>/papers.jsp</to>
     </rule>
