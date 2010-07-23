@@ -1,15 +1,9 @@
-<project default="run" name="ERNIE" basedir=".">
-  <!-- ERNIE specific build properties -->
-  <property name="sources" value="src/"/>
-  <property name="classes" value="bin/"/>
-  <property name="docs" value="javadoc/"/>
-  <property name="name" value="ERNIE"/>
+<project name="ERNIE" basedir=".">
 
   <!--JSP specific build properties -->
-  <property name="jsp-basedir" value="jsp"/>
-  <property file="${jsp-basedir}/etc/build.properties"/>
-  <property name="jsp-srcdir" value="${jsp-basedir}/src"/>
-  <property name="jsp-webdir" value="${jsp-basedir}/war"/>
+  <property file="etc/build.properties"/>
+  <property name="jsp-srcdir" value="src"/>
+  <property name="jsp-webdir" value="war"/>
   <property name="jsp-libdir" value="${jsp-webdir}/WEB-INF/lib"/>
   <property name="jsp-builddir" value="${jsp-webdir}/WEB-INF/classes"/>
   <property name="jsp-name" value="ernie"/>
@@ -24,15 +18,6 @@
 <!-- Usage target -->
   <target name="usage">
     <echo message=""/>
-    <echo message="${name} build file"/>
-    <echo message="-----------------------------------"/>
-    <echo message=""/>
-
-    <echo message="init      --> Initialize ERNIE directories"/>
-    <echo message="compile   --> Compile ERNIE"/>
-    <echo message="run       --> Run ERNIE"/>
-    <echo message="docs      --> Generate ERNIE javadoc tree to javadoc/"/>
-    <echo message=""/>
     <echo message="${jsp-name} JSP website build file"/>
     <echo message="-----------------------------------"/>
     <echo message=""/>
@@ -41,39 +26,6 @@
     <echo message="jsp-deploy     --> Deploy JSP website (depends on jsp/etc/build.properties)"/>
     <echo message="jsp-war        --> Deploy JSP website in web archive (.war)"/>
     <echo message=""/>
-  </target>
-
-<!--ERNIE-specific targets -->
-  <target name="init">
-    <mkdir dir="${classes}"/>
-    <mkdir dir="website/csv"/>
-    <mkdir dir="website/graphs/descriptors"/>
-    <mkdir dir="website/graphs/direct-users"/>
-    <mkdir dir="website/graphs/exit"/>
-    <mkdir dir="website/graphs/gettor"/>
-    <mkdir dir="website/graphs/networksize"/>
-    <mkdir dir="website/graphs/new-users"/>
-    <mkdir dir="website/graphs/torperf"/>
-  </target>
-  <target name="compile" depends="init"> 
-    <javac srcdir="${sources}"
-           destdir="${classes}"
-           excludes="org/torproject/ernie/web/"
-           debug="true" debuglevel="lines,source"
-           classpath="lib/commons-codec-1.4.jar;lib/commons-compress-1.0.jar"/>
-  </target>
-  <target name="run" depends="compile">
-    <java classpath="${classes};lib/commons-codec-1.4.jar:lib/commons-compress-1.0.jar;lib/postgresql-8.4-701.jdbc4.jar"
-          fork="true"
-          maxmemory="1024m"
-          classname="Main"/>
-  </target>
-  <target name="docs">
-    <mkdir dir="${docs}"/>
-    <javadoc destdir="${docs}"
-             classpath="lib/commons-codec-1.4.jar;lib/commons-compress-1.0.jar">
-      <fileset dir="${sources}/" includes="**/*.java" />
-    </javadoc>
   </target>
 
 <!--JSP website-specific targets -->

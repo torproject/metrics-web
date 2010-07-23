@@ -1,46 +1,10 @@
-# Input directories for descriptors to parse
-archives/
-bridges/
-
-# compiled Java class files
-bin/
-
-# generated R input files
-stats/
-
-# generated graphs
-website/graphs/bridge-users/*.png
-website/graphs/descriptors/*.png
-website/graphs/direct-users/*.png
-website/graphs/exit/*.png
-website/graphs/gettor/*.png
-website/graphs/networksize/*.png
-website/graphs/new-users/*.png
-website/graphs/torperf/*.png
-
-# generated CSV files
-website/csv/*.csv
-
-# papers and tech reports, not included in Git
-website/papers/*.pdf
-
-# logfiles
-log.*
-
 # Eclipse files
 .classpath
 .project
 
-# Auxiliary LaTeX files
-doc/*.aux
-doc/*.log
-
-# Generated websites
-website/consensus-health*.html
-
-# Temporary directory for generating web archive
-dist/
-
 # Generated web archive
 ernie.war
+
+# Compiled class files
+war/WEB-INF/classes/
 
