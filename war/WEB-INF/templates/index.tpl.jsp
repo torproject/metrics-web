@@ -20,6 +20,14 @@
         <br/>
         <h3>News</h3>
         <ul>
+          <li>August 16, 2010: There are now graphs for total
+          <a href="new-users-graphs.html">new or returning</a> and
+          <a href="recurring-users-graphs.html">recurring</a> directly
+          connecting users and total
+          <a href="bridge-users-graphs.html">bridge users</a> as well as
+          for users coming from Australia, Brazil, Canada, France,
+          Germany, Italy, Japan, Poland, Russia, South Korea, Sweden,
+          U.K., and U.S.A.</li>
           <li>June 7, 2010: The <a href="exonerator.html">ExoneraTor</a>
           now uses the most recent network information as its data basis
           (as opposed to monthly snapshots). As a by-product,
