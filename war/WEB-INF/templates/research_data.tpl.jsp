@@ -608,7 +608,7 @@
               (<a href="http://archive.torproject.org/tor-metrics-archive/extra-infos-2008-05.tar.bz2.asc">sig</a>)</td>
             <td><a href="http://archive.torproject.org/tor-metrics-archive/votes-2008-05.tar.bz2">v3 votes</a>
               (<a href="http://archive.torproject.org/tor-metrics-archive/votes-2008-05.tar.bz2.asc">sig</a>)</td>
-            <td><a href="http://archive.torproject.org/tor-metrics-archive/consensuses-2008-05.tar.bzw">v3 consensuses</a>
+            <td><a href="http://archive.torproject.org/tor-metrics-archive/consensuses-2008-05.tar.bz2">v3 consensuses</a>
               (<a href="http://archive.torproject.org/tor-metrics-archive/consensuses-2008-05.tar.bz2.asc">sig</a>)</td>
           </tr>
           <tr>
