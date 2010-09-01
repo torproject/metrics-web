@@ -10,4 +10,4 @@
       Project has waived all copyright and related or neighboring rights
       in the data. Graphs are licensed under a
       <a href="http://creativecommons.org/licenses/by/3.0/us/">Creative
-      Commons Attribution 3.0 United States License</a>. 
+      Commons Attribution 3.0 United States License</a>.</p>
