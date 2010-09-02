@@ -23,6 +23,14 @@
   </filter-mapping>
 
   <servlet>
+    <servlet-name>RelaySearch</servlet-name>
+    <servlet-class>org.torproject.ernie.web.RelaySearchServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RelaySearch</servlet-name>
+    <url-pattern>/relay-search.html</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>ExoneraTor</servlet-name>
     <servlet-class>org.torproject.ernie.web.ExoneraTorServlet</servlet-class>
   </servlet>

@@ -20,6 +20,11 @@
         <br/>
         <h3>News</h3>
         <ul>
+          <li>September 2, 2010: New <a href="relay-search.html">relay
+          search</a> feature available.</li>
+          <li>August 31, 2010: Named relays can now be found more easily
+          on the consensus-health page by using anchors, e.g.,
+          <a href="consensus-health.html#gabelmoo">https://metrics.torproject.org/consensus-health.html#gabelmoo</a> .</li>
           <li>August 16, 2010: There are now graphs for total
           <a href="new-users-graphs.html">new or returning</a> and
           <a href="recurring-users-graphs.html">recurring</a> directly

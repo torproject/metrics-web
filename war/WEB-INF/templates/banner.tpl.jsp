@@ -22,6 +22,7 @@
       <br/>
       <font size="2">
         <a href="/exonerator.html">ExoneraTor</a>
+        <a href="/relay-search.html">Relay Search</a>
         <a href="/consensus-health.html">Consensus Health</a>
         <a href="/log.html">Last Log</a>
       </font>
