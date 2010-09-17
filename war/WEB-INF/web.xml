@@ -79,6 +79,22 @@
     <url-pattern>/serverdesc</url-pattern>
   </servlet-mapping>
   <servlet>
+    <servlet-name>ExtraInfoDescriptor</servlet-name>
+    <servlet-class>org.torproject.ernie.web.ExtraInfoDescriptorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExtraInfoDescriptor</servlet-name>
+    <url-pattern>/extrainfodesc</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Descriptor</servlet-name>
+    <servlet-class>org.torproject.ernie.web.DescriptorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Descriptor</servlet-name>
+    <url-pattern>/descriptor.html</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>Consensus</servlet-name>
     <servlet-class>org.torproject.ernie.web.ConsensusServlet</servlet-class>
   </servlet>

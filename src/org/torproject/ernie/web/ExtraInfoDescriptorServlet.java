@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.regex.*;
 import org.torproject.ernie.util.*;
 
-public class ServerDescriptorServlet extends HttpServlet {
+public class ExtraInfoDescriptorServlet extends HttpServlet {
 
   private Connection conn = null;
 
-  public ServerDescriptorServlet() {
+  public ExtraInfoDescriptorServlet() {
 
     /* Try to load the database driver. */
     try {
@@ -40,14 +40,13 @@ public class ServerDescriptorServlet extends HttpServlet {
 
     /* Check if we have a database connection. */
     if (conn == null) {
-      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      //response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
 
     /* Check desc-id parameter. */
     String descIdParameter = request.getParameter("desc-id");
-    if (descIdParameter == null || descIdParameter.length() < 8 ||
-        descIdParameter.length() > 40) {
+    if (descIdParameter == null || descIdParameter.length() < 8) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
@@ -60,15 +59,15 @@ public class ServerDescriptorServlet extends HttpServlet {
     }
 
     /* Look up descriptor in the database. */
-    String descriptor = null;
+    String extrainfo = null;
     byte[] rawDescriptor = null;
     try {
       Statement statement = conn.createStatement();
-      String query = "SELECT descriptor, rawdesc FROM descriptor "
-          + "WHERE descriptor LIKE '" + descId + "%'";
+      String query = "SELECT extrainfo, rawdesc FROM extrainfo "
+          + "WHERE extrainfo LIKE '" + descId + "%'";
       ResultSet rs = statement.executeQuery(query);
       if (rs.next()) {
-        descriptor = rs.getString(1);
+        extrainfo = rs.getString(1);
         rawDescriptor = rs.getBytes(2);
       }
     } catch (SQLException e) {
@@ -86,7 +85,7 @@ public class ServerDescriptorServlet extends HttpServlet {
       response.setHeader("Content-Length", String.valueOf(
           rawDescriptor.length));
       response.setHeader("Content-Disposition", "inline; filename=\""
-          + descriptor + "\"");
+          + extrainfo + "\"");
       BufferedOutputStream output = new BufferedOutputStream(
           response.getOutputStream());
       output.write(rawDescriptor);

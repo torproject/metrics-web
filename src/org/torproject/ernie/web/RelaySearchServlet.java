@@ -520,10 +520,10 @@ public class RelaySearchServlet extends HttpServlet {
             String descriptor = String.format("%040x", new BigInteger(1,
                 Base64.decodeBase64(parts[3] + "==")));
             out.println("    <tt>r " + parts[1] + " " + parts[2] + " "
-                + "<a href=\"serverdesc?desc-id=" + descriptor + "\" "
-                + "target=\"_blank\">" + parts[3] + "</a> " + parts[4]
-                + " " + parts[5] + " " + parts[6] + " " + parts[7]
-                + " " + parts[8] + "</tt><br/>");
+                + "<a href=\"descriptor.html?desc-id=" + descriptor
+                + "\" " + "target=\"_blank\">" + parts[3] + "</a> "
+                + parts[4] + " " + parts[5] + " " + parts[6] + " "
+                + parts[7] + " " + parts[8] + "</tt><br/>");
             matches++;
           }
         } else if (line.startsWith("valid-after ")) {
