@@ -21,7 +21,14 @@
     <filter-name>UrlRewriteFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-
+  <servlet>
+    <servlet-name>Relay</servlet-name>
+    <servlet-class>org.torproject.ernie.web.RelayServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Relay</servlet-name>
+    <url-pattern>/relay.html</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>RelaySearch</servlet-name>
     <servlet-class>org.torproject.ernie.web.RelaySearchServlet</servlet-class>
