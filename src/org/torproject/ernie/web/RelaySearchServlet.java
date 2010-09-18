@@ -4,6 +4,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.*;
 import java.math.*;
+import java.sql.*;
 import java.text.*;
 import java.util.*;
 import java.util.regex.*;
@@ -11,18 +12,16 @@ import java.util.regex.*;
 import org.apache.commons.codec.*;
 import org.apache.commons.codec.binary.*;
 
+import org.torproject.ernie.util.*;
+
 /**
  * Web page that allows users to search for relays in the descriptor
  * archives.
  *
- * Possible improvements:
- * - Make nickname search case-insensitive
- * - Instead of searching last 30 days, add date, month, or even year
- *   parameter
- * - Make CONSENSUS_DIRECTORY configurable
- *
  * Possible search terms for testing:
  * - gabelmoo
+ * - gabelmoo 2010-09
+ * - gabelmoo 2010-09-18
  * - gabelmoo F2044413DAC2E02E3D6BCF4735A19BCA1DE97281
  * - gabelmoo 80.190.246
  * - gabelmoo F2044413DAC2E02E3D6BCF4735A19BCA1DE97281 80.190.246
@@ -36,8 +35,8 @@ import org.apache.commons.codec.binary.*;
  */
 public class RelaySearchServlet extends HttpServlet {
 
-  private static Pattern alphaNumDotSpacePattern =
-      Pattern.compile("[A-Za-z0-9\\. ]+");
+  private static Pattern alphaNumDotDashSpacePattern =
+      Pattern.compile("[A-Za-z0-9\\.\\- ]+");
 
   private static Pattern numPattern = Pattern.compile("[0-9]+");
 
@@ -45,6 +44,42 @@ public class RelaySearchServlet extends HttpServlet {
 
   private static Pattern alphaNumPattern =
       Pattern.compile("[A-Za-z0-9]+");
+
+  private static SimpleDateFormat dayFormat =
+      new SimpleDateFormat("yyyy-MM-dd");
+
+  private static SimpleDateFormat monthFormat =
+      new SimpleDateFormat("yyyy-MM");
+
+  static {
+    dayFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    monthFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+  }
+
+  private Connection conn = null;
+
+  public RelaySearchServlet() {
+
+    /* Try to load the database driver. */
+    try {
+      Class.forName("org.postgresql.Driver");
+    } catch (ClassNotFoundException e) {
+      /* Don't initialize conn and always reply to all requests with
+       * "500 internal server error". */
+      return;
+    }
+
+    /* Read JDBC URL from property file. */
+    ErnieProperties props = new ErnieProperties();
+    String connectionURL = props.getProperty("jdbc.url");
+
+    /* Try to connect to database. */
+    try {
+      conn = DriverManager.getConnection(connectionURL);
+    } catch (SQLException e) {
+      conn = null;
+    }
+  }
 
   private void writeHeader(PrintWriter out) throws IOException {
     out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 "
@@ -139,24 +174,27 @@ public class RelaySearchServlet extends HttpServlet {
     PrintWriter out = new PrintWriter(response.getWriter(), true);
     writeHeader(out);
 
-    /* Check if we have a consensuses directory. */
-    File consensusDirectory = new File(CONSENSUS_DIRECTORY);
+    /* If we don't have a database, see if we have consensus on disk. */
     SortedSet<File> consensusDirectories = new TreeSet<File>();
-    if (consensusDirectory.exists() && consensusDirectory.isDirectory()) {
-      for (File yearFile : consensusDirectory.listFiles()) {
-        for (File monthFile : yearFile.listFiles()) {
-          consensusDirectories.add(monthFile);
+    if (conn == null) {
+      /* Check if we have a consensuses directory. */
+      File consensusDirectory = new File(CONSENSUS_DIRECTORY);
+      if (consensusDirectory.exists() && consensusDirectory.isDirectory()) {
+        for (File yearFile : consensusDirectory.listFiles()) {
+          for (File monthFile : yearFile.listFiles()) {
+            consensusDirectories.add(monthFile);
+          }
         }
       }
-    }
-    if (consensusDirectories.isEmpty()) {
-      out.println("<p><font color=\"red\"><b>Warning: </b></font>This "
-          + "server doesn't have any relay lists available. If this "
-          + "problem persists, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
-          + "know</a>!</p>\n");
-      writeFooter(out);
-      return;
+      if (consensusDirectories.isEmpty()) {
+        out.println("<p><font color=\"red\"><b>Warning: </b></font>This "
+            + "server doesn't have any relay lists available. If this "
+            + "problem persists, please "
+            + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+            + "know</a>!</p>\n");
+        writeFooter(out);
+        return;
+      }
     }
 
     /* Read search parameter, if any. */
@@ -167,11 +205,13 @@ public class RelaySearchServlet extends HttpServlet {
 
     /* Write search form. */
     out.print("        <p>Search for a relay in the relay descriptor "
-          + "archive by typing (part of) its <b>nickname</b>, "
-          + "<b>fingerprint</b>, or <b>IP address</b> in the following "
-          + "search field and clicking Search. The search will stop "
-          + "after 30 hits or parsing 1 month of descriptors. Note that "
-          + "the search can take up to 30 seconds.</p><br/>\n"
+          + "archive by typing (part of) a <b>nickname</b>, "
+          + "<b>fingerprint</b>, or <b>IP address</b> and optionally up "
+          + "to three <b>months (yyyy-mm)</b> or <b>days "
+          + "(yyyy-mm-dd)</b> in the following search field and "
+          + "clicking Search. The search will stop after 30 hits or, "
+          + "unless you provide a month or a day, after parsing the last "
+          + "30 days of relay lists.</p><br/>\n"
         + "        <form action=\"relay-search.html\">\n"
         + "          <table>\n"
         + "            <tr>\n"
@@ -200,11 +240,13 @@ public class RelaySearchServlet extends HttpServlet {
     String searchFingerprint = "";
     String searchIPAddress = "";
     SortedSet<String> searchFingerprintOrNickname = new TreeSet<String>();
+    SortedSet<String> searchDays = new TreeSet<String>();
+    SortedSet<String> searchMonths = new TreeSet<String>();
     boolean validQuery = false;
 
     /* Only parse search parameter if it contains nothing else than
      * alphanumeric characters, dots, and spaces. */
-    if (alphaNumDotSpacePattern.matcher(searchParameter).matches()) {
+    if (alphaNumDotDashSpacePattern.matcher(searchParameter).matches()) {
       SortedSet<String> searchTerms = new TreeSet<String>();
       if (searchParameter.trim().contains(" ")) {
         String[] split = searchParameter.trim().split(" ");
@@ -249,6 +291,27 @@ public class RelaySearchServlet extends HttpServlet {
             sb.append(".");
           }
           searchIPAddress = sb.toString().substring(1);
+        }
+
+        /* If the search term contains hyphens, it must be a month or a
+         * day. */
+        else if (searchTerm.contains("-") &&
+            searchTerm.startsWith("20")) {
+          try {
+            if (searchTerm.length() == 10) {
+              dayFormat.parse(searchTerm);
+              searchDays.add(searchTerm);
+            } else if (searchTerm.length() == 7) {
+              monthFormat.parse(searchTerm);
+              searchMonths.add(searchTerm);
+            } else {
+              validQuery = false;
+              break;
+            }
+          } catch (ParseException e) {
+            validQuery = false;
+            break;
+          }
         }
 
         /* If the search term contains between 8 and 19 hex characters, it
@@ -313,14 +376,21 @@ public class RelaySearchServlet extends HttpServlet {
       searchFingerprintOrNickname.clear();
     }
 
+    /* We only accept at most three months or days, or people could
+     * accidentally keep the database busy. */
+    if (searchDays.size() + searchMonths.size() > 3) {
+      validQuery = false;
+    }
+
     /* If the query is invalid, print out a general warning. */
     if (!validQuery) {
       out.write("        <p>Sorry, I didn't understand your query. "
           + "Please provide a nickname (e.g., \"gabelmoo\"), at least "
           + "the first 8 hex characters of a fingerprint (e.g., "
           + "\"F2044413\"), or at least the first two octets of an IPv4 "
-          + "address in dotted-decimal notation (e.g., \"80.190\")."
-          + "</p>\n");
+          + "address in dotted-decimal notation (e.g., \"80.190\"). You "
+          + "can also provide at most three months or days in ISO 8601 "
+          + "format (e.g., \"2010-09\" or \"2010-09-17\").</p>\n");
       writeFooter(out);
       return;
     }
@@ -342,20 +412,156 @@ public class RelaySearchServlet extends HttpServlet {
       recognizedSearchTerms.add("IP address <b>" + searchIPAddress
           + "</b>");
     }
+    List<String> recognizedIntervals = new ArrayList<String>();
+    for (String searchTerm : searchMonths) {
+      recognizedIntervals.add("in <b>" + searchTerm + "</b>");
+    }
+    for (String searchTerm : searchDays) {
+      recognizedIntervals.add("on <b>" + searchTerm + "</b>");
+    }
     out.write("        <p>Searching for relays with ");
     if (recognizedSearchTerms.size() == 1) {
-      out.write(recognizedSearchTerms.get(0) + " ...</p>\n");
+      out.write(recognizedSearchTerms.get(0));
     } else if (recognizedSearchTerms.size() == 2) {
       out.write(recognizedSearchTerms.get(0) + " and "
-          + recognizedSearchTerms.get(1) + " ...</p>\n");
+          + recognizedSearchTerms.get(1));
     } else {
       for (int i = 0; i < recognizedSearchTerms.size() - 1; i++) {
         out.write(recognizedSearchTerms.get(i) + ", ");
       }
       out.write("and " + recognizedSearchTerms.get(
-          recognizedSearchTerms.size() - 1) + " ...</p>\n");
+          recognizedSearchTerms.size() - 1));
     }
+    if (recognizedIntervals.size() == 1) {
+      out.write(" running " + recognizedIntervals.get(0));
+    } else if (recognizedIntervals.size() == 2) {
+      out.write(" running " + recognizedIntervals.get(0) + " and/or "
+          + recognizedIntervals.get(1));
+    } else if (recognizedIntervals.size() > 2) {
+      out.write(" running ");
+      for (int i = 0; i < recognizedIntervals.size() - 1; i++) {
+        out.write(recognizedIntervals.get(i) + ", ");
+      }
+      out.write("and/or " + recognizedIntervals.get(
+          recognizedIntervals.size() - 1));
+    }
+    out.write(" ...</p>\n");
     out.flush();
+
+    /* If we have a database connection, search relays in the database. */
+    if (conn != null) {
+
+      StringBuilder query = new StringBuilder("SELECT validafter, "
+          + "rawdesc FROM statusentry WHERE ");
+      boolean addAnd = false;
+      if (searchDays.size() > 0 || searchMonths.size() > 0) {
+        boolean addOr = false;
+        query.append("(");
+        for (String search : searchDays) {
+          query.append((addOr ? "OR " : "") + "DATE_TRUNC('day', "
+              + "validafter) = '" + search + " 00:00:00' ");
+          addOr = true;
+        }
+        for (String search : searchMonths) {
+          query.append((addOr ? "OR " : "") + "DATE_TRUNC('month', "
+              + "validafter) = '" + search + "-01 00:00:00' ");
+          addOr = true;
+        }
+        query.append(") ");
+      } else {
+        query.append("DATE_TRUNC('day', validafter) >= '"
+            + dayFormat.format(started - 30L * 24L * 60L * 60L * 1000L)
+            + " 00:00:00' ");
+      }
+      if (searchNickname.length() > 0) {
+        query.append("AND LOWER(nickname) LIKE '"
+            + searchNickname.toLowerCase() + "%' ");
+      }
+      if (searchFingerprint.length() > 0) {
+        query.append("AND fingerprint LIKE '"
+            + searchFingerprint.toLowerCase() + "%' ");
+      }
+      if (searchIPAddress.length() > 0) {
+        query.append("AND address LIKE '" + searchIPAddress + "%' ");
+      }
+      for (String search : searchFingerprintOrNickname) {
+        query.append("AND (LOWER(nickname) LIKE '" + search.toLowerCase()
+            + "%' OR fingerprint LIKE '" + search.toLowerCase() + "%') ");
+      }
+      query.append("ORDER BY validafter DESC, fingerprint LIMIT 31");
+      int matches = 0;
+      long startedQuery = System.currentTimeMillis();
+      try {
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(query.toString());
+        String lastValidAfter = null;
+        while (rs.next()) {
+          matches++;
+          if (matches > 30) {
+            break;
+          }
+          String validAfter = rs.getTimestamp(1).toString().
+              substring(0, 19);
+          if (!validAfter.equals(lastValidAfter)) {
+            out.println("        <br/><tt>valid-after "
+                + "<a href=\"consensus?valid-after="
+                + validAfter.replaceAll(":", "-").replaceAll(" ", "-")
+                + "\" target=\"_blank\">" + validAfter + "</a></tt><br/>");
+            lastValidAfter = validAfter;
+            out.flush();
+          }
+          byte[] rawStatusEntry = rs.getBytes(2);
+          try {
+            String statusEntryLines = new String(rawStatusEntry,
+                "US-ASCII");
+            String[] lines = statusEntryLines.split("\n");
+            for (String line : lines) {
+              if (line.startsWith("r ")) {
+                String[] parts = line.split(" ");
+                String descriptor = String.format("%040x",
+                    new BigInteger(1, Base64.decodeBase64(parts[3]
+                    + "==")));
+                out.println("    <tt>r " + parts[1] + " " + parts[2] + " "
+                    + "<a href=\"descriptor.html?desc-id=" + descriptor
+                    + "\" target=\"_blank\">" + parts[3] + "</a> "
+                    + parts[4] + " " + parts[5] + " " + parts[6] + " "
+                    + parts[7] + " " + parts[8] + "</tt><br/>");
+              } else {
+                out.println("    <tt>" + line + "</tt><br/>");
+              }
+            }
+            out.println("    <br/>");
+            out.flush();
+          } catch (UnsupportedEncodingException e) {
+            /* This shouldn't happen, because we know that ASCII is
+             * supported. */
+          }
+        }
+        statement.close();
+      } catch (SQLException e) {
+        out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
+            + "experienced an unknown database problem while running the "
+            + "search. The query was '" + query + "'. If this problem "
+            + "persists, please "
+            + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+            + "know</a>!</p>\n");
+        writeFooter(out);
+        return;
+      }
+
+      /* Display total search time on the results page. */
+      long searchTime = System.currentTimeMillis() - started;
+      long queryTime = System.currentTimeMillis() - startedQuery;
+      out.write("        <br/><p>Found " + (matches > 30 ? "more than 30"
+          : "" + matches) + " relays " + (matches > 30 ?
+          "(displaying only the first 30 hits) " : "") + "in "
+          + String.format("%d.%03d", searchTime / 1000, searchTime % 1000)
+          + " seconds.</p>\n");
+
+      /* Finish writing response. */
+      writeFooter(out);
+      return;
+    }
 
     /* Compile a regular expression pattern to parse r lines more
      * quickly. */
