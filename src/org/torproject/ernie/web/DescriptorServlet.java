@@ -159,6 +159,51 @@ public class DescriptorServlet extends HttpServlet {
       return;
     }
 
+    /* If we were only given a partial descriptor identifier, look up all
+     * descriptor identifiers starting with that part to see if it's
+     * unique. */
+    if (descId.length() < 40) {
+      SortedSet<String> allDescIds = new TreeSet<String>();
+      try {
+        Statement statement = conn.createStatement();
+        String query = "SELECT DISTINCT descriptor FROM statusentry "
+            + "WHERE descriptor LIKE '" + descId + "%'";
+        ResultSet rs = statement.executeQuery(query);
+        while (rs.next()) {
+          allDescIds.add(rs.getString(1));
+        }
+        statement.close();
+      } catch (SQLException e) {
+        out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
+            + "experienced an unknown database problem while looking up "
+            + "descriptors with identifier starting with " + descId
+            + ". If this problem persists, please "
+            + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+            + "know</a>!</p>\n");
+        writeFooter(out);
+        return;
+      }
+      if (allDescIds.size() == 0) {
+        out.write("<p>No descriptor found " + (descId.length() < 40
+            ? "starting " : "") + "with identifier " + descId + ".</p>");
+        writeFooter(out);
+        return;
+      } else if (allDescIds.size() > 1) {
+        out.println("<p>The descriptor identifier part " + descIdParameter
+            + " is not unique. Please choose one of the following "
+            + "descriptors:</p><ul>");
+        for (String f : allDescIds) {
+          out.println("<li><a href=\"descriptor.html?desc-id=" + f + "\">"
+              + f + "</a></li>");
+        }
+        out.write("</ul><br/>");
+        writeFooter(out);
+        return;
+      } else {
+        descId = allDescIds.first();
+      }
+    }
+
     /* Look up descriptor in the database. */
     String descriptor = null, nickname = null, published = null,
         extrainfo = null;
@@ -166,8 +211,8 @@ public class DescriptorServlet extends HttpServlet {
     try {
       Statement statement = conn.createStatement();
       String query = "SELECT descriptor, nickname, published, extrainfo, "
-          + "rawdesc FROM descriptor WHERE descriptor LIKE '" + descId
-          + "%'";
+          + "rawdesc FROM descriptor WHERE descriptor = '" + descId
+          + "'";
       ResultSet rs = statement.executeQuery(query);
       if (rs.next()) {
         descriptor = rs.getString(1);
@@ -194,8 +239,9 @@ public class DescriptorServlet extends HttpServlet {
 
     /* If no descriptor was found, stop here. */
     if (descriptor == null) {
-      out.write("<p>No descriptor found " + (descId.length() < 40
-          ? "starting " : "") + "with identifier " + descId + ".</p>");
+      out.write("<p>No descriptor found " + (descIdParameter.length() < 40
+          ? "starting " : "") + "with identifier " + descIdParameter
+          + ".</p>");
       writeFooter(out);
       return;
     }
@@ -250,7 +296,12 @@ public class DescriptorServlet extends HttpServlet {
         }
       }
     } catch (SQLException e) {
-      // TODO handle?
+      out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
+          + "experienced an unknown database problem while looking up "
+          + "the network status consensuses referencing descriptor "
+          + descId + ". If this problem persists, please "
+          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+          + "know</a>!</p>\n");
     }
 
     /* Provide links to raw descriptors, too. */
