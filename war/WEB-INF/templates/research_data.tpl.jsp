@@ -44,6 +44,7 @@
           <li><a href="#bridgedesc">Bridge descriptor archives</a></li>
           <li><a href="#stats">Statistics produced by relays</a></li>
           <li><a href="#performance">Performance data</a></li>
+          <li><a href="#exitlist">Exit lists</a></li>
         </ul>
         <br/>
         <a id="relaydesc"/>
@@ -211,7 +212,8 @@
           (filename.startsWith("buffer-") ||
           filename.startsWith("dirreq-") ||
           filename.startsWith("entry-") ||
-          filename.startsWith("exit-"))) {
+          (filename.startsWith("exit-") &&
+          !filename.startsWith("exit-list-")))) {
         statsSources.add(filename.substring(filename.indexOf("-") + 1));
       }
     }
@@ -289,6 +291,31 @@
         out.write("            <td/>\n");
       }
       out.write("          </tr>\n");
+    }
+%>
+        </table>
+        <br/>
+        <a id="exitlist"/>
+        <h3>Exit lists</h3>
+        <br/>
+        <p>We are archiving the bulk exit lists used by
+        <a href="https://check.torproject.org/">Tor Check</a> containing
+        the IP addresses that exit relays exit from:</p>
+        <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
+<%
+    for (Map.Entry<String, String> e : allFiles.entrySet()) {
+      String file = e.getKey();
+      String url = e.getValue();
+      if (file.startsWith("exit-list")) {
+        String yearMonth = file.substring(file.indexOf("exit-list-")
+            + "exit-list-".length());
+        String year = yearMonth.substring(0, 4);
+        String monthName = monthNames[Integer.parseInt(
+            yearMonth.substring(5, 7)) - 1];
+        out.write("          <tr><td><a href=\"" + url + "\">"
+            + monthName + " " + year + "</a></td></tr>\n");
+        printedFiles.add(file);
+      }
     }
 %>
         </table>
