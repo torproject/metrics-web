@@ -505,6 +505,7 @@ public class RelaySearchServlet extends HttpServlet {
             + "%' OR fingerprint LIKE '" + search.toLowerCase() + "%') ");
       }
       query.append("ORDER BY validafter DESC, fingerprint LIMIT 31");
+      out.println("<!-- " + query.toString() + " -->");
       int matches = 0;
       long startedQuery = System.currentTimeMillis();
       try {
