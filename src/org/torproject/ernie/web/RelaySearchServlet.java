@@ -51,9 +51,13 @@ public class RelaySearchServlet extends HttpServlet {
   private static SimpleDateFormat monthFormat =
       new SimpleDateFormat("yyyy-MM");
 
+  private static SimpleDateFormat dateTimeFormat =
+      new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
   static {
     dayFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     monthFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
   }
 
   private Connection conn = null;
@@ -242,6 +246,8 @@ public class RelaySearchServlet extends HttpServlet {
     SortedSet<String> searchFingerprintOrNickname = new TreeSet<String>();
     SortedSet<String> searchDays = new TreeSet<String>();
     SortedSet<String> searchMonths = new TreeSet<String>();
+    SortedSet<Long> searchDayTimestamps = new TreeSet<Long>();
+    SortedSet<Long> searchMonthTimestamps = new TreeSet<Long>();
     boolean validQuery = false;
 
     /* Only parse search parameter if it contains nothing else than
@@ -299,10 +305,12 @@ public class RelaySearchServlet extends HttpServlet {
             searchTerm.startsWith("20")) {
           try {
             if (searchTerm.length() == 10) {
-              dayFormat.parse(searchTerm);
+              searchDayTimestamps.add(dayFormat.parse(searchTerm).
+                  getTime());
               searchDays.add(searchTerm);
             } else if (searchTerm.length() == 7) {
-              monthFormat.parse(searchTerm);
+              searchMonthTimestamps.add(monthFormat.parse(searchTerm).
+                  getTime());
               searchMonths.add(searchTerm);
             } else {
               validQuery = false;
@@ -454,24 +462,32 @@ public class RelaySearchServlet extends HttpServlet {
       StringBuilder query = new StringBuilder("SELECT validafter, "
           + "rawdesc FROM statusentry WHERE ");
       boolean addAnd = false;
-      if (searchDays.size() > 0 || searchMonths.size() > 0) {
+      if (searchDayTimestamps.size() > 0 ||
+          searchMonthTimestamps.size() > 0) {
         boolean addOr = false;
         query.append("(");
-        for (String search : searchDays) {
-          query.append((addOr ? "OR " : "") + "DATE_TRUNC('day', "
-              + "validafter) = '" + search + " 00:00:00' ");
+        for (long searchTimestamp : searchDayTimestamps) {
+          query.append((addOr ? "OR " : "") + "(validafter >= '"
+              + dateTimeFormat.format(searchTimestamp) + "' AND "
+              + "validafter < '" + dateTimeFormat.format(searchTimestamp
+              + 24L * 60L * 60L * 1000L) + "') ");
           addOr = true;
         }
-        for (String search : searchMonths) {
-          query.append((addOr ? "OR " : "") + "DATE_TRUNC('month', "
-              + "validafter) = '" + search + "-01 00:00:00' ");
+        for (long searchTimestamp : searchMonthTimestamps) {
+          Calendar firstOfNextMonth = Calendar.getInstance(
+              TimeZone.getTimeZone("UTC"));
+          firstOfNextMonth.setTimeInMillis(searchTimestamp);
+          firstOfNextMonth.add(Calendar.MONTH, 1);
+          query.append((addOr ? "OR " : "") + "(validafter >= '"
+              + dateTimeFormat.format(searchTimestamp) + "' AND "
+              + "validafter < '" + dateTimeFormat.format(
+              firstOfNextMonth.getTimeInMillis()) + "') ");
           addOr = true;
         }
         query.append(") ");
       } else {
-        query.append("DATE_TRUNC('day', validafter) >= '"
-            + dayFormat.format(started - 30L * 24L * 60L * 60L * 1000L)
-            + " 00:00:00' ");
+        query.append("validafter >= '" + dateTimeFormat.format(
+            started - 30L * 24L * 60L * 60L * 1000L) + "' ");
       }
       if (searchNickname.length() > 0) {
         query.append("AND LOWER(nickname) LIKE '"
@@ -557,6 +573,13 @@ public class RelaySearchServlet extends HttpServlet {
           "(displaying only the first 30 hits) " : "") + "in "
           + String.format("%d.%03d", searchTime / 1000, searchTime % 1000)
           + " seconds.</p>\n");
+      if (searchTime > 10L * 1000L) {
+        out.write("        <p>In theory, search time should not exceed "
+            + "10 seconds. The query was '" + query + "'. If this or "
+            + "similar searches remain slow, please "
+            + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+            + "know</a>!</p>\n");
+      }
 
       /* Finish writing response. */
       writeFooter(out);
