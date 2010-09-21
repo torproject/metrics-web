@@ -74,7 +74,7 @@ plot_bandwidth_line <- function(start, end, path) {
   con <- dbConnect(drv, user=dbuser, password=dbpassword, dbname=db)
   # TODO As soon as the database schema has bwadvertised, switch to that
   # and update the graph title!
-  q <- paste("SELECT bwobserved, date FROM total_bandwidth ",
+  q <- paste("SELECT bwadvertised, date FROM total_bandwidth ",
       "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
   rs <- dbSendQuery(con, q)
   bandwidth <- fetch(rs,n=-1)
@@ -85,7 +85,7 @@ plot_bandwidth_line <- function(start, end, path) {
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name="Bandwidth (MiB/s)",
         limits = c(0, max(bandwidth$value, na.rm = TRUE) / 2^20)) +
-    opts(title = "Total observed bandwidth\n")
+    opts(title = "Total advertised bandwidth\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
   dbDisconnect(con)
   dbUnloadDriver(drv)
