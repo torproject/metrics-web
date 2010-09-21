@@ -20,27 +20,26 @@ plot_networksize_line <- function(start, end, path) {
   dbDisconnect(con)
   dbUnloadDriver(drv)
 }
-# TODO Instead of displaying pre-defined versions, we could prune all
-# versions with 0 relays in the requested interval and only show versions
-# with 1 or more relays. We should manually define colors for versions in
-# this case, or people will get confused when a version changes its color
-# only because they pick a different interval.
 plot_versions_line <- function(start, end, path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user=dbuser, password=dbpassword, dbname=db)
-  q <- paste("SELECT * FROM relay_versions WHERE date >= '", start,
-      "' AND date <= '", end, "'", sep = "")
+  q <- paste("SELECT date, version, relays FROM relay_versions ",
+      "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
   rs <- dbSendQuery(con, q)
   v <- fetch(rs,n=-1)
-  v <- v[, c("date", "0.1.2", "0.2.0", "0.2.1", "0.2.2")]
-  v <- melt(v, id="date")
-  ggplot(v, aes(x=as.Date(date, "%Y-%m-%d"), y = value, colour=variable)) +
+  colours <- data.frame(version = c("0.1.0", "0.1.1", "0.1.2", "0.2.0",
+    "0.2.1", "0.2.2", "0.2.3"), colour = c("#B4674D", "#C0448F",
+    "#1F75FE", "#FF7F49", "#1CAC78", "#5D76CB", "#FF496C"),
+    stringsAsFactors = FALSE)
+  colours <- colours[colours$version %in% unique(v$version), "colour"]
+  ggplot(v, aes(x = as.Date(date, "%Y-%m-%d"), y = relays,
+      colour = version)) +
     geom_line(size=1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name= "",
-      limits = c(0, max(v$value, na.rm = TRUE))) +
-    scale_colour_brewer(name = "Tor version") +
+      limits = c(0, max(v$relays, na.rm = TRUE))) +
+    scale_colour_manual(name = "Tor version", values = colours) +
     opts(title = "Relay versions\n")
   ggsave(filename=path, width=8,height=5,dpi=72)
   dbDisconnect(con)
