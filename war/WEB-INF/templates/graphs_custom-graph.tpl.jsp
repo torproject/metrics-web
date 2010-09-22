@@ -92,7 +92,8 @@ for tracking a more specific part of the Tor network.</p>
   <jsp:getProperty name="customgraph" property="graphStart"/> to
   <jsp:getProperty name="customgraph" property="graphEnd"/></strong></p>
   <img src="<jsp:getProperty name="customgraph" property="graphURL"/>"
-       href="<jsp:getProperty name="customgraph" property="graphURL"/>"/>
+       href="<jsp:getProperty name="customgraph" property="graphURL"/>"
+       width=576 height=360 />
   <%}
 }%>
 <div style="clear:both;"></div>

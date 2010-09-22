@@ -1,129 +1,151 @@
 package org.torproject.ernie.web;
 
-import org.torproject.ernie.util.ErnieProperties;
-import org.apache.log4j.Logger;
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
+
 import org.rosuda.REngine.Rserve.*;
 import org.rosuda.REngine.*;
 
+import org.torproject.ernie.util.ErnieProperties;
+
 public class GraphController {
 
-  private static final Logger log;
-  private static final String baseDir;
-  private static final int cacheSize;
-  private final String graphName;
-  private static int cacheClearRequests;
-  private static int requests;
+  /* Singleton instance and getInstance method of this class. */
+  private static GraphController instance = new GraphController();
+  public static GraphController getInstance() {
+    return instance;
+  }
 
-  private static final int rservePort;
-  private static final String rserveHost;
+  /* Host and port where Rserve is listening. */
+  private String rserveHost;
+  private int rservePort;
 
-  static {
-    log = Logger.getLogger(GraphController.class.toString());
+  /* Some parameters for our cache of graph images. */
+  private String cachedGraphsDirectory;
+  private int maxCacheSize;
+  private int minCacheSize;
+  private long maxCacheAge;
+  private int currentCacheSize;
+  private long oldestGraph;
+
+  protected GraphController ()  {
+
+    /* Read properties from property file. */
     ErnieProperties props = new ErnieProperties();
-    cacheSize = props.getInt("max.cached.graphs");
-    baseDir = props.getProperty("cached.graphs.dir");
-    cacheClearRequests = props.getInt("cache.clear.requests");
-    rservePort = props.getInt("rserve.port");
-    rserveHost = props.getProperty("rserve.host");
-    requests = 0;
+    this.cachedGraphsDirectory = props.getProperty("cached.graphs.dir");
+    this.maxCacheSize = props.getInt("max.cache.size");
+    this.minCacheSize = props.getInt("min.cache.size");
+    this.maxCacheAge = (long) props.getInt("max.cache.age");
+    this.rserveHost = props.getProperty("rserve.host");
+    this.rservePort = props.getInt("rserve.port");
 
-    try {
-      /* Create temp graphs directory if it doesn't exist. */
-      File dir = new File(baseDir);
-      if (!dir.exists())  {
-        dir.mkdirs();
-      }
-
-      /* Change directory permissions to allow it to be written to
-       * by Rserve. */
-      Runtime rt = Runtime.getRuntime();
-      rt.exec("chmod 777 " + baseDir).waitFor();
-    } catch (InterruptedException e) {
-    } catch (IOException e) {
-      log.warn("Couldn't create temporary graphs directory. " + e);
-    }
+    /* Clean up cache on startup. */
+    this.cleanUpCache();
   }
 
-  public GraphController (String graphName)  {
-    this.graphName = graphName;
-  }
+  /* Generate a graph using the given R query that has a placeholder for
+   * the absolute path to the image to be created. */
+  public byte[] generateGraph(String rQuery, String imageFilename) {
 
-  public void writeOutput(String imagePath, HttpServletRequest request,
-      HttpServletResponse response) throws IOException {
-
-    /* Read file from disk and write it to response. */
-    BufferedInputStream input = null;
-    BufferedOutputStream output = null;
-    try {
-      File imageFile = new File(imagePath);
-      /* If there was an error when generating the graph,
-       * set the header to 400 bad request. */
-      if (!imageFile.exists())  {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      } else {
-        response.setContentType("image/png");
-        response.setHeader("Content-Length", String.valueOf(
-            imageFile.length()));
-        response.setHeader("Content-Disposition",
-            "inline; filename=\"" + graphName + ".png" + "\"");
-        input = new BufferedInputStream(new FileInputStream(imageFile),
-            1024);
-        output = new BufferedOutputStream(response.getOutputStream(), 1024);
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = input.read(buffer)) > 0) {
-            output.write(buffer, 0, length);
-        }
-        requests++;
-        if (requests % cacheClearRequests == 0) {
-          deleteLRUgraph();
-        }
-      }
+    /* Check if we need to clean up the cache first, or we might give
+     * someone an old grpah. */
+    if (this.currentCacheSize > this.maxCacheSize ||
+        (this.currentCacheSize > 0 && System.currentTimeMillis()
+        - this.oldestGraph > this.maxCacheAge * 1000L)) {
+      this.cleanUpCache();
     }
-    finally {
-      if (output != null)
-        output.close();
-      if (input != null)
-        input.close();
-    }
-  }
 
-  public void generateGraph(String rquery, String path)  {
-    try {
-      File f = new File(path);
-      if (!f.exists())  {
+    /* See if we need to generate this graph. */
+    File imageFile = new File(this.cachedGraphsDirectory + "/"
+        + imageFilename);
+    if (!imageFile.exists()) {
+
+      /* We do. Update the R query to contain the absolute path to the file
+       * to be generated, create a connection to Rserve, run the R query,
+       * and close the connection. The generated graph will be on disk. */
+      rQuery = String.format(rQuery, imageFile.getAbsolutePath());
+      try {
         RConnection rc = new RConnection(rserveHost, rservePort);
-        rc.eval(rquery);
+        rc.eval(rQuery);
         rc.close();
+      } catch (RserveException e) {
+        return null;
       }
-    } catch (Exception e) {
-      log.warn("Internal Rserve error. Couldn't generate graph: " +
-          e.toString());
+
+      /* Check that we really just generated the file */
+      if (!imageFile.exists()) {
+        return null;
+      }
+
+      /* Update our graph counter. */
+      this.currentCacheSize++;
     }
+
+    /* Read the image from disk and write it to a byte array. */
+    byte[] result = null;
+    try {
+      BufferedInputStream bis = new BufferedInputStream(
+          new FileInputStream(imageFile), 1024);
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      byte[] buffer = new byte[1024];
+      int length;
+      while ((length = bis.read(buffer)) > 0) {
+        baos.write(buffer, 0, length);
+      }
+      result = baos.toByteArray();
+    } catch (IOException e) {
+      return null;
+    }
+
+    /* Return the graph bytes. */
+    return result;
   }
 
-  /* Caching mechanism to delete the least recently
-   * used graph every X requests.
-   * TODO We're not really deleting the least recently used graphs here,
-   * but a random sample. Not the end of the world, but when we're bored,
-   * let's fix this. */
-  public void deleteLRUgraph()  {
-    File dir = new File(baseDir);
-    List<File> flist = Arrays.asList(dir.listFiles());
-    if (flist.size() > (cacheSize + cacheClearRequests))  {
-      Collections.sort(flist);
-      for (int i = 0; i <= cacheClearRequests; i++) {
-        flist.get(i).delete();
-      }
-    }
-  }
+  /* Clean up graph cache by removing all graphs older than maxCacheAge
+   * and then the oldest graphs until we have minCacheSize graphs left.
+   * Also update currentCacheSize and oldestGraph. */
+  public void cleanUpCache() {
 
-  public String getBaseDir()  {
-    return this.baseDir;
+    /* Check if the cache is empty first. */
+    File[] filesInCache = new File(this.cachedGraphsDirectory).
+        listFiles();
+    if (filesInCache.length == 0) {
+      this.currentCacheSize = 0;
+      this.oldestGraph = System.currentTimeMillis();
+      return;
+    }
+
+    /* Sort graphs in cache by the time they were last modified. */
+    List<File> graphsByLastModified = new LinkedList<File>(
+        Arrays.asList(filesInCache));
+    Collections.sort(graphsByLastModified, new Comparator<File>() {
+      public int compare(File a, File b) {
+        return a.lastModified() < b.lastModified() ? -1 :
+            a.lastModified() > b.lastModified() ? 1 : 0;
+      }
+    });
+
+    /* Delete the graphs that are either older than maxCacheAge and then
+     * as many graphs as necessary to shrink to minCacheSize graphs. */
+    long cutOffTime = System.currentTimeMillis()
+        - this.maxCacheAge * 1000L;
+    while (!graphsByLastModified.isEmpty()) {
+      File oldestGraphInList = graphsByLastModified.remove(0);
+      if (oldestGraphInList.lastModified() >= cutOffTime ||
+          graphsByLastModified.size() < this.minCacheSize) {
+        break;
+      }
+      oldestGraphInList.delete();
+    }
+
+    /* Update currentCacheSize and oldestGraph that we need to decide when
+     * we should next clean up the graph cache. */
+    this.currentCacheSize = graphsByLastModified.size();
+    if (!graphsByLastModified.isEmpty()) {
+      this.oldestGraph = graphsByLastModified.get(0).lastModified();
+    } else {
+      this.oldestGraph = System.currentTimeMillis();
+    }
   }
 }
 
