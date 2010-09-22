@@ -94,7 +94,7 @@
         server descriptors that they send to the directory authorities.
         The following graph shows the number of relays running specific
         Tor versions.</p>
-        <img src="graphs/descriptors/versions.png"/>
+        <img src="versions.png" width=576 height=360 />
         <br/>
         <a id="platforms"/>
         <h3>Relay platforms</h3>
@@ -103,7 +103,7 @@
         descriptors that they send to the directory authorities. The
         following graph shows the number of relays running specific
         platforms.</p>
-        <img src="graphs/descriptors/platforms.png"/>
+        <img src="platforms.png" width=576 height=360 />
         <br/>
         <a id="bandwidth"/>
         <h3>Relay bandwidth</h3>
@@ -112,5 +112,5 @@
         to contribute in their server descriptors. The following graph
         shows the sum of advertised bandwidth of all relays in the
         network.</p>
-        <img src="graphs/descriptors/bandwidth.png"/>
+        <img src="bandwidth.png" width=576 height=360 />
         <br/>
