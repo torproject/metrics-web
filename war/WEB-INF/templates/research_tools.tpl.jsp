@@ -107,6 +107,9 @@
         functionality. There is also a web version of
         <a href="/exonerator.html">ExoneraTor</a> available.</p>
         <ul>
+          <li>Download
+          <a href="dist/exonerator-0.0.1.tar">ExoneraTor 0.0.1</a>
+          (<a href="dist/exonerator-0.0.1.tar.asc">sig</a>)
           <li>Browse the <a href="https://gitweb.torproject.org/metrics-utils.git/tree/HEAD:/exonerator">Git repository</a>
           <li><tt>git clone git://git.torproject.org/metrics-utils</tt></li>
         </ul>
@@ -118,6 +121,9 @@
         list archives to tell how many of the requests come from Tor
         users.</p>
         <ul>
+          <li>Download
+          <a href="dist/visitor-0.0.2.tar">VisiTor 0.0.2</a>
+          (<a href="dist/visitor-0.0.2.tar.asc">sig</a>)
           <li>Browse the <a href="https://gitweb.torproject.org/metrics-utils.git/tree/HEAD:/visitor">Git repository</a></li>
           <li><tt>git clone git://git.torproject.org/metrics-utils</tt></li>
         </ul>

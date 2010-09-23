@@ -147,6 +147,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>ErnieGeneratedFile</servlet-name>
+    <url-pattern>/dist/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ErnieGeneratedFile</servlet-name>
     <url-pattern>/data/*</url-pattern>
   </servlet-mapping>
 </web-app>
