@@ -71,20 +71,28 @@ plot_platforms_line <- function(start, end, path) {
 plot_bandwidth_line <- function(start, end, path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user=dbuser, password=dbpassword, dbname=db)
-  # TODO As soon as the database schema has bwadvertised, switch to that
-  # and update the graph title!
-  q <- paste("SELECT bwadvertised, date FROM total_bandwidth ",
+  q1 <- paste("SELECT date, bwadvertised FROM total_bandwidth ",
       "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  bandwidth <- fetch(rs,n=-1)
-  bandwidth <- melt(bandwidth, id="date")
-  ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20)) +
+  rs1 <- dbSendQuery(con, q1)
+  bw_desc <- fetch(rs1, n = -1)
+  q2 <- paste("SELECT date, read, written FROM total_bwhist ",
+      "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
+  rs2 <- dbSendQuery(con, q2)
+  bw_hist <- fetch(rs2, n = -1)
+  bandwidth <- rbind(data.frame(date = bw_desc$date,
+      value = bw_desc$bwadvertised, variable = "bwadv"),
+    data.frame(date = bw_hist$date, value = (bw_hist$read +
+      bw_hist$written) / (2 * 86400), variable = "bwhist"))
+  ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20,
+      colour = variable)) +
     geom_line(size=1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name="Bandwidth (MiB/s)",
         limits = c(0, max(bandwidth$value, na.rm = TRUE) / 2^20)) +
-    opts(title = "Total advertised bandwidth\n")
+    scale_colour_hue(name = "", breaks = c("bwadv", "bwhist"),
+        labels = c("Advertised bandwidth", "Bandwidth history")) +
+    opts(title = "Total relay bandwidth", legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
   dbDisconnect(con)
   dbUnloadDriver(drv)
