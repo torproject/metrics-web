@@ -131,7 +131,7 @@ public class GraphController {
         - this.maxCacheAge * 1000L;
     while (!graphsByLastModified.isEmpty()) {
       File oldestGraphInList = graphsByLastModified.remove(0);
-      if (oldestGraphInList.lastModified() >= cutOffTime ||
+      if (oldestGraphInList.lastModified() >= cutOffTime &&
           graphsByLastModified.size() < this.minCacheSize) {
         break;
       }
