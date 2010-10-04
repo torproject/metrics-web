@@ -76,7 +76,8 @@ plot_bandwidth_line <- function(start, end, path) {
   rs1 <- dbSendQuery(con, q1)
   bw_desc <- fetch(rs1, n = -1)
   q2 <- paste("SELECT date, read, written FROM total_bwhist ",
-      "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
+      "WHERE date >= '", start, "' AND date <= '", end, "' ",
+      "AND date < current_date - 1", sep = "")
   rs2 <- dbSendQuery(con, q2)
   bw_hist <- fetch(rs2, n = -1)
   bandwidth <- rbind(data.frame(date = bw_desc$date,
