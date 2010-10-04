@@ -72,10 +72,9 @@ public class ExoneraTorServlet extends HttpServlet {
           + "who can read the network traffic between you and this web "
           + "server or who has access to this web server. If you need to "
           + "keep the IP addresses and incident times confidential, you "
-          + "should download the <a href=\"https://svn.torproject.org/"
-            + "svn/projects/archives/trunk/exonerator/\">Java or Python "
-            + "version of ExoneraTor</a> and run it on your local "
-            + "machine.</font></p>\n"
+          + "should download the <a href=\"tools.html#exonerator\">Java "
+            + "or Python version of ExoneraTor</a> and run it on your "
+            + "local machine.</font></p>\n"
         + "        <br/>\n");
   }
 
