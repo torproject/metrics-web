@@ -119,14 +119,6 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>ErnieGeneratedFile</servlet-name>
-    <url-pattern>/papers/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ErnieGeneratedFile</servlet-name>
-    <url-pattern>/reports/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ErnieGeneratedFile</servlet-name>
     <url-pattern>/consensus-health.html</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
@@ -136,21 +128,5 @@
   <servlet-mapping>
     <servlet-name>ErnieGeneratedFile</servlet-name>
     <url-pattern>/consensus-health-2.html</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ErnieGeneratedFile</servlet-name>
-    <url-pattern>/csv/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ErnieGeneratedFile</servlet-name>
-    <url-pattern>/graphs/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ErnieGeneratedFile</servlet-name>
-    <url-pattern>/dist/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ErnieGeneratedFile</servlet-name>
-    <url-pattern>/data/*</url-pattern>
   </servlet-mapping>
 </web-app>
