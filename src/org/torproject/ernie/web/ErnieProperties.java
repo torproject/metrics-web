@@ -1,4 +1,4 @@
-package org.torproject.ernie.util;
+package org.torproject.ernie.web;
 
 import java.util.Properties;
 

@@ -9,8 +9,6 @@ import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.torproject.ernie.util.*;
-
 import org.apache.commons.codec.*;
 import org.apache.commons.codec.binary.*;
 

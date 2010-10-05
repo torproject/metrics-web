@@ -12,8 +12,6 @@ import java.util.regex.*;
 import org.apache.commons.codec.*;
 import org.apache.commons.codec.binary.*;
 
-import org.torproject.ernie.util.*;
-
 /**
  * Web page that allows users to search for relays in the descriptor
  * archives.

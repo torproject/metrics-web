@@ -6,8 +6,6 @@ import java.util.*;
 import org.rosuda.REngine.Rserve.*;
 import org.rosuda.REngine.*;
 
-import org.torproject.ernie.util.ErnieProperties;
-
 public class GraphController {
 
   /* Singleton instance and getInstance method of this class. */
@@ -105,13 +103,24 @@ public class GraphController {
    * and then the oldest graphs until we have minCacheSize graphs left.
    * Also update currentCacheSize and oldestGraph. */
   public void cleanUpCache() {
-
+BufferedWriter out = null;
+try {
+out = new BufferedWriter(new FileWriter("/tmp/graphcache.log"));
+out.write("cleaning up cache\n");
+out.flush();
+} catch (IOException e) {}
     /* Check if the cache is empty first. */
     File[] filesInCache = new File(this.cachedGraphsDirectory).
         listFiles();
     if (filesInCache.length == 0) {
       this.currentCacheSize = 0;
       this.oldestGraph = System.currentTimeMillis();
+try {
+if (out != null) {
+out.write("cache is empty. exiting\n");
+out.close();
+}
+} catch (IOException e) {}
       return;
     }
 
@@ -129,13 +138,25 @@ public class GraphController {
      * as many graphs as necessary to shrink to minCacheSize graphs. */
     long cutOffTime = System.currentTimeMillis()
         - this.maxCacheAge * 1000L;
+try {
+if (out != null) {
+out.write("cut off time is " + cutOffTime + "\n");
+out.flush();
+}
+} catch (IOException e) {}
     while (!graphsByLastModified.isEmpty()) {
       File oldestGraphInList = graphsByLastModified.remove(0);
       if (oldestGraphInList.lastModified() >= cutOffTime &&
           graphsByLastModified.size() < this.minCacheSize) {
         break;
       }
-      oldestGraphInList.delete();
+      boolean deleted = oldestGraphInList.delete();
+try {
+if (out != null) {
+out.write("deleting " + oldestGraphInList.getName() + " was " + (deleted ? "" : "NOT") + " successful.\n");
+out.flush();
+}
+} catch (IOException e) {}
     }
 
     /* Update currentCacheSize and oldestGraph that we need to decide when
@@ -146,6 +167,13 @@ public class GraphController {
     } else {
       this.oldestGraph = System.currentTimeMillis();
     }
+try {
+if (out != null) {
+out.write("now we have " + this.currentCacheSize + " graphs in our cache, the oldest one being from " + this.oldestGraph + "\n");
+out.close();
+}
+} catch (IOException e) {}
+
   }
 }
 

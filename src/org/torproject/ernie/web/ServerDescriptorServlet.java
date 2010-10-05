@@ -5,7 +5,6 @@ import javax.servlet.http.*;
 import java.io.*;
 import java.sql.*;
 import java.util.regex.*;
-import org.torproject.ernie.util.*;
 
 public class ServerDescriptorServlet extends HttpServlet {
 
