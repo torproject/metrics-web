@@ -292,7 +292,7 @@ plot_gettor <- function(start, end, bundle, path) {
   if (length(missing) > 0)
     downloads <- rbind(downloads,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        users = NA))
+        downloads = NA))
   title <- ifelse(bundle == "all",
     "Total packages requested from GetTor per day\n",
     paste("Tor Browser Bundles (", bundle,
