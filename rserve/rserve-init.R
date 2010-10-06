@@ -13,4 +13,4 @@ db = "tordir"
 dbuser = "ernie"
 dbpassword= ""
 
-source('linegraphs.R')
+source('graphs.R')

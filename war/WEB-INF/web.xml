@@ -38,36 +38,48 @@
     <url-pattern>/relay-search.html</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>NetworkSizeImageServlet</servlet-name>
-    <servlet-class>org.torproject.ernie.web.NetworkSizeImageServlet</servlet-class>
+    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-class>org.torproject.ernie.web.GraphImageServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>NetworkSizeImageServlet</servlet-name>
+    <servlet-name>GraphImageServlet</servlet-name>
     <url-pattern>/networksize.png</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>RelayPlatformsImageServlet</servlet-name>
-    <servlet-class>org.torproject.ernie.web.RelayPlatformsImageServlet</servlet-class>
-  </servlet>
   <servlet-mapping>
-    <servlet-name>RelayPlatformsImageServlet</servlet-name>
-    <url-pattern>/platforms.png</url-pattern>
+    <servlet-name>GraphImageServlet</servlet-name>
+    <url-pattern>/relayflags.png</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>RelayVersionsImageServlet</servlet-name>
-    <servlet-class>org.torproject.ernie.web.RelayVersionsImageServlet</servlet-class>
-  </servlet>
   <servlet-mapping>
-    <servlet-name>RelayVersionsImageServlet</servlet-name>
+    <servlet-name>GraphImageServlet</servlet-name>
     <url-pattern>/versions.png</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>RelayBandwidthImageServlet</servlet-name>
-    <servlet-class>org.torproject.ernie.web.RelayBandwidthImageServlet</servlet-class>
-  </servlet>
   <servlet-mapping>
-    <servlet-name>RelayBandwidthImageServlet</servlet-name>
+    <servlet-name>GraphImageServlet</servlet-name>
+    <url-pattern>/platforms.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImageServlet</servlet-name>
     <url-pattern>/bandwidth.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImageServlet</servlet-name>
+    <url-pattern>/new-users.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImageServlet</servlet-name>
+    <url-pattern>/direct-users.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImageServlet</servlet-name>
+    <url-pattern>/bridge-users.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImageServlet</servlet-name>
+    <url-pattern>/gettor.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImageServlet</servlet-name>
+    <url-pattern>/torperf.png</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>ExoneraTor</servlet-name>
