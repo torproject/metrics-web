@@ -101,7 +101,7 @@ plot_bandwidth <- function(start, end, path) {
   bw_desc <- fetch(rs, n = -1)
   q <- paste("SELECT date, read, written FROM total_bwhist ",
       "WHERE date >= '", start, "' AND date <= '", end, "' ",
-      "AND date < current_date - 1", sep = "")
+      "AND date < (SELECT MAX(date) FROM total_bwhist) - 1 ", sep = "")
   rs <- dbSendQuery(con, q)
   bw_hist <- fetch(rs, n = -1)
   dbDisconnect(con)
