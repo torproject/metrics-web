@@ -6,5 +6,5 @@
 ernie.war
 
 # Compiled class files
-war/WEB-INF/classes/
+classes/
 
