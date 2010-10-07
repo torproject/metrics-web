@@ -127,10 +127,6 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ErnieGeneratedFile</servlet-name>
-    <url-pattern>/log.html</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ErnieGeneratedFile</servlet-name>
     <url-pattern>/consensus-health.html</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

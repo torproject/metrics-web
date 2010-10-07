@@ -46,9 +46,9 @@ public class GraphImageServlet extends HttpServlet {
     this.knownParameterValues = new HashMap<String, String>();
     this.knownParameterValues.put("flag",
         "Running,Exit,Guard,Fast,Stable");
-    this.knownParameterValues.put("country", "au,bh,br,ca,cn,cu,de,et,"
-         + "fr,gb,ir,it,jp,kr,mm,pl,ru,sa,se,sy,tn,tm,us,uz,vn,ye");
-    this.knownParameterValues.put("bundle", "en,zh_cn,fa");
+    this.knownParameterValues.put("country", "all,au,bh,br,ca,cn,cu,de,"
+        + "et,fr,gb,ir,it,jp,kr,mm,pl,ru,sa,se,sy,tn,tm,us,uz,vn,ye");
+    this.knownParameterValues.put("bundle", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
   }
@@ -149,7 +149,7 @@ public class GraphImageServlet extends HttpServlet {
     }
 
     /* Parse country codes if supported by the graph type. If no countries
-     * are passed, use country code "zy" (all countries) as default. */
+     * are passed, use country code "all" (all countries) as default. */
     if (supportedGraphParameters.contains("country")) {
       String[] countryParameters = request.getParameterValues("country");
       List<String> knownCountries = Arrays.asList(
@@ -163,7 +163,7 @@ public class GraphImageServlet extends HttpServlet {
           }
         }
       } else {
-        countryParameters = new String[] { "zy" };
+        countryParameters = new String[] { "all" };
       }
       recognizedGraphParameters.put("country", countryParameters);
     }

@@ -9,6 +9,3 @@
         descriptor archive for a relay, and the
         <a href="consensus-health.html">Consensus Health</a> summarizes
         information about the latest network consensus voting process.
-        The <a href="log.html">Last Log</a> of the metrics portal software
-        execution also falls under this category to evaluate how recent
-        and complete the presented data are.

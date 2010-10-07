@@ -159,7 +159,7 @@ plot_new_users <- function(start, end, country, path) {
       "WHERE (source = '68333D0761BCF397A587A0C0B963E4A9E99EC4D3' ",
       "OR source = 'F2044413DAC2E02E3D6BCF4735A19BCA1DE97281') ",
       "AND date >= '", start, "' AND date <= '", end, "' AND country = '",
-      country, "'", sep = "")
+      ifelse(country == "all", "zy", country), "'", sep = "")
   rs <- dbSendQuery(con, q)
   newusers <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -179,7 +179,7 @@ plot_new_users <- function(start, end, country, path) {
     "Iranian", "Italian", "Japanese", "South Korean", "Burmese", "Polish",
     "Russian", "Saudi", "Swedish", "Syrian", "Tunisian", "Turkmen",
     "U.S.", "Uzbek", "Vietnamese", "Yemeni"), stringsAsFactors = FALSE)
-  title <- ifelse(country == "zy",
+  title <- ifelse(country == "all",
     "Total new or returning, directly connecting Tor users (all data)\n",
     paste("New or returning, directly connecting",
     peoples[peoples$country == country, "people"], "Tor users\n"))
@@ -200,7 +200,7 @@ plot_direct_users <- function(start, end, country, path) {
       "FROM dirreq_stats WHERE share >= 1 ",
       "AND source = '8522EB98C91496E80EC238E732594D1509158E77' ",
       "AND date >= '", start, "' AND date <= '", end, "' AND country = '",
-      country, "'", sep = "")
+      ifelse(country == "all", "zy", country), "'", sep = "")
   rs <- dbSendQuery(con, q)
   directusers <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -220,7 +220,7 @@ plot_direct_users <- function(start, end, country, path) {
     "Iranian", "Italian", "Japanese", "South Korean", "Burmese", "Polish",
     "Russian", "Saudi", "Swedish", "Syrian", "Tunisian", "Turkmen",
     "U.S.", "Uzbek", "Vietnamese", "Yemeni"), stringsAsFactors = FALSE)
-  title <- ifelse(country == "zy",
+  title <- ifelse(country == "all",
     "Total recurring, directly connecting Tor users (all data)\n",
     paste("Recurring, directly connecting",
     peoples[peoples$country == country, "people"], "Tor users\n"))
@@ -240,7 +240,8 @@ plot_bridge_users <- function(start, end, country, path) {
   q <- paste("SELECT date, users FROM bridge_stats ",
       "WHERE date >= '", start, "' AND date <= '", end, "' ",
       "AND date < (SELECT MAX(date) FROM bridge_stats) ",
-      "AND country = '", country, "'", sep = "")
+      " AND country = '", ifelse(country == "all", "zy", country), "'",
+      sep = "")
   rs <- dbSendQuery(con, q)
   bridgeusers <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -260,7 +261,7 @@ plot_bridge_users <- function(start, end, country, path) {
     "Iranian", "Italian", "Japanese", "South Korean", "Burmese", "Polish",
     "Russian", "Saudi", "Swedish", "Syrian", "Tunisian", "Turkmen",
     "U.S.", "Uzbek", "Vietnamese", "Yemeni"), stringsAsFactors = FALSE)
-  title <- ifelse(country == "zy",
+  title <- ifelse(country == "all",
     "Total users via bridges (all data)\n",
     paste(peoples[peoples$country == country, "people"],
     "users via bridges\n"))

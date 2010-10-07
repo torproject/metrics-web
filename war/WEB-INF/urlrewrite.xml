@@ -31,36 +31,20 @@
       <to>/status.jsp</to>
     </rule>
     <rule>
-      <from>/consensus-graphs.html</from>
-      <to>/consensus-graphs.jsp</to>
+      <from>/network.html</from>
+      <to>/network.jsp</to>
     </rule>
     <rule>
-      <from>/exit-relays-graphs.html</from>
-      <to>/exit-relays-graphs.jsp</to>
+      <from>/users.html</from>
+      <to>/users.jsp</to>
     </rule>
     <rule>
-      <from>/new-users-graphs.html</from>
-      <to>/new-users-graphs.jsp</to>
+      <from>/packages.html</from>
+      <to>/packages.jsp</to>
     </rule>
     <rule>
-      <from>/recurring-users-graphs.html</from>
-      <to>/recurring-users-graphs.jsp</to>
-    </rule>
-    <rule>
-      <from>/bridge-users-graphs.html</from>
-      <to>/bridge-users-graphs.jsp</to>
-    </rule>
-    <rule>
-      <from>/torperf-graphs.html</from>
-      <to>/torperf-graphs.jsp</to>
-    </rule>
-    <rule>
-      <from>/gettor-graphs.html</from>
-      <to>/gettor-graphs.jsp</to>
-    </rule>
-    <rule>
-      <from>/custom-graph.html</from>
-      <to>/custom-graph.jsp</to>
+      <from>/performance.html</from>
+      <to>/performance.jsp</to>
     </rule>
     <rule>
       <from>/papers.html</from>
