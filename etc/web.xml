@@ -40,6 +40,22 @@
   <servlet>
     <servlet-name>GraphImageServlet</servlet-name>
     <servlet-class>org.torproject.ernie.web.GraphImageServlet</servlet-class>
+    <init-param>
+      <param-name>rserveHost</param-name>
+      <param-value>localhost</param-value>
+    </init-param>
+    <init-param>
+      <param-name>rservePort</param-name>
+      <param-value>6311</param-value>
+    </init-param>
+    <init-param>
+      <param-name>maxCacheAge</param-name>
+      <param-value>21600</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cachedGraphsDir</param-name>
+      <param-value>/srv/metrics.torproject.org/graphs/</param-value>
+    </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>GraphImageServlet</servlet-name>
@@ -137,4 +153,10 @@
     <servlet-name>ErnieGeneratedFile</servlet-name>
     <url-pattern>/consensus-health-2.html</url-pattern>
   </servlet-mapping>
+
+  <context-param>
+    <param-name>jdbcUrl</param-name>
+    <param-value>jdbc:postgresql://localhost/tordir?user=ernie&amp;password=password</param-value>
+  </context-param>
 </web-app>
+

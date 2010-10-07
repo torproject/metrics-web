@@ -8,12 +8,6 @@ import org.rosuda.REngine.*;
 
 public class GraphController {
 
-  /* Singleton instance and getInstance method of this class. */
-  private static GraphController instance = new GraphController();
-  public static GraphController getInstance() {
-    return instance;
-  }
-
   /* Host and port where Rserve is listening. */
   private String rserveHost;
   private int rservePort;
@@ -22,14 +16,13 @@ public class GraphController {
   private String cachedGraphsDirectory;
   private long maxCacheAge;
 
-  protected GraphController ()  {
+  public GraphController(String rserveHost, String rservePort,
+      String maxCacheAge, String cachedGraphsDir) {
 
-    /* Read properties from property file. */
-    ErnieProperties props = new ErnieProperties();
-    this.cachedGraphsDirectory = props.getProperty("cached.graphs.dir");
-    this.maxCacheAge = (long) props.getInt("max.cache.age");
-    this.rserveHost = props.getProperty("rserve.host");
-    this.rservePort = props.getInt("rserve.port");
+    this.rserveHost = rserveHost;
+    this.rservePort = Integer.parseInt(rservePort);
+    this.cachedGraphsDirectory = cachedGraphsDir;
+    this.maxCacheAge = Long.parseLong(maxCacheAge);
   }
 
   /* Generate a graph using the given R query that has a placeholder for

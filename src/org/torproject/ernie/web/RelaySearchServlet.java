@@ -60,7 +60,7 @@ public class RelaySearchServlet extends HttpServlet {
 
   private Connection conn = null;
 
-  public RelaySearchServlet() {
+  public void init() {
 
     /* Try to load the database driver. */
     try {
@@ -71,9 +71,9 @@ public class RelaySearchServlet extends HttpServlet {
       return;
     }
 
-    /* Read JDBC URL from property file. */
-    ErnieProperties props = new ErnieProperties();
-    String connectionURL = props.getProperty("jdbc.url");
+    /* Read JDBC URL from deployment descriptor. */
+    String connectionURL = getServletContext().
+        getInitParameter("jdbcUrl");
 
     /* Try to connect to database. */
     try {
