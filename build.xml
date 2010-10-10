@@ -35,11 +35,8 @@
            excludes="servlet-api.jar"/>
       <classes dir="${classes}"/>
       <zipfileset dir="${config}"
-                  prefix="WEB-INF/"
-                  includes="urlrewrite.xml"/>
-      <zipfileset dir="${config}"
                   prefix="WEB-INF/classes"
-                  includes="*.properties"/>
+                  includes="logging.properties"/>
       <zipfileset dir="templates"
                   prefix="WEB-INF/templates"/>
     </war>
