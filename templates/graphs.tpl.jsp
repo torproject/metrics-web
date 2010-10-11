@@ -1,5 +1,5 @@
         <h2>Tor Metrics Portal: Graphs</h2>
-        <br/>
+        <br>
         <p>The graphs on this page visualize a small portion of the data
         gathered in the Tor Metrics Project. The following graphs are
         available:</p>
@@ -15,4 +15,4 @@
           Tor network available on the
           <a href="performance.html">Performance page</a>.</li>
         </ul>
-        <br/>
+        <br>

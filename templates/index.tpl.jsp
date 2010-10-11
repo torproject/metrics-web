@@ -1,5 +1,5 @@
         <h2>Tor Metrics Portal</h2>
-        <br/>
+        <br>
         <p>The Tor Metrics Portal aggregates all kinds of interesting
         data about the Tor network and visualizes them in graphs and
         reports. This portal also provides easy access to the underlying
@@ -17,7 +17,7 @@
           <li>Try out the <a href="tools.html">tools</a> to parse and
           evaluate the metrics data</li>
         </ul>
-        <br/>
+        <br>
         <h3>News</h3>
         <ul>
           <li>October 7, 2010: Custom graphs are now available for all

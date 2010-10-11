@@ -1,5 +1,5 @@
         <h2>Tor Metrics Portal: Status</h2>
-        <br/>
+        <br>
         <p>The network data collected by the Tor Metrics Project can be
         used to analyze the Tor network status from a few years ago until
         an hour ago. There are currently two applications for this data:

@@ -1,5 +1,5 @@
         <h2>Tor Metrics Portal: Research</h2>
-        <br/>
+        <br>
         <p>The Tor Metrics Project aims at supporting privacy enhancing
         technologies research by making <a href="papers.html">papers</a>
         and technical reports, gathered network

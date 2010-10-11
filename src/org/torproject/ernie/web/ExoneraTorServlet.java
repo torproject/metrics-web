@@ -13,20 +13,17 @@ import org.apache.commons.codec.binary.*;
 public class ExoneraTorServlet extends HttpServlet {
 
   private void writeHeader(PrintWriter out) throws IOException {
-    out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 "
-          + "Transitional//EN\"\n"
-        + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
-        + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+    out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 "
+          + "Transitional//EN\">\n"
+        + "<html>\n"
         + "  <head>\n"
-        + "    <meta content=\"text/html; charset=ISO-8859-1\"\n"
-        + "          http-equiv=\"content-type\" />\n"
         + "    <title>ExoneraTor</title>\n"
-        + "    <meta http-equiv=Content-Type content=\"text/html; "
-          + "charset=iso-8859-1\">\n"
-        + "    <link href=\"/css/stylesheet-ltr.css\" type=text/css "
-          + "rel=stylesheet>\n"
+        + "    <meta http-equiv=\"content-type\" content=\"text/html; "
+          + "charset=ISO-8859-1\">\n"
+        + "    <link href=\"/css/stylesheet-ltr.css\" type=\"text/css\" "
+          + "rel=\"stylesheet\">\n"
         + "    <link href=\"/images/favicon.ico\" "
-          + "type=image/x-icon rel=\"shortcut icon\">\n"
+          + "type=\"image/x-icon\" rel=\"shortcut icon\">\n"
         + "  </head>\n"
         + "  <body>\n"
         + "    <div class=\"center\">\n"
@@ -42,7 +39,7 @@ public class ExoneraTorServlet extends HttpServlet {
           + "            <a href=\"graphs.html\">Graphs</a>\n"
           + "            <a href=\"research.html\">Research</a>\n"
           + "            <a href=\"status.html\">Status</a>\n"
-          + "            <br/>\n"
+          + "            <br>\n"
           + "            <font size=\"2\">\n"
           + "              <a class=\"current\">ExoneraTor</a>\n"
           + "              <a href=\"relay-search.html\">Relay Search</a>\n"
@@ -64,8 +61,8 @@ public class ExoneraTorServlet extends HttpServlet {
           + "to a given server and/or TCP port. ExoneraTor learns about "
           + "these facts from parsing the public relay lists and relay "
           + "descriptors that are collected from the Tor directory "
-          + "authorities.\n"
-        + "        <br/>\n"
+          + "authorities.</p>\n"
+        + "        <br>\n"
         + "        <p><font color=\"red\"><b>Notice:</b> Note that the "
           + "information you are providing below may be leaked to anyone "
           + "who can read the network traffic between you and this web "
@@ -74,11 +71,11 @@ public class ExoneraTorServlet extends HttpServlet {
           + "should download the <a href=\"tools.html#exonerator\">Java "
             + "or Python version of ExoneraTor</a> and run it on your "
             + "local machine.</font></p>\n"
-        + "        <br/>\n");
+        + "        <br>\n");
   }
 
   private void writeFooter(PrintWriter out) throws IOException {
-    out.println("        <br/>\n"
+    out.println("        <br>\n"
         + "      </div>\n"
         + "    </div>\n"
         + "    <div class=\"bottom\" id=\"bottom\">\n"
@@ -159,7 +156,7 @@ public class ExoneraTorServlet extends HttpServlet {
     lastConsensus = lastConsensus.substring(0, 10) + " "
         + lastConsensus.substring(11, 13) + ":00";
 
-    out.println("<a id=\"relay\"/><h3>Was there a Tor relay running on "
+    out.println("<a name=\"relay\"></a><h3>Was there a Tor relay running on "
         + "this IP address?</h3>");
 
     /* Parse IP parameter. */
@@ -279,18 +276,18 @@ public class ExoneraTorServlet extends HttpServlet {
     out.println("        <form action=\"exonerator.html#relay\">\n"
         + "          <input type=\"hidden\" name=\"targetaddr\" "
         + (targetIP.length() > 0 ? " value=\"" + targetIP + "\"" : "")
-        + "/>\n"
+        + ">\n"
         + "          <input type=\"hidden\" name=\"targetPort\""
         + (targetPort.length() > 0 ? " value=\"" + targetPort + "\"" : "")
-        + "/>\n"
+        + ">\n"
         + "          <table>\n"
         + "            <tr>\n"
         + "              <td align=\"right\">IP address in question:</td>\n"
         + "              <td><input type=\"text\" name=\"ip\""
           + (relayIP.length() > 0 ? " value=\"" + relayIP + "\"" :
             (TEST_MODE ? " value=\"209.17.171.104\"" : ""))
-          + "\"/>"
-          + (ipWarning.length() > 0 ? "<br/><font color=\"red\">"
+          + ">"
+          + (ipWarning.length() > 0 ? "<br><font color=\"red\">"
           + ipWarning + "</font>" : "")
         + "</td>\n"
         + "              <td><i>(Ex.: 1.2.3.4)</i></td>\n"
@@ -300,19 +297,19 @@ public class ExoneraTorServlet extends HttpServlet {
         + "              <td><input type=\"text\" name=\"timestamp\""
           + (timestampStr.length() > 0 ? " value=\"" + timestampStr + "\"" :
              (TEST_MODE ? " value=\"2009-08-15 16:05\"" : ""))
-          + "\"/>"
-          + (timestampWarning.length() > 0 ? "<br/><font color=\"red\">"
+          + ">"
+          + (timestampWarning.length() > 0 ? "<br><font color=\"red\">"
               + timestampWarning + "</font>" : "")
         + "</td>\n"
         + "              <td><i>(Ex.: 2010-01-01 12:00)</i></td>\n"
         + "            </tr>\n"
         + "            <tr>\n"
-        + "              <td/>\n"
+        + "              <td></td>\n"
         + "              <td>\n"
         + "                <input type=\"submit\">\n"
         + "                <input type=\"reset\">\n"
         + "              </td>\n"
-        + "              <td/>\n"
+        + "              <td></td>\n"
         + "            </tr>\n"
         + "          </table>\n"
         + "        </form>\n");
@@ -341,7 +338,7 @@ public class ExoneraTorServlet extends HttpServlet {
         + "select relays for their paths and build circuits using them. "
         + "You may follow the links to relay lists and relay descriptors "
         + "to grep for the lines printed below and confirm that results "
-        + "are correct.<br/>", relayIP, calFrom, calFrom, timestampStr);
+        + "are correct.<br>", relayIP, calFrom, calFrom, timestampStr);
     SimpleDateFormat consensusTimeFormat = new SimpleDateFormat(
         "yyyy-MM-dd-HH-mm-ss");
     consensusTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -435,10 +432,10 @@ public class ExoneraTorServlet extends HttpServlet {
         long validAfterTime = validAfterDate.getTime();
         String validAfterDatetime = validAfterTimeFormat.format(
             validAfterTime);
-        out.println("        <br/><tt>valid-after <b>"
+        out.println("        <br><tt>valid-after <b>"
             + "<a href=\"consensus?valid-after="
             + validAfterString + "\" target=\"_blank\">"
-            + validAfterDatetime + "</b></a></tt><br/>");
+            + validAfterDatetime + "</b></a></tt><br>");
       }
       BufferedReader br = new BufferedReader(new FileReader(consensus));
       String line;
@@ -459,7 +456,7 @@ public class ExoneraTorServlet extends HttpServlet {
                 + "<a href=\"serverdesc?desc-id=" + hex + "\" "
                 + "target=\"_blank\">" + parts[3] + "</a> " + parts[4]
                 + " " + parts[5] + " <b>" + parts[6] + "</b> " + parts[7]
-                + " " + parts[8] + "</tt><br/>");
+                + " " + parts[8] + "</tt><br>");
           }
         } else {
           if (relayIP.startsWith(address.substring(0,
@@ -556,7 +553,7 @@ public class ExoneraTorServlet extends HttpServlet {
     }
 
     /* Second part: target */
-    out.println("<br/><a id=\"exit\"/><h3>Was this relay configured to "
+    out.println("<br><a name=\"exit\"></a><h3>Was this relay configured to "
         + "permit exiting to a given target?</h3>");
 
     File serverDescriptorDirectory =
@@ -583,17 +580,17 @@ public class ExoneraTorServlet extends HttpServlet {
 
     out.println("        <form action=\"exonerator.html#exit\">\n"
         + "              <input type=\"hidden\" name=\"timestamp\"\n"
-        + "                         value=\"" + timestampStr + "\"/>\n"
+        + "                         value=\"" + timestampStr + "\">\n"
         + "              <input type=\"hidden\" name=\"ip\" "
-          + "value=\"" + relayIP + "\"/>\n"
+          + "value=\"" + relayIP + "\">\n"
         + "          <table>\n"
         + "            <tr>\n"
         + "              <td align=\"right\">Target address:</td>\n"
         + "              <td><input type=\"text\" name=\"targetaddr\""
           + (targetIP.length() > 0 ? " value=\"" + targetIP + "\"" :
              (TEST_MODE ? " value=\"209.85.129.104\"" : ""))
-          + "\"/>"
-          + (targetAddrWarning.length() > 0 ? "<br/><font color=\"red\">"
+          + "\">"
+          + (targetAddrWarning.length() > 0 ? "<br><font color=\"red\">"
               + targetAddrWarning + "</font>" : "")
         + "</td>\n"
         + "              <td><i>(Ex.: 4.3.2.1)</i></td>\n"
@@ -603,19 +600,19 @@ public class ExoneraTorServlet extends HttpServlet {
         + "              <td><input type=\"text\" name=\"targetport\""
           + (targetPort.length() > 0 ? " value=\"" + targetPort + "\"" :
              (TEST_MODE ? " value=\"80\"" : ""))
-          + "/>"
-          + (targetPortWarning.length() > 0 ? "<br/><font color=\"red\">"
+          + ">"
+          + (targetPortWarning.length() > 0 ? "<br><font color=\"red\">"
               + targetPortWarning + "</font>" : "")
         + "</td>\n"
         + "              <td><i>(Ex.: 80)</i></td>\n"
         + "            </tr>\n"
         + "            <tr>\n"
-        + "              <td/>\n"
+        + "              <td></td>\n"
         + "              <td>\n"
         + "                <input type=\"submit\">\n"
         + "                <input type=\"reset\">\n"
         + "              </td>\n"
-        + "              <td/>\n"
+        + "              <td></td>\n"
         + "            </tr>\n"
         + "          </table>\n"
         + "        </form>\n");
@@ -659,7 +656,7 @@ public class ExoneraTorServlet extends HttpServlet {
             } else if (line.startsWith("reject ") ||
                 line.startsWith("accept ")) {
               if (foundMatch) {
-                out.println("<tt> " + line + "</tt><br/>");
+                out.println("<tt> " + line + "</tt><br>");
                 continue;
               }
               boolean ruleAccept = line.split(" ")[0].equals("accept");
@@ -667,7 +664,7 @@ public class ExoneraTorServlet extends HttpServlet {
               if (!ruleAddress.equals("*")) {
                 if (!ruleAddress.contains("/") &&
                     !ruleAddress.equals(targetIP)) {
-                  acceptRejectLines.append("<tt> " + line + "</tt><br/>\n");
+                  acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
                   continue; // IP address does not match
                 }
                 String[] ruleIPParts = ruleAddress.split("/")[0].
@@ -693,21 +690,21 @@ public class ExoneraTorServlet extends HttpServlet {
                   }
                 }
                 if (ruleNetwork > 0) {
-                  acceptRejectLines.append("<tt> " + line + "</tt><br/>\n");
+                  acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
                   continue; // IP address does not match
                 }
               }
               String rulePort = line.split(" ")[1].split(":")[1];
               if (targetPort.length() < 1 && !ruleAccept &&
                   !rulePort.equals("*")) {
-                acceptRejectLines.append("<tt> " + line + "</tt><br/>\n");
+                acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
                 continue; // with no port given, we only consider
                           // reject :* rules as matching
               }
               if (targetPort.length() > 0) {
                 if (!rulePort.equals("*") &&
                     !targetPort.equals(rulePort)) {
-                  acceptRejectLines.append("<tt> " + line + "</tt><br/>\n");
+                  acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
                   continue; // ports do not match
                 }
               }
@@ -717,16 +714,16 @@ public class ExoneraTorServlet extends HttpServlet {
                   relevantMatch = true;
               if (relevantMatch) {
                 String[] routerParts = routerLine.split(" ");
-                out.println("<br/><tt>" + routerParts[0] + " "
+                out.println("<br><tt>" + routerParts[0] + " "
                     + routerParts[1] + " <b>" + routerParts[2] + "</b> "
                     + routerParts[3] + " " + routerParts[4] + " "
-                    + routerParts[5] + "</tt><br/>");
+                    + routerParts[5] + "</tt><br>");
                 String[] publishedParts = publishedLine.split(" ");
                 out.println("<tt>" + publishedParts[0] + " <b>"
                     + publishedParts[1] + " " + publishedParts[2]
-                    + "</b></tt><br/>");
+                    + "</b></tt><br>");
                 out.println(acceptRejectLines.toString());
-                out.println("<tt><b>" + line + "</b></tt><br/>");
+                out.println("<tt><b>" + line + "</b></tt><br>");
                 foundMatch = true;
               }
               if (ruleAccept) {

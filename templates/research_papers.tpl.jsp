@@ -1,13 +1,13 @@
         <h2>Tor Metrics Portal: Papers</h2>
-        <br/>
+        <br>
         <p>The <a href="#papers">papers</a> and
         <a href="#techreports">technical reports</a> listed on this page
         originate from, or are based on, work performed in the Tor Metrics
         Project.</p>
-        <br/>
-        <a id="papers">
+        <br>
+        <a name="papers"></a>
         <h3>Papers</h3>
-        <br/>
+        <br>
         These papers summarize some of the results of of the Tor Metrics
         Project and have been accepted for publication at academic
         conferences or workshops.
@@ -22,10 +22,10 @@
           Computer Security Research (WECSR 2010), Tenerife, Spain,
           January 2010. (<a href="papers/wecsr10.pdf">PDF</a>, 160K)</li>
         </ul>
-        <br/>
-        <a id="techreports">
+        <br>
+        <a name="techreports"></a>
         <h3>Technical reports</h3>
-        <br/>
+        <br>
         The technical reports listed here have been the first place to
         publish novel kinds of statistics on the Tor network. Some, but
         not all, of the results contained in these technical reports have

@@ -2,9 +2,9 @@
 <html>
 <head>
   <title><jsp:getProperty name="template" property="title"/></title>
-  <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
-  <link href="/css/stylesheet-ltr.css" type=text/css rel=stylesheet>
-  <link href="/images/favicon.ico" type=image/x-icon rel="shortcut icon">
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
+  <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
 </head>
 <body>
   <div class="center">

@@ -29,7 +29,7 @@
     }
 %>
         <h2>Tor Metrics Portal: Data</h2>
-        <br/>
+        <br>
         <p>One of the main goals of the Tor Metrics Project is to make all
         gathered data available to the public. This approach enables
         privacy researchers to perform their own analyses using real data
@@ -46,10 +46,10 @@
           <li><a href="#performance">Performance data</a></li>
           <li><a href="#exitlist">Exit lists</a></li>
         </ul>
-        <br/>
-        <a id="relaydesc"/>
+        <br>
+        <a name="relaydesc"></a>
         <h3>Relay descriptor archives</h3>
-        <br/>
+        <br>
         <p>The relay descriptor archives contain all documents that the
         directory authorities make available about the network of relays.
         These documents include network statuses, server (relay)
@@ -112,7 +112,7 @@
             out.write("</td>\n");
           }
         } else {
-          out.write("            <td/>\n");
+          out.write("            <td></td>\n");
         }
       }
       out.write("          </tr>\n");
@@ -127,10 +127,10 @@
     }
 %>
         </table>
-        <br/>
-        <a id="bridgedesc"/>
+        <br>
+        <a name="bridgedesc"></a>
         <h3>Bridge descriptor archives</h3>
-        <br/>
+        <br>
         <p>The bridge descriptor archives contain similar documents as the
         relay descriptor archives, but for the non-public bridges. The
         descriptors have been sanitized before publication to remove all
@@ -191,11 +191,11 @@
     }
 %>
         </table>
-        <p/>
-        <br/>
-        <a id="stats"/>
+        <p></p>
+        <br>
+        <a name="stats"></a>
         <h3>Statistics produced by relays</h3>
-        <br/>
+        <br>
         <p>Some of the relays are configured to gather statistics on the
         number of requests or connecting clients, the number of processed
         cells per queue, or the number of exiting bytes per port. Relays
@@ -240,17 +240,17 @@
             out.write("</td>\n");
           }
         } else {
-          out.write("            <td/>\n");
+          out.write("            <td></td>\n");
         }
       }
       out.write("          </tr>\n");
     }
 %>
         </table>
-        <br/>
-        <a id="performance"/>
+        <br>
+        <a name="performance"></a>
         <h3>Performance data</h3>
-        <br/>
+        <br>
         <p>We are measuring the performance of the Tor network by
         periodically requesting files of different sizes and recording the
         time needed to do so. The files below contain the output of the
@@ -272,7 +272,7 @@
             + "\">50 KiB requests</a></td>\n");
         printedFiles.add(file);
       } else {
-        out.write("            <td/>\n");
+        out.write("            <td></td>\n");
       }
       file = source + "-1mb.data";
       if (allFiles.containsKey(file)) {
@@ -280,7 +280,7 @@
             + "\">1 MiB requests</a></td>\n");
         printedFiles.add(file);
       } else {
-        out.write("            <td/>\n");
+        out.write("            <td></td>\n");
       }
       file = source + "-5mb.data";
       if (allFiles.containsKey(file)) {
@@ -288,16 +288,16 @@
             + "\">5 MiB requests</a></td>\n");
         printedFiles.add(file);
       } else {
-        out.write("            <td/>\n");
+        out.write("            <td></td>\n");
       }
       out.write("          </tr>\n");
     }
 %>
         </table>
-        <br/>
-        <a id="exitlist"/>
+        <br>
+        <a name="exitlist"></a>
         <h3>Exit lists</h3>
-        <br/>
+        <br>
         <p>We are archiving the bulk exit lists used by
         <a href="https://check.torproject.org/">Tor Check</a> containing
         the IP addresses that exit relays exit from:</p>

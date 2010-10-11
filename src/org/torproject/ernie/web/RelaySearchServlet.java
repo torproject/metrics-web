@@ -84,20 +84,19 @@ public class RelaySearchServlet extends HttpServlet {
   }
 
   private void writeHeader(PrintWriter out) throws IOException {
-    out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 "
-          + "Transitional//EN\"\n"
-        + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
-        + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+
+
+    out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 "
+          + "Transitional//EN\">\n"
+        + "<html>\n"
         + "  <head>\n"
-        + "    <meta content=\"text/html; charset=ISO-8859-1\"\n"
-        + "          http-equiv=\"content-type\" />\n"
         + "    <title>Relay Search</title>\n"
-        + "    <meta http-equiv=Content-Type content=\"text/html; "
-          + "charset=iso-8859-1\">\n"
-        + "    <link href=\"/css/stylesheet-ltr.css\" type=text/css "
-          + "rel=stylesheet>\n"
+        + "    <meta http-equiv=\"content-type\" content=\"text/html; "
+          + "charset=ISO-8859-1\">\n"
+        + "    <link href=\"/css/stylesheet-ltr.css\" type=\"text/css\" "
+          + "rel=\"stylesheet\">\n"
         + "    <link href=\"/images/favicon.ico\" "
-          + "type=image/x-icon rel=\"shortcut icon\">\n"
+          + "type=\"image/x-icon\" rel=\"shortcut icon\">\n"
         + "  </head>\n"
         + "  <body>\n"
         + "    <div class=\"center\">\n"
@@ -113,7 +112,7 @@ public class RelaySearchServlet extends HttpServlet {
         + "            <a href=\"graphs.html\">Graphs</a>\n"
         + "            <a href=\"research.html\">Research</a>\n"
         + "            <a href=\"status.html\">Status</a>\n"
-        + "            <br/>\n"
+        + "            <br>\n"
         + "            <font size=\"2\">\n"
         + "              <a href=\"exonerator.html\">ExoneraTor</a>\n"
         + "              <a class=\"current\">Relay Search</a>\n"
@@ -130,7 +129,7 @@ public class RelaySearchServlet extends HttpServlet {
   }
 
   private void writeFooter(PrintWriter out) throws IOException {
-    out.println("        <br/>\n"
+    out.println("        <br>\n"
         + "      </div>\n"
         + "    </div>\n"
         + "    <div class=\"bottom\" id=\"bottom\">\n"
@@ -211,19 +210,19 @@ public class RelaySearchServlet extends HttpServlet {
           + "(yyyy-mm-dd)</b> in the following search field and "
           + "clicking Search. The search will stop after 30 hits or, "
           + "unless you provide a month or a day, after parsing the last "
-          + "30 days of relay lists.</p><br/>\n"
+          + "30 days of relay lists.</p><br>\n"
         + "        <form action=\"relay-search.html\">\n"
         + "          <table>\n"
         + "            <tr>\n"
         + "              <td><input type=\"text\" name=\"search\""
           + (searchParameter.length() > 0 ? " value=\"" + searchParameter
-          + "\"" : "") + "/></td>\n"
-        + "              <td><input type=\"submit\" value=\"Search\"/>"
+          + "\"" : "") + "></td>\n"
+        + "              <td><input type=\"submit\" value=\"Search\">"
           + "</td>\n"
         + "            </tr>\n"
         + "          </table>\n"
         + "        </form>\n"
-        + "        <br/>\n");
+        + "        <br>\n");
 
     /* No search parameter? We're done here. */
     if (searchParameter.length() == 0) {
@@ -516,10 +515,10 @@ public class RelaySearchServlet extends HttpServlet {
           String validAfter = rs.getTimestamp(1).toString().
               substring(0, 19);
           if (!validAfter.equals(lastValidAfter)) {
-            out.println("        <br/><tt>valid-after "
+            out.println("        <br><tt>valid-after "
                 + "<a href=\"consensus?valid-after="
                 + validAfter.replaceAll(":", "-").replaceAll(" ", "-")
-                + "\" target=\"_blank\">" + validAfter + "</a></tt><br/>");
+                + "\" target=\"_blank\">" + validAfter + "</a></tt><br>");
             lastValidAfter = validAfter;
             out.flush();
           }
@@ -538,12 +537,12 @@ public class RelaySearchServlet extends HttpServlet {
                     + "<a href=\"descriptor.html?desc-id=" + descriptor
                     + "\" target=\"_blank\">" + parts[3] + "</a> "
                     + parts[4] + " " + parts[5] + " " + parts[6] + " "
-                    + parts[7] + " " + parts[8] + "</tt><br/>");
+                    + parts[7] + " " + parts[8] + "</tt><br>");
               } else {
-                out.println("    <tt>" + line + "</tt><br/>");
+                out.println("    <tt>" + line + "</tt><br>");
               }
             }
-            out.println("    <br/>");
+            out.println("    <br>");
             out.flush();
           } catch (UnsupportedEncodingException e) {
             /* This shouldn't happen, because we know that ASCII is
@@ -565,7 +564,7 @@ public class RelaySearchServlet extends HttpServlet {
       /* Display total search time on the results page. */
       long searchTime = System.currentTimeMillis() - started;
       long queryTime = System.currentTimeMillis() - startedQuery;
-      out.write("        <br/><p>Found " + (matches > 30 ? "more than 30"
+      out.write("        <br><p>Found " + (matches > 30 ? "more than 30"
           : "" + matches) + " relays " + (matches > 30 ?
           "(displaying only the first 30 hits) " : "") + "in "
           + String.format("%d.%03d", searchTime / 1000, searchTime % 1000)
@@ -732,13 +731,13 @@ public class RelaySearchServlet extends HttpServlet {
              * first match in this consensus, print the valid-after
              * line. */
             if (validAfterLine != null) {
-              out.println("        <br/><tt>valid-after "
+              out.println("        <br><tt>valid-after "
                   + "<a href=\"consensus?valid-after="
                   + validAfterLine.substring("valid-after ".length()).
                   replaceAll(":", "-").replaceAll(" ", "-")
                   + "\" target=\"_blank\">"
                   + validAfterLine.substring("valid-after ".length())
-                  + "</a></tt><br/>");
+                  + "</a></tt><br>");
               validAfterLine = null;
             }
 
@@ -749,7 +748,7 @@ public class RelaySearchServlet extends HttpServlet {
                 + "<a href=\"descriptor.html?desc-id=" + descriptor
                 + "\" " + "target=\"_blank\">" + parts[3] + "</a> "
                 + parts[4] + " " + parts[5] + " " + parts[6] + " "
-                + parts[7] + " " + parts[8] + "</tt><br/>");
+                + parts[7] + " " + parts[8] + "</tt><br>");
             matches++;
           }
         } else if (line.startsWith("valid-after ")) {
@@ -768,7 +767,7 @@ public class RelaySearchServlet extends HttpServlet {
 
     /* Display total search time on the results page. */
     long searchTime = System.currentTimeMillis() - started;
-    out.write("        <br/><p>Found " + matches + " relays in the last "
+    out.write("        <br><p>Found " + matches + " relays in the last "
         + consensusesParsed + " known consensuses in "
         + String.format("%d.%03d", searchTime / 1000, searchTime % 1000)
         + " seconds.</p>\n");
