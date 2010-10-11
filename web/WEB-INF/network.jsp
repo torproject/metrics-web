@@ -130,6 +130,71 @@ out.println("<img src=\"" + relayflagsUrl.toString() + "\" width=\"576\" "
 </form>
 <br>
 
+<h3>Relays with Exit, Fast, Guard, and Stable flags on 1-hour detail</h3>
+<br>
+<p>The same graph on the average number of relays with flags assigned is
+available on 1-hour detail.</p>
+<a name="relayflags-hour"></a>
+<%
+StringBuilder relayflagsHourUrl = new StringBuilder("relayflags-hour.png");
+if ("relayflags-hour".equals(request.getParameter("graph"))) {
+  List<String> parameters = new ArrayList<String>();
+// TODO check values here!
+  String startParameter = request.getParameter("start"),
+      endParameter = request.getParameter("end");
+  String[] flagParameters = request.getParameterValues("flag");
+  if (startParameter != null && startParameter.length() > 0) {
+    parameters.add("start=" + startParameter);
+  }
+  if (endParameter != null && endParameter.length() > 0) {
+    parameters.add("end=" + endParameter);
+  }
+  if (flagParameters != null && flagParameters.length > 0) {
+    for (String flag : flagParameters) {
+      if (flag != null && flag.length() > 0) {
+        parameters.add("flag=" + flag);
+      }
+    }
+  }
+  if (parameters.size() > 0) {
+    relayflagsHourUrl.append("?" + parameters.get(0));
+    if (parameters.size() > 1) {
+      for (int i = 1; i < parameters.size(); i++) {
+        relayflagsHourUrl.append("&" + parameters.get(i));
+      }
+    }
+  }
+}
+out.println("<img src=\"" + relayflagsHourUrl.toString()
+    + "\" width=\"576\" height=\"360\" alt=\"Relay flags graph\">");
+%><form action="network.html#relayflags-hour">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="relayflags-hour">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+        value="<%=("relayflags-hour".equals(request.getParameter("graph")) &&
+                   request.getParameter("start") != null) ?
+                      request.getParameter("start") : ""%>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+        value="<%=("relayflags-hour".equals(request.getParameter("graph")) &&
+                   request.getParameter("end") != null) ?
+                      request.getParameter("end") : ""%>">
+    </p><p>
+      <label>Relay flags: </label>
+      <input type="checkbox" name="flag" value="Running"> Running
+      <input type="checkbox" name="flag" value="Exit"> Exit
+      <input type="checkbox" name="flag" value="Fast"> Fast
+      <input type="checkbox" name="flag" value="Guard"> Guard
+      <input type="checkbox" name="flag" value="Stable"> Stable
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<br>
+
 <h3>Relays by version</h3>
 <br>
 <p>Relays report the Tor version that they are running to the directory

@@ -30,6 +30,8 @@ public class GraphImageServlet extends HttpServlet {
     this.availableGraphs = new HashMap<String, String>();
     this.availableGraphs.put("networksize", "start,end,filename");
     this.availableGraphs.put("relayflags", "start,end,flag,filename");
+    this.availableGraphs.put("relayflags-hour",
+        "start,end,flag,filename");
     this.availableGraphs.put("versions", "start,end,filename");
     this.availableGraphs.put("platforms", "start,end,filename");
     this.availableGraphs.put("bandwidth", "start,end,filename");

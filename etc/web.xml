@@ -141,6 +141,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphImageServlet</servlet-name>
+    <url-pattern>/relayflags-hour.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImageServlet</servlet-name>
     <url-pattern>/versions.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
