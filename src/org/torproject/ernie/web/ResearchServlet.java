@@ -9,7 +9,7 @@ public class ResearchServlet extends HttpServlet {
       HttpServletResponse response) throws IOException, ServletException {
 
     /* Forward the request to the JSP that does all the hard work. */
-    request.getRequestDispatcher("research.jsp").forward(request,
+    request.getRequestDispatcher("WEB-INF/research.jsp").forward(request,
         response);
   }
 }

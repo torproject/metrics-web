@@ -9,7 +9,8 @@ public class GraphsUsersServlet extends HttpServlet {
       HttpServletResponse response) throws IOException, ServletException {
 
     /* Forward the request to the JSP that does all the hard work. */
-    request.getRequestDispatcher("users.jsp").forward(request, response);
+    request.getRequestDispatcher("WEB-INF/users.jsp").forward(request,
+        response);
   }
 }
 

@@ -37,8 +37,6 @@
       <zipfileset dir="${config}"
                   prefix="WEB-INF/classes"
                   includes="logging.properties"/>
-      <zipfileset dir="templates"
-                  prefix="WEB-INF/templates"/>
     </war>
   </target>
 </project>

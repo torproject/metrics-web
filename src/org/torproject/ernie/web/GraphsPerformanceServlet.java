@@ -9,8 +9,8 @@ public class GraphsPerformanceServlet extends HttpServlet {
       HttpServletResponse response) throws IOException, ServletException {
 
     /* Forward the request to the JSP that does all the hard work. */
-    request.getRequestDispatcher("performance.jsp").forward(request,
-        response);
+    request.getRequestDispatcher("WEB-INF/performance.jsp").forward(
+        request, response);
   }
 }
 

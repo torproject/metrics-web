@@ -9,7 +9,7 @@ public class StatusServlet extends HttpServlet {
       HttpServletResponse response) throws IOException, ServletException {
 
     /* Forward the request to the JSP that does all the hard work. */
-    request.getRequestDispatcher("status.jsp").forward(request,
+    request.getRequestDispatcher("WEB-INF/status.jsp").forward(request,
         response);
   }
 }
