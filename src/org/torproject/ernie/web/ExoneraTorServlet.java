@@ -86,7 +86,7 @@ public class ExoneraTorServlet extends HttpServlet {
           + "do not necessarily reflect the views of the National "
           + "Science Foundation.</p>\n"
         + "      <p>\"Tor\" and the \"Onion Logo\" are <a "
-          + "href=\"https://www.torproject.org/trademark-faq.html.en\">"
+          + "href=\"https://www.torproject.org/docs/trademark-faq.html.en\">"
           + "registered trademarks</a> of The Tor Project, Inc.</p>\n"
         + "      <p>Data on this site is freely available under a <a "
           + "href=\"http://creativecommons.org/publicdomain/zero/1.0/\">"
