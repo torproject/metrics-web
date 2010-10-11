@@ -6,10 +6,6 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
 
-  <welcome-file-list>
-    <welcome-file>WEB-INF/index.jsp</welcome-file>
-  </welcome-file-list>
-
   <servlet>
     <servlet-name>Index</servlet-name>
     <servlet-class>org.torproject.ernie.web.IndexServlet</servlet-class>
@@ -236,5 +232,9 @@
     <param-name>jdbcUrl</param-name>
     <param-value>jdbc:postgresql://localhost/tordir?user=ernie&amp;password=password</param-value>
   </context-param>
+
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
 </web-app>
 
