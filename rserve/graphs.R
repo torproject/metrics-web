@@ -48,13 +48,12 @@ plot_versions <- function(start, end, path) {
   versions <- fetch(rs, n = -1)
   dbDisconnect(con)
   dbUnloadDriver(drv)
-# TODO improve colors?
-  colours <- data.frame(version = c("0.1.0", "0.1.1", "0.1.2", "0.2.0",
-    "0.2.1", "0.2.2", "0.2.3"), colour = c("#B4674D", "#C0448F",
-    "#1F75FE", "#FF7F49", "#1CAC78", "#5D76CB", "#FF496C"),
-    stringsAsFactors = FALSE)
-  colours <- colours[colours$version %in% unique(versions$version),
-      "colour"]
+  visible_versions <- unique(versions$version)
+  versions <- rbind(data.frame(
+    date = as.Date(rep(end, 7)),
+    version = c("0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1", "0.2.2",
+        "0.2.3"),
+    relays = rep(NA, 7)), versions)
   ggplot(versions, aes(x = as.Date(date, "%Y-%m-%d"), y = relays,
       colour = version)) +
     geom_line(size = 1) +
@@ -62,7 +61,8 @@ plot_versions <- function(start, end, path) {
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name = "",
       limits = c(0, max(versions$relays, na.rm = TRUE))) +
-    scale_colour_manual(name = "Tor version", values = colours) +
+    scale_colour_hue(name = "Tor version", h.start = 280,
+      breaks = visible_versions, labels = visible_versions) +
     opts(title = "Relay versions\n")
   ggsave(filename = path, width = 8,height = 5,dpi = 72)
 }
@@ -85,8 +85,9 @@ plot_platforms <- function(start, end, path) {
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name = "",
       limits = c(0, max(platforms$value, na.rm = TRUE))) +
-    scale_colour_brewer(name = "Platform", breaks = c("avg_linux",
-        "avg_darwin", "avg_bsd", "avg_windows", "avg_other"),
+    scale_colour_hue(name = "Platform", h.start = 180,
+      breaks = c("avg_linux", "avg_darwin", "avg_bsd", "avg_windows",
+          "avg_other"),
       labels = c("Linux", "Darwin", "FreeBSD", "Windows", "Other")) +
     opts(title = "Relay platforms\n")
   ggsave(filename = path,width = 8,height = 5,dpi = 72)
@@ -117,7 +118,8 @@ plot_bandwidth <- function(start, end, path) {
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name="Bandwidth (MiB/s)",
         limits = c(0, max(bandwidth$value, na.rm = TRUE) / 2^20)) +
-    scale_colour_hue(name = "", breaks = c("bwadv", "bwhist"),
+    scale_colour_hue(name = "", h.start = 90,
+        breaks = c("bwadv", "bwhist"),
         labels = c("Advertised bandwidth", "Bandwidth history")) +
     opts(title = "Total relay bandwidth", legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
@@ -134,20 +136,19 @@ plot_relayflags <- function(start, end, flags, path) {
   dbDisconnect(con)
   dbUnloadDriver(drv)
   networksize <- melt(networksize, id = "date")
-# TODO improve colors?
-  colours <- data.frame(flag = c("Running", "Exit", "Guard", "Fast",
-    "Stable"), colour = c("black", "green", "orange", "red", "blue"),
-    stringsAsFactors = FALSE)
-  colours <- colours[colours$flag %in% flags, "colour"]
+  networksize <- rbind(data.frame(
+    date = as.Date(rep(end, 5)),
+    variable = paste("avg_", c("running", "exit", "guard", "fast",
+      "stable"), sep = ""),
+    value = rep(NA, 5)), networksize)
   ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
     colour = variable)) + geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name = "", limits = c(0, max(networksize$value,
         na.rm = TRUE))) +
-    scale_colour_manual(name = "Relay flags",
-        breaks = paste("avg_", tolower(flags), sep = ""), labels = flags,
-        values = colours) +
+    scale_colour_hue(name = "Relay flags", h.start = 280,
+        breaks = paste("avg_", tolower(flags), sep = ""), labels = flags) +
     opts(title = "Number of relays with relay flags assigned\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
@@ -164,20 +165,19 @@ plot_relayflags_hour <- function(start, end, flags, path) {
   dbDisconnect(con)
   dbUnloadDriver(drv)
   networksize <- melt(networksize, id = "validafter")
-# TODO improve colors?
-  colours <- data.frame(flag = c("Running", "Exit", "Guard", "Fast",
-    "Stable"), colour = c("black", "green", "orange", "red", "blue"),
-    stringsAsFactors = FALSE)
-  colours <- colours[colours$flag %in% flags, "colour"]
+  networksize <- rbind(data.frame(
+    validafter = as.POSIXct(rep(paste(end, "00:00:00"), 5)),
+    variable = paste("avg_", c("running", "exit", "guard", "fast",
+      "stable"), sep = ""),
+    value = rep(NA, 5)), networksize)
   ggplot(networksize, aes(x = as.POSIXct(validafter), y = value,
     colour = variable)) + geom_line(size = 1) +
     scale_x_datetime(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name = "", limits = c(0, max(networksize$value,
         na.rm = TRUE))) +
-    scale_colour_manual(name = "Relay flags",
-        breaks = paste("avg_", tolower(flags), sep = ""), labels = flags,
-        values = colours) +
+    scale_colour_hue(name = "Relay flags", h.start = 280,
+        breaks = paste("avg_", tolower(flags), sep = ""), labels = flags) +
     opts(title = "Number of relays with relay flags assigned\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
