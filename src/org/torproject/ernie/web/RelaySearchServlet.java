@@ -90,7 +90,7 @@ public class RelaySearchServlet extends HttpServlet {
           + "Transitional//EN\">\n"
         + "<html>\n"
         + "  <head>\n"
-        + "    <title>Relay Search</title>\n"
+        + "    <title>Tor Metrics Portal: Relay Search</title>\n"
         + "    <meta http-equiv=\"content-type\" content=\"text/html; "
           + "charset=ISO-8859-1\">\n"
         + "    <link href=\"/css/stylesheet-ltr.css\" type=\"text/css\" "
