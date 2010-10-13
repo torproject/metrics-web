@@ -13,8 +13,13 @@ public class ErnieGeneratedFileServlet extends HttpServlet {
       ServletException {
 
     /* Read file from disk and write it to response. */
+    String requestedURL = request.getRequestURI();
+    if (requestedURL.contains("/")) {
+      requestedURL = requestedURL.substring(requestedURL.
+          lastIndexOf("/"));
+    }
     String fn = "/srv/metrics.torproject.org/ernie/website"
-        + request.getRequestURI();
+        + requestedURL;
     BufferedInputStream input = null;
     BufferedOutputStream output = null;
     try {

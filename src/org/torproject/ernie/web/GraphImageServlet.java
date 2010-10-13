@@ -73,12 +73,18 @@ public class GraphImageServlet extends HttpServlet {
     /* Find out which graph type was requested and make sure we know this
      * graph type. */
     String requestedGraph = request.getRequestURI();
-    if (requestedGraph == null || requestedGraph.length() < 6) {
+    if (requestedGraph == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    requestedGraph = requestedGraph.substring(1,
-        requestedGraph.length() - 4);
+    if (requestedGraph.endsWith(".png")) {
+      requestedGraph = requestedGraph.substring(0, requestedGraph.length()
+          - ".png".length());
+    }
+    if (requestedGraph.contains("/")) {
+      requestedGraph = requestedGraph.substring(requestedGraph.
+          lastIndexOf("/") + 1);
+    }
     if (!this.availableGraphs.containsKey(requestedGraph)) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
