@@ -35,6 +35,7 @@ public class GraphImageServlet extends HttpServlet {
     this.availableGraphs.put("versions", "start,end,filename");
     this.availableGraphs.put("platforms", "start,end,filename");
     this.availableGraphs.put("bandwidth", "start,end,filename");
+    this.availableGraphs.put("dirbytes", "start,end,filename");
     this.availableGraphs.put("new-users", "start,end,country,filename");
     this.availableGraphs.put("direct-users",
         "start,end,country,filename");

@@ -157,6 +157,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphImageServlet</servlet-name>
+    <url-pattern>/dirbytes.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImageServlet</servlet-name>
     <url-pattern>/new-users.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

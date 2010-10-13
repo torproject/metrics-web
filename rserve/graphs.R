@@ -125,6 +125,34 @@ plot_bandwidth <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
+plot_dirbytes <- function(start, end, path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT date, read, written, dirread, dirwritten ",
+      "FROM total_bwhist WHERE date >= '", start, "' AND date <= '", end,
+      "' AND date < (SELECT MAX(date) FROM total_bwhist) - 1 ", sep = "")
+  rs <- dbSendQuery(con, q)
+  bw_hist <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  bw_hist <- melt(bw_hist, id = "date")
+  ggplot(bw_hist, aes(x = as.Date(date, "%Y-%m-%d"), y = value /
+      (86400 * 2^20), colour = variable)) +
+    geom_line(size = 1) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = "")) +
+    scale_y_continuous(name="Bandwidth (MiB/s)",
+        limits = c(0, max(bw_hist$value, na.rm = TRUE) /
+        (86400 * 2^20))) +
+    scale_colour_hue(name = "",
+        breaks = c("written", "read", "dirwritten", "dirread"),
+        labels = c("Total written bytes", "Total read bytes",
+            "Written dir bytes", "Read dir bytes")) +
+    opts(title = "Number of bytes spent on answering directory requests",
+        legend.position = "top")
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+
 plot_relayflags <- function(start, end, flags, path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)

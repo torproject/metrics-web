@@ -348,6 +348,59 @@ out.println("<img src=\"" + bandwidthUrl.toString() + "\" width=\"576\" "
   </div>
 </form>
 <br>
+
+<h3>Number of bytes spent on answering directory requests</h3>
+<br>
+<p>Relays running on 0.2.2.15-alpha or higher report the number of bytes
+they spend on answering directory requests. The following graph shows
+total written and read bytes as well as written and read dir bytes. The
+dir bytes are extrapolated from those relays who report them to reflect
+the number of written and read dir bytes by all relays.</p>
+<a name="dirbytes"></a>
+<%
+StringBuilder dirbytesUrl = new StringBuilder("dirbytes.png");
+if ("dirbytes".equals(request.getParameter("graph"))) {
+  List<String> parameters = new ArrayList<String>();
+// TODO check values here!
+  String startParameter = request.getParameter("start"),
+      endParameter = request.getParameter("end");
+  if (startParameter != null && startParameter.length() > 0) {
+    parameters.add("start=" + startParameter);
+  }
+  if (endParameter != null && endParameter.length() > 0) {
+    parameters.add("end=" + endParameter);
+  }
+  if (parameters.size() > 0) {
+    dirbytesUrl.append("?" + parameters.get(0));
+    if (parameters.size() > 1) {
+      for (int i = 1; i < parameters.size(); i++) {
+        dirbytesUrl.append("&" + parameters.get(i));
+      }
+    }
+  }
+}
+out.println("<img src=\"" + dirbytesUrl.toString() + "\" width=\"576\" "
+    + "height=\"360\" alt=\"Dir bytes graph\">");
+%><form action="network.html#dirbytes">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="dirbytes">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+        value="<%=("dirbytes".equals(request.getParameter("graph")) &&
+                   request.getParameter("start") != null) ?
+                      request.getParameter("start") : ""%>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+        value="<%=("dirbytes".equals(request.getParameter("graph")) &&
+                   request.getParameter("end") != null) ?
+                      request.getParameter("end") : ""%>">
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<br>
     </div>
   </div>
   <div class="bottom" id="bottom">
