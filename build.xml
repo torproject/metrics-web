@@ -37,6 +37,8 @@
       <zipfileset dir="${config}"
                   prefix="WEB-INF/classes"
                   includes="logging.properties"/>
+      <metainf dir="${config}"
+               includes="context.xml"/>
     </war>
   </target>
 </project>
