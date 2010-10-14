@@ -84,8 +84,6 @@ public class RelaySearchServlet extends HttpServlet {
   }
 
   private void writeHeader(PrintWriter out) throws IOException {
-
-
     out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 "
           + "Transitional//EN\">\n"
         + "<html>\n"
@@ -173,27 +171,15 @@ public class RelaySearchServlet extends HttpServlet {
     PrintWriter out = new PrintWriter(response.getWriter(), true);
     writeHeader(out);
 
-    /* If we don't have a database, see if we have consensus on disk. */
-    SortedSet<File> consensusDirectories = new TreeSet<File>();
+    /* Check if we have a database connection. */
     if (conn == null) {
-      /* Check if we have a consensuses directory. */
-      File consensusDirectory = new File(CONSENSUS_DIRECTORY);
-      if (consensusDirectory.exists() && consensusDirectory.isDirectory()) {
-        for (File yearFile : consensusDirectory.listFiles()) {
-          for (File monthFile : yearFile.listFiles()) {
-            consensusDirectories.add(monthFile);
-          }
-        }
-      }
-      if (consensusDirectories.isEmpty()) {
-        out.println("<p><font color=\"red\"><b>Warning: </b></font>This "
-            + "server doesn't have any relay lists available. If this "
-            + "problem persists, please "
-            + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
-            + "know</a>!</p>\n");
-        writeFooter(out);
-        return;
-      }
+      out.println("<p><font color=\"red\"><b>Warning: </b></font>This "
+          + "server doesn't have any relay lists available. If this "
+          + "problem persists, please "
+          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+          + "know</a>!</p>\n");
+      writeFooter(out);
+      return;
     }
 
     /* Read search parameter, if any. */
@@ -451,329 +437,133 @@ public class RelaySearchServlet extends HttpServlet {
     out.write(" ...</p>\n");
     out.flush();
 
-    /* If we have a database connection, search relays in the database. */
-    if (conn != null) {
-
-      StringBuilder query = new StringBuilder("SELECT validafter, "
-          + "rawdesc FROM statusentry WHERE ");
-      boolean addAnd = false;
-      if (searchDayTimestamps.size() > 0 ||
-          searchMonthTimestamps.size() > 0) {
-        boolean addOr = false;
-        query.append("(");
-        for (long searchTimestamp : searchDayTimestamps) {
-          query.append((addOr ? "OR " : "") + "(validafter >= '"
-              + dateTimeFormat.format(searchTimestamp) + "' AND "
-              + "validafter < '" + dateTimeFormat.format(searchTimestamp
-              + 24L * 60L * 60L * 1000L) + "') ");
-          addOr = true;
+    /* Search relays in the database. */
+    StringBuilder query = new StringBuilder("SELECT validafter, rawdesc "
+        + "FROM statusentry WHERE ");
+    boolean addAnd = false;
+    if (searchDayTimestamps.size() > 0 ||
+        searchMonthTimestamps.size() > 0) {
+      boolean addOr = false;
+      query.append("(");
+      for (long searchTimestamp : searchDayTimestamps) {
+        query.append((addOr ? "OR " : "") + "(validafter >= '"
+            + dateTimeFormat.format(searchTimestamp) + "' AND "
+            + "validafter < '" + dateTimeFormat.format(searchTimestamp
+            + 24L * 60L * 60L * 1000L) + "') ");
+        addOr = true;
+      }
+      for (long searchTimestamp : searchMonthTimestamps) {
+        Calendar firstOfNextMonth = Calendar.getInstance(
+            TimeZone.getTimeZone("UTC"));
+        firstOfNextMonth.setTimeInMillis(searchTimestamp);
+        firstOfNextMonth.add(Calendar.MONTH, 1);
+        query.append((addOr ? "OR " : "") + "(validafter >= '"
+            + dateTimeFormat.format(searchTimestamp) + "' AND "
+            + "validafter < '" + dateTimeFormat.format(
+            firstOfNextMonth.getTimeInMillis()) + "') ");
+        addOr = true;
+      }
+      query.append(") ");
+    } else {
+      query.append("validafter >= '" + dateTimeFormat.format(
+          started - 30L * 24L * 60L * 60L * 1000L) + "' ");
+    }
+    if (searchNickname.length() > 0) {
+      query.append("AND LOWER(nickname) LIKE '"
+          + searchNickname.toLowerCase() + "%' ");
+    }
+    if (searchFingerprint.length() > 0) {
+      query.append("AND fingerprint LIKE '"
+          + searchFingerprint.toLowerCase() + "%' ");
+    }
+    if (searchIPAddress.length() > 0) {
+      query.append("AND address LIKE '" + searchIPAddress + "%' ");
+    }
+    for (String search : searchFingerprintOrNickname) {
+      query.append("AND (LOWER(nickname) LIKE '" + search.toLowerCase()
+          + "%' OR fingerprint LIKE '" + search.toLowerCase() + "%') ");
+    }
+    query.append("ORDER BY validafter DESC, fingerprint LIMIT 31");
+    out.println("<!-- " + query.toString() + " -->");
+    int matches = 0;
+    long startedQuery = System.currentTimeMillis();
+    try {
+      Statement statement = conn.createStatement();
+      ResultSet rs = statement.executeQuery(query.toString());
+      String lastValidAfter = null;
+      while (rs.next()) {
+        matches++;
+        if (matches > 30) {
+          break;
         }
-        for (long searchTimestamp : searchMonthTimestamps) {
-          Calendar firstOfNextMonth = Calendar.getInstance(
-              TimeZone.getTimeZone("UTC"));
-          firstOfNextMonth.setTimeInMillis(searchTimestamp);
-          firstOfNextMonth.add(Calendar.MONTH, 1);
-          query.append((addOr ? "OR " : "") + "(validafter >= '"
-              + dateTimeFormat.format(searchTimestamp) + "' AND "
-              + "validafter < '" + dateTimeFormat.format(
-              firstOfNextMonth.getTimeInMillis()) + "') ");
-          addOr = true;
+        String validAfter = rs.getTimestamp(1).toString().
+            substring(0, 19);
+        if (!validAfter.equals(lastValidAfter)) {
+          out.println("        <br><tt>valid-after "
+              + "<a href=\"consensus?valid-after="
+              + validAfter.replaceAll(":", "-").replaceAll(" ", "-")
+              + "\" target=\"_blank\">" + validAfter + "</a></tt><br>");
+          lastValidAfter = validAfter;
+          out.flush();
         }
-        query.append(") ");
-      } else {
-        query.append("validafter >= '" + dateTimeFormat.format(
-            started - 30L * 24L * 60L * 60L * 1000L) + "' ");
-      }
-      if (searchNickname.length() > 0) {
-        query.append("AND LOWER(nickname) LIKE '"
-            + searchNickname.toLowerCase() + "%' ");
-      }
-      if (searchFingerprint.length() > 0) {
-        query.append("AND fingerprint LIKE '"
-            + searchFingerprint.toLowerCase() + "%' ");
-      }
-      if (searchIPAddress.length() > 0) {
-        query.append("AND address LIKE '" + searchIPAddress + "%' ");
-      }
-      for (String search : searchFingerprintOrNickname) {
-        query.append("AND (LOWER(nickname) LIKE '" + search.toLowerCase()
-            + "%' OR fingerprint LIKE '" + search.toLowerCase() + "%') ");
-      }
-      query.append("ORDER BY validafter DESC, fingerprint LIMIT 31");
-      out.println("<!-- " + query.toString() + " -->");
-      int matches = 0;
-      long startedQuery = System.currentTimeMillis();
-      try {
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(query.toString());
-        String lastValidAfter = null;
-        while (rs.next()) {
-          matches++;
-          if (matches > 30) {
-            break;
-          }
-          String validAfter = rs.getTimestamp(1).toString().
-              substring(0, 19);
-          if (!validAfter.equals(lastValidAfter)) {
-            out.println("        <br><tt>valid-after "
-                + "<a href=\"consensus?valid-after="
-                + validAfter.replaceAll(":", "-").replaceAll(" ", "-")
-                + "\" target=\"_blank\">" + validAfter + "</a></tt><br>");
-            lastValidAfter = validAfter;
-            out.flush();
-          }
-          byte[] rawStatusEntry = rs.getBytes(2);
-          try {
-            String statusEntryLines = new String(rawStatusEntry,
-                "US-ASCII");
-            String[] lines = statusEntryLines.split("\n");
-            for (String line : lines) {
-              if (line.startsWith("r ")) {
-                String[] parts = line.split(" ");
-                String descriptor = String.format("%040x",
-                    new BigInteger(1, Base64.decodeBase64(parts[3]
-                    + "==")));
-                out.println("    <tt>r " + parts[1] + " " + parts[2] + " "
-                    + "<a href=\"descriptor.html?desc-id=" + descriptor
-                    + "\" target=\"_blank\">" + parts[3] + "</a> "
-                    + parts[4] + " " + parts[5] + " " + parts[6] + " "
-                    + parts[7] + " " + parts[8] + "</tt><br>");
-              } else {
-                out.println("    <tt>" + line + "</tt><br>");
-              }
+        byte[] rawStatusEntry = rs.getBytes(2);
+        try {
+          String statusEntryLines = new String(rawStatusEntry,
+              "US-ASCII");
+          String[] lines = statusEntryLines.split("\n");
+          for (String line : lines) {
+            if (line.startsWith("r ")) {
+              String[] parts = line.split(" ");
+              String descriptor = String.format("%040x",
+                  new BigInteger(1, Base64.decodeBase64(parts[3]
+                  + "==")));
+              out.println("    <tt>r " + parts[1] + " " + parts[2] + " "
+                  + "<a href=\"descriptor.html?desc-id=" + descriptor
+                  + "\" target=\"_blank\">" + parts[3] + "</a> "
+                  + parts[4] + " " + parts[5] + " " + parts[6] + " "
+                  + parts[7] + " " + parts[8] + "</tt><br>");
+            } else {
+              out.println("    <tt>" + line + "</tt><br>");
             }
-            out.println("    <br>");
-            out.flush();
-          } catch (UnsupportedEncodingException e) {
-            /* This shouldn't happen, because we know that ASCII is
-             * supported. */
           }
+          out.println("    <br>");
+          out.flush();
+        } catch (UnsupportedEncodingException e) {
+          /* This shouldn't happen, because we know that ASCII is
+           * supported. */
         }
-        statement.close();
-      } catch (SQLException e) {
-        out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
-            + "experienced an unknown database problem while running the "
-            + "search. The query was '" + query + "'. If this problem "
-            + "persists, please "
-            + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
-            + "know</a>!</p>\n");
-        writeFooter(out);
-        return;
       }
-
-      /* Display total search time on the results page. */
-      long searchTime = System.currentTimeMillis() - started;
-      long queryTime = System.currentTimeMillis() - startedQuery;
-      out.write("        <br><p>Found " + (matches > 30 ? "more than 30"
-          : "" + matches) + " relays " + (matches > 30 ?
-          "(displaying only the first 30 hits) " : "") + "in "
-          + String.format("%d.%03d", searchTime / 1000, searchTime % 1000)
-          + " seconds.</p>\n");
-      if (searchTime > 10L * 1000L) {
-        out.write("        <p>In theory, search time should not exceed "
-            + "10 seconds. The query was '" + query + "'. If this or "
-            + "similar searches remain slow, please "
-            + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
-            + "know</a>!</p>\n");
-      }
-
-      /* Finish writing response. */
+      statement.close();
+    } catch (SQLException e) {
+      out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
+          + "experienced an unknown database problem while running the "
+          + "search. The query was '" + query + "'. If this problem "
+          + "persists, please "
+          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+          + "know</a>!</p>\n");
       writeFooter(out);
       return;
     }
 
-    /* Compile a regular expression pattern to parse r lines more
-     * quickly. */
-    StringBuilder patternBuilder = new StringBuilder("r ");
-    if (searchNickname.length() > 0 || searchFingerprint.length() > 0) {
-      if (searchNickname.length() > 0) {
-        patternBuilder.append(searchNickname);
-      }
-      if (searchFingerprint.length() > 0) {
-        try {
-          patternBuilder.append(".*" + Base64.encodeBase64String(
-              Hex.decodeHex((searchFingerprint
-              + (searchFingerprint.length() % 2 == 1 ? "0" : "")).
-              toCharArray())).substring(0, searchFingerprint.length() *
-              2 / 3));
-        } catch (DecoderException e) {
-          /* We make sure this exception is never thrown by passing an
-           * even number of only hex characters to Hex.decodeHex(). */
-        }
-      }
-    } else if (searchFingerprintOrNickname.size() > 0) {
-      List<String> searchTermsCopy = new ArrayList<String>(
-          searchFingerprintOrNickname);
-      if (searchTermsCopy.size() < 2) {
-        searchTermsCopy.add("");
-      }
-      patternBuilder.append("(");
-      for (int i = 0; i < 2; i++) {
-        patternBuilder.append(searchTermsCopy.get(i));
-        String searchTerm = searchTermsCopy.get((i + 1) % 2);
-        if (searchTerm.length() > 0) {
-          try{
-            patternBuilder.append(".*" + Base64.encodeBase64String(
-                Hex.decodeHex((searchTerm + (searchTerm.length()
-                % 2 == 1 ? "0" : "")).toCharArray())).substring(0,
-                searchTerm.length() * 2 / 3));
-          } catch (DecoderException e) {
-            /* We make sure this exception is never thrown by passing an
-             * even number of only hex characters to Hex.decodeHex(). */
-          }
-        }
-        if (i == 0) {
-          patternBuilder.append("|");
-        }
-      }
-      patternBuilder.append(")");
-    }
-    if (searchIPAddress.length() > 0) {
-      patternBuilder.append(".* " + searchIPAddress.replaceAll("\\.",
-          "\\\\."));
-    }
-    patternBuilder.append(".*");
-    String pattern = patternBuilder.toString();
-    Pattern searchPattern = Pattern.compile(pattern);
-
-    /* While parsing, memorize the r lines of the last 24 parsed
-     * consensuses, so that we don't have to parse them again. */
-    Set<String> failedRLines = new HashSet<String>();
-    List<Set<String>> addedFailedRLines = new ArrayList<Set<String>>();
-
-    /* Parse consensus files from newest to oldest. Stop after either
-     * parsing 31 * 24 consensuses, finding 30 hits, or running out of
-     * consensuses. */
-    SortedSet<File> consensusDirsToParse = new TreeSet<File>();
-    consensusDirsToParse.addAll(consensusDirectories);
-    SortedSet<File> consensusesToParse = new TreeSet<File>();
-    int matches = 0, consensusesParsed = 0;
-    while (consensusesParsed < 31 * 24 && matches < 30 &&
-        !(consensusDirsToParse.isEmpty() &&
-        consensusesToParse.isEmpty())) {
-
-      /* Only put consensuses of one month in the queue at the same
-       * time. */
-      while (consensusesToParse.isEmpty() &&
-          !consensusDirsToParse.isEmpty()) {
-        Stack<File> parse = new Stack<File>();
-        File dir = consensusDirsToParse.last();
-        parse.add(dir);
-        consensusDirsToParse.remove(dir);
-        while (!parse.isEmpty()) {
-          File pop = parse.remove(0);
-          if (pop.isDirectory()) {
-            for (File file : pop.listFiles()) {
-              parse.add(file);
-            }
-          } else {
-            consensusesToParse.add(pop);
-          }
-        }
-      }
-      if (consensusesToParse.isEmpty()) {
-        break;
-      }
-
-      /* Parse consensus at the head of the queue. */
-      File consensus = consensusesToParse.last();
-      consensusesToParse.remove(consensus);
-      BufferedReader br = new BufferedReader(new FileReader(consensus));
-      String line = null, validAfterLine = null;
-      Set<String> currentlyAddedFailedRLines = new HashSet<String>();
-      addedFailedRLines.add(currentlyAddedFailedRLines);
-      while ((line = br.readLine()) != null) {
-        if (line.startsWith("r ")) {
-
-          /* If we already know this r line doesn't match our regular
-           * expression, ignore it. */
-          if (failedRLines.contains(line)) {
-
-          /* If we don't know this r line yet, but it doesn't match our
-           * regular expression, memorize it. */
-          } else if (!searchPattern.matcher(line).matches()) {
-            currentlyAddedFailedRLines.add(line);
-            failedRLines.add(line);
-
-          /* If this r line matches our regular expression, compare fields
-           * to be certain we want this relay. */
-          } else {
-            String[] parts = line.split(" ");
-            String nickname = parts[1];
-            String address = parts[6];
-            if (searchNickname.length() > 0 &&
-                !nickname.startsWith(searchNickname)) {
-              continue;
-            }
-            if (searchIPAddress.length() > 0 &&
-                !address.startsWith(searchIPAddress)) {
-              continue;
-            }
-            String fingerprint = String.format("%040x", new BigInteger(1,
-                Base64.decodeBase64(parts[2] + "=="))).toLowerCase();
-            if (searchFingerprint.length() > 0 && !fingerprint.startsWith(
-                searchFingerprint.toLowerCase())) {
-              continue;
-            }
-            boolean skip = false;
-            for (String searchTerm : searchFingerprintOrNickname) {
-              if (!nickname.startsWith(searchTerm) &&
-                  !fingerprint.startsWith(searchTerm.toLowerCase())) {
-                skip = true;
-                break;
-              }
-            }
-            if (skip) {
-              continue;
-            }
-
-            /* This r line matches the search criteria. If this is the
-             * first match in this consensus, print the valid-after
-             * line. */
-            if (validAfterLine != null) {
-              out.println("        <br><tt>valid-after "
-                  + "<a href=\"consensus?valid-after="
-                  + validAfterLine.substring("valid-after ".length()).
-                  replaceAll(":", "-").replaceAll(" ", "-")
-                  + "\" target=\"_blank\">"
-                  + validAfterLine.substring("valid-after ".length())
-                  + "</a></tt><br>");
-              validAfterLine = null;
-            }
-
-            /* And print the r line. */
-            String descriptor = String.format("%040x", new BigInteger(1,
-                Base64.decodeBase64(parts[3] + "==")));
-            out.println("    <tt>r " + parts[1] + " " + parts[2] + " "
-                + "<a href=\"descriptor.html?desc-id=" + descriptor
-                + "\" " + "target=\"_blank\">" + parts[3] + "</a> "
-                + parts[4] + " " + parts[5] + " " + parts[6] + " "
-                + parts[7] + " " + parts[8] + "</tt><br>");
-            matches++;
-          }
-        } else if (line.startsWith("valid-after ")) {
-          validAfterLine = line;
-        }
-      }
-      br.close();
-      consensusesParsed++;
-
-      /* Forget about failed r lines if they are 24 consensuses apart. */
-      while (addedFailedRLines.size() >= 24) {
-        Set<String> removeFailedRLines = addedFailedRLines.remove(0);
-        failedRLines.removeAll(removeFailedRLines);
-      }
-    }
-
     /* Display total search time on the results page. */
     long searchTime = System.currentTimeMillis() - started;
-    out.write("        <br><p>Found " + matches + " relays in the last "
-        + consensusesParsed + " known consensuses in "
+    long queryTime = System.currentTimeMillis() - startedQuery;
+    out.write("        <br><p>Found " + (matches > 30 ? "more than 30"
+        : "" + matches) + " relays " + (matches > 30 ?
+        "(displaying only the first 30 hits) " : "") + "in "
         + String.format("%d.%03d", searchTime / 1000, searchTime % 1000)
         + " seconds.</p>\n");
+    if (searchTime > 10L * 1000L) {
+      out.write("        <p>In theory, search time should not exceed "
+          + "10 seconds. The query was '" + query + "'. If this or "
+          + "similar searches remain slow, please "
+          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+          + "know</a>!</p>\n");
+    }
 
     /* Finish writing response. */
     writeFooter(out);
+    return;
   }
 }
 
