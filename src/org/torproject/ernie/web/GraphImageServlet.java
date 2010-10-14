@@ -23,7 +23,7 @@ public class GraphImageServlet extends HttpServlet {
   /* Known parameters and parameter values. */
   private Map<String, String> knownParameterValues;
 
-  public GraphImageServlet()  {
+  public void init() {
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -53,9 +53,7 @@ public class GraphImageServlet extends HttpServlet {
     this.knownParameterValues.put("bundle", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
-  }
 
-  public void init() {
     ServletConfig servletConfig = getServletConfig();
     String rserveHost = servletConfig.getInitParameter("rserveHost");
     String rservePort = servletConfig.getInitParameter("rservePort");
