@@ -8,7 +8,9 @@
 
   <servlet>
     <servlet-name>Index</servlet-name>
-    <servlet-class>org.torproject.ernie.web.IndexServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.IndexServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Index</servlet-name>
@@ -16,7 +18,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>Graphs</servlet-name>
-    <servlet-class>org.torproject.ernie.web.GraphsServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.GraphsServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Graphs</servlet-name>
@@ -24,7 +28,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>GraphsNetwork</servlet-name>
-    <servlet-class>org.torproject.ernie.web.GraphsNetworkServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.GraphsNetworkServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>GraphsNetwork</servlet-name>
@@ -32,7 +38,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>GraphsUsers</servlet-name>
-    <servlet-class>org.torproject.ernie.web.GraphsUsersServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.GraphsUsersServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>GraphsUsers</servlet-name>
@@ -40,7 +48,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>GraphsPackages</servlet-name>
-    <servlet-class>org.torproject.ernie.web.GraphsPackagesServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.GraphsPackagesServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>GraphsPackages</servlet-name>
@@ -48,7 +58,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>GraphsPerformance</servlet-name>
-    <servlet-class>org.torproject.ernie.web.GraphsPerformanceServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.GraphsPerformanceServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>GraphsPerformance</servlet-name>
@@ -56,7 +68,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>Research</servlet-name>
-    <servlet-class>org.torproject.ernie.web.ResearchServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.ResearchServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Research</servlet-name>
@@ -64,7 +78,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>ResearchData</servlet-name>
-    <servlet-class>org.torproject.ernie.web.ResearchDataServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.ResearchDataServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ResearchData</servlet-name>
@@ -72,7 +88,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>ResearchPapers</servlet-name>
-    <servlet-class>org.torproject.ernie.web.ResearchPapersServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.ResearchPapersServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ResearchPapers</servlet-name>
@@ -80,7 +98,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>ResearchTools</servlet-name>
-    <servlet-class>org.torproject.ernie.web.ResearchToolsServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.ResearchToolsServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ResearchTools</servlet-name>
@@ -88,7 +108,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>Status</servlet-name>
-    <servlet-class>org.torproject.ernie.web.StatusServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.StatusServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Status</servlet-name>
@@ -97,7 +119,9 @@
 
   <servlet>
     <servlet-name>Relay</servlet-name>
-    <servlet-class>org.torproject.ernie.web.RelayServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.RelayServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Relay</servlet-name>
@@ -105,7 +129,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>RelaySearch</servlet-name>
-    <servlet-class>org.torproject.ernie.web.RelaySearchServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.RelaySearchServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>RelaySearch</servlet-name>
@@ -113,7 +139,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>GraphImageServlet</servlet-name>
-    <servlet-class>org.torproject.ernie.web.GraphImageServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.GraphImageServlet
+    </servlet-class>
     <init-param>
       <param-name>rserveHost</param-name>
       <param-value>localhost</param-value>
@@ -181,7 +209,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>ExoneraTor</servlet-name>
-    <servlet-class>org.torproject.ernie.web.ExoneraTorServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.ExoneraTorServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ExoneraTor</servlet-name>
@@ -189,7 +219,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>ServerDescriptor</servlet-name>
-    <servlet-class>org.torproject.ernie.web.ServerDescriptorServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.ServerDescriptorServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ServerDescriptor</servlet-name>
@@ -197,7 +229,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>ExtraInfoDescriptor</servlet-name>
-    <servlet-class>org.torproject.ernie.web.ExtraInfoDescriptorServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.ExtraInfoDescriptorServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ExtraInfoDescriptor</servlet-name>
@@ -205,7 +239,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>Descriptor</servlet-name>
-    <servlet-class>org.torproject.ernie.web.DescriptorServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.DescriptorServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Descriptor</servlet-name>
@@ -213,7 +249,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>Consensus</servlet-name>
-    <servlet-class>org.torproject.ernie.web.ConsensusServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.ConsensusServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>Consensus</servlet-name>
@@ -221,7 +259,9 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>ErnieGeneratedFile</servlet-name>
-    <servlet-class>org.torproject.ernie.web.ErnieGeneratedFileServlet</servlet-class>
+    <servlet-class>
+      org.torproject.ernie.web.ErnieGeneratedFileServlet
+    </servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ErnieGeneratedFile</servlet-name>
@@ -238,7 +278,9 @@
 
   <context-param>
     <param-name>jdbcUrl</param-name>
-    <param-value>jdbc:postgresql://localhost/tordir?user=ernie&amp;password=password</param-value>
+    <param-value>
+      jdbc:postgresql://localhost/tordir?user=ernie&amp;password=password
+    </param-value>
   </context-param>
 
   <welcome-file-list>
