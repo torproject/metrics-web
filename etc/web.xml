@@ -81,6 +81,18 @@
     <servlet-class>
       org.torproject.ernie.web.ResearchDataServlet
     </servlet-class>
+    <init-param>
+      <param-name>remoteDataFiles</param-name>
+      <param-value>
+        /srv/metrics.torproject.org/ernie/remote-files-for-data-page
+      </param-value>
+    </init-param>
+    <init-param>
+      <param-name>localDataDir</param-name>
+      <param-value>
+        /srv/metrics.torproject.org/ernie/website/data/
+      </param-value>
+    </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>ResearchData</servlet-name>

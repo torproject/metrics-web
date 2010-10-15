@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -10,36 +12,6 @@
   <div class="center">
     <%@ include file="banner.jsp"%>
     <div class="main-column">
-<%@page import="java.io.*" %>
-<%@page import="java.util.*" %>
-<%
-    /* Read /srv/metrics.torproject.org/ernie/remote-files-for-data-page,
-     * if that file exists, and add the contained URLs to this page.
-     * TODO make file location configurable. */
-    SortedMap<String, String> allFiles = new TreeMap<String, String>();
-    File remoteFiles = new File("/srv/metrics.torproject.org/ernie/"
-        + "remote-files-for-data-page");
-    if (remoteFiles.exists() && !remoteFiles.isDirectory()) {
-      BufferedReader br = new BufferedReader(new FileReader(remoteFiles));
-      String line = null;
-      while ((line = br.readLine()) != null) {
-        if (line.startsWith("#") || !line.contains("/")) {
-          continue;
-        }
-        allFiles.put(line.substring(line.lastIndexOf("/") + 1), line);
-      }
-    }
-    /* Add files in /srv/metrics.torproject.org/ernie/website/data/ to
-     * list of provided files on this page. TODO make dir location
-     * configurable. */
-    File localFiles =
-        new File("/srv/metrics.torproject.org/ernie/website/data/");
-    if (localFiles.exists() && localFiles.isDirectory()) {
-      for (File file : localFiles.listFiles()) {
-        allFiles.put(file.getName(), "/data/" + file.getName());
-      }
-    }
-%>
         <h2>Tor Metrics Portal: Data</h2>
         <br>
         <p>One of the main goals of the Tor Metrics Project is to make all
@@ -67,77 +39,61 @@
         These documents include network statuses, server (relay)
         descriptors, and extra-info descriptors:</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
-<%
-    String firstYearMonth = null, lastYearMonth = null;
-    for (Map.Entry<String, String> e : allFiles.entrySet()) {
-      String filename = e.getKey();
-      if (!filename.endsWith(".asc") &&
-          (filename.startsWith("tor-20") ||
-          filename.startsWith("statuses-20") ||
-          filename.startsWith("server-descriptors-20") ||
-          filename.startsWith("extra-infos-20") ||
-          filename.startsWith("votes-20") ||
-          filename.startsWith("consensuses-20"))) {
-        String yearMonth = filename.substring(filename.indexOf("20"));
-        yearMonth = yearMonth.substring(0, 7);
-        if (firstYearMonth == null ||
-            yearMonth.compareTo(firstYearMonth) < 0) {
-          firstYearMonth = yearMonth;
-        }
-        if (lastYearMonth == null ||
-            yearMonth.compareTo(lastYearMonth) > 0) {
-          lastYearMonth = yearMonth;
-        }
-      }
-    }
-    String currentYearMonth = firstYearMonth;
-    String[] monthNames = new String[] { "January", "February", "March",
-        "April", "May", "June", "July", "August", "September", "October",
-        "November", "December" };
-    String[] prefixes = new String[] { "tor-", "statuses-",
-        "server-descriptors-", "extra-infos-", "votes-", "consensuses-" };
-    String[] descriptions = new String[] { "v1 directories",
-        "v2 statuses", "server descriptors", "extra-infos", "v3 votes",
-        "v3 consensuses" };
-    Set<String> printedFiles = new HashSet<String>();
-    while (currentYearMonth.compareTo(lastYearMonth) <= 0) {
-      int currentYear = Integer.parseInt(currentYearMonth.substring(
-          0, 4));
-      int currentMonth = Integer.parseInt(currentYearMonth.substring(
-          5, 7));
-      out.write("          <tr>\n            <td>"
-          + monthNames[currentMonth - 1] + " " + currentYear + "</td>\n");
-      for (int i = 0; i < prefixes.length; i++) {
-        String prefix = prefixes[i];
-        String description = descriptions[i];
-        String file = prefix + currentYearMonth + ".tar.bz2";
-        String sig = file + ".asc";
-        if (allFiles.containsKey(file)) {
-          out.write("            <td><a href=\"" + allFiles.get(file)
-              + "\">" + description + "</a>");
-          printedFiles.add(file);
-          if (allFiles.containsKey(sig)) {
-            out.write("\n              (<a href=\"" + allFiles.get(sig)
-                + "\">sig</a>)</td>\n");
-            printedFiles.add(sig);
-          } else {
-            out.write("</td>\n");
-          }
-        } else {
-          out.write("            <td></td>\n");
-        }
-      }
-      out.write("          </tr>\n");
-      if (currentMonth < 12) {
-        currentMonth++;
-      } else {
-        currentYear++;
-        currentMonth = 1;
-      }
-      currentYearMonth = String.format("%d-%02d", currentYear,
-          currentMonth);
-    }
-%>
+          <c:forEach var="item" items="${relayDescriptors}" >
+            <fmt:formatDate var="longDate" pattern="MMMM yyyy"
+                            value="${item.key}"/>
+            <tr>
+              <td>${longDate}</td>
+              <td>
+                <c:if test="${item.value['tor'] ne null}" >
+                  <a href="${item.value['tor'][0]}">v1 directories</a>
+                  <c:if test="${item.value['tor'][1] ne null}">
+                    (<a href="${item.value['tor'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
+              <td>
+                <c:if test="${item.value['statuses'] ne null}" >
+                  <a href="${item.value['statuses'][0]}">v2 statuses</a>
+                  <c:if test="${item.value['statuses'][1] ne null}">
+                    (<a href="${item.value['statuses'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
+              <td>
+                <c:if test="${item.value['server-descriptors'] ne null}" >
+                  <a href="${item.value['server-descriptors'][0]}">server descriptors</a>
+                  <c:if test="${item.value['server-descriptors'][1] ne null}">
+                    (<a href="${item.value['server-descriptors'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
+              <td>
+                <c:if test="${item.value['extra-infos'] ne null}" >
+                  <a href="${item.value['extra-infos'][0]}">extra-infos</a>
+                  <c:if test="${item.value['extra-infos'][1] ne null}">
+                    (<a href="${item.value['extra-infos'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
+              <td>
+                <c:if test="${item.value['votes'] ne null}" >
+                  <a href="${item.value['votes'][0]}">v3 votes</a>
+                  <c:if test="${item.value['votes'][1] ne null}">
+                    (<a href="${item.value['votes'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
+              <td>
+                <c:if test="${item.value['consensuses'] ne null}" >
+                  <a href="${item.value['consensuses'][0]}">v3 consensuses</a>
+                  <c:if test="${item.value['consensuses'][1] ne null}">
+                    (<a href="${item.value['consensuses'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
+            </tr>
+          </c:forEach>
         </table>
         <br>
         <a name="bridgedesc"></a>
@@ -153,55 +109,18 @@
         or any other detail, contact us and we'll sort something out. The
         files below contain all documents of a given month:</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
-<%
-    firstYearMonth = lastYearMonth = null;
-    for (Map.Entry<String, String> e : allFiles.entrySet()) {
-      String filename = e.getKey();
-      if (!filename.endsWith(".asc") &&
-          filename.startsWith("bridge-descriptors-20")) {
-        String yearMonth = filename.substring(filename.indexOf("20"));
-        yearMonth = yearMonth.substring(0, 7);
-        if (firstYearMonth == null ||
-            yearMonth.compareTo(firstYearMonth) < 0) {
-          firstYearMonth = yearMonth;
-        }
-        if (lastYearMonth == null ||
-            yearMonth.compareTo(lastYearMonth) > 0) {
-          lastYearMonth = yearMonth;
-        }
-      }
-    }
-    currentYearMonth = firstYearMonth;
-    while (currentYearMonth.compareTo(lastYearMonth) <= 0) {
-      int currentYear = Integer.parseInt(currentYearMonth.substring(
-          0, 4));
-      int currentMonth = Integer.parseInt(currentYearMonth.substring(
-          5, 7));
-      String file = "bridge-descriptors-" + currentYearMonth + ".tar.bz2";
-      String sig = file + ".asc";
-      if (allFiles.containsKey(file)) {
-        out.write("          <tr><td><a href=\"" + allFiles.get(file)
-            + "\">" + monthNames[currentMonth - 1] + " " + currentYear
-            + "</a>");
-        printedFiles.add(file);
-        if (allFiles.containsKey(sig)) {
-          out.write("\n              (<a href=\"" + allFiles.get(sig)
-                + "\">sig</a>)</td></tr>\n");
-          printedFiles.add(sig);
-        } else {
-          out.write("</td></tr>\n");
-        }
-      }
-      if (currentMonth < 12) {
-        currentMonth++;
-      } else {
-        currentYear++;
-        currentMonth = 1;
-      }
-      currentYearMonth = String.format("%d-%02d", currentYear,
-          currentMonth);
-    }
-%>
+          <c:forEach var="item" items="${bridgeDescriptors}" >
+            <fmt:formatDate var="longDate" pattern="MMMM yyyy"
+                            value="${item.key}"/>
+            <tr>
+              <td>
+                <a href="${item.value[0]}">${longDate}</a>
+                <c:if test="${item.value[1] ne null}">
+                    (<a href="${item.value[1]}">sig</a>)
+                </c:if>
+              </td>
+            </tr>
+          </c:forEach>
         </table>
         <p></p>
         <br>
@@ -216,48 +135,43 @@
         descriptor archives. The following files contain the statistics
         produced by relays running earlier versions:</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
-<%
-    SortedSet<String> statsSources = new TreeSet<String>();
-    for (Map.Entry<String, String> e : allFiles.entrySet()) {
-      String filename = e.getKey();
-      if (!filename.endsWith(".asc") &&
-          (filename.startsWith("buffer-") ||
-          filename.startsWith("dirreq-") ||
-          filename.startsWith("entry-") ||
-          (filename.startsWith("exit-") &&
-          !filename.startsWith("exit-list-")))) {
-        statsSources.add(filename.substring(filename.indexOf("-") + 1));
-      }
-    }
-    prefixes = new String[] { "buffer-", "dirreq-", "entry-", "exit-" };
-    for (String source : statsSources) {
-      String nickname = source.split("-")[0];
-      String fingerprint = source.split("-")[1];
-      fingerprint = fingerprint.substring(0, 8);
-      out.write("          <tr>\n            <td>" + nickname + " ("
-          + fingerprint + ")</td>\n");
-      for (int i = 0; i < prefixes.length; i++) {
-        String prefix = prefixes[i];
-        String file = prefix + source;
-        String sig = file + ".asc";
-        if (allFiles.containsKey(file)) {
-          out.write("            <td><a href=\"" + allFiles.get(file)
-              + "\">" + prefix + "stats</a>");
-          printedFiles.add(file);
-          if (allFiles.containsKey(sig)) {
-            out.write("\n              (<a href=\"" + allFiles.get(sig)
-                + "\">sig</a>)</td>\n");
-            printedFiles.add(sig);
-          } else {
-            out.write("</td>\n");
-          }
-        } else {
-          out.write("            <td></td>\n");
-        }
-      }
-      out.write("          </tr>\n");
-    }
-%>
+          <c:forEach var="item" items="${relayStatistics}" >
+            <tr>
+              <td>${item.key}</td>
+              <td>
+                <c:if test="${item.value['buffer'] ne null}" >
+                  <a href="${item.value['buffer'][0]}">buffer-stats</a>
+                  <c:if test="${item.value['buffer'][1] ne null}">
+                    (<a href="${item.value['buffer'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
+              <td>
+                <c:if test="${item.value['dirreq'] ne null}" >
+                  <a href="${item.value['dirreq'][0]}">dirreq-stats</a>
+                  <c:if test="${item.value['dirreq'][1] ne null}">
+                    (<a href="${item.value['dirreq'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
+              <td>
+                <c:if test="${item.value['entry'] ne null}" >
+                  <a href="${item.value['entry'][0]}">entry-stats</a>
+                  <c:if test="${item.value['entry'][1] ne null}">
+                    (<a href="${item.value['entry'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
+              <td>
+                <c:if test="${item.value['exit'] ne null}" >
+                  <a href="${item.value['exit'][0]}">exit-stats</a>
+                  <c:if test="${item.value['exit'][1] ne null}">
+                    (<a href="${item.value['exit'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
+            </tr>
+          </c:forEach>
         </table>
         <br>
         <a name="performance"></a>
@@ -268,43 +182,26 @@
         time needed to do so. The files below contain the output of the
         torperf application and are updated every hour:</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
-<%
-    SortedSet<String> torperfSources = new TreeSet<String>();
-    for (Map.Entry<String, String> e : allFiles.entrySet()) {
-      String filename = e.getKey();
-      if (filename.endsWith("b.data")) {
-        torperfSources.add(filename.substring(0, filename.indexOf("-")));
-      }
-    }
-    for (String source : torperfSources) {
-      out.write("          <tr>\n            <td>" + source + "</td>\n");
-      String file = source + "-50kb.data";
-      if (allFiles.containsKey(file)) {
-        out.write("            <td><a href=\"" + allFiles.get(file)
-            + "\">50 KiB requests</a></td>\n");
-        printedFiles.add(file);
-      } else {
-        out.write("            <td></td>\n");
-      }
-      file = source + "-1mb.data";
-      if (allFiles.containsKey(file)) {
-        out.write("            <td><a href=\"" + allFiles.get(file)
-            + "\">1 MiB requests</a></td>\n");
-        printedFiles.add(file);
-      } else {
-        out.write("            <td></td>\n");
-      }
-      file = source + "-5mb.data";
-      if (allFiles.containsKey(file)) {
-        out.write("            <td><a href=\"" + allFiles.get(file)
-            + "\">5 MiB requests</a></td>\n");
-        printedFiles.add(file);
-      } else {
-        out.write("            <td></td>\n");
-      }
-      out.write("          </tr>\n");
-    }
-%>
+          <c:forEach var="item" items="${torperfData}" >
+            <tr>
+              <td>${item.key}</td>
+              <td>
+                <c:if test="${item.value['50kb'] ne null}" >
+                  <a href="${item.value['50kb'][0]}">50 KiB requests</a>
+                </c:if>
+              </td>
+              <td>
+                <c:if test="${item.value['1mb'] ne null}" >
+                  <a href="${item.value['1mb'][0]}">1 MiB requests</a>
+                </c:if>
+              </td>
+              <td>
+                <c:if test="${item.value['5mb'] ne null}" >
+                  <a href="${item.value['5mb'][0]}">5 MiB requests</a>
+                </c:if>
+              </td>
+            </tr>
+          </c:forEach>
         </table>
         <br>
         <a name="exitlist"></a>
@@ -314,22 +211,15 @@
         <a href="https://check.torproject.org/">Tor Check</a> containing
         the IP addresses that exit relays exit from:</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
-<%
-    for (Map.Entry<String, String> e : allFiles.entrySet()) {
-      String file = e.getKey();
-      String url = e.getValue();
-      if (file.startsWith("exit-list")) {
-        String yearMonth = file.substring(file.indexOf("exit-list-")
-            + "exit-list-".length());
-        String year = yearMonth.substring(0, 4);
-        String monthName = monthNames[Integer.parseInt(
-            yearMonth.substring(5, 7)) - 1];
-        out.write("          <tr><td><a href=\"" + url + "\">"
-            + monthName + " " + year + "</a></td></tr>\n");
-        printedFiles.add(file);
-      }
-    }
-%>
+          <c:forEach var="item" items="${exitLists}" >
+            <fmt:formatDate var="longDate" pattern="MMMM yyyy"
+                            value="${item.key}"/>
+            <tr>
+              <td>
+                <a href="${item.value[0]}">${longDate}</a>
+              </td>
+            </tr>
+          </c:forEach>
         </table>
     </div>
   </div>
