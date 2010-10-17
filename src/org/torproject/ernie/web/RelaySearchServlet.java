@@ -9,7 +9,6 @@ import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.commons.codec.*;
 import org.apache.commons.codec.binary.*;
 
 /**
@@ -33,34 +32,29 @@ import org.apache.commons.codec.binary.*;
  */
 public class RelaySearchServlet extends HttpServlet {
 
-  private static Pattern alphaNumDotDashSpacePattern =
+  private Pattern alphaNumDotDashSpacePattern =
       Pattern.compile("[A-Za-z0-9\\.\\- ]+");
 
-  private static Pattern numPattern = Pattern.compile("[0-9]+");
+  private Pattern numPattern = Pattern.compile("[0-9]+");
 
-  private static Pattern hexPattern = Pattern.compile("[A-Fa-f0-9]+");
+  private Pattern hexPattern = Pattern.compile("[A-Fa-f0-9]+");
 
-  private static Pattern alphaNumPattern =
-      Pattern.compile("[A-Za-z0-9]+");
+  private Pattern alphaNumPattern = Pattern.compile("[A-Za-z0-9]+");
 
-  private static SimpleDateFormat dayFormat =
-      new SimpleDateFormat("yyyy-MM-dd");
+  private SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-  private static SimpleDateFormat monthFormat =
-      new SimpleDateFormat("yyyy-MM");
+  private SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM");
 
-  private static SimpleDateFormat dateTimeFormat =
+  private SimpleDateFormat dateTimeFormat =
       new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-  static {
-    dayFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    monthFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-  }
 
   private Connection conn = null;
 
   public void init() {
+
+    dayFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    monthFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
     /* Try to load the database driver. */
     try {
@@ -83,136 +77,28 @@ public class RelaySearchServlet extends HttpServlet {
     }
   }
 
-  private void writeHeader(PrintWriter out) throws IOException {
-    out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 "
-          + "Transitional//EN\">\n"
-        + "<html>\n"
-        + "  <head>\n"
-        + "    <title>Tor Metrics Portal: Relay Search</title>\n"
-        + "    <meta http-equiv=\"content-type\" content=\"text/html; "
-          + "charset=ISO-8859-1\">\n"
-        + "    <link href=\"/css/stylesheet-ltr.css\" type=\"text/css\" "
-          + "rel=\"stylesheet\">\n"
-        + "    <link href=\"/images/favicon.ico\" "
-          + "type=\"image/x-icon\" rel=\"shortcut icon\">\n"
-        + "  </head>\n"
-        + "  <body>\n"
-        + "    <div class=\"center\">\n"
-        + "      <table class=\"banner\" border=\"0\" cellpadding=\"0\" "
-          + "cellspacing=\"0\" summary=\"\">\n"
-        + "        <tr>\n"
-        + "          <td class=\"banner-left\"><a "
-          + "href=\"/index.html\"><img src=\"/images/top-left.png\" "
-          + "alt=\"Click to go to home page\" width=\"193\" "
-          + "height=\"79\"></a></td>\n"
-        + "          <td class=\"banner-middle\">\n"
-        + "            <a href=\"/\">Home</a>\n"
-        + "            <a href=\"graphs.html\">Graphs</a>\n"
-        + "            <a href=\"research.html\">Research</a>\n"
-        + "            <a href=\"status.html\">Status</a>\n"
-        + "            <br>\n"
-        + "            <font size=\"2\">\n"
-        + "              <a href=\"exonerator.html\">ExoneraTor</a>\n"
-        + "              <a class=\"current\">Relay Search</a>\n"
-        + "              <a href=\"consensus-health.html\">Consensus "
-          + "Health</a>\n"
-        + "            </font>\n"
-        + "          </td>\n"
-        + "          <td class=\"banner-right\"></td>\n"
-        + "        </tr>\n"
-        + "      </table>\n"
-        + "      <div class=\"main-column\" style=\"margin:5; "
-          + "Padding:0;\">\n"
-        + "        <h2>Relay Search</h2>\n");
-  }
-
-  private void writeFooter(PrintWriter out) throws IOException {
-    out.println("        <br>\n"
-        + "      </div>\n"
-        + "    </div>\n"
-        + "    <div class=\"bottom\" id=\"bottom\">\n"
-        + "      <p>This material is supported in part by the National "
-          + "Science Foundation under Grant No. CNS-0959138. Any "
-          + "opinions, finding, and conclusions or recommendations "
-          + "expressed in this material are those of the author(s) and "
-          + "do not necessarily reflect the views of the National "
-          + "Science Foundation.</p>\n"
-        + "      <p>\"Tor\" and the \"Onion Logo\" are <a "
-          + "href=\"https://www.torproject.org/docs/trademark-faq.html.en\">"
-          + "registered trademarks</a> of The Tor Project, Inc.</p>\n"
-        + "      <p>Data on this site is freely available under a <a "
-          + "href=\"http://creativecommons.org/publicdomain/zero/1.0/\">"
-          + "CC0 no copyright declaration</a>: To the extent possible "
-          + "under law, the Tor Project has waived all copyright and "
-          + "related or neighboring rights in the data. Graphs are "
-          + "licensed under a <a "
-          + "href=\"http://creativecommons.org/licenses/by/3.0/us/\">"
-          + "Creative Commons Attribution 3.0 United States "
-          + "License</a>.</p>\n"
-        + "    </div>\n"
-        + "  </body>\n"
-        + "</html>");
-    out.close();
-  }
-
-  public final String CONSENSUS_DIRECTORY =
-      "/srv/metrics.torproject.org/ernie/directory-archive/consensus";
-
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException,
       ServletException {
 
-    /* Measure how long it takes to process this request. */
-    long started = System.currentTimeMillis();
-
-    /* Get print writer and start writing response. We're wrapping the
-     * PrintWriter, because we want it to auto-flush as soon as we have
-     * written a line. */
-    PrintWriter out = new PrintWriter(response.getWriter(), true);
-    writeHeader(out);
-
-    /* Check if we have a database connection. */
+    /* Check if we have a database connection. If not, there's nothing we
+     * can do here. */
     if (conn == null) {
-      out.println("<p><font color=\"red\"><b>Warning: </b></font>This "
-          + "server doesn't have any relay lists available. If this "
-          + "problem persists, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
-          + "know</a>!</p>\n");
-      writeFooter(out);
+      request.setAttribute("noDbConn", "No database connection.");
+      request.getRequestDispatcher("WEB-INF/relay-search.jsp").forward(
+          request, response);
       return;
     }
 
-    /* Read search parameter, if any. */
+    /* We should be able to answer this request. Show the search form. */
+    request.setAttribute("showForm", "Show search form.");
+
+    /* Read search parameter. If we don't have a search parameter, we're
+     * done here. */
     String searchParameter = request.getParameter("search");
-    if (searchParameter == null) {
-      searchParameter = "";
-    }
-
-    /* Write search form. */
-    out.print("        <p>Search for a relay in the relay descriptor "
-          + "archive by typing (part of) a <b>nickname</b>, "
-          + "<b>fingerprint</b>, or <b>IP address</b> and optionally up "
-          + "to three <b>months (yyyy-mm)</b> or <b>days "
-          + "(yyyy-mm-dd)</b> in the following search field and "
-          + "clicking Search. The search will stop after 30 hits or, "
-          + "unless you provide a month or a day, after parsing the last "
-          + "30 days of relay lists.</p><br>\n"
-        + "        <form action=\"relay-search.html\">\n"
-        + "          <table>\n"
-        + "            <tr>\n"
-        + "              <td><input type=\"text\" name=\"search\""
-          + (searchParameter.length() > 0 ? " value=\"" + searchParameter
-          + "\"" : "") + "></td>\n"
-        + "              <td><input type=\"submit\" value=\"Search\">"
-          + "</td>\n"
-        + "            </tr>\n"
-        + "          </table>\n"
-        + "        </form>\n"
-        + "        <br>\n");
-
-    /* No search parameter? We're done here. */
-    if (searchParameter.length() == 0) {
-      writeFooter(out);
+    if (searchParameter == null || searchParameter.length() == 0) {
+      request.getRequestDispatcher("WEB-INF/relay-search.jsp").forward(
+          request, response);
       return;
     }
 
@@ -371,20 +257,15 @@ public class RelaySearchServlet extends HttpServlet {
       validQuery = false;
     }
 
-    /* If the query is invalid, print out a general warning. */
+    /* If the query is invalid, stop here. */
     if (!validQuery) {
-      out.write("        <p>Sorry, I didn't understand your query. "
-          + "Please provide a nickname (e.g., \"gabelmoo\"), at least "
-          + "the first 8 hex characters of a fingerprint (e.g., "
-          + "\"F2044413\"), or at least the first two octets of an IPv4 "
-          + "address in dotted-decimal notation (e.g., \"80.190\"). You "
-          + "can also provide at most three months or days in ISO 8601 "
-          + "format (e.g., \"2010-09\" or \"2010-09-17\").</p>\n");
-      writeFooter(out);
+      request.setAttribute("invalidQuery", "Query is invalid.");
+      request.getRequestDispatcher("WEB-INF/relay-search.jsp").
+          forward(request, response);
       return;
     }
 
-    /* Print out what we're searching for. */
+    /* Prepare a string that says what we're searching for. */
     List<String> recognizedSearchTerms = new ArrayList<String>();
     if (searchNickname.length() > 0) {
       recognizedSearchTerms.add("nickname <b>" + searchNickname + "</b>");
@@ -408,45 +289,48 @@ public class RelaySearchServlet extends HttpServlet {
     for (String searchTerm : searchDays) {
       recognizedIntervals.add("on <b>" + searchTerm + "</b>");
     }
-    out.write("        <p>Searching for relays with ");
+    StringBuilder searchNoticeBuilder = new StringBuilder();
+    searchNoticeBuilder.append("Searching for relays with ");
     if (recognizedSearchTerms.size() == 1) {
-      out.write(recognizedSearchTerms.get(0));
+      searchNoticeBuilder.append(recognizedSearchTerms.get(0));
     } else if (recognizedSearchTerms.size() == 2) {
-      out.write(recognizedSearchTerms.get(0) + " and "
+      searchNoticeBuilder.append(recognizedSearchTerms.get(0) + " and "
           + recognizedSearchTerms.get(1));
     } else {
       for (int i = 0; i < recognizedSearchTerms.size() - 1; i++) {
-        out.write(recognizedSearchTerms.get(i) + ", ");
+        searchNoticeBuilder.append(recognizedSearchTerms.get(i) + ", ");
       }
-      out.write("and " + recognizedSearchTerms.get(
+      searchNoticeBuilder.append("and " + recognizedSearchTerms.get(
           recognizedSearchTerms.size() - 1));
     }
     if (recognizedIntervals.size() == 1) {
-      out.write(" running " + recognizedIntervals.get(0));
+      searchNoticeBuilder.append(" running "
+          + recognizedIntervals.get(0));
     } else if (recognizedIntervals.size() == 2) {
-      out.write(" running " + recognizedIntervals.get(0) + " and/or "
-          + recognizedIntervals.get(1));
+      searchNoticeBuilder.append(" running " + recognizedIntervals.get(0)
+          + " and/or " + recognizedIntervals.get(1));
     } else if (recognizedIntervals.size() > 2) {
-      out.write(" running ");
+      searchNoticeBuilder.append(" running ");
       for (int i = 0; i < recognizedIntervals.size() - 1; i++) {
-        out.write(recognizedIntervals.get(i) + ", ");
+      searchNoticeBuilder.append(recognizedIntervals.get(i) + ", ");
       }
-      out.write("and/or " + recognizedIntervals.get(
+      searchNoticeBuilder.append("and/or " + recognizedIntervals.get(
           recognizedIntervals.size() - 1));
     }
-    out.write(" ...</p>\n");
-    out.flush();
+    searchNoticeBuilder.append(" ...");
+    String searchNotice = searchNoticeBuilder.toString();
+    request.setAttribute("searchNotice", searchNotice);
 
-    /* Search relays in the database. */
-    StringBuilder query = new StringBuilder("SELECT validafter, rawdesc "
+    /* Prepare the query string. */
+    StringBuilder queryBuilder = new StringBuilder();
+    queryBuilder.append("SELECT validafter, descriptor, rawdesc "
         + "FROM statusentry WHERE ");
-    boolean addAnd = false;
     if (searchDayTimestamps.size() > 0 ||
         searchMonthTimestamps.size() > 0) {
       boolean addOr = false;
-      query.append("(");
+      queryBuilder.append("(");
       for (long searchTimestamp : searchDayTimestamps) {
-        query.append((addOr ? "OR " : "") + "(validafter >= '"
+        queryBuilder.append((addOr ? "OR " : "") + "(validafter >= '"
             + dateTimeFormat.format(searchTimestamp) + "' AND "
             + "validafter < '" + dateTimeFormat.format(searchTimestamp
             + 24L * 60L * 60L * 1000L) + "') ");
@@ -457,40 +341,49 @@ public class RelaySearchServlet extends HttpServlet {
             TimeZone.getTimeZone("UTC"));
         firstOfNextMonth.setTimeInMillis(searchTimestamp);
         firstOfNextMonth.add(Calendar.MONTH, 1);
-        query.append((addOr ? "OR " : "") + "(validafter >= '"
+        queryBuilder.append((addOr ? "OR " : "") + "(validafter >= '"
             + dateTimeFormat.format(searchTimestamp) + "' AND "
             + "validafter < '" + dateTimeFormat.format(
             firstOfNextMonth.getTimeInMillis()) + "') ");
         addOr = true;
       }
-      query.append(") ");
+      queryBuilder.append(") ");
     } else {
-      query.append("validafter >= '" + dateTimeFormat.format(
-          started - 30L * 24L * 60L * 60L * 1000L) + "' ");
+      queryBuilder.append("validafter >= '" + dateTimeFormat.format(
+          System.currentTimeMillis() - 30L * 24L * 60L * 60L * 1000L)
+          + "' ");
     }
     if (searchNickname.length() > 0) {
-      query.append("AND LOWER(nickname) LIKE '"
+      queryBuilder.append("AND LOWER(nickname) LIKE '"
           + searchNickname.toLowerCase() + "%' ");
     }
     if (searchFingerprint.length() > 0) {
-      query.append("AND fingerprint LIKE '"
+      queryBuilder.append("AND fingerprint LIKE '"
           + searchFingerprint.toLowerCase() + "%' ");
     }
     if (searchIPAddress.length() > 0) {
-      query.append("AND address LIKE '" + searchIPAddress + "%' ");
+      queryBuilder.append("AND address LIKE '" + searchIPAddress + "%' ");
     }
     for (String search : searchFingerprintOrNickname) {
-      query.append("AND (LOWER(nickname) LIKE '" + search.toLowerCase()
-          + "%' OR fingerprint LIKE '" + search.toLowerCase() + "%') ");
+      queryBuilder.append("AND (LOWER(nickname) LIKE '"
+          + search.toLowerCase() + "%' OR fingerprint LIKE '"
+          + search.toLowerCase() + "%') ");
     }
-    query.append("ORDER BY validafter DESC, fingerprint LIMIT 31");
-    out.println("<!-- " + query.toString() + " -->");
-    int matches = 0;
+    queryBuilder.append("ORDER BY validafter DESC, fingerprint LIMIT 31");
+    String query = queryBuilder.toString();
+    request.setAttribute("query", query);
+
+    /* Actually execute the query. */
     long startedQuery = System.currentTimeMillis();
+    SortedMap<String, SortedSet<String>> foundDescriptors =
+        new TreeMap<String, SortedSet<String>>();
+    Map<String, String> rawValidAfterLines =
+        new HashMap<String, String>();
+    Map<String, String> rawStatusEntries = new HashMap<String, String>();
+    int matches = 0;
     try {
       Statement statement = conn.createStatement();
-      ResultSet rs = statement.executeQuery(query.toString());
-      String lastValidAfter = null;
+      ResultSet rs = statement.executeQuery(query);
       while (rs.next()) {
         matches++;
         if (matches > 30) {
@@ -498,72 +391,66 @@ public class RelaySearchServlet extends HttpServlet {
         }
         String validAfter = rs.getTimestamp(1).toString().
             substring(0, 19);
-        if (!validAfter.equals(lastValidAfter)) {
-          out.println("        <br><tt>valid-after "
+        String descriptor = rs.getString(2);
+        if (!foundDescriptors.containsKey(validAfter)) {
+          foundDescriptors.put(validAfter, new TreeSet<String>());
+        }
+        foundDescriptors.get(validAfter).add(descriptor);
+        if (!rawValidAfterLines.containsKey(validAfter)) {
+          rawValidAfterLines.put(validAfter, "<tt>valid-after "
               + "<a href=\"consensus?valid-after="
               + validAfter.replaceAll(":", "-").replaceAll(" ", "-")
               + "\" target=\"_blank\">" + validAfter + "</a></tt><br>");
-          lastValidAfter = validAfter;
-          out.flush();
         }
-        byte[] rawStatusEntry = rs.getBytes(2);
-        try {
-          String statusEntryLines = new String(rawStatusEntry,
-              "US-ASCII");
+        if (!rawStatusEntries.containsKey(descriptor)) {
+          byte[] rawStatusEntry = rs.getBytes(3);
+          String statusEntryLines = null;
+          try {
+            statusEntryLines = new String(rawStatusEntry, "US-ASCII");
+          } catch (UnsupportedEncodingException e) {
+            /* This shouldn't happen, because we know that ASCII is
+             * supported. */
+          }
+          StringBuilder rawStatusEntryBuilder = new StringBuilder();
           String[] lines = statusEntryLines.split("\n");
           for (String line : lines) {
             if (line.startsWith("r ")) {
               String[] parts = line.split(" ");
-              String descriptor = String.format("%040x",
+              String descriptorBase64 = String.format("%040x",
                   new BigInteger(1, Base64.decodeBase64(parts[3]
                   + "==")));
-              out.println("    <tt>r " + parts[1] + " " + parts[2] + " "
-                  + "<a href=\"descriptor.html?desc-id=" + descriptor
-                  + "\" target=\"_blank\">" + parts[3] + "</a> "
-                  + parts[4] + " " + parts[5] + " " + parts[6] + " "
-                  + parts[7] + " " + parts[8] + "</tt><br>");
+              rawStatusEntryBuilder.append("<tt>r " + parts[1] + " "
+                  + parts[2] + " <a href=\"descriptor.html?desc-id="
+                  + descriptorBase64 + "\" target=\"_blank\">" + parts[3]
+                  + "</a> " + parts[4] + " " + parts[5] + " " + parts[6]
+                  + " " + parts[7] + " " + parts[8] + "</tt><br>");
             } else {
-              out.println("    <tt>" + line + "</tt><br>");
+              rawStatusEntryBuilder.append("<tt>" + line + "</tt><br>");
             }
+            rawStatusEntries.put(descriptor,
+                rawStatusEntryBuilder.toString());
           }
-          out.println("    <br>");
-          out.flush();
-        } catch (UnsupportedEncodingException e) {
-          /* This shouldn't happen, because we know that ASCII is
-           * supported. */
         }
       }
       statement.close();
     } catch (SQLException e) {
-      out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
-          + "experienced an unknown database problem while running the "
-          + "search. The query was '" + query + "'. If this problem "
-          + "persists, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
-          + "know</a>!</p>\n");
-      writeFooter(out);
+
+      /* Tell the user we have a database problem. */
+      request.setAttribute("dbProblem", "Database problem.");
+      request.getRequestDispatcher("WEB-INF/relay-search.jsp").forward(
+          request, response);
       return;
     }
+    request.setAttribute("queryTime", System.currentTimeMillis()
+        - startedQuery);
+    request.setAttribute("foundDescriptors", foundDescriptors);
+    request.setAttribute("rawValidAfterLines", rawValidAfterLines);
+    request.setAttribute("rawStatusEntries", rawStatusEntries);
+    request.setAttribute("matches", matches);
 
-    /* Display total search time on the results page. */
-    long searchTime = System.currentTimeMillis() - started;
-    long queryTime = System.currentTimeMillis() - startedQuery;
-    out.write("        <br><p>Found " + (matches > 30 ? "more than 30"
-        : "" + matches) + " relays " + (matches > 30 ?
-        "(displaying only the first 30 hits) " : "") + "in "
-        + String.format("%d.%03d", searchTime / 1000, searchTime % 1000)
-        + " seconds.</p>\n");
-    if (searchTime > 10L * 1000L) {
-      out.write("        <p>In theory, search time should not exceed "
-          + "10 seconds. The query was '" + query + "'. If this or "
-          + "similar searches remain slow, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
-          + "know</a>!</p>\n");
-    }
-
-    /* Finish writing response. */
-    writeFooter(out);
-    return;
+    /* We're done. Let the JSP do the rest. */
+    request.getRequestDispatcher("WEB-INF/relay-search.jsp").forward(
+        request, response);
   }
 }
 
