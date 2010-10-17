@@ -27,43 +27,25 @@
     <url-pattern>/graphs.html</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>GraphsNetwork</servlet-name>
+    <servlet-name>GraphsSubpages</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.GraphsNetworkServlet
+      org.torproject.ernie.web.GraphsSubpagesServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>GraphsNetwork</servlet-name>
+    <servlet-name>GraphsSubpages</servlet-name>
     <url-pattern>/network.html</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>GraphsUsers</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.web.GraphsUsersServlet
-    </servlet-class>
-  </servlet>
   <servlet-mapping>
-    <servlet-name>GraphsUsers</servlet-name>
+    <servlet-name>GraphsSubpages</servlet-name>
     <url-pattern>/users.html</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>GraphsPackages</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.web.GraphsPackagesServlet
-    </servlet-class>
-  </servlet>
   <servlet-mapping>
-    <servlet-name>GraphsPackages</servlet-name>
+    <servlet-name>GraphsSubpages</servlet-name>
     <url-pattern>/packages.html</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>GraphsPerformance</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.web.GraphsPerformanceServlet
-    </servlet-class>
-  </servlet>
   <servlet-mapping>
-    <servlet-name>GraphsPerformance</servlet-name>
+    <servlet-name>GraphsSubpages</servlet-name>
     <url-pattern>/performance.html</url-pattern>
   </servlet-mapping>
   <servlet>

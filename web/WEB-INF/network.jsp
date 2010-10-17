@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -10,7 +11,6 @@
   <div class="center">
     <%@ include file="banner.jsp"%>
     <div class="main-column">
-<%@page import="java.util.*" %>
 <h2>Tor Metrics Portal: Network</h2>
 <br>
 <h3>Relays and bridges in the network</h3>
@@ -18,44 +18,18 @@
 <p>The following graph shows the average daily number of relays and
 bridges in the network.</p>
 <a name="networksize"></a>
-<%
-StringBuilder networksizeUrl = new StringBuilder("networksize.png");
-if ("networksize".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (parameters.size() > 0) {
-    networksizeUrl.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        networksizeUrl.append("&" + parameters.get(i));
-      }
-    }
-  }
-}
-out.println("<img src=\"" + networksizeUrl.toString() + "\" width=\"576\" "
-    + "height=\"360\" alt=\"Network size graph\">");
-%><form action="network.html#networksize">
+<img src="networksize.png${networksize_url}"
+     width="576" height="360" alt="Network size graph">
+<form action="network.html#networksize">
   <div class="formrow">
     <input type="hidden" name="graph" value="networksize">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("networksize".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${networksize_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("networksize".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${networksize_end[0]}">
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
@@ -70,52 +44,18 @@ out.println("<img src=\"" + networksizeUrl.toString() + "\" width=\"576\" "
 use for their path selection decisions. The following graph shows the
 average number of relays with these flags assigned.</p>
 <a name="relayflags"></a>
-<%
-StringBuilder relayflagsUrl = new StringBuilder("relayflags.png");
-if ("relayflags".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end");
-  String[] flagParameters = request.getParameterValues("flag");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (flagParameters != null && flagParameters.length > 0) {
-    for (String flag : flagParameters) {
-      if (flag != null && flag.length() > 0) {
-        parameters.add("flag=" + flag);
-      }
-    }
-  }
-  if (parameters.size() > 0) {
-    relayflagsUrl.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        relayflagsUrl.append("&" + parameters.get(i));
-      }
-    }
-  }
-}
-out.println("<img src=\"" + relayflagsUrl.toString() + "\" width=\"576\" "
-    + "height=\"360\" alt=\"Relay flags graph\">");
-%><form action="network.html#relayflags">
+<img src="relayflags.png${relayflags_url}"
+     width="576" height="360" alt="Relay flags graph">
+<form action="network.html#relayflags">
   <div class="formrow">
     <input type="hidden" name="graph" value="relayflags">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("relayflags".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${relayflags_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("relayflags".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${relayflags_end[0]}">
     </p><p>
       <label>Relay flags: </label>
       <input type="checkbox" name="flag" value="Running"> Running
@@ -135,52 +75,18 @@ out.println("<img src=\"" + relayflagsUrl.toString() + "\" width=\"576\" "
 <p>The same graph on the average number of relays with flags assigned is
 available on 1-hour detail.</p>
 <a name="relayflags-hour"></a>
-<%
-StringBuilder relayflagsHourUrl = new StringBuilder("relayflags-hour.png");
-if ("relayflags-hour".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end");
-  String[] flagParameters = request.getParameterValues("flag");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (flagParameters != null && flagParameters.length > 0) {
-    for (String flag : flagParameters) {
-      if (flag != null && flag.length() > 0) {
-        parameters.add("flag=" + flag);
-      }
-    }
-  }
-  if (parameters.size() > 0) {
-    relayflagsHourUrl.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        relayflagsHourUrl.append("&" + parameters.get(i));
-      }
-    }
-  }
-}
-out.println("<img src=\"" + relayflagsHourUrl.toString()
-    + "\" width=\"576\" height=\"360\" alt=\"Relay flags graph\">");
-%><form action="network.html#relayflags-hour">
+<img src="relayflags-hour.png${relayflags_hour_url}"
+     width="576" height="360" alt="Relay flags graph">
+<form action="network.html#relayflags-hour">
   <div class="formrow">
     <input type="hidden" name="graph" value="relayflags-hour">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("relayflags-hour".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${relayflags_hour_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("relayflags-hour".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${relayflags_hour_end[0]}">
     </p><p>
       <label>Relay flags: </label>
       <input type="checkbox" name="flag" value="Running"> Running
@@ -201,44 +107,18 @@ out.println("<img src=\"" + relayflagsHourUrl.toString()
 authorities. The following graph shows the number of relays by
 version.</p>
 <a name="versions"></a>
-<%
-StringBuilder versionsUrl = new StringBuilder("versions.png");
-if ("versions".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (parameters.size() > 0) {
-    versionsUrl.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        versionsUrl.append("&" + parameters.get(i));
-      }
-    }
-  }
-}
-out.println("<img src=\"" + versionsUrl.toString() + "\" width=\"576\" "
-    + "height=\"360\" alt=\"Relay versions graph\">");
-%><form action="network.html#versions">
+<img src="versions.png${versions_url}"
+     width="576" height="360" alt="Relay versions graph">
+<form action="network.html#versions">
   <div class="formrow">
     <input type="hidden" name="graph" value="versions">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("versions".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${versions_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("versions".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${versions_end[0]}">
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
@@ -252,44 +132,18 @@ out.println("<img src=\"" + versionsUrl.toString() + "\" width=\"576\" "
 authorities. The following graph shows the number of relays by
 platform.</p>
 <a name="platforms"></a>
-<%
-StringBuilder platformsUrl = new StringBuilder("platforms.png");
-if ("platforms".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (parameters.size() > 0) {
-    platformsUrl.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        platformsUrl.append("&" + parameters.get(i));
-      }
-    }
-  }
-}
-out.println("<img src=\"" + platformsUrl.toString() + "\" width=\"576\" "
-    + "height=\"360\" alt=\"Relay platforms graph\">");
-%><form action="network.html#platforms">
+<img src="platforms.png${platforms_url}"
+     width="576" height="360" alt="Relay platforms graph">
+<form action="network.html#platforms">
   <div class="formrow">
     <input type="hidden" name="graph" value="platforms">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("platforms".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${platforms_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("platforms".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${platforms_end[0]}">
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
@@ -304,44 +158,18 @@ many bytes they have read and written in the past 24 hours. The following
 graph shows total advertised bandwidth and bandwidth history of all relays
 in the network.</p>
 <a name="bandwidth"></a>
-<%
-StringBuilder bandwidthUrl = new StringBuilder("bandwidth.png");
-if ("bandwidth".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (parameters.size() > 0) {
-    bandwidthUrl.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        bandwidthUrl.append("&" + parameters.get(i));
-      }
-    }
-  }
-}
-out.println("<img src=\"" + bandwidthUrl.toString() + "\" width=\"576\" "
-    + "height=\"360\" alt=\"Relay bandwidth graph\">");
-%><form action="network.html#bandwidth">
+<img src="bandwidth.png${bandwidth_url}"
+     width="576" height="360" alt="Relay bandwidth graph">
+<form action="network.html#bandwidth">
   <div class="formrow">
     <input type="hidden" name="graph" value="bandwidth">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("bandwidth".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${bandwidth_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("bandwidth".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${bandwidth_end[0]}">
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
@@ -357,44 +185,18 @@ total written and read bytes as well as written and read dir bytes. The
 dir bytes are extrapolated from those relays who report them to reflect
 the number of written and read dir bytes by all relays.</p>
 <a name="dirbytes"></a>
-<%
-StringBuilder dirbytesUrl = new StringBuilder("dirbytes.png");
-if ("dirbytes".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (parameters.size() > 0) {
-    dirbytesUrl.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        dirbytesUrl.append("&" + parameters.get(i));
-      }
-    }
-  }
-}
-out.println("<img src=\"" + dirbytesUrl.toString() + "\" width=\"576\" "
-    + "height=\"360\" alt=\"Dir bytes graph\">");
-%><form action="network.html#dirbytes">
+<img src="dirbytes.png${dirbytes_url}"
+     width="576" height="360" alt="Dir bytes graph">
+<form action="network.html#dirbytes">
   <div class="formrow">
     <input type="hidden" name="graph" value="dirbytes">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("dirbytes".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${dirbytes_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("dirbytes".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${dirbytes_end[0]}">
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>

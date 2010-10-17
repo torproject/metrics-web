@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -10,7 +11,6 @@
   <div class="center">
     <%@ include file="banner.jsp"%>
     <div class="main-column">
-<%@page import="java.util.*" %>
 <h2>Tor Metrics Portal: Packages</h2>
 <br>
 <h3>Packages requested from GetTor</h3>
@@ -19,51 +19,18 @@
 graph shows the number of packages requested from GetTor per day.</p>
 <p>
 <a name="gettor"></a>
-<%
-if ("gettor".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end"),
-      bundleParameter = request.getParameter("bundle");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (bundleParameter != null && bundleParameter.length() > 0) {
-    parameters.add("bundle=" + bundleParameter);
-  }
-  StringBuilder url = new StringBuilder("gettor.png");
-  if (parameters.size() > 0) {
-    url.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        url.append("&" + parameters.get(i));
-      }
-    }
-  }
-  out.println("<img src=\"" + url.toString() + "\" width=\"576\" "
-      + "height=\"360\" alt=\"GetTor graph\">");
-} else {%>
-  <img src="gettor.png" width="576" height="360" alt="GetTor graph">
-<%
-}
-%><form action="packages.html#gettor">
+<img src="gettor.png${gettor_url}"
+     width="576" height="360" alt="GetTor graph">
+<form action="packages.html#gettor">
   <div class="formrow">
     <input type="hidden" name="graph" value="gettor">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("gettor".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${gettor_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("gettor".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${gettor_end[0]}">
     </p><p>
       Packages:
       <input type="radio" name="bundle" value="all"> Total packages

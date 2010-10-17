@@ -8,12 +8,12 @@ import javax.servlet.http.*;
 
 /**
  * Servlet that reads an HTTP request for a graph image, asks the
- * GraphController to generate this graph if it's not in the cache, and
+ * GraphGenerator to generate this graph if it's not in the cache, and
  * returns the image bytes to the client.
  */
 public class GraphImageServlet extends HttpServlet {
 
-  private GraphController graphController;
+  private GraphGenerator graphGenerator;
 
   public void init() {
     ServletConfig servletConfig = getServletConfig();
@@ -22,7 +22,7 @@ public class GraphImageServlet extends HttpServlet {
     String maxCacheAge = servletConfig.getInitParameter("maxCacheAge");
     String cachedGraphsDir = servletConfig.getInitParameter(
         "cachedGraphsDir");
-    this.graphController = new GraphController(rserveHost, rservePort,
+    this.graphGenerator = new GraphGenerator(rserveHost, rservePort,
         maxCacheAge, cachedGraphsDir);
   }
 
@@ -85,7 +85,7 @@ public class GraphImageServlet extends HttpServlet {
 
     /* Request graph from graph controller, which either returns it from
      * its cache or asks Rserve to generate it. */
-    byte[] graphBytes = graphController.generateGraph(rQuery,
+    byte[] graphBytes = graphGenerator.generateGraph(rQuery,
         imageFilename);
 
     /* Make sure that we have a graph to return. */

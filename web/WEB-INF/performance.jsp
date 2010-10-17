@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -10,7 +11,6 @@
   <div class="center">
     <%@ include file="banner.jsp"%>
     <div class="main-column">
-<%@page import="java.util.*" %>
 <h2>Tor Metrics Portal: Performance</h2>
 <br>
 <h3>Time to download files over Tor</h3>
@@ -20,55 +20,18 @@ experienced by its users. The graphs contain the average (median) time to
 request files of three different sizes over Tor as well as first and third
 quartile of request times.</p>
 <a name="torperf"></a>
-<%
-if ("torperf".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end"),
-      sourceParameter = request.getParameter("source"),
-      filesizeParameter = request.getParameter("filesize");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (sourceParameter != null && sourceParameter.length() > 0) {
-    parameters.add("source=" + sourceParameter);
-  }
-  if (filesizeParameter != null && filesizeParameter.length() > 0) {
-    parameters.add("filesize=" + filesizeParameter);
-  }
-  StringBuilder url = new StringBuilder("torperf.png");
-  if (parameters.size() > 0) {
-    url.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        url.append("&" + parameters.get(i));
-      }
-    }
-  }
-  out.println("<img src=\"" + url.toString() + "\" width=\"576\" "
-      + "height=\"360\" alt=\"Torperf graph\">");
-} else {%>
-  <img src="torperf.png" width="576" height="360" alt="Torperf graph">
-<%
-}
-%><form action="performance.html#torperf">
+<img src="torperf.png${torperf_url}"
+     width="576" height="360" alt="Torperf graph">
+<form action="performance.html#torperf">
   <div class="formrow">
     <input type="hidden" name="graph" value="torperf">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("torperf".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${torperf_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("torperf".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${torperf_end[0]}">
     </p><p>
       Source:
       <input type="radio" name="source" value="torperf"> torperf

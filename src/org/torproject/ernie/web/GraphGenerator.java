@@ -6,7 +6,7 @@ import java.util.*;
 import org.rosuda.REngine.Rserve.*;
 import org.rosuda.REngine.*;
 
-public class GraphController {
+public class GraphGenerator {
 
   /* Host and port where Rserve is listening. */
   private String rserveHost;
@@ -16,7 +16,7 @@ public class GraphController {
   private String cachedGraphsDirectory;
   private long maxCacheAge;
 
-  public GraphController(String rserveHost, String rservePort,
+  public GraphGenerator(String rserveHost, String rservePort,
       String maxCacheAge, String cachedGraphsDir) {
 
     this.rserveHost = rserveHost;

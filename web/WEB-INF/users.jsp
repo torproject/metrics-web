@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -10,7 +11,6 @@
   <div class="center">
     <%@ include file="banner.jsp"%>
     <div class="main-column">
-<%@page import="java.util.*" %>
 <h2>Tor Metrics Portal: Users</h2>
 <br>
 <h3>New or returning, directly connecting Tor users</h3>
@@ -23,52 +23,18 @@ The following graphs display an estimate of new or returning Tor users
 based on the requests as seen by gabelmoo, one of the directory
 authorities.</p>
 <a name="new-users"></a>
-<%
-StringBuilder newUsersUrl = new StringBuilder("new-users.png");
-if ("new-users".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end");
-  String[] countryParameters = request.getParameterValues("country");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (countryParameters != null && countryParameters.length > 0) {
-    for (String country : countryParameters) {
-      if (country != null && country.length() > 0) {
-        parameters.add("country=" + country);
-      }
-    }
-  }
-  if (parameters.size() > 0) {
-    newUsersUrl.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        newUsersUrl.append("&" + parameters.get(i));
-      }
-    }
-  }
-}
-out.println("<img src=\"" + newUsersUrl.toString() + "\" width=\"576\" "
-    + "height=\"360\" alt=\"New users graph\">");
-%><form action="users.html#new-users">
+<img src="new-users.png${new_users_url}"
+     width="576" height="360" alt="New users graph">
+<form action="users.html#new-users">
   <div class="formrow">
     <input type="hidden" name="graph" value="new-users">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("new-users".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${new_users_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("new-users".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${new_users_end[0]}">
     </p><p>
       Source:
       <input type="radio" name="country" value="all">All users
@@ -115,52 +81,18 @@ authorities. The following graphs show an estimate of recurring Tor users
 based on the requests as seen by trusted, a particularly fast directory
 mirror.</p>
 <a name="direct-users"></a>
-<%
-StringBuilder directUsersUrl = new StringBuilder("direct-users.png");
-if ("direct-users".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end");
-  String[] countryParameters = request.getParameterValues("country");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (countryParameters != null && countryParameters.length > 0) {
-    for (String country : countryParameters) {
-      if (country != null && country.length() > 0) {
-        parameters.add("country=" + country);
-      }
-    }
-  }
-  if (parameters.size() > 0) {
-    directUsersUrl.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        directUsersUrl.append("&" + parameters.get(i));
-      }
-    }
-  }
-}
-out.println("<img src=\"" + directUsersUrl.toString() + "\" width=\"576\" "
-    + "height=\"360\" alt=\"Recurring users graph\">");
-%><form action="users.html#direct-users">
+<img src="direct-users.png${direct_users_url}"
+     width="576" height="360" alt="Direct users graph">
+<form action="users.html#direct-users">
   <div class="formrow">
     <input type="hidden" name="graph" value="direct-users">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("direct-users".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${direct_users_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("direct-users".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${direct_users_end[0]}">
     </p><p>
       Source:
       <input type="radio" name="country" value="all">All users
@@ -209,52 +141,18 @@ via bridges, which are non-public relays. The following graphs display an
 estimate of Tor users via bridges based on the unique IP addresses as seen
 by a few hundred bridges.</p>
 <a name="bridge-users"></a>
-<%
-StringBuilder bridgeUsersUrl = new StringBuilder("bridge-users.png");
-if ("bridge-users".equals(request.getParameter("graph"))) {
-  List<String> parameters = new ArrayList<String>();
-// TODO check values here!
-  String startParameter = request.getParameter("start"),
-      endParameter = request.getParameter("end");
-  String[] countryParameters = request.getParameterValues("country");
-  if (startParameter != null && startParameter.length() > 0) {
-    parameters.add("start=" + startParameter);
-  }
-  if (endParameter != null && endParameter.length() > 0) {
-    parameters.add("end=" + endParameter);
-  }
-  if (countryParameters != null && countryParameters.length > 0) {
-    for (String country : countryParameters) {
-      if (country != null && country.length() > 0) {
-        parameters.add("country=" + country);
-      }
-    }
-  }
-  if (parameters.size() > 0) {
-    bridgeUsersUrl.append("?" + parameters.get(0));
-    if (parameters.size() > 1) {
-      for (int i = 1; i < parameters.size(); i++) {
-        bridgeUsersUrl.append("&" + parameters.get(i));
-      }
-    }
-  }
-}
-out.println("<img src=\"" + bridgeUsersUrl.toString() + "\" width=\"576\" "
-    + "height=\"360\" alt=\"Bridge users graph\">");
-%><form action="users.html#bridge-users">
+<img src="bridge-users.png${bridge_users_url}"
+     width="576" height="360" alt="Bridge users graph">
+<form action="users.html#bridge-users">
   <div class="formrow">
     <input type="hidden" name="graph" value="bridge-users">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-        value="<%=("bridge-users".equals(request.getParameter("graph")) &&
-                   request.getParameter("start") != null) ?
-                      request.getParameter("start") : ""%>">
+             value="${bridge_users_start[0]}">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-        value="<%=("bridge-users".equals(request.getParameter("graph")) &&
-                   request.getParameter("end") != null) ?
-                      request.getParameter("end") : ""%>">
+             value="${bridge_users_end[0]}">
     </p><p>
       Source:
       <input type="radio" name="country" value="all">All users

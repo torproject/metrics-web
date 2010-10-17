@@ -93,7 +93,10 @@ public class GraphParameterChecker {
         supportedGraphParameters.contains("end")) {
       String[] startParameter = (String[]) requestParameters.get("start");
       String[] endParameter = (String[]) requestParameters.get("end");
-      if (startParameter == null && endParameter == null) {
+      if ((startParameter == null || startParameter.length < 1 ||
+          startParameter[0].length() < 1) &&
+          (endParameter == null || endParameter.length < 1 ||
+          endParameter[0].length() < 1)) {
         /* If no start and end parameters are given, set default date
          * range to the past 90 days. */
         long now = System.currentTimeMillis();
