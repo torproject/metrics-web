@@ -25,7 +25,7 @@ public class ErnieGeneratedFileServlet extends HttpServlet {
     try {
       File f = new File(fn);
       if (!f.exists()) {
-        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
         return;
       }
       response.setContentType(this.getServletContext().getMimeType(f.getName()));

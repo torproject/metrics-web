@@ -21,14 +21,14 @@ public class ConsensusServlet extends HttpServlet {
         + "directory-archive/consensus");
     if (!archiveDirectory.exists() || !archiveDirectory.isDirectory()) {
       /* Oops, we don't have any descriptors to serve. */
-      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
 
     /* Check valid-after parameter. */
     if (validAfterParameter == null ||
-        validAfterParameter.length() < "yyyy-MM-dd-HH-mm-ss".length()) {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        validAfterParameter.length() != "yyyy-MM-dd-HH-mm-ss".length()) {
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
     SimpleDateFormat timeFormat = new SimpleDateFormat(
@@ -38,11 +38,11 @@ public class ConsensusServlet extends HttpServlet {
     try {
       parsedTimestamp = timeFormat.parse(validAfterParameter);
     } catch (ParseException e) {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
     if (parsedTimestamp == null) {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
     String consensusFilename = archiveDirectory.getAbsolutePath()
@@ -53,7 +53,7 @@ public class ConsensusServlet extends HttpServlet {
     File consensusFile = new File(consensusFilename);
 
     if (!consensusFile.exists()) {
-      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 

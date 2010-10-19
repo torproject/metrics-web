@@ -82,7 +82,6 @@ public class RelayServlet extends HttpServlet {
         + "              <a class=\"current\">Relay Search</a>\n"
         + "              <a href=\"consensus-health.html\">Consensus "
           + "Health</a>\n"
-        + "              <a href=\"log.html\">Last Log</a>\n"
         + "            </font>\n"
         + "          </td>\n"
         + "          <td class=\"banner-right\"></td>\n"
