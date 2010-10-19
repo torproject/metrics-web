@@ -241,12 +241,13 @@ plot_new_users <- function(start, end, country, path) {
     "Total new or returning, directly connecting Tor users (all data)\n",
     paste("New or returning, directly connecting",
     peoples[peoples$country == country, "people"], "Tor users\n"))
+  formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
   ggplot(newusers, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name = "", limits = c(0, max(newusers$users,
-        na.rm = TRUE))) +
+        na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
@@ -282,12 +283,13 @@ plot_direct_users <- function(start, end, country, path) {
     "Total recurring, directly connecting Tor users (all data)\n",
     paste("Recurring, directly connecting",
     peoples[peoples$country == country, "people"], "Tor users\n"))
+  formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
   ggplot(directusers, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name = "", limits = c(0, max(directusers$users,
-        na.rm = TRUE))) +
+        na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
@@ -323,12 +325,13 @@ plot_bridge_users <- function(start, end, country, path) {
     "Total users via bridges (all data)\n",
     paste(peoples[peoples$country == country, "people"],
     "users via bridges\n"))
+  formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
   ggplot(bridgeusers, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name = "", limits = c(0, max(bridgeusers$users,
-        na.rm = TRUE))) +
+        na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
