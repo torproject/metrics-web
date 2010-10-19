@@ -270,6 +270,49 @@
     <url-pattern>/consensus-health-2.html</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>Redirect</servlet-name>
+    <servlet-class>
+      org.torproject.ernie.web.RedirectServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Redirect</servlet-name>
+    <url-pattern>/networksize.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Redirect</servlet-name>
+    <url-pattern>/exit-relays-graphs.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Redirect</servlet-name>
+    <url-pattern>/bridge-users-graphs.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Redirect</servlet-name>
+    <url-pattern>/new-users-graphs.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Redirect</servlet-name>
+    <url-pattern>/consensus-graphs.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Redirect</servlet-name>
+    <url-pattern>/recurring-users-graphs.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Redirect</servlet-name>
+    <url-pattern>/torperf-graphs.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Redirect</servlet-name>
+    <url-pattern>/gettor-graphs.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Redirect</servlet-name>
+    <url-pattern>/custom-graph.html</url-pattern>
+  </servlet-mapping>
+
   <context-param>
     <param-name>jdbcUrl</param-name>
     <param-value>
