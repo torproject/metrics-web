@@ -33,10 +33,6 @@ public class GraphImageServlet extends HttpServlet {
     /* Find out which graph type was requested and make sure we know this
      * graph type. */
     String requestedGraph = request.getRequestURI();
-    if (requestedGraph == null) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return;
-    }
     if (requestedGraph.endsWith(".png")) {
       requestedGraph = requestedGraph.substring(0, requestedGraph.length()
           - ".png".length());
