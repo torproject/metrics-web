@@ -48,7 +48,7 @@ plot_versions <- function(start, end, path) {
   versions <- fetch(rs, n = -1)
   dbDisconnect(con)
   dbUnloadDriver(drv)
-  visible_versions <- unique(versions$version)
+  visible_versions <- sort(unique(versions$version))
   versions <- rbind(data.frame(
     date = as.Date(rep(end, 7)),
     version = c("0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1", "0.2.2",
