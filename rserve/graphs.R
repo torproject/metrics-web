@@ -373,3 +373,24 @@ plot_torperf <- function(start, end, source, filesize, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
+plot_routerdetail <- function(start, end, fingerprint, path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("select avg(bandwidth)::integer as bw, date(validafter) ",
+      "from statusentry where fingerprint='",fingerprint,"' ",
+      "group by date(validafter);", sep = "")
+  rs <- dbSendQuery(con, q)
+  routerdetail <- fetch(rs, n = -1)
+  routerdetail <- melt(routerdetail, id="date")
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  ggplot(routerdetail, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
+    colour = variable)) + geom_line(size = 1) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = "")) +
+    scale_y_continuous(name = "") +
+    scale_colour_hue("", breaks = c("bw"),
+        labels = c("Bandwidth")) +
+    opts(title = paste("Bandwidth history for ", fingerprint, "\n", sep = ""))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}

@@ -119,6 +119,27 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>NetworkStatus</servlet-name>
+    <servlet-class>
+      org.torproject.ernie.web.NetworkStatusServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NetworkStatus</servlet-name>
+    <url-pattern>/networkstatus.html</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>RouterDetail</servlet-name>
+    <servlet-class>
+      org.torproject.ernie.web.RouterDetailServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RouterDetail</servlet-name>
+    <url-pattern>/routerdetail.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>Relay</servlet-name>
     <servlet-class>
       org.torproject.ernie.web.RelayServlet
@@ -193,6 +214,10 @@
   <servlet-mapping>
     <servlet-name>GraphImage</servlet-name>
     <url-pattern>/torperf.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/routerdetail.png</url-pattern>
   </servlet-mapping>
 
   <servlet>

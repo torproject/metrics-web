@@ -35,11 +35,15 @@
             %>>Performance</a>
       </font>
     <%} else if (currentPage.endsWith("status.jsp") ||
+                 currentPage.endsWith("networkstatus.jsp") ||
                  currentPage.endsWith("exonerator.jsp") ||
                  currentPage.endsWith("relay-search.jsp") ||
                  currentPage.endsWith("consensus-health.jsp")) {
      %><br>
       <font size="2">
+        <a <%if (currentPage.endsWith("networkstatus.jsp")){
+            %>class="current"<%} else {%>href="/networkstatus.html"<%}
+            %>>Network Status</a>
         <a <%if (currentPage.endsWith("exonerator.jsp")){
             %>class="current"<%} else {%>href="/exonerator.html"<%}
             %>>ExoneraTor</a>
