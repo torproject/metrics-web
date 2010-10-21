@@ -66,13 +66,13 @@
     <init-param>
       <param-name>remoteDataFiles</param-name>
       <param-value>
-        /srv/metrics.torproject.org/ernie/remote-files-for-data-page
+        /srv/metrics.torproject.org/web/remote-files-for-data-page
       </param-value>
     </init-param>
     <init-param>
       <param-name>localDataDir</param-name>
       <param-value>
-        /srv/metrics.torproject.org/ernie/website/data/
+        /srv/metrics.torproject.org/db/data/
       </param-value>
     </init-param>
   </servlet>
@@ -150,7 +150,9 @@
     </init-param>
     <init-param>
       <param-name>cachedGraphsDir</param-name>
-      <param-value>/srv/metrics.torproject.org/graphs/</param-value>
+      <param-value>
+        /srv/metrics.torproject.org/web/rserve/graphs/
+      </param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
