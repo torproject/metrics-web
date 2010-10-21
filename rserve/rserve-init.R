@@ -10,7 +10,7 @@ library("plyr")
 library("digest")
 
 db = "tordir"
-dbuser = "ernie"
+dbuser = "metrics"
 dbpassword= ""
 
 source('graphs.R')
