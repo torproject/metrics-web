@@ -1,13 +1,17 @@
 package org.torproject.ernie.web;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.*;
 import java.math.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.*;
 import java.util.regex.*;
+
+import javax.naming.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.sql.*;
 
 import org.apache.commons.codec.binary.*;
 
@@ -48,50 +52,33 @@ public class RelaySearchServlet extends HttpServlet {
   private SimpleDateFormat dateTimeFormat =
       new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-  private Connection conn = null;
+  private DataSource ds;
+
+  private Logger logger;
 
   public void init() {
 
+    /* Initialize logger. */
+    this.logger = Logger.getLogger(RelaySearchServlet.class.toString());
+
+    /* Initialize date format parsers. */
     dayFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     monthFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    /* Try to load the database driver. */
+    /* Look up data source. */
     try {
-      Class.forName("org.postgresql.Driver");
-    } catch (ClassNotFoundException e) {
-      /* Don't initialize conn and always reply to all requests with
-       * "500 internal server error". */
-      return;
-    }
-
-    /* Read JDBC URL from deployment descriptor. */
-    String connectionURL = getServletContext().
-        getInitParameter("jdbcUrl");
-
-    /* Try to connect to database. */
-    try {
-      conn = DriverManager.getConnection(connectionURL);
-    } catch (SQLException e) {
-      conn = null;
+      Context cxt = new InitialContext();
+      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/tordir");
+      this.logger.info("Successfully looked up data source.");
+    } catch (NamingException e) {
+      this.logger.log(Level.WARNING, "Could not look up data source", e);
     }
   }
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException,
       ServletException {
-
-    /* Check if we have a database connection. If not, there's nothing we
-     * can do here. */
-    if (conn == null) {
-      request.setAttribute("noDbConn", "No database connection.");
-      request.getRequestDispatcher("WEB-INF/relay-search.jsp").forward(
-          request, response);
-      return;
-    }
-
-    /* We should be able to answer this request. Show the search form. */
-    request.setAttribute("showForm", "Show search form.");
 
     /* Read search parameter. If we don't have a search parameter, we're
      * done here. */
@@ -382,6 +369,7 @@ public class RelaySearchServlet extends HttpServlet {
     Map<String, String> rawStatusEntries = new HashMap<String, String>();
     int matches = 0;
     try {
+      Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       ResultSet rs = statement.executeQuery(query);
       while (rs.next()) {
@@ -432,13 +420,14 @@ public class RelaySearchServlet extends HttpServlet {
           }
         }
       }
+      rs.close();
       statement.close();
+      conn.close();
     } catch (SQLException e) {
 
       /* Tell the user we have a database problem. */
-      request.setAttribute("dbProblem", "Database problem.");
-      request.getRequestDispatcher("WEB-INF/relay-search.jsp").forward(
-          request, response);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+          "Database problem");
       return;
     }
     request.setAttribute("queryTime", System.currentTimeMillis()

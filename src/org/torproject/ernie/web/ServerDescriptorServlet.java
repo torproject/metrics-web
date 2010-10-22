@@ -1,47 +1,40 @@
 package org.torproject.ernie.web;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.*;
 import java.sql.*;
+import java.util.logging.*;
 import java.util.regex.*;
+
+import javax.naming.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.sql.*;
 
 public class ServerDescriptorServlet extends HttpServlet {
 
-  private Connection conn = null;
+  private DataSource ds;
+
+  private Logger logger;
 
   public void init() {
 
-    /* Try to load the database driver. */
-    try {
-      Class.forName("org.postgresql.Driver");
-    } catch (ClassNotFoundException e) {
-      /* Don't initialize conn and always reply to all requests with
-       * "500 internal server error". */
-      return;
-    }
+    /* Initialize logger. */
+    this.logger = Logger.getLogger(
+        ServerDescriptorServlet.class.toString());
 
-    /* Read JDBC URL from deployment descriptor. */
-    String connectionURL = getServletContext().
-        getInitParameter("jdbcUrl");
-
-    /* Try to connect to database. */
+    /* Look up data source. */
     try {
-      conn = DriverManager.getConnection(connectionURL);
-    } catch (SQLException e) {
-      conn = null;
+      Context cxt = new InitialContext();
+      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/tordir");
+      this.logger.info("Successfully looked up data source.");
+    } catch (NamingException e) {
+      this.logger.log(Level.WARNING, "Could not look up data source", e);
     }
   }
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException,
       ServletException {
-
-    /* Check if we have a database connection. */
-    if (conn == null) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
-    }
 
     /* Check desc-id parameter. */
     String descIdParameter = request.getParameter("desc-id");
@@ -62,6 +55,7 @@ public class ServerDescriptorServlet extends HttpServlet {
     String descriptor = null;
     byte[] rawDescriptor = null;
     try {
+      Connection conn = ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT descriptor, rawdesc FROM descriptor "
           + "WHERE descriptor LIKE '" + descId + "%'";
@@ -70,6 +64,9 @@ public class ServerDescriptorServlet extends HttpServlet {
         descriptor = rs.getString(1);
         rawDescriptor = rs.getBytes(2);
       }
+      rs.close();
+      statement.close();
+      conn.close();
     } catch (SQLException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;

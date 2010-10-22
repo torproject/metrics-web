@@ -1,41 +1,39 @@
 package org.torproject.ernie.web;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.*;
 import java.math.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.*;
 import java.util.regex.*;
+
+import javax.naming.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.sql.*;
 
 import org.apache.commons.codec.*;
 import org.apache.commons.codec.binary.*;
 
 public class DescriptorServlet extends HttpServlet {
 
-  private Connection conn = null;
+  private DataSource ds;
+
+  private Logger logger;
 
   public void init() {
 
-    /* Try to load the database driver. */
-    try {
-      Class.forName("org.postgresql.Driver");
-    } catch (ClassNotFoundException e) {
-      /* Don't initialize conn and always reply to all requests with
-       * "500 internal server error". */
-      return;
-    }
+    /* Initialize logger. */
+    this.logger = Logger.getLogger(DescriptorServlet.class.toString());
 
-    /* Read JDBC URL from deployment descriptor. */
-    String connectionURL = getServletContext().
-        getInitParameter("jdbcUrl");
-
-    /* Try to connect to database. */
+    /* Look up data source. */
     try {
-      conn = DriverManager.getConnection(connectionURL);
-    } catch (SQLException e) {
-      conn = null;
+      Context cxt = new InitialContext();
+      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/tordir");
+      this.logger.info("Successfully looked up data source.");
+    } catch (NamingException e) {
+      this.logger.log(Level.WARNING, "Could not look up data source", e);
     }
   }
 
@@ -125,7 +123,14 @@ public class DescriptorServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
     writeHeader(out);
 
-    /* Check if we have a database connection. */
+    /* Check if we have a data source and get a database connection. */
+    Connection conn = null;
+    if (this.ds != null) {
+      try {
+        conn = this.ds.getConnection();
+      } catch (SQLException e) {
+      }
+    }
     if (conn == null) {
       out.println("<br/><p><font color=\"red\"><b>Warning: </b></font>"
           + "This server doesn't have any relay descriptors available. "
@@ -168,6 +173,7 @@ public class DescriptorServlet extends HttpServlet {
         while (rs.next()) {
           allDescIds.add(rs.getString(1));
         }
+        rs.close();
         statement.close();
       } catch (SQLException e) {
         out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
@@ -223,6 +229,8 @@ public class DescriptorServlet extends HttpServlet {
       if (rs.next()) {
         rawExtrainfo = rs.getBytes(1);
       }
+      rs.close();
+      statement.close();
     } catch (SQLException e) {
       out.write("<br/><p><font color=\"red\"><b>Warning: </b></font>"
           + "Internal server error when looking up descriptor. If this "
@@ -316,6 +324,14 @@ public class DescriptorServlet extends HttpServlet {
     out.write("        <br/><p>Looking up this descriptor took us "
         + String.format("%d.%03d", searchTime / 1000, searchTime % 1000)
         + " seconds.</p>\n");
+
+    /* Close database connection. */
+    try {
+      conn.close();
+    } catch (SQLException e) {
+      this.logger.log(Level.WARNING, "Could not close database "
+          + "connection", e);
+    }
 
     /* Finish writing response. */
     writeFooter(out);

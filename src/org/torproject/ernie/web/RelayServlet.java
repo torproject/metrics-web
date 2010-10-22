@@ -1,48 +1,45 @@
 package org.torproject.ernie.web;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.*;
 import java.math.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.*;
 import java.util.regex.*;
+
+import javax.naming.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.sql.*;
 
 import org.apache.commons.codec.*;
 import org.apache.commons.codec.binary.*;
 
 public class RelayServlet extends HttpServlet {
 
-  private static SimpleDateFormat dayFormat =
+  private SimpleDateFormat dayFormat =
       new SimpleDateFormat("yyyy-MM-dd");
 
-  static {
-    dayFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-  }
+  private DataSource ds;
 
-  private Connection conn = null;
+  private Logger logger;
 
   public void init() {
 
-    /* Try to load the database driver. */
-    try {
-      Class.forName("org.postgresql.Driver");
-    } catch (ClassNotFoundException e) {
-      /* Don't initialize conn and always reply to all requests with
-       * "500 internal server error". */
-      return;
-    }
+    /* Initialize logger. */
+    this.logger = Logger.getLogger(RelayServlet.class.toString());
 
-    /* Read JDBC URL from deployment descriptor. */
-    String connectionURL = getServletContext().
-        getInitParameter("jdbcUrl");
+    /* Initialize date format parser. */
+    this.dayFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    /* Try to connect to database. */
+    /* Look up data source. */
     try {
-      conn = DriverManager.getConnection(connectionURL);
-    } catch (SQLException e) {
-      conn = null;
+      Context cxt = new InitialContext();
+      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/tordir");
+      this.logger.info("Successfully looked up data source.");
+    } catch (NamingException e) {
+      this.logger.log(Level.WARNING, "Could not look up data source", e);
     }
   }
 
@@ -132,7 +129,14 @@ public class RelayServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
     writeHeader(out);
 
-    /* Check if we have a database connection. */
+    /* Check if we have a data source and get a database connection. */
+    Connection conn = null;
+    if (this.ds != null) {
+      try {
+        conn = this.ds.getConnection();
+      } catch (SQLException e) {
+      }
+    }
     if (conn == null) {
       out.println("<br/><p><font color=\"red\"><b>Warning: </b></font>"
           + "This server doesn't have any relay descriptors available. "
@@ -176,12 +180,14 @@ public class RelayServlet extends HttpServlet {
         Statement statement = conn.createStatement();
         String query = "SELECT DISTINCT fingerprint FROM statusentry "
             + "WHERE validafter >= '"
-            + dayFormat.format(started - 30L * 24L * 60L * 60L * 1000L)
+            + this.dayFormat.format(started
+            - 30L * 24L * 60L * 60L * 1000L)
             + " 00:00:00' AND fingerprint LIKE '" + fingerprint + "%'";
         ResultSet rs = statement.executeQuery(query);
         while (rs.next()) {
           allFingerprints.add(rs.getString(1));
         }
+        rs.close();
         statement.close();
       } catch (SQLException e) {
         out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
@@ -221,7 +227,7 @@ public class RelayServlet extends HttpServlet {
       Statement statement = conn.createStatement();
       String query = "SELECT validafter, rawdesc FROM statusentry WHERE "
           + "validafter >= '"
-          + dayFormat.format(started - 30L * 24L * 60L * 60L * 1000L)
+          + this.dayFormat.format(started - 30L * 24L * 60L * 60L * 1000L)
           + " 00:00:00' AND fingerprint = '" + fingerprint
           + "' ORDER BY validafter DESC LIMIT 3";
       ResultSet rs = statement.executeQuery(query);
@@ -269,6 +275,7 @@ public class RelayServlet extends HttpServlet {
            * supported. */
         }
       }
+      rs.close();
       statement.close();
     } catch (SQLException e) {
       out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
@@ -315,6 +322,7 @@ public class RelayServlet extends HttpServlet {
             rawExtrainfo = rs.getBytes(1);
           }
         }
+        rs.close();
       } catch (SQLException e) {
         out.write("<br/><p><font color=\"red\"><b>Warning: </b></font>"
             + "Internal server error when looking up descriptor. The "
@@ -372,6 +380,14 @@ public class RelayServlet extends HttpServlet {
     out.write("        <br/><p>Looking up this relay took us "
         + String.format("%d.%03d", searchTime / 1000, searchTime % 1000)
         + " seconds.</p>\n");
+
+    /* Close database connection. */
+    try {
+      conn.close();
+    } catch (SQLException e) {
+      this.logger.log(Level.WARNING, "Could not close database "
+          + "connection", e);
+    }
 
     /* Finish writing response. */
     writeFooter(out);

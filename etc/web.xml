@@ -315,13 +315,6 @@
     <url-pattern>/custom-graph.html</url-pattern>
   </servlet-mapping>
 
-  <context-param>
-    <param-name>jdbcUrl</param-name>
-    <param-value>
-      jdbc:postgresql://localhost/tordir?user=ernie&amp;password=password
-    </param-value>
-  </context-param>
-
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
@@ -342,6 +335,13 @@
     <exception-type>java.lang.Throwable</exception-type>
     <location>/WEB-INF/error.jsp</location>
   </error-page>
+
+  <resource-ref>
+    <description>Tor Metrics Database</description>
+    <res-ref-name>jdbc/tordir</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+    <res-auth>Container</res-auth>
+  </resource-ref>
 
 </web-app>
 
