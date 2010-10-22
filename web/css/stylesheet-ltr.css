@@ -233,7 +233,7 @@ td.banner-middle a:hover {
 td.banner-right {
     background-image: url("/images/top-right.png");
     background-repeat: no-repeat;
-    width: 180px;
+    width: 15px;
     background-position: right;
     padding-top: 8px;
 }
