@@ -16,6 +16,7 @@
     <servlet-name>Index</servlet-name>
     <url-pattern>/index.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>Graphs</servlet-name>
     <servlet-class>
@@ -26,6 +27,7 @@
     <servlet-name>Graphs</servlet-name>
     <url-pattern>/graphs.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>GraphsSubpages</servlet-name>
     <servlet-class>
@@ -48,6 +50,7 @@
     <servlet-name>GraphsSubpages</servlet-name>
     <url-pattern>/performance.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>Research</servlet-name>
     <servlet-class>
@@ -58,6 +61,7 @@
     <servlet-name>Research</servlet-name>
     <url-pattern>/research.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>ResearchData</servlet-name>
     <servlet-class>
@@ -80,6 +84,7 @@
     <servlet-name>ResearchData</servlet-name>
     <url-pattern>/data.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>ResearchPapers</servlet-name>
     <servlet-class>
@@ -90,6 +95,7 @@
     <servlet-name>ResearchPapers</servlet-name>
     <url-pattern>/papers.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>ResearchTools</servlet-name>
     <servlet-class>
@@ -100,6 +106,7 @@
     <servlet-name>ResearchTools</servlet-name>
     <url-pattern>/tools.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>Status</servlet-name>
     <servlet-class>
@@ -121,6 +128,7 @@
     <servlet-name>Relay</servlet-name>
     <url-pattern>/relay.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>RelaySearch</servlet-name>
     <servlet-class>
@@ -131,78 +139,73 @@
     <servlet-name>RelaySearch</servlet-name>
     <url-pattern>/relay-search.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <servlet-class>
       org.torproject.ernie.web.GraphImageServlet
     </servlet-class>
-    <init-param>
-      <param-name>rserveHost</param-name>
-      <param-value>localhost</param-value>
-    </init-param>
-    <init-param>
-      <param-name>rservePort</param-name>
-      <param-value>6311</param-value>
-    </init-param>
-    <init-param>
-      <param-name>maxCacheAge</param-name>
-      <param-value>21600</param-value>
-    </init-param>
-    <init-param>
-      <param-name>cachedGraphsDir</param-name>
-      <param-value>
-        /srv/metrics.torproject.org/web/rserve/graphs/
-      </param-value>
-    </init-param>
   </servlet>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/networksize.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/relayflags.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/relayflags-hour.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/versions.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/platforms.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/bandwidth.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/dirbytes.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/new-users.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/direct-users.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/bridge-users.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/gettor.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GraphImageServlet</servlet-name>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/torperf.png</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Csv</servlet-name>
+    <servlet-class>
+      org.torproject.ernie.web.CsvServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Csv</servlet-name>
+    <url-pattern>/csv/*</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>ExoneraTor</servlet-name>
     <servlet-class>
@@ -213,6 +216,7 @@
     <servlet-name>ExoneraTor</servlet-name>
     <url-pattern>/exonerator.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>ServerDescriptor</servlet-name>
     <servlet-class>
@@ -223,6 +227,7 @@
     <servlet-name>ServerDescriptor</servlet-name>
     <url-pattern>/serverdesc</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>ExtraInfoDescriptor</servlet-name>
     <servlet-class>
@@ -233,6 +238,7 @@
     <servlet-name>ExtraInfoDescriptor</servlet-name>
     <url-pattern>/extrainfodesc</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>Descriptor</servlet-name>
     <servlet-class>
@@ -243,6 +249,7 @@
     <servlet-name>Descriptor</servlet-name>
     <url-pattern>/descriptor.html</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>Consensus</servlet-name>
     <servlet-class>
@@ -253,6 +260,7 @@
     <servlet-name>Consensus</servlet-name>
     <url-pattern>/consensus</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>ErnieGeneratedFile</servlet-name>
     <servlet-class>
@@ -342,6 +350,31 @@
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref>
+
+  <context-param>
+    <param-name>rserveHost</param-name>
+    <param-value>localhost</param-value>
+  </context-param>
+  <context-param>
+    <param-name>rservePort</param-name>
+    <param-value>6311</param-value>
+  </context-param>
+  <context-param>
+    <param-name>maxCacheAge</param-name>
+    <param-value>21600</param-value>
+  </context-param>
+  <context-param>
+    <param-name>cachedGraphsDir</param-name>
+    <param-value>
+      /srv/metrics.torproject.org/web/rserve/graphs/
+    </param-value>
+  </context-param>
+
+  <listener>
+    <listener-class>
+      org.torproject.ernie.web.RObjectGenerator
+    </listener-class>
+  </listener>
 
 </web-app>
 

@@ -8,22 +8,19 @@ import javax.servlet.http.*;
 
 /**
  * Servlet that reads an HTTP request for a graph image, asks the
- * GraphGenerator to generate this graph if it's not in the cache, and
+ * RObjectGenerator to generate this graph if it's not in the cache, and
  * returns the image bytes to the client.
  */
 public class GraphImageServlet extends HttpServlet {
 
-  private GraphGenerator graphGenerator;
+  private RObjectGenerator rObjectGenerator;
 
   public void init() {
-    ServletConfig servletConfig = getServletConfig();
-    String rserveHost = servletConfig.getInitParameter("rserveHost");
-    String rservePort = servletConfig.getInitParameter("rservePort");
-    String maxCacheAge = servletConfig.getInitParameter("maxCacheAge");
-    String cachedGraphsDir = servletConfig.getInitParameter(
-        "cachedGraphsDir");
-    this.graphGenerator = new GraphGenerator(rserveHost, rservePort,
-        maxCacheAge, cachedGraphsDir);
+
+    /* Get a reference to the R object generator that we need to generate
+     * graph images. */
+    this.rObjectGenerator = (RObjectGenerator) getServletContext().
+        getAttribute("RObjectGenerator");
   }
 
   public void doGet(HttpServletRequest request,
@@ -79,9 +76,9 @@ public class GraphImageServlet extends HttpServlet {
     rQueryBuilder.append("path = '%s')");
     String rQuery = rQueryBuilder.toString();
 
-    /* Request graph from graph controller, which either returns it from
+    /* Request graph from R object generator, which either returns it from
      * its cache or asks Rserve to generate it. */
-    byte[] graphBytes = graphGenerator.generateGraph(rQuery,
+    byte[] graphBytes = rObjectGenerator.generateGraph(rQuery,
         imageFilename);
 
     /* Make sure that we have a graph to return. */

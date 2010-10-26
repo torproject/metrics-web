@@ -68,6 +68,7 @@ average number of relays with these flags assigned.</p>
     </p>
   </div>
 </form>
+<p><a href="csv/relayflags.csv">CSV</a> file containing all data.</p>
 <br>
 
 <h3>Relays with Exit, Fast, Guard, and Stable flags on 1-hour detail</h3>
@@ -99,6 +100,7 @@ available on 1-hour detail.</p>
     </p>
   </div>
 </form>
+<p><a href="csv/relayflags-hour.csv">CSV</a> file containing all data.</p>
 <br>
 
 <h3>Relays by version</h3>
@@ -124,6 +126,7 @@ version.</p>
     </p>
   </div>
 </form>
+<p><a href="csv/versions.csv">CSV</a> file containing all data.</p>
 <br>
 
 <h3>Relays by platform</h3>
@@ -149,6 +152,7 @@ platform.</p>
     </p>
   </div>
 </form>
+<p><a href="csv/platforms.csv">CSV</a> file containing all data.</p>
 <br>
 
 <h3>Total relay bandwidth in the network</h3>
@@ -175,6 +179,7 @@ in the network.</p>
     </p>
   </div>
 </form>
+<p><a href="csv/bandwidth.csv">CSV</a> file containing all data.</p>
 <br>
 
 <h3>Number of bytes spent on answering directory requests</h3>
@@ -202,6 +207,7 @@ the number of written and read dir bytes by all relays.</p>
     </p>
   </div>
 </form>
+<p><a href="csv/dirbytes.csv">CSV</a> file containing all data.</p>
 <br>
     </div>
   </div>

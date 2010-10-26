@@ -18,7 +18,8 @@
            debug="true"
            deprecation="true"
            optimize="false"
-           failonerror="true">
+           failonerror="true"
+           includeantruntime="false">
       <classpath>
         <fileset dir="${libs}"/>
       </classpath>
