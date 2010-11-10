@@ -123,24 +123,6 @@ public class DescriptorServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
     writeHeader(out);
 
-    /* Check if we have a data source and get a database connection. */
-    Connection conn = null;
-    if (this.ds != null) {
-      try {
-        conn = this.ds.getConnection();
-      } catch (SQLException e) {
-      }
-    }
-    if (conn == null) {
-      out.println("<br/><p><font color=\"red\"><b>Warning: </b></font>"
-          + "This server doesn't have any relay descriptors available. "
-          + "If this problem persists, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
-          + "know</a>!</p>\n");
-      writeFooter(out);
-      return;
-    }
-
     /* Check desc-id parameter. */
     String descIdParameter = request.getParameter("desc-id");
     String descId = null;
@@ -166,6 +148,7 @@ public class DescriptorServlet extends HttpServlet {
     if (descId.length() < 40) {
       SortedSet<String> allDescIds = new TreeSet<String>();
       try {
+        Connection conn = this.ds.getConnection();
         Statement statement = conn.createStatement();
         String query = "SELECT DISTINCT descriptor FROM statusentry "
             + "WHERE descriptor LIKE '" + descId + "%'";
@@ -175,6 +158,7 @@ public class DescriptorServlet extends HttpServlet {
         }
         rs.close();
         statement.close();
+        conn.close();
       } catch (SQLException e) {
         out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
             + "experienced an unknown database problem while looking up "
@@ -211,6 +195,7 @@ public class DescriptorServlet extends HttpServlet {
         extrainfo = null;
     byte[] rawDescriptor = null, rawExtrainfo = null;
     try {
+      Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT descriptor, nickname, published, extrainfo, "
           + "rawdesc FROM descriptor WHERE descriptor = '" + descId
@@ -231,6 +216,7 @@ public class DescriptorServlet extends HttpServlet {
       }
       rs.close();
       statement.close();
+      conn.close();
     } catch (SQLException e) {
       out.write("<br/><p><font color=\"red\"><b>Warning: </b></font>"
           + "Internal server error when looking up descriptor. If this "
@@ -273,6 +259,7 @@ public class DescriptorServlet extends HttpServlet {
 
     /* Print out in which consensuses this descriptor is referenced. */
     try {
+      Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT validafter, rawdesc FROM statusentry "
           + "WHERE descriptor = '" + descriptor + "' ORDER BY validafter "
@@ -299,6 +286,9 @@ public class DescriptorServlet extends HttpServlet {
           out.println("        <tt>" + line + "</tt><br/>");
         }
       }
+      rs.close();
+      statement.close();
+      conn.close();
     } catch (SQLException e) {
       out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
           + "experienced an unknown database problem while looking up "
@@ -324,14 +314,6 @@ public class DescriptorServlet extends HttpServlet {
     out.write("        <br/><p>Looking up this descriptor took us "
         + String.format("%d.%03d", searchTime / 1000, searchTime % 1000)
         + " seconds.</p>\n");
-
-    /* Close database connection. */
-    try {
-      conn.close();
-    } catch (SQLException e) {
-      this.logger.log(Level.WARNING, "Could not close database "
-          + "connection", e);
-    }
 
     /* Finish writing response. */
     writeFooter(out);
