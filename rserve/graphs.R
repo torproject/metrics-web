@@ -402,7 +402,6 @@ plot_torperf <- function(start, end, source, filesize, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name = "", limits = c(0, maxY) / 1e3) +
-    coord_cartesian(ylim = c(0, 0.8 * maxY / 1e3)) +
     scale_fill_manual(name = paste("Measured times on",
         source, "per day"),
       breaks = c("line", "ribbon"),
