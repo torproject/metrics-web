@@ -1,16 +1,40 @@
 package org.torproject.ernie.web;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.*;
 import java.math.*;
+import java.sql.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.*;
 import java.util.regex.*;
+
+import javax.naming.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.sql.*;
 
 import org.apache.commons.codec.binary.*;
 
 public class ExoneraTorServlet extends HttpServlet {
+
+  private DataSource ds;
+
+  private Logger logger;
+
+  public void init() {
+
+    /* Initialize logger. */
+    this.logger = Logger.getLogger(ExoneraTorServlet.class.toString());
+
+    /* Look up data source. */
+    try {
+      Context cxt = new InitialContext();
+      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/tordir");
+      this.logger.info("Successfully looked up data source.");
+    } catch (NamingException e) {
+      this.logger.log(Level.WARNING, "Could not look up data source", e);
+    }
+  }
 
   private void writeHeader(PrintWriter out) throws IOException {
     out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 "
@@ -35,18 +59,18 @@ public class ExoneraTorServlet extends HttpServlet {
           + "alt=\"Click to go to home page\" width=\"193\" "
           + "height=\"79\"></a></td>\n"
         + "          <td class=\"banner-middle\">\n"
-          + "            <a href=\"/\">Home</a>\n"
-          + "            <a href=\"graphs.html\">Graphs</a>\n"
-          + "            <a href=\"research.html\">Research</a>\n"
-          + "            <a href=\"status.html\">Status</a>\n"
-          + "            <br>\n"
-          + "            <font size=\"2\">\n"
-          + "              <a class=\"current\">ExoneraTor</a>\n"
-          + "              <a href=\"relay-search.html\">Relay Search</a>\n"
-
-          + "              <a href=\"consensus-health.html\">Consensus Health</a>\n"
-          + "            </font>\n"
-          + "          </td>\n"
+        + "            <a href=\"/\">Home</a>\n"
+        + "            <a href=\"graphs.html\">Graphs</a>\n"
+        + "            <a href=\"research.html\">Research</a>\n"
+        + "            <a href=\"status.html\">Status</a>\n"
+        + "            <br>\n"
+        + "            <font size=\"2\">\n"
+        + "              <a class=\"current\">ExoneraTor</a>\n"
+        + "              <a href=\"relay-search.html\">Relay Search</a>\n"
+        + "              <a href=\"consensus-health.html\">Consensus "
+          + "Health</a>\n"
+        + "            </font>\n"
+        + "          </td>\n"
         + "          <td class=\"banner-right\"></td>\n"
         + "        </tr>\n"
         + "      </table>\n"
@@ -69,8 +93,8 @@ public class ExoneraTorServlet extends HttpServlet {
           + "server or who has access to this web server. If you need to "
           + "keep the IP addresses and incident times confidential, you "
           + "should download the <a href=\"tools.html#exonerator\">Java "
-            + "or Python version of ExoneraTor</a> and run it on your "
-            + "local machine.</font></p>\n"
+          + "or Python version of ExoneraTor</a> and run it on your "
+          + "local machine.</font></p>\n"
         + "        <br>\n");
   }
 
@@ -86,8 +110,8 @@ public class ExoneraTorServlet extends HttpServlet {
           + "do not necessarily reflect the views of the National "
           + "Science Foundation.</p>\n"
         + "      <p>\"Tor\" and the \"Onion Logo\" are <a "
-          + "href=\"https://www.torproject.org/docs/trademark-faq.html.en\">"
-          + "registered trademarks</a> of The Tor Project, Inc.</p>\n"
+          + "href=\"https://www.torproject.org/docs/trademark-faq.html.en"
+          + "\">registered trademarks</a> of The Tor Project, Inc.</p>\n"
         + "      <p>Data on this site is freely available under a <a "
           + "href=\"http://creativecommons.org/publicdomain/zero/1.0/\">"
           + "CC0 no copyright declaration</a>: To the extent possible "
@@ -103,38 +127,33 @@ public class ExoneraTorServlet extends HttpServlet {
     out.close();
   }
 
-  // TODO make this configurable!
-  public final String CONSENSUS_DIRECTORY =
-      "/srv/metrics.torproject.org/ernie/directory-archive/consensus";
-  public final String SERVER_DESCRIPTOR_DIRECTORY =
-      "/srv/metrics.torproject.org/ernie/directory-archive/"
-      + "server-descriptor";
-
-  private static final boolean TEST_MODE = false; // TODO take me out
-
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException,
       ServletException {
 
-    /* Get print writer and start writing response. We're wrapping the
-     * PrintWriter, because we want it to auto-flush as soon as we have
-     * written a line. */
-    //PrintWriter out = new PrintWriter(response.getWriter(), true);
+    /* Start writing response. */
     PrintWriter out = response.getWriter();
     writeHeader(out);
 
-    /* Check if we have a descriptors directory. */
-    File consensusDirectory = new File(CONSENSUS_DIRECTORY);
-    SortedSet<File> consensusDirectories = new TreeSet<File>();
-    if (consensusDirectory.exists() && consensusDirectory.isDirectory()) {
-      for (File yearFile : consensusDirectory.listFiles()) {
-        for (File monthFile : yearFile.listFiles()) {
-          consensusDirectories.add(monthFile);
-        }
+    /* Look up first and last consensus in the database. */
+    long firstValidAfter = -1L, lastValidAfter = -1L;
+    try {
+      Connection conn = this.ds.getConnection();
+      Statement statement = conn.createStatement();
+      String query = "SELECT MIN(validafter) AS first, "
+          + "MAX(validafter) AS last FROM consensus";
+      ResultSet rs = statement.executeQuery(query);
+      if (rs.next()) {
+        firstValidAfter = rs.getTimestamp(1).getTime();
+        lastValidAfter = rs.getTimestamp(2).getTime();
       }
+      rs.close();
+      statement.close();
+      conn.close();
+    } catch (SQLException e) {
+      /* Looks like we don't have any consensuses. */
     }
-
-    if (consensusDirectories.isEmpty()) {
+    if (firstValidAfter < 0L || lastValidAfter < 0L) {
       out.println("<p><font color=\"red\"><b>Warning: </b></font>This "
           + "server doesn't have any relay lists available. If this "
           + "problem persists, please "
@@ -143,21 +162,9 @@ public class ExoneraTorServlet extends HttpServlet {
       writeFooter(out);
       return;
     }
-    String firstConsensus = new TreeSet<File>(Arrays.asList(
-        new TreeSet<File>(Arrays.asList(consensusDirectories.first().
-        listFiles())).first().listFiles())).first().getName().substring(0,
-        13);
-    firstConsensus = firstConsensus.substring(0, 10) + " "
-        + firstConsensus.substring(11, 13) + ":00";
-    String lastConsensus = new TreeSet<File>(Arrays.asList(
-        new TreeSet<File>(Arrays.asList(consensusDirectories.last().
-        listFiles())).last().listFiles())).last().getName().substring(0,
-        13);
-    lastConsensus = lastConsensus.substring(0, 10) + " "
-        + lastConsensus.substring(11, 13) + ":00";
 
-    out.println("<a name=\"relay\"></a><h3>Was there a Tor relay running on "
-        + "this IP address?</h3>");
+    out.println("<a name=\"relay\"></a><h3>Was there a Tor relay running "
+        + "on this IP address?</h3>");
 
     /* Parse IP parameter. */
     Pattern ipAddressPattern = Pattern.compile(
@@ -186,19 +193,18 @@ public class ExoneraTorServlet extends HttpServlet {
     String timestampParameter = request.getParameter("timestamp");
     long timestamp = 0L;
     String timestampStr = "", timestampWarning = "";
-    SimpleDateFormat parseTimeFormat = new SimpleDateFormat(
+    SimpleDateFormat shortDateTimeFormat = new SimpleDateFormat(
         "yyyy-MM-dd HH:mm");
-    parseTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    shortDateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     if (timestampParameter != null && timestampParameter.length() > 0) {
       try {
-        Date parsedTimestamp = parseTimeFormat.parse(timestampParameter);
-        if (timestampParameter.compareTo(firstConsensus) >= 0 &&
-            timestampParameter.compareTo(lastConsensus) <= 0) {
-          timestamp = parsedTimestamp.getTime();
-          timestampStr = parseTimeFormat.format(timestamp);
-        } else {
+        timestamp = shortDateTimeFormat.parse(timestampParameter).
+            getTime();
+        timestampStr = shortDateTimeFormat.format(timestamp);
+        if (timestamp < firstValidAfter || timestamp > lastValidAfter) {
           timestampWarning = "Please pick a value between \""
-              + firstConsensus + "\" and \"" + lastConsensus + "\".";
+              + shortDateTimeFormat.format(firstValidAfter) + "\" and \""
+              + shortDateTimeFormat.format(lastValidAfter) + "\".";
         }
       } catch (ParseException e) {
         /* We have no way to handle this exception, other than leaving
@@ -282,10 +288,11 @@ public class ExoneraTorServlet extends HttpServlet {
         + ">\n"
         + "          <table>\n"
         + "            <tr>\n"
-        + "              <td align=\"right\">IP address in question:</td>\n"
+        + "              <td align=\"right\">IP address in question:"
+          + "</td>\n"
         + "              <td><input type=\"text\" name=\"ip\""
-          + (relayIP.length() > 0 ? " value=\"" + relayIP + "\"" :
-            (TEST_MODE ? " value=\"209.17.171.104\"" : ""))
+          + (relayIP.length() > 0 ? " value=\"" + relayIP + "\""
+            : "")
           + ">"
           + (ipWarning.length() > 0 ? "<br><font color=\"red\">"
           + ipWarning + "</font>" : "")
@@ -295,8 +302,8 @@ public class ExoneraTorServlet extends HttpServlet {
         + "            <tr>\n"
         + "              <td align=\"right\">Timestamp, in UTC:</td>\n"
         + "              <td><input type=\"text\" name=\"timestamp\""
-          + (timestampStr.length() > 0 ? " value=\"" + timestampStr + "\"" :
-             (TEST_MODE ? " value=\"2009-08-15 16:05\"" : ""))
+          + (timestampStr.length() > 0 ? " value=\"" + timestampStr + "\""
+            : "")
           + ">"
           + (timestampWarning.length() > 0 ? "<br><font color=\"red\">"
               + timestampWarning + "</font>" : "")
@@ -323,79 +330,54 @@ public class ExoneraTorServlet extends HttpServlet {
     long timestampTooOld = timestamp - 15L * 60L * 60L * 1000L;
     long timestampFrom = timestamp - 3L * 60L * 60L * 1000L;
     long timestampTooNew = timestamp + 12L * 60L * 60L * 1000L;
-    Calendar calTooOld = Calendar.getInstance(
-        TimeZone.getTimeZone("UTC"));
-    Calendar calFrom = Calendar.getInstance(
-        TimeZone.getTimeZone("UTC"));
-    Calendar calTooNew = Calendar.getInstance(
-        TimeZone.getTimeZone("UTC"));
-    calTooOld.setTimeInMillis(timestampTooOld);
-    calFrom.setTimeInMillis(timestampFrom);
-    calTooNew.setTimeInMillis(timestampTooNew);
     out.printf("<p>Looking up IP address %s in the relay lists published "
-        + "between %tF %tR and %s. "
+        + "between %s and %s. "
         + "Clients could have used any of these relay lists to "
         + "select relays for their paths and build circuits using them. "
         + "You may follow the links to relay lists and relay descriptors "
         + "to grep for the lines printed below and confirm that results "
-        + "are correct.<br>", relayIP, calFrom, calFrom, timestampStr);
-    SimpleDateFormat consensusTimeFormat = new SimpleDateFormat(
-        "yyyy-MM-dd-HH-mm-ss");
-    consensusTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    String fromTime = consensusTimeFormat.format(
-        new Date(timestampTooOld));
-    String fromDay = fromTime.substring(0, "yyyy-MM-dd".length());
-    String fromMonth = fromDay.substring(0, "yyyy-MM".length());
-    String toTime = consensusTimeFormat.format(new Date(timestampTooNew));
-    String toDay = toTime.substring(0, "yyyy-MM-dd".length());
-    String toMonth = toDay.substring(0, "yyyy-MM".length());
-    SortedSet<File> tooOldConsensuses = new TreeSet<File>();
-    SortedSet<File> relevantConsensuses = new TreeSet<File>();
-    SortedSet<File> tooNewConsensuses = new TreeSet<File>();
-    for (File consensusMonth : consensusDirectories) {
-      String month = consensusMonth.getParentFile().getName() + "-"
-          + consensusMonth.getName();
-      if (month.compareTo(fromMonth) < 0 ||
-          month.compareTo(toMonth) > 0) {
-        continue;
-      }
-      for (File consensusDay : consensusMonth.listFiles()) {
-        String day = month + "-" + consensusDay.getName();
-        if (day.compareTo(fromDay) < 0 ||
-            day.compareTo(toDay) > 0) {
-          continue;
-        }
-        for (File consensusFile : consensusDay.listFiles()) {
-          String time = consensusFile.getName().substring(0,
-              "yyyy-MM-dd-HH-mm-ss".length());
-          if (time.compareTo(fromTime) < 0 ||
-              time.compareTo(toTime) > 0) {
-            continue;
-          }
-          Date consensusDate = null;
-          try {
-            consensusDate = consensusTimeFormat.parse(time);
-          } catch (ParseException e) {
-            /* This should never happen. If it does, it's a bug. */
-            throw new RuntimeException(e);
-          }
-          long consensusTime = consensusDate.getTime();
-          if (consensusTime >= timestampTooOld &&
-              consensusTime < timestampFrom)
-            tooOldConsensuses.add(consensusFile);
-          else if (consensusTime >= timestampFrom &&
-                   consensusTime <= timestamp)
-            relevantConsensuses.add(consensusFile);
-          else if (consensusTime > timestamp &&
-                   consensusTime <= timestampTooNew)
-            tooNewConsensuses.add(consensusFile);
+        + "are correct.<br>", relayIP,
+        shortDateTimeFormat.format(timestampFrom), timestampStr);
+    SimpleDateFormat validAfterTimeFormat = new SimpleDateFormat(
+        "yyyy-MM-dd HH:mm:ss");
+    validAfterTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    String fromValidAfter = validAfterTimeFormat.format(timestampTooOld);
+    String toValidAfter = validAfterTimeFormat.format(timestampTooNew);
+    SortedMap<Long, String> tooOldConsensuses =
+        new TreeMap<Long, String>();
+    SortedMap<Long, String> relevantConsensuses =
+        new TreeMap<Long, String>();
+    SortedMap<Long, String> tooNewConsensuses =
+        new TreeMap<Long, String>();
+    try {
+      Connection conn = this.ds.getConnection();
+      Statement statement = conn.createStatement();
+      String query = "SELECT validafter, rawdesc FROM consensus "
+          + "WHERE validafter >= '" + fromValidAfter
+          + "' AND validafter <= '" + toValidAfter + "'";
+      ResultSet rs = statement.executeQuery(query);
+      while (rs.next()) {
+        long consensusTime = rs.getTimestamp(1).getTime();
+        String rawConsensusString = new String(rs.getBytes(2), "US-ASCII");
+        if (consensusTime < timestampFrom) {
+          tooOldConsensuses.put(consensusTime, rawConsensusString);
+        } else if (consensusTime > timestamp) {
+          tooNewConsensuses.put(consensusTime, rawConsensusString);
+        } else {
+          relevantConsensuses.put(consensusTime, rawConsensusString);
         }
       }
+      rs.close();
+      statement.close();
+      conn.close();
+    } catch (SQLException e) {
+      /* Looks like we don't have any consensuses in the requested
+         interval. */
     }
-    SortedSet<File> allConsensuses = new TreeSet<File>();
-    allConsensuses.addAll(tooOldConsensuses);
-    allConsensuses.addAll(relevantConsensuses);
-    allConsensuses.addAll(tooNewConsensuses);
+    SortedMap<Long, String> allConsensuses = new TreeMap<Long, String>();
+    allConsensuses.putAll(tooOldConsensuses);
+    allConsensuses.putAll(relevantConsensuses);
+    allConsensuses.putAll(tooNewConsensuses);
     if (allConsensuses.isEmpty()) {
       out.println("        <p>No relay lists found!</p>\n"
           + "        <p>Result is INDECISIVE!</p>\n"
@@ -410,48 +392,46 @@ public class ExoneraTorServlet extends HttpServlet {
       return;
     }
 
-    // parse consensuses to find descriptors belonging to the IP address
-    SortedSet<File> positiveConsensusesNoTarget = new TreeSet<File>();
+    /* Parse consensuses to find descriptors belonging to the IP
+       address. */
+    SortedSet<Long> positiveConsensusesNoTarget = new TreeSet<Long>();
     Set<String> addressesInSameNetwork = new HashSet<String>();
-    SortedMap<String, Set<File>> relevantDescriptors =
-        new TreeMap<String, Set<File>>();
-    SimpleDateFormat validAfterTimeFormat = new SimpleDateFormat(
-        "yyyy-MM-dd HH:mm:ss");
-    validAfterTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    for (File consensus : allConsensuses) {
-      if (relevantConsensuses.contains(consensus)) {
-        String validAfterString = consensus.getName().substring(0,
-            "yyyy-MM-dd-HH-mm-ss".length());
-        Date validAfterDate = null;
-        try {
-          validAfterDate = consensusTimeFormat.parse(validAfterString);
-        } catch (ParseException e) {
-          /* This should never happen. If it does, it's a bug. */
-          throw new RuntimeException(e);
-        }
-        long validAfterTime = validAfterDate.getTime();
+    SortedMap<String, Set<Long>> relevantDescriptors =
+        new TreeMap<String, Set<Long>>();
+    SimpleDateFormat validAfterUrlFormat = new SimpleDateFormat(
+        "yyyy-MM-dd-HH-mm-ss");
+    validAfterUrlFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    for (Map.Entry<Long, String> e : allConsensuses.entrySet()) {
+      long consensus = e.getKey();
+      if (relevantConsensuses.containsKey(consensus)) {
+        long validAfterTime = -1L;
         String validAfterDatetime = validAfterTimeFormat.format(
-            validAfterTime);
+            consensus);
+        String validAfterString = validAfterUrlFormat.format(consensus);
         out.println("        <br><tt>valid-after <b>"
             + "<a href=\"consensus?valid-after="
             + validAfterString + "\" target=\"_blank\">"
             + validAfterDatetime + "</b></a></tt><br>");
       }
-      BufferedReader br = new BufferedReader(new FileReader(consensus));
-      String line;
+      String rawConsensusString = e.getValue();
+      BufferedReader br = new BufferedReader(new StringReader(
+          rawConsensusString));
+      String line = null;
       while ((line = br.readLine()) != null) {
-        if (!line.startsWith("r "))
+        if (!line.startsWith("r ")) {
           continue;
+        }
         String[] parts = line.split(" ");
         String address = parts[6];
         if (address.equals(relayIP)) {
           String hex = String.format("%040x", new BigInteger(1,
               Base64.decodeBase64(parts[3] + "==")));
-          if (!relevantDescriptors.containsKey(hex))
-            relevantDescriptors.put(hex, new HashSet<File>());
+          if (!relevantDescriptors.containsKey(hex)) {
+            relevantDescriptors.put(hex, new HashSet<Long>());
+          }
           relevantDescriptors.get(hex).add(consensus);
           positiveConsensusesNoTarget.add(consensus);
-          if (relevantConsensuses.contains(consensus)) {
+          if (relevantConsensuses.containsKey(consensus)) {
             out.println("    <tt>r " + parts[1] + " " + parts[2] + " "
                 + "<a href=\"serverdesc?desc-id=" + hex + "\" "
                 + "target=\"_blank\">" + parts[3] + "</a> " + parts[4]
@@ -472,12 +452,13 @@ public class ExoneraTorServlet extends HttpServlet {
           + "        <p>Result is NEGATIVE with moderate certainty!</p>\n"
           + "        <p>We did not find IP "
           + "address " + relayIP + " in any of the relay lists that were "
-          + "published between %tF %tR and %tF %tR.\n\nA possible "
+          + "published between %s and %s.\n\nA possible "
           + "reason for false negatives is that the relay is using a "
           + "different IP address when generating a descriptor than for "
           + "exiting to the Internet. We hope to provide better checks "
-          + "for this case in the future.</p>\n", calTooOld, calTooOld,
-          calTooNew, calTooNew);
+          + "for this case in the future.</p>\n",
+          shortDateTimeFormat.format(timestampTooOld),
+          shortDateTimeFormat.format(timestampTooNew));
       if (!addressesInSameNetwork.isEmpty()) {
         out.println("        <p>The following other IP addresses of Tor "
             + "relays were found in the mentioned relay lists that "
@@ -491,9 +472,9 @@ public class ExoneraTorServlet extends HttpServlet {
       return;
     }
 
-    // print out result
-    Set<File> matches = positiveConsensusesNoTarget;
-    if (matches.contains(relevantConsensuses.last())) {
+    /* Print out result. */
+    Set<Long> matches = positiveConsensusesNoTarget;
+    if (matches.contains(relevantConsensuses.lastKey())) {
       out.println("        <p>Result is POSITIVE with high certainty!"
             + "</p>\n"
           + "        <p>We found one or more relays on IP address "
@@ -504,24 +485,25 @@ public class ExoneraTorServlet extends HttpServlet {
       boolean inOtherRelevantConsensus = false,
           inTooOldConsensuses = false,
           inTooNewConsensuses = false;
-      for (File f : matches)
-        if (relevantConsensuses.contains(f))
+      for (long match : matches) {
+        if (relevantConsensuses.containsKey(match)) {
           inOtherRelevantConsensus = true;
-        else if (tooOldConsensuses.contains(f))
+        } else if (tooOldConsensuses.containsKey(match)) {
           inTooOldConsensuses = true;
-        else if (tooNewConsensuses.contains(f))
+        } else if (tooNewConsensuses.containsKey(match)) {
           inTooNewConsensuses = true;
+        }
+      }
       if (inOtherRelevantConsensus) {
         out.println("        <p>Result is POSITIVE "
             + "with moderate certainty!</p>\n");
         out.println("<p>We found one or more relays on IP address "
-            + relayIP
-            + ", but not in the relay list immediately preceding "
-            + timestampStr + ". A possible reason for the relay being "
-            + "missing in the last relay list preceding the given time might "
-            + "be that some of the directory authorities had difficulties "
-            + "connecting to the relay. However, clients might still have "
-            + "used the relay.</p>\n");
+            + relayIP + ", but not in the relay list immediately "
+            + "preceding " + timestampStr + ". A possible reason for the "
+            + "relay being missing in the last relay list preceding the "
+            + "given time might be that some of the directory "
+            + "authorities had difficulties connecting to the relay. "
+            + "However, clients might still have used the relay.</p>\n");
       } else {
         out.println("        <p>Result is NEGATIVE "
             + "with high certainty!</p>\n");
@@ -531,18 +513,18 @@ public class ExoneraTorServlet extends HttpServlet {
             + ".</p>\n");
         if (inTooOldConsensuses || inTooNewConsensuses) {
           if (inTooOldConsensuses && !inTooNewConsensuses) {
-            out.println("        <p>Note that we found a matching relay in "
-                + "relay lists that were published between 5 and 3 "
+            out.println("        <p>Note that we found a matching relay "
+                + "in relay lists that were published between 5 and 3 "
                 + "hours before " + timestampStr + ".</p>\n");
           } else if (!inTooOldConsensuses && inTooNewConsensuses) {
-            out.println("        <p>Note that we found a matching relay in "
-                + "relay lists that were published up to 2 hours after "
-                + timestampStr + ".</p>\n");
+            out.println("        <p>Note that we found a matching relay "
+                + "in relay lists that were published up to 2 hours "
+                + "after " + timestampStr + ".</p>\n");
           } else {
-            out.println("        <p>Note that we found a matching relay in "
-                + "relay lists that were published between 5 and 3 "
-                + "hours before and in relay lists that were published up "
-                + "to 2 hours after " + timestampStr + ".</p>\n");
+            out.println("        <p>Note that we found a matching relay "
+                + "in relay lists that were published between 5 and 3 "
+                + "hours before and in relay lists that were published "
+                + "up to 2 hours after " + timestampStr + ".</p>\n");
           }
           out.println("<p>Make sure that the timestamp you provided is "
               + "in the correct timezone: UTC (or GMT).</p>");
@@ -553,30 +535,8 @@ public class ExoneraTorServlet extends HttpServlet {
     }
 
     /* Second part: target */
-    out.println("<br><a name=\"exit\"></a><h3>Was this relay configured to "
-        + "permit exiting to a given target?</h3>");
-
-    File serverDescriptorDirectory =
-        new File(SERVER_DESCRIPTOR_DIRECTORY);
-    SortedSet<File> serverDescriptorDirectories = new TreeSet<File>();
-    if (serverDescriptorDirectory.exists() &&
-        serverDescriptorDirectory.isDirectory()) {
-      for (File yearFile : serverDescriptorDirectory.listFiles()) {
-        for (File monthFile : yearFile.listFiles()) {
-          serverDescriptorDirectories.add(monthFile);
-        }
-      }
-    }
-
-    if (serverDescriptorDirectories.isEmpty()) {
-      out.println("<p><font color=\"red\"><b>Warning: </b></font>This "
-          + "server doesn't have any relay descriptors available. If "
-          + "this problem persists, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
-          + "know</a>!</p>\n");
-      writeFooter(out);
-      return;
-    }
+    out.println("<br><a name=\"exit\"></a><h3>Was this relay configured "
+        + "to permit exiting to a given target?</h3>");
 
     out.println("        <form action=\"exonerator.html#exit\">\n"
         + "              <input type=\"hidden\" name=\"timestamp\"\n"
@@ -587,8 +547,7 @@ public class ExoneraTorServlet extends HttpServlet {
         + "            <tr>\n"
         + "              <td align=\"right\">Target address:</td>\n"
         + "              <td><input type=\"text\" name=\"targetaddr\""
-          + (targetIP.length() > 0 ? " value=\"" + targetIP + "\"" :
-             (TEST_MODE ? " value=\"209.85.129.104\"" : ""))
+          + (targetIP.length() > 0 ? " value=\"" + targetIP + "\"" : "")
           + "\">"
           + (targetAddrWarning.length() > 0 ? "<br><font color=\"red\">"
               + targetAddrWarning + "</font>" : "")
@@ -598,8 +557,8 @@ public class ExoneraTorServlet extends HttpServlet {
         + "            <tr>\n"
         + "              <td align=\"right\">Target port:</td>\n"
         + "              <td><input type=\"text\" name=\"targetport\""
-          + (targetPort.length() > 0 ? " value=\"" + targetPort + "\"" :
-             (TEST_MODE ? " value=\"80\"" : ""))
+          + (targetPort.length() > 0 ? " value=\"" + targetPort + "\""
+            : "")
           + ">"
           + (targetPortWarning.length() > 0 ? "<br><font color=\"red\">"
               + targetPortWarning + "</font>" : "")
@@ -622,30 +581,40 @@ public class ExoneraTorServlet extends HttpServlet {
       return;
     }
 
-    // parse router descriptors to check exit policies
-    out.println("<p>Searching the relay descriptors published by the relay "
-        + "on IP address " + relayIP + " to find out whether this relay "
-        + "permitted exiting to " + target + ". You may follow the links "
-        + "above to the relay descriptors and grep them for the lines "
-        + "printed below to confirm that results are correct.</p>");
-    SortedSet<File> positiveConsensuses = new TreeSet<File>();
+    /* Parse router descriptors to check exit policies. */
+    out.println("<p>Searching the relay descriptors published by the "
+        + "relay on IP address " + relayIP + " to find out whether this "
+        + "relay permitted exiting to " + target + ". You may follow the "
+        + "links above to the relay descriptors and grep them for the "
+        + "lines printed below to confirm that results are correct.</p>");
+    SortedSet<Long> positiveConsensuses = new TreeSet<Long>();
     Set<String> missingDescriptors = new HashSet<String>();
     Set<String> descriptors = relevantDescriptors.keySet();
     for (String descriptor : descriptors) {
-      for (File directory : serverDescriptorDirectories) {
-        File subDirectory = new File(directory.getAbsolutePath() + "/"
-            + descriptor.substring(0, 1) + "/"
-            + descriptor.substring(1, 2));
-        if (subDirectory.exists()) {
-          File descriptorFile = new File(subDirectory.getAbsolutePath()
-              + "/" + descriptor);
-          if (!descriptorFile.exists()) {
-            continue;
-          }
-          missingDescriptors.remove(descriptor);
+      byte[] rawDescriptor = null;
+      try {
+        Connection conn = this.ds.getConnection();
+        Statement statement = conn.createStatement();
+        String query = "SELECT rawdesc FROM descriptor "
+            + "WHERE descriptor = '" + descriptor + "'";
+        ResultSet rs = statement.executeQuery(query);
+        if (rs.next()) {
+          rawDescriptor = rs.getBytes(1);
+        }
+        rs.close();
+        statement.close();
+        conn.close();
+      } catch (SQLException e) {
+        /* Consider this descriptors as 'missing'. */
+        continue;
+      }
+      if (rawDescriptor != null && rawDescriptor.length > 0) {
+        missingDescriptors.remove(descriptor);
+        String rawDescriptorString = new String(rawDescriptor, "US-ASCII");
+        try {
           BufferedReader br = new BufferedReader(
-              new FileReader(descriptorFile));
-          String line, routerLine = null, publishedLine = null;
+              new StringReader(rawDescriptorString));
+          String line = null, routerLine = null, publishedLine = null;
           StringBuilder acceptRejectLines = new StringBuilder();
           boolean foundMatch = false;
           while ((line = br.readLine()) != null) {
@@ -664,8 +633,9 @@ public class ExoneraTorServlet extends HttpServlet {
               if (!ruleAddress.equals("*")) {
                 if (!ruleAddress.contains("/") &&
                     !ruleAddress.equals(targetIP)) {
+                  /* IP address does not match. */
                   acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
-                  continue; // IP address does not match
+                  continue;
                 }
                 String[] ruleIPParts = ruleAddress.split("/")[0].
                     split("\\.");
@@ -690,28 +660,45 @@ public class ExoneraTorServlet extends HttpServlet {
                   }
                 }
                 if (ruleNetwork > 0) {
+                  /* IP address does not match. */
                   acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
-                  continue; // IP address does not match
+                  continue;
                 }
               }
               String rulePort = line.split(" ")[1].split(":")[1];
               if (targetPort.length() < 1 && !ruleAccept &&
                   !rulePort.equals("*")) {
+                /* With no port given, we only consider reject :* rules as
+                   matching. */
                 acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
-                continue; // with no port given, we only consider
-                          // reject :* rules as matching
+                continue;
+              }
+              if (targetPort.length() > 0 && !rulePort.equals("*") &&
+                  rulePort.contains("-")) {
+                int fromPort = Integer.parseInt(rulePort.split("-")[0]);
+                int toPort = Integer.parseInt(rulePort.split("-")[1]);
+                int targetPortInt = Integer.parseInt(targetPort);
+                if (targetPortInt < fromPort ||
+                    targetPortInt > toPort) {
+                  /* Port not contained in interval. */
+                  continue;
+                }
               }
               if (targetPort.length() > 0) {
                 if (!rulePort.equals("*") &&
+                    !rulePort.contains("-") &&
                     !targetPort.equals(rulePort)) {
+                  /* Ports do not match. */
                   acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
-                  continue; // ports do not match
+                  continue;
                 }
               }
               boolean relevantMatch = false;
-              for (File f : relevantDescriptors.get(descriptor))
-                if (relevantConsensuses.contains(f))
+              for (long match : relevantDescriptors.get(descriptor)) {
+                if (relevantConsensuses.containsKey(match)) {
                   relevantMatch = true;
+                }
+              }
               if (relevantMatch) {
                 String[] routerParts = routerLine.split(" ");
                 out.println("<br><tt>" + routerParts[0] + " "
@@ -733,15 +720,18 @@ public class ExoneraTorServlet extends HttpServlet {
             }
           }
           br.close();
+        } catch (IOException e) {
+          /* Could not read descriptor string. */
+          continue;
         }
       }
     }
 
-    // print out result
-// TODO don't repeat results from above
+    /* Print out result. */
     matches = positiveConsensuses;
-    if (matches.contains(relevantConsensuses.last())) {
-      out.println("        <p>Result is POSITIVE with high certainty!</p>\n"
+    if (matches.contains(relevantConsensuses.lastKey())) {
+      out.println("        <p>Result is POSITIVE with high certainty!</p>"
+            + "\n"
           + "        <p>We found one or more relays on IP address "
           + relayIP + " permitting exit to " + target
           + " in the most recent relay list preceding " + timestampStr
@@ -753,35 +743,38 @@ public class ExoneraTorServlet extends HttpServlet {
         && !missingDescriptors.isEmpty();
     if (resultIndecisive) {
       out.println("        <p>Result is INDECISIVE!</p>\n"
-          + "        <p>At least one referenced descriptor could not be found. This "
-          + "is a rare case, but one that (apparently) happens. We cannot "
-          + "make any good statement about exit relays without these "
-          + "descriptors. The following descriptors are missing:</p>");
+          + "        <p>At least one referenced descriptor could not be "
+          + "found. This is a rare case, but one that (apparently) "
+          + "happens. We cannot make any good statement about exit "
+          + "relays without these descriptors. The following descriptors "
+          + "are missing:</p>");
       for (String desc : missingDescriptors)
         out.println("        <p>" + desc + "</p>\n");
     }
     boolean inOtherRelevantConsensus = false, inTooOldConsensuses = false,
         inTooNewConsensuses = false;
-    for (File f : matches)
-      if (relevantConsensuses.contains(f))
+    for (long match : matches) {
+      if (relevantConsensuses.containsKey(match)) {
         inOtherRelevantConsensus = true;
-      else if (tooOldConsensuses.contains(f))
+      } else if (tooOldConsensuses.containsKey(match)) {
         inTooOldConsensuses = true;
-      else if (tooNewConsensuses.contains(f))
+      } else if (tooNewConsensuses.containsKey(match)) {
         inTooNewConsensuses = true;
+      }
+    }
     if (inOtherRelevantConsensus) {
       if (!resultIndecisive) {
         out.println("        <p>Result is POSITIVE "
             + "with moderate certainty!</p>\n");
       }
       out.println("<p>We found one or more relays on IP address "
-          + relayIP + " permitting exit to " + target
-          + ", but not in the relay list immediately preceding "
-          + timestampStr + ". A possible reason for the relay being "
-          + "missing in the last relay list preceding the given time might "
-          + "be that some of the directory authorities had difficulties "
-          + "connecting to the relay. However, clients might still have "
-          + "used the relay.</p>\n");
+          + relayIP + " permitting exit to " + target + ", but not in "
+          + "the relay list immediately preceding " + timestampStr
+          + ". A possible reason for the relay being missing in the last "
+          + "relay list preceding the given time might be that some of "
+          + "the directory authorities had difficulties connecting to "
+          + "the relay. However, clients might still have used the "
+          + "relay.</p>\n");
     } else {
       if (!resultIndecisive) {
         out.println("        <p>Result is NEGATIVE "
@@ -792,29 +785,31 @@ public class ExoneraTorServlet extends HttpServlet {
           + " in the relay list 3 hours preceding " + timestampStr
           + ".</p>\n");
       if (inTooOldConsensuses || inTooNewConsensuses) {
-        if (inTooOldConsensuses && !inTooNewConsensuses)
+        if (inTooOldConsensuses && !inTooNewConsensuses) {
           out.println("        <p>Note that we found a matching relay in "
               + "relay lists that were published between 5 and 3 "
               + "hours before " + timestampStr + ".</p>\n");
-        else if (!inTooOldConsensuses && inTooNewConsensuses)
+        } else if (!inTooOldConsensuses && inTooNewConsensuses) {
           out.println("        <p>Note that we found a matching relay in "
               + "relay lists that were published up to 2 hours after "
               + timestampStr + ".</p>\n");
-        else
+        } else {
           out.println("        <p>Note that we found a matching relay in "
               + "relay lists that were published between 5 and 3 "
               + "hours before and in relay lists that were published up "
               + "to 2 hours after " + timestampStr + ".</p>\n");
+        }
         out.println("<p>Make sure that the timestamp you provided is "
             + "in the correct timezone: UTC (or GMT).</p>");
       }
     }
     if (target != null) {
       if (positiveConsensuses.isEmpty() &&
-          !positiveConsensusesNoTarget.isEmpty())
+          !positiveConsensusesNoTarget.isEmpty()) {
         out.println("        <p>Note that although the found relay(s) did "
             + "not permit exiting to " + target + ", there have been one "
             + "or more relays running at the given time.</p>");
+      }
     }
 
     /* Finish writing response. */
