@@ -1,82 +1,103 @@
 package org.torproject.ernie.web;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
 import java.io.*;
-import java.math.*;
+import java.sql.*;
 import java.text.*;
 import java.util.*;
+import java.util.logging.*;
+
+import javax.naming.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.sql.*;
 
 public class ConsensusServlet extends HttpServlet {
+
+  private DataSource ds;
+
+  private Logger logger;
+
+  public void init() {
+
+    /* Initialize logger. */
+    this.logger = Logger.getLogger(ConsensusServlet.class.toString());
+
+    /* Look up data source. */
+    try {
+      Context cxt = new InitialContext();
+      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/tordir");
+      this.logger.info("Successfully looked up data source.");
+    } catch (NamingException e) {
+      this.logger.log(Level.WARNING, "Could not look up data source", e);
+    }
+  }
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException,
       ServletException {
 
-    String validAfterParameter = request.getParameter("valid-after");
-
-    /* Check if we have a descriptors directory. */
-    // TODO make this configurable!
-    File archiveDirectory = new File("/srv/metrics.torproject.org/ernie/"
-        + "directory-archive/consensus");
-    if (!archiveDirectory.exists() || !archiveDirectory.isDirectory()) {
-      /* Oops, we don't have any descriptors to serve. */
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
-    }
-
     /* Check valid-after parameter. */
+    String validAfterParameter = request.getParameter("valid-after");
     if (validAfterParameter == null ||
         validAfterParameter.length() != "yyyy-MM-dd-HH-mm-ss".length()) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    SimpleDateFormat timeFormat = new SimpleDateFormat(
+    SimpleDateFormat parameterFormat = new SimpleDateFormat(
         "yyyy-MM-dd-HH-mm-ss");
-    timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    Date parsedTimestamp = null;
+    parameterFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    long parsedTimestamp = -1L;
     try {
-      parsedTimestamp = timeFormat.parse(validAfterParameter);
+      parsedTimestamp = parameterFormat.parse(validAfterParameter).
+          getTime();
     } catch (ParseException e) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    if (parsedTimestamp == null) {
+    if (parsedTimestamp < 0L) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    String consensusFilename = archiveDirectory.getAbsolutePath()
-        + "/" + validAfterParameter.substring(0, 4) + "/"
-        + validAfterParameter.substring(5, 7) + "/"
-        + validAfterParameter.substring(8, 10) + "/"
-        + validAfterParameter + "-consensus";
-    File consensusFile = new File(consensusFilename);
 
-    if (!consensusFile.exists()) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    /* Look up consensus in the database. */
+    SimpleDateFormat databaseFormat = new SimpleDateFormat(
+        "yyyy-MM-dd HH:mm:ss");
+    databaseFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    String databaseParameter = databaseFormat.format(parsedTimestamp);
+    byte[] rawDescriptor = null;
+    try {
+      Connection conn = this.ds.getConnection();
+      Statement statement = conn.createStatement();
+      String query = "SELECT rawdesc FROM consensus "
+          + "WHERE validafter = '" + databaseParameter + "'";
+      ResultSet rs = statement.executeQuery(query);
+      if (rs.next()) {
+        rawDescriptor = rs.getBytes(1);
+      }
+      rs.close();
+      statement.close();
+      conn.close();
+    } catch (SQLException e) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
 
-    /* Read file from disk and write it to response. */
-    BufferedInputStream input = null;
-    BufferedOutputStream output = null;
+    /* Write response. */
+    if (rawDescriptor == null) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      return;
+    }
     try {
       response.setContentType("text/plain");
       response.setHeader("Content-Length", String.valueOf(
-          consensusFile.length()));
-      response.setHeader("Content-Disposition",
-          "inline; filename=\"" + consensusFile.getName() + "\"");
-      input = new BufferedInputStream(new FileInputStream(consensusFile),
-          1024);
-      output = new BufferedOutputStream(response.getOutputStream(), 1024);
-      byte[] buffer = new byte[1024];
-      int length;
-      while ((length = input.read(buffer)) > 0) {
-          output.write(buffer, 0, length);
-      }
+          rawDescriptor.length));
+      response.setHeader("Content-Disposition", "inline; filename=\""
+          + validAfterParameter + "-consensus\"");
+      BufferedOutputStream output = new BufferedOutputStream(
+          response.getOutputStream());
+      output.write(rawDescriptor);
     } finally {
-      output.close();
-      input.close();
+      /* Nothing to do here. */
     }
   }
 }
