@@ -210,65 +210,26 @@ plot_relayflags_hour <- function(start, end, flags, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_new_users <- function(start, end, country, path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, 6 * requests AS users FROM dirreq_stats ",
-      "WHERE (source = '68333D0761BCF397A587A0C0B963E4A9E99EC4D3' ",
-      "OR source = 'F2044413DAC2E02E3D6BCF4735A19BCA1DE97281') ",
-      "AND date >= '", start, "' AND date <= '", end, "' AND country = '",
-      ifelse(country == "all", "zy", country), "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  newusers <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
-      to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, newusers$date)
-  if (length(missing) > 0)
-    newusers <- rbind(newusers,
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        users = NA))
-  peoples <- data.frame(country = c("au", "bh", "br", "ca", "cn", "cu",
-    "de", "et", "fr", "gb", "ir", "it", "jp", "kr", "mm", "pl", "ru",
-    "sa", "se", "sy", "tn", "tm", "us", "uz", "vn", "ye"),
-    people = c("Australian", "Bahraini", "Brazilian", "Canadian",
-    "Chinese", "Cuban", "German", "Ethiopian", "French", "U.K.",
-    "Iranian", "Italian", "Japanese", "South Korean", "Burmese", "Polish",
-    "Russian", "Saudi", "Swedish", "Syrian", "Tunisian", "Turkmen",
-    "U.S.", "Uzbek", "Vietnamese", "Yemeni"), stringsAsFactors = FALSE)
-  title <- ifelse(country == "all",
-    "Total new or returning, directly connecting Tor users (all data)\n",
-    paste("New or returning, directly connecting",
-    peoples[peoples$country == country, "people"], "Tor users\n"))
-  formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
-  ggplot(newusers, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
-    geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = "")) +
-    scale_y_continuous(name = "", limits = c(0, max(newusers$users,
-        na.rm = TRUE)), formatter = formatter) +
-    opts(title = title)
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
-}
-
 plot_direct_users <- function(start, end, country, path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, 10 * requests / share AS users ",
-      "FROM dirreq_stats WHERE share >= 1 ",
-      "AND source = '8522EB98C91496E80EC238E732594D1509158E77' ",
-      "AND date >= '", start, "' AND date <= '", end, "' AND country = '",
-      ifelse(country == "all", "zy", country), "'", sep = "")
+  q <- paste("SELECT date, r, bwp, brn, bwn, brp, bwr, brr ",
+      "FROM user_stats WHERE date >= '", start, "' AND date <= '", end,
+      "' AND date < (SELECT MAX(date) FROM user_stats) - 1 ",
+      " AND country = '", ifelse(country == "all", "zy", country), "'",
+      sep = "")
   rs <- dbSendQuery(con, q)
-  directusers <- fetch(rs, n = -1)
+  u <- fetch(rs, n = -1)
   dbDisconnect(con)
   dbUnloadDriver(drv)
+  u <- data.frame(date = u$date,
+       users = u$r * (u$bwp * u$brn / u$bwn - u$brp) /
+               (u$bwr * u$brn / u$bwn - u$brr) / 10)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, directusers$date)
+  missing <- setdiff(dates, u$date)
   if (length(missing) > 0)
-    directusers <- rbind(directusers,
+    u <- rbind(u,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         users = NA))
   peoples <- data.frame(country = c("au", "bh", "br", "ca", "cn", "cu",
@@ -280,15 +241,15 @@ plot_direct_users <- function(start, end, country, path) {
     "Russian", "Saudi", "Swedish", "Syrian", "Tunisian", "Turkmen",
     "U.S.", "Uzbek", "Vietnamese", "Yemeni"), stringsAsFactors = FALSE)
   title <- ifelse(country == "all",
-    "Total recurring, directly connecting Tor users (all data)\n",
-    paste("Recurring, directly connecting",
+    "Total directly connecting Tor users (all data)\n",
+    paste("Directly connecting",
     peoples[peoples$country == country, "people"], "Tor users\n"))
   formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
-  ggplot(directusers, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
+  ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = "")) +
-    scale_y_continuous(name = "", limits = c(0, max(directusers$users,
+    scale_y_continuous(name = "", limits = c(0, max(u$users,
         na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
