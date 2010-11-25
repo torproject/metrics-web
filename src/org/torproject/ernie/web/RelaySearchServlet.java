@@ -363,7 +363,8 @@ public class RelaySearchServlet extends HttpServlet {
     /* Actually execute the query. */
     long startedQuery = System.currentTimeMillis();
     SortedMap<String, SortedSet<String>> foundDescriptors =
-        new TreeMap<String, SortedSet<String>>();
+        new TreeMap<String, SortedSet<String>>(
+        Collections.reverseOrder());
     Map<String, String> rawValidAfterLines =
         new HashMap<String, String>();
     Map<String, String> rawStatusEntries = new HashMap<String, String>();
