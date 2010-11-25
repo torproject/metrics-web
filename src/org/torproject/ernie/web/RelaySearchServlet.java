@@ -309,13 +309,40 @@ public class RelaySearchServlet extends HttpServlet {
     request.setAttribute("searchNotice", searchNotice);
 
     /* Prepare the query string. */
+    StringBuilder conditionBuilder = new StringBuilder();
+    boolean addAnd = false;
+    if (searchNickname.length() > 0) {
+      conditionBuilder.append((addAnd ? "AND " : "")
+          + "LOWER(nickname) LIKE '" + searchNickname.toLowerCase()
+          + "%' ");
+      addAnd = true;
+    }
+    if (searchFingerprint.length() > 0) {
+      conditionBuilder.append((addAnd ? "AND " : "")
+          + "fingerprint LIKE '" + searchFingerprint.toLowerCase()
+          + "%' ");
+      addAnd = true;
+    }
+    if (searchIPAddress.length() > 0) {
+      conditionBuilder.append((addAnd ? "AND " : "")
+          + "address LIKE '" + searchIPAddress + "%' ");
+      addAnd = true;
+    }
+    for (String search : searchFingerprintOrNickname) {
+      conditionBuilder.append((addAnd ? "AND " : "")
+          + "(LOWER(nickname) LIKE '" + search.toLowerCase()
+          + "%' OR fingerprint LIKE '" + search.toLowerCase() + "%') ");
+      addAnd = true;
+    }
     StringBuilder queryBuilder = new StringBuilder();
     queryBuilder.append("SELECT validafter, descriptor, rawdesc "
+        + "FROM statusentry WHERE validafter IN (SELECT validafter "
         + "FROM statusentry WHERE ");
+    queryBuilder.append(conditionBuilder.toString());
     if (searchDayTimestamps.size() > 0 ||
         searchMonthTimestamps.size() > 0) {
       boolean addOr = false;
-      queryBuilder.append("(");
+      queryBuilder.append("AND (");
       for (long searchTimestamp : searchDayTimestamps) {
         queryBuilder.append((addOr ? "OR " : "") + "(validafter >= '"
             + dateTimeFormat.format(searchTimestamp) + "' AND "
@@ -336,26 +363,13 @@ public class RelaySearchServlet extends HttpServlet {
       }
       queryBuilder.append(") ");
     } else {
-      queryBuilder.append("validafter >= '" + dateTimeFormat.format(
+      queryBuilder.append("AND validafter >= '" + dateTimeFormat.format(
           System.currentTimeMillis() - 30L * 24L * 60L * 60L * 1000L)
           + "' ");
     }
-    if (searchNickname.length() > 0) {
-      queryBuilder.append("AND LOWER(nickname) LIKE '"
-          + searchNickname.toLowerCase() + "%' ");
-    }
-    if (searchFingerprint.length() > 0) {
-      queryBuilder.append("AND fingerprint LIKE '"
-          + searchFingerprint.toLowerCase() + "%' ");
-    }
-    if (searchIPAddress.length() > 0) {
-      queryBuilder.append("AND address LIKE '" + searchIPAddress + "%' ");
-    }
-    for (String search : searchFingerprintOrNickname) {
-      queryBuilder.append("AND (LOWER(nickname) LIKE '"
-          + search.toLowerCase() + "%' OR fingerprint LIKE '"
-          + search.toLowerCase() + "%') ");
-    }
+    queryBuilder.append("GROUP BY validafter ORDER BY validafter DESC "
+        + "LIMIT 31) AND ");
+    queryBuilder.append(conditionBuilder.toString());
     queryBuilder.append("ORDER BY validafter DESC, fingerprint LIMIT 31");
     String query = queryBuilder.toString();
     request.setAttribute("query", query);
