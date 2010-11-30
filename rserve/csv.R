@@ -103,35 +103,20 @@ export_relayflags_hour <- function(path) {
   write.csv(relayflags, path, quote = FALSE, row.names = FALSE)
 }
 
-export_new_users <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, country, 6 * requests AS newusers",
-      "FROM dirreq_stats",
-      "WHERE source = '68333D0761BCF397A587A0C0B963E4A9E99EC4D3'",
-      "OR source = 'F2044413DAC2E02E3D6BCF4735A19BCA1DE97281'",
-      "ORDER BY date, country")
-  rs <- dbSendQuery(con, q)
-  newusers <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  newusers <- cast(newusers, date ~ country, value = "newusers")
-  names(newusers)[names(newusers) == "zy"] <- "all"
-  write.csv(newusers, path, quote = FALSE, row.names = FALSE)
-}
-
 export_direct_users <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, country,",
-      "FLOOR(10 * requests / share) AS directusers",
-      "FROM dirreq_stats WHERE share >= 1",
-      "AND source = '8522EB98C91496E80EC238E732594D1509158E77'",
+  q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr",
+      "FROM user_stats",
+      "WHERE date < (SELECT MAX(date) FROM user_stats) - 1",
       "ORDER BY date, country")
   rs <- dbSendQuery(con, q)
-  directusers <- fetch(rs, n = -1)
+  u <- fetch(rs, n = -1)
   dbDisconnect(con)
   dbUnloadDriver(drv)
+  directusers <- data.frame(date = u$date, country = u$country,
+       directusers = floor(u$r * (u$bwp * u$brn / u$bwn - u$brp) /
+               (u$bwr * u$brn / u$bwn - u$brr) / 10))
   directusers <- cast(directusers, date ~ country, value = "directusers")
   names(directusers)[names(directusers) == "zy"] <- "all"
   write.csv(directusers, path, quote = FALSE, row.names = FALSE)
@@ -202,13 +187,15 @@ export_torperf <- function(path) {
 help_export_monthly_users <- function(path, aggr_fun) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, country,",
-      "FLOOR(10 * requests / share) AS users",
-      "FROM dirreq_stats WHERE share >= 1",
-      "AND source = '8522EB98C91496E80EC238E732594D1509158E77'",
+  q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr",
+      "FROM user_stats",
+      "WHERE date < (SELECT MAX(date) FROM user_stats) - 1",
       "ORDER BY date, country")
   rs <- dbSendQuery(con, q)
-  trusted <- fetch(rs, n = -1)
+  u <- fetch(rs, n = -1)
+  direct <- data.frame(date = u$date, country = u$country,
+       users = u$r * (u$bwp * u$brn / u$bwn - u$brp) /
+               (u$bwr * u$brn / u$bwn - u$brr) / 10)
   q <- paste("SELECT date, country, FLOOR(users) AS users",
       "FROM bridge_stats",
       "WHERE date < (SELECT MAX(date) FROM bridge_stats)",
@@ -217,7 +204,7 @@ help_export_monthly_users <- function(path, aggr_fun) {
   bridge <- fetch(rs, n = -1)
   dbDisconnect(con)
   dbUnloadDriver(drv)
-  users <- rbind(bridge, trusted)
+  users <- rbind(bridge, direct)
   users <- aggregate(users$users,
       by = list(date = users$date, country = users$country), sum)
   users <- aggregate(users$x, by = list(month = substr(users$date, 1, 7),
