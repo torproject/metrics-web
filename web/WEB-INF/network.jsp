@@ -127,6 +127,8 @@ version.</p>
   </div>
 </form>
 <p><a href="csv/versions.csv">CSV</a> file containing all data.</p>
+<p><a href="csv/current-platform-strings.csv">CSV</a> file containing
+platform strings of currently running relays.</p>
 <br>
 
 <h3>Relays by platform</h3>
@@ -153,6 +155,8 @@ platform.</p>
   </div>
 </form>
 <p><a href="csv/platforms.csv">CSV</a> file containing all data.</p>
+<p><a href="csv/current-platform-strings.csv">CSV</a> file containing
+platform strings of currently running relays.</p>
 <br>
 
 <h3>Total relay bandwidth in the network</h3>
