@@ -45,8 +45,8 @@
         daily updated <a href="graphs.html">graphs</a>.
         <ul>
           <li>Privacy-preserving Ways to Estimate the Number of Tor Users
-          (<a href="papers/countingusers-2010-11-24.pdf">PDF</a>,
-          322K from November 24, 2010).</li>
+          (<a href="papers/countingusers-2010-11-30.pdf">PDF</a>,
+          307K from November 30, 2010).</li>
           <li>Comparison of GeoIP Databases for Tor
           (<a href="papers/geoipdbcomp-2009-10-23.pdf">PDF</a>,
           546K from October 23, 2009).</li>

@@ -32,6 +32,10 @@
         <br>
         <h3>News</h3>
         <ul>
+          <li>November 30, 2010: Tech report on
+          <a href="papers/countingusers-2010-11-30.pdf">Privacy-preserving
+          Ways to Estimate the Number of Tor Users</a> is available for
+          download on the <a href="papers.html">Papers</a> page.
           <li>October 7, 2010: Custom graphs are now available for all
           <a href="graphs.html">graphs</a>. Based on work by Kevin
           Berry.</li>
