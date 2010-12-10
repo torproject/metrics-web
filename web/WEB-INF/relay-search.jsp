@@ -15,7 +15,7 @@
       <h2>Tor Metrics Portal: Relay Search</h2>
       <p>Search for a relay in the relay descriptor archive by typing
       (part of) a <b>nickname</b>, <b>fingerprint</b>, or <b>IP
-      address</b> and optionally up to three <b>months (yyyy-mm)</b> or
+      address</b> and optionally a <b>month (yyyy-mm)</b> or up to three
       <b>days (yyyy-mm-dd)</b> in the following search field and
       clicking Search. The search will stop after 30 hits or, unless you
       provide a month or a day, after parsing the last 30 days of relay

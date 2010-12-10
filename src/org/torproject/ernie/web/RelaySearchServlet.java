@@ -238,9 +238,10 @@ public class RelaySearchServlet extends HttpServlet {
       searchFingerprintOrNickname.clear();
     }
 
-    /* We only accept at most three months or days, or people could
-     * accidentally keep the database busy. */
-    if (searchDays.size() + searchMonths.size() > 3) {
+    /* We only accept at most one month or three days, but not both, or
+     * people could accidentally keep the database busy. */
+    if (searchDays.size() > 3 || searchMonths.size() > 1 ||
+        (searchMonths.size() == 1 && searchDays.size() > 0)) {
       validQuery = false;
     }
 
