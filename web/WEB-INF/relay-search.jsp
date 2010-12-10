@@ -56,7 +56,8 @@
         <p>Found
         <c:choose>
           <c:when test="${matches > 30}">
-            more than 30 relays (displaying only the first 30 hits)
+            more than 30 relays (displaying only those in the last
+            consensuses)
           </c:when>
           <c:otherwise>
             ${matches} relays

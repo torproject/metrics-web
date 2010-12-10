@@ -369,7 +369,7 @@ public class RelaySearchServlet extends HttpServlet {
     }
     queryBuilder.append("ORDER BY validafter DESC LIMIT 31) AND ");
     queryBuilder.append(conditionBuilder.toString());
-    queryBuilder.append("ORDER BY validafter DESC, fingerprint LIMIT 31");
+    queryBuilder.append("ORDER BY validafter DESC, fingerprint");
     String query = queryBuilder.toString();
     request.setAttribute("query", query);
 
@@ -388,9 +388,6 @@ public class RelaySearchServlet extends HttpServlet {
       ResultSet rs = statement.executeQuery(query);
       while (rs.next()) {
         matches++;
-        if (matches > 30) {
-          break;
-        }
         String validAfter = rs.getTimestamp(1).toString().
             substring(0, 19);
         String descriptor = rs.getString(2);
