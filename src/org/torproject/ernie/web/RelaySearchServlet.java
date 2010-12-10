@@ -336,9 +336,9 @@ public class RelaySearchServlet extends HttpServlet {
       addAnd = true;
     }
     StringBuilder queryBuilder = new StringBuilder();
-    queryBuilder.append("SELECT validafter, descriptor, rawdesc "
-        + "FROM statusentry WHERE validafter IN (SELECT validafter "
-        + "FROM statusentry WHERE ");
+    queryBuilder.append("SELECT validafter, fingerprint, descriptor, "
+        + "rawdesc FROM statusentry WHERE validafter IN (SELECT "
+        + "validafter FROM statusentry WHERE ");
     queryBuilder.append(conditionBuilder.toString());
     if (searchDayTimestamps.size() > 0 ||
         searchMonthTimestamps.size() > 0) {
@@ -370,7 +370,6 @@ public class RelaySearchServlet extends HttpServlet {
     }
     queryBuilder.append("ORDER BY validafter DESC LIMIT 31) AND ");
     queryBuilder.append(conditionBuilder.toString());
-    queryBuilder.append("ORDER BY validafter DESC, fingerprint");
     String query = queryBuilder.toString();
     request.setAttribute("query", query);
 
@@ -391,46 +390,46 @@ public class RelaySearchServlet extends HttpServlet {
         matches++;
         String validAfter = rs.getTimestamp(1).toString().
             substring(0, 19);
-        String descriptor = rs.getString(2);
+        String fingerprint = rs.getString(2);
+        String descriptor = rs.getString(3);
         if (!foundDescriptors.containsKey(validAfter)) {
           foundDescriptors.put(validAfter, new TreeSet<String>());
         }
-        foundDescriptors.get(validAfter).add(descriptor);
+        foundDescriptors.get(validAfter).add(validAfter + " "
+            + fingerprint);
         if (!rawValidAfterLines.containsKey(validAfter)) {
           rawValidAfterLines.put(validAfter, "<tt>valid-after "
               + "<a href=\"consensus?valid-after="
               + validAfter.replaceAll(":", "-").replaceAll(" ", "-")
               + "\" target=\"_blank\">" + validAfter + "</a></tt><br>");
         }
-        if (!rawStatusEntries.containsKey(descriptor)) {
-          byte[] rawStatusEntry = rs.getBytes(3);
-          String statusEntryLines = null;
-          try {
-            statusEntryLines = new String(rawStatusEntry, "US-ASCII");
-          } catch (UnsupportedEncodingException e) {
-            /* This shouldn't happen, because we know that ASCII is
-             * supported. */
-          }
-          StringBuilder rawStatusEntryBuilder = new StringBuilder();
-          String[] lines = statusEntryLines.split("\n");
-          for (String line : lines) {
-            if (line.startsWith("r ")) {
-              String[] parts = line.split(" ");
-              String descriptorBase64 = String.format("%040x",
-                  new BigInteger(1, Base64.decodeBase64(parts[3]
-                  + "==")));
-              rawStatusEntryBuilder.append("<tt>r " + parts[1] + " "
-                  + parts[2] + " <a href=\"descriptor.html?desc-id="
-                  + descriptorBase64 + "\" target=\"_blank\">" + parts[3]
-                  + "</a> " + parts[4] + " " + parts[5] + " " + parts[6]
-                  + " " + parts[7] + " " + parts[8] + "</tt><br>");
-            } else {
-              rawStatusEntryBuilder.append("<tt>" + line + "</tt><br>");
-            }
-            rawStatusEntries.put(descriptor,
-                rawStatusEntryBuilder.toString());
+        byte[] rawStatusEntry = rs.getBytes(4);
+        String statusEntryLines = null;
+        try {
+          statusEntryLines = new String(rawStatusEntry, "US-ASCII");
+        } catch (UnsupportedEncodingException e) {
+          /* This shouldn't happen, because we know that ASCII is
+           * supported. */
+        }
+        StringBuilder rawStatusEntryBuilder = new StringBuilder();
+        String[] lines = statusEntryLines.split("\n");
+        for (String line : lines) {
+          if (line.startsWith("r ")) {
+            String[] parts = line.split(" ");
+            String descriptorBase64 = String.format("%040x",
+                new BigInteger(1, Base64.decodeBase64(parts[3]
+                + "==")));
+            rawStatusEntryBuilder.append("<tt>r " + parts[1] + " "
+                + parts[2] + " <a href=\"descriptor.html?desc-id="
+                + descriptorBase64 + "\" target=\"_blank\">" + parts[3]
+                + "</a> " + parts[4] + " " + parts[5] + " " + parts[6]
+                + " " + parts[7] + " " + parts[8] + "</tt><br>");
+          } else {
+            rawStatusEntryBuilder.append("<tt>" + line + "</tt><br>");
           }
         }
+        rawStatusEntries.put(validAfter + " " + fingerprint,
+              rawStatusEntryBuilder.toString());
       }
       rs.close();
       statement.close();
