@@ -71,10 +71,10 @@
           know</a>!</p>
         </c:if>
       </c:if>
+    </div>
   </div>
-</div>
-<div class="bottom" id="bottom">
-  <%@ include file="footer.jsp"%>
-</div>
+  <div class="bottom" id="bottom">
+    <%@ include file="footer.jsp"%>
+  </div>
 </body>
 </html>
