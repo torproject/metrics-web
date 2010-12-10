@@ -367,8 +367,7 @@ public class RelaySearchServlet extends HttpServlet {
           System.currentTimeMillis() - 30L * 24L * 60L * 60L * 1000L)
           + "' ");
     }
-    queryBuilder.append("GROUP BY validafter ORDER BY validafter DESC "
-        + "LIMIT 31) AND ");
+    queryBuilder.append("ORDER BY validafter DESC LIMIT 31) AND ");
     queryBuilder.append(conditionBuilder.toString());
     queryBuilder.append("ORDER BY validafter DESC, fingerprint LIMIT 31");
     String query = queryBuilder.toString();
