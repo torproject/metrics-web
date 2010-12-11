@@ -1,21 +1,29 @@
 package org.torproject.ernie.web;
 
 import java.io.*;
-import java.util.*;
 import java.sql.*;
-import java.util.logging.*;
 import java.text.*;
+import java.util.*;
+import java.util.logging.*;
 
 import javax.naming.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.sql.*;
 
+import org.apache.commons.lang.time.*;
+
 public class NetworkStatusServlet extends HttpServlet {
 
   private DataSource ds;
 
   private Logger logger;
+
+  /** Known parameter values for the sort parameter. */
+  private Set<String> validSortParameterValues;
+
+  /** Known parameter values for the order parameter. */
+  private Set<String> validOrderParameterValues;
 
   public void init() {
 
@@ -30,51 +38,69 @@ public class NetworkStatusServlet extends HttpServlet {
     } catch (NamingException e) {
       this.logger.log(Level.WARNING, "Could not look up data source", e);
     }
+
+    /* Initialize known parameter values. */
+    this.validSortParameterValues = new HashSet<String>(Arrays.asList((
+        "nickname,bandwidth,orport,dirport,isbadexit,uptime").
+        split(",")));
+    this.validOrderParameterValues = new HashSet<String>(
+        Arrays.asList(("desc,asc").split(",")));
+
   }
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 
-    String sort, order;
+    /* Try to parse parameters and override them with defaults if we
+     * cannot parse them. */
+    String sortParameter = request.getParameter("sort");
+    if (sortParameter != null) {
+      sortParameter = sortParameter.toLowerCase();
+    }
+    if (sortParameter == null || sortParameter.length() < 1 ||
+        !validSortParameterValues.contains(sortParameter)) {
+      sortParameter = "nickname";
+    }
+    String orderParameter = request.getParameter("order");
+    if (orderParameter != null) {
+      orderParameter = orderParameter.toLowerCase();
+    }
+    if (orderParameter == null || orderParameter.length() < 1 ||
+        !validOrderParameterValues.contains(orderParameter)) {
+      orderParameter = "asc";
+    }
 
+    /* Initialize list containing the results. */
     List<Map<String, Object>> status =
         new ArrayList<Map<String, Object>>();
 
-    Set<String> validSort = new HashSet<String>(
-        Arrays.asList(("nickname,bandwidth,orport,dirport,isbadexit,"
-            + "uptime").split(",")));
-
-    Set<String> validOrder = new HashSet<String>(
-        Arrays.asList(("desc,asc").split(",")));
-
-    /* Initialize sort and order parameters from GET */
-    try {
-      sort = request.getParameter("sort").toLowerCase();
-      order = request.getParameter("order").toLowerCase();
-    } catch (Exception e) {
-      sort = "nickname";
-      order = "asc";
-    }
-
-    /* Check and set default parameters in case of bad user data. */
-    if (!validSort.contains(sort))    { sort = "nickname"; }
-    if (!validOrder.contains(order))  { order = "desc"; }
-
-    /* Connect to the database and retrieve data set */
+    /* Connect to the database and retrieve data set. */
     try {
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
 
-      String dbsort = ((sort.equals("uptime") || sort.equals("platform"))
-          ? "d." : "s.") + sort;
-      String query = "SELECT s.*, "
-          + "d.uptime AS uptime, d.platform AS platform "
-          + "FROM statusentry s "
-          + "JOIN descriptor d "
-          + "ON d.descriptor=s.descriptor "
-          + "WHERE s.validafter = "
-              + "(SELECT MAX(validafter) FROM statusentry) "
-          + "ORDER BY " + dbsort + " " + order;
+      String orderBy = ((sortParameter.equals("uptime") ||
+          sortParameter.equals("platform"))
+          ? "descriptor." : "statusentry.") + sortParameter;
+      String query = "SELECT statusentry.validafter, "
+          + "statusentry.nickname, statusentry.fingerprint, "
+          + "statusentry.descriptor, statusentry.published, "
+          + "statusentry.address, statusentry.orport, "
+          + "statusentry.dirport, statusentry.isauthority, "
+          + "statusentry.isbadexit, statusentry.isbaddirectory, "
+          + "statusentry.isexit, statusentry.isfast, "
+          + "statusentry.isguard, statusentry.ishsdir, "
+          + "statusentry.isnamed, statusentry.isstable, "
+          + "statusentry.isrunning, statusentry.isunnamed, "
+          + "statusentry.isvalid, statusentry.isv2dir, "
+          + "statusentry.isv3dir, statusentry.version, "
+          + "statusentry.bandwidth, statusentry.ports, "
+          + "statusentry.rawdesc, descriptor.uptime, "
+          + "descriptor.platform FROM statusentry JOIN descriptor "
+          + "ON descriptor.descriptor = statusentry.descriptor "
+          + "WHERE statusentry.validafter = "
+          + "(SELECT MAX(validafter) FROM statusentry) "
+          + "ORDER BY " + orderBy + " " + orderParameter.toUpperCase();
 
       ResultSet rs = statement.executeQuery(query);
 
@@ -106,18 +132,20 @@ public class NetworkStatusServlet extends HttpServlet {
         row.put("bandwidth", rs.getBigDecimal(24));
         row.put("ports", rs.getString(25));
         row.put("rawdesc", rs.getBytes(26));
-        row.put("uptime", TimeInterval.format(
-            rs.getBigDecimal(27).intValue()));
+        row.put("uptime", DurationFormatUtils.formatDuration(
+            rs.getBigDecimal(27).longValue() * 1000L, "d'd' HH:mm:ss"));
         row.put("platform", rs.getString(28));
         row.put("validafterts", rs.getTimestamp(1).getTime());
 
         status.add(row);
       }
-
+      rs.close();
+      statement.close();
       conn.close();
       request.setAttribute("status", status);
-      request.setAttribute("sort", sort);
-      request.setAttribute("order", (order.equals("desc")) ? "asc" : "desc");
+      request.setAttribute("sort", sortParameter);
+      request.setAttribute("order", (orderParameter.equals("desc"))
+          ? "asc" : "desc");
 
     } catch (SQLException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -125,8 +153,9 @@ public class NetworkStatusServlet extends HttpServlet {
       return;
     }
 
-    /* Forward the request to the JSP that does all the hard work. */
-    request.getRequestDispatcher("WEB-INF/networkstatus.jsp").forward(request,
-        response);
+    /* Forward the request to the JSP. */
+    request.getRequestDispatcher("WEB-INF/networkstatus.jsp").forward(
+        request, response);
   }
 }
+

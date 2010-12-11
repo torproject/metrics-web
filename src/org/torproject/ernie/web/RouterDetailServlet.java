@@ -1,15 +1,18 @@
 package org.torproject.ernie.web;
 
 import java.io.*;
-import java.util.*;
 import java.sql.*;
-import java.util.logging.*;
 import java.text.*;
+import java.util.*;
+import java.util.logging.*;
+import java.util.regex.*;
 
 import javax.naming.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.sql.*;
+
+import org.apache.commons.lang.time.*;
 
 public class RouterDetailServlet extends HttpServlet {
 
@@ -17,10 +20,12 @@ public class RouterDetailServlet extends HttpServlet {
 
   private Logger logger;
 
+  private Pattern fingerprintPattern;
+
   public void init() {
 
     /* Initialize logger. */
-    this.logger = Logger.getLogger(NetworkStatusServlet.class.toString());
+    this.logger = Logger.getLogger(RouterDetailServlet.class.toString());
 
     /* Look up data source. */
     try {
@@ -30,112 +35,82 @@ public class RouterDetailServlet extends HttpServlet {
     } catch (NamingException e) {
       this.logger.log(Level.WARNING, "Could not look up data source", e);
     }
+
+    /* Initialize fingerprint pattern. */
+    this.fingerprintPattern = Pattern.compile("^[0-9a-f]{40}$");
   }
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 
-    String fingerprint;
-    java.sql.Timestamp validafter;
-
-    try {
-      fingerprint = request.getParameter("fingerprint");
-      validafter = new java.sql.Timestamp(
-          Long.parseLong(request.getParameter("validafter")));
-
-    } catch (Exception e) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    /* Check that we were given a valid fingerprint. */
+    String fingerprintParameter = request.getParameter("fingerprint");
+    if (fingerprintParameter != null) {
+      fingerprintParameter = fingerprintParameter.toLowerCase();
+    }
+    if (fingerprintParameter == null ||
+        fingerprintParameter.length() != 40 ||
+        !fingerprintPattern.matcher(fingerprintParameter).matches()) {
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
 
-    String query = "SELECT s.*, d.uptime, d.platform, d.rawdesc as rawdescd "
-        + "FROM statusentry s "
-        + "JOIN descriptor d "
-        + "ON s.descriptor = d.descriptor "
-        + "WHERE s.fingerprint = ? "
-        + "AND s.validafter = ? "
-        + "LIMIT 1";
+    String query = "SELECT statusentry.validafter, statusentry.nickname, "
+        + "statusentry.fingerprint, statusentry.descriptor, "
+        + "statusentry.published, statusentry.address, "
+        + "statusentry.orport, statusentry.dirport, "
+        + "statusentry.isauthority, statusentry.isbadexit, "
+        + "statusentry.isbaddirectory, statusentry.isexit, "
+        + "statusentry.isfast, statusentry.isguard, statusentry.ishsdir, "
+        + "statusentry.isnamed, statusentry.isstable, "
+        + "statusentry.isrunning, statusentry.isunnamed, "
+        + "statusentry.isvalid, statusentry.isv2dir, "
+        + "statusentry.isv3dir, statusentry.version, "
+        + "statusentry.bandwidth, statusentry.ports, "
+        + "descriptor.uptime, descriptor.platform, descriptor.rawdesc "
+        + "FROM statusentry JOIN descriptor "
+        + "ON descriptor.descriptor = statusentry.descriptor "
+        + "WHERE statusentry.validafter = "
+        + "(SELECT MAX(validafter) FROM statusentry) "
+        + "AND statusentry.fingerprint = ?";
 
     try {
       Connection conn = this.ds.getConnection();
       PreparedStatement ps = conn.prepareStatement(query);
-      ps.setString(1, fingerprint);
-      ps.setTimestamp(2, validafter);
+      ps.setString(1, fingerprintParameter);
       ResultSet rs = ps.executeQuery();
       if (rs.next()) {
-        request.setAttribute("validafter", rs.getTimestamp("validafter"));
-        request.setAttribute("nickname", rs.getString("nickname"));
-        request.setAttribute("fingerprint", rs.getString("fingerprint"));
-        request.setAttribute("descriptor", rs.getString("descriptor"));
-        request.setAttribute("published", rs.getTimestamp("published"));
-        request.setAttribute("address", rs.getString("address"));
-        request.setAttribute("orport", rs.getInt("orport"));
-        request.setAttribute("dirport", rs.getInt("dirport"));
-        request.setAttribute("isauthority", rs.getBoolean("isauthority"));
-        request.setAttribute("isbadexit", rs.getBoolean("isbadexit"));
-        request.setAttribute("isbaddirectory", rs.getBoolean("isbaddirectory"));
-        request.setAttribute("isexit", rs.getBoolean("isexit"));
-        request.setAttribute("isfast", rs.getBoolean("isfast"));
-        request.setAttribute("isguard", rs.getBoolean("isguard"));
-        request.setAttribute("ishsdir", rs.getBoolean("ishsdir"));
-        request.setAttribute("isnamed", rs.getBoolean("isnamed"));
-        request.setAttribute("isstable", rs.getBoolean("isstable"));
-        request.setAttribute("isrunning", rs.getBoolean("isrunning"));
-        request.setAttribute("isunnamed", rs.getBoolean("isunnamed"));
-        request.setAttribute("isvalid", rs.getBoolean("isvalid"));
-        request.setAttribute("isv2dir", rs.getBoolean("isv2dir"));
-        request.setAttribute("isv3dir", rs.getBoolean("isv3dir"));
-        request.setAttribute("version", rs.getString("version"));
-        request.setAttribute("bandwidth", rs.getBigDecimal("bandwidth"));
-        request.setAttribute("ports", rs.getString("ports"));
-        request.setAttribute("uptime", TimeInterval.format(
-            rs.getBigDecimal("uptime").intValue()));
-        request.setAttribute("platform", rs.getString("platform"));
-
-        //Find onion key and signing key
-        byte[] rawdesc = rs.getBytes("rawdescd");
-        String rawdesc_str = new String(rawdesc, "UTF-8");
-        String[] lines = rawdesc_str.split("\n");
-        String onion_key = "";
-        String signing_key = "";
-        int line = 0;
-        for (String t : lines)  {
-          if (t.startsWith("onion-key"))  {
-            int start = 0, end = 0;
-            if (lines[line+1].startsWith("-----BEGIN")) {
-              start = line + 1;
-              for (int i = line + 1; i < lines.length; i++) {
-                if (lines[i].startsWith("-----END"))  {
-                  end = i + 1;
-                  break;
-                }
-              }
-              for (int i = start; i < end; i++ )  {
-                onion_key += lines[i] + "<br/>";
-              }
-            }
-          }
-          if (t.startsWith("signing-key"))  {
-            int start = 0, end = 0;
-            if (lines[line+1].startsWith("-----BEGIN")) {
-              start = line + 1;
-              for (int i = line + 1; i < lines.length; i++) {
-                if (lines[i].startsWith("-----END"))  {
-                  end = i + 1;
-                  break;
-                }
-              }
-              for (int i = start; i < end; i++ )  {
-                signing_key += lines[i] + "<br/>";
-              }
-            }
-          }
-          line++;
-        }
-        request.setAttribute("onion_key", onion_key);
-        request.setAttribute("signing_key", signing_key);
+        request.setAttribute("validafter", rs.getTimestamp(1));
+        request.setAttribute("nickname", rs.getString(2));
+        request.setAttribute("fingerprint", rs.getString(3));
+        request.setAttribute("descriptor", rs.getString(4));
+        request.setAttribute("published", rs.getTimestamp(5));
+        request.setAttribute("address", rs.getString(6));
+        request.setAttribute("orport", rs.getInt(7));
+        request.setAttribute("dirport", rs.getInt(8));
+        request.setAttribute("isauthority", rs.getBoolean(9));
+        request.setAttribute("isbadexit", rs.getBoolean(10));
+        request.setAttribute("isbaddirectory", rs.getBoolean(11));
+        request.setAttribute("isexit", rs.getBoolean(12));
+        request.setAttribute("isfast", rs.getBoolean(13));
+        request.setAttribute("isguard", rs.getBoolean(14));
+        request.setAttribute("ishsdir", rs.getBoolean(15));
+        request.setAttribute("isnamed", rs.getBoolean(16));
+        request.setAttribute("isstable", rs.getBoolean(17));
+        request.setAttribute("isrunning", rs.getBoolean(18));
+        request.setAttribute("isunnamed", rs.getBoolean(19));
+        request.setAttribute("isvalid", rs.getBoolean(20));
+        request.setAttribute("isv2dir", rs.getBoolean(21));
+        request.setAttribute("isv3dir", rs.getBoolean(22));
+        request.setAttribute("version", rs.getString(23));
+        request.setAttribute("bandwidth", rs.getBigDecimal(24));
+        request.setAttribute("ports", rs.getString(25));
+        request.setAttribute("uptime", DurationFormatUtils.formatDuration(
+            rs.getBigDecimal(26).longValue() * 1000L, "d'd' HH:mm:ss"));
+        request.setAttribute("platform", rs.getString(27));
       } else {
         /* There were zero results in the set */
+        /* TODO Handle this case in a more user-friendly way. */
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       }
       conn.close();
@@ -146,8 +121,9 @@ public class RouterDetailServlet extends HttpServlet {
       return;
     }
 
-    /* Forward the request to the JSP that does all the hard work. */
-    request.getRequestDispatcher("WEB-INF/routerdetail.jsp").forward(request,
-        response);
+    /* Forward the request to the JSP. */
+    request.getRequestDispatcher("WEB-INF/routerdetail.jsp").forward(
+        request, response);
   }
 }
+

@@ -1,9 +1,8 @@
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics Portal: Status</title>
+  <title>Tor Metrics Portal: Router Detail</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -21,7 +20,7 @@
          <td>nickname</td><td>${nickname}</td>
         </tr>
         <tr>
-         <td>bandwidth</td><td>${bandwidth * 0.0009765625} kBps</td>
+         <td>bandwidth</td><td>${bandwidth}</td>
         </tr>
         <tr>
          <td>fingerprint</td><td>${fingerprint}</td>
@@ -92,17 +91,11 @@
         <tr>
          <td>platform</td><td>${platform}</td>
         </tr>
-        <tr>
-         <td>onion-key</td><td>${onion_key}</td>
-        </tr>
-        <tr>
-         <td>signing-key</td><td>${signing_key}</td>
-        </tr>
       </table>
       <img src="routerdetail.png?fingerprint=${fingerprint}"
            width="576"
            height="360"
-           alt="Router detail bandwidth graph for ${fingerprint}"/>
+           alt="Bandwidth history for ${fingerprint}"/>
     </div>
   </div>
   <div class="bottom" id="bottom">

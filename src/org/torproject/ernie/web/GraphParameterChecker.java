@@ -55,8 +55,7 @@ public class GraphParameterChecker {
     this.availableGraphs.put("gettor", "start,end,bundle,filename");
     this.availableGraphs.put("torperf",
          "start,end,source,filesize,filename");
-    this.availableGraphs.put("routerdetail",
-         "start,end,fingerprint,filename");
+    this.availableGraphs.put("routerdetail", "fingerprint,filename");
 
     this.knownParameterValues = new HashMap<String, String>();
     this.knownParameterValues.put("flag",
@@ -66,7 +65,6 @@ public class GraphParameterChecker {
     this.knownParameterValues.put("bundle", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
-    this.knownParameterValues.put("fingerprint", "[0-9a-f]{40}");
   }
 
   /**
@@ -243,32 +241,23 @@ public class GraphParameterChecker {
       recognizedGraphParameters.put("filesize", filesizeParameter);
     }
 
-    /* Parse fingerprint field for the torstatus graph. Match it against
-     * a hexadecimal regular expression and make sure it is 40 characters
-     * long. */
+    /* Parse fingerprint if supported/required by the graph type. Make
+     * sure the fingerprint contains only hexadecimal characters and is 40
+     * characters long. Fail if no fingerprint is provided! */
     if (supportedGraphParameters.contains("fingerprint")) {
-      String[] fingerprint = (String[])requestParameters.get("fingerprint");
-      if (fingerprint != null) {
-        if (!Pattern.matches(this.knownParameterValues.get("fingerprint"),
-            fingerprint[0]) || fingerprint[0].length() != 40) {
-          return null;
-        }
-      } else {
+      String[] fingerprintParameter = (String[]) requestParameters.get(
+          "fingerprint");
+      if (fingerprintParameter == null ||
+          fingerprintParameter.length != 1 ||
+          fingerprintParameter[0] == null ||
+          !Pattern.matches("[0-9a-f]{40}",
+          fingerprintParameter[0].toLowerCase())) {
         return null;
+      } else {
+        fingerprintParameter[0] = fingerprintParameter[0].toLowerCase();
+        recognizedGraphParameters.put("fingerprint",
+            fingerprintParameter);
       }
-
-      /* Set "mandatory" start and end parameters to this hour so it stays up to
-       * date (the start and end parameters aren't needed for this graph).
-       * Round the timestamp to the lowest hour */
-      long msDay = 1000 * 60 * 60;
-      long now = System.currentTimeMillis();
-      long nearestHour = now - (now % msDay);
-
-      String startParameter[] = { Long.toString(nearestHour) };
-      String endParameter[] = { "" };
-      recognizedGraphParameters.put("start", startParameter);
-      recognizedGraphParameters.put("end", endParameter);
-      recognizedGraphParameters.put("fingerprint", fingerprint);
     }
 
     /* We now have a map with all required graph parameters. Return it. */
