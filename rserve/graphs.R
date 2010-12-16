@@ -373,6 +373,33 @@ plot_torperf <- function(start, end, source, filesize, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
+plot_connbidirect <- function(start, end, path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT DATE(statsend) AS date, readnum, writenum, bothnum ",
+      "FROM connbidirect WHERE DATE(statsend) >= '", start,
+      "' AND DATE(statsend) <= '", end, "'", sep = "")
+  rs <- dbSendQuery(con, q)
+  c <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  connbidirect <- data.frame(date = c$date, c[, 2:4] /
+      (c$readnum + c$writenum + c$bothnum))
+  connbidirect <- melt(connbidirect, id = "date")
+  ggplot(connbidirect, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
+      colour = variable)) +
+    geom_point(size = 2.5) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = "")) +
+    scale_y_continuous(name = "", formatter = "percent") +
+    scale_colour_hue("", breaks = c("readnum", "writenum", "bothnum"),
+        labels = c("Mostly reading", "Mostly writing",
+        "Both reading and writing")) +
+    opts(title = "Fraction of connections used uni-/bidirectionally",
+        legend.position = "top")
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+
 ## TODO The bandwidth history shouldn't be based on the consensus weights
 ## which aren't bandwidths anymore, but either on the advertised bandwidth
 ## contained in server descriptors or better on the bandwidth history

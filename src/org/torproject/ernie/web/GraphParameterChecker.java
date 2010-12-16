@@ -55,6 +55,7 @@ public class GraphParameterChecker {
     this.availableGraphs.put("gettor", "start,end,bundle,filename");
     this.availableGraphs.put("torperf",
          "start,end,source,filesize,filename");
+    this.availableGraphs.put("connbidirect", "start,end,filename");
     this.availableGraphs.put("routerdetail", "fingerprint,filename");
 
     this.knownParameterValues = new HashMap<String, String>();

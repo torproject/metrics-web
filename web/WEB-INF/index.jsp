@@ -32,6 +32,9 @@
         <br>
         <h3>News</h3>
         <ul>
+          <li>December 16, 2010: Graph and raw data on
+          <a href="performance.html">Fraction of connections used
+          uni-/bidirectionally</a> is available.</li>
           <li>November 30, 2010: Tech report on
           <a href="papers/countingusers-2010-11-30.pdf">Privacy-preserving
           Ways to Estimate the Number of Tor Users</a> is available for

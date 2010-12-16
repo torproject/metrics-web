@@ -47,9 +47,43 @@ quartile of request times.</p>
     </p>
   </div>
 </form>
-
 <p><a href="csv/torperf.csv">CSV</a> file containing all data.</p>
+
 <br>
+<h3>Fraction of connections used uni-/bidirectionally</h3>
+<br>
+<p>The following graph shows the fraction of connections that is used
+uni- or bi-directionally.  Every 10 seconds, relays determine for every
+connection whether they read and wrote less more a threshold of 20 KiB.
+Connections below this threshold are excluded from these statistics.  For
+the remaining connections, relays report whether they read/wrote at least
+10 times as many bytes as they wrote/read.  If so, they classify a
+connection as "Mostly reading" or "Mostly writing," respectively.  All
+other connections are classified as "Both reading and writing."  After
+classifying connections, read and write counters are reset for the next
+10-second interval.  Statistics are aggregated over 24 hours.</p>
+<a name="connbidirect"></a>
+<img src="connbidirect.png${connbidirect_url}"
+     width="576" height="360"
+     alt="Fraction of direct connections used uni-/bidirectionally">
+<form action="performance.html#connbidirect">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="connbidirect">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="${connbidirect_start[0]}">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="${connbidirect_end[0]}">
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<p><a href="csv/connbidirect.csv">CSV</a> file containing all data.</p>
+<br>
+
     </div>
   </div>
   <div class="bottom" id="bottom">

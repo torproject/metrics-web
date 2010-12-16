@@ -239,3 +239,17 @@ export_monthly_users_average <- function(path) {
   help_export_monthly_users(path, mean)
 }
 
+export_connbidirect <- function(path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT DATE(statsend) AS date, source, belownum AS below,",
+      "readnum AS read, writenum AS write, bothnum AS \"both\"",
+      "FROM connbidirect ORDER BY 1, 2")
+  rs <- dbSendQuery(con, q)
+  c <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  write.csv(format(c, trim = TRUE, scientific = FALSE), path, 
+      quote = FALSE, row.names = FALSE)
+}
+
