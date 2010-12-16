@@ -81,16 +81,18 @@ export_bandwidth <- function(path) {
 export_dirbytes <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, read / 86400 AS read,",
-      "written / 86400 AS written, dirread / 86400 AS dirread,",
-      "dirwritten / 86400 AS dirwritten FROM total_bwhist",
-      "WHERE date < (SELECT MAX(date) FROM total_bwhist) - 1",
-      "ORDER BY date")
+  q <- paste("SELECT date, dr, dw, brp, bwp, brd, bwd FROM user_stats",
+      "WHERE country = 'zy' AND bwp / bwd <= 3",
+      "AND date < (SELECT MAX(date) FROM user_stats) - 1 ORDER BY date")
   rs <- dbSendQuery(con, q)
-  bw_hist <- fetch(rs, n = -1)
+  dir <- fetch(rs, n = -1)
   dbDisconnect(con)
   dbUnloadDriver(drv)
-  write.csv(bw_hist, path, quote = FALSE, row.names = FALSE)
+  dir <- data.frame(date = dir$date,
+      dirread = floor(dir$dr * dir$brp / dir$brd / 86400),
+      dirwrite = floor(dir$dw * dir$bwp / dir$bwd / 86400))
+  dir <- na.omit(dir)
+  write.csv(dir, path, quote = FALSE, row.names = FALSE)
 }
 
 export_relayflags <- function(path) {

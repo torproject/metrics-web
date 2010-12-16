@@ -128,26 +128,28 @@ plot_bandwidth <- function(start, end, path) {
 plot_dirbytes <- function(start, end, path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, read, written, dirread, dirwritten ",
-      "FROM total_bwhist WHERE date >= '", start, "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM total_bwhist) - 1 ", sep = "")
+  q <- paste("SELECT date, dr, dw, brp, bwp, brd, bwd FROM user_stats",
+      "WHERE country = 'zy' AND bwp / bwd <= 3",
+      "AND date < (SELECT MAX(date) FROM user_stats) - 1 ORDER BY date")
   rs <- dbSendQuery(con, q)
-  bw_hist <- fetch(rs, n = -1)
+  dir <- fetch(rs, n = -1)
   dbDisconnect(con)
   dbUnloadDriver(drv)
-  bw_hist <- melt(bw_hist, id = "date")
-  ggplot(bw_hist, aes(x = as.Date(date, "%Y-%m-%d"), y = value /
-      (86400 * 2^20), colour = variable)) +
+  dir <- data.frame(date = dir$date,
+      dirread = floor(dir$dr * dir$brp / dir$brd / 86400),
+      dirwrite = floor(dir$dw * dir$bwp / dir$bwd / 86400))
+  dir <- na.omit(dir)
+  dir <- melt(dir, id = "date")
+  ggplot(dir, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20,
+      colour = variable)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name="Bandwidth (MiB/s)",
-        limits = c(0, max(bw_hist$value, na.rm = TRUE) /
-        (86400 * 2^20))) +
+        limits = c(0, max(dir$value, na.rm = TRUE) / 2^20)) +
     scale_colour_hue(name = "",
-        breaks = c("written", "read", "dirwritten", "dirread"),
-        labels = c("Total written bytes", "Total read bytes",
-            "Written dir bytes", "Read dir bytes")) +
+        breaks = c("dirwrite", "dirread"),
+        labels = c("Written dir bytes", "Read dir bytes")) +
     opts(title = "Number of bytes spent on answering directory requests",
         legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
