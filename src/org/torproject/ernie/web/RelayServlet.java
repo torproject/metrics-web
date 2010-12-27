@@ -178,7 +178,7 @@ public class RelayServlet extends HttpServlet {
             + "experienced an unknown database problem while looking up "
             + "the relay with fingerprint starting with "
             + fingerprintParameter + ". If this problem persists, please "
-            + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+            + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
             + "know</a>!</p>\n");
         writeFooter(out);
         return;
@@ -269,7 +269,7 @@ public class RelayServlet extends HttpServlet {
           + "the relay with fingerprint "
           + (fingerprintParameter.length() < 40 ? "starting with " : "")
           + fingerprintParameter + ". If this problem persists, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+          + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
           + "know</a>!</p>\n");
       writeFooter(out);
       return;
@@ -317,7 +317,7 @@ public class RelayServlet extends HttpServlet {
             + "Internal server error when looking up descriptor. The "
             + "query was '" + query + "'. If this problem persists, "
             + "please "
-            + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+            + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
             + "know</a>!</p>\n");
         writeFooter(out);
         return;

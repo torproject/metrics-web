@@ -64,7 +64,7 @@ Maybe you find what you're looking for on our sitemap:
 </p>
 
 <p>If this problem persists, please
-<a href="mailto:tor-assistants@freehaven.net">let us know</a>!</p>
+<a href="mailto:tor-assistants@torproject.org">let us know</a>!</p>
 
     </div>
   </div>

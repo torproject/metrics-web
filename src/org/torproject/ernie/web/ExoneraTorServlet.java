@@ -157,7 +157,7 @@ public class ExoneraTorServlet extends HttpServlet {
       out.println("<p><font color=\"red\"><b>Warning: </b></font>This "
           + "server doesn't have any relay lists available. If this "
           + "problem persists, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+          + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
           + "know</a>!</p>\n");
       writeFooter(out);
       return;
@@ -386,7 +386,7 @@ public class ExoneraTorServlet extends HttpServlet {
           + relayIP + " at " + timestampStr + "! We "
           + "did not find any relevant relay lists preceding the given "
           + "time. If you think this is an error on our side, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">contact "
+          + "<a href=\"mailto:tor-assistants@torproject.org\">contact "
           + "us</a>!</p>\n");
       writeFooter(out);
       return;

@@ -20,7 +20,7 @@
         for processing these data available to the public. If you are
         missing anything for your Tor-related research or want to share
         your research results with others, please
-        <a href="mailto:tor-assistants@freehaven.net">let us know</a>!
+        <a href="mailto:tor-assistants@torproject.org">let us know</a>!
     </div>
   </div>
   <div class="bottom" id="bottom">

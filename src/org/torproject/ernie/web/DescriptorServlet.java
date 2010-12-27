@@ -164,7 +164,7 @@ public class DescriptorServlet extends HttpServlet {
             + "experienced an unknown database problem while looking up "
             + "descriptors with identifier starting with " + descId
             + ". If this problem persists, please "
-            + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+            + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
             + "know</a>!</p>\n");
         writeFooter(out);
         return;
@@ -221,7 +221,7 @@ public class DescriptorServlet extends HttpServlet {
       out.write("<br/><p><font color=\"red\"><b>Warning: </b></font>"
           + "Internal server error when looking up descriptor. If this "
           + "problem persists, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+          + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
           + "know</a>!</p>\n");
       writeFooter(out);
       return;
@@ -294,7 +294,7 @@ public class DescriptorServlet extends HttpServlet {
           + "experienced an unknown database problem while looking up "
           + "the network status consensuses referencing descriptor "
           + descId + ". If this problem persists, please "
-          + "<a href=\"mailto:tor-assistants@freehaven.net\">let us "
+          + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
           + "know</a>!</p>\n");
     }
 

@@ -68,7 +68,7 @@
         <c:if test="${queryTime > 10000}">
           <p>In theory, search time should not exceed 10 seconds. The
           query was '${query}'. If this or similar searches remain slow,
-          please <a href="mailto:tor-assistants@freehaven.net">let us
+          please <a href="mailto:tor-assistants@torproject.org">let us
           know</a>!</p>
         </c:if>
       </c:if>
