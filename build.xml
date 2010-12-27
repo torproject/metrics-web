@@ -6,10 +6,18 @@
   <property name="libs" value="lib"/>
   <property name="config" value="etc"/>
   <property name="webxmlfile" value="${config}/web.xml"/>
+  <property name="contextxmltemplate"
+            value="${config}/context.xml.template"/>
+  <property name="contextxml" value="${config}/context.xml"/>
   <property name="warfile" value="ernie.war"/>
 
+  <target name="init">
+    <copy file="${contextxmltemplate}" tofile="${contextxml}"/>
+  </target>
+
   <!-- Compile all servlets and plain Java classes. -->
-  <target name="compile">
+  <target name="compile"
+          depends="init">
     <mkdir dir="${classes}"/>
     <javac destdir="${classes}"
            srcdir="${sources}"

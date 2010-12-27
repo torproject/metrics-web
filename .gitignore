@@ -8,3 +8,6 @@ ernie.war
 # Compiled class files
 classes/
 
+# Possibly modified config file
+etc/context.xml
+
