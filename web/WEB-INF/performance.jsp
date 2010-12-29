@@ -54,7 +54,7 @@ quartile of request times.</p>
 <br>
 <p>The following graph shows the fraction of connections that is used
 uni- or bi-directionally.  Every 10 seconds, relays determine for every
-connection whether they read and wrote less more a threshold of 20 KiB.
+connection whether they read and wrote less than a threshold of 20 KiB.
 Connections below this threshold are excluded from these statistics.  For
 the remaining connections, relays report whether they read/wrote at least
 10 times as many bytes as they wrote/read.  If so, they classify a
