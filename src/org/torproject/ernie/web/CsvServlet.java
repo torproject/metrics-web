@@ -39,7 +39,6 @@ public class CsvServlet extends HttpServlet {
     this.availableCsvFiles.add("monthly-users-average");
     this.availableCsvFiles.add("monthly-users-peak");
     this.availableCsvFiles.add("networksize");
-    this.availableCsvFiles.add("new-users");
     this.availableCsvFiles.add("platforms");
     this.availableCsvFiles.add("relayflags");
     this.availableCsvFiles.add("relayflags-hour");

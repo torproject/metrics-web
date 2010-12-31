@@ -197,10 +197,6 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphImage</servlet-name>
-    <url-pattern>/new-users.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/direct-users.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
