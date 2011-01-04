@@ -134,8 +134,8 @@
         users.</p>
         <ul>
           <li>Download
-          <a href="dist/visitor-0.0.3.tar">VisiTor 0.0.3</a>
-          (<a href="dist/visitor-0.0.3.tar.asc">sig</a>)
+          <a href="dist/visitor-0.0.4.tar">VisiTor 0.0.4</a>
+          (<a href="dist/visitor-0.0.4.tar.asc">sig</a>)
           <li>Browse the <a href="https://gitweb.torproject.org/metrics-utils.git/tree/HEAD:/visitor">Git repository</a></li>
           <li><tt>git clone git://git.torproject.org/metrics-utils</tt></li>
         </ul>
