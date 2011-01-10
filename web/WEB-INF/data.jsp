@@ -208,8 +208,9 @@
         <h3>Exit lists</h3>
         <br>
         <p>We are archiving the bulk exit lists used by
-        <a href="https://check.torproject.org/">Tor Check</a> containing
-        the IP addresses that exit relays exit from:</p>
+        <a href="https://check.torproject.org/">Tor Check</a> (see
+        <a href="https://www.torproject.org/tordnsel/exitlist-spec.txt">exitlist-spec.txt</a>)
+        containing the IP addresses that exit relays exit from:</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
           <c:forEach var="item" items="${exitLists}" >
             <fmt:formatDate var="longDate" pattern="MMMM yyyy"

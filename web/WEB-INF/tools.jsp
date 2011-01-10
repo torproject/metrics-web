@@ -131,7 +131,8 @@
         <br>
         <p>VisiTor is a script that parses a web server log and the exit
         list archives to tell how many of the requests come from Tor
-        users.</p>
+        users. VisiTor expects exit lists in the format described in
+        <a href="https://www.torproject.org/tordnsel/exitlist-spec.txt">exitlist-spec.txt</a>.</p>
         <ul>
           <li>Download
           <a href="dist/visitor-0.0.4.tar">VisiTor 0.0.4</a>
