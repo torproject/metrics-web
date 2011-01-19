@@ -20,7 +20,6 @@
           <li><a href="#metrics-db">Metrics database</a></li>
           <li><a href="#metrics-web">Metrics website</a></li>
           <li><a href="#dirarch">Directory-archive script</a></li>
-          <li><a href="#bridgesan">Bridge descriptor sanitizer</a></li>
           <li><a href="#torperf">Torperf</a></li>
           <li><a href="#exonerator">ExoneraTor</a></li>
           <li><a href="#visitor">VisiTor</a></li>
@@ -72,30 +71,6 @@
           <li>Browse the <a href="https://gitweb.torproject.org/tor.git/tree/HEAD:/contrib/directory-archive">contrib/directory-archive/</a>
           subdirectory in the Tor sources</li>
           <li><tt>git clone git://git.torproject.org/tor</tt></li>
-        </ul>
-        <br>
-        <a name="bridgesan"></a>
-        <h3>Bridge descriptor sanitizer</h3>
-        <br>
-        <p>The bridge authority Tonga maintains a list of bridges in order
-        to serve bridge addresses and descriptors to its clients. Every
-        half hour, Tonga takes a snapshot of the known bridge descriptors
-        and copies them to byblos for later statistical analysis. As a
-        guiding principle, the Tor project makes all data that it uses for
-        statistical analysis available to the interested public, in order
-        to maximize transparency towards the community. However, the
-        bridge descriptors contain the IP addresses and other contact
-        information of bridges that must not be made public, or the
-        purpose of bridges as non-public entry points into the Tor network
-        would be obsolete. This script takes the half-hourly snapshots as
-        input, removes all possibly sensitive information from the
-        descriptors, and puts out the sanitized bridge descriptors that
-        are safe to be published. The <a href="#metrics-db">metrics
-        database software</a> contains similar functionality to the bridge
-        descriptor sanitizer.</p>
-        <ul>
-          <li>Browse the <a href="https://gitweb.torproject.org/metrics-utils.git/tree/HEAD:/bridge-desc-sanitizer">Git repository</a></li>
-          <li><tt>git clone git://git.torproject.org/metrics-utils</tt></li>
         </ul>
         <br>
         <a name="torperf"></a>
