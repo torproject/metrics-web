@@ -160,14 +160,17 @@ public class ResearchDataServlet extends HttpServlet {
             url;
 
       /* URL contains Torperf data file. */
-      } else if (filename.endsWith("b.data")) {
+      } else if (filename.endsWith("b.data") ||
+          filename.endsWith("b.extradata")) {
+        boolean isExtraData = filename.endsWith("b.extradata");
         String[] parts = filename.split("-");
         if (parts.length != 2) {
           continue;
         }
         String source = parts[0];
         String filesize = parts[1];
-        filesize = filesize.substring(0, filesize.length() - 5);
+        filesize = filesize.substring(0, filesize.length()
+            - (isExtraData ? 10 : 5));
         if (!torperfFilesizes.contains(filesize)) {
           continue;
         }
@@ -177,7 +180,7 @@ public class ResearchDataServlet extends HttpServlet {
         if (!torperfData.get(source).containsKey(filesize)) {
           torperfData.get(source).put(filesize, new String[2]);
         }
-        torperfData.get(source).get(filesize)[0] = url;
+        torperfData.get(source).get(filesize)[isExtraData ? 1 : 0] = url;
 
       /* URL contains exit list. */
       } else if (filename.startsWith("exit-list-20")) {

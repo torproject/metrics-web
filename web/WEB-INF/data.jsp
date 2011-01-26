@@ -187,17 +187,32 @@
               <td>${item.key}</td>
               <td>
                 <c:if test="${item.value['50kb'] ne null}" >
-                  <a href="${item.value['50kb'][0]}">50 KiB requests</a>
+                  <c:if test="${item.value['50kb'][0] ne null}" >
+                    <a href="${item.value['50kb'][0]}">50 KiB requests</a>
+                  </c:if>
+                  <c:if test="${item.value['50kb'][1] ne null}" >
+                    <a href="${item.value['50kb'][1]}">50 KiB path info</a>
+                  </c:if>
                 </c:if>
               </td>
               <td>
                 <c:if test="${item.value['1mb'] ne null}" >
-                  <a href="${item.value['1mb'][0]}">1 MiB requests</a>
+                  <c:if test="${item.value['1mb'][0] ne null}" >
+                    <a href="${item.value['1mb'][0]}">1 MiB requests</a>
+                  </c:if>
+                  <c:if test="${item.value['1mb'][1] ne null}" >
+                    <a href="${item.value['1mb'][1]}">1 MiB path info</a>
+                  </c:if>
                 </c:if>
               </td>
               <td>
                 <c:if test="${item.value['5mb'] ne null}" >
-                  <a href="${item.value['5mb'][0]}">5 MiB requests</a>
+                  <c:if test="${item.value['5mb'][0] ne null}" >
+                    <a href="${item.value['5mb'][0]}">5 MiB requests</a>
+                  </c:if>
+                  <c:if test="${item.value['5mb'][1] ne null}" >
+                    <a href="${item.value['5mb'][1]}">5 MiB path info</a>
+                  </c:if>
                 </c:if>
               </td>
             </tr>
