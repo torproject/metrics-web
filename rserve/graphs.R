@@ -235,13 +235,14 @@ plot_direct_users <- function(start, end, country, path) {
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         users = NA))
   peoples <- data.frame(country = c("au", "bh", "br", "ca", "cn", "cu",
-    "de", "et", "fr", "gb", "ir", "it", "jp", "kr", "mm", "pl", "ru",
-    "sa", "se", "sy", "tn", "tm", "us", "uz", "vn", "ye"),
+    "de", "eg", "et", "fr", "gb", "ir", "it", "jp", "kr", "mm", "pl",
+    "ru", "sa", "se", "sy", "tn", "tm", "us", "uz", "vn", "ye"),
     people = c("Australian", "Bahraini", "Brazilian", "Canadian",
-    "Chinese", "Cuban", "German", "Ethiopian", "French", "U.K.",
-    "Iranian", "Italian", "Japanese", "South Korean", "Burmese", "Polish",
-    "Russian", "Saudi", "Swedish", "Syrian", "Tunisian", "Turkmen",
-    "U.S.", "Uzbek", "Vietnamese", "Yemeni"), stringsAsFactors = FALSE)
+    "Chinese", "Cuban", "German", "Egyptian", "Ethiopian", "French",
+    "U.K.", "Iranian", "Italian", "Japanese", "South Korean", "Burmese",
+    "Polish", "Russian", "Saudi", "Swedish", "Syrian", "Tunisian",
+    "Turkmen", "U.S.", "Uzbek", "Vietnamese", "Yemeni"),
+    stringsAsFactors = FALSE)
   title <- ifelse(country == "all",
     "Total directly connecting Tor users (all data)\n",
     paste("Directly connecting",
@@ -277,13 +278,14 @@ plot_bridge_users <- function(start, end, country, path) {
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         users = NA))
   peoples <- data.frame(country = c("au", "bh", "br", "ca", "cn", "cu",
-    "de", "et", "fr", "gb", "ir", "it", "jp", "kr", "mm", "pl", "ru",
-    "sa", "se", "sy", "tn", "tm", "us", "uz", "vn", "ye"),
+    "de", "eg", "et", "fr", "gb", "ir", "it", "jp", "kr", "mm", "pl",
+    "ru", "sa", "se", "sy", "tn", "tm", "us", "uz", "vn", "ye"),
     people = c("Australian", "Bahraini", "Brazilian", "Canadian",
-    "Chinese", "Cuban", "German", "Ethiopian", "French", "U.K.",
-    "Iranian", "Italian", "Japanese", "South Korean", "Burmese", "Polish",
-    "Russian", "Saudi", "Swedish", "Syrian", "Tunisian", "Turkmen",
-    "U.S.", "Uzbek", "Vietnamese", "Yemeni"), stringsAsFactors = FALSE)
+    "Chinese", "Cuban", "German", "Egyptian", "Ethiopian", "French",
+    "U.K.", "Iranian", "Italian", "Japanese", "South Korean", "Burmese",
+    "Polish", "Russian", "Saudi", "Swedish", "Syrian", "Tunisian",
+    "Turkmen", "U.S.", "Uzbek", "Vietnamese", "Yemeni"),
+    stringsAsFactors = FALSE)
   title <- ifelse(country == "all",
     "Total users via bridges (all data)\n",
     paste(peoples[peoples$country == country, "people"],

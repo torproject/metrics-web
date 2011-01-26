@@ -44,6 +44,7 @@ based on the requests seen by a few dozen directory mirrors.</p>
       <input type="radio" name="country" value="cn">China
       <input type="radio" name="country" value="cu">Cuba
       <input type="radio" name="country" value="de">Germany
+      <input type="radio" name="country" value="eg">Egypt
       <input type="radio" name="country" value="et">Ethiopia
       <input type="radio" name="country" value="fr">France
       <input type="radio" name="country" value="gb">U.K.
@@ -104,6 +105,7 @@ by a few hundred bridges.</p>
       <input type="radio" name="country" value="cn">China
       <input type="radio" name="country" value="cu">Cuba
       <input type="radio" name="country" value="de">Germany
+      <input type="radio" name="country" value="eg">Egypt
       <input type="radio" name="country" value="et">Ethiopia
       <input type="radio" name="country" value="fr">France
       <input type="radio" name="country" value="gb">U.K.
