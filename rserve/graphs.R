@@ -349,8 +349,8 @@ plot_torperf <- function(start, end, source, filesize, path) {
     torperf <- rbind(torperf,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         q1 = NA, md = NA, q3 = NA))
-  colours <- data.frame(source = c("siv", "moria", "torperf"),
-      colour = c("#0000EE", "#EE0000", "#00CD00"),
+  colours <- data.frame(source = c("all", "siv", "moria", "torperf"),
+      colour = c("#FF8C00", "#0000EE", "#EE0000", "#00CD00"),
       stringsAsFactors = FALSE)
   colour <- colours[colours$source == source, "colour"]
   filesizes <- data.frame(filesizes = c("5mb", "1mb", "50kb"),
@@ -366,7 +366,7 @@ plot_torperf <- function(start, end, source, filesize, path) {
         "https://metrics.torproject.org/", sep = "")) +
     scale_y_continuous(name = "", limits = c(0, maxY) / 1e3) +
     scale_fill_manual(name = paste("Measured times on",
-        source, "per day"),
+        ifelse(source == "all", "all sources", source), "per day"),
       breaks = c("line", "ribbon"),
       labels = c("Median", "1st to 3rd quartile"),
       values = paste(colour, c("", "66"), sep = "")) +

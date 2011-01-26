@@ -34,6 +34,7 @@ quartile of request times.</p>
              value="${torperf_end[0]}">
     </p><p>
       Source:
+      <input type="radio" name="source" value="all"> all
       <input type="radio" name="source" value="torperf"> torperf
       <input type="radio" name="source" value="moria"> moria
       <input type="radio" name="source" value="siv"> siv
