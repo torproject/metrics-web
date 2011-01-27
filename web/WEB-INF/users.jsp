@@ -51,9 +51,12 @@ based on the requests seen by a few dozen directory mirrors.</p>
         <option value="ir">Iran</option>
         <option value="it">Italy</option>
         <option value="jp">Japan</option>
+        <option value="kp">North Korea</option>
         <option value="kr">South Korea</option>
+        <option value="lb">Lebanon</option>
         <option value="mm">Burma</option>
         <option value="pl">Poland</option>
+        <option value="qa">Qatar</option>
         <option value="ru">Russia</option>
         <option value="sa">Saudi Arabia</option>
         <option value="se">Sweden</option>
@@ -113,9 +116,12 @@ by a few hundred bridges.</p>
         <option value="ir">Iran</option>
         <option value="it">Italy</option>
         <option value="jp">Japan</option>
+        <option value="kp">North Korea</option>
         <option value="kr">South Korea</option>
+        <option value="lb">Lebanon</option>
         <option value="mm">Burma</option>
         <option value="pl">Poland</option>
+        <option value="qa">Qatar</option>
         <option value="ru">Russia</option>
         <option value="sa">Saudi Arabia</option>
         <option value="se">Sweden</option>

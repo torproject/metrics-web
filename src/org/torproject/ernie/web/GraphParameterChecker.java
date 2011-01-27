@@ -61,7 +61,8 @@ public class GraphParameterChecker {
     this.knownParameterValues.put("flag",
         "Running,Exit,Guard,Fast,Stable");
     this.knownParameterValues.put("country", "all,au,bh,br,ca,cn,cu,de,"
-        + "eg,et,fr,gb,ir,it,jp,kr,mm,pl,ru,sa,se,sy,tn,tm,us,uz,vn,ye");
+        + "eg,et,fr,gb,ir,it,jp,kp,kr,lb,mm,pl,qa,ru,sa,se,sy,tn,tm,us,"
+        + "uz,vn,ye");
     this.knownParameterValues.put("bundle", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "all,siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
