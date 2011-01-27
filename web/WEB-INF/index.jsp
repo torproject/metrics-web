@@ -32,6 +32,9 @@
         <br>
         <h3>News</h3>
         <ul>
+          <li>January 27, 2011: New <a href="performance.html">Torperf</a>
+          graphs combining the download times of all sources and showing
+          the fraction of timeouts and failures are now available.</li>
           <li>December 29, 2010: Tech report with an
           <a href="papers/data-2010-12-29.pdf">Overview of Statistical
           Data in the Tor Network</a> is available for download on the

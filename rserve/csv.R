@@ -202,6 +202,18 @@ export_torperf <- function(path) {
   write.csv(torperf, path, quote = FALSE, row.names = FALSE)
 }
 
+export_torperf_failures <- function(path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT source, date, timeouts, failures, requests",
+      "FROM torperf_stats ORDER BY source, date")
+  rs <- dbSendQuery(con, q)
+  torperf <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  write.csv(torperf, path, quote = FALSE, row.names = FALSE)
+}
+
 help_export_monthly_users <- function(path, aggr_fun) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)

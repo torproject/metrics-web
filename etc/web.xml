@@ -213,6 +213,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/torperf-failures.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/connbidirect.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

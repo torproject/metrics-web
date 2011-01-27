@@ -43,6 +43,7 @@ public class CsvServlet extends HttpServlet {
     this.availableCsvFiles.add("relayflags");
     this.availableCsvFiles.add("relayflags-hour");
     this.availableCsvFiles.add("torperf");
+    this.availableCsvFiles.add("torperf-failures");
     this.availableCsvFiles.add("versions");
 
     /* Get a reference to the R object generator that we need to generate

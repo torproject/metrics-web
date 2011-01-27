@@ -51,6 +51,46 @@ quartile of request times.</p>
 <p><a href="csv/torperf.csv">CSV</a> file containing all data.</p>
 
 <br>
+<h3>Timeouts and failures of downloading files over Tor</h3>
+<br>
+<p>The following graphs show the fraction of timeouts and failures of
+downloading files over Tor as experienced by users.
+A timeout occurs when a 50 KiB (1 MiB, 5 MiB) download does not complete
+within 4:55 minutes (29:55 minutes, 59:55 minutes).
+A failure occurs when the download completes, but the response is smaller
+than 50 KiB (1 MiB, 5 MiB).</p>
+<a name="torperf-failures"></a>
+<img src="torperf-failures.png${torperf_failures_url}"
+     width="576" height="360" alt="Torperf failures graph">
+<form action="performance.html#torperf-failures">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="torperf-failures">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="${torperf_failures_start[0]}">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="${torperf_failures_end[0]}">
+    </p><p>
+      Source:
+      <input type="radio" name="source" value="all"> all
+      <input type="radio" name="source" value="torperf"> torperf
+      <input type="radio" name="source" value="moria"> moria
+      <input type="radio" name="source" value="siv"> siv
+    </p><p>
+      <label>File size: </label>
+      <input type="radio" name="filesize" value="50kb"> 50 KiB
+      <input type="radio" name="filesize" value="1mb"> 1 MiB
+      <input type="radio" name="filesize" value="5mb"> 5 MiB
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<p><a href="csv/torperf-failures.csv">CSV</a> file containing all data.</p>
+
+<br>
 <h3>Fraction of connections used uni-/bidirectionally</h3>
 <br>
 <p>The following graph shows the fraction of connections that is used

@@ -381,6 +381,54 @@ plot_torperf <- function(start, end, source, filesize, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
+plot_torperf_failures <- function(start, end, source, filesize, path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT date, timeouts, failures, requests ",
+      "FROM torperf_stats WHERE source = '",
+      paste(source, filesize, sep = "-"),
+      "' AND date >= '", start, "' AND date <= '", end, "'", sep = "")
+  rs <- dbSendQuery(con, q)
+  torperf <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
+      to = as.Date(end, "%Y-%m-%d"), by="1 day")
+  missing <- setdiff(dates, torperf$date)
+  if (length(missing) > 0)
+    torperf <- rbind(torperf,
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        timeouts = NA, failures = NA, requests = NA))
+  colours <- data.frame(source = c("all", "siv", "moria", "torperf"),
+      colour = c("#FF8C00", "#0000EE", "#EE0000", "#00CD00"),
+      stringsAsFactors = FALSE)
+  colour <- colours[colours$source == source, "colour"]
+  filesizes <- data.frame(filesizes = c("5mb", "1mb", "50kb"),
+      label = c("5 MiB", "1 MiB", "50 KiB"), stringsAsFactors = FALSE)
+  filesizeStr <- filesizes[filesizes$filesize == filesize, "label"]
+  torperf <- rbind(data.frame(date = torperf$date,
+      value = ifelse(torperf$requests > 0,
+                     torperf$timeouts / torperf$requests, 0),
+      variable = "timeouts"),
+    data.frame(date = torperf$date,
+      value = ifelse(torperf$requests > 0,
+                     torperf$failures / torperf$requests, 0),
+      variable = "failures"))
+  ggplot(torperf, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
+    colour = variable)) +
+    geom_point(size = 2) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = "")) +
+    scale_y_continuous(name = "", formatter = "percent") +
+    scale_colour_hue(name = paste("Problems encountered on",
+        ifelse(source == "all", "all sources", source)),
+        h.start = 45, breaks = c("timeouts", "failures"),
+        labels = c("Timeouts", "Failures")) +
+    opts(title = paste("Timeouts and failures of", filesizeStr,
+        "requests"), legend.position = "top")
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+
 plot_connbidirect <- function(start, end, path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
