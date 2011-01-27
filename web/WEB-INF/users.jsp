@@ -35,35 +35,36 @@ based on the requests seen by a few dozen directory mirrors.</p>
       <input type="text" name="end" size="10"
              value="${direct_users_end[0]}">
     </p><p>
-      Source:
-      <input type="radio" name="country" value="all">All users
-      <input type="radio" name="country" value="au">Australia
-      <input type="radio" name="country" value="bh">Bahrain
-      <input type="radio" name="country" value="br">Brazil
-      <input type="radio" name="country" value="ca">Canada
-      <input type="radio" name="country" value="cn">China
-      <input type="radio" name="country" value="cu">Cuba
-      <input type="radio" name="country" value="de">Germany
-      <input type="radio" name="country" value="eg">Egypt
-      <input type="radio" name="country" value="et">Ethiopia
-      <input type="radio" name="country" value="fr">France
-      <input type="radio" name="country" value="gb">U.K.
-      <input type="radio" name="country" value="ir">Iran
-      <input type="radio" name="country" value="it">Italy
-      <input type="radio" name="country" value="jp">Japan
-      <input type="radio" name="country" value="kr">South Korea
-      <input type="radio" name="country" value="mm">Burma
-      <input type="radio" name="country" value="pl">Poland
-      <input type="radio" name="country" value="ru">Russia
-      <input type="radio" name="country" value="sa">Saudi Arabia
-      <input type="radio" name="country" value="se">Sweden
-      <input type="radio" name="country" value="sy">Syria
-      <input type="radio" name="country" value="tn">Tunisia
-      <input type="radio" name="country" value="tm">Turkmenistan
-      <input type="radio" name="country" value="us">U.S.A.
-      <input type="radio" name="country" value="uz">Uzbekistan
-      <input type="radio" name="country" value="vn">Vietnam
-      <input type="radio" name="country" value="ye">Yemen
+      Source: <select name="country">
+        <option value="all" selected>All users</option>
+        <option value="au">Australia</option>
+        <option value="bh">Bahrain</option>
+        <option value="br">Brazil</option>
+        <option value="ca">Canada</option>
+        <option value="cn">China</option>
+        <option value="cu">Cuba</option>
+        <option value="de">Germany</option>
+        <option value="eg">Egypt</option>
+        <option value="et">Ethiopia</option>
+        <option value="fr">France</option>
+        <option value="gb">U.K.</option>
+        <option value="ir">Iran</option>
+        <option value="it">Italy</option>
+        <option value="jp">Japan</option>
+        <option value="kr">South Korea</option>
+        <option value="mm">Burma</option>
+        <option value="pl">Poland</option>
+        <option value="ru">Russia</option>
+        <option value="sa">Saudi Arabia</option>
+        <option value="se">Sweden</option>
+        <option value="sy">Syria</option>
+        <option value="tn">Tunisia</option>
+        <option value="tm">Turkmenistan</option>
+        <option value="us">U.S.A.</option>
+        <option value="uz">Uzbekistan</option>
+        <option value="vn">Vietnam</option>
+        <option value="ye">Yemen</option>
+      </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
@@ -96,35 +97,36 @@ by a few hundred bridges.</p>
       <input type="text" name="end" size="10"
              value="${bridge_users_end[0]}">
     </p><p>
-      Source:
-      <input type="radio" name="country" value="all">All users
-      <input type="radio" name="country" value="au">Australia
-      <input type="radio" name="country" value="bh">Bahrain
-      <input type="radio" name="country" value="br">Brazil
-      <input type="radio" name="country" value="ca">Canada
-      <input type="radio" name="country" value="cn">China
-      <input type="radio" name="country" value="cu">Cuba
-      <input type="radio" name="country" value="de">Germany
-      <input type="radio" name="country" value="eg">Egypt
-      <input type="radio" name="country" value="et">Ethiopia
-      <input type="radio" name="country" value="fr">France
-      <input type="radio" name="country" value="gb">U.K.
-      <input type="radio" name="country" value="ir">Iran
-      <input type="radio" name="country" value="it">Italy
-      <input type="radio" name="country" value="jp">Japan
-      <input type="radio" name="country" value="kr">South Korea
-      <input type="radio" name="country" value="mm">Burma
-      <input type="radio" name="country" value="pl">Poland
-      <input type="radio" name="country" value="ru">Russia
-      <input type="radio" name="country" value="sa">Saudi Arabia
-      <input type="radio" name="country" value="se">Sweden
-      <input type="radio" name="country" value="sy">Syria
-      <input type="radio" name="country" value="tn">Tunisia
-      <input type="radio" name="country" value="tm">Turkmenistan
-      <input type="radio" name="country" value="us">U.S.A.
-      <input type="radio" name="country" value="uz">Uzbekistan
-      <input type="radio" name="country" value="vn">Vietnam
-      <input type="radio" name="country" value="ye">Yemen
+      Source: <select name="country">
+        <option value="all" selected>All users</option>
+        <option value="au">Australia</option>
+        <option value="bh">Bahrain</option>
+        <option value="br">Brazil</option>
+        <option value="ca">Canada</option>
+        <option value="cn">China</option>
+        <option value="cu">Cuba</option>
+        <option value="de">Germany</option>
+        <option value="eg">Egypt</option>
+        <option value="et">Ethiopia</option>
+        <option value="fr">France</option>
+        <option value="gb">U.K.</option>
+        <option value="ir">Iran</option>
+        <option value="it">Italy</option>
+        <option value="jp">Japan</option>
+        <option value="kr">South Korea</option>
+        <option value="mm">Burma</option>
+        <option value="pl">Poland</option>
+        <option value="ru">Russia</option>
+        <option value="sa">Saudi Arabia</option>
+        <option value="se">Sweden</option>
+        <option value="sy">Syria</option>
+        <option value="tn">Tunisia</option>
+        <option value="tm">Turkmenistan</option>
+        <option value="us">U.S.A.</option>
+        <option value="uz">Uzbekistan</option>
+        <option value="vn">Vietnam</option>
+        <option value="ye">Yemen</option>
+      </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
