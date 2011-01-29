@@ -62,9 +62,9 @@ public class GraphParameterChecker {
     this.knownParameterValues = new HashMap<String, String>();
     this.knownParameterValues.put("flag",
         "Running,Exit,Guard,Fast,Stable");
-    this.knownParameterValues.put("country", "all,au,bh,br,ca,cn,cu,de,"
-        + "eg,et,fr,gb,ir,it,jp,kp,kr,lb,mm,pl,qa,ru,sa,se,sy,tn,tm,us,"
-        + "uz,vn,ye");
+    this.knownParameterValues.put("country", "all,ae,au,bh,br,ca,cn,cu,"
+        + "de,dj,dz,eg,et,fr,gb,il,ir,it,iq,jo,jp,kp,kr,kw,lb,ly,ma,mm,"
+        + "om,pl,ps,qa,ru,sa,sd,se,sy,tn,tm,us,uz,vn,ye");
     this.knownParameterValues.put("bundle", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "all,siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
