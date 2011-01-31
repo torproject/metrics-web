@@ -155,60 +155,59 @@ plot_dirbytes <- function(start, end, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
-plot_relayflags <- function(start, end, flags, path, dpi) {
+plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  columns <- paste("avg_", tolower(flags), sep = "", collapse = ", ")
-  q <- paste("SELECT date, ", columns, " FROM network_size ",
-      "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  networksize <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  networksize <- melt(networksize, id = "date")
-  networksize <- rbind(data.frame(
-    date = as.Date(rep(end, 5)),
-    variable = paste("avg_", c("running", "exit", "guard", "fast",
-      "stable"), sep = ""),
-    value = rep(NA, 5)), networksize)
-  ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-    colour = variable)) + geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = "")) +
-    scale_y_continuous(name = "", limits = c(0, max(networksize$value,
-        na.rm = TRUE))) +
-    scale_colour_hue(name = "Relay flags", h.start = 280,
-        breaks = paste("avg_", tolower(flags), sep = ""), labels = flags) +
-    opts(title = "Number of relays with relay flags assigned\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
-}
-
-plot_relayflags_hour <- function(start, end, flags, path, dpi) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  columns <- paste("avg_", tolower(flags), sep = "", collapse = ", ")
-  q <- paste("SELECT validafter, ", columns, " FROM network_size_hour ",
-      "WHERE DATE(validafter) >= '", start, "' AND DATE(validafter) <= '",
-      end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  networksize <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  networksize <- melt(networksize, id = "validafter")
-  networksize <- rbind(data.frame(
-    validafter = as.POSIXct(rep(paste(end, "00:00:00"), 5)),
-    variable = paste("avg_", c("running", "exit", "guard", "fast",
-      "stable"), sep = ""),
-    value = rep(NA, 5)), networksize)
-  ggplot(networksize, aes(x = as.POSIXct(validafter), y = value,
-    colour = variable)) + geom_line(size = 1) +
-    scale_x_datetime(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = "")) +
-    scale_y_continuous(name = "", limits = c(0, max(networksize$value,
-        na.rm = TRUE))) +
-    scale_colour_hue(name = "Relay flags", h.start = 280,
-        breaks = paste("avg_", tolower(flags), sep = ""), labels = flags) +
-    opts(title = "Number of relays with relay flags assigned\n")
+  if (granularity == 'day') {
+    columns <- paste("avg_", tolower(flags), sep = "", collapse = ", ")
+    q <- paste("SELECT date, ", columns, " FROM network_size ",
+        "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
+    rs <- dbSendQuery(con, q)
+    networksize <- fetch(rs, n = -1)
+    dbDisconnect(con)
+    dbUnloadDriver(drv)
+    networksize <- melt(networksize, id = "date")
+    networksize <- rbind(data.frame(
+      date = as.Date(rep(end, 5)),
+      variable = paste("avg_", c("running", "exit", "guard", "fast",
+        "stable"), sep = ""),
+      value = rep(NA, 5)), networksize)
+    ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
+      colour = variable)) + geom_line(size = 1) +
+      scale_x_date(name = paste("\nThe Tor Project - ",
+          "https://metrics.torproject.org/", sep = "")) +
+      scale_y_continuous(name = "", limits = c(0, max(networksize$value,
+          na.rm = TRUE))) +
+      scale_colour_hue(name = "Relay flags", h.start = 280,
+          breaks = paste("avg_", tolower(flags), sep = ""),
+          labels = flags) +
+      opts(title = "Number of relays with relay flags assigned\n")
+  } else {
+    columns <- paste("avg_", tolower(flags), sep = "", collapse = ", ")
+    q <- paste("SELECT validafter, ", columns, " FROM network_size_hour ",
+        "WHERE DATE(validafter) >= '", start,
+        "' AND DATE(validafter) <= '", end, "'", sep = "")
+    rs <- dbSendQuery(con, q)
+    networksize <- fetch(rs, n = -1)
+    dbDisconnect(con)
+    dbUnloadDriver(drv)
+    networksize <- melt(networksize, id = "validafter")
+    networksize <- rbind(data.frame(
+      validafter = as.POSIXct(rep(paste(end, "00:00:00"), 5)),
+      variable = paste("avg_", c("running", "exit", "guard", "fast",
+        "stable"), sep = ""),
+      value = rep(NA, 5)), networksize)
+    ggplot(networksize, aes(x = as.POSIXct(validafter), y = value,
+      colour = variable)) + geom_line(size = 1) +
+      scale_x_datetime(name = paste("\nThe Tor Project - ",
+          "https://metrics.torproject.org/", sep = "")) +
+      scale_y_continuous(name = "", limits = c(0, max(networksize$value,
+          na.rm = TRUE))) +
+      scale_colour_hue(name = "Relay flags", h.start = 280,
+          breaks = paste("avg_", tolower(flags), sep = ""),
+          labels = flags) +
+      opts(title = "Number of relays with relay flags assigned\n")
+  }
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 

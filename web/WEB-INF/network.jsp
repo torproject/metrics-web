@@ -70,6 +70,10 @@ average number of relays with these flags assigned.</p>
       <input type="checkbox" name="flag" value="Guard"> Guard
       <input type="checkbox" name="flag" value="Stable"> Stable
     </p><p>
+      Granularity:
+        <input type="radio" name="granularity" value="day"> 1 day
+        <input type="radio" name="granularity" value="hour"> 1 hour
+    </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${relayflags_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
         <option value="150"<c:if test="${relayflags_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
@@ -81,44 +85,6 @@ average number of relays with these flags assigned.</p>
   </div>
 </form>
 <p><a href="csv/relayflags.csv">CSV</a> file containing all data.</p>
-<br>
-
-<h3>Relays with Exit, Fast, Guard, and Stable flags on 1-hour detail</h3>
-<br>
-<p>The same graph on the average number of relays with flags assigned is
-available on 1-hour detail.</p>
-<a name="relayflags-hour"></a>
-<img src="relayflags-hour.png${relayflags_hour_url}"
-     width="576" height="360" alt="Relay flags graph">
-<form action="network.html#relayflags-hour">
-  <div class="formrow">
-    <input type="hidden" name="graph" value="relayflags-hour">
-    <p>
-    <label>Start date (yyyy-mm-dd):</label>
-      <input type="text" name="start" size="10"
-             value="${relayflags_hour_start[0]}">
-    <label>End date (yyyy-mm-dd):</label>
-      <input type="text" name="end" size="10"
-             value="${relayflags_hour_end[0]}">
-    </p><p>
-      <label>Relay flags: </label>
-      <input type="checkbox" name="flag" value="Running"> Running
-      <input type="checkbox" name="flag" value="Exit"> Exit
-      <input type="checkbox" name="flag" value="Fast"> Fast
-      <input type="checkbox" name="flag" value="Guard"> Guard
-      <input type="checkbox" name="flag" value="Stable"> Stable
-    </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${relayflags_hour_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${relayflags_hour_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${relayflags_hour_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
-    </p><p>
-    <input class="submit" type="submit" value="Update graph">
-    </p>
-  </div>
-</form>
-<p><a href="csv/relayflags-hour.csv">CSV</a> file containing all data.</p>
 <br>
 
 <h3>Relays by version</h3>

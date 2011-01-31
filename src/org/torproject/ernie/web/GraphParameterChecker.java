@@ -40,9 +40,8 @@ public class GraphParameterChecker {
 
     this.availableGraphs = new HashMap<String, String>();
     this.availableGraphs.put("networksize", "start,end,filename,dpi");
-    this.availableGraphs.put("relayflags", "start,end,flag,filename,dpi");
-    this.availableGraphs.put("relayflags-hour",
-        "start,end,flag,filename,dpi");
+    this.availableGraphs.put("relayflags", "start,end,flag,granularity,"
+        + "filename,dpi");
     this.availableGraphs.put("versions", "start,end,filename,dpi");
     this.availableGraphs.put("platforms", "start,end,filename,dpi");
     this.availableGraphs.put("bandwidth", "start,end,filename,dpi");
@@ -62,6 +61,7 @@ public class GraphParameterChecker {
     this.knownParameterValues = new HashMap<String, String>();
     this.knownParameterValues.put("flag",
         "Running,Exit,Guard,Fast,Stable");
+    this.knownParameterValues.put("granularity", "day,hour");
     this.knownParameterValues.put("country", "all,ae,au,bh,br,ca,cn,cu,"
         + "de,dj,dz,eg,et,fr,gb,il,ir,it,iq,jo,jp,kp,kr,kw,lb,ly,ma,mm,"
         + "om,pl,ps,qa,ru,sa,sd,se,sy,tn,tm,us,uz,vn,ye");
@@ -159,6 +159,25 @@ public class GraphParameterChecker {
         flagParameters = this.knownParameterValues.get("flag").split(",");
       }
       recognizedGraphParameters.put("flag", flagParameters);
+    }
+
+    /* Parse granularity, which can be 1 day or 1 hour, if supported by
+     * the graph type. The default is 1 day. */
+    if (supportedGraphParameters.contains("granularity")) {
+      String[] granularityParameter = (String[]) requestParameters.get(
+          "granularity");
+      List<String> knownGranularities = Arrays.asList(
+          this.knownParameterValues.get("granularity").split(","));
+      if (granularityParameter != null) {
+        if (granularityParameter.length != 1 ||
+            granularityParameter[0] == null ||
+            !knownGranularities.contains(granularityParameter[0])) {
+          return null;
+        }
+      } else {
+        granularityParameter = new String[] { "day" };
+      }
+      recognizedGraphParameters.put("granularity", granularityParameter);
     }
 
     /* Parse country codes if supported by the graph type. If no countries
@@ -263,7 +282,6 @@ public class GraphParameterChecker {
             fingerprintParameter);
       }
     }
-
 
     /* Parse graph resolution in dpi. The default is 72. */
     if (supportedGraphParameters.contains("dpi")) {
