@@ -212,7 +212,7 @@ plot_relayflags_hour <- function(start, end, flags, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_direct_users <- function(start, end, country, path) {
+plot_direct_users <- function(start, end, country, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, r, bwp, brn, bwn, brp, bwr, brr ",
@@ -260,10 +260,10 @@ plot_direct_users <- function(start, end, country, path) {
     scale_y_continuous(name = "", limits = c(0, max(u$users,
         na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
-plot_bridge_users <- function(start, end, country, path) {
+plot_bridge_users <- function(start, end, country, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, users FROM bridge_stats ",
@@ -308,7 +308,7 @@ plot_bridge_users <- function(start, end, country, path) {
     scale_y_continuous(name = "", limits = c(0, max(bridgeusers$users,
         na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
 plot_gettor <- function(start, end, bundle, path) {

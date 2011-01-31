@@ -48,9 +48,9 @@ public class GraphParameterChecker {
     this.availableGraphs.put("bandwidth", "start,end,filename");
     this.availableGraphs.put("dirbytes", "start,end,filename");
     this.availableGraphs.put("direct-users",
-        "start,end,country,filename");
+        "start,end,country,filename,dpi");
     this.availableGraphs.put("bridge-users",
-         "start,end,country,filename");
+         "start,end,country,filename,dpi");
     this.availableGraphs.put("gettor", "start,end,bundle,filename");
     this.availableGraphs.put("torperf",
          "start,end,source,filesize,filename");
@@ -68,6 +68,7 @@ public class GraphParameterChecker {
     this.knownParameterValues.put("bundle", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "all,siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
+    this.knownParameterValues.put("dpi", "72,150,300");
   }
 
   /**
@@ -261,6 +262,25 @@ public class GraphParameterChecker {
         recognizedGraphParameters.put("fingerprint",
             fingerprintParameter);
       }
+    }
+
+
+    /* Parse graph resolution in dpi. The default is 72. */
+    if (supportedGraphParameters.contains("dpi")) {
+      String[] dpiParameter = (String[]) requestParameters.get("dpi");
+      if (dpiParameter != null) {
+        List<String> knownDpis = Arrays.asList(
+            this.knownParameterValues.get("dpi").split(","));
+        if (dpiParameter.length != 1 ||
+            dpiParameter[0] == null ||
+            !Pattern.matches("[0-9]{1,4}", dpiParameter[0]) ||
+            !knownDpis.contains(dpiParameter[0])) {
+          return null;
+        }
+      } else {
+        dpiParameter = new String[] { "72" };
+      }
+      recognizedGraphParameters.put("dpi", dpiParameter);
     }
 
     /* We now have a map with all required graph parameters. Return it. */

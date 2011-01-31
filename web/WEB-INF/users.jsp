@@ -37,48 +37,54 @@ based on the requests seen by a few dozen directory mirrors.</p>
     </p><p>
       Source: <select name="country">
         <option value="all" selected>All users</option>
-        <option value="ae">United Arab Emirates</option>
+        <option value="dz">Algeria</option>
         <option value="au">Australia</option>
         <option value="bh">Bahrain</option>
         <option value="br">Brazil</option>
+        <option value="mm">Burma</option>
         <option value="ca">Canada</option>
         <option value="cn">China</option>
         <option value="cu">Cuba</option>
-        <option value="de">Germany</option>
         <option value="dj">Djibouti</option>
-        <option value="dz">Algeria</option>
         <option value="eg">Egypt</option>
         <option value="et">Ethiopia</option>
         <option value="fr">France</option>
-        <option value="gb">U.K.</option>
-        <option value="il">Israel</option>
+        <option value="de">Germany</option>
         <option value="ir">Iran</option>
-        <option value="it">Italy</option>
         <option value="iq">Iraq</option>
-        <option value="jo">Jordan</option>
+        <option value="il">Israel</option>
+        <option value="it">Italy</option>
         <option value="jp">Japan</option>
-        <option value="kp">North Korea</option>
-        <option value="kr">South Korea</option>
+        <option value="jo">Jordan</option>
         <option value="kw">Kuwait</option>
         <option value="lb">Lebanon</option>
         <option value="ly">Libya</option>
         <option value="ma">Morocco</option>
-        <option value="mm">Burma</option>
+        <option value="kp">North Korea</option>
         <option value="om">Oman</option>
-        <option value="pl">Poland</option>
         <option value="ps">Palestinian territories</option>
+        <option value="pl">Poland</option>
         <option value="qa">Qatar</option>
         <option value="ru">Russia</option>
         <option value="sa">Saudi Arabia</option>
+        <option value="kr">South Korea</option>
         <option value="sd">Sudan</option>
         <option value="se">Sweden</option>
         <option value="sy">Syria</option>
         <option value="tn">Tunisia</option>
         <option value="tm">Turkmenistan</option>
+        <option value="ae">U.A.E.</option>
+        <option value="gb">U.K.</option>
         <option value="us">U.S.A.</option>
         <option value="uz">Uzbekistan</option>
         <option value="vn">Vietnam</option>
         <option value="ye">Yemen</option>
+      </select>
+    </p><p>
+      Resolution: <select name="dpi">
+        <option value="72" selected>Screen - 576x360</option>
+        <option value="150">Print low - 1200x750</option>
+        <option value="300">Print high - 2400x1500</option>
       </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
@@ -114,48 +120,54 @@ by a few hundred bridges.</p>
     </p><p>
       Source: <select name="country">
         <option value="all" selected>All users</option>
-        <option value="ae">United Arab Emirates</option>
+        <option value="dz">Algeria</option>
         <option value="au">Australia</option>
         <option value="bh">Bahrain</option>
         <option value="br">Brazil</option>
+        <option value="mm">Burma</option>
         <option value="ca">Canada</option>
         <option value="cn">China</option>
         <option value="cu">Cuba</option>
-        <option value="de">Germany</option>
         <option value="dj">Djibouti</option>
-        <option value="dz">Algeria</option>
         <option value="eg">Egypt</option>
         <option value="et">Ethiopia</option>
         <option value="fr">France</option>
-        <option value="gb">U.K.</option>
-        <option value="il">Israel</option>
+        <option value="de">Germany</option>
         <option value="ir">Iran</option>
-        <option value="it">Italy</option>
         <option value="iq">Iraq</option>
-        <option value="jo">Jordan</option>
+        <option value="il">Israel</option>
+        <option value="it">Italy</option>
         <option value="jp">Japan</option>
-        <option value="kp">North Korea</option>
-        <option value="kr">South Korea</option>
+        <option value="jo">Jordan</option>
         <option value="kw">Kuwait</option>
         <option value="lb">Lebanon</option>
         <option value="ly">Libya</option>
         <option value="ma">Morocco</option>
-        <option value="mm">Burma</option>
+        <option value="kp">North Korea</option>
         <option value="om">Oman</option>
-        <option value="pl">Poland</option>
         <option value="ps">Palestinian territories</option>
+        <option value="pl">Poland</option>
         <option value="qa">Qatar</option>
         <option value="ru">Russia</option>
         <option value="sa">Saudi Arabia</option>
+        <option value="kr">South Korea</option>
         <option value="sd">Sudan</option>
         <option value="se">Sweden</option>
         <option value="sy">Syria</option>
         <option value="tn">Tunisia</option>
         <option value="tm">Turkmenistan</option>
+        <option value="ae">U.A.E.</option>
+        <option value="gb">U.K.</option>
         <option value="us">U.S.A.</option>
         <option value="uz">Uzbekistan</option>
         <option value="vn">Vietnam</option>
         <option value="ye">Yemen</option>
+      </select>
+    </p><p>
+      Resolution: <select name="dpi">
+        <option value="72" selected>Screen - 576x360</option>
+        <option value="150">Print low - 1200x750</option>
+        <option value="300">Print high - 2400x1500</option>
       </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
