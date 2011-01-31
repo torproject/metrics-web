@@ -31,6 +31,12 @@ bridges in the network.</p>
       <input type="text" name="end" size="10"
              value="${networksize_end[0]}">
     </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${networksize_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${networksize_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${networksize_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
+    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -64,6 +70,12 @@ average number of relays with these flags assigned.</p>
       <input type="checkbox" name="flag" value="Guard"> Guard
       <input type="checkbox" name="flag" value="Stable"> Stable
     </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${relayflags_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${relayflags_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${relayflags_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
+    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -96,6 +108,12 @@ available on 1-hour detail.</p>
       <input type="checkbox" name="flag" value="Guard"> Guard
       <input type="checkbox" name="flag" value="Stable"> Stable
     </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${relayflags_hour_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${relayflags_hour_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${relayflags_hour_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
+    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -121,6 +139,12 @@ version.</p>
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
              value="${versions_end[0]}">
+    </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${versions_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${versions_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${versions_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
@@ -149,6 +173,12 @@ platform.</p>
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
              value="${platforms_end[0]}">
+    </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${platforms_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${platforms_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${platforms_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
@@ -179,6 +209,12 @@ in the network.</p>
       <input type="text" name="end" size="10"
              value="${bandwidth_end[0]}">
     </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${bandwidth_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${bandwidth_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${bandwidth_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
+    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -206,6 +242,12 @@ the number of written and read dir bytes by all relays.</p>
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
              value="${dirbytes_end[0]}">
+    </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${dirbytes_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${dirbytes_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${dirbytes_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>

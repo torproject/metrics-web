@@ -38,6 +38,12 @@ graph shows the number of packages requested from GetTor per day.</p>
       <input type="radio" name="bundle" value="zh_CN"> TBB (zh_CN)
       <input type="radio" name="bundle" value="fa"> TBB (fa)
     </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${gettor_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${gettor_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${gettor_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
+    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>

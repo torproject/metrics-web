@@ -44,6 +44,12 @@ quartile of request times.</p>
       <input type="radio" name="filesize" value="1mb"> 1 MiB
       <input type="radio" name="filesize" value="5mb"> 5 MiB
     </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${torperf_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${torperf_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${torperf_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
+    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -84,6 +90,12 @@ than 50 KiB (1 MiB, 5 MiB).</p>
       <input type="radio" name="filesize" value="1mb"> 1 MiB
       <input type="radio" name="filesize" value="5mb"> 5 MiB
     </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${torperf_failures_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${torperf_failures_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${torperf_failures_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
+    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -117,6 +129,12 @@ classifying connections, read and write counters are reset for the next
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
              value="${connbidirect_end[0]}">
+    </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${connbidirect_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${connbidirect_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${connbidirect_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>

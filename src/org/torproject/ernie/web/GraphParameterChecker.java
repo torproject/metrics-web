@@ -39,24 +39,24 @@ public class GraphParameterChecker {
     this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
     this.availableGraphs = new HashMap<String, String>();
-    this.availableGraphs.put("networksize", "start,end,filename");
-    this.availableGraphs.put("relayflags", "start,end,flag,filename");
+    this.availableGraphs.put("networksize", "start,end,filename,dpi");
+    this.availableGraphs.put("relayflags", "start,end,flag,filename,dpi");
     this.availableGraphs.put("relayflags-hour",
-        "start,end,flag,filename");
-    this.availableGraphs.put("versions", "start,end,filename");
-    this.availableGraphs.put("platforms", "start,end,filename");
-    this.availableGraphs.put("bandwidth", "start,end,filename");
-    this.availableGraphs.put("dirbytes", "start,end,filename");
+        "start,end,flag,filename,dpi");
+    this.availableGraphs.put("versions", "start,end,filename,dpi");
+    this.availableGraphs.put("platforms", "start,end,filename,dpi");
+    this.availableGraphs.put("bandwidth", "start,end,filename,dpi");
+    this.availableGraphs.put("dirbytes", "start,end,filename,dpi");
     this.availableGraphs.put("direct-users",
         "start,end,country,filename,dpi");
     this.availableGraphs.put("bridge-users",
          "start,end,country,filename,dpi");
-    this.availableGraphs.put("gettor", "start,end,bundle,filename");
+    this.availableGraphs.put("gettor", "start,end,bundle,filename,dpi");
     this.availableGraphs.put("torperf",
-         "start,end,source,filesize,filename");
+         "start,end,source,filesize,filename,dpi");
     this.availableGraphs.put("torperf-failures",
-         "start,end,source,filesize,filename");
-    this.availableGraphs.put("connbidirect", "start,end,filename");
+         "start,end,source,filesize,filename,dpi");
+    this.availableGraphs.put("connbidirect", "start,end,filename,dpi");
     this.availableGraphs.put("routerdetail", "fingerprint,filename");
 
     this.knownParameterValues = new HashMap<String, String>();
