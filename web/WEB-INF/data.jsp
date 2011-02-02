@@ -179,8 +179,15 @@
         <br>
         <p>We are measuring the performance of the Tor network by
         periodically requesting files of different sizes and recording the
-        time needed to do so. The files below contain the output of the
-        torperf application and are updated every hour:</p>
+        time needed to do so. The main measurements on moria, siv, and
+        torperf use an unmodified Tor client. The four additional setups
+        on torperf are configured to pick their guard nodes from sets of
+        the a) absolute fastest, b) absolute slowest, c) best rated vs.
+        advertised ratio or d) worst rated vs. advertised ratio nodes. The
+        ratio mechanisms provide a way to select the nodes that the
+        bandwidth authorities think stand out in their measurement. The
+        files below contain the output of the torperf application and are
+        updated every hour:</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
           <c:forEach var="item" items="${torperfData}" >
             <tr>

@@ -76,6 +76,13 @@ public class ResearchDataServlet extends HttpServlet {
         new TreeMap<String, Map<String, String[]>>();
     SortedMap<Date, String[]> exitLists = new TreeMap<Date, String[]>();
 
+    /* Prepare rewriting Torperf sources. */
+    Map<String, String> torperfSources = new HashMap<String, String>();
+    torperfSources.put("torperffast", "torperf, fastest");
+    torperfSources.put("torperffastratio", "torperf, best ratio");
+    torperfSources.put("torperfslow", "torperf, slowest");
+    torperfSources.put("torperfslowratio", "torperf, worst ratio");
+
     /* Go through the file list, decide for each file what metrics data
      * type it is, and put it in the appropriate map. */
     SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM");
@@ -168,6 +175,9 @@ public class ResearchDataServlet extends HttpServlet {
           continue;
         }
         String source = parts[0];
+        if (torperfSources.containsKey(source)) {
+          source = torperfSources.get(source);
+        }
         String filesize = parts[1];
         filesize = filesize.substring(0, filesize.length()
             - (isExtraData ? 10 : 5));
