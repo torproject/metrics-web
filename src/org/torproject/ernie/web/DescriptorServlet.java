@@ -16,6 +16,8 @@ import javax.sql.*;
 import org.apache.commons.codec.*;
 import org.apache.commons.codec.binary.*;
 
+import org.apache.commons.lang.*;
+
 public class DescriptorServlet extends HttpServlet {
 
   private DataSource ds;
@@ -239,8 +241,11 @@ public class DescriptorServlet extends HttpServlet {
     /* Print out both server and extra-info descriptor. */
     out.write("<br/><p>The following server descriptor was published by "
         + "relay " + nickname + " at " + published + " UTC:</p>");
-    BufferedReader br = new BufferedReader(new StringReader(new String(
-        rawDescriptor, "US-ASCII")));
+    String descriptorString = new String(rawDescriptor, "US-ASCII");
+    String escapedDescriptorString = StringEscapeUtils.escapeHtml(
+        descriptorString);
+    BufferedReader br = new BufferedReader(new StringReader(
+        escapedDescriptorString));
     String line = null;
     while ((line = br.readLine()) != null) {
       out.println("        <tt>" + line + "</tt><br/>");
@@ -249,8 +254,10 @@ public class DescriptorServlet extends HttpServlet {
     if (rawExtrainfo != null) {
       out.println("<br/><p>Together with this server descriptor, the "
           + "relay published the following extra-info descriptor:</p>");
-      br = new BufferedReader(new StringReader(new String(rawExtrainfo,
-          "US-ASCII")));
+      String extraInfoString = new String(rawExtrainfo, "US-ASCII");
+      String escapedExtraInfoString = StringEscapeUtils.escapeHtml(
+          extraInfoString);
+      br = new BufferedReader(new StringReader(escapedExtraInfoString));
       line = null;
       while ((line = br.readLine()) != null) {
         out.println("        <tt>" + line + "</tt><br/>");

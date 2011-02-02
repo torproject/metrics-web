@@ -16,6 +16,8 @@ import javax.sql.*;
 import org.apache.commons.codec.*;
 import org.apache.commons.codec.binary.*;
 
+import org.apache.commons.lang.*;
+
 public class RelayServlet extends HttpServlet {
 
   private SimpleDateFormat dayFormat =
@@ -335,8 +337,11 @@ public class RelayServlet extends HttpServlet {
     /* Print out both server and extra-info descriptor. */
     out.write("<br/><p>The last referenced server descriptor published "
         + "by this relay is:</p>");
-    BufferedReader br = new BufferedReader(new StringReader(new String(
-        rawDescriptor, "US-ASCII")));
+    String descriptorString = new String(rawDescriptor, "US-ASCII");
+    String escapedDescriptorString = StringEscapeUtils.escapeHtml(
+        descriptorString);
+    BufferedReader br = new BufferedReader(new StringReader(
+        escapedDescriptorString));
     String line = null;
     while ((line = br.readLine()) != null) {
       out.println("        <tt>" + line + "</tt><br/>");
