@@ -92,50 +92,42 @@ public class GraphParameterChecker {
     Map<String, String[]> recognizedGraphParameters =
         new HashMap<String, String[]>();
 
-    /* Parse start and end dates if supported by the graph type. If
-     * neither start nor end date are given, set the default date range to
-     * the past 90 days. */
+    /* Parse start and end dates if supported by the graph type. If no end
+     * date is provided, set it to today. If no start date is provided,
+     * set it to 90 days before the end date. Make sure that start date
+     * precedes end date. */
     if (supportedGraphParameters.contains("start") ||
         supportedGraphParameters.contains("end")) {
       String[] startParameter = (String[]) requestParameters.get("start");
       String[] endParameter = (String[]) requestParameters.get("end");
-      if ((startParameter == null || startParameter.length < 1 ||
-          startParameter[0].length() < 1) &&
-          (endParameter == null || endParameter.length < 1 ||
-          endParameter[0].length() < 1)) {
-        /* If no start and end parameters are given, set default date
-         * range to the past 90 days. */
-        long now = System.currentTimeMillis();
-        startParameter = new String[] {
-            dateFormat.format(now - 90L * 24L * 60L * 60L * 1000L) };
-        endParameter = new String[] { dateFormat.format(now) };
-      } else if (startParameter != null && startParameter.length == 1 &&
-          endParameter != null && endParameter.length == 1) {
-        long startTimestamp = -1L, endTimestamp = -1L;
+      long endTimestamp = System.currentTimeMillis();
+      if (endParameter != null && endParameter.length > 0 &&
+          endParameter[0].length() > 0) {
         try {
-          startTimestamp = dateFormat.parse(startParameter[0]).getTime();
           endTimestamp = dateFormat.parse(endParameter[0]).getTime();
         } catch (ParseException e)  {
           return null;
         }
-        /* The parameters are dates. Good. Does end not precede start? */
-        if (startTimestamp > endTimestamp) {
+        if (!endParameter[0].startsWith("20")) {
           return null;
         }
-        /* And while we're at it, make sure both parameters lie in this
-         * century. */
-        if (!startParameter[0].startsWith("20") ||
-            !endParameter[0].startsWith("20")) {
+      }
+      endParameter = new String[] { dateFormat.format(endTimestamp) };
+      long startTimestamp = endTimestamp - 90L * 24L * 60L * 60L * 1000L;
+      if (startParameter != null && startParameter.length > 0 &&
+          startParameter[0].length() > 0) {
+        try {
+          startTimestamp = dateFormat.parse(startParameter[0]).getTime();
+        } catch (ParseException e)  {
           return null;
         }
-        /* Looks like sane parameters. Re-format them to get a canonical
-         * version, not something like 2010-1-1, 2010-01-1, etc. */
-        startParameter = new String[] {
-            dateFormat.format(startTimestamp) };
-        endParameter = new String[] { dateFormat.format(endTimestamp) };
-      } else {
-        /* Either none or both of start and end need to be set. */
-        return null;
+        if (!startParameter[0].startsWith("20")) {
+          return null;
+        }
+      }
+      startParameter = new String[] { dateFormat.format(startTimestamp) };
+      if (startTimestamp > endTimestamp) {
+       return null;
       }
       recognizedGraphParameters.put("start", startParameter);
       recognizedGraphParameters.put("end", endParameter);
