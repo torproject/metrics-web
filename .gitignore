@@ -11,3 +11,6 @@ classes/
 # Possibly modified config file
 etc/context.xml
 
+# Copied and possibly modified config file
+config
+

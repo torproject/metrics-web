@@ -1,4 +1,4 @@
-<project name="metrics-web" basedir=".">
+<project default="run" name="metrics-web" basedir=".">
 
   <!-- Define build paths. -->
   <property name="sources" value="src"/>
@@ -10,15 +10,21 @@
             value="${config}/context.xml.template"/>
   <property name="contextxml" value="${config}/context.xml"/>
   <property name="warfile" value="ernie.war"/>
+  <path id="classpath">
+    <pathelement path="${classes}"/>
+    <pathelement location="lib/commons-codec-1.4.jar"/>
+  </path>
 
   <target name="init">
     <copy file="${contextxmltemplate}" tofile="${contextxml}"/>
+    <copy file="config.template" tofile="config"/>
+    <mkdir dir="${classes}"/>
+    <mkdir dir="website"/>
   </target>
 
   <!-- Compile all servlets and plain Java classes. -->
   <target name="compile"
           depends="init">
-    <mkdir dir="${classes}"/>
     <javac destdir="${classes}"
            srcdir="${sources}"
            source="1.5"
@@ -32,6 +38,15 @@
         <fileset dir="${libs}"/>
       </classpath>
     </javac>
+  </target>
+
+  <!-- Prepare data for being displayed on the website. -->
+  <target name="run" depends="compile">
+    <java fork="true"
+          maxmemory="1024m"
+          classname="org.torproject.ernie.cron.Main">
+      <classpath refid="classpath"/>
+    </java>
   </target>
 
   <!-- Create a .war file for deployment. -->
