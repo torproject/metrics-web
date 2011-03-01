@@ -37,10 +37,20 @@ public class Main {
     ConsensusHealthChecker chc = config.getWriteConsensusHealth() ?
         new ConsensusHealthChecker() : null;
 
+    // Prepare writing relay descriptors to database
+    RelayDescriptorDatabaseImporter rddi =
+        config.getWriteRelayDescriptorDatabase() ||
+        config.getWriteRelayDescriptorsRawFiles() ?
+        new RelayDescriptorDatabaseImporter(
+        config.getWriteRelayDescriptorDatabase() ?
+        config.getRelayDescriptorDatabaseJDBC() : null,
+        config.getWriteRelayDescriptorsRawFiles() ?
+        config.getRelayDescriptorRawFilesDirectory() : null) : null;
+
     // Prepare relay descriptor parser (only if we are writing the
     // consensus-health page to disk)
-    RelayDescriptorParser rdp = config.getWriteConsensusHealth() ?
-        new RelayDescriptorParser(chc) : null;
+    RelayDescriptorParser rdp = chc != null || rddi != null ?
+        new RelayDescriptorParser(chc, rddi) : null;
 
     // Import relay descriptors
     if (rdp != null) {
@@ -50,6 +60,11 @@ public class Main {
             statsDirectory,
             config.getKeepDirectoryArchiveImportHistory());
       }
+    }
+
+    // Close database connection (if active)
+    if (rddi != null)   {
+      rddi.closeConnection();
     }
 
     // Write consensus health website

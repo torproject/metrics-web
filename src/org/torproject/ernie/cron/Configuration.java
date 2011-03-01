@@ -16,6 +16,11 @@ public class Configuration {
   private boolean importDirectoryArchives = false;
   private String directoryArchivesDirectory = "archives/";
   private boolean keepDirectoryArchiveImportHistory = false;
+  private boolean writeRelayDescriptorDatabase = false;
+  private String relayDescriptorDatabaseJdbc =
+      "jdbc:postgresql://localhost/tordir?user=metrics&password=password";
+  private boolean writeRelayDescriptorsRawFiles = false;
+  private String relayDescriptorRawFilesDirectory = "pg-import/";
   private boolean writeConsensusHealth = false;
   public Configuration() {
 
@@ -42,6 +47,16 @@ public class Configuration {
         } else if (line.startsWith("KeepDirectoryArchiveImportHistory")) {
           this.keepDirectoryArchiveImportHistory = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("WriteRelayDescriptorDatabase")) {
+          this.writeRelayDescriptorDatabase = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("RelayDescriptorDatabaseJDBC")) {
+          this.relayDescriptorDatabaseJdbc = line.split(" ")[1];
+        } else if (line.startsWith("WriteRelayDescriptorsRawFiles")) {
+          this.writeRelayDescriptorsRawFiles = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("RelayDescriptorRawFilesDirectory")) {
+          this.relayDescriptorRawFilesDirectory = line.split(" ")[1];
         } else if (line.startsWith("WriteConsensusHealth")) {
           this.writeConsensusHealth = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -78,6 +93,18 @@ public class Configuration {
   }
   public boolean getKeepDirectoryArchiveImportHistory() {
     return this.keepDirectoryArchiveImportHistory;
+  }
+  public boolean getWriteRelayDescriptorDatabase() {
+    return this.writeRelayDescriptorDatabase;
+  }
+  public String getRelayDescriptorDatabaseJDBC() {
+    return this.relayDescriptorDatabaseJdbc;
+  }
+  public boolean getWriteRelayDescriptorsRawFiles() {
+    return this.writeRelayDescriptorsRawFiles;
+  }
+  public String getRelayDescriptorRawFilesDirectory() {
+    return this.relayDescriptorRawFilesDirectory;
   }
   public boolean getWriteConsensusHealth() {
     return this.writeConsensusHealth;

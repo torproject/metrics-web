@@ -10,6 +10,20 @@
 ## again, but it can be confusing to users who don't know about it.
 #KeepDirectoryArchiveImportHistory 0
 #
+## Write relay descriptors to the database
+#WriteRelayDescriptorDatabase 0
+#
+## JDBC string for relay descriptor database
+#RelayDescriptorDatabaseJDBC jdbc:postgresql://localhost/tordir?user=metrics&password=password
+#
+## Write relay descriptors to raw text files for importing them into the
+## database using PostgreSQL's \copy command
+#WriteRelayDescriptorsRawFiles 0
+#
+## Relative path to directory to write raw text files; note that existing
+## files will be overwritten!
+#RelayDescriptorRawFilesDirectory pg-import/
+#
 ## Write statistics about the current consensus and votes to the
 ## website
 #WriteConsensusHealth 0
