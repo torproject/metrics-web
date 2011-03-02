@@ -16,12 +16,16 @@ public class Configuration {
   private boolean importDirectoryArchives = false;
   private String directoryArchivesDirectory = "archives/";
   private boolean keepDirectoryArchiveImportHistory = false;
+  private boolean importSanitizedBridges = false;
+  private String sanitizedBridgesDirectory = "bridges/";
+  private boolean keepSanitizedBridgesImportHistory = false;
   private boolean writeRelayDescriptorDatabase = false;
   private String relayDescriptorDatabaseJdbc =
       "jdbc:postgresql://localhost/tordir?user=metrics&password=password";
   private boolean writeRelayDescriptorsRawFiles = false;
   private String relayDescriptorRawFilesDirectory = "pg-import/";
   private boolean writeConsensusHealth = false;
+  private boolean writeBridgeStats = false;
   public Configuration() {
 
     /* Initialize logger. */
@@ -47,6 +51,14 @@ public class Configuration {
         } else if (line.startsWith("KeepDirectoryArchiveImportHistory")) {
           this.keepDirectoryArchiveImportHistory = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("ImportSanitizedBridges")) {
+          this.importSanitizedBridges = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("SanitizedBridgesDirectory")) {
+          this.sanitizedBridgesDirectory = line.split(" ")[1];
+        } else if (line.startsWith("KeepSanitizedBridgesImportHistory")) {
+          this.keepSanitizedBridgesImportHistory = Integer.parseInt(
+              line.split(" ")[1]) != 0;
         } else if (line.startsWith("WriteRelayDescriptorDatabase")) {
           this.writeRelayDescriptorDatabase = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -59,6 +71,9 @@ public class Configuration {
           this.relayDescriptorRawFilesDirectory = line.split(" ")[1];
         } else if (line.startsWith("WriteConsensusHealth")) {
           this.writeConsensusHealth = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("WriteBridgeStats")) {
+          this.writeBridgeStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
         } else {
           logger.severe("Configuration file contains unrecognized "
@@ -97,6 +112,15 @@ public class Configuration {
   public boolean getWriteRelayDescriptorDatabase() {
     return this.writeRelayDescriptorDatabase;
   }
+  public boolean getImportSanitizedBridges() {
+    return this.importSanitizedBridges;
+  }
+  public String getSanitizedBridgesDirectory() {
+    return this.sanitizedBridgesDirectory;
+  }
+  public boolean getKeepSanitizedBridgesImportHistory() {
+    return this.keepSanitizedBridgesImportHistory;
+  }
   public String getRelayDescriptorDatabaseJDBC() {
     return this.relayDescriptorDatabaseJdbc;
   }
@@ -108,6 +132,9 @@ public class Configuration {
   }
   public boolean getWriteConsensusHealth() {
     return this.writeConsensusHealth;
+  }
+  public boolean getWriteBridgeStats() {
+    return this.writeBridgeStats;
   }
 }
 

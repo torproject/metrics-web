@@ -10,6 +10,18 @@
 ## again, but it can be confusing to users who don't know about it.
 #KeepDirectoryArchiveImportHistory 0
 #
+## Import sanitized bridges from disk, if available
+#ImportSanitizedBridges 0
+#
+## Relative path to directory to import sanitized bridges from
+#SanitizedBridgesDirectory bridges/
+#
+## Keep a history of imported sanitized bridge descriptors. This history
+## can be useful when importing from a changing data source to avoid
+## importing descriptors more than once, but it can be confusing to users
+## who don't know about it.
+#KeepSanitizedBridgesImportHistory 0
+#
 ## Write relay descriptors to the database
 #WriteRelayDescriptorDatabase 0
 #
@@ -27,4 +39,7 @@
 ## Write statistics about the current consensus and votes to the
 ## website
 #WriteConsensusHealth 0
+#
+## Write bridge stats to disk
+#WriteBridgeStats 0
 

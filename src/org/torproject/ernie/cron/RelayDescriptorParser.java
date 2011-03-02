@@ -18,6 +18,11 @@ import org.apache.commons.codec.binary.*;
 public class RelayDescriptorParser {
 
   /**
+   * Stats file handler that accepts parse results for bridge statistics.
+   */
+  private BridgeStatsFileHandler bsfh;
+
+  /**
    * Relay descriptor database importer that stores relay descriptor
    * contents for later evaluation.
    */
@@ -36,9 +41,10 @@ public class RelayDescriptorParser {
    * Initializes this class.
    */
   public RelayDescriptorParser(ConsensusHealthChecker chc,
-      RelayDescriptorDatabaseImporter rddi) {
+      RelayDescriptorDatabaseImporter rddi, BridgeStatsFileHandler bsfh) {
     this.chc = chc;
     this.rddi = rddi;
+    this.bsfh = bsfh;
 
     /* Initialize logger. */
     this.logger = Logger.getLogger(RelayDescriptorParser.class.getName());
@@ -76,6 +82,7 @@ public class RelayDescriptorParser {
             orPort = 0L, dirPort = 0L;
         SortedSet<String> relayFlags = null;
         StringBuilder rawStatusEntry = null;
+        SortedSet<String> hashedRelayIdentities = new TreeSet<String>();
         while ((line = br.readLine()) != null) {
           if (line.equals("vote-status vote")) {
             isConsensus = false;
@@ -111,6 +118,9 @@ public class RelayDescriptorParser {
             relayIdentity = Hex.encodeHexString(
                 Base64.decodeBase64(parts[2] + "=")).
                 toLowerCase();
+            hashedRelayIdentities.add(DigestUtils.shaHex(
+                Base64.decodeBase64(parts[2] + "=")).
+                toUpperCase());
             serverDesc = Hex.encodeHexString(Base64.decodeBase64(
                 parts[3] + "=")).toLowerCase();
             published = parseFormat.parse(parts[4] + " " + parts[5]).
@@ -144,6 +154,11 @@ public class RelayDescriptorParser {
           }
         }
         if (isConsensus) {
+          if (this.bsfh != null) {
+            for (String hashedRelayIdentity : hashedRelayIdentities) {
+              this.bsfh.addHashedRelay(hashedRelayIdentity);
+            }
+          }
           if (this.chc != null) {
             this.chc.processConsensus(validAfterTime, data);
           }

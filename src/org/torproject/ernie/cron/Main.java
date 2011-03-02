@@ -33,6 +33,11 @@ public class Main {
     // Define stats directory for temporary files
     File statsDirectory = new File("stats");
 
+    // Prepare bridge stats file handler
+    BridgeStatsFileHandler bsfh = config.getWriteBridgeStats() ?
+        new BridgeStatsFileHandler(
+        config.getRelayDescriptorDatabaseJDBC()) : null;
+
     // Prepare consensus health checker
     ConsensusHealthChecker chc = config.getWriteConsensusHealth() ?
         new ConsensusHealthChecker() : null;
@@ -50,7 +55,7 @@ public class Main {
     // Prepare relay descriptor parser (only if we are writing the
     // consensus-health page to disk)
     RelayDescriptorParser rdp = chc != null || rddi != null ?
-        new RelayDescriptorParser(chc, rddi) : null;
+        new RelayDescriptorParser(chc, rddi, bsfh) : null;
 
     // Import relay descriptors
     if (rdp != null) {
@@ -71,6 +76,33 @@ public class Main {
     if (chc != null) {
       chc.writeStatusWebsite();
       chc = null;
+    }
+
+    // Prepare consensus stats file handler (used for stats on running
+    // bridges only)
+    ConsensusStatsFileHandler csfh = config.getWriteBridgeStats() ?
+        new ConsensusStatsFileHandler(
+        config.getRelayDescriptorDatabaseJDBC()) : null;
+
+    // Prepare bridge descriptor parser
+    BridgeDescriptorParser bdp = config.getWriteBridgeStats() ?
+        new BridgeDescriptorParser(csfh, bsfh) : null;
+
+    // Import bridge descriptors
+    if (bdp != null && config.getImportSanitizedBridges()) {
+      new SanitizedBridgesReader(bdp,
+          new File(config.getSanitizedBridgesDirectory()),
+          statsDirectory, config.getKeepSanitizedBridgesImportHistory());
+    }
+
+    // Write updated stats files to disk
+    if (bsfh != null) {
+      bsfh.writeFiles();
+      bsfh = null;
+    }
+    if (csfh != null) {
+      csfh.writeFiles();
+      csfh = null;
     }
 
     // Remove lock file
