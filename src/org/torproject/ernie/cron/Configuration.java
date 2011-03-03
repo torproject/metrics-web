@@ -28,6 +28,8 @@ public class Configuration {
   private boolean writeBridgeStats = false;
   private boolean importWriteTorperfStats = false;
   private String torperfDirectory = "torperf/";
+  private boolean processGetTorStats = false;
+  private String getTorDirectory = "gettor/";
   public Configuration() {
 
     /* Initialize logger. */
@@ -82,6 +84,11 @@ public class Configuration {
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("TorperfDirectory")) {
           this.torperfDirectory = line.split(" ")[1];
+        } else if (line.startsWith("ProcessGetTorStats")) {
+          this.processGetTorStats = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("GetTorDirectory")) {
+          this.getTorDirectory = line.split(" ")[1];
         } else {
           logger.severe("Configuration file contains unrecognized "
               + "configuration key in line '" + line + "'! Exiting!");
@@ -148,6 +155,12 @@ public class Configuration {
   }
   public String getTorperfDirectory() {
     return this.torperfDirectory;
+  }
+  public boolean getProcessGetTorStats() {
+    return this.processGetTorStats;
+  }
+  public String getGetTorDirectory() {
+    return this.getTorDirectory;
   }
 }
 

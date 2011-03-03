@@ -48,4 +48,10 @@
 #
 ## Relative path to directory to import torperf results from
 #TorperfDirectory torperf/
+#
+## Process GetTor stats and import them into the database
+#ProcessGetTorStats 0
+#
+## Relative path to directory where to find GetTor stats
+#GetTorDirectory gettor/
 
