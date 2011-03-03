@@ -26,6 +26,8 @@ public class Configuration {
   private String relayDescriptorRawFilesDirectory = "pg-import/";
   private boolean writeConsensusHealth = false;
   private boolean writeBridgeStats = false;
+  private boolean importWriteTorperfStats = false;
+  private String torperfDirectory = "torperf/";
   public Configuration() {
 
     /* Initialize logger. */
@@ -75,6 +77,11 @@ public class Configuration {
         } else if (line.startsWith("WriteBridgeStats")) {
           this.writeBridgeStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
+        } else if (line.startsWith("ImportWriteTorperfStats")) {
+          this.importWriteTorperfStats = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("TorperfDirectory")) {
+          this.torperfDirectory = line.split(" ")[1];
         } else {
           logger.severe("Configuration file contains unrecognized "
               + "configuration key in line '" + line + "'! Exiting!");
@@ -135,6 +142,12 @@ public class Configuration {
   }
   public boolean getWriteBridgeStats() {
     return this.writeBridgeStats;
+  }
+  public boolean getImportWriteTorperfStats() {
+    return this.importWriteTorperfStats;
+  }
+  public String getTorperfDirectory() {
+    return this.torperfDirectory;
   }
 }
 

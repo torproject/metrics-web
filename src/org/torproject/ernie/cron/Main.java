@@ -105,6 +105,12 @@ public class Main {
       csfh = null;
     }
 
+    // Import and process torperf stats
+    if (config.getImportWriteTorperfStats()) {
+      new TorperfProcessor(new File(config.getTorperfDirectory()),
+          statsDirectory, config.getRelayDescriptorDatabaseJDBC());
+    }
+
     // Remove lock file
     lf.releaseLock();
 

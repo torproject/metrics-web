@@ -51,6 +51,18 @@
     </java>
   </target>
 
+  <!-- Run unit tests. -->
+  <target name="test" depends="compile">
+    <junit haltonfailure="true" printsummary="off">
+      <classpath refid="classpath"/>
+      <formatter type="plain" usefile="false"/>
+      <batchtest>
+        <fileset dir="${classes}"
+                 includes="**/*Test.class"/>
+      </batchtest>
+    </junit>
+  </target>
+
   <!-- Create a .war file for deployment. -->
   <target name="make-war"
           depends="compile">
