@@ -40,6 +40,10 @@
 ## website
 #WriteConsensusHealth 0
 #
+## Write Nagios status file containing potential problems with the latest
+## consensus
+#WriteNagiosStatusFile 0
+#
 ## Write bridge stats to disk
 #WriteBridgeStats 0
 #

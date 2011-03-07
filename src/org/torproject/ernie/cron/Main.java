@@ -40,7 +40,7 @@ public class Main {
 
     // Prepare consensus health checker
     ConsensusHealthChecker chc = config.getWriteConsensusHealth() ?
-        new ConsensusHealthChecker() : null;
+        new ConsensusHealthChecker(statsDirectory) : null;
 
     // Prepare writing relay descriptors to database
     RelayDescriptorDatabaseImporter rddi =
@@ -75,6 +75,9 @@ public class Main {
     // Write consensus health website
     if (chc != null) {
       chc.writeStatusWebsite();
+      if (config.getWriteNagiosStatusFile()) {
+        chc.writeNagiosStatusFile();
+      }
       chc = null;
     }
 

@@ -25,6 +25,7 @@ public class Configuration {
   private boolean writeRelayDescriptorsRawFiles = false;
   private String relayDescriptorRawFilesDirectory = "pg-import/";
   private boolean writeConsensusHealth = false;
+  private boolean writeNagiosStatusFile = false;
   private boolean writeBridgeStats = false;
   private boolean importWriteTorperfStats = false;
   private String torperfDirectory = "torperf/";
@@ -75,6 +76,9 @@ public class Configuration {
           this.relayDescriptorRawFilesDirectory = line.split(" ")[1];
         } else if (line.startsWith("WriteConsensusHealth")) {
           this.writeConsensusHealth = Integer.parseInt(
+              line.split(" ")[1]) != 0;
+        } else if (line.startsWith("WriteNagiosStatusFile")) {
+          this.writeNagiosStatusFile = Integer.parseInt(
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("WriteBridgeStats")) {
           this.writeBridgeStats = Integer.parseInt(
@@ -146,6 +150,9 @@ public class Configuration {
   }
   public boolean getWriteConsensusHealth() {
     return this.writeConsensusHealth;
+  }
+  public boolean getWriteNagiosStatusFile() {
+    return this.writeNagiosStatusFile;
   }
   public boolean getWriteBridgeStats() {
     return this.writeBridgeStats;

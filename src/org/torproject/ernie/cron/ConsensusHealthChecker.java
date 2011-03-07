@@ -25,13 +25,22 @@ public class ConsensusHealthChecker {
    */
   private Logger logger;
 
+  private File statsDirectory;
+
+  private List<String> nagiosWarnings = new ArrayList<String>(),
+      nagiosCriticals = new ArrayList<String>(),
+      nagiosUnknowns = new ArrayList<String>();
+
   private SortedMap<String, byte[]> mostRecentVotes =
         new TreeMap<String, byte[]>();
 
-  public ConsensusHealthChecker() {
+  public ConsensusHealthChecker(File statsDirectory) {
+
     /* Initialize logger. */
     this.logger = Logger.getLogger(
         ConsensusHealthChecker.class.getName());
+
+    this.statsDirectory = statsDirectory;
   }
 
   public void processConsensus(String validAfterTime, byte[] data) {
@@ -78,6 +87,7 @@ public class ConsensusHealthChecker {
      * with a warning, because we might just not have learned about a new
      * consensus in this execution. */
     if (this.mostRecentConsensus == null) {
+      nagiosUnknowns.add("No consensus known");
       return;
     }
 
@@ -107,7 +117,6 @@ public class ConsensusHealthChecker {
         new TreeMap<String, SortedMap<String, Integer>>();
     SortedMap<String, SortedMap<String, Integer>> flagsMissing =
         new TreeMap<String, SortedMap<String, Integer>>();
-
 
     /* Read consensus and parse all information that we want to compare to
      * votes. */
@@ -241,6 +250,8 @@ public class ConsensusHealthChecker {
         this.logger.warning(dirSource + " does not support consensus "
             + "method " + consensusConsensusMethod.split(" ")[1] + ": "
             + voteConsensusMethods);
+        nagiosWarnings.add(dirSource + " does not support consensus "
+            + "method " + consensusConsensusMethod.split(" ")[1]);
       } else {
         consensusMethodsResults.append("          <tr>\n"
                + "            <td>" + dirSource + "</td>\n"
@@ -263,6 +274,8 @@ public class ConsensusHealthChecker {
             + "          </tr>\n");
         this.logger.warning(dirSource + " recommends other client "
             + "versions than the consensus: " + voteClientVersions);
+        nagiosWarnings.add(dirSource + " recommends other client "
+            + "versions than the consensus");
       } else {
         versionsResults.append("          <tr>\n"
             + "            <td>" + dirSource + "</td>\n"
@@ -281,6 +294,8 @@ public class ConsensusHealthChecker {
             + "          </tr>\n");
         this.logger.warning(dirSource + " recommends other server "
             + "versions than the consensus: " + voteServerVersions);
+        nagiosWarnings.add(dirSource + " recommends other server "
+            + "versions than the consensus");
       } else {
         versionsResults.append("          <tr>\n"
             + "            <td></td>\n"
@@ -318,6 +333,8 @@ public class ConsensusHealthChecker {
             + "          </tr>\n");
         this.logger.warning(dirSource + " sets conflicting or invalid "
             + "consensus parameters: " + voteParams);
+        nagiosWarnings.add(dirSource + " sets conflicting or invalid "
+            + "consensus parameters");
       } else {
         paramsResults.append("          <tr>\n"
             + "            <td>" + dirSource + "</td>\n"
@@ -347,6 +364,8 @@ public class ConsensusHealthChecker {
               + "          </tr>\n");
           this.logger.warning(dirSource + "'s certificate expires in the "
               + "next 14 days: " + voteDirKeyExpires);
+          nagiosWarnings.add(dirSource + "'s certificate expires in the "
+              + "next 14 days");
         } else {
           authorityKeysResults.append("          <tr>\n"
               + "            <td>" + dirSource + "</td>\n"
@@ -380,6 +399,8 @@ public class ConsensusHealthChecker {
         sb.append(", " + dir);
       }
       this.logger.warning("We're missing votes from the following "
+          + "directory authorities: " + sb.toString().substring(2));
+      nagiosWarnings.add("We're missing votes from the following "
           + "directory authorities: " + sb.toString().substring(2));
     }
 
@@ -464,6 +485,9 @@ public class ConsensusHealthChecker {
         this.logger.warning("The last consensus published at "
             + this.mostRecentValidAfterTime + " is more than 3 hours "
             + "old.");
+        nagiosCriticals.add("The last consensus published at "
+            + this.mostRecentValidAfterTime + " is more than 3 hours "
+            + "old");
       } else {
         bw.write(this.mostRecentValidAfterTime);
         this.logger.fine("The last consensus published at "
@@ -905,6 +929,37 @@ public class ConsensusHealthChecker {
           + "</html>");
       bw.close();
 
+    } catch (IOException e) {
+    }
+  }
+
+  public void writeNagiosStatusFile() {
+    try {
+      statsDirectory.mkdirs();
+      File nagiosStatusFile = new File(statsDirectory,
+          "consensus-health");
+      BufferedWriter bw = new BufferedWriter(new FileWriter(
+          nagiosStatusFile));
+      if (!nagiosUnknowns.isEmpty()) {
+        bw.write("UNKNOWN\nUNKNOWN");
+      } else if (!nagiosCriticals.isEmpty()) {
+        bw.write("CRITICAL\nCRITICAL");
+      } else if (!nagiosWarnings.isEmpty()) {
+        bw.write("WARNING\nWARNING");
+      } else {
+        bw.write("OK\nOK");
+      }
+      for (String message : nagiosUnknowns) {
+        bw.write(" " + message + ";");
+      }
+      for (String message : nagiosCriticals) {
+        bw.write(" " + message + ";");
+      }
+      for (String message : nagiosWarnings) {
+        bw.write(" " + message + ";");
+      }
+      bw.write("\n");
+      bw.close();
     } catch (IOException e) {
     }
   }
