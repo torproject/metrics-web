@@ -105,6 +105,7 @@ public class ConsensusHealthChecker {
     StringBuilder authorityVersionsResults = new StringBuilder();
     SortedSet<String> allKnownFlags = new TreeSet<String>();
     SortedSet<String> allKnownVotes = new TreeSet<String>();
+    SortedSet<String> runningBandwidthScanners = new TreeSet<String>();
     SortedMap<String, String> consensusAssignedFlags =
         new TreeMap<String, String>();
     SortedMap<String, SortedSet<String>> votesAssignedFlags =
@@ -383,6 +384,7 @@ public class ConsensusHealthChecker {
             + "            <td>" + voteContainsBandwidthWeights
               + " Measured values in w lines</td>\n"
             + "          </tr>\n");
+        runningBandwidthScanners.add(dirSource);
       }
     }
 
@@ -402,6 +404,29 @@ public class ConsensusHealthChecker {
           + "directory authorities: " + sb.toString().substring(2));
       nagiosWarnings.add("We're missing votes from the following "
           + "directory authorities: " + sb.toString().substring(2));
+    }
+
+    /* Check if less than 4 bandwidth scanners are running. TODO make this
+     * configurable */
+    SortedSet<String> knownBandwidthScanners = new TreeSet<String>(
+        Arrays.asList("ides,urras,moria1,gabelmoo".split(",")));
+    for (String dir : runningBandwidthScanners) {
+      knownBandwidthScanners.remove(dir);
+    }
+    if (!knownBandwidthScanners.isEmpty()) {
+      StringBuilder sb = new StringBuilder();
+      for (String dir : knownBandwidthScanners) {
+        sb.append(", " + dir);
+      }
+      String message = "The following directory authorities are not "
+          + "reporting bandwidth scanner results: "
+          + sb.toString().substring(2);
+      this.logger.warning(message);
+      if (runningBandwidthScanners.size() >= 3) {
+        nagiosWarnings.add(message);
+      } else {
+        nagiosCriticals.add(message);
+      }
     }
 
     try {
