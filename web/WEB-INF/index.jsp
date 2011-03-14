@@ -32,6 +32,11 @@
         <br>
         <h3>News</h3>
         <ul>
+          <li>March 14, 2011:
+          <a href="data.html#bridgeassignments">Sanitized bridge pool
+          assignments</a> containing lists of running bridges with
+          information about the rings, subrings, and file buckets to which
+          they are assigned are now available.</li>
           <li>January 27, 2011: New <a href="performance.html">Torperf</a>
           graphs combining the download times of all sources and showing
           the fraction of timeouts and failures are now available.</li>
@@ -45,15 +50,7 @@
           <li>November 30, 2010: Tech report on
           <a href="papers/countingusers-2010-11-30.pdf">Privacy-preserving
           Ways to Estimate the Number of Tor Users</a> is available for
-          download on the <a href="papers.html">Papers</a> page.
-          <li>October 7, 2010: Custom graphs are now available for all
-          <a href="graphs.html">graphs</a>. Based on work by Kevin
-          Berry.</li>
-          <li>September 9, 2010: Custom
-          graphs on network size, relay platforms, versions, and
-          observed bandwidth available. Implemented by Kevin Berry.</li>
-          <li>September 2, 2010: New <a href="relay-search.html">relay
-          search</a> feature available.</li>
+          download on the <a href="papers.html">Papers</a> page.</li>
         </ul>
     </div>
   </div>

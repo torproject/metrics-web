@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="en_US"/>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -26,6 +27,7 @@
         <ul>
           <li><a href="#relaydesc">Relay descriptor archives</a></li>
           <li><a href="#bridgedesc">Bridge descriptor archives</a></li>
+          <li><a href="#bridgeassignments">Bridge pool assignments</a></li>
           <li><a href="#stats">Statistics produced by relays</a></li>
           <li><a href="#performance">Performance data</a></li>
           <li><a href="#exitlist">Exit lists</a></li>
@@ -123,6 +125,26 @@
           </c:forEach>
         </table>
         <p></p>
+        <br>
+        <a name="bridgeassignments"></a>
+        <h3>Bridge pool assignments</h3>
+        <br>
+        <p>BridgeDB periodically dumps the list of running bridges with
+        information about the rings, subrings, and file buckets to which
+        they are assigned to a local file.  We are archiving sanitized
+        versions of these files here to analyze how the pool assignment
+        affects a bridge's usage.</p>
+        <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
+          <c:forEach var="item" items="${bridgePoolAssignments}" >
+            <fmt:formatDate var="longDate" pattern="MMMM yyyy"
+                            value="${item.key}"/>
+            <tr>
+              <td>
+                <a href="${item.value[0]}">${longDate}</a>
+              </td>
+            </tr>
+          </c:forEach>
+        </table>
         <br>
         <a name="stats"></a>
         <h3>Statistics produced by relays</h3>

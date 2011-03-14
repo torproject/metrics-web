@@ -75,6 +75,8 @@ public class ResearchDataServlet extends HttpServlet {
     SortedMap<String, Map<String, String[]>> torperfData =
         new TreeMap<String, Map<String, String[]>>();
     SortedMap<Date, String[]> exitLists = new TreeMap<Date, String[]>();
+    SortedMap<Date, String[]> bridgePoolAssignments =
+        new TreeMap<Date, String[]>();
 
     /* Prepare rewriting Torperf sources. */
     Map<String, String> torperfSources = new HashMap<String, String>();
@@ -207,6 +209,22 @@ public class ResearchDataServlet extends HttpServlet {
           exitLists.put(month, new String[2]);
         }
         exitLists.get(month)[0] = url;
+
+      /* URL contains bridge pool assignments. */
+      } else if (filename.startsWith("bridge-pool-assignments-20")) {
+        String yearMonth = filename.substring(filename.indexOf("20"));
+        yearMonth = yearMonth.substring(0, 7);
+        Date month = null;
+        try {
+          month = monthFormat.parse(yearMonth);
+        } catch (ParseException e) {
+          /* Ignore this URL. */
+          continue;
+        }
+        if (!bridgePoolAssignments.containsKey(month)) {
+          bridgePoolAssignments.put(month, new String[2]);
+        }
+        bridgePoolAssignments.get(month)[0] = url;
       }
     }
 
@@ -217,6 +235,7 @@ public class ResearchDataServlet extends HttpServlet {
     request.setAttribute("relayStatistics", relayStatistics);
     request.setAttribute("torperfData", torperfData);
     request.setAttribute("exitLists", exitLists);
+    request.setAttribute("bridgePoolAssignments", bridgePoolAssignments);
     request.getRequestDispatcher("WEB-INF/data.jsp").forward(request,
         response);
   }
