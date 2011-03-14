@@ -87,7 +87,7 @@ public class ConsensusHealthChecker {
      * with a warning, because we might just not have learned about a new
      * consensus in this execution. */
     if (this.mostRecentConsensus == null) {
-      nagiosUnknowns.add("No consensus known");
+      nagiosCriticals.add("No consensus known");
       return;
     }
 
