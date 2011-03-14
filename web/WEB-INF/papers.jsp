@@ -45,8 +45,8 @@
         daily updated <a href="graphs.html">graphs</a>.
         <ul>
           <li>Overview of Statistical Data in the Tor Network
-          (<a href="papers/data-2010-12-29.pdf">PDF</a>,
-          164K from December 29, 2010).</li>
+          (<a href="papers/data-2011-03-14.pdf">PDF</a>,
+          166K from March 14, 2011).</li>
           <li>Privacy-preserving Ways to Estimate the Number of Tor Users
           (<a href="papers/countingusers-2010-11-30.pdf">PDF</a>,
           307K from November 30, 2010).</li>
