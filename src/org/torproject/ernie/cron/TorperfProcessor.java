@@ -86,7 +86,7 @@ public class TorperfProcessor {
             while ((line = br.readLine()) != null) {
               String[] parts = line.split(" ");
               // remove defective lines as they occurred on gabelmoo
-              if (parts.length == 20 && parts[0].length() == 10) {
+              if (parts.length >= 20 && parts[0].length() == 10) {
                 long startSec = Long.parseLong(parts[0]);
                 String dateTime = formatter.format(startSec * 1000L);
                 long completeMillis = Long.parseLong(parts[16])
@@ -95,7 +95,8 @@ public class TorperfProcessor {
                     + Long.parseLong(parts[1]) / 1000L;
                 String key = source + "," + dateTime;
                 String value = key;
-                if (parts[16].equals("0")) {
+                if ((parts.length == 20 && parts[16].equals("0")) ||
+                    (parts.length == 21 && parts[20].equals("1"))) {
                   value += ",-2"; // -2 for timeout
                 } else if (Long.parseLong(parts[19]) < receivedBytes) {
                   value += ",-1"; // -1 for failure
