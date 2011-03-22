@@ -137,7 +137,8 @@ public class DescriptorServlet extends HttpServlet {
       }
     }
     if (descId == null) {
-      out.write("    <br/><p>Sorry, \"" + descIdParameter + "\" is not a "
+      out.write("    <br/><p>Sorry, \""
+          + StringEscapeUtils.escapeHtml(descIdParameter) + "\" is not a "
           + "valid descriptor identifier. Please provide at least the "
           + "first 8 hex characters of a descriptor identifier.</p>\n");
       writeFooter(out);

@@ -146,7 +146,8 @@ public class RelayServlet extends HttpServlet {
       }
     }
     if (!validParameter) {
-      out.write("    <br/><p>Sorry, \"" + fingerprintParameter
+      out.write("    <br/><p>Sorry, \""
+          + StringEscapeUtils.escapeHtml(fingerprintParameter)
           + "\" is not a valid relay fingerprint. Please provide at "
           + "least the first 8 hex characters of a relay "
           + "fingerprint.</p>\n");

@@ -14,6 +14,7 @@ import javax.servlet.http.*;
 import javax.sql.*;
 
 import org.apache.commons.codec.binary.*;
+import org.apache.commons.lang.*;
 
 public class ExoneraTorServlet extends HttpServlet {
 
@@ -184,8 +185,9 @@ public class ExoneraTorServlet extends HttpServlet {
             + Integer.parseInt(ipParts[3]);
       } else {
         ipWarning = "\"" + (ipParameter.length() > 20 ?
-            ipParameter.substring(0, 20) + "[...]" :
-            ipParameter) + "\" is not a valid IP address.";
+            StringEscapeUtils.escapeHtml(ipParameter.substring(0, 20))
+            + "[...]" : StringEscapeUtils.escapeHtml(ipParameter))
+            + "\" is not a valid IP address.";
       }
     }
 
@@ -210,8 +212,10 @@ public class ExoneraTorServlet extends HttpServlet {
         /* We have no way to handle this exception, other than leaving
            timestampStr at "". */
         timestampWarning = "\"" + (timestampParameter.length() > 20 ?
-            timestampParameter.substring(0, 20) + "[...]" :
-            timestampParameter) + "\" is not a valid timestamp.";
+            StringEscapeUtils.escapeHtml(timestampParameter.
+            substring(0, 20)) + "[...]" :
+            StringEscapeUtils.escapeHtml(timestampParameter))
+            + "\" is not a valid timestamp.";
       }
     }
 
@@ -244,8 +248,9 @@ public class ExoneraTorServlet extends HttpServlet {
         targetIPParts = targetIP.split("\\.");
       } else {
         targetAddrWarning = "\"" + (targetAddrParameter.length() > 20 ?
-            timestampParameter.substring(0, 20) + "[...]" :
-            timestampParameter) + "\" is not a valid IP address.";
+            StringEscapeUtils.escapeHtml(targetAddrParameter.substring(
+            0, 20)) + "[...]" : StringEscapeUtils.escapeHtml(
+            targetAddrParameter)) + "\" is not a valid IP address.";
       }
     }
 
@@ -266,8 +271,10 @@ public class ExoneraTorServlet extends HttpServlet {
         }
       } else {
         targetPortWarning = "\"" + (targetPortParameter.length() > 8 ?
-            targetPortParameter.substring(0, 8) + "[...]" :
-            targetPortParameter) + "\" is not a valid TCP port.";
+            StringEscapeUtils.escapeHtml(targetPortParameter.
+            substring(0, 8)) + "[...]" :
+            StringEscapeUtils.escapeHtml(targetPortParameter))
+            + "\" is not a valid TCP port.";
       }
     }
 
