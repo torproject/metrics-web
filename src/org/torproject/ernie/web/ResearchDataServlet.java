@@ -68,6 +68,7 @@ public class ResearchDataServlet extends HttpServlet {
      * arrays containing the file url and optional signature file. */
     SortedMap<Date, Map<String, String[]>> relayDescriptors =
         new TreeMap<Date, Map<String, String[]>>();
+    String[] certs = new String[2];
     SortedMap<Date, String[]> bridgeDescriptors =
         new TreeMap<Date, String[]>();
     SortedMap<String, Map<String, String[]>> relayStatistics =
@@ -121,6 +122,11 @@ public class ResearchDataServlet extends HttpServlet {
           relayDescriptors.get(month).put(type, new String[2]);
         }
         relayDescriptors.get(month).get(type)[index] = url;
+
+      /* URL contains v3 certificates. */
+      } else if (filename.startsWith("certs.tar")) {
+        int index = filename.endsWith(".asc") ? 1 : 0;
+        certs[index] = url;
 
       /* URL contains bridge descriptors. */
       } else if (filename.startsWith("bridge-descriptors-20")) {
@@ -231,6 +237,7 @@ public class ResearchDataServlet extends HttpServlet {
     /* Add the maps to the request and forward it to the JSP to display
      * the page. */
     request.setAttribute("relayDescriptors", relayDescriptors);
+    request.setAttribute("certs", certs);
     request.setAttribute("bridgeDescriptors", bridgeDescriptors);
     request.setAttribute("relayStatistics", relayStatistics);
     request.setAttribute("torperfData", torperfData);

@@ -97,6 +97,15 @@
             </tr>
           </c:forEach>
         </table>
+        <c:if test="${certs[0] ne null}">
+          <br>
+          <p>In order to verify the v3 votes and v3 consensuses, download
+          the tarball of <a href="${certs[0]}">v3 certificates</a>
+          <c:if test="${certs[1] ne null}">
+            (<a href="${certs[1]}">sig</a>)
+          </c:if>
+          which is updated whenever new v3 certificates become available.</p>
+        </c:if>
         <br>
         <a name="bridgedesc"></a>
         <h3>Bridge descriptor archives</h3>
