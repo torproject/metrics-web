@@ -719,7 +719,7 @@ CREATE TABLE torperf_stats (
 -- Packages requested from GetTor
 CREATE TABLE gettor_stats (
     "date" DATE NOT NULL,
-    bundle CHARACTER VARYING(32) NOT NULL,
+    bundle CHARACTER VARYING(64) NOT NULL,
     downloads INTEGER NOT NULL,
     CONSTRAINT gettor_stats_pkey PRIMARY KEY("date", bundle)
 );
