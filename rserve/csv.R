@@ -267,3 +267,15 @@ export_connbidirect <- function(path) {
       quote = FALSE, row.names = FALSE)
 }
 
+export_relays_monthly_snapshots <- function(path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT * FROM relays_monthly_snapshots")
+  rs <- dbSendQuery(con, q)
+  c <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  write.csv(format(c, trim = TRUE, scientific = FALSE), path,
+      quote = FALSE, row.names = FALSE)
+}
+

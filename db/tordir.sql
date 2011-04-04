@@ -239,6 +239,56 @@ CREATE TABLE updates (
     date DATE
 );
 
+-- GeoIP database that helps resolve IP addresses to country codes,
+-- latitudes, and longitudes.
+CREATE TABLE geoipdb (
+  id SERIAL,
+  ipstart INET,
+  ipend INET,
+  country CHARACTER(2) NOT NULL,
+  latitude NUMERIC(7, 4) NOT NULL,
+  longitude NUMERIC(7, 4) NOT NULL
+);
+
+-- Indexes to speed up looking up IP addresses in the GeoIP database.
+CREATE INDEX geoip_ipstart ON geoipdb (ipstart);
+CREATE INDEX geoip_ipend ON geoipdb (ipend);
+
+-- Result type for GeoIP lookups that encapsulates the country code,
+-- latitude, and longitude.
+CREATE TYPE geoip_result AS (country CHARACTER(2),
+  latitude NUMERIC(7, 4), longitude NUMERIC(7, 4));
+
+-- GeoIP database lookup function.
+CREATE OR REPLACE FUNCTION geoip_lookup (CHARACTER VARYING)
+RETURNS geoip_result AS $$
+  SELECT country, latitude, longitude FROM geoipdb
+  WHERE INET($1)
+  BETWEEN geoipdb.ipstart AND geoipdb.ipend LIMIT 1;
+$$ LANGUAGE SQL;
+
+-- View that contains the relays of the first known consensuses of all
+-- months in the database.
+CREATE OR REPLACE VIEW relays_monthly_snapshots AS
+SELECT status.validafter, status.fingerprint, status.nickname,
+    status.address, (status.geoip).country, (status.geoip).latitude,
+    (status.geoip).longitude, status.isexit, status.isfast,
+    status.isguard, status.isstable, status.version, status.ports,
+    descriptor.bandwidthavg, descriptor.bandwidthburst,
+    descriptor.bandwidthobserved
+FROM (
+  SELECT *, geoip_lookup(address) AS geoip
+  FROM statusentry
+  WHERE validafter IN (
+    SELECT MIN(validafter)
+    FROM consensus
+    GROUP BY DATE_TRUNC('month', validafter)
+  )
+) AS status
+LEFT JOIN descriptor
+ON status.descriptor = descriptor.descriptor
+ORDER BY validafter, fingerprint;
+
 CREATE LANGUAGE plpgsql;
 
 -- FUNCTION refresh_relay_statuses_per_day()

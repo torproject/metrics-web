@@ -42,6 +42,15 @@
     </javac>
   </target>
 
+  <!-- Import GeoIP database. -->
+  <target name="geoipdb" depends="compile">
+    <java fork="true"
+          maxmemory="1024m"
+          classname="org.torproject.ernie.cron.GeoipDatabaseImporter">
+      <classpath refid="classpath"/>
+    </java>
+  </target>
+
   <!-- Prepare data for being displayed on the website. -->
   <target name="run" depends="compile">
     <java fork="true"
