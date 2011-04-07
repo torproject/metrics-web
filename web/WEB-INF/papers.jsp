@@ -12,10 +12,11 @@
     <div class="main-column">
         <h2>Tor Metrics Portal: Papers</h2>
         <br>
-        <p>The <a href="#papers">papers</a> and
-        <a href="#techreports">technical reports</a> listed on this page
-        originate from, or are based on, work performed in the Tor Metrics
-        Project.</p>
+        <p>The <a href="#papers">papers</a>,
+        <a href="#techreports">technical reports</a>, and
+        <a href="#blogposts">blog posts</a> listed on this page originate
+        from, are based on, or are related to work performed in the Tor
+        Metrics Project.</p>
         <br>
         <a name="papers"></a>
         <h3>Papers</h3>
@@ -80,6 +81,18 @@
           <li>Evaluation of Relays from Public Directory Data
           (<a href="papers/dirarch-2009-06-22.pdf">PDF</a>,
           558K, last updated on June 22, 2009).</li>
+        </ul>
+        <br>
+        <a name="blogposts"></a>
+        <h3>Blog posts</h3>
+        <br>
+        The following blog posts are either the results of metrics
+        research or describe new interesting research questions that can
+        (partly) be answered with metrics data.
+        <ul>
+          <li>Research problem: measuring the safety of the Tor network
+          (<a href="https://blog.torproject.org/blog/research-problem-measuring-safety-tor-network">link</a>,
+          February 5, 2011).</li>
         </ul>
     </div>
   </div>
