@@ -476,6 +476,7 @@ public class ConsensusHealthChecker {
           + "            <a href=\"status.html\">Status</a>\n"
           + "            <br>\n"
           + "            <font size=\"2\">\n"
+          + "              <a href=\"networkstatus.html\">Network Status</a>\n"
           + "              <a href=\"exonerator.html\">ExoneraTor</a>\n"
           + "              <a href=\"relay-search.html\">Relay Search</a>\n"
           + "              <a class=\"current\">Consensus Health</a>\n"
