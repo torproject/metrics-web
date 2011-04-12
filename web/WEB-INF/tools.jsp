@@ -81,6 +81,9 @@
         download files of various sizes over the Tor network and notes how
         long substeps take.</p>
         <ul>
+          <li>Download
+          <a href="dist/torperf-0.0.1.tar">Torperf 0.0.1</a>
+          (<a href="dist/torperf-0.0.1.tar.asc">sig</a>)</li>
           <li>Browse the <a href="https://gitweb.torproject.org/torperf.git">Git repository</a></li>
           <li><tt>git clone git://git.torproject.org/torperf</tt></li>
         </ul>
@@ -96,7 +99,7 @@
         <ul>
           <li>Download
           <a href="dist/exonerator-0.0.2.tar">ExoneraTor 0.0.2</a>
-          (<a href="dist/exonerator-0.0.2.tar.asc">sig</a>)
+          (<a href="dist/exonerator-0.0.2.tar.asc">sig</a>)</li>
           <li>Browse the <a href="https://gitweb.torproject.org/metrics-utils.git/tree/HEAD:/exonerator">Git repository</a>
           <li><tt>git clone git://git.torproject.org/metrics-utils</tt></li>
         </ul>
@@ -111,7 +114,7 @@
         <ul>
           <li>Download
           <a href="dist/visitor-0.0.4.tar">VisiTor 0.0.4</a>
-          (<a href="dist/visitor-0.0.4.tar.asc">sig</a>)
+          (<a href="dist/visitor-0.0.4.tar.asc">sig</a>)</li>
           <li>Browse the <a href="https://gitweb.torproject.org/metrics-utils.git/tree/HEAD:/visitor">Git repository</a></li>
           <li><tt>git clone git://git.torproject.org/metrics-utils</tt></li>
         </ul>
