@@ -378,25 +378,27 @@ CREATE OR REPLACE FUNCTION refresh_network_size() RETURNS INTEGER AS $$
 
         INSERT INTO network_size
         (date, avg_running, avg_exit, avg_guard, avg_fast, avg_stable)
-        SELECT
-              DATE(validafter) AS date,
-              COUNT(*) / relay_statuses_per_day.count AS avg_running,
-              SUM(CASE WHEN isexit IS TRUE THEN 1 ELSE 0 END)
-                  / relay_statuses_per_day.count AS avg_exit,
-              SUM(CASE WHEN isguard IS TRUE THEN 1 ELSE 0 END)
-                  / relay_statuses_per_day.count AS avg_guard,
-              SUM(CASE WHEN isfast IS TRUE THEN 1 ELSE 0 END)
-                  / relay_statuses_per_day.count AS avg_fast,
-              SUM(CASE WHEN isstable IS TRUE THEN 1 ELSE 0 END)
-                  / relay_statuses_per_day.count AS avg_stable
-          FROM statusentry
-          JOIN relay_statuses_per_day
-          ON DATE(validafter) = relay_statuses_per_day.date
-          WHERE isrunning = TRUE
+        SELECT date,
+            isrunning / count AS avg_running,
+            isexit / count AS avg_exit,
+            isguard / count AS avg_guard,
+            isfast / count AS avg_fast,
+            isstable / count AS avg_stable
+        FROM (
+            SELECT DATE(validafter) AS date,
+                COUNT(*) AS isrunning,
+                COUNT(NULLIF(isexit, FALSE)) AS isexit,
+                COUNT(NULLIF(isguard, FALSE)) AS isguard,
+                COUNT(NULLIF(isfast, FALSE)) AS isfast,
+                COUNT(NULLIF(isstable, FALSE)) AS isstable
+            FROM statusentry
+            WHERE isrunning = TRUE
               AND DATE(validafter) >= (SELECT MIN(date) FROM updates)
               AND DATE(validafter) <= (SELECT MAX(date) FROM updates)
               AND DATE(validafter) IN (SELECT date FROM updates)
-          GROUP BY DATE(validafter), relay_statuses_per_day.count;
+            GROUP BY DATE(validafter)
+            ) b
+        NATURAL JOIN relay_statuses_per_day;
 
     RETURN 1;
     END;
@@ -412,10 +414,10 @@ CREATE OR REPLACE FUNCTION refresh_network_size_hour() RETURNS INTEGER AS $$
     INSERT INTO network_size_hour
     (validafter, avg_running, avg_exit, avg_guard, avg_fast, avg_stable)
     SELECT validafter, COUNT(*) AS avg_running,
-    SUM(CASE WHEN isexit IS TRUE THEN 1 ELSE 0 END) AS avg_exit,
-    SUM(CASE WHEN isguard IS TRUE THEN 1 ELSE 0 END) AS avg_guard,
-    SUM(CASE WHEN isfast IS TRUE THEN 1 ELSE 0 END) AS avg_fast,
-    SUM(CASE WHEN isstable IS TRUE THEN 1 ELSE 0 END) AS avg_stable
+    COUNT(NULLIF(isexit, FALSE)) AS avg_exit,
+    COUNT(NULLIF(isguard, FALSE)) AS avg_guard,
+    COUNT(NULLIF(isfast, FALSE)) AS avg_fast,
+    COUNT(NULLIF(isstable, FALSE)) AS avg_stable
     FROM statusentry
     WHERE isrunning = TRUE
     AND DATE(validafter) >= (SELECT MIN(date) FROM updates)
@@ -436,35 +438,37 @@ CREATE OR REPLACE FUNCTION refresh_relay_platforms() RETURNS INTEGER AS $$
 
     INSERT INTO relay_platforms
     (date, avg_linux, avg_darwin, avg_bsd, avg_windows, avg_other)
-    SELECT DATE(validafter),
-        SUM(CASE WHEN platform LIKE '%Linux%' THEN 1 ELSE 0 END) /
-            relay_statuses_per_day.count AS avg_linux,
-        SUM(CASE WHEN platform LIKE '%Darwin%' THEN 1 ELSE 0 END) /
-            relay_statuses_per_day.count AS avg_darwin,
-        SUM(CASE WHEN platform LIKE '%BSD%' THEN 1 ELSE 0 END) /
-            relay_statuses_per_day.count AS avg_bsd,
-        SUM(CASE WHEN platform LIKE '%Windows%' THEN 1 ELSE 0 END) /
-            relay_statuses_per_day.count AS avg_windows,
-        SUM(CASE WHEN platform NOT LIKE '%Windows%'
-            AND platform NOT LIKE '%Darwin%'
-            AND platform NOT LIKE '%BSD%'
-            AND platform NOT LIKE '%Linux%' THEN 1 ELSE 0 END) /
-            relay_statuses_per_day.count AS avg_other
-    FROM descriptor RIGHT JOIN statusentry
-    ON statusentry.descriptor = descriptor.descriptor
-    JOIN relay_statuses_per_day
-    ON DATE(validafter) = relay_statuses_per_day.date
-    WHERE isrunning = TRUE
+    SELECT date,
+        linux / count AS avg_linux,
+        darwin / count AS avg_darwin,
+        bsd / count AS avg_bsd,
+        windows / count AS avg_windows,
+        other / count AS avg_other
+    FROM (
+        SELECT DATE(validafter) AS date,
+            SUM(CASE WHEN platform LIKE '%Linux%' THEN 1 ELSE 0 END)
+                AS linux,
+            SUM(CASE WHEN platform LIKE '%Darwin%' THEN 1 ELSE 0 END)
+                AS darwin,
+            SUM(CASE WHEN platform LIKE '%BSD%' THEN 1 ELSE 0 END)
+                AS bsd,
+            SUM(CASE WHEN platform LIKE '%Windows%' THEN 1 ELSE 0 END)
+                AS windows,
+            SUM(CASE WHEN platform NOT LIKE '%Windows%'
+                AND platform NOT LIKE '%Darwin%'
+                AND platform NOT LIKE '%BSD%'
+                AND platform NOT LIKE '%Linux%' THEN 1 ELSE 0 END)
+                AS other
+        FROM descriptor
+        RIGHT JOIN statusentry
+        ON statusentry.descriptor = descriptor.descriptor
+        WHERE isrunning = TRUE
           AND DATE(validafter) >= (SELECT MIN(date) FROM updates)
           AND DATE(validafter) <= (SELECT MAX(date) FROM updates)
           AND DATE(validafter) IN (SELECT date FROM updates)
-          AND DATE(relay_statuses_per_day.date) >=
-              (SELECT MIN(date) FROM updates)
-          AND DATE(relay_statuses_per_day.date) <=
-              (SELECT MAX(date) FROM updates)
-          AND DATE(relay_statuses_per_day.date) IN
-              (SELECT date FROM updates)
-    GROUP BY DATE(validafter), relay_statuses_per_day.count;
+        GROUP BY DATE(validafter)
+        ) b
+    NATURAL JOIN relay_statuses_per_day;
 
     RETURN 1;
     END;
@@ -479,24 +483,20 @@ CREATE OR REPLACE FUNCTION refresh_relay_versions() RETURNS INTEGER AS $$
 
     INSERT INTO relay_versions
     (date, version, relays)
-    SELECT DATE(validafter), SUBSTRING(platform, 5, 5) AS version,
-           COUNT(*) / relay_statuses_per_day.count AS relays
-    FROM descriptor RIGHT JOIN statusentry
-    ON descriptor.descriptor = statusentry.descriptor
-    JOIN relay_statuses_per_day
-    ON DATE(validafter) = relay_statuses_per_day.date
-    WHERE isrunning = TRUE
-          AND DATE(validafter) >= (SELECT MIN(date) FROM updates)
-          AND DATE(validafter) <= (SELECT MAX(date) FROM updates)
-          AND DATE(validafter) IN (SELECT date FROM updates)
-          AND DATE(relay_statuses_per_day.date) >=
-              (SELECT MIN(date) FROM updates)
-          AND DATE(relay_statuses_per_day.date) <=
-              (SELECT MAX(date) FROM updates)
-          AND DATE(relay_statuses_per_day.date) IN
-              (SELECT date FROM updates)
-          AND platform IS NOT NULL
-    GROUP BY 1, 2, relay_statuses_per_day.count;
+    SELECT date, version, relays / count AS relays
+    FROM (
+        SELECT DATE(validafter), SUBSTRING(platform, 5, 5) AS version,
+               COUNT(*) AS relays
+        FROM descriptor RIGHT JOIN statusentry
+        ON descriptor.descriptor = statusentry.descriptor
+        WHERE isrunning = TRUE
+              AND platform IS NOT NULL
+              AND DATE(validafter) >= (SELECT MIN(date) FROM updates)
+              AND DATE(validafter) <= (SELECT MAX(date) FROM updates)
+              AND DATE(validafter) IN (SELECT date FROM updates)
+        GROUP BY 1, 2
+        ) b
+    NATURAL JOIN relay_statuses_per_day;
 
     RETURN 1;
     END;
