@@ -52,11 +52,13 @@ plot_versions <- function(start, end, path, dpi) {
   versions <- fetch(rs, n = -1)
   dbDisconnect(con)
   dbUnloadDriver(drv)
+  known_versions <- c("0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1",
+        "0.2.2", "0.2.3")
+  versions <- versions[versions$version %in% known_versions, ]
   visible_versions <- sort(unique(versions$version))
   versions <- rbind(data.frame(
     date = as.Date(rep(end, 7)),
-    version = c("0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1", "0.2.2",
-        "0.2.3"),
+    version = known_versions,
     relays = rep(NA, 7)), versions)
   ggplot(versions, aes(x = as.Date(date, "%Y-%m-%d"), y = relays,
       colour = version)) +
