@@ -173,6 +173,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/relaycountries.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/relayflags.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

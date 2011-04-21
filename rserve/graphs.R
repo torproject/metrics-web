@@ -43,6 +43,65 @@ plot_networksize <- function(start, end, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
+plot_relaycountries <- function(start, end, country, path, dpi) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  if (country == "all") {
+    q <- paste("SELECT date, avg_running AS relays FROM network_size ",
+        "WHERE date >= '", start, "' AND date <= '", end,
+        "' AND date < (SELECT MAX(date) FROM network_size)", sep = "")
+  } else {
+    q <- paste("SELECT date, relays FROM relay_countries ",
+        "WHERE date >= '", start, "' AND date <= '", end,
+        "' AND date < (SELECT MAX(date) FROM relay_countries) ",
+        "AND country = '", country, "'", sep = "")
+  }
+  rs <- dbSendQuery(con, q)
+  u <- fetch(rs, n = -1)
+  if (length(u$date) == 0)
+    u <- data.frame(date = as.Date(start), relays = 0)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
+      to = as.Date(end, "%Y-%m-%d"), by="1 day")
+  missing <- setdiff(dates, u$date)
+  if (length(missing) > 0)
+    u <- rbind(u,
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        relays = NA))
+  peoples <- data.frame(country = c("ae", "au", "bh", "br", "ca", "cn",
+    "cu", "de", "dj", "dz", "eg", "et", "fr", "gb", "il", "ir", "it",
+    "iq", "jo", "jp", "kp", "kr", "kw", "lb", "ly", "ma", "mm", "om",
+    "pl", "ps", "qa", "ru", "sa", "sd", "se", "sy", "tn", "tm", "us",
+    "uz", "vn", "ye"),
+    people = c("U.A.E.", "Australian", "Bahraini", "Brazilian",
+    "Canadian", "Chinese", "Cuban", "German", "Djiboutian", "Algerian",
+    "Egyptian", "Ethiopian", "French", "U.K.", "Israeli", "Iranian",
+    "Italian", "Iraqi", "Jordanian", "Japanese", "North Korean",
+    "South Korean", "Kuwaiti", "Lebanese", "Libyan", "Moroccan",
+    "Burmese", "Omani", "Polish", "Palestinian", "Qatari", "Russian",
+    "Saudi", "Sudanese", "Swedish", "Syrian", "Tunisian", "Turkmen",
+    "U.S.", "Uzbek", "Vietnamese", "Yemeni"),
+    stringsAsFactors = FALSE)
+  title <- ifelse(country == "all",
+    "Number of relays in all countries\n",
+    paste("Number of", peoples[peoples$country == country, "people"],
+      "relays\n"))
+  formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
+  ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = relays)) +
+    geom_line(size = 1) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""), format =
+        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
+        cut(as.numeric(max(as.Date(u$date, "%Y-%m-%d")) -
+        min(as.Date(u$date, "%Y-%m-%d"))),
+        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+    scale_y_continuous(name = "", limits = c(0, max(u$relays,
+        na.rm = TRUE)), formatter = formatter) +
+    opts(title = title)
+  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+}
+
 plot_versions <- function(start, end, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)

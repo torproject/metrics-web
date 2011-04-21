@@ -40,6 +40,8 @@ public class GraphParameterChecker {
 
     this.availableGraphs = new HashMap<String, String>();
     this.availableGraphs.put("networksize", "start,end,filename,dpi");
+    this.availableGraphs.put("relaycountries",
+        "start,end,country,filename,dpi");
     this.availableGraphs.put("relayflags", "start,end,flag,granularity,"
         + "filename,dpi");
     this.availableGraphs.put("versions", "start,end,filename,dpi");

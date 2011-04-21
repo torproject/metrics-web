@@ -15,6 +15,18 @@ export_networksize <- function(path) {
   write.csv(networksize, path, quote = FALSE, row.names = FALSE)
 }
 
+export_relaycountries <- function(path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT date, country, relays FROM relay_countries",
+             "ORDER BY date, country")
+  rs <- dbSendQuery(con, q)
+  relays <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  write.csv(relays, path, quote = FALSE, row.names = FALSE)
+}
+
 export_versions <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)

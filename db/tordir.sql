@@ -146,6 +146,14 @@ CREATE TABLE network_size_hour (
     CONSTRAINT network_size_hour_pkey PRIMARY KEY(validafter)
 );
 
+-- TABLE relay_countries
+CREATE TABLE relay_countries (
+    date DATE NOT NULL,
+    country CHARACTER(2) NOT NULL,
+    relays INTEGER NOT NULL,
+    CONSTRAINT relay_countries_pkey PRIMARY KEY(date, country)
+);
+
 -- TABLE relay_platforms
 CREATE TABLE relay_platforms (
     date DATE NOT NULL,
@@ -424,6 +432,34 @@ CREATE OR REPLACE FUNCTION refresh_network_size_hour() RETURNS INTEGER AS $$
     AND DATE(validafter) <= (SELECT MAX(date) FROM updates)
     AND DATE(validafter) IN (SELECT date FROM updates)
     GROUP BY validafter;
+
+    RETURN 1;
+    END;
+$$ LANGUAGE plpgsql;
+
+-- FUNCTION refresh_relay_countries()
+CREATE OR REPLACE FUNCTION refresh_relay_countries() RETURNS INTEGER AS $$
+    BEGIN
+
+    DELETE FROM relay_countries
+    WHERE date IN (SELECT date FROM updates);
+
+    INSERT INTO relay_countries
+    (date, country, relays)
+    SELECT date, country, relays / count AS relays
+    FROM (
+        SELECT DATE(validafter),
+               COALESCE(lower((geoip_lookup(address)).country), 'zz')
+                 AS country,
+               COUNT(*) AS relays
+        FROM statusentry
+        WHERE isrunning = TRUE
+              AND DATE(validafter) >= (SELECT MIN(date) FROM updates)
+              AND DATE(validafter) <= (SELECT MAX(date) FROM updates)
+              AND DATE(validafter) IN (SELECT date FROM updates)
+        GROUP BY 1, 2
+        ) b
+    NATURAL JOIN relay_statuses_per_day;
 
     RETURN 1;
     END;
@@ -782,6 +818,7 @@ CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
     PERFORM refresh_relay_statuses_per_day();
     PERFORM refresh_network_size();
     PERFORM refresh_network_size_hour();
+    PERFORM refresh_relay_countries();
     PERFORM refresh_relay_platforms();
     PERFORM refresh_relay_versions();
     PERFORM refresh_total_bandwidth();

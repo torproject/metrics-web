@@ -41,6 +41,7 @@ public class CsvServlet extends HttpServlet {
     this.availableCsvFiles.add("networksize");
     this.availableCsvFiles.add("platforms");
     this.availableCsvFiles.add("relays-monthly-snapshots");
+    this.availableCsvFiles.add("relaycountries");
     this.availableCsvFiles.add("relayflags");
     this.availableCsvFiles.add("relayflags-hour");
     this.availableCsvFiles.add("torperf");
