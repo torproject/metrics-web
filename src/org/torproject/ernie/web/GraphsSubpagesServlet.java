@@ -11,6 +11,9 @@ public class GraphsSubpagesServlet extends HttpServlet {
    * are forwarded. */
   private Map<String, String> availableGraphsSubpages;
 
+  /* Country codes and names for per-country graphs. */
+  private List<String[]> knownCountries;
+
   public GraphsSubpagesServlet() {
     this.availableGraphsSubpages = new HashMap<String, String>();
     this.availableGraphsSubpages.put("network.html",
@@ -20,6 +23,8 @@ public class GraphsSubpagesServlet extends HttpServlet {
         "WEB-INF/packages.jsp");
     this.availableGraphsSubpages.put("performance.html",
         "WEB-INF/performance.jsp");
+
+    this.knownCountries = Countries.getInstance().getCountryList();
   }
 
   public void doGet(HttpServletRequest request,
@@ -68,6 +73,9 @@ public class GraphsSubpagesServlet extends HttpServlet {
             url);
       }
     }
+
+    /* Pass list of known countries in case we want to display them. */
+    request.setAttribute("countries", this.knownCountries);
 
     /* Forward the request to the JSP that does all the hard work. */
     request.getRequestDispatcher(jsp).forward(request, response);
