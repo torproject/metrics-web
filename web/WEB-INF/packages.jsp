@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -33,10 +34,10 @@ graph shows the number of packages requested from GetTor per day.</p>
              value="${gettor_end[0]}">
     </p><p>
       Packages:
-      <input type="radio" name="bundle" value="all"> Total packages
-      <input type="radio" name="bundle" value="en"> TBB (en)
-      <input type="radio" name="bundle" value="zh_CN"> TBB (zh_CN)
-      <input type="radio" name="bundle" value="fa"> TBB (fa)
+      <input type="radio" name="bundle" value="all" <c:if test="${fn:length(gettor_bundle) == 0 or gettor_bundle[0] eq 'all'}"> checked</c:if>> Total packages
+      <input type="radio" name="bundle" value="en" <c:if test="${gettor_bundle[0] eq 'en'}"> checked</c:if>> TBB (en)
+      <input type="radio" name="bundle" value="zh_CN" <c:if test="${gettor_bundle[0] eq 'zh_CN'}"> checked</c:if>> TBB (zh_CN)
+      <input type="radio" name="bundle" value="fa" <c:if test="${gettor_bundle[0] eq 'fa'}"> checked</c:if>> TBB (fa)
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${gettor_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>

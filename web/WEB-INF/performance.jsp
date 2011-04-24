@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -34,15 +35,15 @@ quartile of request times.</p>
              value="${torperf_end[0]}">
     </p><p>
       Source:
-      <input type="radio" name="source" value="all"> all
-      <input type="radio" name="source" value="torperf"> torperf
-      <input type="radio" name="source" value="moria"> moria
-      <input type="radio" name="source" value="siv"> siv
+      <input type="radio" name="source" value="all"<c:if test="${fn:length(torperf_source) == 0 or torperf_source[0] eq 'all'}"> checked</c:if>> all
+      <input type="radio" name="source" value="torperf"<c:if test="${torperf_source[0] eq 'torperf'}"> checked</c:if>> torperf
+      <input type="radio" name="source" value="moria"<c:if test="${torperf_source[0] eq 'moria'}"> checked</c:if>> moria
+      <input type="radio" name="source" value="siv"<c:if test="${torperf_source[0] eq 'siv'}"> checked</c:if>> siv
     </p><p>
       <label>File size: </label>
-      <input type="radio" name="filesize" value="50kb"> 50 KiB
-      <input type="radio" name="filesize" value="1mb"> 1 MiB
-      <input type="radio" name="filesize" value="5mb"> 5 MiB
+      <input type="radio" name="filesize" value="50kb"<c:if test="${fn:length(torperf_filesize) == 0 or torperf_filesize[0] eq '50kb'}"> checked</c:if>> 50 KiB
+      <input type="radio" name="filesize" value="1mb"<c:if test="${torperf_filesize[0] eq '1mb'}"> checked</c:if>> 1 MiB
+      <input type="radio" name="filesize" value="5mb"<c:if test="${torperf_filesize[0] eq '5mb'}"> checked</c:if>> 5 MiB
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${torperf_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
@@ -80,15 +81,15 @@ than 50 KiB (1 MiB, 5 MiB).</p>
              value="${torperf_failures_end[0]}">
     </p><p>
       Source:
-      <input type="radio" name="source" value="all"> all
-      <input type="radio" name="source" value="torperf"> torperf
-      <input type="radio" name="source" value="moria"> moria
-      <input type="radio" name="source" value="siv"> siv
+      <input type="radio" name="source" value="all"<c:if test="${fn:length(torperf_failures_source) == 0 or torperf_failures_source[0] eq 'all'}"> checked</c:if>> all
+      <input type="radio" name="source" value="torperf"<c:if test="${torperf_failures_source[0] eq 'torperf'}"> checked</c:if>> torperf
+      <input type="radio" name="source" value="moria"<c:if test="${torperf_failures_source[0] eq 'moria'}"> checked</c:if>> moria
+      <input type="radio" name="source" value="siv"<c:if test="${torperf_failures_source[0] eq 'siv'}"> checked</c:if>> siv
     </p><p>
       <label>File size: </label>
-      <input type="radio" name="filesize" value="50kb"> 50 KiB
-      <input type="radio" name="filesize" value="1mb"> 1 MiB
-      <input type="radio" name="filesize" value="5mb"> 5 MiB
+      <input type="radio" name="filesize" value="50kb"<c:if test="${fn:length(torperf_failures_filesize) == 0 or torperf_failures_filesize[0] eq '50kb'}"> checked</c:if>> 50 KiB
+      <input type="radio" name="filesize" value="1mb"<c:if test="${torperf_failures_filesize[0] eq '1mb'}"> checked</c:if>> 1 MiB
+      <input type="radio" name="filesize" value="5mb"<c:if test="${torperf_failures_filesize[0] eq '5mb'}"> checked</c:if>> 5 MiB
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${torperf_failures_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>

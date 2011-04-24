@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -102,15 +103,15 @@ average number of relays with these flags assigned.</p>
              value="${relayflags_end[0]}">
     </p><p>
       <label>Relay flags: </label>
-      <input type="checkbox" name="flag" value="Running"> Running
-      <input type="checkbox" name="flag" value="Exit"> Exit
-      <input type="checkbox" name="flag" value="Fast"> Fast
-      <input type="checkbox" name="flag" value="Guard"> Guard
-      <input type="checkbox" name="flag" value="Stable"> Stable
+      <input type="checkbox" name="flag" value="Running"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Running')}"> checked</c:if>> Running
+      <input type="checkbox" name="flag" value="Exit"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Exit')}"> checked</c:if>> Exit
+      <input type="checkbox" name="flag" value="Fast"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Fast')}"> checked</c:if>> Fast
+      <input type="checkbox" name="flag" value="Guard"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Guard')}"> checked</c:if>> Guard
+      <input type="checkbox" name="flag" value="Stable"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Stable')}"> checked</c:if>> Stable
     </p><p>
       Granularity:
-        <input type="radio" name="granularity" value="day"> 1 day
-        <input type="radio" name="granularity" value="hour"> 1 hour
+        <input type="radio" name="granularity" value="day" <c:if test="${fn:length(relayflags_granularity) == 0 or relayflags_granularity[0] eq 'day'}"> checked</c:if>> 1 day
+        <input type="radio" name="granularity" value="hour" <c:if test="${relayflags_granularity[0] eq 'hour'}"> checked</c:if>> 1 hour
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${relayflags_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
