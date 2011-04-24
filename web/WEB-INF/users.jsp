@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -30,10 +31,10 @@ based on the requests seen by a few dozen directory mirrors.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${direct_users_start[0]}">
+             value="<c:choose><c:when test="${fn:length(direct_users_start) == 0}">${default_start_date}</c:when><c:otherwise>${direct_users_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${direct_users_end[0]}">
+             value="<c:choose><c:when test="${fn:length(direct_users_end) == 0}">${default_end_date}</c:when><c:otherwise>${direct_users_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Source: <select name="country">
         <option value="all"<c:if test="${direct_users_country[0] eq 'all'}"> selected</c:if>>All users</option>
@@ -74,10 +75,10 @@ by a few hundred bridges.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${bridge_users_start[0]}">
+             value="<c:choose><c:when test="${fn:length(bridge_users_start) == 0}">${default_start_date}</c:when><c:otherwise>${bridge_users_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${bridge_users_end[0]}">
+             value="<c:choose><c:when test="${fn:length(bridge_users_end) == 0}">${default_end_date}</c:when><c:otherwise>${bridge_users_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Source: <select name="country">
         <option value="all"<c:if test="${bridge_users_country[0] eq 'all'}"> selected</c:if>>All users</option>

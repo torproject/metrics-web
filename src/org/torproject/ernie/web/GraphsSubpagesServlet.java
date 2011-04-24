@@ -3,6 +3,7 @@ package org.torproject.ernie.web;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.*;
+import java.text.*;
 import java.util.*;
 
 public class GraphsSubpagesServlet extends HttpServlet {
@@ -76,6 +77,17 @@ public class GraphsSubpagesServlet extends HttpServlet {
 
     /* Pass list of known countries in case we want to display them. */
     request.setAttribute("countries", this.knownCountries);
+
+    /* Pass the default start and end dates. */
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    Date defaultEndDate = new Date();
+    Date defaultStartDate = new Date(defaultEndDate.getTime()
+        - 90L * 24L * 60L * 60L * 1000L);
+    request.setAttribute("default_start_date",
+        dateFormat.format(defaultStartDate));
+    request.setAttribute("default_end_date",
+        dateFormat.format(defaultEndDate));
 
     /* Forward the request to the JSP that does all the hard work. */
     request.getRequestDispatcher(jsp).forward(request, response);

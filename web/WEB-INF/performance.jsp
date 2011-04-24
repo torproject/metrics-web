@@ -29,10 +29,10 @@ quartile of request times.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${torperf_start[0]}">
+             value="<c:choose><c:when test="${fn:length(torperf_start) == 0}">${default_start_date}</c:when><c:otherwise>${torperf_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${torperf_end[0]}">
+             value="<c:choose><c:when test="${fn:length(torperf_end) == 0}">${default_end_date}</c:when><c:otherwise>${torperf_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Source:
       <input type="radio" name="source" value="all"<c:if test="${fn:length(torperf_source) == 0 or torperf_source[0] eq 'all'}"> checked</c:if>> all
@@ -75,10 +75,10 @@ than 50 KiB (1 MiB, 5 MiB).</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${torperf_failures_start[0]}">
+             value="<c:choose><c:when test="${fn:length(torperf_failures_start) == 0}">${default_start_date}</c:when><c:otherwise>${torperf_failures_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${torperf_failures_end[0]}">
+             value="<c:choose><c:when test="${fn:length(torperf_failures_end) == 0}">${default_end_date}</c:when><c:otherwise>${torperf_failures_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Source:
       <input type="radio" name="source" value="all"<c:if test="${fn:length(torperf_failures_source) == 0 or torperf_failures_source[0] eq 'all'}"> checked</c:if>> all
@@ -126,10 +126,10 @@ classifying connections, read and write counters are reset for the next
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${connbidirect_start[0]}">
+             value="<c:choose><c:when test="${fn:length(connbidirect_start) == 0}">${default_start_date}</c:when><c:otherwise>${connbidirect_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${connbidirect_end[0]}">
+             value="<c:choose><c:when test="${fn:length(connbidirect_end) == 0}">${default_end_date}</c:when><c:otherwise>${connbidirect_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${connbidirect_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>

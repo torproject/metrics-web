@@ -28,10 +28,10 @@ graph shows the number of packages requested from GetTor per day.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${gettor_start[0]}">
+             value="<c:choose><c:when test="${fn:length(gettor_start) == 0}">${default_start_date}</c:when><c:otherwise>${gettor_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${gettor_end[0]}">
+             value="<c:choose><c:when test="${fn:length(gettor_end) == 0}">${default_end_date}</c:when><c:otherwise>${gettor_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Packages:
       <input type="radio" name="bundle" value="all" <c:if test="${fn:length(gettor_bundle) == 0 or gettor_bundle[0] eq 'all'}"> checked</c:if>> Total packages

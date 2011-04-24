@@ -27,10 +27,10 @@ bridges in the network.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${networksize_start[0]}">
+             value="<c:choose><c:when test="${fn:length(networksize_start) == 0}">${default_start_date}</c:when><c:otherwise>${networksize_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${networksize_end[0]}">
+             value="<c:choose><c:when test="${fn:length(networksize_end) == 0}">${default_end_date}</c:when><c:otherwise>${networksize_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${networksize_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
@@ -58,10 +58,10 @@ country.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${relaycountries_start[0]}">
+             value="<c:choose><c:when test="${fn:length(relaycountries_start) == 0}">${default_start_date}</c:when><c:otherwise>${relaycountries_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${relaycountries_end[0]}">
+             value="<c:choose><c:when test="${fn:length(relaycountries_end) == 0}">${default_end_date}</c:when><c:otherwise>${relaycountries_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Source: <select name="country">
         <option value="all"<c:if test="${relaycountries_country[0] eq 'all'}"> selected</c:if>>All relays</option>
@@ -97,10 +97,10 @@ average number of relays with these flags assigned.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${relayflags_start[0]}">
+             value="<c:choose><c:when test="${fn:length(relayflags_start) == 0}">${default_start_date}</c:when><c:otherwise>${relayflags_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${relayflags_end[0]}">
+             value="<c:choose><c:when test="${fn:length(relayflags_end) == 0}">${default_end_date}</c:when><c:otherwise>${relayflags_end[0]}</c:otherwise></c:choose>">
     </p><p>
       <label>Relay flags: </label>
       <input type="checkbox" name="flag" value="Running"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Running')}"> checked</c:if>> Running
@@ -140,10 +140,10 @@ version.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${versions_start[0]}">
+             value="<c:choose><c:when test="${fn:length(versions_start) == 0}">${default_start_date}</c:when><c:otherwise>${versions_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${versions_end[0]}">
+             value="<c:choose><c:when test="${fn:length(versions_end) == 0}">${default_end_date}</c:when><c:otherwise>${versions_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${versions_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
@@ -174,10 +174,10 @@ platform.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${platforms_start[0]}">
+             value="<c:choose><c:when test="${fn:length(platforms_start) == 0}">${default_start_date}</c:when><c:otherwise>${platforms_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${platforms_end[0]}">
+             value="<c:choose><c:when test="${fn:length(platforms_end) == 0}">${default_end_date}</c:when><c:otherwise>${platforms_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${platforms_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
@@ -209,10 +209,10 @@ in the network.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${bandwidth_start[0]}">
+             value="<c:choose><c:when test="${fn:length(bandwidth_start) == 0}">${default_start_date}</c:when><c:otherwise>${bandwidth_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${bandwidth_end[0]}">
+             value="<c:choose><c:when test="${fn:length(bandwidth_end) == 0}">${default_end_date}</c:when><c:otherwise>${bandwidth_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${bandwidth_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
@@ -243,10 +243,10 @@ the number of written and read dir bytes by all relays.</p>
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="${dirbytes_start[0]}">
+             value="<c:choose><c:when test="${fn:length(dirbytes_start) == 0}">${default_start_date}</c:when><c:otherwise>${dirbytes_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="${dirbytes_end[0]}">
+             value="<c:choose><c:when test="${fn:length(dirbytes_end) == 0}">${default_end_date}</c:when><c:otherwise>${dirbytes_end[0]}</c:otherwise></c:choose>">
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${dirbytes_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
