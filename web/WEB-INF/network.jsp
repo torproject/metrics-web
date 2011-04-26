@@ -227,6 +227,37 @@ in the network.</p>
 <p><a href="csv/bandwidth.csv">CSV</a> file containing all data.</p>
 <br>
 
+<h3>Relay bandwidth by Exit and/or Guard flags</h3>
+<br>
+<p>The following graph shows the relay bandwidth of all relays with the
+Exit and/or Guard flags assigned by the directory authorities.</p>
+<a name="bwhist-flags"></a>
+<img src="bwhist-flags.png${bwhist_flags_url}"
+     width="576" height="360" alt="Relay bandwidth by flags graph">
+<form action="network.html#bwhist-flags">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="bwhist-flags">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(bwhist_flags_start) == 0}">${default_start_date}</c:when><c:otherwise>${bwhist_flags_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(bwhist_flags_end) == 0}">${default_end_date}</c:when><c:otherwise>${bwhist_flags_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${bwhist_flags_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${bwhist_flags_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${bwhist_flags_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<p><a href="csv/bwhist-flags.csv">CSV</a> file containing all data.</p>
+<br>
+
 <h3>Number of bytes spent on answering directory requests</h3>
 <br>
 <p>Relays running on 0.2.2.15-alpha or higher report the number of bytes

@@ -443,6 +443,50 @@ plot_bandwidth <- function(start, end, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
+plot_bwhist_flags <- function(start, end, path, dpi) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT date, isexit, isguard, read, written ",
+      "FROM bwhist_flags WHERE date >= '", start, "' AND date <= '", end,
+      "' AND date < (SELECT MAX(date) FROM bwhist_flags) - 1 ", sep = "")
+  rs <- dbSendQuery(con, q)
+  bw <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
+      to = as.Date(end, "%Y-%m-%d"), by = "1 day")
+  missing <- setdiff(dates, as.Date(bw$date, origin = "1970-01-01"))
+  if (length(missing) > 0)
+    bw <- rbind(bw,
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        isexit = FALSE, isguard = FALSE, read = NA, written = NA),
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        isexit = FALSE, isguard = TRUE, read = NA, written = NA),
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        isexit = TRUE, isguard = FALSE, read = NA, written = NA),
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        isexit = TRUE, isguard = TRUE, read = NA, written = NA))
+  bw <- data.frame(date = bw$date, variable = ifelse(bw$isexit,
+        ifelse(bw$isguard, "Guard & Exit", "Exit only"),
+        ifelse(bw$isguard, "Guard only", "Middle only")),
+        value = (bw$read + bw$written) / 2)
+  ggplot(bw, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20 / 86400,
+      colour = variable)) +
+    geom_line(size = 1) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""), format =
+        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
+        cut(as.numeric(max(as.Date(bw$date, "%Y-%m-%d")) -
+        min(as.Date(bw$date, "%Y-%m-%d"))),
+        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+    scale_y_continuous(name="Bandwidth (MiB/s)",
+        limits = c(0, max(bw$value, na.rm = TRUE) / 2^20 / 86400)) +
+    scale_colour_hue(name = "") +
+    opts(title = "Bandwidth history by relay flags",
+        legend.position = "top")
+  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+}
+
 plot_dirbytes <- function(start, end, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)

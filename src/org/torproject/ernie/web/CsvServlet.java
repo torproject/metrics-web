@@ -31,6 +31,7 @@ public class CsvServlet extends HttpServlet {
     this.availableCsvFiles = new HashSet<String>();
     this.availableCsvFiles.add("bandwidth");
     this.availableCsvFiles.add("bridge-users");
+    this.availableCsvFiles.add("bwhist-flags");
     this.availableCsvFiles.add("connbidirect");
     this.availableCsvFiles.add("current-platform-strings");
     this.availableCsvFiles.add("direct-users");

@@ -47,6 +47,7 @@ public class GraphParameterChecker {
     this.availableGraphs.put("versions", "start,end,filename,dpi");
     this.availableGraphs.put("platforms", "start,end,filename,dpi");
     this.availableGraphs.put("bandwidth", "start,end,filename,dpi");
+    this.availableGraphs.put("bwhist-flags", "start,end,filename,dpi");
     this.availableGraphs.put("dirbytes", "start,end,filename,dpi");
     this.availableGraphs.put("direct-users",
         "start,end,country,filename,dpi");

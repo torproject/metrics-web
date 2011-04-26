@@ -90,6 +90,20 @@ export_bandwidth <- function(path) {
   write.csv(bandwidth, path, quote = FALSE, row.names = FALSE)
 }
 
+export_bwhist_flags <- function(path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT date, isexit, isguard, read, written",
+      "FROM bwhist_flags",
+      "WHERE date < (SELECT MAX(date) FROM bwhist_flags) - 1",
+      "ORDER BY date, isexit, isguard")
+  rs <- dbSendQuery(con, q)
+  bw <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  write.csv(bw, path, quote = FALSE, row.names = FALSE)
+}
+
 export_dirbytes <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)

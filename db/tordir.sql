@@ -196,6 +196,16 @@ CREATE TABLE total_bwhist (
     CONSTRAINT total_bwhist_pkey PRIMARY KEY(date)
 );
 
+-- TABLE bwhist_flags
+CREATE TABLE bwhist_flags (
+    date DATE NOT NULL,
+    isexit BOOLEAN NOT NULL,
+    isguard BOOLEAN NOT NULL,
+    read BIGINT,
+    written BIGINT,
+    CONSTRAINT bwhist_flags_pkey PRIMARY KEY(date, isexit, isguard)
+);
+
 -- TABLE user_stats
 -- Aggregate statistics on directory requests and byte histories that we
 -- use to estimate user numbers.
@@ -591,6 +601,31 @@ CREATE OR REPLACE FUNCTION refresh_total_bwhist() RETURNS INTEGER AS $$
   END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION refresh_bwhist_flags() RETURNS INTEGER AS $$
+  BEGIN
+  DELETE FROM bwhist_flags WHERE date IN (SELECT date FROM updates);
+  INSERT INTO bwhist_flags (date, isexit, isguard, read_write_avg)
+  SELECT a.date, isexit, isguard, SUM(read_sum) as read,
+      SUM(written_sum) AS written
+  FROM
+      (SELECT DATE(validafter) AS date,
+             fingerprint,
+             BOOL_OR(isexit) AS isexit,
+             BOOL_OR(isguard) AS isguard
+      FROM statusentry
+      WHERE isrunning = TRUE
+        AND DATE(validafter) >= (SELECT MIN(date) FROM updates)
+        AND DATE(validafter) <= (SELECT MAX(date) FROM updates)
+        AND DATE(validafter) IN (SELECT date FROM updates)
+      GROUP BY 1, 2) a
+  JOIN bwhist
+  ON a.date = bwhist.date
+  AND a.fingerprint = bwhist.fingerprint
+  GROUP BY 1, 2, 3;
+  RETURN 1;
+  END;
+$$ LANGUAGE plpgsql;
+
 -- FUNCTION refresh_user_stats()
 -- This function refreshes our user statistics by weighting reported
 -- directory request statistics of directory mirrors with bandwidth
@@ -823,6 +858,7 @@ CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
     PERFORM refresh_relay_versions();
     PERFORM refresh_total_bandwidth();
     PERFORM refresh_total_bwhist();
+    PERFORM refresh_bwhist_flags();
     PERFORM refresh_user_stats();
     DELETE FROM scheduled_updates WHERE id IN (SELECT id FROM updates);
   RETURN 1;

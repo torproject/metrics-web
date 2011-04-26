@@ -197,6 +197,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/bwhist-flags.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/dirbytes.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
