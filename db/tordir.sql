@@ -848,19 +848,34 @@ CREATE TABLE gettor_stats (
 -- Refresh all statistics in the database.
 CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
   BEGIN
+    RAISE NOTICE '% Starting refresh run.', timeofday();
+    RAISE NOTICE '% Deleting old dates from updates.', timeofday();
     DELETE FROM updates;
+    RAISE NOTICE '% Copying scheduled dates.', timeofday();
     INSERT INTO updates SELECT * FROM scheduled_updates;
+    RAISE NOTICE '% Refreshing relay statuses per day.', timeofday();
     PERFORM refresh_relay_statuses_per_day();
+    RAISE NOTICE '% Refreshing network size.', timeofday();
     PERFORM refresh_network_size();
+    RAISE NOTICE '% Refreshing hourly network size.', timeofday();
     PERFORM refresh_network_size_hour();
+    RAISE NOTICE '% Refreshing relays by country.', timeofday();
     PERFORM refresh_relay_countries();
+    RAISE NOTICE '% Refreshing relay platforms.', timeofday();
     PERFORM refresh_relay_platforms();
+    RAISE NOTICE '% Refreshing relay versions.', timeofday();
     PERFORM refresh_relay_versions();
+    RAISE NOTICE '% Refreshing total relay bandwidth.', timeofday();
     PERFORM refresh_total_bandwidth();
+    RAISE NOTICE '% Refreshing relay bandwidth history.', timeofday();
     PERFORM refresh_total_bwhist();
+    RAISE NOTICE '% Refreshing bandwidth history by flags.', timeofday();
     PERFORM refresh_bwhist_flags();
+    RAISE NOTICE '% Refreshing user statistics.', timeofday();
     PERFORM refresh_user_stats();
+    RAISE NOTICE '% Deleting processed dates.', timeofday();
     DELETE FROM scheduled_updates WHERE id IN (SELECT id FROM updates);
+    RAISE NOTICE '% Terminating refresh run.', timeofday();
   RETURN 1;
   END;
 $$ LANGUAGE plpgsql;
