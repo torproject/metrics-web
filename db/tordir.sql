@@ -604,7 +604,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION refresh_bwhist_flags() RETURNS INTEGER AS $$
   BEGIN
   DELETE FROM bwhist_flags WHERE date IN (SELECT date FROM updates);
-  INSERT INTO bwhist_flags (date, isexit, isguard, read_write_avg)
+  INSERT INTO bwhist_flags (date, isexit, isguard, read, written)
   SELECT a.date, isexit, isguard, SUM(read_sum) as read,
       SUM(written_sum) AS written
   FROM
