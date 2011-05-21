@@ -208,15 +208,10 @@
         <a name="performance"></a>
         <h3>Performance data</h3>
         <br>
-        <p>We are measuring the performance of the Tor network by
-        periodically requesting files of different sizes and recording the
-        time needed to do so. The main measurements on moria, siv, and
-        torperf use an unmodified Tor client. The four additional setups
-        on torperf are configured to pick their guard nodes from sets of
-        the a) absolute fastest, b) absolute slowest, c) best rated vs.
-        advertised ratio or d) worst rated vs. advertised ratio nodes. The
-        ratio mechanisms provide a way to select the nodes that the
-        bandwidth authorities think stand out in their measurement. The
+        <p>We are continuously measuring the performance of the Tor
+        network by periodically requesting files of different sizes and
+        recording the time needed to do so. These measurements take place
+        on moria, siv, and torperf and use an unmodified Tor client.  The
         files below contain the output of the torperf application and are
         updated every hour:</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
@@ -254,6 +249,24 @@
                 </c:if>
               </td>
             </tr>
+          </c:forEach>
+        </table>
+        <br>
+        <p>We further conducted additional experiments with Torperf in the
+        past by modifying the guard node selection strategies or circuit
+        build timeouts.  The modified guard node selection strategies are
+        to pick guard nodes from sets of the a) absolute fastest, b)
+        absolute slowest, c) best rated vs. advertised ratio or d) worst
+        rated vs. advertised ratio nodes. The ratio mechanisms provide a
+        way to select the nodes that the bandwidth authorities think stand
+        out in their measurement.  Experiments are listed by the date when
+        they ended.  Details about the experiment setup are contained in a
+        README file in the tarballs.</p>
+        <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
+          <c:forEach var="item" items="${torperfExperiments}" >
+            <fmt:formatDate var="endDate" pattern="MMMM dd, yyyy"
+                value="${item.key}"/>
+            <tr><td><a href="${item.value[0]}">${endDate}</a></td></tr>
           </c:forEach>
         </table>
         <br>
