@@ -254,6 +254,17 @@ countryname <- function(country) {
   res
 }
 
+date_breaks <- function(days) {
+  length <- cut(days, c(0, 7, 12, 56, 180, 600, 5000, Inf), labels=FALSE)
+  major <- c("days", "2 days", "weeks", "months", "3 months", "years",
+    "5 years")[length]
+  minor <- c("10 years", "days", "days", "weeks", "months", "months",
+    "years")[length]
+  format <- c("%d-%b", "%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y",
+    "%Y")[length]
+  list(major = major, minor = minor, format = format)
+}
+
 plot_networksize <- function(start, end, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -283,14 +294,15 @@ plot_networksize <- function(start, end, path, dpi) {
   relays <- melt(relays, id = "date")
   bridges <- melt(bridges, id = "date")
   networksize <- rbind(relays, bridges)
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(networksize$date, "%Y-%m-%d")) -
+    min(as.Date(networksize$date, "%Y-%m-%d"))))
   ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
     colour = variable)) + geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(networksize$date, "%Y-%m-%d")) -
-        min(as.Date(networksize$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0, max(networksize$value,
         na.rm = TRUE))) +
     scale_colour_hue("", breaks = c("relays", "bridges"),
@@ -329,14 +341,15 @@ plot_relaycountries <- function(start, end, country, path, dpi) {
     "Number of relays in all countries\n",
     paste("Number of relays in ", countryname(country), "\n", sep = ""))
   formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(u$date, "%Y-%m-%d")) -
+    min(as.Date(u$date, "%Y-%m-%d"))))
   ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = relays)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(u$date, "%Y-%m-%d")) -
-        min(as.Date(u$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0, max(u$relays,
         na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
@@ -360,15 +373,16 @@ plot_versions <- function(start, end, path, dpi) {
     date = as.Date(rep(end, 7)),
     version = known_versions,
     relays = rep(NA, 7)), versions)
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(versions$date, "%Y-%m-%d")) -
+    min(as.Date(versions$date, "%Y-%m-%d"))))
   ggplot(versions, aes(x = as.Date(date, "%Y-%m-%d"), y = relays,
       colour = version)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(versions$date, "%Y-%m-%d")) -
-        min(as.Date(versions$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "",
       limits = c(0, max(versions$relays, na.rm = TRUE))) +
     scale_colour_hue(name = "Tor version", h.start = 280,
@@ -388,15 +402,16 @@ plot_platforms <- function(start, end, path, dpi) {
   dbDisconnect(con)
   dbUnloadDriver(drv)
   platforms <- melt(platforms, id = "date")
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(platforms$date, "%Y-%m-%d")) -
+    min(as.Date(platforms$date, "%Y-%m-%d"))))
   ggplot(platforms, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
       colour = variable)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(platforms$date, "%Y-%m-%d")) -
-        min(as.Date(platforms$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "",
       limits = c(0, max(platforms$value, na.rm = TRUE))) +
     scale_colour_hue(name = "Platform", h.start = 180,
@@ -425,15 +440,16 @@ plot_bandwidth <- function(start, end, path, dpi) {
       value = bw_desc$bwadvertised, variable = "bwadv"),
     data.frame(date = bw_hist$date, value = (bw_hist$read +
       bw_hist$written) / (2 * 86400), variable = "bwhist"))
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(bandwidth$date, "%Y-%m-%d")) -
+    min(as.Date(bandwidth$date, "%Y-%m-%d"))))
   ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20,
       colour = variable)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(bandwidth$date, "%Y-%m-%d")) -
-        min(as.Date(bandwidth$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name="Bandwidth (MiB/s)",
         limits = c(0, max(bandwidth$value, na.rm = TRUE) / 2^20)) +
     scale_colour_hue(name = "", h.start = 90,
@@ -470,15 +486,16 @@ plot_bwhist_flags <- function(start, end, path, dpi) {
         ifelse(bw$isguard, "Guard & Exit", "Exit only"),
         ifelse(bw$isguard, "Guard only", "Middle only")),
         value = (bw$read + bw$written) / 2)
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(bw$date, "%Y-%m-%d")) -
+    min(as.Date(bw$date, "%Y-%m-%d"))))
   ggplot(bw, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20 / 86400,
       colour = variable)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(bw$date, "%Y-%m-%d")) -
-        min(as.Date(bw$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name="Bandwidth (MiB/s)",
         limits = c(0, max(bw$value, na.rm = TRUE) / 2^20 / 86400)) +
     scale_colour_hue(name = "") +
@@ -502,15 +519,16 @@ plot_dirbytes <- function(start, end, path, dpi) {
       dirwrite = floor(dir$dw * dir$bwp / dir$bwd / 86400))
   dir <- na.omit(dir)
   dir <- melt(dir, id = "date")
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(dir$date, "%Y-%m-%d")) -
+    min(as.Date(dir$date, "%Y-%m-%d"))))
   ggplot(dir, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20,
       colour = variable)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(dir$date, "%Y-%m-%d")) -
-        min(as.Date(dir$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name="Bandwidth (MiB/s)",
         limits = c(0, max(dir$value, na.rm = TRUE) / 2^20)) +
     scale_colour_hue(name = "",
@@ -538,14 +556,15 @@ plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
       variable = paste("avg_", c("running", "exit", "guard", "fast",
         "stable"), sep = ""),
       value = rep(NA, 5)), networksize)
+    date_breaks <- date_breaks(
+      as.numeric(max(as.Date(networksize$date, "%Y-%m-%d")) -
+      min(as.Date(networksize$date, "%Y-%m-%d"))))
     ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
       colour = variable)) + geom_line(size = 1) +
       scale_x_date(name = paste("\nThe Tor Project - ",
-          "https://metrics.torproject.org/", sep = ""), format =
-          c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-          cut(as.numeric(max(as.Date(networksize$date, "%Y-%m-%d")) -
-          min(as.Date(networksize$date, "%Y-%m-%d"))),
-          c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+          "https://metrics.torproject.org/", sep = ""),
+          format = date_breaks$format, major = date_breaks$major,
+          minor = date_breaks$minor) +
       scale_y_continuous(name = "", limits = c(0, max(networksize$value,
           na.rm = TRUE))) +
       scale_colour_hue(name = "Relay flags", h.start = 280,
@@ -608,14 +627,15 @@ plot_direct_users <- function(start, end, country, path, dpi) {
     paste("Directly connecting users from ", countryname(country), "\n",
       sep = ""))
   formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(u$date, "%Y-%m-%d")) -
+    min(as.Date(u$date, "%Y-%m-%d"))))
   ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(u$date, "%Y-%m-%d")) -
-        min(as.Date(u$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0, max(u$users,
         na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
@@ -645,14 +665,15 @@ plot_bridge_users <- function(start, end, country, path, dpi) {
     "Bridge users from all countries\n",
     paste("Bridge users from ", countryname(country), "\n", sep = ""))
   formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(bridgeusers$date, "%Y-%m-%d")) -
+    min(as.Date(bridgeusers$date, "%Y-%m-%d"))))
   ggplot(bridgeusers, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(bridgeusers$date, "%Y-%m-%d")) -
-        min(as.Date(bridgeusers$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0, max(bridgeusers$users,
         na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
@@ -682,14 +703,15 @@ plot_gettor <- function(start, end, bundle, path, dpi) {
     "Total packages requested from GetTor per day\n",
     paste("Tor Browser Bundles (", bundle,
     ") requested from GetTor per day\n", sep = ""))
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(downloads$date, "%Y-%m-%d")) -
+    min(as.Date(downloads$date, "%Y-%m-%d"))))
   ggplot(downloads, aes(x = as.Date(date, "%Y-%m-%d"), y = downloads)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(downloads$date, "%Y-%m-%d")) -
-        min(as.Date(downloads$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0, max(downloads$downloads,
         na.rm = TRUE))) +
     opts(title = title)
@@ -721,17 +743,18 @@ plot_torperf <- function(start, end, source, filesize, path, dpi) {
       label = c("5 MiB", "1 MiB", "50 KiB"), stringsAsFactors = FALSE)
   filesizeStr <- filesizes[filesizes$filesize == filesize, "label"]
   maxY <- max(torperf$q3, na.rm = TRUE)
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(torperf$date, "%Y-%m-%d")) -
+    min(as.Date(torperf$date, "%Y-%m-%d"))))
   ggplot(torperf, aes(x = as.Date(date, "%Y-%m-%d"), y = md/1e3,
       fill = "line")) +
     geom_line(colour = colour, size = 0.75) +
     geom_ribbon(data = torperf, aes(x = date, ymin = q1/1e3,
       ymax = q3/1e3, fill = "ribbon")) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(torperf$date, "%Y-%m-%d")) -
-        min(as.Date(torperf$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0, maxY) / 1e3) +
     scale_fill_manual(name = paste("Measured times on",
         ifelse(source == "all", "all sources", source), "per day"),
@@ -777,15 +800,16 @@ plot_torperf_failures <- function(start, end, source, filesize, path,
       value = ifelse(torperf$requests > 0,
                      torperf$failures / torperf$requests, 0),
       variable = "failures"))
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(torperf$date, "%Y-%m-%d")) -
+    min(as.Date(torperf$date, "%Y-%m-%d"))))
   ggplot(torperf, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
     colour = variable)) +
     geom_point(size = 2) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(torperf$date, "%Y-%m-%d")) -
-        min(as.Date(torperf$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "", formatter = "percent") +
     scale_colour_hue(name = paste("Problems encountered on",
         ifelse(source == "all", "all sources", source)),
@@ -809,15 +833,16 @@ plot_connbidirect <- function(start, end, path, dpi) {
   connbidirect <- data.frame(date = c$date, c[, 2:4] /
       (c$readnum + c$writenum + c$bothnum))
   connbidirect <- melt(connbidirect, id = "date")
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(connbidirect$date, "%Y-%m-%d")) -
+    min(as.Date(connbidirect$date, "%Y-%m-%d"))))
   ggplot(connbidirect, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
       colour = variable)) +
     geom_point(size = 2.5) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(connbidirect$date, "%Y-%m-%d")) -
-        min(as.Date(connbidirect$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "", formatter = "percent") +
     scale_colour_hue("", breaks = c("readnum", "writenum", "bothnum"),
         labels = c("Mostly reading", "Mostly writing",
@@ -844,14 +869,15 @@ plot_routerdetail <- function(fingerprint, path) {
   ## TODO We should add NA's for missing dates.
   dbDisconnect(con)
   dbUnloadDriver(drv)
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(routerdetail$date, "%Y-%m-%d")) -
+    min(as.Date(routerdetail$date, "%Y-%m-%d"))))
   ggplot(routerdetail, aes(x = as.Date(date, "%Y-%m-%d"), y = bw)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""), format =
-        c("%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y", "%Y")[
-        cut(as.numeric(max(as.Date(routerdetail$date, "%Y-%m-%d")) -
-        min(as.Date(routerdetail$date, "%Y-%m-%d"))),
-        c(0, 10, 56, 365, 730, 5000, Inf), labels=FALSE)]) +
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
     scale_y_continuous(name = "") +
     opts(title = paste("Bandwidth history for ", fingerprint, "\n",
         sep = ""))
