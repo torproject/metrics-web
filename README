@@ -1,7 +1,526 @@
-ERNIE is the Enhanced R-based tor Network Intelligence Engine
-         (why ERNIE? because nobody liked BIRT; sorry for misspelling Tor)
+Tor Metrics Database and Website
+================================
 
---------------------------------------------------------------------------
+The metrics database stores publicly available data about the Tor network
+which are visualized by the metrics website.
 
-Please find documentation on ERNIE in website/ernie-howto.html and doc/ .
+This software package, metrics-web, contains (1) the code to import Tor
+network data into a database, (2) the code to generate graphs and .CSV
+output, and (3) the code for a dynamic web application.  metrics-web is
+based on Java, Ant, PostgreSQL, R, Apache HTTP Server, and Apache Tomcat.
+
+This README explains all necessary steps to install metrics-web including
+the database (Section 1), the graphing engine (Section 2), and the web
+application (Section 3).  It is possible to install only the database part
+or only the database and the graphing engine, if desired.
+
+
+1. Installing the metrics database
+==================================
+
+The metrics database contains data about the Tor Network coming from
+different sources, including the Tor directory authorities, Torperf
+performance measurement installations, the GetTor software package
+delivery service, and others.
+
+
+1.1. Preparing the operating system
+-----------------------------------
+
+This README describes the steps for installing metrics-web on a Debian
+GNU/Linux Squeeze server.  Instructions for other operating systems may
+vary.
+
+In the following it is assumed that root privileges are available.
+Commands requiring root privileges will be prefixed with # below.
+
+Start by adding a metrics user that will be used to execute all commands
+that do not require root privileges.  These commands will be prefixed with
+$ below.
+
+# adduser metrics
+
+The database importer and website sources will be installed in
+/srv/metrics-web/ that is created as follows:
+
+# mkdir /srv/metrics-web/
+# chmod g+ws /srv/metrics-web/
+# chown metrics:metrics /srv/metrics-web/
+
+Either extract the metrics-web source tarball...
+
+$ tar xf metrics-web-x.y.z.tar /srv/metrics-web/
+
+... or clone the metrics-web Git repository:
+
+$ git clone git://git.torproject.org/metrics-web /srv/metrics-web/
+
+Install Sun Java 6, Ant 1.8, and PostgreSQL 8.4 that are necessary for
+setting up the metrics database (be sure to include Debian's non-free
+repository in /etc/apt/sources.list).
+
+# apt-get install sun-java6-jdk ant postgresql-8.4
+
+Make Sun's Java the default.
+
+# update-java-alternatives -s java-6-sun
+
+Check the versions of the newly installed tools.
+
+$ java -version
+java version "1.6.0_24"
+Java(TM) SE Runtime Environment (build 1.6.0_24-b07)
+Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02, mixed mode)
+
+$ ant -version
+Apache Ant version 1.8.0 compiled on March 11 2010
+
+$ psql --version
+psql (PostgreSQL) 8.4.7
+contains support for command-line editing
+
+
+1.2. Configuring the database
+=============================
+
+The first step in setting up the metrics database is to configure the
+PostgreSQL database and import a database schema.
+
+Start by creating a new metrics database user.  There is no need to give
+the metrics user superuser privileges or allow it to create databases or
+new roles.
+
+# sudo -u postgres createuser -P metrics
+
+Create a new database tordir owned by user metrics.
+
+# sudo -u postgres createdb -O metrics tordir
+
+Import the metrics database schema.
+
+$ psql -f /srv/metrics-web/db/tordir.sql tordir
+
+Confirm that the database now contains tables to hold metrics data.  In
+the following, => will be used as the database prompt.
+
+$ psql tordir
+=> \dt+
+=> \q
+
+
+1.3. Importing relay descriptor tarballs
+========================================
+
+In most cases it makes sense to populate the metrics database with
+archived relay descriptors from the official metrics website.
+
+Download the relay descriptor tarballs from the metrics website at
+https://metrics.torproject.org/data.html#relaydesc and extract them to
+/srv/metrics-web/archives/ .  The database importer can process v3 votes,
+v3 consensuses, server descriptors, and extra-infos.
+
+Edit the config file ~/metrics-web/config (or create it if it's not there)
+to contain the following five lines (be sure to remove the linebreak in
+the line defining the JDBC string and insert the real password there):
+
+ImportDirectoryArchives 1
+DirectoryArchivesDirectory archives/
+KeepDirectoryArchiveImportHistory 1
+WriteRelayDescriptorDatabase 1
+RelayDescriptorDatabaseJDBC
+    jdbc:postgresql://localhost/tordir?user=metrics&password=password
+
+Compile and run the Java database importer.
+
+$ cd /srv/metrics-web/
+$ ./run.sh
+
+The database import will take a while.  Once it's complete, check that the
+database tables now contain metrics data:
+
+$ psql tordir
+=> \dt+
+=> \q
+
+It's safe to delete the relay descriptor files in ~/metrics-web/archives/
+once they are imported.
+
+An alternative to importing relay descriptor tarballs directly into the
+database is to convert them into a data format that psql's \copy command
+can process.  Look for the config option WriteRelayDescriptorsRawFiles in
+/srv/metrics-web/config.template for more information on this experimental
+feature.
+
+
+1.4. Importing relay descriptors from a local Tor data directory
+================================================================
+
+WARNING: The functions described in this section are not implemented yet!
+
+In a future version of metrics-web, the metrics database importer will be
+able to import the cached descriptors from a local Tor data directory.
+(A special case of importing descriptors from a continuously updated
+directory is when both metrics-db and metrics-web are run on the same
+machine, but this shouldn't be the general case.)
+
+Configure a local Tor client to fetch all known descriptors as early as
+possible by adding these config options to its torrc file:
+
+FetchUselessDescriptors 1
+FetchDirInfoExtraEarly 1
+
+Tell the metrics database importer where to find the cached descriptor
+files.  One way to achieve this is to add symbolic links to
+/srv/metrics-web/archives/ like this.  Tor's data directory is assumed to
+be /srv/tor/ here.
+
+$ cd /srv/metrics-web/archives/
+$ ln -s /srv/tor/cached-* .
+
+Add a crontab entry for the database importer to run once per hour:
+
+15 * * * * cd /srv/metrics-web/ && ./run.sh
+
+In a future version of metrics-web it may also be possible to update local
+relay descriptor tarballs from the official metrics server via rsync and
+import only the changes into the metrics database.  The idea is to simply
+rsync the data/ directory from the metrics server and have all information
+available.  But until this is implemented, the recommended way to keep the
+metrics website up-to-date would be the one described above in this
+section.
+
+
+1.5. Importing GeoIP information
+================================
+
+Some of the graphs require GeoIP information to resolve IP addresses to
+country codes.  This information is provided in MaxMind's GeoLite City
+database available at http://www.maxmind.com/app/geolitecity.
+
+Download and extract the two files GeoLiteCity-Location.csv and
+GeoLiteCity-Blocks.csv to /srv/metrics-web/.
+
+Import the two files into the metrics database.
+
+$ ant geoipdb
+
+Note that there is no easy way to update the GeoIP information in the
+metrics database yet.  The only way to do so is to manually delete and
+recreate the database table and import the new GeoIP database.
+
+
+1.6. Pre-calculating relay statistics
+=====================================
+
+The relay graphs on the metrics website rely on pre-calculated statistics
+in the metrics database.  These statistics are not calculated after every
+completed import, which would usually be once per hour.  In general it's
+sufficient to pre-calculate statistics 2 or 4 times a day.
+
+Calculate statistics manually after large imports (this may take a while):
+
+$ psql tordir -c 'SELECT * FROM refresh_all();'
+
+If the metrics database gets updated automatically, write a script and add
+a crontab entry for pre-calculating statistics every 6 or 12 hours.
+
+
+1.7. Generating network status information
+==========================================
+
+The metrics database importer can analyze the most recently parsed network
+status consensus for irregularities indicating problems with the directory
+authorities.  There are two possible outputs: the consensus-health page
+that can be found at https://metrics.torproject.org/consensus-health.html
+and a local file that can be parsed by Nagios that will be written to
+/srv/metrics-web/website/consensus-health .
+
+Edit /srv/metrics-web/config to contain either or both of the following
+options:
+
+WriteConsensusHealth 1
+WriteNagiosStatusFile 1
+
+
+1.8. Importing sanitized bridge descriptors
+===========================================
+
+The metrics database can store aggregate statistics about running bridges
+and bridge usage.  These statistics are added by parsing sanitized bridge
+descriptors available on the official metrics website.
+
+Download a sanitized bridge descriptor tarball from the metrics website at
+https://metrics.torproject.org/data.html#bridgedesc and extract it to,
+e.g., /srv/metrics-web/bridges/bridge-descriptors-2011-05/ .
+
+Edit /srv/metrics-web/config to contain the following options:
+
+ImportSanitizedBridges 1
+SanitizedBridgesDirectory bridges/
+KeepSanitizedBridgesImportHistory 1
+WriteBridgeStats 1
+
+Note that the bridge usage statistics require parsing relay descriptors of
+the same time period in order to filter bridges that have been running as
+relays from the results.  When parsing sanitized bridge descriptors for
+the first time it may be necessary to delete the relay descriptor import
+history in /srv/metrics-web/stats/archives-import-history and import all
+relay descriptors once again.
+
+Run the database import:
+
+$ ./run.sh
+
+
+1.9. Importing Torperf performance data
+=======================================
+
+Torperf measures the performance of the Tor network as users experience
+it.  Torperf's measurement data are available on the metrics website and
+can be imported into the metrics database, too.
+
+Download the Torperf measurement files from the metrics website at
+https://metrics.torproject.org/data.html#performance and put them in a
+subdirectory, e.g., /srv/metrics-web/torperf/ .
+
+Edit /srv/metrics-web/config to contain the following options:
+
+ImportWriteTorperfStats 1
+TorperfDirectory torperf/
+
+Run the database import:
+
+$ ./run.sh
+
+
+1.10. Importing GetTor statistics
+=================================
+
+WARNING: The GetTor statistics are not available for download yet, so that
+this section only applies to the official metrics website.
+
+GetTor is a software distribution service that allows users to fetch the
+Tor software via email.  GetTor produces daily statistics of requested
+packages that can be imported into the metrics database.
+
+Put the GetTor statistics file into /srv/metrics-web/gettor/ .
+
+Edit /srv/metrics-web/config to contain the following options:
+
+ProcessGetTorStats 1
+GetTorDirectory gettor/
+
+Run the database import:
+
+$ ./run.sh
+
+
+2. Installing the graphing engine
+=================================
+
+The metrics graphing engine generates custom graphs of Tor network data
+based on user-provided parameters.  The graphing engine requires the
+metrics database to be installed as described in the previous section.
+
+The graphing engine uses R and Rserve to generate its graphs.  Rserve is a
+TCP/IP server that makes it easy for other tools to use R without spawning
+their own R process.  Rserve also pre-loads R code and R libraries which
+saves time when processing user requests.
+
+In this configuration, Rserve will run in the context of the metrics user.
+
+Setting up the graphing engine requires installing PostgreSQL's header
+files and R 2.8 or higher.  R 2.8 or higher is required for the ggplot2
+library.
+
+# apt-get install libpq-dev r-base-dev
+
+Run R as user metrics and install required packages to ~/R/.  In the
+following, R commands will be prefixed with >.
+
+$ R
+> install.packages("Rserve")
+> install.packages("ggplot2")
+> install.packages("RPostgreSQL")
+> q()
+
+Start the Rserve daemon (the exact path of Rserve-bin.so may vary), check
+that it's working by connecting via telnet, and shut it down:
+
+$ R CMD ~/R/x86_64-pc-linux-gnu-library/2.11/Rserve/libs/Rserve-bin.so
+$ telnet 127.0.0.1 6311
+$ echo "library(Rserve); RSshutdown(RSconnect())" | R --slave
+
+Also check that a database connection can be established from within R
+(using the actual password instead of "password"):
+
+$ R
+> library(RPostgreSQL)
+> drv <- dbDriver("PostgreSQL")
+> con <- dbConnect(drv, user = "metrics", password = "password",
+    dbname = "tordir")
+> dbDisconnect(con)
+> dbUnloadDriver(drv)
+> q()
+
+Insert the database password in the Rserve initialization script in
+/srv/metrics-web/rserve/rserve-init.R.
+
+Update the workdir path in /srv/metrics-web/rserve/Rserv.conf .
+
+Start Rserve, this time with the metrics-web-specific configuration that
+includes pre-loading the graph code:
+
+$ cd /srv/metrics-web/rserve/ && ./start.sh
+
+Add a crontab entry to start Rserve on reboot:
+
+@reboot cd /srv/metrics-web/rserve/ && ./start.sh
+
+Rserve will pre-load the graph code at startup.  If changes are made to
+the graph code, Rserve must be restarted:
+
+$ cd /srv/metrics-web/rserve/
+$ ./shutdown.sh && ./start.sh
+
+
+3. Installing the metrics website
+=================================
+
+The metrics website lets web users search parts of the metrics database
+and visualizes custom graphs.  Both the metrics database and the graphing
+engine are required to set up the metrics website as described in this
+section.
+
+Note that the description here has a few specific parts that only apply to
+the official metrics website.  These parts should be changed when setting
+up a non-official metrics website.
+
+
+3.1. Configuring Apache HTTP Server
+===================================
+
+The Apache HTTP Server is used as the front-end web server that serves
+static resources itself and forwards requests for dynamic resources to
+Apache Tomcat.
+
+Start by installing Apache 2:
+
+# apt-get install apache2
+
+Disable Apache's default site.
+
+# a2dissite default
+
+Enable mod_rewrite to tell Apache where to find static resources on disk.
+Also enable mod_proxy to forward requests to Tomcat.
+
+# a2enmod rewrite proxy_http
+
+Create a new virtual host configuration and store it in a new file
+/etc/apache2/sites-available/metrics.torproject.org with the following
+content:
+
+<VirtualHost *:80>
+  ServerName metrics.torproject.org
+  ServerAdmin torproject-admin@torproject.org
+  ErrorLog /var/log/apache2/error.log
+  CustomLog /var/log/apache2/access.log combined
+  ServerSignature On
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule /(data|dist|papers)/(.*) /srv/metrics-web/$1/$2 [L]
+    RewriteRule /(consensus-health.html) /srv/metrics-web/website/$1 [L]
+  </IfModule>
+  <IfModule mod_proxy.c>
+    <Proxy *>
+      Order deny,allow
+      Allow from all
+    </Proxy>
+    ProxyPass / http://127.0.0.1:8080/ernie/ retry=15
+    ProxyPassReverse / http://127.0.0.1:8080/ernie/
+    ProxyPreserveHost on
+  </IfModule>
+</VirtualHost>
+
+Create the directories containing static resources: /srv/metrics-web/data/
+contains the tarballs and other metrics data linked from data.html.
+/srv/metrics-web/dist/ contains the software packages linked from
+tools.html.  /srv/metrics-web/papers/ contains the papers and technical
+reports linked from papers.html.  Note that there is no option not to
+serve these files other than manually removing the links from the .html
+pages.
+
+Enable the new virtual host.
+
+# a2ensite metrics.torproject.org
+
+Restart Apache just to be sure that all changes are effective.
+
+# /etc/init.d/apache2 restart
+
+
+3.2. Configuring Apache Tomcat
+==============================
+
+Apache Tomcat will process requests for dynamic resources, including web
+pages and graphs.
+
+Install Tomcat 6:
+
+# apt-get install tomcat6
+
+Replace Tomcat's default configuration in /etc/tomcat6/server.xml with the
+following configuration:
+
+<Server port="8005" shutdown="SHUTDOWN">
+  <Service name="Catalina">
+    <Connector port="8080" maxHttpHeaderSize="8192"
+               maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
+               enableLookups="false" redirectPort="8443" acceptCount="100"
+               connectionTimeout="20000" disableUploadTimeout="true"
+               compression="off" compressionMinSize="2048"
+               noCompressionUserAgents="gozilla, traviata"
+               compressableMimeType="text/html,text/xml,text/plain" />
+    <Engine name="Catalina" defaultHost="yatei.torproject.org">
+      <Host name="metrics.torproject.org" appBase="webapps"
+            unpackWARs="true" autoDeploy="true"
+            xmlValidation="false" xmlNamespaceAware="false">
+        <Alias>yatei.torproject.org</Alias>
+        <Valve className="org.apache.catalina.valves.AccessLogValve"
+               directory="logs" prefix="metrics_access_log." suffix=".txt"
+               pattern="%l %u %t %r %s %b" resolveHosts="false"/>
+      </Host>
+    </Engine>
+  </Service>
+</Server>
+
+Be sure to replace *.torproject.org with something else, unless this is
+a re-installation of the official metrics website.
+
+Update the database password in /srv/metrics-web/etc/context.xml.
+
+Update the paths starting with /srv/metrics.torproject.org/ in
+/srv/metrics-web/etc/web.xml to the correct paths in /srv/metrics-web/.
+The default paths in that file are correct for the official metrics
+website setup which is slightly different than the one described here.
+
+Now generate the web application.
+
+$ ant make-war
+
+Create a symbolic link to the ernie.war file:
+
+# ln -s /srv/metrics-web/ernie.war /var/lib/tomcat6/webapps/
+
+Tomcat will now attempt to deploy the web application automatically.
+
+Whenever the metrics website needs to be redeployed, generate a new .war
+file and Tomcat will reload the web application automatically.
+
+Restart Tomcat to make all configuration changes effective:
+
+# /etc/init.d/tomcat6 restart
+
+The metrics website should now work.
 
