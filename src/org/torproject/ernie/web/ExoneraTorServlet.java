@@ -66,6 +66,7 @@ public class ExoneraTorServlet extends HttpServlet {
         + "            <a href=\"status.html\">Status</a>\n"
         + "            <br>\n"
         + "            <font size=\"2\">\n"
+        + "              <a href=\"networkstatus.html\">Network Status</a>\n"
         + "              <a class=\"current\">ExoneraTor</a>\n"
         + "              <a href=\"relay-search.html\">Relay Search</a>\n"
         + "              <a href=\"consensus-health.html\">Consensus "
