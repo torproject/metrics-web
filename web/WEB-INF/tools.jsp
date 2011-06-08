@@ -47,6 +47,9 @@
         accesses the metrics database to generate this website. The
         metrics website uses R to generate custom graphs on demand.</p>
         <ul>
+          <li>Download
+          <a href="dist/metrics-web-0.0.1.tar">metrics-web 0.0.1</a>
+          (<a href="dist/metrics-web-0.0.1.tar.asc">sig</a>)</li>
           <li>Browse the
           <a href="https://gitweb.torproject.org/metrics-web.git/tree">Git
           repository</a></li>
