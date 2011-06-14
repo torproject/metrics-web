@@ -67,19 +67,21 @@ public class ResearchDataServlet extends HttpServlet {
      * displaying the files in tables and map values being 2-element
      * arrays containing the file url and optional signature file. */
     SortedMap<Date, Map<String, String[]>> relayDescriptors =
-        new TreeMap<Date, Map<String, String[]>>();
+        new TreeMap<Date, Map<String, String[]>>(
+        java.util.Collections.reverseOrder());
     String[] certs = new String[2];
     SortedMap<Date, String[]> bridgeDescriptors =
-        new TreeMap<Date, String[]>();
+        new TreeMap<Date, String[]>(java.util.Collections.reverseOrder());
     SortedMap<String, Map<String, String[]>> relayStatistics =
         new TreeMap<String, Map<String, String[]>>();
     SortedMap<String, Map<String, String[]>> torperfData =
         new TreeMap<String, Map<String, String[]>>();
-    SortedMap<Date, String[]> exitLists = new TreeMap<Date, String[]>();
+    SortedMap<Date, String[]> exitLists =
+        new TreeMap<Date, String[]>(java.util.Collections.reverseOrder());
     SortedMap<Date, String[]> torperfExperiments =
         new TreeMap<Date, String[]>();
     SortedMap<Date, String[]> bridgePoolAssignments =
-        new TreeMap<Date, String[]>();
+        new TreeMap<Date, String[]>(java.util.Collections.reverseOrder());
 
     /* Prepare rewriting Torperf sources. */
     Map<String, String> torperfSources = new HashMap<String, String>();
@@ -91,6 +93,7 @@ public class ResearchDataServlet extends HttpServlet {
     /* Go through the file list, decide for each file what metrics data
      * type it is, and put it in the appropriate map. */
     SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     List<String> torperfFilesizes = Arrays.asList("50kb,1mb,5mb".
         split(","));
     for (String url : dataFileUrls) {
@@ -204,19 +207,19 @@ public class ResearchDataServlet extends HttpServlet {
 
       /* URL contains Torperf experiment tarball. */
       } else if (filename.startsWith("torperf-experiment-20")) {
-        String yearMonth = filename.substring(filename.indexOf("20"));
-        yearMonth = yearMonth.substring(0, 7);
-        Date month = null;
+        String dateString = filename.substring(filename.indexOf("20"));
+        dateString = dateString.substring(0, 10);
+        Date date = null;
         try {
-          month = monthFormat.parse(yearMonth);
+          date = dateFormat.parse(dateString);
         } catch (ParseException e) {
           /* Ignore this URL. */
           continue;
         }
-        if (!torperfExperiments.containsKey(month)) {
-          torperfExperiments.put(month, new String[2]);
+        if (!torperfExperiments.containsKey(date)) {
+          torperfExperiments.put(date, new String[2]);
         }
-        torperfExperiments.get(month)[0] = url;
+        torperfExperiments.get(date)[0] = url;
 
       /* URL contains exit list. */
       } else if (filename.startsWith("exit-list-20")) {
