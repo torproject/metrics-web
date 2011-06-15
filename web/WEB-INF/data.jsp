@@ -28,7 +28,6 @@
           <li><a href="#relaydesc">Relay descriptor archives</a></li>
           <li><a href="#bridgedesc">Bridge descriptor archives</a></li>
           <li><a href="#bridgeassignments">Bridge pool assignments</a></li>
-          <li><a href="#stats">Statistics produced by relays</a></li>
           <li><a href="#performance">Performance data</a></li>
           <li><a href="#exitlist">Exit lists</a></li>
         </ul>
@@ -106,6 +105,21 @@
           </c:if>
           which is updated whenever new v3 certificates become available.</p>
         </c:if>
+        <c:if test="${relayStatistics[0] ne null}">
+          <br>
+          <p>Some of the relays are configured to gather statistics on the
+          number of requests or connecting clients, the number of
+          processed cells per queue, or the number of exiting bytes per
+          port. Relays running version 0.2.2.4-alpha or higher can include
+          these statistics in extra-info descriptors, so that they are
+          included in the relay descriptor archives. This
+          <a href="${relayStatistics[0]}">archive</a>
+          <c:if test="${relayStatistics[1] ne null}">
+            (<a href="${relayStatistics[1]}">sig</a>)
+          </c:if>
+          contains the statistics produced by relays running earlier
+          versions.</p>
+        </c:if>
         <br>
         <a name="bridgedesc"></a>
         <h3>Bridge descriptor archives</h3>
@@ -150,56 +164,6 @@
             <tr>
               <td>
                 <a href="${item.value[0]}">${longDate}</a>
-              </td>
-            </tr>
-          </c:forEach>
-        </table>
-        <br>
-        <a name="stats"></a>
-        <h3>Statistics produced by relays</h3>
-        <br>
-        <p>Some of the relays are configured to gather statistics on the
-        number of requests or connecting clients, the number of processed
-        cells per queue, or the number of exiting bytes per port. Relays
-        running version 0.2.2.4-alpha can include these statistics in
-        extra-info descriptors, so that they are included in the relay
-        descriptor archives. The following files contain the statistics
-        produced by relays running earlier versions:</p>
-        <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
-          <c:forEach var="item" items="${relayStatistics}" >
-            <tr>
-              <td>${item.key}</td>
-              <td>
-                <c:if test="${item.value['buffer'] ne null}" >
-                  <a href="${item.value['buffer'][0]}">buffer-stats</a>
-                  <c:if test="${item.value['buffer'][1] ne null}">
-                    (<a href="${item.value['buffer'][1]}">sig</a>)
-                  </c:if>
-                </c:if>
-              </td>
-              <td>
-                <c:if test="${item.value['dirreq'] ne null}" >
-                  <a href="${item.value['dirreq'][0]}">dirreq-stats</a>
-                  <c:if test="${item.value['dirreq'][1] ne null}">
-                    (<a href="${item.value['dirreq'][1]}">sig</a>)
-                  </c:if>
-                </c:if>
-              </td>
-              <td>
-                <c:if test="${item.value['entry'] ne null}" >
-                  <a href="${item.value['entry'][0]}">entry-stats</a>
-                  <c:if test="${item.value['entry'][1] ne null}">
-                    (<a href="${item.value['entry'][1]}">sig</a>)
-                  </c:if>
-                </c:if>
-              </td>
-              <td>
-                <c:if test="${item.value['exit'] ne null}" >
-                  <a href="${item.value['exit'][0]}">exit-stats</a>
-                  <c:if test="${item.value['exit'][1] ne null}">
-                    (<a href="${item.value['exit'][1]}">sig</a>)
-                  </c:if>
-                </c:if>
               </td>
             </tr>
           </c:forEach>

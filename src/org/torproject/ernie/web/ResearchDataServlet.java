@@ -72,8 +72,7 @@ public class ResearchDataServlet extends HttpServlet {
     String[] certs = new String[2];
     SortedMap<Date, String[]> bridgeDescriptors =
         new TreeMap<Date, String[]>(java.util.Collections.reverseOrder());
-    SortedMap<String, Map<String, String[]>> relayStatistics =
-        new TreeMap<String, Map<String, String[]>>();
+    String[] relayStatistics = new String[2];
     SortedMap<String, Map<String, String[]>> torperfData =
         new TreeMap<String, Map<String, String[]>>();
     SortedMap<Date, String[]> exitLists =
@@ -151,33 +150,9 @@ public class ResearchDataServlet extends HttpServlet {
         bridgeDescriptors.get(month)[index] = url;
 
       /* URL contains relay statistics. */
-      } else if (filename.startsWith("buffer-") ||
-          filename.startsWith("dirreq-") ||
-          filename.startsWith("entry-") ||
-          (filename.startsWith("exit-") &&
-          !filename.startsWith("exit-list-"))) {
-        String[] parts = filename.split("-");
-        if (parts.length != 3) {
-          continue;
-        }
-        String type = parts[0];
-        String nickname = parts[1];
-        String fingerprint = parts[2];
-        fingerprint = fingerprint.substring(0, 8);
+      } else if (filename.startsWith("relay-statistics.tar.bz2")) {
         int index = filename.endsWith(".asc") ? 1 : 0;
-        String nicknameAndFingerprint = nickname + " ("
-            + fingerprint.toUpperCase() + ")";
-        if (!relayStatistics.containsKey(nicknameAndFingerprint)) {
-          relayStatistics.put(nicknameAndFingerprint,
-              new HashMap<String, String[]>());
-        }
-        if (!relayStatistics.get(nicknameAndFingerprint).containsKey(
-            type)) {
-          relayStatistics.get(nicknameAndFingerprint).put(type,
-              new String[2]);
-        }
-        relayStatistics.get(nicknameAndFingerprint).get(type)[index] =
-            url;
+        relayStatistics[index] = url;
 
       /* URL contains Torperf data file. */
       } else if (filename.endsWith("b.data") ||
