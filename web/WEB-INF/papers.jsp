@@ -45,6 +45,12 @@
         been included in the <a href="#papers">papers</a> above or in the
         daily updated <a href="graphs.html">graphs</a>.
         <ul>
+          <li>An Analysis of Tor Relay Stability (<a
+          href="papers/relay-stability-2011-06-30.pdf">PDF</a>, 1.3M from
+          June 30, 2011,
+          <a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-2911">code</a>,
+          <a href="data/running-relays-reverse.csv.bz2">data</a>,
+          322M).</li>
           <li>Overview of Statistical Data in the Tor Network
           (<a href="papers/data-2011-03-14.pdf">PDF</a>,
           166K from March 14, 2011).</li>

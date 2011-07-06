@@ -32,6 +32,10 @@
         <br>
         <h3>News</h3>
         <ul>
+          <li>July 4, 2011: Technical report
+          <a href="papers/relay-stability-2011-06-30.pdf">An Analysis of
+          Tor Relay Stability</a> is available for download on the
+          <a href="papers.html">Papers</a> page.</li>
           <li>March 14, 2011:
           <a href="data.html#bridgeassignments">Sanitized bridge pool
           assignments</a> containing lists of running bridges with
