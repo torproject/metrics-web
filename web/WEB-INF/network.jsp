@@ -129,8 +129,12 @@ average number of relays with these flags assigned.</p>
 <h3>Relays by version</h3>
 <br>
 <p>Relays report the Tor version that they are running to the directory
-authorities. The following graph shows the number of relays by
-version.</p>
+authorities. See the
+<a href="https://www.torproject.org/download/download.html.en">download
+page</a> and
+<a href="https://gitweb.torproject.org/tor.git/blob/HEAD:/ChangeLog">ChangeLog file</a>
+to find out which Tor versions are stable and unstable.
+The following graph shows the number of relays by version.</p>
 <a name="versions"></a>
 <img src="versions.png${versions_url}"
      width="576" height="360" alt="Relay versions graph">
