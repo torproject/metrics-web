@@ -50,7 +50,7 @@ public class GraphParameterChecker {
     this.availableGraphs.put("bwhist-flags", "start,end,filename,dpi");
     this.availableGraphs.put("dirbytes", "start,end,filename,dpi");
     this.availableGraphs.put("direct-users",
-        "start,end,country,filename,dpi");
+        "start,end,country,events,filename,dpi");
     this.availableGraphs.put("bridge-users",
          "start,end,country,filename,dpi");
     this.availableGraphs.put("gettor", "start,end,bundle,filename,dpi");
@@ -70,6 +70,7 @@ public class GraphParameterChecker {
       sb.append("," + country[0]);
     }
     this.knownParameterValues.put("country", sb.toString());
+    this.knownParameterValues.put("events", "on,off");
     this.knownParameterValues.put("bundle", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "all,siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
@@ -195,6 +196,26 @@ public class GraphParameterChecker {
         countryParameters = new String[] { "all" };
       }
       recognizedGraphParameters.put("country", countryParameters);
+    }
+
+    /* Parse whether the estimated min/max range shall be displayed if
+     * supported by the graph type. This parameter can either be "on" or
+     * "off," where "off" is the default. */
+    if (supportedGraphParameters.contains("events")) {
+      String[] eventsParameter = (String[]) requestParameters.get(
+          "events");
+      List<String> knownRanges = Arrays.asList(
+          this.knownParameterValues.get("events").split(","));
+      if (eventsParameter != null) {
+        if (eventsParameter.length != 1 ||
+            eventsParameter[0].length() == 0 ||
+            !knownRanges.contains(eventsParameter[0])) {
+          return null;
+        }
+      } else {
+        eventsParameter = new String[] { "off" };
+      }
+      recognizedGraphParameters.put("events", eventsParameter);
     }
 
     /* Parse GetTor bundle if supported by the graph type. Only a single

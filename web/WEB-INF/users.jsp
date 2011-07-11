@@ -43,6 +43,11 @@ based on the requests seen by a few dozen directory mirrors.</p>
         </c:forEach>
       </select>
     </p><p>
+      Show possible censorship events if available (BETA)
+      <input type="checkbox" name="events" value="on"
+        <c:if test="${direct_users_events[0] eq 'on'}"> checked</c:if>
+      ></input>
+    </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${direct_users_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
         <option value="150"<c:if test="${direct_users_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>

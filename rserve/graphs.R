@@ -600,7 +600,7 @@ plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
-plot_direct_users <- function(start, end, country, path, dpi) {
+plot_direct_users <- function(start, end, country, events, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, r, bwp, brn, bwn, brp, bwr, brr ",
@@ -630,7 +630,25 @@ plot_direct_users <- function(start, end, country, path, dpi) {
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(u$date, "%Y-%m-%d")) -
     min(as.Date(u$date, "%Y-%m-%d"))))
-  ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = users)) +
+  plot <- ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = users))
+  if (events == "on" & country != "all") {
+    r <- read.csv(
+        "/srv/metrics.torproject.org/web/direct-users-ranges.csv",
+        stringsAsFactors = FALSE)
+    r <- r[r$date >= start & r$date <= end & r$country == country,
+        c("date", "minusers", "maxusers")]
+    r <- cast(rbind(melt(u, id.vars = "date"), melt(r, id.vars = "date")))
+    upturns <- r[r$users > r$maxusers, 1:2]
+    downturns <- r[r$users < r$minusers, 1:2]
+    plot <- plot +
+      geom_ribbon(data = r, aes(ymin = minusers, ymax = maxusers),
+          fill = "gray") +
+      geom_point(data = upturns, aes(x = date, y = users), size = 5,
+          colour = "dodgerblue2") +
+      geom_point(data = downturns, aes(x = date, y = users), size = 5,
+          colour = "firebrick2")
+  }
+  plot <- plot +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
@@ -639,6 +657,7 @@ plot_direct_users <- function(start, end, country, path, dpi) {
     scale_y_continuous(name = "", limits = c(0, max(u$users,
         na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
+  print(plot)
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
