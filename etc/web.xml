@@ -299,6 +299,17 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>Votes</servlet-name>
+    <servlet-class>
+      org.torproject.ernie.web.VotesServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Votes</servlet-name>
+    <url-pattern>/votes</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>ErnieGeneratedFile</servlet-name>
     <servlet-class>
       org.torproject.ernie.web.ErnieGeneratedFileServlet
