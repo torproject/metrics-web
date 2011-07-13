@@ -2,6 +2,7 @@ Metrics database and website change log:
 
 Changes in version 0.0.2 - 2011-??-??
   - Let users download votes from a given valid-after time.
+  - Allow importing descriptors from a local Tor directory.
 
 Changes in version 0.0.1 - 2011-06-08
   - Initial release

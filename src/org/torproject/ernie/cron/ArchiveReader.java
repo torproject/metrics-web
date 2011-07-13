@@ -21,8 +21,9 @@ public class ArchiveReader {
 
     int parsedFiles = 0, ignoredFiles = 0;
     Logger logger = Logger.getLogger(ArchiveReader.class.getName());
-    SortedSet<String> lastArchivesImportHistory = new TreeSet<String>();
-    SortedSet<String> newArchivesImportHistory = new TreeSet<String>();
+    SortedMap<String, Long>
+        lastArchivesImportHistory = new TreeMap<String, Long>(),
+        newArchivesImportHistory = new TreeMap<String, Long>();
     File archivesImportHistoryFile = new File(statsDirectory,
         "archives-import-history");
     if (keepImportHistory && archivesImportHistoryFile.exists()) {
@@ -31,7 +32,15 @@ public class ArchiveReader {
             archivesImportHistoryFile));
         String line = null;
         while ((line = br.readLine()) != null) {
-          lastArchivesImportHistory.add(line);
+          String[] parts = line.split(",");
+          if (parts.length < 2) {
+            logger.warning("Archives import history file does not "
+                + "contain timestamps. Skipping.");
+            break;
+          }
+          long lastModified = Long.parseLong(parts[0]);
+          String filename = parts[1];
+          lastArchivesImportHistory.put(filename, lastModified);
         }
         br.close();
       } catch (IOException e) {
@@ -53,14 +62,17 @@ public class ArchiveReader {
           }
         } else {
           try {
+            long lastModified = pop.lastModified();
+            String filename = pop.getName();
             if (keepImportHistory) {
-              newArchivesImportHistory.add(pop.getName());
+              newArchivesImportHistory.put(filename, lastModified);
             }
             if (keepImportHistory &&
-                lastArchivesImportHistory.contains(pop.getName())) {
+                lastArchivesImportHistory.containsKey(filename) &&
+                lastArchivesImportHistory.get(filename) >= lastModified) {
               ignoredFiles++;
               continue;
-            } else if (pop.getName().endsWith(".tar.bz2")) {
+            } else if (filename.endsWith(".tar.bz2")) {
               logger.warning("Cannot parse compressed tarball "
                   + pop.getAbsolutePath() + ". Skipping.");
               continue;
@@ -99,6 +111,7 @@ public class ArchiveReader {
             break;
           }
         }
+        logger.warning(sb.toString());
       }
     }
     if (keepImportHistory) {
@@ -106,8 +119,10 @@ public class ArchiveReader {
         archivesImportHistoryFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(
             archivesImportHistoryFile));
-        for (String line : newArchivesImportHistory) {
-          bw.write(line + "\n");
+        for (Map.Entry<String, Long> historyEntry :
+            newArchivesImportHistory.entrySet()) {
+          bw.write(String.valueOf(historyEntry.getValue()) + ","
+              + historyEntry.getKey() + "\n");
         }
         bw.close();
       } catch (IOException e) {

@@ -25,7 +25,7 @@ delivery service, and others.
 
 
 1.1. Preparing the operating system
------------------------------------
+===================================
 
 This README describes the steps for installing metrics-web on a Debian
 GNU/Linux Squeeze server.  Instructions for other operating systems may
@@ -151,22 +151,25 @@ can process.  Look for the config option WriteRelayDescriptorsRawFiles in
 /srv/metrics-web/config.template for more information on this experimental
 feature.
 
+In a future version of metrics-web it may also be possible to update local
+relay descriptor tarballs from the official metrics server via rsync and
+import only the changes into the metrics database.  The idea is to simply
+rsync the data/ directory from the metrics server and have all information
+available.  However, this feature is not implemented yet.
+
 
 1.4. Importing relay descriptors from a local Tor data directory
 ================================================================
 
-WARNING: The functions described in this section are not implemented yet!
-
-In a future version of metrics-web, the metrics database importer will be
-able to import the cached descriptors from a local Tor data directory.
-(A special case of importing descriptors from a continuously updated
-directory is when both metrics-db and metrics-web are run on the same
-machine, but this shouldn't be the general case.)
+In order to keep the data in the metrics database up-to-date, the metrics
+database importer can import the cached descriptors from a local Tor data
+directory.
 
 Configure a local Tor client to fetch all known descriptors as early as
 possible by adding these config options to its torrc file:
 
 FetchUselessDescriptors 1
+FetchDirInfoEarly 1
 FetchDirInfoExtraEarly 1
 
 Tell the metrics database importer where to find the cached descriptor
@@ -180,14 +183,6 @@ $ ln -s /srv/tor/cached-* .
 Add a crontab entry for the database importer to run once per hour:
 
 15 * * * * cd /srv/metrics-web/ && ./run.sh
-
-In a future version of metrics-web it may also be possible to update local
-relay descriptor tarballs from the official metrics server via rsync and
-import only the changes into the metrics database.  The idea is to simply
-rsync the data/ directory from the metrics server and have all information
-available.  But until this is implemented, the recommended way to keep the
-metrics website up-to-date would be the one described above in this
-section.
 
 
 1.5. Importing GeoIP information
