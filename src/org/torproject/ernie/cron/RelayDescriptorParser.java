@@ -55,17 +55,63 @@ public class RelayDescriptorParser {
 
   public void parse(byte[] data) {
     try {
+      /* Remove any @ lines at the beginning of the file and parse the
+       * first non-@ line to find out the descriptor type. */
+      BufferedReader br = new BufferedReader(new StringReader(new String(
+          data, "US-ASCII")));
+      String line = br.readLine();
+      while (line != null && line.startsWith("@")) {
+        line = br.readLine();
+      }
+      if (line == null) {
+        this.logger.fine("We were given a file that doesn't contain a "
+            + "single descriptor for parsing. Ignoring.");
+        return;
+      }
+      br.close();
+
+      /* Split the byte[] possibly containing multiple descriptors into
+       * byte[]'s with one descriptor each and parse them. */
+      String startToken = null;
+      if (line.equals("network-status-version 3")) {
+        startToken = "network-status-version 3";
+      } else if (line.startsWith("router ")) {
+        startToken = "router ";
+      } else if (line.startsWith("extra-info ")) {
+        startToken = "extra-info ";
+      } else {
+        this.logger.warning("Unknown descriptor type. Ignoring.");
+        return;
+      }
+      String splitToken = "\n" + startToken;
+      String ascii = new String(data, "US-ASCII");
+      int length = data.length, start = ascii.indexOf(startToken);
+      while (start < length) {
+        int end = ascii.indexOf(splitToken, start);
+        if (end < 0) {
+          end = length;
+        } else {
+          end += 1;
+        }
+        byte[] descBytes = new byte[end - start];
+        System.arraycopy(data, start, descBytes, 0, end - start);
+        parseSingleDescriptor(descBytes);
+        start = end;
+      }
+    } catch (IOException e) {
+      this.logger.log(Level.WARNING, "Could not parse descriptor. "
+          + "Skipping.", e);
+    }
+  }
+
+  private void parseSingleDescriptor(byte[] data) {
+    try {
       /* Convert descriptor to ASCII for parsing. This means we'll lose
        * the non-ASCII chars, but we don't care about them for parsing
        * anyway. */
       BufferedReader br = new BufferedReader(new StringReader(new String(
           data, "US-ASCII")));
       String line = br.readLine();
-      if (line == null) {
-        this.logger.fine("We were given an empty descriptor for "
-            + "parsing. Ignoring.");
-        return;
-      }
       SimpleDateFormat parseFormat =
           new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
       parseFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
