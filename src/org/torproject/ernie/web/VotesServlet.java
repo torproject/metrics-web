@@ -102,6 +102,8 @@ public class VotesServlet extends HttpServlet {
       for (byte[] rawDescriptor : rawDescriptors) {
         output.write(rawDescriptor);
       }
+      output.flush();
+      output.close();
     } finally {
       /* Nothing to do here. */
     }

@@ -96,6 +96,8 @@ public class ConsensusServlet extends HttpServlet {
       BufferedOutputStream output = new BufferedOutputStream(
           response.getOutputStream());
       output.write(rawDescriptor);
+      output.flush();
+      output.close();
     } finally {
       /* Nothing to do here. */
     }

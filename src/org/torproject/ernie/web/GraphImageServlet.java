@@ -96,6 +96,7 @@ public class GraphImageServlet extends HttpServlet {
         "inline; filename=\"" + imageFilename + "\"");
     output = new BufferedOutputStream(response.getOutputStream(), 1024);
     output.write(graphBytes, 0, graphBytes.length);
+    output.flush();
     output.close();
   }
 }
