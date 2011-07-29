@@ -40,6 +40,7 @@ public class TableParameterChecker {
 
     this.availableTables = new HashMap<String, String>();
     this.availableTables.put("direct-users", "start,end,filename");
+    this.availableTables.put("censorship-events", "start,end,filename");
 
     this.knownParameterValues = new HashMap<String, String>();
   }

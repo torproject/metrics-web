@@ -24,6 +24,7 @@ out of a few hundred directory mirrors to save bandwidth of the directory
 authorities. The following graphs show an estimate of recurring Tor users
 based on the requests seen by a few dozen directory mirrors.</p>
 <a name="direct-users"></a>
+<p><b>Daily directly connecting users:</b></p>
 <img src="direct-users.png${direct_users_url}"
      width="576" height="360" alt="Direct users graph">
 <form action="users.html#direct-users">
@@ -60,6 +61,7 @@ based on the requests seen by a few dozen directory mirrors.</p>
   </div>
 </form>
 <a name="direct-users-table"></a>
+<p><b>Top-10 countries by directly connecting users:</b></p>
 <table>
   <tr>
     <th>Country</th>
@@ -88,7 +90,40 @@ based on the requests seen by a few dozen directory mirrors.</p>
     </p>
   </div>
 </form>
-<p><a href="csv/direct-users.csv">CSV</a> file containing all data.</p>
+<a name="censorship-events"></a>
+<p><b>Top-10 countries by possible censorship events (BETA):</b></p>
+<table>
+  <tr>
+    <th>Country</th>
+    <th>Downturns</th>
+    <th>Upturns</th>
+  </tr>
+  <c:forEach var="row" items="${censorship_events_tabledata}">
+    <tr>
+      <td><a href="users.html?graph=direct-users&country=${row['cc']}&events=on#direct-users">${row['country']}</a>&emsp;</td>
+      <td>${row['downturns']}</td>
+      <td>${row['upturns']}</td>
+    </tr>
+  </c:forEach>
+</table>
+<br>
+<form action="users.html#censorship-events">
+  <div class="formrow">
+    <input type="hidden" name="table" value="censorship-events">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(censorship_events_start) == 0}">${default_start_date}</c:when><c:otherwise>${censorship_events_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(censorship_events_end) == 0}">${default_end_date}</c:when><c:otherwise>${censorship_events_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+    <input class="submit" type="submit" value="Update table">
+    </p>
+  </div>
+</form>
+<p><a href="csv/direct-users.csv">CSV</a> file containing daily directly
+connecting users by country.</p>
 <p><a href="csv/monthly-users-peak.csv">CSV</a> file containing peak daily
 Tor users (direct and bridge) per month by country.</p>
 <p><a href="csv/monthly-users-average.csv">CSV</a> file containing average
