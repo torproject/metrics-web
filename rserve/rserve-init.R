@@ -15,3 +15,5 @@ dbpassword= ""
 
 source('graphs.R')
 source('csv.R')
+source('tables.R')
+

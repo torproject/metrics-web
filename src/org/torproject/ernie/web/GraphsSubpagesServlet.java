@@ -12,8 +12,14 @@ public class GraphsSubpagesServlet extends HttpServlet {
    * are forwarded. */
   private Map<String, String> availableGraphsSubpages;
 
+  /* Available tables on graphs subpages. */
+  private Map<String, Set<String>> availableGraphsSubpageTables;
+
   /* Country codes and names for per-country graphs. */
   private List<String[]> knownCountries;
+
+  /* R object generator for generating table data. */
+  private RObjectGenerator rObjectGenerator;
 
   public GraphsSubpagesServlet() {
     this.availableGraphsSubpages = new HashMap<String, String>();
@@ -25,7 +31,19 @@ public class GraphsSubpagesServlet extends HttpServlet {
     this.availableGraphsSubpages.put("performance.html",
         "WEB-INF/performance.jsp");
 
+    this.availableGraphsSubpageTables =
+        new HashMap<String, Set<String>>();
+    this.availableGraphsSubpageTables.put("users.html",
+        new HashSet<String>(Arrays.asList("direct-users".split(","))));
+
     this.knownCountries = Countries.getInstance().getCountryList();
+  }
+
+  public void init() {
+    /* Get a reference to the R object generator that we need to generate
+     * table data. */
+    this.rObjectGenerator = (RObjectGenerator) getServletContext().
+        getAttribute("RObjectGenerator");
   }
 
   public void doGet(HttpServletRequest request,
@@ -48,8 +66,9 @@ public class GraphsSubpagesServlet extends HttpServlet {
     }
     String jsp = availableGraphsSubpages.get(requestedPage);
 
-    /* Find out which graph type was requested, if any. */
+    /* Find out which graph or table type was requested, if any. */
     String requestedGraph = request.getParameter("graph");
+    String requestedTable = request.getParameter("table");
     if (requestedGraph != null) {
 
       /* Check if the passed parameters are valid. */
@@ -72,6 +91,76 @@ public class GraphsSubpagesServlet extends HttpServlet {
         String url = "?" + urlBuilder.toString().substring(1);
         request.setAttribute(requestedGraph.replaceAll("-", "_") + "_url",
             url);
+      }
+    }
+    if (requestedTable != null) {
+
+      /* Check if the passed parameters are valid. */
+      Map<String, String[]> checkedParameters = TableParameterChecker.
+          getInstance().checkParameters(requestedTable,
+          request.getParameterMap());
+      if (checkedParameters != null) {
+
+        /* Set the table's attributes to the appropriate values, so that
+         * we can prepopulate the form. */
+        for (Map.Entry<String, String[]> param :
+            checkedParameters.entrySet()) {
+          request.setAttribute(requestedTable.replaceAll("-", "_") + "_"
+              + param.getKey(), param.getValue());
+        }
+      }
+    }
+
+    /* Trigger generation of table data if the graphs subpage has any
+     * tables, regardless of whether a table update was requested. */
+    if (this.availableGraphsSubpageTables.containsKey(requestedPage)) {
+      for (String tableName :
+          this.availableGraphsSubpageTables.get(requestedPage)) {
+
+        Map<String, String[]> checkedParameters = null;
+        if (tableName.equals(requestedTable)) {
+          checkedParameters = TableParameterChecker.
+              getInstance().checkParameters(requestedTable,
+              request.getParameterMap());
+        } else {
+          checkedParameters = TableParameterChecker.
+              getInstance().checkParameters(tableName, null);
+        }
+
+        /* Prepare filename and R query string. */
+        StringBuilder rQueryBuilder = new StringBuilder("write_"
+            + tableName.replaceAll("-", "_") + "("),
+            tableFilenameBuilder = new StringBuilder(tableName);
+
+        for (Map.Entry<String, String[]> parameter :
+            checkedParameters.entrySet()) {
+          String parameterName = parameter.getKey();
+          String[] parameterValues = parameter.getValue();
+          for (String param : parameterValues) {
+            tableFilenameBuilder.append("-" + param);
+          }
+          if (parameterValues.length < 2) {
+            rQueryBuilder.append(parameterName + " = '"
+                + parameterValues[0] + "', ");
+          } else {
+            rQueryBuilder.append(parameterName + " = c(");
+            for (int i = 0; i < parameterValues.length - 1; i++) {
+              rQueryBuilder.append("'" + parameterValues[i] + "', ");
+            }
+            rQueryBuilder.append("'" + parameterValues[
+                parameterValues.length - 1] + "'), ");
+          }
+        }
+        tableFilenameBuilder.append(".tbl");
+        String tableFilename = tableFilenameBuilder.toString();
+        rQueryBuilder.append("path = '%s')");
+        String rQuery = rQueryBuilder.toString();
+
+        /* Generate table data and add it as request attribute. */
+        List<Map<String, String>> tableData = rObjectGenerator.
+            generateTable(rQuery, tableFilename);
+        request.setAttribute(tableName.replaceAll("-", "_")
+              + "_tabledata", tableData);
       }
     }
 

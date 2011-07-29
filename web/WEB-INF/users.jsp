@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -55,6 +56,35 @@ based on the requests seen by a few dozen directory mirrors.</p>
       </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<a name="direct-users-table"></a>
+<table>
+  <tr>
+    <th>Country</th>
+    <th>Mean daily users</th>
+  </tr>
+  <c:forEach var="row" items="${direct_users_tabledata}">
+    <tr>
+      <td><a href="users.html?graph=direct-users&country=${row['cc']}#direct-users">${row['country']}</a>&emsp;</td>
+      <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
+    </tr>
+  </c:forEach>
+</table>
+<br>
+<form action="users.html#direct-users-table">
+  <div class="formrow">
+    <input type="hidden" name="table" value="direct-users">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(direct_users_start) == 0}">${default_start_date}</c:when><c:otherwise>${direct_users_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(direct_users_end) == 0}">${default_end_date}</c:when><c:otherwise>${direct_users_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+    <input class="submit" type="submit" value="Update table">
     </p>
   </div>
 </form>

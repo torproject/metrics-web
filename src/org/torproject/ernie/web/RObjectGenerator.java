@@ -55,9 +55,10 @@ public class RObjectGenerator implements ServletContextListener {
     if (!imageFile.exists() || imageFile.lastModified() < now
         - this.maxCacheAge * 1000L) {
 
-      /* We do. Update the R query to contain the absolute path to the file
-       * to be generated, create a connection to Rserve, run the R query,
-       * and close the connection. The generated graph will be on disk. */
+      /* We do. Update the R query to contain the absolute path to the
+       * file to be generated, create a connection to Rserve, run the R
+       * query, and close the connection. The generated graph will be on
+       * disk. */
       rQuery = String.format(rQuery, imageFile.getAbsolutePath());
       try {
         RConnection rc = new RConnection(rserveHost, rservePort);
@@ -133,6 +134,69 @@ public class RObjectGenerator implements ServletContextListener {
     }
 
     /* Return the csv file. */
+    return result;
+  }
+
+  /* Generate table data using the given R query and filename or read
+   * previously generated table data from disk if it's not too old and
+   * return table data. */
+  public List<Map<String, String>> generateTable(String rQuery,
+      String tableFilename) {
+
+    /* See if we need to generate this table. */
+    File tableFile = new File(this.cachedGraphsDirectory + "/"
+        + tableFilename);
+    long now = System.currentTimeMillis();
+    if (!tableFile.exists() || tableFile.lastModified() < now
+        - this.maxCacheAge * 1000L) {
+
+      /* We do. Update the R query to contain the absolute path to the
+       * file to be generated, create a connection to Rserve, run the R
+       * query, and close the connection. The generated csv file will be
+       * on disk in the same directory as the generated graphs. */
+      rQuery = String.format(rQuery, tableFile.getAbsolutePath());
+      try {
+        RConnection rc = new RConnection(rserveHost, rservePort);
+        rc.eval(rQuery);
+        rc.close();
+      } catch (RserveException e) {
+        return null;
+      }
+
+      /* Check that we really just generated the file */
+      if (!tableFile.exists() || tableFile.lastModified() < now
+          - this.maxCacheAge * 1000L) {
+        return null;
+      }
+    }
+
+    /* Read the text file from disk and write the table content to a
+     * map. */
+    List<Map<String, String>> result = null;
+    try {
+      result = new ArrayList<Map<String, String>>();
+      BufferedReader br = new BufferedReader(new FileReader(tableFile));
+      String line = br.readLine();
+      if (line != null) {
+        List<String> headers = new ArrayList<String>(Arrays.asList(
+            line.split(",")));
+        while ((line = br.readLine()) != null) {
+          String[] parts = line.split(",");
+          if (headers.size() != parts.length) {
+            return null;
+          }
+          Map<String, String> row = new HashMap<String, String>();
+          for (int i = 0; i < headers.size(); i++) {
+            row.put(headers.get(i), parts[i]);
+          }
+          result.add(row);
+        }
+      }
+    } catch (IOException e) {
+      return null;
+    }
+
+    /* Return table values. */
     return result;
   }
 }
