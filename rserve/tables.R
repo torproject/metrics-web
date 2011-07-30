@@ -69,3 +69,19 @@ write_censorship_events <- function(start, end, path) {
   write.csv(r, path, quote = FALSE, row.names = FALSE)
 }
 
+write_top_10_relays <- function(start, end, path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT fingerprint, SUM(written_sum) ",
+      "AS written_sum FROM bwhist WHERE date >= '", start,
+      "' AND date <= '", end, "' GROUP BY 1 ORDER BY 2 DESC LIMIT 10",
+      sep = "")
+  rs <- dbSendQuery(con, q)
+  c <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  c <- data.frame(fingerprint = c$fingerprint,
+    written_sum = round(c$written_sum / 2^40, 2))
+  write.csv(c, path, quote = FALSE, row.names = FALSE)
+}
+

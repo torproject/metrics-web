@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -230,6 +231,36 @@ in the network.</p>
 </form>
 <p><a href="csv/bandwidth.csv">CSV</a> file containing all data.</p>
 <br>
+<a name="top-10-relays"></a>
+<p><b>Top-10 relays by bandwidth history:</b></p>
+<table>
+  <tr>
+    <th>Fingerprint</th>
+    <th>Bandwidth history</th>
+  </tr>
+  <c:forEach var="row" items="${top_10_relays_tabledata}">
+    <tr>
+      <td><a href="https://metrics.torproject.org/relay.html?fingerprint=${row['fingerprint']}">${row['fingerprint']}</a>&emsp;</td>
+      <td><fmt:formatNumber type="number" minFractionDigits="2" value="${row['written_sum']}" /> TiB</td>
+    </tr>
+  </c:forEach>
+</table>
+<br>
+<form action="network.html#top-10-relays">
+  <div class="formrow">
+    <input type="hidden" name="table" value="top-10-relays">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(top_10_relays_start) == 0}">${default_start_date}</c:when><c:otherwise>${top_10_relays_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(top_10_relays_end) == 0}">${default_end_date}</c:when><c:otherwise>${top_10_relays_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+    <input class="submit" type="submit" value="Update table">
+    </p>
+  </div>
+</form>
 
 <h3>Relay bandwidth by Exit and/or Guard flags</h3>
 <br>
