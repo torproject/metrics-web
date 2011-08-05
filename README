@@ -168,6 +168,7 @@ directory.
 Configure a local Tor client to fetch all known descriptors as early as
 possible by adding these config options to its torrc file:
 
+DownloadExtraInfo 1
 FetchUselessDescriptors 1
 FetchDirInfoEarly 1
 FetchDirInfoExtraEarly 1
