@@ -45,6 +45,9 @@
         been included in the <a href="#papers">papers</a> above or in the
         daily updated <a href="graphs.html">graphs</a>.
         <ul>
+          <li>An anomaly-based censorship-detection system for Tor (<a
+          href="papers/detector-2011-08-11.pdf">PDF</a>, 106K from August
+          11, 2011).</li>
           <li>An Analysis of Tor Relay Stability (<a
           href="papers/relay-stability-2011-06-30.pdf">PDF</a>, 1.3M from
           June 30, 2011,
