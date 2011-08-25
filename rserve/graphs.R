@@ -134,7 +134,7 @@ countrylist <- list(
   "lt" = "Lithuania",
   "lu" = "Luxembourg",
   "lv" = "Latvia",
-  "ly" = "Libyan Arab Jamahiriya",
+  "ly" = "Libya",
   "ma" = "Morocco",
   "mc" = "Monaco",
   "md" = "the Republic of Moldova",

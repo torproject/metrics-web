@@ -52,6 +52,7 @@ public class Countries {
     this.knownCountries.add("bn;Brunei Darussalam".split(";"));
     this.knownCountries.add("bg;Bulgaria".split(";"));
     this.knownCountries.add("bf;Burkina Faso".split(";"));
+    this.knownCountries.add("mm;Burma".split(";"));
     this.knownCountries.add("bi;Burundi".split(";"));
     this.knownCountries.add("kh;Cambodia".split(";"));
     this.knownCountries.add("cm;Cameroon".split(";"));
@@ -147,7 +148,7 @@ public class Countries {
     this.knownCountries.add("lb;Lebanon".split(";"));
     this.knownCountries.add("ls;Lesotho".split(";"));
     this.knownCountries.add("lr;Liberia".split(";"));
-    this.knownCountries.add("ly;Libyan Arab Jamahiriya".split(";"));
+    this.knownCountries.add("ly;Libya".split(";"));
     this.knownCountries.add("li;Liechtenstein".split(";"));
     this.knownCountries.add("lt;Lithuania".split(";"));
     this.knownCountries.add("lu;Luxembourg".split(";"));
