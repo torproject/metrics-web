@@ -633,8 +633,8 @@ plot_direct_users <- function(start, end, country, events, path, dpi) {
   plot <- ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = users))
   if (events == "on" & country != "all") {
     r <- read.csv(
-        "/srv/metrics.torproject.org/web/direct-users-ranges.csv",
-        stringsAsFactors = FALSE)
+      "/srv/metrics.torproject.org/web/detector/direct-users-ranges.csv",
+      stringsAsFactors = FALSE)
     r <- r[r$date >= start & r$date <= end & r$country == country,
         c("date", "minusers", "maxusers")]
     r <- cast(rbind(melt(u, id.vars = "date"), melt(r, id.vars = "date")))
