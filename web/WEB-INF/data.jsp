@@ -38,7 +38,8 @@
         <p>The relay descriptor archives contain all documents that the
         directory authorities make available about the network of relays.
         These documents include network statuses, server (relay)
-        descriptors, and extra-info descriptors:</p>
+        descriptors, and extra-info descriptors.
+        The data formats are described <a href="formats.html">here</a>.</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
           <c:forEach var="item" items="${relayDescriptors}" >
             <fmt:formatDate var="longDate" pattern="MMMM yyyy"
@@ -132,7 +133,9 @@
         country codes and including those in the sanitized descriptors,
         because it was tough to maintain; if your research requires this
         or any other detail, contact us and we'll sort something out. The
-        files below contain all documents of a given month:</p>
+        files below contain all documents of a given month.
+        The sanitizing process is described
+        <a href="formats.html#bridgedesc">here</a>.</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
           <c:forEach var="item" items="${bridgeDescriptors}" >
             <fmt:formatDate var="longDate" pattern="MMMM yyyy"
@@ -157,6 +160,8 @@
         they are assigned to a local file.  We are archiving sanitized
         versions of these files here to analyze how the pool assignment
         affects a bridge's usage.</p>
+        The data format and sanitizing process is described
+        <a href="formats.html#bridgepool">here</a>.</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
           <c:forEach var="item" items="${bridgePoolAssignments}" >
             <fmt:formatDate var="longDate" pattern="MMMM yyyy"
@@ -177,7 +182,9 @@
         recording the time needed to do so. These measurements take place
         on moria, siv, and torperf and use an unmodified Tor client.  The
         files below contain the output of the torperf application and are
-        updated every hour:</p>
+        updated every hour.
+        The data format is described
+        <a href="formats.html#torperf">here</a>.</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
           <c:forEach var="item" items="${torperfData}" >
             <tr>
@@ -238,9 +245,11 @@
         <h3>Exit lists</h3>
         <br>
         <p>We are archiving the bulk exit lists used by
-        <a href="https://check.torproject.org/">Tor Check</a> (see
-        <a href="https://www.torproject.org/tordnsel/exitlist-spec.txt">exitlist-spec.txt</a>)
-        containing the IP addresses that exit relays exit from:</p>
+        <a href="https://check.torproject.org/">Tor Check</a>
+        containing the IP addresses that exit relays exit from.
+        The data format is described in
+        <a href="https://www.torproject.org/tordnsel/exitlist-spec.txt">exitlist-spec.txt</a>
+        and <a href="formats.html#exitlist">here</a>.</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
           <c:forEach var="item" items="${exitLists}" >
             <fmt:formatDate var="longDate" pattern="MMMM yyyy"

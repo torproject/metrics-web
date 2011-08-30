@@ -108,6 +108,17 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>ResearchFormats</servlet-name>
+    <servlet-class>
+      org.torproject.ernie.web.ResearchFormatsServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResearchFormats</servlet-name>
+    <url-pattern>/formats.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>Status</servlet-name>
     <servlet-class>
       org.torproject.ernie.web.StatusServlet
