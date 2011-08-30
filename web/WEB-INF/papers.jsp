@@ -99,12 +99,12 @@
         research or describe new interesting research questions that can
         (partly) be answered with metrics data.
         <ul>
-          <li>Research problem: measuring the safety of the Tor network
-          (<a href="https://blog.torproject.org/blog/research-problem-measuring-safety-tor-network">link</a>,
-          February 5, 2011).</li>
           <li>Research problem: better guard rotation parameters
           (<a href="https://blog.torproject.org/blog/research-problem-better-guard-rotation-parameters">link</a>,
           August 20, 2011).</li>
+          <li>Research problem: measuring the safety of the Tor network
+          (<a href="https://blog.torproject.org/blog/research-problem-measuring-safety-tor-network">link</a>,
+          February 5, 2011).</li>
         </ul>
     </div>
   </div>
