@@ -631,7 +631,7 @@ plot_direct_users <- function(start, end, country, events, path, dpi) {
     as.numeric(max(as.Date(u$date, "%Y-%m-%d")) -
     min(as.Date(u$date, "%Y-%m-%d"))))
   plot <- ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = users))
-  if (events == "on" & country != "all") {
+  if (length(na.omit(u$users)) > 0 & events == "on" & country != "all") {
     r <- read.csv(
       "/srv/metrics.torproject.org/web/detector/direct-users-ranges.csv",
       stringsAsFactors = FALSE)
@@ -654,8 +654,9 @@ plot_direct_users <- function(start, end, country, events, path, dpi) {
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0, max(u$users,
-        na.rm = TRUE)), formatter = formatter) +
+    scale_y_continuous(name = "", limits = c(0,
+        ifelse(length(na.omit(u$users)) == 0, 0,
+        max(u$users, na.rm = TRUE))), formatter = formatter) +
     opts(title = title)
   print(plot)
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
