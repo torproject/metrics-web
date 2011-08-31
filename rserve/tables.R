@@ -18,7 +18,7 @@ write_direct_users <- function(start, end, path) {
                (u$bwr * u$brn / u$bwn - u$brr) / 10))
   d <- aggregate(d$directusers, by = list(country = d$country), mean)
   total <- d[d$country == "zy", "x"]
-  d <- d[d$country != "zy", ]
+  d <- d[!(d$country %in% c("zy", "??", "a1", "a2", "o1", "ap", "eu")), ]
   d <- data.frame(country = d$country, directusers = d$x)
   d <- d[order(d$directusers, decreasing = TRUE), ]
   d <- d[1:10, ]
@@ -60,6 +60,7 @@ write_censorship_events <- function(start, end, path) {
     downturn = ifelse(r$users < r$minusers, 1, 0))
   r <- aggregate(r[, c("upturn", "downturn")],
     by = list(country = r$country), sum)
+  r <- r[!(r$country %in% c("zy", "??", "a1", "a2", "o1", "ap", "eu")), ]
   r <- r[order(r$downturn, r$upturn, decreasing = TRUE), ]
   r <- r[1:10, ] 
   r <- data.frame(cc = r$country,
