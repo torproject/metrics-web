@@ -17,7 +17,7 @@
         page and to process the resulting files to generate
         <a href="graphs.html">graphs</a>.</p>
         <ul>
-          <li><a href="#metrics-db">Metrics database</a></li>
+          <li><a href="#metrics-db">Metrics data processor</a></li>
           <li><a href="#metrics-web">Metrics website</a></li>
           <li><a href="#dirarch">Directory-archive script</a></li>
           <li><a href="#torperf">Torperf</a></li>
@@ -26,13 +26,13 @@
         </ul>
         <br>
         <a name="metrics-db"></a>
-        <h3>Metrics database</h3>
+        <h3>Metrics data processor</h3>
         <br>
-        <p>The metrics database software is a Java application that parses
-        Tor's directory data and imports it into a PostgreSQL database.
-        This database can then be used to look up relays or perform
-        statistical analysis on the Tor network. The metrics database is
-        also used by this website.</p>
+        <p>The metrics data processor is a Java application that parses
+        Tor's directory data and the data from various other Tor services,
+        possibly removes sensitive parts from them, and then outputs the
+        <a href="data.html">data</a> in <a href="formats.html">formats</a>
+        that are feasible for later analysis.</p>
         <ul>
           <li>Browse the
           <a href="https://gitweb.torproject.org/metrics-db.git/tree">Git
@@ -43,9 +43,10 @@
         <a name="metrics-web"></a>
         <h3>Metrics website</h3>
         <br>
-        <p>The metrics website software is a Tomcat application that
-        accesses the metrics database to generate this website. The
-        metrics website uses R to generate custom graphs on demand.</p>
+        <p>The metrics website software consists of a Java database
+        importer and Tomcat application that makes Tor's directory data
+        easily accessible.  This website is run by the metrics website
+        software.</p>
         <ul>
           <li>Download
           <a href="dist/metrics-web-0.0.1.tar">metrics-web 0.0.1</a>
