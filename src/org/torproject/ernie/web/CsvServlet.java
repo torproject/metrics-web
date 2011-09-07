@@ -35,6 +35,7 @@ public class CsvServlet extends HttpServlet {
     this.availableCsvFiles.add("connbidirect");
     this.availableCsvFiles.add("current-platform-strings");
     this.availableCsvFiles.add("direct-users");
+    this.availableCsvFiles.add("dirreq-stats");
     this.availableCsvFiles.add("dirbytes");
     this.availableCsvFiles.add("gettor");
     this.availableCsvFiles.add("monthly-users-average");

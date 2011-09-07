@@ -305,3 +305,24 @@ export_relays_monthly_snapshots <- function(path) {
       quote = FALSE, row.names = FALSE)
 }
 
+export_dirreq_stats <- function(path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT date, r, bwp, brp, bwn, brn, bwr, brr ",
+      "FROM user_stats ",
+      "WHERE date < (SELECT MAX(date) FROM user_stats) - 1 ",
+      "AND country = 'zy' ORDER BY date", sep = "")
+  rs <- dbSendQuery(con, q)
+  u <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  u <- data.frame(date = u$date,
+       requests = u$r,
+       fraction = (u$bwr * u$brn / u$bwn - u$brr) /
+                (u$bwp * u$brn / u$bwn - u$brp),
+       users = u$r * (u$bwp * u$brn / u$bwn - u$brp) /
+               (u$bwr * u$brn / u$bwn - u$brr) / 10)
+  write.csv(format(u, trim = TRUE, scientific = FALSE), path,
+      quote = FALSE, row.names = FALSE)
+}
+
