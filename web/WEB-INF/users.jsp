@@ -46,7 +46,7 @@ based on the requests seen by a few dozen directory mirrors.</p>
       </select>
     </p><p>
       Show possible censorship events if available (<a
-      href="papers/detector-2011-08-11.pdf">BETA</a>)
+      href="papers/detector-2011-09-09.pdf">BETA</a>)
       <input type="checkbox" name="events" value="on"
         <c:if test="${direct_users_events[0] eq 'on'}"> checked</c:if>
       ></input>
@@ -93,7 +93,7 @@ based on the requests seen by a few dozen directory mirrors.</p>
 </form>
 <a name="censorship-events"></a>
 <p><b>Top-10 countries by possible censorship events (<a
-      href="papers/detector-2011-08-11.pdf">BETA</a>):</b></p>
+      href="papers/detector-2011-09-09.pdf">BETA</a>):</b></p>
 <table>
   <tr>
     <th>Country</th>
