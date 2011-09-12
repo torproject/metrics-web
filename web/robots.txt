@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /networkstatus.html
+Disallow: /routerdetail.html
+Disallow: /relay.html
+Disallow: /csv/
+Disallow: /serverdesc
+Disallow: /extrainfodesc
+Disallow: /descriptor.html
+Disallow: /consensus
+Disallow: /votes
+Disallow: /consensus-health.html
+
