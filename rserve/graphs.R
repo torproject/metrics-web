@@ -441,7 +441,8 @@ plot_bandwidth <- function(start, end, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, bwadvertised FROM total_bandwidth ",
-      "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
+      "WHERE date >= '", start, "' AND date <= '", end, "' ",
+      "AND date < (SELECT MAX(date) FROM total_bandwidth) - 1 ", sep = "")
   rs <- dbSendQuery(con, q)
   bw_desc <- fetch(rs, n = -1)
   q <- paste("SELECT date, read, written FROM total_bwhist ",
