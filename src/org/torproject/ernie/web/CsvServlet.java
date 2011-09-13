@@ -18,7 +18,7 @@ public class CsvServlet extends HttpServlet {
   private RObjectGenerator rObjectGenerator;
 
   /* Available CSV files. */
-  private Set<String> availableCsvFiles;
+  private SortedSet<String> availableCsvFiles;
 
   private Logger logger;
 
@@ -28,7 +28,7 @@ public class CsvServlet extends HttpServlet {
     this.logger = Logger.getLogger(CsvServlet.class.toString());
 
     /* Initialize map of available CSV files. */
-    this.availableCsvFiles = new HashSet<String>();
+    this.availableCsvFiles = new TreeSet<String>();
     this.availableCsvFiles.add("bandwidth");
     this.availableCsvFiles.add("bridge-users");
     this.availableCsvFiles.add("bwhist-flags");
@@ -60,9 +60,19 @@ public class CsvServlet extends HttpServlet {
       HttpServletResponse response) throws IOException,
       ServletException {
 
+    /* Check if the directory listing was requested. */
+    String requestURI = request.getRequestURI();
+    if (requestURI.equals("/ernie/csv/")) {
+      request.setAttribute("directory", "/csv");
+      request.setAttribute("extension", ".csv");
+      request.setAttribute("files", this.availableCsvFiles);
+      request.getRequestDispatcher("/WEB-INF/dir.jsp").forward(request,
+          response);
+      return;
+    }
+
     /* Find out which CSV file was requested and make sure we know this
      * CSV file type. */
-    String requestURI = request.getRequestURI();
     String requestedCsvFile = requestURI;
     if (requestedCsvFile.endsWith(".csv")) {
       requestedCsvFile = requestedCsvFile.substring(0,
