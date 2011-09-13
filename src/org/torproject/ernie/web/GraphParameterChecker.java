@@ -53,7 +53,7 @@ public class GraphParameterChecker {
         "start,end,country,events,filename,dpi");
     this.availableGraphs.put("bridge-users",
          "start,end,country,filename,dpi");
-    this.availableGraphs.put("gettor", "start,end,bundle,filename,dpi");
+    this.availableGraphs.put("gettor", "start,end,language,filename,dpi");
     this.availableGraphs.put("torperf",
          "start,end,source,filesize,filename,dpi");
     this.availableGraphs.put("torperf-failures",
@@ -71,7 +71,7 @@ public class GraphParameterChecker {
     }
     this.knownParameterValues.put("country", sb.toString());
     this.knownParameterValues.put("events", "on,off");
-    this.knownParameterValues.put("bundle", "all,en,zh_CN,fa");
+    this.knownParameterValues.put("language", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "all,siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
     this.knownParameterValues.put("dpi", "72,150,300");
@@ -218,24 +218,24 @@ public class GraphParameterChecker {
       recognizedGraphParameters.put("events", eventsParameter);
     }
 
-    /* Parse GetTor bundle if supported by the graph type. Only a single
-     * bundle can be passed. If no bundle is passed, use "all" as
+    /* Parse language if supported by the graph type. Only a single
+     * language can be passed. If no language is passed, use "all" as
      * default. */
-    if (supportedGraphParameters.contains("bundle")) {
-      String[] bundleParameter = (String[]) requestParameters.get(
-          "bundle");
+    if (supportedGraphParameters.contains("language")) {
+      String[] languageParameter = (String[]) requestParameters.get(
+          "language");
       List<String> knownBundles = Arrays.asList(
-          this.knownParameterValues.get("bundle").split(","));
-      if (bundleParameter != null) {
-        if (bundleParameter.length != 1 ||
-            bundleParameter[0].length() == 0 ||
-            !knownBundles.contains(bundleParameter[0])) {
+          this.knownParameterValues.get("language").split(","));
+      if (languageParameter != null) {
+        if (languageParameter.length != 1 ||
+            languageParameter[0].length() == 0 ||
+            !knownBundles.contains(languageParameter[0])) {
           return null;
         }
       } else {
-        bundleParameter = new String[] { "all" };
+        languageParameter = new String[] { "all" };
       }
-      recognizedGraphParameters.put("bundle", bundleParameter);
+      recognizedGraphParameters.put("language", languageParameter);
     }
 
     /* Parse torperf data source if supported by the graph type. Only a

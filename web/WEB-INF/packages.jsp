@@ -33,11 +33,12 @@ graph shows the number of packages requested from GetTor per day.</p>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(gettor_end) == 0}">${default_end_date}</c:when><c:otherwise>${gettor_end[0]}</c:otherwise></c:choose>">
     </p><p>
-      Packages:
-      <input type="radio" name="bundle" value="all" <c:if test="${fn:length(gettor_bundle) == 0 or gettor_bundle[0] eq 'all'}"> checked</c:if>> Total packages
-      <input type="radio" name="bundle" value="en" <c:if test="${gettor_bundle[0] eq 'en'}"> checked</c:if>> TBB (en)
-      <input type="radio" name="bundle" value="zh_CN" <c:if test="${gettor_bundle[0] eq 'zh_CN'}"> checked</c:if>> TBB (zh_CN)
-      <input type="radio" name="bundle" value="fa" <c:if test="${gettor_bundle[0] eq 'fa'}"> checked</c:if>> TBB (fa)
+      Language: <select name="language">
+        <option value="all"<c:if test="${fn:length(gettor_language) == 0 or gettor_language[0] eq 'all'}"> selected</c:if>>All languages</option>
+        <option value="en"<c:if test="${gettor_language[0] eq 'en'}"> selected</c:if>>English (en)</option>
+        <option value="zh_CN"<c:if test="${gettor_language[0] eq 'zh_CN'}"> selected</c:if>>Simplified Chinese (zh_CN)</option>
+        <option value="fa"<c:if test="${gettor_language[0] eq 'fa'}"> selected</c:if>>Farsi (fa)</option>
+      </select>
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${gettor_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>

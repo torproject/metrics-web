@@ -254,6 +254,18 @@ countryname <- function(country) {
   res
 }
 
+languagelist <- list(
+  "en" = "English",
+  "fa" = "Farsi",
+  "zh_CN" = "Simplified Chinese")
+
+languagename <- function(language) {
+  res <- languagelist[[language]]
+  if (is.null(res))
+    res <- "Gibberish"
+  res
+}
+
 date_breaks <- function(days) {
   length <- cut(days, c(0, 7, 12, 56, 180, 600, 5000, Inf), labels=FALSE)
   major <- c("days", "2 days", "weeks", "months", "3 months", "years",
@@ -704,11 +716,11 @@ plot_bridge_users <- function(start, end, country, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
-plot_gettor <- function(start, end, bundle, path, dpi) {
+plot_gettor <- function(start, end, language, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  condition <- ifelse(bundle == "all", "<> 'none'",
-      paste("LIKE 'tor-%browser-bundle_", tolower(bundle), "'", sep = ""))
+  condition <- ifelse(language == "all", "<> 'none'",
+      paste("LIKE '%_", tolower(language), "'", sep = ""))
   q <- paste("SELECT date, SUM(downloads) AS downloads ",
       "FROM gettor_stats WHERE bundle ", condition, " AND date >= '",
       start, "' AND date <= '", end,
@@ -725,10 +737,10 @@ plot_gettor <- function(start, end, bundle, path, dpi) {
     downloads <- rbind(downloads,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         downloads = NA))
-  title <- ifelse(bundle == "all",
+  title <- ifelse(language == "all",
     "Total packages requested from GetTor per day\n",
-    paste("Tor Browser Bundles (", bundle,
-    ") requested from GetTor per day\n", sep = ""))
+    paste(languagename(language), " (", language,
+        ") packages requested from GetTor per day\n", sep = ""))
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(downloads$date, "%Y-%m-%d")) -
     min(as.Date(downloads$date, "%Y-%m-%d"))))
