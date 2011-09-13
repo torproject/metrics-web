@@ -112,6 +112,10 @@ public class RouterDetailServlet extends HttpServlet {
         /* There were zero results in the set */
         /* TODO Handle this case in a more user-friendly way. */
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        this.logger.log(Level.WARNING, "Query with fingerprint = '"
+            + fingerprintParameter + "' returned zero results.  "
+            + "Returned BAD_REQUEST.");
+        return;
       }
       conn.close();
 
