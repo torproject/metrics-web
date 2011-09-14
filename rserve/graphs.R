@@ -617,12 +617,14 @@ plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
-plot_direct_users <- function(start, end, country, events, path, dpi) {
+plot_direct_users <- function(start, end, country, events, path, nocutoff,
+    dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, r, bwp, brn, bwn, brp, bwr, brr ",
       "FROM user_stats WHERE date >= '", start, "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM user_stats) - 1 ",
+      "' ", ifelse(nocutoff == "off",
+      " AND date < (SELECT MAX(date) FROM user_stats) - 1 ", ""),
       " AND country = '", ifelse(country == "all", "zy", country), "'",
       sep = "")
   rs <- dbSendQuery(con, q)
