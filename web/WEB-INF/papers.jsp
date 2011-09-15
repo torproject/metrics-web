@@ -45,6 +45,10 @@
         been included in the <a href="#papers">papers</a> above or in the
         daily updated <a href="graphs.html">graphs</a>.
         <ul>
+          <li>Case study: Learning whether a Tor bridge is blocked by
+          looking at its aggregate usage statistics, Part one (<a
+          href="papers/blocking-2011-09-15.pdf">PDF</a>, 767K from
+          September 15, 2011).</li>
           <li>An anomaly-based censorship-detection system for Tor (<a
           href="papers/detector-2011-09-09.pdf">PDF</a>, 106K from
           September 9, 2011).</li>
