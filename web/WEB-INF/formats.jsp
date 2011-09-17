@@ -817,7 +817,7 @@ Tor Check makes the list of known exits and corresponding exit IP
 addresses available in a specific format.
 The document below shows an entry of the exit list written on
 December 28, 2010 at 15:21:44 UTC.
-This entry means that the relay with fingerprint <tt>63Ba..</tt> which
+This entry means that the relay with fingerprint <tt>63BA..</tt> which
 published a descriptor at 07:35:55 and was contained in a version 2
 network status from 08:10:11 uses two different IP addresses for exiting.
 The first address <tt>91.102.152.236</tt> was found in a test performed at
