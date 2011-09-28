@@ -31,6 +31,10 @@ public class Configuration {
   private String torperfDirectory = "torperf/";
   private boolean processGetTorStats = false;
   private String getTorDirectory = "gettor/";
+  private String exoneraTorDatabaseJdbc = "jdbc:postgresql:"
+      + "//localhost/exonerator?user=metrics&password=password";
+  private String exoneraTorImportDirectory = "exonerator-import/";
+
   public Configuration() {
 
     /* Initialize logger. */
@@ -93,6 +97,10 @@ public class Configuration {
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("GetTorDirectory")) {
           this.getTorDirectory = line.split(" ")[1];
+        } else if (line.startsWith("ExoneraTorDatabaseJdbc")) {
+          this.exoneraTorDatabaseJdbc = line.split(" ")[1];
+        } else if (line.startsWith("ExoneraTorImportDirectory")) {
+          this.exoneraTorImportDirectory = line.split(" ")[1];
         } else {
           logger.severe("Configuration file contains unrecognized "
               + "configuration key in line '" + line + "'! Exiting!");
@@ -168,6 +176,12 @@ public class Configuration {
   }
   public String getGetTorDirectory() {
     return this.getTorDirectory;
+  }
+  public String getExoneraTorDatabaseJdbc() {
+    return this.exoneraTorDatabaseJdbc;
+  }
+  public String getExoneraTorImportDirectory() {
+    return this.exoneraTorImportDirectory;
   }
 }
 

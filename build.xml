@@ -51,6 +51,15 @@
     </java>
   </target>
 
+  <!-- Import descriptors into the ExoneraTor database. -->
+  <target name="exonerator" depends="compile">
+    <java fork="true"
+          maxmemory="2048m"
+          classname="org.torproject.ernie.cron.ExoneraTorDatabaseImporter">
+      <classpath refid="classpath"/>
+    </java>
+  </target>
+
   <!-- Prepare data for being displayed on the website. -->
   <target name="run" depends="compile">
     <java fork="true"
