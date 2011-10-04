@@ -151,6 +151,7 @@ public class RelaySearchServlet extends HttpServlet {
             sb.append(".");
           }
           searchIPAddress = sb.toString().substring(1);
+          validQuery = true;
         }
 
         /* If the search term contains hyphens, it must be a month or a
@@ -181,6 +182,7 @@ public class RelaySearchServlet extends HttpServlet {
         else if (searchTerm.length() >= 8 && searchTerm.length() <= 19 &&
             hexPattern.matcher(searchTerm).matches()) {
           searchFingerprintOrNickname.add(searchTerm);
+          validQuery = true;
         }
 
         /* If the search term contains between 20 and 40 hex characters,
@@ -192,6 +194,7 @@ public class RelaySearchServlet extends HttpServlet {
             break;
           }
           searchFingerprint = searchTerm;
+          validQuery = true;
         }
 
         /* If the search term contains up to 19 alphanumerical characters,
@@ -203,6 +206,7 @@ public class RelaySearchServlet extends HttpServlet {
             break;
           }
           searchNickname = searchTerm;
+          validQuery = true;
         }
 
         /* We didn't recognize this search term. */
@@ -210,10 +214,6 @@ public class RelaySearchServlet extends HttpServlet {
           validQuery = false;
           break;
         }
-
-        /* We recognized at least one search term, so that the query is
-         * potentially valid. */
-        validQuery = true;
       }
     }
 
