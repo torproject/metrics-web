@@ -494,6 +494,7 @@ public class ExoneraTorDatabaseImporter {
   /* Write parse history from memory to disk for the next execution. */
   private static void writeImportHistoryToDisk() {
     File parseHistoryFile = new File("stats/exonerator-import-history");
+    parseHistoryFile.getParentFile().mkdirs();
     try {
       BufferedWriter bw = new BufferedWriter(new FileWriter(
           parseHistoryFile));
