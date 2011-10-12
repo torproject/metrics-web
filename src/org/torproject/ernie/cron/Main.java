@@ -38,10 +38,6 @@ public class Main {
         new BridgeStatsFileHandler(
         config.getRelayDescriptorDatabaseJDBC()) : null;
 
-    // Prepare consensus health checker
-    ConsensusHealthChecker chc = config.getWriteConsensusHealth() ?
-        new ConsensusHealthChecker(statsDirectory) : null;
-
     // Prepare writing relay descriptors to database
     RelayDescriptorDatabaseImporter rddi =
         config.getWriteRelayDescriptorDatabase() ||
@@ -54,8 +50,8 @@ public class Main {
 
     // Prepare relay descriptor parser (only if we are writing the
     // consensus-health page to disk)
-    RelayDescriptorParser rdp = chc != null || rddi != null ?
-        new RelayDescriptorParser(chc, rddi, bsfh) : null;
+    RelayDescriptorParser rdp = rddi != null ?
+        new RelayDescriptorParser(rddi, bsfh) : null;
 
     // Import relay descriptors
     if (rdp != null) {
@@ -70,15 +66,6 @@ public class Main {
     // Close database connection (if active)
     if (rddi != null)   {
       rddi.closeConnection();
-    }
-
-    // Write consensus health website
-    if (chc != null) {
-      chc.writeStatusWebsite();
-      if (config.getWriteNagiosStatusFile()) {
-        chc.writeNagiosStatusFile();
-      }
-      chc = null;
     }
 
     // Prepare consensus stats file handler (used for stats on running

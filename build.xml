@@ -60,6 +60,15 @@
     </java>
   </target>
 
+  <!-- Run consensus-health checker. -->
+  <target name="chc" depends="compile">
+    <java fork="true"
+          maxmemory="512m"
+          classname="org.torproject.chc.Main">
+      <classpath refid="classpath"/>
+    </java>
+  </target>
+
   <!-- Prepare data for being displayed on the website. -->
   <target name="run" depends="compile">
     <java fork="true"

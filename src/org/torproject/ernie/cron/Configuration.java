@@ -24,8 +24,6 @@ public class Configuration {
       "jdbc:postgresql://localhost/tordir?user=metrics&password=password";
   private boolean writeRelayDescriptorsRawFiles = false;
   private String relayDescriptorRawFilesDirectory = "pg-import/";
-  private boolean writeConsensusHealth = false;
-  private boolean writeNagiosStatusFile = false;
   private boolean writeBridgeStats = false;
   private boolean importWriteTorperfStats = false;
   private String torperfDirectory = "torperf/";
@@ -78,12 +76,6 @@ public class Configuration {
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("RelayDescriptorRawFilesDirectory")) {
           this.relayDescriptorRawFilesDirectory = line.split(" ")[1];
-        } else if (line.startsWith("WriteConsensusHealth")) {
-          this.writeConsensusHealth = Integer.parseInt(
-              line.split(" ")[1]) != 0;
-        } else if (line.startsWith("WriteNagiosStatusFile")) {
-          this.writeNagiosStatusFile = Integer.parseInt(
-              line.split(" ")[1]) != 0;
         } else if (line.startsWith("WriteBridgeStats")) {
           this.writeBridgeStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -155,12 +147,6 @@ public class Configuration {
   }
   public String getRelayDescriptorRawFilesDirectory() {
     return this.relayDescriptorRawFilesDirectory;
-  }
-  public boolean getWriteConsensusHealth() {
-    return this.writeConsensusHealth;
-  }
-  public boolean getWriteNagiosStatusFile() {
-    return this.writeNagiosStatusFile;
   }
   public boolean getWriteBridgeStats() {
     return this.writeBridgeStats;

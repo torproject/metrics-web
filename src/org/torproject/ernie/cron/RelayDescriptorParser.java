@@ -28,8 +28,6 @@ public class RelayDescriptorParser {
    */
   private RelayDescriptorDatabaseImporter rddi;
 
-  private ConsensusHealthChecker chc;
-
   /**
    * Logger for this class.
    */
@@ -40,9 +38,8 @@ public class RelayDescriptorParser {
   /**
    * Initializes this class.
    */
-  public RelayDescriptorParser(ConsensusHealthChecker chc,
-      RelayDescriptorDatabaseImporter rddi, BridgeStatsFileHandler bsfh) {
-    this.chc = chc;
+  public RelayDescriptorParser(RelayDescriptorDatabaseImporter rddi,
+      BridgeStatsFileHandler bsfh) {
     this.rddi = rddi;
     this.bsfh = bsfh;
 
@@ -205,9 +202,6 @@ public class RelayDescriptorParser {
               this.bsfh.addHashedRelay(hashedRelayIdentity);
             }
           }
-          if (this.chc != null) {
-            this.chc.processConsensus(validAfterTime, data);
-          }
           if (this.rddi != null) {
             this.rddi.addConsensus(validAfter, data);
             if (relayIdentity != null) {
@@ -219,9 +213,6 @@ public class RelayDescriptorParser {
             }
           }
         } else {
-          if (this.chc != null) {
-            this.chc.processVote(validAfterTime, dirSource, data);
-          }
           if (this.rddi != null) {
             this.rddi.addVote(validAfter, dirSource, data);
           }

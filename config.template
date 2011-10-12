@@ -36,14 +36,6 @@
 ## files will be overwritten!
 #RelayDescriptorRawFilesDirectory pg-import/
 #
-## Write statistics about the current consensus and votes to the
-## website
-#WriteConsensusHealth 0
-#
-## Write Nagios status file containing potential problems with the latest
-## consensus
-#WriteNagiosStatusFile 0
-#
 ## Write bridge stats to disk
 #WriteBridgeStats 0
 #
