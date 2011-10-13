@@ -140,6 +140,7 @@ public class ExoneraTorServlet extends HttpServlet {
     /* Look up first and last consensus in the database. */
     long firstValidAfter = -1L, lastValidAfter = -1L;
     try {
+      long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT MIN(validafter) AS first, "
@@ -152,6 +153,9 @@ public class ExoneraTorServlet extends HttpServlet {
       rs.close();
       statement.close();
       conn.close();
+      this.logger.info("Returned a database connection to the pool after "
+          + (System.currentTimeMillis() - requestedConnection)
+          + " millis.");
     } catch (SQLException e) {
       /* Looks like we don't have any consensuses. */
     }
@@ -358,6 +362,7 @@ public class ExoneraTorServlet extends HttpServlet {
     SortedMap<Long, String> tooNewConsensuses =
         new TreeMap<Long, String>();
     try {
+      long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT validafter, rawdesc FROM consensus "
@@ -378,6 +383,9 @@ public class ExoneraTorServlet extends HttpServlet {
       rs.close();
       statement.close();
       conn.close();
+      this.logger.info("Returned a database connection to the pool after "
+          + (System.currentTimeMillis() - requestedConnection)
+          + " millis.");
     } catch (SQLException e) {
       /* Looks like we don't have any consensuses in the requested
          interval. */
@@ -601,6 +609,7 @@ public class ExoneraTorServlet extends HttpServlet {
     for (String descriptor : descriptors) {
       byte[] rawDescriptor = null;
       try {
+        long requestedConnection = System.currentTimeMillis();
         Connection conn = this.ds.getConnection();
         Statement statement = conn.createStatement();
         String query = "SELECT rawdesc FROM descriptor "
@@ -612,6 +621,9 @@ public class ExoneraTorServlet extends HttpServlet {
         rs.close();
         statement.close();
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
         /* Consider this descriptors as 'missing'. */
         continue;

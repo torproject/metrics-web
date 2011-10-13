@@ -62,6 +62,7 @@ public class ServerDescriptorServlet extends HttpServlet {
 
       /* Look up descriptor in the database. */
       try {
+        long requestedConnection = System.currentTimeMillis();
         Connection conn = ds.getConnection();
         Statement statement = conn.createStatement();
         String query = "SELECT descriptor, rawdesc FROM descriptor "
@@ -74,6 +75,9 @@ public class ServerDescriptorServlet extends HttpServlet {
         rs.close();
         statement.close();
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return;
@@ -111,6 +115,7 @@ public class ServerDescriptorServlet extends HttpServlet {
       databaseFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
       String databaseParameter = databaseFormat.format(parsedTimestamp);
       try {
+        long requestedConnection = System.currentTimeMillis();
         Connection conn = this.ds.getConnection();
         Statement statement = conn.createStatement();
         String query = "SELECT descriptor.rawdesc FROM statusentry "
@@ -124,6 +129,9 @@ public class ServerDescriptorServlet extends HttpServlet {
         rs.close();
         statement.close();
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return;

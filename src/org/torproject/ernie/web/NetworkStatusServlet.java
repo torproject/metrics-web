@@ -76,6 +76,7 @@ public class NetworkStatusServlet extends HttpServlet {
 
     /* Connect to the database and retrieve data set. */
     try {
+      long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
 
@@ -142,6 +143,9 @@ public class NetworkStatusServlet extends HttpServlet {
       rs.close();
       statement.close();
       conn.close();
+      this.logger.info("Returned a database connection to the pool after "
+          + (System.currentTimeMillis() - requestedConnection)
+          + " millis.");
       request.setAttribute("status", status);
       request.setAttribute("sort", sortParameter);
       request.setAttribute("order", (orderParameter.equals("desc"))

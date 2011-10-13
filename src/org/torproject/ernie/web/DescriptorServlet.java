@@ -151,6 +151,7 @@ public class DescriptorServlet extends HttpServlet {
     if (descId.length() < 40) {
       SortedSet<String> allDescIds = new TreeSet<String>();
       try {
+        long requestedConnection = System.currentTimeMillis();
         Connection conn = this.ds.getConnection();
         Statement statement = conn.createStatement();
         String query = "SELECT DISTINCT descriptor FROM statusentry "
@@ -162,6 +163,9 @@ public class DescriptorServlet extends HttpServlet {
         rs.close();
         statement.close();
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
         out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
             + "experienced an unknown database problem while looking up "
@@ -198,6 +202,7 @@ public class DescriptorServlet extends HttpServlet {
         extrainfo = null;
     byte[] rawDescriptor = null, rawExtrainfo = null;
     try {
+      long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT descriptor, nickname, published, extrainfo, "
@@ -220,6 +225,9 @@ public class DescriptorServlet extends HttpServlet {
       rs.close();
       statement.close();
       conn.close();
+      this.logger.info("Returned a database connection to the pool after "
+          + (System.currentTimeMillis() - requestedConnection)
+          + " millis.");
     } catch (SQLException e) {
       out.write("<br/><p><font color=\"red\"><b>Warning: </b></font>"
           + "Internal server error when looking up descriptor. If this "
@@ -267,6 +275,7 @@ public class DescriptorServlet extends HttpServlet {
 
     /* Print out in which consensuses this descriptor is referenced. */
     try {
+      long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT validafter, rawdesc FROM statusentry "
@@ -297,6 +306,9 @@ public class DescriptorServlet extends HttpServlet {
       rs.close();
       statement.close();
       conn.close();
+      this.logger.info("Returned a database connection to the pool after "
+          + (System.currentTimeMillis() - requestedConnection)
+          + " millis.");
     } catch (SQLException e) {
       out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
           + "experienced an unknown database problem while looking up "

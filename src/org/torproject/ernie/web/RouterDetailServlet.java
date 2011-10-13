@@ -75,6 +75,7 @@ public class RouterDetailServlet extends HttpServlet {
         + "AND statusentry.fingerprint = ?";
 
     try {
+      long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       PreparedStatement ps = conn.prepareStatement(query);
       ps.setString(1, fingerprintParameter);
@@ -118,6 +119,9 @@ public class RouterDetailServlet extends HttpServlet {
         return;
       }
       conn.close();
+      this.logger.info("Returned a database connection to the pool after "
+          + (System.currentTimeMillis() - requestedConnection)
+          + " millis.");
 
     } catch (SQLException e)  {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

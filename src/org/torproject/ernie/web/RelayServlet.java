@@ -162,6 +162,7 @@ public class RelayServlet extends HttpServlet {
     if (fingerprint.length() < 40) {
       SortedSet<String> allFingerprints = new TreeSet<String>();
       try {
+        long requestedConnection = System.currentTimeMillis();
         Connection conn = this.ds.getConnection();
         Statement statement = conn.createStatement();
         String query = "SELECT DISTINCT fingerprint FROM statusentry "
@@ -176,6 +177,9 @@ public class RelayServlet extends HttpServlet {
         rs.close();
         statement.close();
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
         out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
             + "experienced an unknown database problem while looking up "
@@ -211,6 +215,7 @@ public class RelayServlet extends HttpServlet {
     boolean foundRelay = false;
     String lastDescriptor = null;
     try {
+      long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT validafter, rawdesc FROM statusentry WHERE "
@@ -266,6 +271,9 @@ public class RelayServlet extends HttpServlet {
       rs.close();
       statement.close();
       conn.close();
+      this.logger.info("Returned a database connection to the pool after "
+          + (System.currentTimeMillis() - requestedConnection)
+          + " millis.");
     } catch (SQLException e) {
       out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
           + "experienced an unknown database problem while looking up "
@@ -293,6 +301,7 @@ public class RelayServlet extends HttpServlet {
     byte[] rawDescriptor = null, rawExtrainfo = null;
     if (lastDescriptor != null) {
       try {
+        long requestedConnection = System.currentTimeMillis();
         Connection conn = this.ds.getConnection();
         Statement statement = conn.createStatement();
         query = "SELECT descriptor, nickname, published, extrainfo, "
@@ -315,6 +324,9 @@ public class RelayServlet extends HttpServlet {
         rs.close();
         statement.close();
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
         out.write("<br/><p><font color=\"red\"><b>Warning: </b></font>"
             + "Internal server error when looking up descriptor. The "

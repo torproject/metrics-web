@@ -151,6 +151,7 @@ public class ExoneraTorBetaServlet extends HttpServlet {
     /* Open a database connection that we'll use to handle the whole
      * request. */
     Connection conn = null;
+    long requestedConnection = System.currentTimeMillis();
     try {
       conn = this.ds.getConnection();
     } catch (SQLException e) {
@@ -187,6 +188,9 @@ public class ExoneraTorBetaServlet extends HttpServlet {
       writeFooter(out);
       try {
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
       }
       return;
@@ -374,6 +378,9 @@ public class ExoneraTorBetaServlet extends HttpServlet {
       writeFooter(out);
       try {
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
       }
       return;
@@ -455,6 +462,9 @@ public class ExoneraTorBetaServlet extends HttpServlet {
       writeFooter(out);
       try {
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
       }
       return;
@@ -584,6 +594,9 @@ public class ExoneraTorBetaServlet extends HttpServlet {
       writeFooter(out);
       try {
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
       }
       return;
@@ -670,6 +683,9 @@ public class ExoneraTorBetaServlet extends HttpServlet {
         writeFooter(out);
         try {
           conn.close();
+          this.logger.info("Returned a database connection to the pool "
+              + "after " + (System.currentTimeMillis()
+              - requestedConnection) + " millis.");
         } catch (SQLException e) {
         }
         return;
@@ -722,6 +738,9 @@ public class ExoneraTorBetaServlet extends HttpServlet {
       writeFooter(out);
       try {
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
       }
       return;
@@ -908,6 +927,9 @@ public class ExoneraTorBetaServlet extends HttpServlet {
       writeFooter(out);
       try {
         conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
       } catch (SQLException e) {
       }
       return;
@@ -983,6 +1005,9 @@ public class ExoneraTorBetaServlet extends HttpServlet {
     }
     try {
       conn.close();
+      this.logger.info("Returned a database connection to the pool "
+          + "after " + (System.currentTimeMillis()
+          - requestedConnection) + " millis.");
     } catch (SQLException e) {
     }
     writeFooter(out);

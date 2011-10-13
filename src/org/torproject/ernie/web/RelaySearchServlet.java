@@ -383,6 +383,7 @@ public class RelaySearchServlet extends HttpServlet {
     Map<String, String> rawStatusEntries = new HashMap<String, String>();
     int matches = 0;
     try {
+      long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       ResultSet rs = statement.executeQuery(query);
@@ -434,6 +435,9 @@ public class RelaySearchServlet extends HttpServlet {
       rs.close();
       statement.close();
       conn.close();
+      this.logger.info("Returned a database connection to the pool "
+          + "after " + (System.currentTimeMillis()
+          - requestedConnection) + " millis.");
     } catch (SQLException e) {
 
       /* Tell the user we have a database problem. */

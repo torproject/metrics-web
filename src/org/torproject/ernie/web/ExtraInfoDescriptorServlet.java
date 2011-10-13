@@ -54,6 +54,7 @@ public class ExtraInfoDescriptorServlet extends HttpServlet {
     String extrainfo = null;
     byte[] rawDescriptor = null;
     try {
+      long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT extrainfo, rawdesc FROM extrainfo "
@@ -66,6 +67,9 @@ public class ExtraInfoDescriptorServlet extends HttpServlet {
       rs.close();
       statement.close();
       conn.close();
+      this.logger.info("Returned a database connection to the pool after "
+          + (System.currentTimeMillis() - requestedConnection)
+          + " millis.");
     } catch (SQLException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;

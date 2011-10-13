@@ -66,6 +66,7 @@ public class VotesServlet extends HttpServlet {
     String databaseParameter = databaseFormat.format(parsedTimestamp);
     List<byte[]> rawDescriptors = new ArrayList<byte[]>();
     try {
+      long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT rawdesc FROM vote "
@@ -77,6 +78,9 @@ public class VotesServlet extends HttpServlet {
       rs.close();
       statement.close();
       conn.close();
+      this.logger.info("Returned a database connection to the pool after "
+          + (System.currentTimeMillis() - requestedConnection)
+          + " millis.");
     } catch (SQLException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
