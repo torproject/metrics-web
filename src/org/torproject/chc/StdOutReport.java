@@ -41,15 +41,16 @@ public class StdOutReport implements Report {
   public void writeReport() {
     this.readLastWarned();
     if (this.downloadedConsensus != null) {
-      this.checkConsensusMethods();
-      this.checkRecommendedVersions();
-      this.checkConsensusParameters();
-      this.checkAuthorityKeys();
-      this.checkMissingVotes();
-      this.checkBandwidthScanners();
-      this.checkConsensusAge(this.downloadedConsensus);
+      if (this.isConsensusFresh(this.downloadedConsensus)) {
+        this.checkConsensusMethods();
+        this.checkRecommendedVersions();
+        this.checkConsensusParameters();
+        this.checkAuthorityKeys();
+        this.checkMissingVotes();
+        this.checkBandwidthScanners();
+      }
     } else if (this.cachedConsensus != null) {
-      this.checkConsensusAge(this.cachedConsensus);
+      this.checkConsensusValid(this.cachedConsensus);
     } else {
       this.warnings.put("No consensus known", 0L);
     }
@@ -91,6 +92,20 @@ public class StdOutReport implements Report {
       System.err.println("Could not read file '"
           + lastWarnedFile.getAbsolutePath() + "' to learn which "
           + "warnings have been sent out before.  Ignoring.");
+    }
+  }
+
+  /* Check if the most recent consensus is older than 1 hour. */
+  private boolean isConsensusFresh(Status consensus) {
+    if (consensus.getValidAfterMillis() <
+        System.currentTimeMillis() - 60L * 60L * 1000L) {
+      this.warnings.put("The last known consensus published at "
+          + dateTimeFormat.format(consensus.getValidAfterMillis())
+          + " is more than 1 hour old and therefore not fresh anymore",
+          0L);
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -228,12 +243,13 @@ public class StdOutReport implements Report {
   }
 
   /* Check if the most recent consensus is older than 3 hours. */
-  private void checkConsensusAge(Status consensus) {
+  private void checkConsensusValid(Status consensus) {
     if (consensus.getValidAfterMillis() <
         System.currentTimeMillis() - 3L * 60L * 60L * 1000L) {
       this.warnings.put("The last known consensus published at "
           + dateTimeFormat.format(consensus.getValidAfterMillis())
-          + " is more than 3 hours old", 0L);
+          + " is more than 3 hours old and therefore not valid anymore",
+          0L);
     }
   }
 

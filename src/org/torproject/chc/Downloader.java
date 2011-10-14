@@ -4,6 +4,7 @@ package org.torproject.chc;
 
 import java.io.*;
 import java.net.*;
+import java.text.*;
 import java.util.*;
 import java.util.zip.*;
 
@@ -66,6 +67,8 @@ public class Downloader {
     }
   }
 
+  /* Downloads a consensus or vote in a separate thread that can be
+   * interrupted after a timeout. */
   private static class DownloadRunnable implements Runnable {
     Thread mainThread;
     String url;
@@ -121,6 +124,13 @@ public class Downloader {
     return response;
   }
 
+  /* Date-time formats to parse and format timestamps. */
+  private static SimpleDateFormat dateTimeFormat;
+  static {
+    dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+  }
+
   /* Parse the downloaded consensus to find fingerprints of directory
    * authorities publishing the corresponding votes. */
   private List<String> fingerprints = new ArrayList<String>();
@@ -131,7 +141,23 @@ public class Downloader {
             this.downloadedConsensus));
         String line;
         while ((line = br.readLine()) != null) {
-          if (line.startsWith("dir-source ")) {
+          if (line.startsWith("valid-after ")) {
+            try {
+              long validAfterMillis = dateTimeFormat.parse(line.substring(
+                  "valid-after ".length())).getTime();
+              if (validAfterMillis + 60L * 60L * 1000L <
+                  System.currentTimeMillis()) {
+                /* Consensus is more than 1 hour old.  We won't be able to
+                 * download the corresponding votes anymore. */
+                break;
+              }
+            } catch (ParseException e) {
+              System.err.println("Could not parse valid-after timestamp "
+                  + "in line '" + line + "' of a downloaded consensus.  "
+                  + "Not downloading votes.");
+              break;
+            }
+          } else if (line.startsWith("dir-source ")) {
             String[] parts = line.split(" ");
             if (parts.length < 3) {
               System.err.println("Bad dir-source line '" + line

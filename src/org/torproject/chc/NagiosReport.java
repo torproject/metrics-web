@@ -50,19 +50,33 @@ public class NagiosReport implements Report {
    * file. */
   public void writeReport() {
     if (this.downloadedConsensus != null) {
-      this.checkConsensusMethods();
-      this.checkRecommendedVersions();
-      this.checkConsensusParameters();
-      this.checkAuthorityKeys();
-      this.checkMissingVotes();
-      this.checkBandwidthScanners();
-      this.checkConsensusAge(this.downloadedConsensus);
+      if (this.isConsensusFresh(this.downloadedConsensus)) {
+        this.checkConsensusMethods();
+        this.checkRecommendedVersions();
+        this.checkConsensusParameters();
+        this.checkAuthorityKeys();
+        this.checkMissingVotes();
+        this.checkBandwidthScanners();
+      }
     } else if (this.cachedConsensus != null) {
-      this.checkConsensusAge(this.cachedConsensus);
+      this.checkConsensusValid(this.cachedConsensus);
     } else {
       this.nagiosUnknowns.add("No consensus known");
     }
     this.writeNagiosStatusFile();
+  }
+
+  /* Check if the most recent consensus is older than 1 hour. */
+  private boolean isConsensusFresh(Status consensus) {
+    if (consensus.getValidAfterMillis() <
+        System.currentTimeMillis() - 60L * 60L * 1000L) {
+      this.nagiosCriticals.add("The last known consensus published at "
+          + dateTimeFormat.format(consensus.getValidAfterMillis())
+          + " is more than 1 hour old and therefore not fresh anymore");
+      return false;
+    } else {
+      return true;
+    }
   }
 
   /* Check supported consensus methods of all votes. */
@@ -192,12 +206,12 @@ public class NagiosReport implements Report {
 
   /* Check that the most recent consensus is not more than 3 hours
    * old. */
-  public void checkConsensusAge(Status consensus) {
+  public void checkConsensusValid(Status consensus) {
     if (consensus.getValidAfterMillis() <
         System.currentTimeMillis() - 3L * 60L * 60L * 1000L) {
       this.nagiosCriticals.add("The last known consensus published at "
           + dateTimeFormat.format(consensus.getValidAfterMillis())
-          + " is more than 3 hours old");
+          + " is more than 3 hours old and therefore not valid anymore");
     }
   }
 
