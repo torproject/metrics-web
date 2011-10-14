@@ -125,7 +125,7 @@ public class Parser {
           } else {
             break;
           }
-        } else if (line.startsWith("s ")) {
+        } else if (line.startsWith("s ") || line.equals("s")) {
           sLine = line;
           if (line.contains(" Running")) {
             runningRelays++;
