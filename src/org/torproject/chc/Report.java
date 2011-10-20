@@ -10,8 +10,8 @@ public interface Report {
 
   /* Process the downloaded current consensus and corresponding votes to
    * find irregularities between them. */
-  public abstract void processDownloadedConsensus(
-      Status downloadedConsensus);
+  public abstract void processDownloadedConsensuses(
+      SortedMap<String, Status> downloadedConsensuses);
 
   /* Finish writing report. */
   public abstract void writeReport();

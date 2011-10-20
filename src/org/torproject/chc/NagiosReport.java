@@ -20,11 +20,12 @@ public class NagiosReport implements Report {
 
   /* Store the current consensus and corresponding votes for
    * processing. */
+  private SortedMap<String, Status> downloadedConsensuses;
   private Status downloadedConsensus;
   private SortedSet<Status> downloadedVotes;
-  public void processDownloadedConsensus(Status downloadedConsensus) {
-    this.downloadedConsensus = downloadedConsensus;
-    this.downloadedVotes = downloadedConsensus.getVotes();
+  public void processDownloadedConsensuses(
+      SortedMap<String, Status> downloadedConsensuses) {
+    this.downloadedConsensuses = downloadedConsensuses;
   }
 
   /* Lists of output messages sorted by warnings, criticals, and
@@ -43,6 +44,9 @@ public class NagiosReport implements Report {
   /* Check consensus and votes and write any findings to the output
    * file. */
   public void writeReport() {
+    this.findMostRecentConsensus();
+    this.checkMissingConsensuses();
+    this.checkAllConsensusesFresh();
     if (this.downloadedConsensus != null) {
       if (this.isConsensusFresh(this.downloadedConsensus)) {
         this.checkConsensusMethods();
@@ -58,13 +62,66 @@ public class NagiosReport implements Report {
     this.writeNagiosStatusFile();
   }
 
+  /* Find most recent consensus and corresponding votes. */
+  private void findMostRecentConsensus() {
+    long mostRecentValidAfterMillis = -1L;
+    for (Status downloadedConsensus : downloadedConsensuses.values()) {
+      if (downloadedConsensus.getValidAfterMillis() >
+          mostRecentValidAfterMillis) {
+        this.downloadedConsensus = downloadedConsensus;
+        mostRecentValidAfterMillis =
+            downloadedConsensus.getValidAfterMillis();
+      }
+    }
+    if (this.downloadedConsensus != null) {
+      this.downloadedVotes = this.downloadedConsensus.getVotes();
+    }
+  }
+
+  /* Check if any directory authority didn't tell us a consensus. */
+  private void checkMissingConsensuses() {
+    SortedSet<String> missingConsensuses = new TreeSet<String>(
+        Arrays.asList(("gabelmoo,tor26,ides,maatuska,dannenberg,urras,"
+        + "moria1,dizum").split(",")));
+    missingConsensuses.removeAll(this.downloadedConsensuses.keySet());
+    if (!missingConsensuses.isEmpty()) {
+      StringBuilder sb = new StringBuilder();
+      for (String nickname : missingConsensuses) {
+        sb.append(", " + nickname);
+      }
+      this.nagiosCriticals.add("The following directory authorities did "
+          + "not return a consensus within a timeout of 60 seconds: "
+          + sb.toString().substring(2));
+    }
+  }
+
+  /* Check if all consensuses are fresh. */
+  private void checkAllConsensusesFresh() {
+    long fresh = System.currentTimeMillis() - 60L * 60L * 1000L;
+    SortedSet<String> nonFresh = new TreeSet<String>();
+    for (Map.Entry<String, Status> e : downloadedConsensuses.entrySet()) {
+      String nickname = e.getKey();
+      Status downloadedConsensus = e.getValue();
+      if (downloadedConsensus.getValidAfterMillis() < fresh) {
+        nonFresh.add(nickname);
+      }
+    }
+    if (!nonFresh.isEmpty()) {
+      StringBuilder sb = new StringBuilder();
+      for (String nickname : nonFresh) {
+        sb.append(", " + nickname);
+      }
+      this.nagiosCriticals.add("The consensuses published by the "
+          + "following directory authorities are more than 1 hour old "
+          + "and therefore not fresh anymore: "
+          + sb.toString().substring(2));
+    }
+  }
+
   /* Check if the most recent consensus is older than 1 hour. */
   private boolean isConsensusFresh(Status consensus) {
     if (consensus.getValidAfterMillis() <
         System.currentTimeMillis() - 60L * 60L * 1000L) {
-      this.nagiosCriticals.add("The last known consensus published at "
-          + dateTimeFormat.format(consensus.getValidAfterMillis())
-          + " is more than 1 hour old and therefore not fresh anymore");
       return false;
     } else {
       return true;

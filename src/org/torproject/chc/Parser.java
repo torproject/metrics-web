@@ -12,18 +12,34 @@ public class Parser {
 
   /* Parse and return a consensus and corresponding votes, or null if
    * something goes wrong. */
-  public Status parse(String consensusString, List<String> voteStrings) {
-    Status consensus = this.parseConsensusOrVote(consensusString, true);
-    if (consensus != null) {
-      for (String voteString : voteStrings) {
-        Status vote = this.parseConsensusOrVote(voteString, false);
-        if (consensus.getValidAfterMillis() ==
-            vote.getValidAfterMillis()) {
-          consensus.addVote(vote);
-        }
+  public SortedMap<String, Status> parse(
+      SortedMap<String, String> consensusStrings,
+      List<String> voteStrings) {
+    SortedSet<Status> parsedVotes = new TreeSet<Status>();
+    for (String voteString : voteStrings) {
+      Status parsedVote = this.parseConsensusOrVote(voteString, false);
+      if (parsedVote != null) {
+        parsedVotes.add(parsedVote);
       }
     }
-    return consensus;
+    SortedMap<String, Status> parsedConsensuses =
+        new TreeMap<String, Status>();
+    for (Map.Entry<String, String> e : consensusStrings.entrySet()) {
+      String nickname = e.getKey();
+      String consensusString = e.getValue();
+      Status parsedConsensus = this.parseConsensusOrVote(consensusString,
+          true);
+      if (parsedConsensus != null) {
+        for (Status parsedVote : parsedVotes) {
+          if (parsedConsensus.getValidAfterMillis() ==
+              parsedVote.getValidAfterMillis()) {
+            parsedConsensus.addVote(parsedVote);
+          }
+        }
+        parsedConsensuses.put(nickname, parsedConsensus);
+      }
+    }
+    return parsedConsensuses;
   }
 
   /* Date-time formats to parse and format timestamps. */

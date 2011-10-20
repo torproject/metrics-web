@@ -29,9 +29,20 @@ public class MetricsWebsiteReport implements Report {
    * processing. */
   private Status downloadedConsensus;
   private SortedSet<Status> downloadedVotes;
-  public void processDownloadedConsensus(Status downloadedConsensus) {
-    this.downloadedConsensus = downloadedConsensus;
-    this.downloadedVotes = downloadedConsensus.getVotes();
+  public void processDownloadedConsensuses(
+      SortedMap<String, Status> downloadedConsensuses) {
+    long mostRecentValidAfterMillis = -1L;
+    for (Status downloadedConsensus : downloadedConsensuses.values()) {
+      if (downloadedConsensus.getValidAfterMillis() >
+          mostRecentValidAfterMillis) {
+        this.downloadedConsensus = downloadedConsensus;
+        mostRecentValidAfterMillis =
+            downloadedConsensus.getValidAfterMillis();
+      }
+    }
+    if (this.downloadedConsensus != null) {
+      this.downloadedVotes = this.downloadedConsensus.getVotes();
+    }
   }
 
   /* Writer to write all HTML output to. */

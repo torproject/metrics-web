@@ -14,41 +14,46 @@ public class Downloader {
 
   /* List of directory authorities to download consensuses and votes
    * from. */
-  private static final List<String> AUTHORITIES =
-      new ArrayList<String>(Arrays.asList(("212.112.245.170,86.59.21.38,"
-      + "216.224.124.114:9030,213.115.239.118:443,193.23.244.244,"
-      + "208.83.223.34:443,128.31.0.34:9131,194.109.206.212").
-      split(",")));
+  private SortedMap<String, String> authorities =
+      new TreeMap<String, String>();
+  public Downloader() {
+    this.authorities.put("gabelmoo", "212.112.245.170");
+    this.authorities.put("tor26", "86.59.21.38");
+    this.authorities.put("ides", "216.224.124.114:9030");
+    this.authorities.put("maatuska", "213.115.239.118:443");
+    this.authorities.put("dannenberg", "193.23.244.244");
+    this.authorities.put("urras", "208.83.223.34:443");
+    this.authorities.put("moria1", "128.31.0.34:9131");
+    this.authorities.put("dizum", "194.109.206.212");
+  }
 
   /* Download a new consensus and corresponding votes. */
   public void downloadFromAuthorities() {
     this.downloadConsensus();
-    if (this.downloadedConsensus != null) {
+    if (!this.downloadedConsensuses.isEmpty()) {
       this.parseConsensusToFindReferencedVotes();
       this.downloadReferencedVotes();
     }
   }
 
-  /* Download the most recent consensus. */
-  private String downloadedConsensus;
+  /* Download the most recent consensus from all authorities. */
+  private SortedMap<String, String> downloadedConsensuses =
+      new TreeMap<String, String>();
   private void downloadConsensus() {
-    List<String> authorities = new ArrayList<String>(AUTHORITIES);
-    Collections.shuffle(authorities);
-    for (String authority : authorities) {
-      if (this.downloadedConsensus != null) {
-        break;
-      }
+    for (Map.Entry<String, String> e : this.authorities.entrySet()) {
+      String nickname = e.getKey();
+      String address = e.getValue();
       String resource = "/tor/status-vote/current/consensus.z";
-      String fullUrl = "http://" + authority + resource;
+      String fullUrl = "http://" + address + resource;
       String response = this.downloadFromAuthority(fullUrl);
       if (response != null) {
-        this.downloadedConsensus = response;
+        this.downloadedConsensuses.put(nickname, response);
       } else {
         System.err.println("Could not download consensus from directory "
-            + "authority " + authority + ".  Ignoring.");
+            + "authority " + nickname + ".  Ignoring.");
       }
     }
-    if (this.downloadedConsensus == null) {
+    if (this.downloadedConsensuses.isEmpty()) {
       System.err.println("Could not download consensus from any of the "
           + "directory authorities.  Ignoring.");
     }
@@ -122,10 +127,11 @@ public class Downloader {
    * authorities publishing the corresponding votes. */
   private List<String> fingerprints = new ArrayList<String>();
   private void parseConsensusToFindReferencedVotes() {
-    if (this.downloadedConsensus != null) {
+    for (String downloadedConsensus :
+        this.downloadedConsensuses.values()) {
       try {
         BufferedReader br = new BufferedReader(new StringReader(
-            this.downloadedConsensus));
+            downloadedConsensus));
         String line;
         while ((line = br.readLine()) != null) {
           if (line.startsWith("valid-after ")) {
@@ -173,7 +179,8 @@ public class Downloader {
   private void downloadReferencedVotes() {
     for (String fingerprint : this.fingerprints) {
       String downloadedVote = null;
-      List<String> authorities = new ArrayList<String>(AUTHORITIES);
+      List<String> authorities = new ArrayList<String>(
+          this.authorities.values());
       Collections.shuffle(authorities);
       for (String authority : authorities) {
         if (downloadedVote != null) {
@@ -190,9 +197,10 @@ public class Downloader {
     }
   }
 
-  /* Return the previously downloaded (unparsed) consensus string. */
-  public String getConsensusString() {
-    return this.downloadedConsensus;
+  /* Return the previously downloaded (unparsed) consensus string by
+   * authority nickname. */
+  public SortedMap<String, String> getConsensusStrings() {
+    return this.downloadedConsensuses;
   }
 
   /* Return the previously downloaded (unparsed) vote strings. */

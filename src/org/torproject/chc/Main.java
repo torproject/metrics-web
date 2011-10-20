@@ -23,12 +23,10 @@ public class Main {
 
     /* Parse consensus and votes and pass them to the reports. */
     Parser parser = new Parser();
-    Status parsedDownloadedConsensus = parser.parse(
-        downloader.getConsensusString(), downloader.getVoteStrings());
-    if (parsedDownloadedConsensus != null) {
-      for (Report report : reports) {
-        report.processDownloadedConsensus(parsedDownloadedConsensus);
-      }
+    SortedMap<String, Status> parsedDownloadedConsensuses = parser.parse(
+        downloader.getConsensusStrings(), downloader.getVoteStrings());
+    for (Report report : reports) {
+      report.processDownloadedConsensuses(parsedDownloadedConsensuses);
     }
 
     /* Finish writing reports. */
