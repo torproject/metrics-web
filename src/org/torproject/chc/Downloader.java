@@ -40,20 +40,28 @@ public class Downloader {
   private SortedMap<String, String> downloadedConsensuses =
       new TreeMap<String, String>();
   private void downloadConsensus() {
+    Map<String, String> urls = new HashMap<String, String>();
     for (Map.Entry<String, String> e : this.authorities.entrySet()) {
       String nickname = e.getKey();
       String address = e.getValue();
       String resource = "/tor/status-vote/current/consensus.z";
       String fullUrl = "http://" + address + resource;
-      String response = this.downloadFromAuthority(fullUrl);
-      if (response != null) {
+      urls.put(nickname, fullUrl);
+    }
+    Map<String, String> responses =
+        this.downloadFromAuthority(new HashSet<String>(urls.values()));
+    for (Map.Entry<String, String> e : urls.entrySet()) {
+      String nickname = e.getKey();
+      String url = e.getValue();
+      if (responses.containsKey(url)) {
+        String response = responses.get(url);
         this.downloadedConsensuses.put(nickname, response);
       } else {
         System.err.println("Could not download consensus from directory "
             + "authority " + nickname + ".  Ignoring.");
       }
     }
-    if (this.downloadedConsensuses.isEmpty()) {
+    if (responses.isEmpty()) {
       System.err.println("Could not download consensus from any of the "
           + "directory authorities.  Ignoring.");
     }
@@ -65,14 +73,14 @@ public class Downloader {
     Thread mainThread;
     String url;
     String response;
-    boolean interrupted = false;
+    boolean finished = false;
     public DownloadRunnable(String url) {
       this.mainThread = Thread.currentThread();
       this.url = url;
     }
     public void run() {
       try {
-        URL u = new URL(url);
+        URL u = new URL(this.url);
         HttpURLConnection huc = (HttpURLConnection) u.openConnection();
         huc.setRequestMethod("GET");
         huc.connect();
@@ -83,37 +91,65 @@ public class Downloader {
           ByteArrayOutputStream baos = new ByteArrayOutputStream();
           int len;
           byte[] data = new byte[1024];
-          while (!this.interrupted &&
+          while (!this.finished &&
               (len = in.read(data, 0, 1024)) >= 0) {
             baos.write(data, 0, len);
           }
-          if (this.interrupted) {
+          if (this.finished) {
             return;
           }
           in.close();
           byte[] allData = baos.toByteArray();
           this.response = new String(allData);
+          this.finished = true;
           this.mainThread.interrupt();
         }
       } catch (IOException e) {
         /* Can't do much except leaving this.response at null. */
       }
+      this.finished = true;
     }
   }
 
-  /* Download a consensus or vote from a directory authority using a
-   * timeout of 60 seconds. */
-  private String downloadFromAuthority(final String url) {
-    DownloadRunnable downloadRunnable = new DownloadRunnable(url);
-    new Thread(downloadRunnable).start();
-    try {
-      Thread.sleep(60L * 1000L);
-    } catch (InterruptedException e) {
-      /* Do nothing. */
+  /* Download one or more consensuses or votes from one or more directory
+   * authorities using a timeout of 60 seconds. */
+  private Map<String, String> downloadFromAuthority(Set<String> urls) {
+    Set<DownloadRunnable> downloadRunnables =
+        new HashSet<DownloadRunnable>();
+    for (String url : urls) {
+      DownloadRunnable downloadRunnable = new DownloadRunnable(url);
+      downloadRunnables.add(downloadRunnable);
+      new Thread(downloadRunnable).start();
     }
-    String response = downloadRunnable.response;
-    downloadRunnable.interrupted = true;
-    return response;
+    long started = System.currentTimeMillis(), sleep;
+    while ((sleep = started + 60L * 1000L - System.currentTimeMillis())
+        > 0L) {
+      try {
+        Thread.sleep(sleep);
+      } catch (InterruptedException e) {
+        /* Do nothing. */
+      }
+      boolean unfinished = false;
+      for (DownloadRunnable downloadRunnable : downloadRunnables) {
+        if (!downloadRunnable.finished) {
+          unfinished = true;
+          break;
+        }
+      }
+      if (!unfinished) {
+        break;
+      }
+    }
+    Map<String, String> responses = new HashMap<String, String>();
+    for (DownloadRunnable downloadRunnable : downloadRunnables) {
+      String url = downloadRunnable.url;
+      String response = downloadRunnable.response;
+      if (response != null) {
+        responses.put(url, response);
+      }
+      downloadRunnable.finished = true;
+    }
+    return responses;
   }
 
   /* Date-time formats to parse and format timestamps. */
@@ -125,7 +161,7 @@ public class Downloader {
 
   /* Parse the downloaded consensus to find fingerprints of directory
    * authorities publishing the corresponding votes. */
-  private List<String> fingerprints = new ArrayList<String>();
+  private SortedSet<String> fingerprints = new TreeSet<String>();
   private void parseConsensusToFindReferencedVotes() {
     for (String downloadedConsensus :
         this.downloadedConsensuses.values()) {
@@ -189,8 +225,12 @@ public class Downloader {
         String resource = "/tor/status-vote/current/" + fingerprint
             + ".z";
         String fullUrl = "http://" + authority + resource;
-        downloadedVote = this.downloadFromAuthority(fullUrl);
-        if (downloadedVote != null) {
+        Set<String> urls = new HashSet<String>();
+        urls.add(fullUrl);
+        Map<String, String> downloadedVotes =
+            this.downloadFromAuthority(urls);
+        if (downloadedVotes.containsKey(fullUrl)) {
+          downloadedVote = downloadedVotes.get(fullUrl);
           this.downloadedVotes.add(downloadedVote);
         }
       }
