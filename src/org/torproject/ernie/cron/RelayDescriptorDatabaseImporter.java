@@ -496,8 +496,12 @@ public final class RelayDescriptorDatabaseImporter {
           this.psD.setLong(7, bandwidthAvg);
           this.psD.setLong(8, bandwidthBurst);
           this.psD.setLong(9, bandwidthObserved);
+          /* Remove all non-ASCII characters from the platform string, or
+           * we'll make Postgres unhappy.  Sun's JDK and OpenJDK behave
+           * differently when creating a new String with a given encoding.
+           * That's what the regexp below is for. */
           this.psD.setString(10, new String(platform.getBytes(),
-              "US-ASCII"));
+              "US-ASCII").replaceAll("[^\\p{ASCII}]",""));
           this.psD.setTimestamp(11, new Timestamp(published), cal);
           this.psD.setLong(12, uptime);
           this.psD.setString(13, extraInfoDigest);
