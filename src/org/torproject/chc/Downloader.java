@@ -20,21 +20,8 @@ public class Downloader {
       + "208.83.223.34:443,128.31.0.34:9131,194.109.206.212").
       split(",")));
 
-  /* Set the last known valid-after time to avoid downloading a new
-   * consensus if there cannot be a new one yet. */
-  private long lastKnownValidAfterMillis;
-  public void setLastKnownValidAfterMillis(
-      long lastKnownValidAfterMillis) {
-    this.lastKnownValidAfterMillis = lastKnownValidAfterMillis;
-  }
-
-  /* Download a new consensus and corresponding votes if we expect them to
-   * be newer than the ones we have. */
+  /* Download a new consensus and corresponding votes. */
   public void downloadFromAuthorities() {
-    if (System.currentTimeMillis() - lastKnownValidAfterMillis <
-        60L * 60L * 1000L) {
-      return;
-    }
     this.downloadConsensus();
     if (this.downloadedConsensus != null) {
       this.parseConsensusToFindReferencedVotes();

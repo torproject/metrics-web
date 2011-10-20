@@ -21,12 +21,6 @@ public class StdOutReport implements Report {
     dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
   }
 
-  /* Cached consensus for later processing. */
-  private Status cachedConsensus;
-  public void processCachedConsensus(Status cachedConsensus) {
-    this.cachedConsensus = cachedConsensus;
-  }
-
   /* Downloaded consensus and corresponding votes for later
    * processing. */
   private Status downloadedConsensus;
@@ -49,8 +43,6 @@ public class StdOutReport implements Report {
         this.checkMissingVotes();
         this.checkBandwidthScanners();
       }
-    } else if (this.cachedConsensus != null) {
-      this.checkConsensusValid(this.cachedConsensus);
     } else {
       this.warnings.put("No consensus known", 0L);
     }
@@ -239,17 +231,6 @@ public class StdOutReport implements Report {
       this.warnings.put("The following directory authorities are not "
           + "reporting bandwidth scanner results: "
           + sb.toString().substring(2), 150L * 60L * 1000L);
-    }
-  }
-
-  /* Check if the most recent consensus is older than 3 hours. */
-  private void checkConsensusValid(Status consensus) {
-    if (consensus.getValidAfterMillis() <
-        System.currentTimeMillis() - 3L * 60L * 60L * 1000L) {
-      this.warnings.put("The last known consensus published at "
-          + dateTimeFormat.format(consensus.getValidAfterMillis())
-          + " is more than 3 hours old and therefore not valid anymore",
-          0L);
     }
   }
 

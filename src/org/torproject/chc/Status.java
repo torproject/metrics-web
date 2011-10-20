@@ -29,15 +29,6 @@ public class Status implements Comparable<Status> {
     return this.unparsedString;
   }
 
-  /* File name when writing this status to disk. */
-  private String fileName;
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
-  }
-  public String getFileName() {
-    return this.fileName;
-  }
-
   /* Votes published at the same time as this consensus; votes don't
    * reference any statuses. */
   private SortedSet<Status> votes = new TreeSet<Status>();

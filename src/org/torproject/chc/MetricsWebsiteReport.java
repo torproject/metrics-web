@@ -25,11 +25,6 @@ public class MetricsWebsiteReport implements Report {
     this.htmlOutputFile = new File(htmlOutputFilename);
   }
 
-  /* Process the last but one consensus (ignored in this report). */
-  public void processCachedConsensus(Status cachedConsensus) {
-    /* Do nothing. */
-  }
-
   /* Store the downloaded consensus and corresponding votes for later
    * processing. */
   private Status downloadedConsensus;

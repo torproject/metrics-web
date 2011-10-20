@@ -28,12 +28,9 @@ public class Parser {
 
   /* Date-time formats to parse and format timestamps. */
   private static SimpleDateFormat dateTimeFormat;
-  private static SimpleDateFormat fileNameFormat;
   static {
     dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    fileNameFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-    fileNameFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
   }
 
   /* Parse a consensus or vote string into a Status instance. */
@@ -143,14 +140,6 @@ public class Parser {
       br.close();
       status.setRunningRelays(runningRelays);
       status.setBandwidthWeights(bandwidthWeights);
-      if (isConsensus) {
-        status.setFileName(fileNameFormat.format(
-            status.getValidAfterMillis()) + "-consensus");
-      } else {
-        status.setFileName(fileNameFormat.format(
-            status.getValidAfterMillis()) + "-vote-"
-            + status.getFingerprint());
-      }
     } catch (IOException e) {
       System.err.println("Caught an IOException while parsing a "
           + (isConsensus ? "consensus" : "vote") + " string.  Skipping.");

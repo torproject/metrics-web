@@ -16,45 +16,19 @@ public class Main {
     reports.add(new NagiosReport("stats/consensus-health"));
     reports.add(new StdOutReport());
 
-    /* Load last-known consensus and votes from disk and parse them. */
-    Archiver archiver = new Archiver();
-    archiver.loadLastFromDisk();
-    Parser parser = new Parser();
-    Status parsedCachedConsensus = parser.parse(
-        archiver.getConsensusString(), archiver.getVoteStrings());
-    if (parsedCachedConsensus != null) {
-      for (Report report : reports) {
-        report.processCachedConsensus(parsedCachedConsensus);
-      }
-    }
-
     /* Download consensus and corresponding votes from the directory
-     * authorities and parse them, too. */
+     * authorities. */
     Downloader downloader = new Downloader();
-    if (parsedCachedConsensus != null) {
-      downloader.setLastKnownValidAfterMillis(
-          parsedCachedConsensus.getValidAfterMillis());
-    }
     downloader.downloadFromAuthorities();
+
+    /* Parse consensus and votes and pass them to the reports. */
+    Parser parser = new Parser();
     Status parsedDownloadedConsensus = parser.parse(
         downloader.getConsensusString(), downloader.getVoteStrings());
     if (parsedDownloadedConsensus != null) {
       for (Report report : reports) {
         report.processDownloadedConsensus(parsedDownloadedConsensus);
       }
-    }
-
-    /* Save the new consensus and corresponding votes to disk and delete
-     * all previous ones. */
-    if (parsedDownloadedConsensus != null) {
-      archiver.saveStatusStringToDisk(
-          parsedDownloadedConsensus.getUnparsedString(),
-          parsedDownloadedConsensus.getFileName());
-      for (Status vote : parsedDownloadedConsensus.getVotes()) {
-        archiver.saveStatusStringToDisk(vote.getUnparsedString(),
-            vote.getFileName());
-      }
-      archiver.deleteAllButLast();
     }
 
     /* Finish writing reports. */

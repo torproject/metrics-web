@@ -18,12 +18,6 @@ public class NagiosReport implements Report {
     this.nagiosOutputFile = new File(nagiosOutputFilename);
   }
 
-  /* Store the cached consensus for processing. */
-  private Status cachedConsensus;
-  public void processCachedConsensus(Status cachedConsensus) {
-    this.cachedConsensus = cachedConsensus;
-  }
-
   /* Store the current consensus and corresponding votes for
    * processing. */
   private Status downloadedConsensus;
@@ -58,8 +52,6 @@ public class NagiosReport implements Report {
         this.checkMissingVotes();
         this.checkBandwidthScanners();
       }
-    } else if (this.cachedConsensus != null) {
-      this.checkConsensusValid(this.cachedConsensus);
     } else {
       this.nagiosUnknowns.add("No consensus known");
     }
@@ -201,17 +193,6 @@ public class NagiosReport implements Report {
       } else {
         nagiosCriticals.add(message);
       }
-    }
-  }
-
-  /* Check that the most recent consensus is not more than 3 hours
-   * old. */
-  public void checkConsensusValid(Status consensus) {
-    if (consensus.getValidAfterMillis() <
-        System.currentTimeMillis() - 3L * 60L * 60L * 1000L) {
-      this.nagiosCriticals.add("The last known consensus published at "
-          + dateTimeFormat.format(consensus.getValidAfterMillis())
-          + " is more than 3 hours old and therefore not valid anymore");
     }
   }
 

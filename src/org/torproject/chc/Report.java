@@ -8,10 +8,6 @@ import java.util.*;
  * some form. */
 public interface Report {
 
-  /* Process the cached consensus and corresponding votes to compare them
-   * to the downloaded ones. */
-  public abstract void processCachedConsensus(Status cachedConsensus);
-
   /* Process the downloaded current consensus and corresponding votes to
    * find irregularities between them. */
   public abstract void processDownloadedConsensus(
