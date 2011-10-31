@@ -76,8 +76,12 @@ public class RelayDescriptorParser {
         startToken = "router ";
       } else if (line.startsWith("extra-info ")) {
         startToken = "extra-info ";
+      } else if (line.equals("dir-key-certificate-version 3")) {
+        this.logger.fine("Not parsing dir key certificate.");
+        return;
       } else {
-        this.logger.warning("Unknown descriptor type. Ignoring.");
+        this.logger.warning("Unknown descriptor type.  First line is '"
+            + line + "'.  Ignoring.");
         return;
       }
       String splitToken = "\n" + startToken;
