@@ -45,6 +45,10 @@
         been included in the <a href="#papers">papers</a> above or in the
         daily updated <a href="graphs.html">graphs</a>.
         <ul>
+          <li>An Analysis of Tor Bridge Stability&mdash;Making BridgeDB
+          give out at least one stable bridge per user (<a
+          href="papers/bridge-stability-2011-10-31.pdf">PDF</a>, 419K from
+          October 31, 2011).</li>
           <li>Case study: Learning whether a Tor bridge is blocked by
           looking at its aggregate usage statistics, Part one (<a
           href="papers/blocking-2011-09-15.pdf">PDF</a>, 767K from
