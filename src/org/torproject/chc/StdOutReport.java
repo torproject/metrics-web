@@ -211,7 +211,7 @@ public class StdOutReport implements Report {
       Map<String, String> voteConsensusParams =
           vote.getConsensusParams();
       boolean conflictOrInvalid = false;
-      if (voteConsensusParams == null) {
+      if (voteConsensusParams != null) {
         for (Map.Entry<String, String> e :
             voteConsensusParams.entrySet()) {
           if (!downloadedConsensus.getConsensusParams().containsKey(
