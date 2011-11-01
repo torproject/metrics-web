@@ -385,7 +385,7 @@ public class MetricsWebsiteReport implements Report {
           ("circwindow,CircuitPriorityHalflifeMsec,refuseunknownexits,"
           + "cbtdisabled,cbtnummodes,cbtrecentcount,cbtmaxtimeouts,"
           + "cbtmincircs,cbtquantile,cbtclosequantile,cbttestfreq,"
-          + "cbtmintimeout,cbtinitialtimeout").split(",")));
+          + "cbtmintimeout,cbtinitialtimeout,bwauthpid").split(",")));
       Map<String, String> consensusConsensusParams =
           downloadedConsensus.getConsensusParams();
       for (Status vote : this.downloadedVotes) {
