@@ -229,7 +229,7 @@ public class NagiosReport implements Report {
   /* Check if any bandwidth scanner results are missing. */
   private void checkBandwidthScanners() {
     SortedSet<String> missingBandwidthScanners = new TreeSet<String>(
-        Arrays.asList("ides,urras,moria1,gabelmoo".split(",")));
+        Arrays.asList("ides,urras,moria1,gabelmoo,maatuska".split(",")));
     SortedSet<String> runningBandwidthScanners = new TreeSet<String>();
     for (Status vote : this.downloadedVotes) {
       if (vote.getBandwidthWeights() > 0) {
