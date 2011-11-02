@@ -128,7 +128,9 @@ public class MetricsWebsiteReport implements Report {
   /* Write the valid-after time of the downloaded consensus. */
   private void writeValidAfterTime() throws IOException {
     this.bw.write("        <br>\n"
-        + "        <h3>Valid-after time</h3>\n"
+        + "        <a name=\"validafter\">\n"
+        + "        <h3><a href=\"#validafter\" class=\"anchor\">"
+          + "Valid-after time</a></h3>\n"
         + "        <br>\n"
         + "        <p>Consensus was published ");
     if (this.downloadedConsensus.getValidAfterMillis() <
@@ -147,7 +149,9 @@ public class MetricsWebsiteReport implements Report {
   /* Write the lists of known flags. */
   private void writeKnownFlags() throws IOException {
     this.bw.write("        <br>\n"
-        + "        <h3>Known flags</h3>\n"
+        + "        <a name=\"knownflags\">\n"
+        + "        <h3><a href=\"#knownflags\" class=\"anchor\">Known "
+          + "flags</a></h3>\n"
         + "        <br>\n"
         + "        <table border=\"0\" cellpadding=\"4\" "
         + "cellspacing=\"0\" summary=\"\">\n"
@@ -184,7 +188,9 @@ public class MetricsWebsiteReport implements Report {
   /* Write the number of relays voted about. */
   private void writeNumberOfRelaysVotedAbout() throws IOException {
     this.bw.write("        <br>\n"
-        + "        <h3>Number of relays voted about</h3>\n"
+        + "        <a name=\"numberofrelays\">\n"
+        + "        <h3><a href=\"#numberofrelays\" class=\"anchor\">"
+          + "Number of relays voted about</a></h3>\n"
         + "        <br>\n"
         + "        <table border=\"0\" cellpadding=\"4\" "
         + "cellspacing=\"0\" summary=\"\">\n"
@@ -224,7 +230,9 @@ public class MetricsWebsiteReport implements Report {
    * the resulting consensus method. */
   private void writeConsensusMethods() throws IOException {
     this.bw.write("        <br>\n"
-        + "        <h3>Consensus methods</h3>\n"
+        + "        <a name=\"consensusmethods\">\n"
+        + "        <h3><a href=\"#consensusmethods\" class=\"anchor\">"
+          + "Consensus methods</a></h3>\n"
         + "        <br>\n"
         + "        <table border=\"0\" cellpadding=\"4\" "
         + "cellspacing=\"0\" summary=\"\">\n"
@@ -275,7 +283,9 @@ public class MetricsWebsiteReport implements Report {
   /* Write recommended versions. */
   private void writeRecommendedVersions() throws IOException {
     this.bw.write("        <br>\n"
-        + "        <h3>Recommended versions</h3>\n"
+        + "        <a name=\"recommendedversions\">\n"
+        + "        <h3><a href=\"#recommendedversions\" class=\"anchor\">"
+          + "Recommended versions</a></h3>\n"
         + "        <br>\n"
         + "        <table border=\"0\" cellpadding=\"4\" "
         + "cellspacing=\"0\" summary=\"\">\n"
@@ -370,7 +380,9 @@ public class MetricsWebsiteReport implements Report {
   /* Write consensus parameters. */
   private void writeConsensusParameters() throws IOException {
     this.bw.write("        <br>\n"
-        + "        <h3>Consensus parameters</h3>\n"
+        + "        <a name=\"consensusparams\">\n"
+        + "        <h3><a href=\"#consensusparams\" class=\"anchor\">"
+          + "Consensus parameters</a></h3>\n"
         + "        <br>\n"
         + "        <table border=\"0\" cellpadding=\"4\" "
         + "cellspacing=\"0\" summary=\"\">\n"
@@ -444,7 +456,9 @@ public class MetricsWebsiteReport implements Report {
   /* Write authority keys and their expiration dates. */
   private void writeAuthorityKeys() throws IOException {
     this.bw.write("        <br>\n"
-        + "        <h3>Authority keys</h3>\n"
+        + "        <a name=\"authoritykeys\">\n"
+        + "        <h3><a href=\"#authoritykeys\" class=\"anchor\">"
+          + "Authority keys</a></h3>\n"
         + "        <br>\n"
         + "        <table border=\"0\" cellpadding=\"4\" "
         + "cellspacing=\"0\" summary=\"\">\n"
@@ -487,7 +501,9 @@ public class MetricsWebsiteReport implements Report {
    * in votes. */
   private void writeBandwidthScannerStatus() throws IOException {
     this.bw.write("        <br>\n"
-         + "        <h3>Bandwidth scanner status</h3>\n"
+         + "        <a name=\"bwauthstatus\">\n"
+         + "        <h3><a href=\"#bwauthstatus\" class=\"anchor\">"
+           + "Bandwidth scanner status</a></h3>\n"
         + "        <br>\n"
         + "        <table border=\"0\" cellpadding=\"4\" "
         + "cellspacing=\"0\" summary=\"\">\n"
@@ -514,7 +530,9 @@ public class MetricsWebsiteReport implements Report {
   /* Write directory authority versions. */
   private void writeAuthorityVersions() throws IOException {
     this.bw.write("        <br>\n"
-         + "        <h3>Authority versions</h3>\n"
+         + "        <a name=\"authorityversions\">\n"
+         + "        <h3><a href=\"#authorityversions\" class=\"anchor\">"
+           + "Authority versions</a></h3>\n"
         + "        <br>\n");
     Map<String, String> authorityVersions =
         this.downloadedConsensus.getAuthorityVersions();
@@ -548,7 +566,9 @@ public class MetricsWebsiteReport implements Report {
    * the consensus for each relay. */
   private void writeRelayFlagsTable() throws IOException {
     this.bw.write("        <br>\n"
-        + "        <h3>Relay flags</h3>\n"
+        + "        <a name=\"relayflags\">\n"
+        + "        <h3><a href=\"#relayflags\" class=\"anchor\">Relay "
+          + "flags</a></h3>\n"
         + "        <br>\n"
         + "        <p>The semantics of flags written in the table is "
           + "as follows:</p>\n"
@@ -695,7 +715,9 @@ public class MetricsWebsiteReport implements Report {
   /* Write the relay flag summary. */
   private void writeRelayFlagsSummary() throws IOException {
     this.bw.write("        <br>\n"
-         + "        <h3>Overlap between votes and consensus</h3>\n"
+        + "        <a name=\"overlap\">\n"
+        + "        <h3><a href=\"#overlap\" class=\"anchor\">Overlap "
+          + "between votes and consensus</a></h3>\n"
         + "        <br>\n"
         + "        <p>The semantics of columns is similar to the "
           + "table above:</p>\n"
