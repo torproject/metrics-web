@@ -4,6 +4,7 @@ package org.torproject.ernie.cron;
 
 import java.io.*;
 import java.sql.*;
+import java.text.*;
 import java.util.*;
 import java.util.logging.*;
 
@@ -14,6 +15,7 @@ public class GetTorProcessor {
 
     /* Parse stats file. */
     File getTorFile = new File(getTorDirectory, "gettor_stats.txt");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     if (!getTorFile.exists() || getTorFile.isDirectory()) {
       logger.warning("Could not read GetTor stats");
       return;
@@ -28,6 +30,13 @@ public class GetTorProcessor {
       while ((line = br.readLine()) != null) {
         String[] parts = line.split(" ");
         String date = parts[0];
+        try {
+          dateFormat.parse(date);
+        } catch (ParseException e) {
+          logger.warning("Illegal line in GetTor stats file: '" + line
+              + "'.  Skipping.");
+          continue;
+        }
         Map<String, Integer> obs = new HashMap<String, Integer>();
         data.put(date, obs);
         for (int i = 2; i < parts.length; i++) {
