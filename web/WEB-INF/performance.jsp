@@ -14,13 +14,14 @@
     <div class="main-column">
 <h2>Tor Metrics Portal: Performance</h2>
 <br>
-<h3>Time to download files over Tor</h3>
+<a name="torperf"></a>
+<h3><a href="#torperf" class="anchor">Time to download files over
+Tor</a></h3>
 <br>
 <p>The following graphs show the performance of the Tor network as
 experienced by its users. The graphs contain the average (median) time to
 request files of three different sizes over Tor as well as first and third
 quartile of request times.</p>
-<a name="torperf"></a>
 <img src="torperf.png${torperf_url}"
      width="576" height="360" alt="Torperf graph">
 <form action="performance.html#torperf">
@@ -58,7 +59,9 @@ quartile of request times.</p>
 <p><a href="csv/torperf.csv">CSV</a> file containing all data.</p>
 
 <br>
-<h3>Timeouts and failures of downloading files over Tor</h3>
+<a name="torperf-failures"></a>
+<h3><a href="#torperf-failures" class="anchor">Timeouts and failures of
+downloading files over Tor</a></h3>
 <br>
 <p>The following graphs show the fraction of timeouts and failures of
 downloading files over Tor as experienced by users.
@@ -66,7 +69,6 @@ A timeout occurs when a 50 KiB (1 MiB, 5 MiB) download does not complete
 within 4:55 minutes (29:55 minutes, 59:55 minutes).
 A failure occurs when the download completes, but the response is smaller
 than 50 KiB (1 MiB, 5 MiB).</p>
-<a name="torperf-failures"></a>
 <img src="torperf-failures.png${torperf_failures_url}"
      width="576" height="360" alt="Torperf failures graph">
 <form action="performance.html#torperf-failures">
@@ -104,7 +106,9 @@ than 50 KiB (1 MiB, 5 MiB).</p>
 <p><a href="csv/torperf-failures.csv">CSV</a> file containing all data.</p>
 
 <br>
-<h3>Fraction of connections used uni-/bidirectionally</h3>
+<a name="connbidirect"></a>
+<h3><a href="#connbidirect" class="anchor">Fraction of connections used
+uni-/bidirectionally</a></h3>
 <br>
 <p>The following graph shows the fraction of connections that is used
 uni- or bi-directionally.  Every 10 seconds, relays determine for every
@@ -116,7 +120,6 @@ connection as "Mostly reading" or "Mostly writing," respectively.  All
 other connections are classified as "Both reading and writing."  After
 classifying connections, read and write counters are reset for the next
 10-second interval.  Statistics are aggregated over 24 hours.</p>
-<a name="connbidirect"></a>
 <img src="connbidirect.png${connbidirect_url}"
      width="576" height="360"
      alt="Fraction of direct connections used uni-/bidirectionally">

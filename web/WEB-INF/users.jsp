@@ -16,14 +16,15 @@
 <h2>Tor Metrics Portal: Users</h2>
 <br>
 
-<h3>Directly connecting Tor users</h3>
+<a name="direct-users"></a>
+<h3><a href="#direct-users" class="anchor">Directly connecting Tor
+users</a></h3>
 <br>
 <p>After being connected to the Tor network, users need to refresh their
 list of running relays on a regular basis. They send their requests to one
 out of a few hundred directory mirrors to save bandwidth of the directory
 authorities. The following graphs show an estimate of recurring Tor users
 based on the requests seen by a few dozen directory mirrors.</p>
-<a name="direct-users"></a>
 <p><b>Daily directly connecting users:</b></p>
 <img src="direct-users.png${direct_users_url}"
      width="576" height="360" alt="Direct users graph">
@@ -132,13 +133,13 @@ Tor users (direct and bridge) per month by country.</p>
 daily Tor users (direct and bridge) per month by country.</p>
 <br>
 
-<h3>Tor users via bridges</h3>
+<a name="bridge-users"></a>
+<h3><a href="#bridge-users" class="anchor">Tor users via bridges</a></h3>
 <br>
 <p>Users who cannot connect directly to the Tor network instead connect
 via bridges, which are non-public relays. The following graphs display an
 estimate of Tor users via bridges based on the unique IP addresses as seen
 by a few hundred bridges.</p>
-<a name="bridge-users"></a>
 <img src="bridge-users.png${bridge_users_url}"
      width="576" height="360" alt="Bridge users graph">
 <form action="users.html#bridge-users">

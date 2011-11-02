@@ -15,11 +15,12 @@
     <div class="main-column">
 <h2>Tor Metrics Portal: Network</h2>
 <br>
-<h3>Relays and bridges in the network</h3>
+<a name="networksize"></a>
+<h3><a href="#networksize" class="anchor">Relays and bridges in the
+network</a></h3>
 <br>
 <p>The following graph shows the average daily number of relays and
 bridges in the network.</p>
-<a name="networksize"></a>
 <img src="networksize.png${networksize_url}"
      width="576" height="360" alt="Network size graph">
 <form action="network.html#networksize">
@@ -46,11 +47,11 @@ bridges in the network.</p>
 <p><a href="csv/networksize.csv">CSV</a> file containing all data.</p>
 <br>
 
-<h3>Relays by country</h3>
+<a name="relaycountries"></a>
+<h3><a href="#relaycountries" class="anchor">Relays by country</a></h3>
 <br>
 <p>The following graph shows the average daily number of relays by
 country.</p>
-<a name="relaycountries"></a>
 <img src="relaycountries.png${relaycountries_url}"
      width="576" height="360" alt="Relay countries graph">
 <form action="network.html#relaycountries">
@@ -84,12 +85,13 @@ country.</p>
 <p><a href="csv/relaycountries.csv">CSV</a> file containing all data.</p>
 <br>
 
-<h3>Relays with Exit, Fast, Guard, and Stable flags</h3>
+<a name="relayflags"></a>
+<h3><a href="#relayflags" class="anchor">Relays with Exit, Fast, Guard,
+and Stable flags</a></h3>
 <br>
 <p>The directory authorities assign certain flags to relays that clients
 use for their path selection decisions. The following graph shows the
 average number of relays with these flags assigned.</p>
-<a name="relayflags"></a>
 <img src="relayflags.png${relayflags_url}"
      width="576" height="360" alt="Relay flags graph">
 <form action="network.html#relayflags">
@@ -127,7 +129,8 @@ average number of relays with these flags assigned.</p>
 <p><a href="csv/relayflags.csv">CSV</a> file containing all data.</p>
 <br>
 
-<h3>Relays by version</h3>
+<a name="versions"></a>
+<h3><a href="#versions" class="anchor">Relays by version</a></h3>
 <br>
 <p>Relays report the Tor version that they are running to the directory
 authorities. See the
@@ -136,7 +139,6 @@ page</a> and
 <a href="https://gitweb.torproject.org/tor.git/blob/HEAD:/ChangeLog">ChangeLog file</a>
 to find out which Tor versions are stable and unstable.
 The following graph shows the number of relays by version.</p>
-<a name="versions"></a>
 <img src="versions.png${versions_url}"
      width="576" height="360" alt="Relay versions graph">
 <form action="network.html#versions">
@@ -165,12 +167,12 @@ The following graph shows the number of relays by version.</p>
 platform strings of currently running relays.</p>
 <br>
 
-<h3>Relays by platform</h3>
+<a name="platforms"></a>
+<h3><a href="#platforms" class="anchor">Relays by platform</a></h3>
 <br>
 <p>Relays report the operating system they are running to the directory
 authorities. The following graph shows the number of relays by
 platform.</p>
-<a name="platforms"></a>
 <img src="platforms.png${platforms_url}"
      width="576" height="360" alt="Relay platforms graph">
 <form action="network.html#platforms">
@@ -199,13 +201,14 @@ platform.</p>
 platform strings of currently running relays.</p>
 <br>
 
-<h3>Total relay bandwidth in the network</h3>
+<a name="bandwidth"></a>
+<h3><a href="#bandwidth" class="anchor">Total relay bandwidth in the
+network</a></h3>
 <br>
 <p>Relays report how much bandwidth they are willing to contribute and how
 many bytes they have read and written in the past 24 hours. The following
 graph shows total advertised bandwidth and bandwidth history of all relays
 in the network.</p>
-<a name="bandwidth"></a>
 <img src="bandwidth.png${bandwidth_url}"
      width="576" height="360" alt="Relay bandwidth graph">
 <form action="network.html#bandwidth">
@@ -262,11 +265,12 @@ in the network.</p>
   </div>
 </form>
 
-<h3>Relay bandwidth by Exit and/or Guard flags</h3>
+<a name="bwhist-flags"></a>
+<h3><a href="#bwhist-flags" class="anchor">Relay bandwidth by Exit and/or
+Guard flags</a></h3>
 <br>
 <p>The following graph shows the relay bandwidth of all relays with the
 Exit and/or Guard flags assigned by the directory authorities.</p>
-<a name="bwhist-flags"></a>
 <img src="bwhist-flags.png${bwhist_flags_url}"
      width="576" height="360" alt="Relay bandwidth by flags graph">
 <form action="network.html#bwhist-flags">
@@ -293,14 +297,15 @@ Exit and/or Guard flags assigned by the directory authorities.</p>
 <p><a href="csv/bwhist-flags.csv">CSV</a> file containing all data.</p>
 <br>
 
-<h3>Number of bytes spent on answering directory requests</h3>
+<a name="dirbytes"></a>
+<h3><a href="#dirbytes" class="anchor">Number of bytes spent on answering
+directory requests</a></h3>
 <br>
 <p>Relays running on 0.2.2.15-alpha or higher report the number of bytes
 they spend on answering directory requests. The following graph shows
 total written and read bytes as well as written and read dir bytes. The
 dir bytes are extrapolated from those relays who report them to reflect
 the number of written and read dir bytes by all relays.</p>
-<a name="dirbytes"></a>
 <img src="dirbytes.png${dirbytes_url}"
      width="576" height="360" alt="Dir bytes graph">
 <form action="network.html#dirbytes">

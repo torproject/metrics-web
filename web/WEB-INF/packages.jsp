@@ -14,12 +14,12 @@
     <div class="main-column">
 <h2>Tor Metrics Portal: Packages</h2>
 <br>
-<h3>Packages requested from GetTor</h3>
+<a name="gettor"></a>
+<h3><a href="#gettor" class="anchor">Packages requested from GetTor</a></h3>
 <br>
 <p>GetTor allows users to fetch the Tor software via email. The following
 graph shows the number of packages requested from GetTor per day.</p>
 <p>
-<a name="gettor"></a>
 <img src="gettor.png${gettor_url}"
      width="576" height="360" alt="GetTor graph">
 <form action="packages.html#gettor">
