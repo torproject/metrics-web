@@ -54,7 +54,8 @@ and is very likely more recent than the report.
 <br>
 
 <a name="serverdesc"></a>
-<h3>Server descriptors and network statuses</h3>
+<h3><a href="#serverdesc" class="anchor">Server descriptors and network
+statuses</a></h3>
 <br>
 <p>
 Relays in the Tor network report their capabilities by publishing server
@@ -257,7 +258,8 @@ addresses.</li>
 <br>
 
 <a name="bridgedesc"></a>
-<h3>Sanitized bridge descriptors</h3>
+<h3><a href="#bridgedesc" class="anchor">Sanitized bridge
+descriptors</a></h3>
 <br>
 Bridges in the Tor network publish server descriptors to the bridge
 authority which in turn generates a bridge network status.
@@ -351,7 +353,7 @@ For more details about this process, see the
 <br>
 
 <a name="bytehist"></a>
-<h3>Byte histories</h3>
+<h3><a href="#bytehist" class="anchor">Byte histories</a></h3>
 <br>
 <p>
 Relays include aggregate statistics in their descriptors that they upload
@@ -412,7 +414,7 @@ specification</a>.
 <br>
 
 <a name="dirreqstats"></a>
-<h3>Directory requests</h3>
+<h3><a href="#dirreqstats" class="anchor">Directory requests</a></h3>
 <br>
 <p>
 The directory authorities and directory mirrors report statistical data
@@ -485,7 +487,7 @@ specification</a>.
 <br>
 
 <a name="entrystats"></a>
-<h3>Connecting clients</h3>
+<h3><a href="#entrystats" class="anchor">Connecting clients</a></h3>
 <br>
 <p>
 Relays can be configured to report per-country statistics on directly
@@ -505,7 +507,7 @@ specification</a>.
 <br>
 
 <a name="bridgestats"></a>
-<h3>Bridge users</h3>
+<h3><a href="#bridgestats" class="anchor">Bridge users</a></h3>
 <br>
 <p>
 Bridges report statistics on connecting bridge clients in their extra-info
@@ -543,7 +545,7 @@ specification</a>.
 <br>
 
 <a name="cellstats"></a>
-<h3>Cell-queue statistics</h3>
+<h3><a href="#cellstats" class="anchor">Cell-queue statistics</a></h3>
 <br>
 <p>
 Relays can be configured to report aggregate statistics on their cell
@@ -578,7 +580,7 @@ specification</a>.
 <br>
 
 <a name="exitstats"></a>
-<h3>Exit-port statistics</h3>
+<h3><a href="#exitstats" class="anchor">Exit-port statistics</a></h3>
 <br>
 <p>
 Exit relays running Tor version 0.2.1.1-alpha or higher can be configured
@@ -600,7 +602,8 @@ specification</a>.
 <br>
 
 <a name="bidistats"></a>
-<h3>Bidirectional connection use</h3>
+<h3><a href="#bidistats" class="anchor">Bidirectional connection
+use</a></h3>
 <br>
 <p>
 Relays running Tor version 0.2.3.1-alpha or higher can be configured to
@@ -637,7 +640,7 @@ by relay <tt>zweifaltigkeit</tt>:</i>
 <br>
 
 <a name="torperf"></a>
-<h3>Torperf output files</h3>
+<h3><a href="#torperf" class="anchor">Torperf output files</a></h3>
 <br>
 <p>
 Torperf is a little tool that measures Tor's performance as users
@@ -711,7 +714,8 @@ file (reformatted and annotated with comments):</i>
 <br>
 
 <a name="bridgepool"></a>
-<h3>BridgeDB pool assignment files</h3>
+<h3><a href="#bridgepool" class="anchor">BridgeDB pool assignment
+files</a></h3>
 <br>
 <p>
 BridgeDB is the software that receives bridge network statuses containing
@@ -770,7 +774,7 @@ OR port or relay flag which is defined by <tt>port=$port</tt> and/or
 <br>
 
 <a name="gettor"></a>
-<h3>GetTor statistics file</h3>
+<h3><a href="#gettor" class="anchor">GetTor statistics file</a></h3>
 <br>
 <p>
 GetTor allows users to fetch the Tor software via email.
@@ -806,7 +810,7 @@ tor-im-browser-bundle_ru:0 tor-im-browser-bundle_zh_CN:0</tt>
 <br>
 
 <a name="exitlist">
-<h3>Tor Check exit lists</h3>
+<h3><a href="#exitlist" class="anchor">Tor Check exit lists</a></h3>
 <br>
 <p>
 <a href="https://www.torproject.org/tordnsel/dist/">TorDNSEL</a> is an

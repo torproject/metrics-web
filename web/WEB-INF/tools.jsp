@@ -26,7 +26,8 @@
         </ul>
         <br>
         <a name="metrics-db"></a>
-        <h3>Metrics data processor</h3>
+        <h3><a href="#metrics-db" class="anchor">Metrics data
+        processor</a></h3>
         <br>
         <p>The metrics data processor is a Java application that parses
         Tor's directory data and the data from various other Tor services,
@@ -41,7 +42,7 @@
         </ul>
         <br>
         <a name="metrics-web"></a>
-        <h3>Metrics website</h3>
+        <h3><a href="#metrics-web" class="anchor">Metrics website</a></h3>
         <br>
         <p>The metrics website software consists of a Java database
         importer and Tomcat application that makes Tor's directory data
@@ -58,7 +59,8 @@
         </ul>
         <br>
         <a name="dirarch"></a>
-        <h3>Directory-archive script</h3>
+        <h3><a href="#dirarch" class="anchor">Directory-archive
+        script</a></h3>
         <br>
         <p>The directory-archive script consists of a bunch of shell
         scripts that periodically download relay descriptors, sort them
@@ -78,7 +80,7 @@
         </ul>
         <br>
         <a name="torperf"></a>
-        <h3>Torperf</h3>
+        <h3><a href="#torperf" class="anchor">Torperf</a></h3>
         <br>
         <p>Torperf is a little tool that measures Tor's performance as
         users experience it. Torperf uses a trivial SOCKS client to
@@ -93,7 +95,7 @@
         </ul>
         <br>
         <a name="exonerator"></a>
-        <h3>ExoneraTor</h3>
+        <h3><a href="#exonerator" class="anchor">ExoneraTor</a></h3>
         <br>
         <p>ExoneraTor parses the relay descriptor archives to answer the
         question whether some IP address was a Tor relay. This script is
@@ -109,7 +111,7 @@
         </ul>
         <br>
         <a name="visitor"></a>
-        <h3>VisiTor</h3>
+        <h3><a href="#visitor" class="anchor">VisiTor</a></h3>
         <br>
         <p>VisiTor is a script that parses a web server log and the exit
         list archives to tell how many of the requests come from Tor

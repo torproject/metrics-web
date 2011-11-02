@@ -19,7 +19,7 @@
         Metrics Project.</p>
         <br>
         <a name="papers"></a>
-        <h3>Papers</h3>
+        <h3><a href="#papers" class="anchor">Papers</a></h3>
         <br>
         These papers summarize some of the results of of the Tor Metrics
         Project and have been accepted for publication at academic
@@ -37,7 +37,8 @@
         </ul>
         <br>
         <a name="techreports"></a>
-        <h3>Technical reports</h3>
+        <h3><a href="#techreports" class="anchor">Technical
+        reports</a></h3>
         <br>
         The technical reports listed here have been the first place to
         publish novel kinds of statistics on the Tor network. Some, but
@@ -101,7 +102,7 @@
         </ul>
         <br>
         <a name="blogposts"></a>
-        <h3>Blog posts</h3>
+        <h3><a href="#blogposts" class="anchor">Blog posts</a></h3>
         <br>
         The following blog posts are either the results of metrics
         research or describe new interesting research questions that can

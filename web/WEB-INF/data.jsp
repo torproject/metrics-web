@@ -33,7 +33,8 @@
         </ul>
         <br>
         <a name="relaydesc"></a>
-        <h3>Relay descriptor archives</h3>
+        <h3><a href="#relaydesc" class="anchor">Relay descriptor
+        archives</a></h3>
         <br>
         <p>The relay descriptor archives contain all documents that the
         directory authorities make available about the network of relays.
@@ -123,7 +124,8 @@
         </c:if>
         <br>
         <a name="bridgedesc"></a>
-        <h3>Bridge descriptor archives</h3>
+        <h3><a href="#bridgedesc" class="anchor">Bridge descriptor
+        archives</a></h3>
         <br>
         <p>The bridge descriptor archives contain similar documents as the
         relay descriptor archives, but for the non-public bridges. The
@@ -153,7 +155,8 @@
         <p></p>
         <br>
         <a name="bridgeassignments"></a>
-        <h3>Bridge pool assignments</h3>
+        <h3><a href="#bridgeassignments" class="anchor">Bridge pool
+        assignments</a></h3>
         <br>
         <p>BridgeDB periodically dumps the list of running bridges with
         information about the rings, subrings, and file buckets to which
@@ -175,7 +178,8 @@
         </table>
         <br>
         <a name="performance"></a>
-        <h3>Performance data</h3>
+        <h3><a href="#performance" class="anchor">Performance
+        data</a></h3>
         <br>
         <p>We are continuously measuring the performance of the Tor
         network by periodically requesting files of different sizes and
@@ -242,7 +246,7 @@
         </table>
         <br>
         <a name="exitlist"></a>
-        <h3>Exit lists</h3>
+        <h3><a href="#exitlist" class="anchor">Exit lists</a></h3>
         <br>
         <p>We are archiving the bulk exit lists used by
         <a href="https://check.torproject.org/">Tor Check</a>
