@@ -108,6 +108,9 @@
         research or describe new interesting research questions that can
         (partly) be answered with metrics data.
         <ul>
+          <li>Research problems: Ten ways to discover Tor bridges
+          (<a href="https://blog.torproject.org/blog/research-problems-ten-ways-discover-tor-bridges">link</a>,
+          October 31, 2011).</li>
           <li>Research problem: better guard rotation parameters
           (<a href="https://blog.torproject.org/blog/research-problem-better-guard-rotation-parameters">link</a>,
           August 20, 2011).</li>
