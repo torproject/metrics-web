@@ -23,21 +23,21 @@ import org.apache.commons.codec.binary.*;
  * - gabelmoo
  * - gabelmoo 2010-09
  * - gabelmoo 2010-09-18
- * - gabelmoo F2044413DAC2E02E3D6BCF4735A19BCA1DE97281
+ * - gabelmoo $F2044413DAC2E02E3D6BCF4735A19BCA1DE97281
  * - gabelmoo 80.190.246
- * - gabelmoo F2044413DAC2E02E3D6BCF4735A19BCA1DE97281 80.190.246
+ * - gabelmoo $F2044413DAC2E02E3D6BCF4735A19BCA1DE97281 80.190.246
  * - 5898549205 dc737cc9dca16af6 79.212.74.45
  * - 5898549205 dc737cc9dca16af6
  * - 80.190.246.100
- * - F2044413DAC2E02E3D6BCF4735A19BCA1DE97281
- * - F2044413DAC2E02E3D6BCF4735A19BCA1DE97281 80.190.246
+ * - $F2044413DAC2E02E3D6BCF4735A19BCA1DE97281
+ * - $F2044413DAC2E02E3D6BCF4735A19BCA1DE97281 80.190.246
  * - 58985492
  * - 58985492 79.212.74.45
  */
 public class RelaySearchServlet extends HttpServlet {
 
-  private Pattern alphaNumDotDashSpacePattern =
-      Pattern.compile("[A-Za-z0-9\\.\\- ]+");
+  private Pattern alphaNumDotDashDollarSpacePattern =
+      Pattern.compile("[A-Za-z0-9\\.\\-$ ]+");
 
   private Pattern numPattern = Pattern.compile("[0-9]+");
 
@@ -97,7 +97,6 @@ public class RelaySearchServlet extends HttpServlet {
     String searchNickname = "";
     String searchFingerprint = "";
     String searchIPAddress = "";
-    SortedSet<String> searchFingerprintOrNickname = new TreeSet<String>();
     SortedSet<String> searchDays = new TreeSet<String>();
     SortedSet<String> searchMonths = new TreeSet<String>();
     SortedSet<Long> searchDayTimestamps = new TreeSet<Long>();
@@ -106,7 +105,8 @@ public class RelaySearchServlet extends HttpServlet {
 
     /* Only parse search parameter if it contains nothing else than
      * alphanumeric characters, dots, and spaces. */
-    if (alphaNumDotDashSpacePattern.matcher(searchParameter).matches()) {
+    if (alphaNumDotDashDollarSpacePattern.matcher(searchParameter).
+        matches()) {
       SortedSet<String> searchTerms = new TreeSet<String>();
       if (searchParameter.trim().contains(" ")) {
         String[] split = searchParameter.trim().split(" ");
@@ -177,23 +177,16 @@ public class RelaySearchServlet extends HttpServlet {
           }
         }
 
-        /* If the search term contains between 8 and 19 hex characters, it
-         * could be either a nickname or a fingerprint. */
-        else if (searchTerm.length() >= 8 && searchTerm.length() <= 19 &&
-            hexPattern.matcher(searchTerm).matches()) {
-          searchFingerprintOrNickname.add(searchTerm);
-          validQuery = true;
-        }
-
-        /* If the search term contains between 20 and 40 hex characters,
-         * it must be a fingerprint. */
-        else if (searchTerm.length() >= 20 && searchTerm.length() <= 40 &&
-            hexPattern.matcher(searchTerm).matches()) {
+        /* If the search term starts with a $ followed by 8 to 40 hex
+         * characters, it must be a fingerprint. */
+        else if (searchTerm.length() >= 9 && searchTerm.length() <= 41 &&
+            searchTerm.startsWith("$") &&
+            hexPattern.matcher(searchTerm.substring(1)).matches()) {
           if (searchFingerprint.length() > 0) {
             validQuery = false;
             break;
           }
-          searchFingerprint = searchTerm;
+          searchFingerprint = searchTerm.substring(1);
           validQuery = true;
         }
 
@@ -215,27 +208,6 @@ public class RelaySearchServlet extends HttpServlet {
           break;
         }
       }
-    }
-
-    /* We can only accept at most two search terms for nickname and
-     * fingerprint. */
-    int items = searchFingerprintOrNickname.size();
-    items += searchFingerprint.length() > 0 ? 1 : 0;
-    items += searchNickname.length() > 0 ? 1 : 0;
-    if (items > 2) {
-      validQuery = false;
-    }
-
-    /* If we have two candidates for fingerprint or nickname and we can
-     * recognize what one of them is, then we can conclude what the other
-     * one must be. */
-    else if (items == 2 && searchFingerprintOrNickname.size() == 1) {
-      if (searchFingerprint.length() == 0) {
-        searchFingerprint = searchFingerprintOrNickname.first();
-      } else {
-        searchNickname = searchFingerprintOrNickname.first();
-      }
-      searchFingerprintOrNickname.clear();
     }
 
     /* We only accept at most one month or three days, but not both, or
@@ -260,10 +232,6 @@ public class RelaySearchServlet extends HttpServlet {
     }
     if (searchFingerprint.length() > 0) {
       recognizedSearchTerms.add("fingerprint <b>" + searchFingerprint
-          + "</b>");
-    }
-    for (String searchTerm : searchFingerprintOrNickname) {
-      recognizedSearchTerms.add("nickname or fingerprint <b>" + searchTerm
           + "</b>");
     }
     if (searchIPAddress.length() > 0) {
@@ -327,12 +295,6 @@ public class RelaySearchServlet extends HttpServlet {
     if (searchIPAddress.length() > 0) {
       conditionBuilder.append((addAnd ? "AND " : "")
           + "address LIKE '" + searchIPAddress + "%' ");
-      addAnd = true;
-    }
-    for (String search : searchFingerprintOrNickname) {
-      conditionBuilder.append((addAnd ? "AND " : "")
-          + "(LOWER(nickname) LIKE '" + search.toLowerCase()
-          + "%' OR fingerprint LIKE '" + search.toLowerCase() + "%') ");
       addAnd = true;
     }
     StringBuilder queryBuilder = new StringBuilder();
