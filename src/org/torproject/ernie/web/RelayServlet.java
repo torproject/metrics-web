@@ -184,7 +184,10 @@ public class RelayServlet extends HttpServlet {
         out.println("<p><font color=\"red\"><b>Warning: </b></font>We "
             + "experienced an unknown database problem while looking up "
             + "the relay with fingerprint starting with "
-            + fingerprintParameter + ". If this problem persists, please "
+            + fingerprintParameter + ". Unfortunately, this is very "
+            + "likely a <a href=\"https://trac.torproject.org/projects/"
+            + "tor/ticket/4406\">known problem</a>. If you don't think "
+            + "these problems are related, please "
             + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
             + "know</a>!</p>\n");
         writeFooter(out);
@@ -279,7 +282,10 @@ public class RelayServlet extends HttpServlet {
           + "experienced an unknown database problem while looking up "
           + "the relay with fingerprint "
           + (fingerprintParameter.length() < 40 ? "starting with " : "")
-          + fingerprintParameter + ". If this problem persists, please "
+          + fingerprintParameter + ". Unfortunately, this is very likely "
+          + "a <a href=\"https://trac.torproject.org/projects/tor/ticket"
+          + "/4406\">known problem</a>. If you don't think these "
+          + "problems are related, please "
           + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
           + "know</a>!</p>\n");
       writeFooter(out);
@@ -330,8 +336,10 @@ public class RelayServlet extends HttpServlet {
       } catch (SQLException e) {
         out.write("<br/><p><font color=\"red\"><b>Warning: </b></font>"
             + "Internal server error when looking up descriptor. The "
-            + "query was '" + query + "'. If this problem persists, "
-            + "please "
+            + "query was '" + query + "'. Unfortunately, this is very "
+            + "likely a <a href=\"https://trac.torproject.org/projects/"
+            + "tor/ticket/4406\">known problem</a>. If you don't think "
+            + "these problems are related, please "
             + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
             + "know</a>!</p>\n");
         writeFooter(out);
