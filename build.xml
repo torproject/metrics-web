@@ -64,7 +64,8 @@
   <target name="chc" depends="compile">
     <java fork="true"
           maxmemory="512m"
-          classname="org.torproject.chc.Main">
+          classname="org.torproject.chc.Main"
+          error="chc-stderr.txt">
       <classpath refid="classpath"/>
     </java>
   </target>
