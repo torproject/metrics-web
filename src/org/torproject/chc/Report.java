@@ -13,6 +13,10 @@ public interface Report {
   public abstract void processDownloadedConsensuses(
       SortedMap<String, Status> downloadedConsensuses);
 
+  /* Process warnings consisting of warning type and details. */
+  public abstract void processWarnings(
+      SortedMap<Warning, String> warnings);
+
   /* Finish writing report. */
   public abstract void writeReport();
 }

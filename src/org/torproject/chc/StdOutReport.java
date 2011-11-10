@@ -10,10 +10,6 @@ import java.util.*;
  * to stdout while rate-limiting warnings based on severity. */
 public class StdOutReport implements Report {
 
-  /* Warning messages and the time in millis that should have passed
-   * since sending them out. */
-  private Map<String, Long> warnings = new HashMap<String, Long>();
-
   /* Date-time format to format timestamps. */
   private static SimpleDateFormat dateTimeFormat;
   static {
@@ -31,25 +27,16 @@ public class StdOutReport implements Report {
     this.downloadedConsensuses = downloadedConsensuses;
   }
 
+  /* Warnings obtained from checking the current consensus and votes. */
+  private SortedMap<Warning, String> warnings;
+  public void processWarnings(SortedMap<Warning, String> warnings) {
+    this.warnings = warnings;
+  }
+
   /* Check consensuses and votes for irregularities and write output to
    * stdout. */
   public void writeReport() {
     this.readLastWarned();
-    this.findMostRecentConsensus();
-    this.checkMissingConsensuses();
-    this.checkAllConsensusesFresh();
-    if (this.downloadedConsensus != null) {
-      if (this.isConsensusFresh(this.downloadedConsensus)) {
-        this.checkConsensusMethods();
-        this.checkRecommendedVersions();
-        this.checkConsensusParameters();
-        this.checkAuthorityKeys();
-        this.checkMissingVotes();
-        this.checkBandwidthScanners();
-      }
-    } else {
-      this.warnings.put("No consensus known", 0L);
-    }
     this.prepareReport();
     this.writeReportToStdOut();
     this.writeLastWarned();
@@ -91,211 +78,66 @@ public class StdOutReport implements Report {
     }
   }
 
-  /* Find most recent consensus and corresponding votes. */
-  private void findMostRecentConsensus() {
-    long mostRecentValidAfterMillis = -1L;
-    for (Status downloadedConsensus : downloadedConsensuses.values()) {
-      if (downloadedConsensus.getValidAfterMillis() >
-          mostRecentValidAfterMillis) {
-        this.downloadedConsensus = downloadedConsensus;
-        mostRecentValidAfterMillis =
-            downloadedConsensus.getValidAfterMillis();
-      }
-    }
-    if (this.downloadedConsensus != null) {
-      this.downloadedVotes = this.downloadedConsensus.getVotes();
-    }
-  }
-
-  /* Check if any directory authority didn't tell us a consensus. */
-  private void checkMissingConsensuses() {
-    SortedSet<String> missingConsensuses = new TreeSet<String>(
-        Arrays.asList(("gabelmoo,tor26,ides,maatuska,dannenberg,urras,"
-        + "moria1,dizum").split(",")));
-    missingConsensuses.removeAll(this.downloadedConsensuses.keySet());
-    if (!missingConsensuses.isEmpty()) {
-      StringBuilder sb = new StringBuilder();
-      for (String nickname : missingConsensuses) {
-        sb.append(", " + nickname);
-      }
-      this.warnings.put("The following directory authorities did not "
-          + "return a consensus within a timeout of 60 seconds: "
-          + sb.toString().substring(2), 150L * 60L * 1000L);
-    }
-  }
-
-  /* Check if all consensuses are fresh. */
-  private void checkAllConsensusesFresh() {
-    long fresh = System.currentTimeMillis() - 60L * 60L * 1000L;
-    SortedSet<String> nonFresh = new TreeSet<String>();
-    for (Map.Entry<String, Status> e : downloadedConsensuses.entrySet()) {
-      String nickname = e.getKey();
-      Status downloadedConsensus = e.getValue();
-      if (downloadedConsensus.getValidAfterMillis() < fresh) {
-        nonFresh.add(nickname);
-      }
-    }
-    if (!nonFresh.isEmpty()) {
-      StringBuilder sb = new StringBuilder();
-      for (String nickname : nonFresh) {
-        sb.append(", " + nickname);
-      }
-      this.warnings.put("The consensuses published by the following "
-          + "directory authorities are more than 1 hour old and "
-          + "therefore not fresh anymore: "
-          + sb.toString().substring(2), 150L * 60L * 1000L);
-    }
-  }
-
-  /* Check if the most recent consensus is older than 1 hour. */
-  private boolean isConsensusFresh(Status consensus) {
-    if (consensus.getValidAfterMillis() <
-        System.currentTimeMillis() - 60L * 60L * 1000L) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  /* Check supported consensus methods of all votes. */
-  private void checkConsensusMethods() {
-    for (Status vote : this.downloadedVotes) {
-      if (!vote.getConsensusMethods().contains(
-          this.downloadedConsensus.getConsensusMethods().last())) {
-        this.warnings.put(vote.getNickname() + " does not "
-            + "support consensus method "
-            + this.downloadedConsensus.getConsensusMethods().last(),
-            24L * 60L * 60L * 1000L);
-      }
-    }
-  }
-
-  /* Check if the recommended versions in a vote are different from the
-   * recommended versions in the consensus. */
-  private void checkRecommendedVersions() {
-    for (Status vote : this.downloadedVotes) {
-      if (vote.getRecommendedClientVersions() != null &&
-          !downloadedConsensus.getRecommendedClientVersions().equals(
-          vote.getRecommendedClientVersions())) {
-        StringBuilder message = new StringBuilder();
-        message.append(vote.getNickname() + " recommends other "
-            + "client versions than the consensus:");
-        for (String version : vote.getRecommendedClientVersions()) {
-          message.append(" " + version);
-        }
-        this.warnings.put(message.toString(), 150L * 60L * 1000L);
-      }
-      if (vote.getRecommendedServerVersions() != null &&
-          !downloadedConsensus.getRecommendedServerVersions().equals(
-          vote.getRecommendedServerVersions())) {
-        StringBuilder message = new StringBuilder();
-        message.append(vote.getNickname() + " recommends other "
-            + "server versions than the consensus:");
-        for (String version : vote.getRecommendedServerVersions()) {
-          message.append(" " + version);
-        }
-        this.warnings.put(message.toString(), 150L * 60L * 1000L);
-      }
-    }
-  }
-
-  /* Check if a vote contains conflicting or invalid consensus
-   * parameters. */
-  private void checkConsensusParameters() {
-    Set<String> validParameters = new HashSet<String>(Arrays.asList(
-        ("circwindow,CircuitPriorityHalflifeMsec,refuseunknownexits,"
-        + "cbtdisabled,cbtnummodes,cbtrecentcount,cbtmaxtimeouts,"
-        + "cbtmincircs,cbtquantile,cbtclosequantile,cbttestfreq,"
-        + "cbtmintimeout,cbtinitialtimeout,bwauthpid").split(",")));
-    for (Status vote : this.downloadedVotes) {
-      Map<String, String> voteConsensusParams =
-          vote.getConsensusParams();
-      boolean conflictOrInvalid = false;
-      if (voteConsensusParams != null) {
-        for (Map.Entry<String, String> e :
-            voteConsensusParams.entrySet()) {
-          if (!downloadedConsensus.getConsensusParams().containsKey(
-              e.getKey()) ||
-              !downloadedConsensus.getConsensusParams().get(e.getKey()).
-              equals(e.getValue()) ||
-              !validParameters.contains(e.getKey())) {
-            StringBuilder message = new StringBuilder();
-            message.append(vote.getNickname() + " sets conflicting or "
-                + "invalid consensus parameters:");
-            for (Map.Entry<String, String> p :
-                voteConsensusParams.entrySet()) {
-              message.append(" " + p.getKey() + "=" + p.getValue());
-            }
-            this.warnings.put(message.toString(), 150L * 60L * 1000L);
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  /* Check whether any of the authority keys expire in the next 14
-   * days. */
-  private void checkAuthorityKeys() {
-    for (Status vote : this.downloadedVotes) {
-      long voteDirKeyExpiresMillis = vote.getDirKeyExpiresMillis();
-      if (voteDirKeyExpiresMillis - 14L * 24L * 60L * 60L * 1000L <
-          System.currentTimeMillis()) {
-        this.warnings.put(vote.getNickname() + "'s certificate "
-            + "expires in the next 14 days: "
-            + dateTimeFormat.format(voteDirKeyExpiresMillis),
-            24L * 60L * 60L * 1000L);
-      }
-    }
-  }
-
-  /* Check if any votes are missing. */
-  private void checkMissingVotes() {
-    SortedSet<String> knownAuthorities = new TreeSet<String>(
-        Arrays.asList(("dannenberg,dizum,gabelmoo,ides,maatuska,moria1,"
-        + "tor26,urras").split(",")));
-    SortedSet<String> missingVotes =
-        new TreeSet<String>(knownAuthorities);
-    for (Status vote : this.downloadedVotes) {
-      missingVotes.remove(vote.getNickname());
-    }
-    if (!missingVotes.isEmpty()) {
-      StringBuilder sb = new StringBuilder();
-      for (String missingDir : missingVotes) {
-        sb.append(", " + missingDir);
-      }
-      this.warnings.put("We're missing votes from the following "
-          + "directory authorities: " + sb.toString().substring(2),
-          150L * 60L * 1000L);
-    }
-  }
-
-  /* Check if any bandwidth scanner results are missing. */
-  private void checkBandwidthScanners() {
-    SortedSet<String> missingBandwidthScanners = new TreeSet<String>(
-        Arrays.asList("ides,urras,moria1,gabelmoo,maatuska".split(",")));
-    for (Status vote : this.downloadedVotes) {
-      if (vote.getBandwidthWeights() > 0) {
-        missingBandwidthScanners.remove(vote.getNickname());
-      }
-    }
-    if (!missingBandwidthScanners.isEmpty()) {
-      StringBuilder sb = new StringBuilder();
-      for (String dir : missingBandwidthScanners) {
-        sb.append(", " + dir);
-      }
-      this.warnings.put("The following directory authorities are not "
-          + "reporting bandwidth scanner results: "
-          + sb.toString().substring(2), 150L * 60L * 1000L);
-    }
-  }
-
   /* Prepare a report to be written to stdout. */
   private String preparedReport = null;
   private void prepareReport() {
+    SortedMap<String, Long> warningStrings = new TreeMap<String, Long>();
+    for (Map.Entry<Warning, String> e : this.warnings.entrySet()) {
+      Warning type = e.getKey();
+      String details = e.getValue();
+      switch (type) {
+        case NoConsensusKnown:
+          break;
+        case ConsensusDownloadTimeout:
+          warningStrings.put("The following directory authorities did "
+              + "not return a consensus within a timeout of 60 seconds: "
+              + details, 150L * 60L * 1000L);
+          break;
+        case ConsensusNotFresh:
+          warningStrings.put("The consensuses published by the following "
+              + "directory authorities are more than 1 hour old and "
+              + "therefore not fresh anymore: " + details,
+              150L * 60L * 1000L);
+          break;
+        case ConsensusMethodNotSupported:
+          warningStrings.put("The following directory authorities do not "
+              + "support the consensus method that the consensus uses: "
+              + details, 24L * 60L * 60L * 1000L);
+          break;
+        case DifferentRecommendedClientVersions:
+          warningStrings.put("The following directory authorities "
+              + "recommend other client versions than the consensus: "
+              + details, 150L * 60L * 1000L);
+          break;
+        case DifferentRecommendedServerVersions:
+          warningStrings.put("The following directory authorities "
+              + "recommend other server versions than the consensus: "
+              + details, 150L * 60L * 1000L);
+          break;
+        case ConflictingOrInvalidConsensusParams:
+          warningStrings.put("The following directory authorities set "
+              + "conflicting or invalid consensus parameters: " + details,
+              150L * 60L * 1000L);
+          break;
+        case CertificateExpiresSoon:
+          warningStrings.put("The certificates of the following "
+              + "directory authorities expire within the next 14 days: "
+              + details, 24L * 60L * 60L * 1000L);
+          break;
+        case VotesMissing:
+          warningStrings.put("We're missing votes from the following "
+              + "directory authorities: " + details, 150L * 60L * 1000L);
+          break;
+        case BandwidthScannerResultsMissing:
+          warningStrings.put("The following directory authorities are "
+              + "not reporting bandwidth scanner results: " + details,
+              150L * 60L * 1000L);
+          break;
+      }
+    }
     long now = System.currentTimeMillis();
     boolean writeReport = false;
-    for (Map.Entry<String, Long> e : this.warnings.entrySet()) {
+    for (Map.Entry<String, Long> e : warningStrings.entrySet()) {
       String message = e.getKey();
       long warnInterval = e.getValue();
       if (!lastWarned.containsKey(message) ||
@@ -305,7 +147,7 @@ public class StdOutReport implements Report {
     }
     if (writeReport) {
       StringBuilder sb = new StringBuilder();
-      for (String message : this.warnings.keySet()) {
+      for (String message : warningStrings.keySet()) {
         this.lastWarned.put(message, now);
         sb.append("\n\n" + message);
       }

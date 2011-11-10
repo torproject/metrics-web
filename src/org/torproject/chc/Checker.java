@@ -6,19 +6,26 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 
-/* Check a given consensus and votes for irregularities and writes results
- * to a local text file for Nagios to print out warnings. */
-public class NagiosReport implements Report {
+/* Check a given consensus and votes for irregularities and write results
+ * to a warnings map consisting of warning type and details. */
+public class Checker {
 
-  /* Output file to write report to. */
-  private File nagiosOutputFile;
+  /* Warning messages consisting of type and details. */
+  private SortedMap<Warning, String> warnings =
+      new TreeMap<Warning, String>();
 
-  /* Initialize this report. */
-  public NagiosReport(String nagiosOutputFilename) {
-    this.nagiosOutputFile = new File(nagiosOutputFilename);
+  public SortedMap<Warning, String> getWarnings() {
+    return this.warnings;
   }
 
-  /* Store the current consensus and corresponding votes for
+  /* Date-time format to format timestamps. */
+  private static SimpleDateFormat dateTimeFormat;
+  static {
+    dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+  }
+
+  /* Downloaded consensus and corresponding votes for later
    * processing. */
   private SortedMap<String, Status> downloadedConsensuses;
   private Status downloadedConsensus;
@@ -28,27 +35,8 @@ public class NagiosReport implements Report {
     this.downloadedConsensuses = downloadedConsensuses;
   }
 
-  /* Process warnings. */
-  public void processWarnings(SortedMap<Warning, String> warnings) {
-    /* Don't use these warnings.  This class will go away soon anyway. */
-  }
-
-  /* Lists of output messages sorted by warnings, criticals, and
-   * unknowns (increasing severity). */
-  private List<String> nagiosWarnings = new ArrayList<String>(),
-      nagiosCriticals = new ArrayList<String>(),
-      nagiosUnknowns = new ArrayList<String>();
-
-  /* Date-time format to format timestamps. */
-  private static SimpleDateFormat dateTimeFormat;
-  static {
-    dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-  }
-
-  /* Check consensus and votes and write any findings to the output
-   * file. */
-  public void writeReport() {
+  /* Check consensuses and votes for irregularities. */
+  public void checkConsensus() {
     this.findMostRecentConsensus();
     this.checkMissingConsensuses();
     this.checkAllConsensusesFresh();
@@ -62,9 +50,8 @@ public class NagiosReport implements Report {
         this.checkBandwidthScanners();
       }
     } else {
-      this.nagiosUnknowns.add("No consensus known");
+      this.warnings.put(Warning.NoConsensusKnown, "");
     }
-    this.writeNagiosStatusFile();
   }
 
   /* Find most recent consensus and corresponding votes. */
@@ -94,9 +81,8 @@ public class NagiosReport implements Report {
       for (String nickname : missingConsensuses) {
         sb.append(", " + nickname);
       }
-      this.nagiosCriticals.add("The following directory authorities did "
-          + "not return a consensus within a timeout of 60 seconds: "
-          + sb.toString().substring(2));
+      this.warnings.put(Warning.ConsensusDownloadTimeout,
+          sb.toString().substring(2));
     }
   }
 
@@ -116,55 +102,82 @@ public class NagiosReport implements Report {
       for (String nickname : nonFresh) {
         sb.append(", " + nickname);
       }
-      this.nagiosCriticals.add("The consensuses published by the "
-          + "following directory authorities are more than 1 hour old "
-          + "and therefore not fresh anymore: "
-          + sb.toString().substring(2));
+      this.warnings.put(Warning.ConsensusNotFresh,
+          sb.toString().substring(2));
     }
   }
 
   /* Check if the most recent consensus is older than 1 hour. */
   private boolean isConsensusFresh(Status consensus) {
-    if (consensus.getValidAfterMillis() <
-        System.currentTimeMillis() - 60L * 60L * 1000L) {
-      return false;
-    } else {
-      return true;
-    }
+    return (consensus.getValidAfterMillis() >=
+        System.currentTimeMillis() - 60L * 60L * 1000L);
   }
 
   /* Check supported consensus methods of all votes. */
   private void checkConsensusMethods() {
+    SortedSet<String> dirs = new TreeSet<String>();
     for (Status vote : this.downloadedVotes) {
-      if (!this.downloadedConsensus.getConsensusMethods().contains(
+      if (!vote.getConsensusMethods().contains(
           this.downloadedConsensus.getConsensusMethods().last())) {
-        nagiosWarnings.add(vote.getNickname() + " does not support "
-            + "consensus method "
-            + this.downloadedConsensus.getConsensusMethods().last());
+        dirs.add(vote.getNickname());
       }
+    }
+    if (!dirs.isEmpty()) {
+      StringBuilder sb = new StringBuilder();
+      for (String dir : dirs) {
+        sb.append(", " + dir);
+      }
+      this.warnings.put(Warning.ConsensusMethodNotSupported,
+          sb.toString().substring(2));
     }
   }
 
-  /* Check if the recommended client and server versions in a vote are
-   * different from the recommended versions in the consensus. */
+  /* Check if the recommended versions in a vote are different from the
+   * recommended versions in the consensus. */
   private void checkRecommendedVersions() {
+    SortedSet<String> unrecommendedClientVersions = new TreeSet<String>(),
+        unrecommendedServerVersions = new TreeSet<String>();
     for (Status vote : this.downloadedVotes) {
       if (vote.getRecommendedClientVersions() != null &&
           !downloadedConsensus.getRecommendedClientVersions().equals(
           vote.getRecommendedClientVersions())) {
-        nagiosWarnings.add(vote.getNickname() + " recommends other "
-            + "client versions than the consensus");
+        StringBuilder message = new StringBuilder();
+        message.append(vote.getNickname());
+        for (String version : vote.getRecommendedClientVersions()) {
+          message.append(" " + version);
+        }
+        unrecommendedClientVersions.add(message.toString());
       }
       if (vote.getRecommendedServerVersions() != null &&
           !downloadedConsensus.getRecommendedServerVersions().equals(
           vote.getRecommendedServerVersions())) {
-        nagiosWarnings.add(vote.getNickname() + " recommends other "
-            + "server versions than the consensus");
+        StringBuilder message = new StringBuilder();
+        message.append(vote.getNickname());
+        for (String version : vote.getRecommendedServerVersions()) {
+          message.append(" " + version);
+        }
+        unrecommendedServerVersions.add(message.toString());
       }
+    }
+    if (!unrecommendedServerVersions.isEmpty()) {
+      StringBuilder sb = new StringBuilder();
+      for (String dir : unrecommendedServerVersions) {
+        sb.append(", " + dir);
+      }
+      this.warnings.put(Warning.DifferentRecommendedServerVersions,
+          sb.toString().substring(2));
+    }
+    if (!unrecommendedClientVersions.isEmpty()) {
+      StringBuilder sb = new StringBuilder();
+      for (String dir : unrecommendedClientVersions) {
+        sb.append(", " + dir);
+      }
+      this.warnings.put(Warning.DifferentRecommendedClientVersions,
+          sb.toString().substring(2));
     }
   }
 
-  /* Checks if a vote contains conflicting or invalid consensus
+  /* Check if a vote contains conflicting or invalid consensus
    * parameters. */
   private void checkConsensusParameters() {
     Set<String> validParameters = new HashSet<String>(Arrays.asList(
@@ -172,6 +185,7 @@ public class NagiosReport implements Report {
         + "cbtdisabled,cbtnummodes,cbtrecentcount,cbtmaxtimeouts,"
         + "cbtmincircs,cbtquantile,cbtclosequantile,cbttestfreq,"
         + "cbtmintimeout,cbtinitialtimeout,bwauthpid").split(",")));
+    SortedSet<String> conflicts = new TreeSet<String>();
     for (Status vote : this.downloadedVotes) {
       Map<String, String> voteConsensusParams =
           vote.getConsensusParams();
@@ -185,29 +199,50 @@ public class NagiosReport implements Report {
               equals(e.getValue()) ||
               !validParameters.contains(e.getKey())) {
             StringBuilder message = new StringBuilder();
-            message.append(vote.getNickname() + " sets conflicting "
-                + "or invalid consensus parameters:");
+            message.append(vote.getNickname());
             for (Map.Entry<String, String> p :
                 voteConsensusParams.entrySet()) {
               message.append(" " + p.getKey() + "=" + p.getValue());
             }
-            nagiosWarnings.add(message.toString());
+            conflicts.add(message.toString());
             break;
           }
         }
       }
     }
+    if (!conflicts.isEmpty()) {
+      StringBuilder sb = new StringBuilder();
+      for (String dir : conflicts) {
+        sb.append(", " + dir);
+      }
+      this.warnings.put(Warning.ConflictingOrInvalidConsensusParams,
+          sb.toString().substring(2));
+    }
   }
 
-  /* Check whether authority keys expire in the next 14 days. */
+  /* Check whether any of the authority keys expire in the next 14
+   * days. */
   private void checkAuthorityKeys() {
+    SortedMap<String, String> expiringCertificates =
+        new TreeMap<String, String>();
+    long now = System.currentTimeMillis();
     for (Status vote : this.downloadedVotes) {
       long voteDirKeyExpiresMillis = vote.getDirKeyExpiresMillis();
-      if (voteDirKeyExpiresMillis - 14L * 24L * 60L * 60L * 1000L <
-          System.currentTimeMillis()) {
-        nagiosWarnings.add(vote.getNickname() + "'s certificate "
-            + "expires in the next 14 days");
+      if (voteDirKeyExpiresMillis - 14L * 24L * 60L * 60L * 1000L < now) {
+        expiringCertificates.put(vote.getNickname(),
+            dateTimeFormat.format(voteDirKeyExpiresMillis));
       }
+    }
+    if (!expiringCertificates.isEmpty()) {
+      StringBuilder sb = new StringBuilder();
+      for (Map.Entry<String, String> e :
+          expiringCertificates.entrySet()) {
+        String dir = e.getKey();
+        String timestamp = e.getValue();
+        sb.append(", " + dir + " " + timestamp);
+      }
+      this.warnings.put(Warning.CertificateExpiresSoon,
+          sb.toString().substring(2));
     }
   }
 
@@ -226,8 +261,8 @@ public class NagiosReport implements Report {
       for (String missingDir : missingVotes) {
         sb.append(", " + missingDir);
       }
-      nagiosWarnings.add("We're missing votes from the following "
-          + "directory authorities: " + sb.toString().substring(2));
+      this.warnings.put(Warning.VotesMissing,
+          sb.toString().substring(2));
     }
   }
 
@@ -235,11 +270,9 @@ public class NagiosReport implements Report {
   private void checkBandwidthScanners() {
     SortedSet<String> missingBandwidthScanners = new TreeSet<String>(
         Arrays.asList("ides,urras,moria1,gabelmoo,maatuska".split(",")));
-    SortedSet<String> runningBandwidthScanners = new TreeSet<String>();
     for (Status vote : this.downloadedVotes) {
       if (vote.getBandwidthWeights() > 0) {
         missingBandwidthScanners.remove(vote.getNickname());
-        runningBandwidthScanners.add(vote.getNickname());
       }
     }
     if (!missingBandwidthScanners.isEmpty()) {
@@ -247,48 +280,8 @@ public class NagiosReport implements Report {
       for (String dir : missingBandwidthScanners) {
         sb.append(", " + dir);
       }
-      String message = "The following directory authorities are not "
-          + "reporting bandwidth scanner results: "
-          + sb.toString().substring(2);
-      if (runningBandwidthScanners.size() >= 3) {
-        nagiosWarnings.add(message);
-      } else {
-        nagiosCriticals.add(message);
-      }
-    }
-  }
-
-  /* Write all output to the Nagios status file.  The most severe status
-   * goes in the first line of the output file and the same status and all
-   * log messages in the second line. */
-  private void writeNagiosStatusFile() {
-    File nagiosStatusFile = this.nagiosOutputFile;
-    try {
-      BufferedWriter bw = new BufferedWriter(new FileWriter(
-          nagiosStatusFile));
-      if (!nagiosUnknowns.isEmpty()) {
-        bw.write("UNKNOWN\nUNKNOWN");
-      } else if (!nagiosCriticals.isEmpty()) {
-        bw.write("CRITICAL\nCRITICAL");
-      } else if (!nagiosWarnings.isEmpty()) {
-        bw.write("WARNING\nWARNING");
-      } else {
-        bw.write("OK\nOK");
-      }
-      for (String message : nagiosUnknowns) {
-        bw.write(" " + message + ";");
-      }
-      for (String message : nagiosCriticals) {
-        bw.write(" " + message + ";");
-      }
-      for (String message : nagiosWarnings) {
-        bw.write(" " + message + ";");
-      }
-      bw.write("\n");
-      bw.close();
-    } catch (IOException e) {
-      System.err.println("Could not write Nagios output file to '"
-          + nagiosStatusFile.getAbsolutePath() + "'.  Ignoring.");
+      this.warnings.put(Warning.BandwidthScannerResultsMissing,
+          sb.toString().substring(2));
     }
   }
 }

@@ -21,16 +21,21 @@ public class Main {
     Downloader downloader = new Downloader();
     downloader.downloadFromAuthorities();
 
-    /* Parse consensus and votes and pass them to the reports. */
+    /* Parse consensus and votes. */
     Parser parser = new Parser();
     SortedMap<String, Status> parsedDownloadedConsensuses = parser.parse(
         downloader.getConsensusStrings(), downloader.getVoteStrings());
-    for (Report report : reports) {
-      report.processDownloadedConsensuses(parsedDownloadedConsensuses);
-    }
 
-    /* Finish writing reports. */
+    /* Check consensus and votes for possible problems. */
+    Checker checker = new Checker();
+    checker.processDownloadedConsensuses(parsedDownloadedConsensuses);
+    SortedMap<Warning, String> warnings = checker.getWarnings();
+
+    /* Pass warnings, consensuses, and votes to the reports, and finish
+     * writing them. */
     for (Report report : reports) {
+      report.processWarnings(warnings);
+      report.processDownloadedConsensuses(parsedDownloadedConsensuses);
       report.writeReport();
     }
 

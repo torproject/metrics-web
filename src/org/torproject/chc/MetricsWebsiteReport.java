@@ -25,6 +25,12 @@ public class MetricsWebsiteReport implements Report {
     this.htmlOutputFile = new File(htmlOutputFilename);
   }
 
+  /* Process warnings. */
+  public void processWarnings(SortedMap<Warning, String> warnings) {
+    /* We could use these warnings instead of running all checks
+     * ourselves.  But we're not doing that yet. */
+  }
+
   /* Store the downloaded consensus and corresponding votes for later
    * processing. */
   private Status downloadedConsensus;
