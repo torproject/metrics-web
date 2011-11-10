@@ -8,7 +8,7 @@ import java.util.*;
 
 /* Check a given consensus and votes for irregularities and write results
  * to stdout while rate-limiting warnings based on severity. */
-public class StdOutReport implements Report {
+public class StatusFileReport implements Report {
 
   /* Date-time format to format timestamps. */
   private static SimpleDateFormat dateTimeFormat;
@@ -37,8 +37,8 @@ public class StdOutReport implements Report {
    * stdout. */
   public void writeReport() {
     this.readLastWarned();
-    this.prepareReport();
-    this.writeReportToStdOut();
+    this.prepareReports();
+    this.writeStatusFiles();
     this.writeLastWarned();
   }
 
@@ -79,8 +79,8 @@ public class StdOutReport implements Report {
   }
 
   /* Prepare a report to be written to stdout. */
-  private String preparedReport = null;
-  private void prepareReport() {
+  private String allWarnings = null, newWarnings = null;
+  private void prepareReports() {
     SortedMap<String, Long> warningStrings = new TreeMap<String, Long>();
     for (Map.Entry<Warning, String> e : this.warnings.entrySet()) {
       Warning type = e.getKey();
@@ -136,29 +136,40 @@ public class StdOutReport implements Report {
       }
     }
     long now = System.currentTimeMillis();
-    boolean writeReport = false;
+    StringBuilder allSb = new StringBuilder(),
+        newSb = new StringBuilder();
     for (Map.Entry<String, Long> e : warningStrings.entrySet()) {
       String message = e.getKey();
+      allSb.append(message + "\n");
       long warnInterval = e.getValue();
       if (!lastWarned.containsKey(message) ||
           lastWarned.get(message) + warnInterval < now) {
-        writeReport = true;
+        newSb.append(message + "\n");
       }
     }
-    if (writeReport) {
-      StringBuilder sb = new StringBuilder();
-      for (String message : warningStrings.keySet()) {
-        this.lastWarned.put(message, now);
-        sb.append("\n\n" + message);
-      }
-      this.preparedReport = sb.toString().substring(2);
+    if (newSb.length() > 0) {
+      this.allWarnings = allSb.toString();
+      this.newWarnings = newSb.toString();
     }
   }
 
   /* Write report to stdout. */
-  private void writeReportToStdOut() {
-    if (this.preparedReport != null) {
-      System.out.println(this.preparedReport);
+  private void writeStatusFiles() {
+    try {
+      BufferedWriter allBw = new BufferedWriter(new FileWriter(
+          "all-warnings")), newBw = new BufferedWriter(new FileWriter(
+          "new-warnings"));
+      if (this.allWarnings != null) {
+        allBw.write(this.allWarnings);
+      }
+      if (this.newWarnings != null) {
+        newBw.write(this.newWarnings);
+      }
+      allBw.close();
+      newBw.close();
+    } catch (IOException e) {
+      System.err.println("Could not write status files 'all-warnings' "
+          + "and/or 'new-warnings'.  Ignoring.");
     }
   }
 

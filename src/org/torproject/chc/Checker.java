@@ -25,18 +25,13 @@ public class Checker {
     dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
   }
 
-  /* Downloaded consensus and corresponding votes for later
-   * processing. */
+  /* Downloaded consensus and corresponding votes for processing. */
   private SortedMap<String, Status> downloadedConsensuses;
   private Status downloadedConsensus;
   private SortedSet<Status> downloadedVotes;
   public void processDownloadedConsensuses(
       SortedMap<String, Status> downloadedConsensuses) {
     this.downloadedConsensuses = downloadedConsensuses;
-  }
-
-  /* Check consensuses and votes for irregularities. */
-  public void checkConsensus() {
     this.findMostRecentConsensus();
     this.checkMissingConsensuses();
     this.checkAllConsensusesFresh();
