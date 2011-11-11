@@ -13,7 +13,6 @@ public class Main {
     List<Report> reports = new ArrayList<Report>();
     reports.add(new MetricsWebsiteReport(
         "website/consensus-health.html"));
-    reports.add(new NagiosReport("stats/consensus-health"));
     reports.add(new StatusFileReport());
 
     /* Download consensus and corresponding votes from the directory
