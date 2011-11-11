@@ -150,6 +150,9 @@ public class StatusFileReport implements Report {
     if (newSb.length() > 0) {
       this.allWarnings = allSb.toString();
       this.newWarnings = newSb.toString();
+      for (String message : warningStrings.keySet()) {
+        this.lastWarned.put(message, now);
+      }
     }
   }
 
