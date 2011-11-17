@@ -180,8 +180,8 @@ public class Checker {
         + "cbtdisabled,cbtnummodes,cbtrecentcount,cbtmaxtimeouts,"
         + "cbtmincircs,cbtquantile,cbtclosequantile,cbttestfreq,"
         + "cbtmintimeout,cbtinitialtimeout,bwauthpid,bwauthbestratio,"
-        + "bwauthcircs,bwauthkp,bwauthtd,bwauthti,bwauthtidecay").
-        split(",")));
+        + "bwauthcircs,bwauthkp,bwauthtd,bwauthti,bwauthtidecay,"
+        + "bwauthdescbw").split(",")));
     SortedSet<String> conflicts = new TreeSet<String>();
     for (Status vote : this.downloadedVotes) {
       Map<String, String> voteConsensusParams =
