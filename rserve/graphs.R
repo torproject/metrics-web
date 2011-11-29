@@ -713,8 +713,9 @@ plot_bridge_users <- function(start, end, country, path, dpi) {
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0, max(bridgeusers$users,
-        na.rm = TRUE)), formatter = formatter) +
+    scale_y_continuous(name = "", limits = c(0,
+        ifelse(length(na.omit(bridgeusers$users)) == 0, 0,
+        max(bridgeusers$users, na.rm = TRUE))), formatter = formatter) +
     opts(title = title)
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
