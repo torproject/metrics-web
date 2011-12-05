@@ -179,9 +179,8 @@ public class Checker {
         ("circwindow,CircuitPriorityHalflifeMsec,refuseunknownexits,"
         + "cbtdisabled,cbtnummodes,cbtrecentcount,cbtmaxtimeouts,"
         + "cbtmincircs,cbtquantile,cbtclosequantile,cbttestfreq,"
-        + "cbtmintimeout,cbtinitialtimeout,perconnbwburst,perconnbwrate,"
-        + "bwauthpid,bwauthbestratio,bwauthcircs,bwauthkp,bwauthtd,"
-        + "bwauthti,bwauthtidecay,bwauthdescbw").split(",")));
+        + "cbtmintimeout,cbtinitialtimeout,perconnbwburst,perconnbwrate").
+        split(",")));
     SortedSet<String> conflicts = new TreeSet<String>();
     for (Status vote : this.downloadedVotes) {
       Map<String, String> voteConsensusParams =
@@ -194,7 +193,8 @@ public class Checker {
               e.getKey()) ||
               !downloadedConsensus.getConsensusParams().get(e.getKey()).
               equals(e.getValue()) ||
-              !validParameters.contains(e.getKey())) {
+              (!validParameters.contains(e.getKey()) &&
+              !e.getKey().startsWith("bwauth"))) {
             StringBuilder message = new StringBuilder();
             message.append(vote.getNickname());
             for (Map.Entry<String, String> p :
