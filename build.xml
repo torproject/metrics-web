@@ -21,7 +21,6 @@
     <copy file="${contextxmltemplate}" tofile="${contextxml}"/>
     <copy file="config.template" tofile="config"/>
     <mkdir dir="${classes}"/>
-    <mkdir dir="website"/>
   </target>
 
   <!-- Compile all servlets and plain Java classes. -->
@@ -56,16 +55,6 @@
     <java fork="true"
           maxmemory="2048m"
           classname="org.torproject.ernie.cron.ExoneraTorDatabaseImporter">
-      <classpath refid="classpath"/>
-    </java>
-  </target>
-
-  <!-- Run consensus-health checker. -->
-  <target name="chc" depends="compile">
-    <java fork="true"
-          maxmemory="512m"
-          classname="org.torproject.chc.Main"
-          error="chc-stderr.txt">
       <classpath refid="classpath"/>
     </java>
   </target>
