@@ -62,6 +62,7 @@ based on the requests seen by a few dozen directory mirrors.</p>
     </p>
   </div>
 </form>
+<hr>
 <a name="direct-users-table"></a>
 <p><b>Top-10 countries by directly connecting users:</b></p>
 <table>
@@ -92,6 +93,7 @@ based on the requests seen by a few dozen directory mirrors.</p>
     </p>
   </div>
 </form>
+<hr>
 <a name="censorship-events"></a>
 <p><b>Top-10 countries by possible censorship events (<a
       href="papers/detector-2011-09-09.pdf">BETA</a>):</b></p>
@@ -125,6 +127,7 @@ based on the requests seen by a few dozen directory mirrors.</p>
     </p>
   </div>
 </form>
+<hr>
 <p><a href="csv/direct-users.csv">CSV</a> file containing daily directly
 connecting users by country.</p>
 <p><a href="csv/monthly-users-peak.csv">CSV</a> file containing peak daily
@@ -170,6 +173,7 @@ by a few hundred bridges.</p>
     </p>
   </div>
 </form>
+<hr>
 <p><a href="csv/bridge-users.csv">CSV</a> file containing all data.</p>
 <p><a href="csv/monthly-users-peak.csv">CSV</a> file containing peak daily
 Tor users (direct and bridge) per month by country.</p>
