@@ -523,9 +523,11 @@ plot_bwhist_flags <- function(start, end, path, dpi) {
 plot_dirbytes <- function(start, end, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, dr, dw, brp, bwp, brd, bwd FROM user_stats",
-      "WHERE country = 'zy' AND bwp / bwd <= 3",
-      "AND date < (SELECT MAX(date) FROM user_stats) - 1 ORDER BY date")
+  q <- paste("SELECT date, dr, dw, brp, bwp, brd, bwd FROM user_stats ",
+      "WHERE country = 'zy' AND bwp / bwd <= 3 AND date >= '", start,
+      "' AND date <= '", end, "' ",
+      "AND date < (SELECT MAX(date) FROM user_stats) - 1 ORDER BY date",
+      sep = "")
   rs <- dbSendQuery(con, q)
   dir <- fetch(rs, n = -1)
   dbDisconnect(con)
