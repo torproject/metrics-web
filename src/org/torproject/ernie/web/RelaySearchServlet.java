@@ -297,17 +297,15 @@ public class RelaySearchServlet extends HttpServlet {
           + "address LIKE '" + searchIPAddress + "%' ");
       addAnd = true;
     }
-    StringBuilder queryBuilder = new StringBuilder();
-    queryBuilder.append("SELECT validafter, fingerprint, descriptor, "
-        + "rawdesc FROM statusentry WHERE validafter IN (SELECT "
-        + "validafter FROM statusentry WHERE ");
-    queryBuilder.append(conditionBuilder.toString());
+    List<String> timeIntervals = new ArrayList<String>();
     if (searchDayTimestamps.size() > 0 ||
         searchMonthTimestamps.size() > 0) {
+      StringBuilder timeIntervalBuilder = new StringBuilder();
       boolean addOr = false;
-      queryBuilder.append("AND (");
+      timeIntervalBuilder.append("AND (");
       for (long searchTimestamp : searchDayTimestamps) {
-        queryBuilder.append((addOr ? "OR " : "") + "(validafter >= '"
+        timeIntervalBuilder.append((addOr ? "OR " : "")
+            + "(validafter >= '"
             + dateTimeFormat.format(searchTimestamp) + "' AND "
             + "validafter < '" + dateTimeFormat.format(searchTimestamp
             + 24L * 60L * 60L * 1000L) + "') ");
@@ -318,22 +316,35 @@ public class RelaySearchServlet extends HttpServlet {
             TimeZone.getTimeZone("UTC"));
         firstOfNextMonth.setTimeInMillis(searchTimestamp);
         firstOfNextMonth.add(Calendar.MONTH, 1);
-        queryBuilder.append((addOr ? "OR " : "") + "(validafter >= '"
+        timeIntervalBuilder.append((addOr ? "OR " : "")
+            + "(validafter >= '"
             + dateTimeFormat.format(searchTimestamp) + "' AND "
             + "validafter < '" + dateTimeFormat.format(
             firstOfNextMonth.getTimeInMillis()) + "') ");
         addOr = true;
       }
-      queryBuilder.append(") ");
+      timeIntervalBuilder.append(") ");
+      timeIntervals.add(timeIntervalBuilder.toString());
     } else {
-      queryBuilder.append("AND validafter >= '" + dateTimeFormat.format(
-          System.currentTimeMillis() - 30L * 24L * 60L * 60L * 1000L)
-          + "' ");
+      timeIntervals.add("AND validafter >= '"
+          + dateTimeFormat.format(System.currentTimeMillis()
+          - 4L * 24L * 60L * 60L * 1000L) + "' ");
+      timeIntervals.add("AND validafter >= '"
+          + dateTimeFormat.format(System.currentTimeMillis()
+          - 30L * 24L * 60L * 60L * 1000L) + "' ");
     }
-    queryBuilder.append("ORDER BY validafter DESC LIMIT 31) AND ");
-    queryBuilder.append(conditionBuilder.toString());
-    String query = queryBuilder.toString();
-    request.setAttribute("query", query);
+    List<String> queries = new ArrayList<String>();
+    for (String timeInterval : timeIntervals) {
+      StringBuilder queryBuilder = new StringBuilder();
+      queryBuilder.append("SELECT validafter, fingerprint, descriptor, "
+          + "rawdesc FROM statusentry WHERE validafter IN (SELECT "
+          + "validafter FROM statusentry WHERE ");
+      queryBuilder.append(conditionBuilder.toString());
+      queryBuilder.append(timeInterval);
+      queryBuilder.append("ORDER BY validafter DESC LIMIT 31) AND ");
+      queryBuilder.append(conditionBuilder.toString());
+      queries.add(queryBuilder.toString());
+    }
 
     /* Actually execute the query. */
     long startedQuery = System.currentTimeMillis();
@@ -343,59 +354,67 @@ public class RelaySearchServlet extends HttpServlet {
     Map<String, String> rawValidAfterLines =
         new HashMap<String, String>();
     Map<String, String> rawStatusEntries = new HashMap<String, String>();
+    String query = null;
     int matches = 0;
     try {
       long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
-      Statement statement = conn.createStatement();
-      ResultSet rs = statement.executeQuery(query);
-      while (rs.next()) {
-        matches++;
-        String validAfter = rs.getTimestamp(1).toString().
-            substring(0, 19);
-        String fingerprint = rs.getString(2);
-        String descriptor = rs.getString(3);
-        if (!foundDescriptors.containsKey(validAfter)) {
-          foundDescriptors.put(validAfter, new TreeSet<String>());
-        }
-        foundDescriptors.get(validAfter).add(validAfter + " "
-            + fingerprint);
-        if (!rawValidAfterLines.containsKey(validAfter)) {
-          rawValidAfterLines.put(validAfter, "<tt>valid-after "
-              + "<a href=\"consensus?valid-after="
-              + validAfter.replaceAll(":", "-").replaceAll(" ", "-")
-              + "\" target=\"_blank\">" + validAfter + "</a></tt><br>");
-        }
-        byte[] rawStatusEntry = rs.getBytes(4);
-        String statusEntryLines = null;
-        try {
-          statusEntryLines = new String(rawStatusEntry, "US-ASCII");
-        } catch (UnsupportedEncodingException e) {
-          /* This shouldn't happen, because we know that ASCII is
-           * supported. */
-        }
-        StringBuilder rawStatusEntryBuilder = new StringBuilder();
-        String[] lines = statusEntryLines.split("\n");
-        for (String line : lines) {
-          if (line.startsWith("r ")) {
-            String[] parts = line.split(" ");
-            String descriptorBase64 = String.format("%040x",
-                new BigInteger(1, Base64.decodeBase64(parts[3]
-                + "==")));
-            rawStatusEntryBuilder.append("<tt>r " + parts[1] + " "
-                + parts[2] + " <a href=\"descriptor.html?desc-id="
-                + descriptorBase64 + "\" target=\"_blank\">" + parts[3]
-                + "</a> " + parts[4] + " " + parts[5] + " " + parts[6]
-                + " " + parts[7] + " " + parts[8] + "</tt><br>");
-          } else {
-            rawStatusEntryBuilder.append("<tt>" + line + "</tt><br>");
+      while (!queries.isEmpty()) {
+        query = queries.remove(0);
+        this.logger.info("Running query '" + query + "'.");
+        Statement statement = conn.createStatement();
+        ResultSet rs = statement.executeQuery(query);
+        while (rs.next()) {
+          matches++;
+          String validAfter = rs.getTimestamp(1).toString().
+              substring(0, 19);
+          String fingerprint = rs.getString(2);
+          String descriptor = rs.getString(3);
+          if (!foundDescriptors.containsKey(validAfter)) {
+            foundDescriptors.put(validAfter, new TreeSet<String>());
           }
+          foundDescriptors.get(validAfter).add(validAfter + " "
+              + fingerprint);
+          if (!rawValidAfterLines.containsKey(validAfter)) {
+            rawValidAfterLines.put(validAfter, "<tt>valid-after "
+                + "<a href=\"consensus?valid-after="
+                + validAfter.replaceAll(":", "-").replaceAll(" ", "-")
+                + "\" target=\"_blank\">" + validAfter + "</a></tt><br>");
+          }
+          byte[] rawStatusEntry = rs.getBytes(4);
+          String statusEntryLines = null;
+          try {
+            statusEntryLines = new String(rawStatusEntry, "US-ASCII");
+          } catch (UnsupportedEncodingException e) {
+            /* This shouldn't happen, because we know that ASCII is
+             * supported. */
+          }
+          StringBuilder rawStatusEntryBuilder = new StringBuilder();
+          String[] lines = statusEntryLines.split("\n");
+          for (String line : lines) {
+            if (line.startsWith("r ")) {
+              String[] parts = line.split(" ");
+              String descriptorBase64 = String.format("%040x",
+                  new BigInteger(1, Base64.decodeBase64(parts[3]
+                  + "==")));
+              rawStatusEntryBuilder.append("<tt>r " + parts[1] + " "
+                  + parts[2] + " <a href=\"descriptor.html?desc-id="
+                  + descriptorBase64 + "\" target=\"_blank\">" + parts[3]
+                  + "</a> " + parts[4] + " " + parts[5] + " " + parts[6]
+                  + " " + parts[7] + " " + parts[8] + "</tt><br>");
+            } else {
+              rawStatusEntryBuilder.append("<tt>" + line + "</tt><br>");
+            }
+          }
+          rawStatusEntries.put(validAfter + " " + fingerprint,
+                rawStatusEntryBuilder.toString());
         }
-        rawStatusEntries.put(validAfter + " " + fingerprint,
-              rawStatusEntryBuilder.toString());
+        rs.close();
+        statement.close();
+        if (matches == 31) {
+          queries.clear();
+        }
       }
-      rs.close();
-      statement.close();
       conn.close();
       this.logger.info("Returned a database connection to the pool "
           + "after " + (System.currentTimeMillis()
@@ -407,6 +426,7 @@ public class RelaySearchServlet extends HttpServlet {
           "Database problem");
       return;
     }
+    request.setAttribute("query", query);
     request.setAttribute("queryTime", System.currentTimeMillis()
         - startedQuery);
     request.setAttribute("foundDescriptors", foundDescriptors);
