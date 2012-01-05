@@ -49,7 +49,7 @@ public class Countries {
     this.knownCountries.add("br;Brazil".split(";"));
     this.knownCountries.add("io;British Indian Ocean Territory".
         split(";"));
-    this.knownCountries.add("bn;Brunei Darussalam".split(";"));
+    this.knownCountries.add("bn;Brunei".split(";"));
     this.knownCountries.add("bg;Bulgaria".split(";"));
     this.knownCountries.add("bf;Burkina Faso".split(";"));
     this.knownCountries.add("mm;Burma".split(";"));
@@ -72,7 +72,7 @@ public class Countries {
     this.knownCountries.add("cg;Congo".split(";"));
     this.knownCountries.add("ck;Cook Islands".split(";"));
     this.knownCountries.add("cr;Costa Rica".split(";"));
-    this.knownCountries.add("ci;Cote d'Ivoire".split(";"));
+    this.knownCountries.add("ci;Côte d'Ivoire".split(";"));
     this.knownCountries.add("hr;Croatia".split(";"));
     this.knownCountries.add("cu;Cuba".split(";"));
     this.knownCountries.add("cy;Cyprus".split(";"));
@@ -116,15 +116,14 @@ public class Countries {
     this.knownCountries.add("ht;Haiti".split(";"));
     this.knownCountries.add("hm;Heard Island and McDonald Islands".
         split(";"));
-    this.knownCountries.add("va;Holy See (Vatican City State)".
-        split(";"));
+    this.knownCountries.add("va;Vatican City".split(";"));
     this.knownCountries.add("hn;Honduras".split(";"));
     this.knownCountries.add("hk;Hong Kong".split(";"));
     this.knownCountries.add("hu;Hungary".split(";"));
     this.knownCountries.add("is;Iceland".split(";"));
     this.knownCountries.add("in;India".split(";"));
     this.knownCountries.add("id;Indonesia".split(";"));
-    this.knownCountries.add("ir;Iran, Islamic Republic of".split(";"));
+    this.knownCountries.add("ir;Iran".split(";"));
     this.knownCountries.add("iq;Iraq".split(";"));
     this.knownCountries.add("ie;Ireland".split(";"));
     this.knownCountries.add("im;Isle of Man".split(";"));
@@ -137,13 +136,11 @@ public class Countries {
     this.knownCountries.add("kz;Kazakhstan".split(";"));
     this.knownCountries.add("ke;Kenya".split(";"));
     this.knownCountries.add("ki;Kiribati".split(";"));
-    this.knownCountries.add("kp;Korea, Democratic People's Republic of".
-        split(";"));
+    this.knownCountries.add("kp;North Korea".split(";"));
     this.knownCountries.add("kr;Korea, Republic of".split(";"));
     this.knownCountries.add("kw;Kuwait".split(";"));
     this.knownCountries.add("kg;Kyrgyzstan".split(";"));
-    this.knownCountries.add("la;Lao People's Democratic Republic".
-        split(";"));
+    this.knownCountries.add("la;Laos".split(";"));
     this.knownCountries.add("lv;Latvia".split(";"));
     this.knownCountries.add("lb;Lebanon".split(";"));
     this.knownCountries.add("ls;Lesotho".split(";"));
@@ -152,7 +149,7 @@ public class Countries {
     this.knownCountries.add("li;Liechtenstein".split(";"));
     this.knownCountries.add("lt;Lithuania".split(";"));
     this.knownCountries.add("lu;Luxembourg".split(";"));
-    this.knownCountries.add("mo;Macao".split(";"));
+    this.knownCountries.add("mo;Macau".split(";"));
     this.knownCountries.add("mk;Macedonia".split(";"));
     this.knownCountries.add("mg;Madagascar".split(";"));
     this.knownCountries.add("mw;Malawi".split(";"));
@@ -175,7 +172,7 @@ public class Countries {
     this.knownCountries.add("ms;Montserrat".split(";"));
     this.knownCountries.add("ma;Morocco".split(";"));
     this.knownCountries.add("mz;Mozambique".split(";"));
-    this.knownCountries.add("mm;Myanmar".split(";"));
+    this.knownCountries.add("mm;Burma".split(";"));
     this.knownCountries.add("na;Namibia".split(";"));
     this.knownCountries.add("nr;Nauru".split(";"));
     this.knownCountries.add("np;Nepal".split(";"));
@@ -199,14 +196,14 @@ public class Countries {
     this.knownCountries.add("py;Paraguay".split(";"));
     this.knownCountries.add("pe;Peru".split(";"));
     this.knownCountries.add("ph;Philippines".split(";"));
-    this.knownCountries.add("pn;Pitcairn".split(";"));
+    this.knownCountries.add("pn;Pitcairn Islands".split(";"));
     this.knownCountries.add("pl;Poland".split(";"));
     this.knownCountries.add("pt;Portugal".split(";"));
     this.knownCountries.add("pr;Puerto Rico".split(";"));
     this.knownCountries.add("qa;Qatar".split(";"));
     this.knownCountries.add("re;Reunion".split(";"));
     this.knownCountries.add("ro;Romania".split(";"));
-    this.knownCountries.add("ru;Russian Federation".split(";"));
+    this.knownCountries.add("ru;Russia".split(";"));
     this.knownCountries.add("rw;Rwanda".split(";"));
     this.knownCountries.add("bl;Saint Bartelemey".split(";"));
     this.knownCountries.add("sh;Saint Helena".split(";"));
@@ -218,7 +215,7 @@ public class Countries {
         split(";"));
     this.knownCountries.add("ws;Samoa".split(";"));
     this.knownCountries.add("sm;San Marino".split(";"));
-    this.knownCountries.add("st;Sao Tome and Principe".split(";"));
+    this.knownCountries.add("st;São Tomé and Príncipe".split(";"));
     this.knownCountries.add("sa;Saudi Arabia".split(";"));
     this.knownCountries.add("sn;Senegal".split(";"));
     this.knownCountries.add("rs;Serbia".split(";"));
@@ -245,7 +242,7 @@ public class Countries {
     this.knownCountries.add("tj;Tajikistan".split(";"));
     this.knownCountries.add("tz;Tanzania, United Republic of".split(";"));
     this.knownCountries.add("th;Thailand".split(";"));
-    this.knownCountries.add("tl;Timor-Leste".split(";"));
+    this.knownCountries.add("tl;East Timor".split(";"));
     this.knownCountries.add("tg;Togo".split(";"));
     this.knownCountries.add("tk;Tokelau".split(";"));
     this.knownCountries.add("to;Tonga".split(";"));
