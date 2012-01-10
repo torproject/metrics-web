@@ -411,7 +411,7 @@ public class RelaySearchServlet extends HttpServlet {
         }
         rs.close();
         statement.close();
-        if (matches == 31) {
+        if (matches >= 31) {
           queries.clear();
         }
       }
