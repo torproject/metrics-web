@@ -72,7 +72,7 @@ public class Countries {
     this.knownCountries.add("cg;Congo".split(";"));
     this.knownCountries.add("ck;Cook Islands".split(";"));
     this.knownCountries.add("cr;Costa Rica".split(";"));
-    this.knownCountries.add("ci;Côte d'Ivoire".split(";"));
+    this.knownCountries.add("ci:C&#244;te d'Ivoire".split(":"));
     this.knownCountries.add("hr;Croatia".split(";"));
     this.knownCountries.add("cu;Cuba".split(";"));
     this.knownCountries.add("cy;Cyprus".split(";"));
@@ -215,7 +215,8 @@ public class Countries {
         split(";"));
     this.knownCountries.add("ws;Samoa".split(";"));
     this.knownCountries.add("sm;San Marino".split(";"));
-    this.knownCountries.add("st;São Tomé and Príncipe".split(";"));
+    this.knownCountries.add("st:S&#227;o Tom&#233; and Pr&#237;ncipe".
+        split(":"));
     this.knownCountries.add("sa;Saudi Arabia".split(";"));
     this.knownCountries.add("sn;Senegal".split(";"));
     this.knownCountries.add("rs;Serbia".split(";"));
