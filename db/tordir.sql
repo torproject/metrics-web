@@ -1,6 +1,8 @@
 -- Copyright 2010 The Tor Project
 -- See LICENSE for licensing information
 
+CREATE LANGUAGE plpgsql;
+
 -- TABLE descriptor
 -- Contains all of the descriptors published by routers.
 CREATE TABLE descriptor (
@@ -80,9 +82,58 @@ CREATE TABLE statusentry (
     version CHARACTER VARYING(50),
     bandwidth BIGINT,
     ports TEXT,
-    rawdesc BYTEA NOT NULL,
-    CONSTRAINT statusentry_pkey PRIMARY KEY (validafter, fingerprint)
+    rawdesc BYTEA NOT NULL
 );
+
+CREATE OR REPLACE FUNCTION statusentry_insert_trigger()
+RETURNS TRIGGER AS $$
+
+DECLARE
+  tablename TEXT;
+  selectresult TEXT;
+  nextmonth TIMESTAMP WITHOUT TIME ZONE;
+  v_year INTEGER;
+  v_month INTEGER;
+  n_year INTEGER;
+  n_month INTEGER;
+
+BEGIN
+  v_year := extract(YEAR FROM new.validafter);
+  v_month := extract(MONTH FROM new.validafter);
+  tablename := 'statusentry_y' || v_year || 'm' || v_month;
+  EXECUTE 'SELECT relname FROM pg_class WHERE relname = '''|| tablename ||
+    '''' INTO selectresult;
+  IF selectresult IS NULL THEN
+    nextmonth := new.validafter + interval '1 month';
+    n_year := extract(YEAR FROM nextmonth);
+    n_month := extract(MONTH FROM nextmonth);
+    EXECUTE 'CREATE TABLE ' || tablename ||
+      ' ( CHECK ( validafter >= ''' || v_year || '-' || v_month ||
+      '-01 00:00:00'' AND validafter < ''' || n_year || '-' || n_month ||
+      '-01 00:00:00'') ) INHERITS (statusentry_all)';
+    EXECUTE 'ALTER TABLE ' || tablename || ' ADD CONSTRAINT ' ||
+      tablename || '_pkey PRIMARY KEY (validafter, fingerprint)';
+    EXECUTE 'CREATE INDEX ' || tablename || '_address ON ' ||
+      tablename || ' (address)';
+    EXECUTE 'CREATE INDEX ' || tablename || '_fingerprint ON ' ||
+      tablename || ' (fingerprint)';
+    EXECUTE 'CREATE INDEX ' || tablename || '_nickname ON ' ||
+      tablename || ' (LOWER(nickname))';
+    EXECUTE 'CREATE INDEX ' || tablename || '_validafter ON ' ||
+      tablename || ' (validafter)';
+    EXECUTE 'CREATE INDEX ' || tablename || '_descriptor ON ' ||
+      tablename || ' (descriptor)';
+    EXECUTE 'CREATE INDEX ' || tablename || '_validafter_date ON ' ||
+      tablename || ' (DATE(validafter))';
+  END IF;
+  EXECUTE 'INSERT INTO ' || tablename || ' SELECT ($1).*' USING NEW;
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER insert_statusentry_trigger
+  BEFORE INSERT ON statusentry_all
+  FOR EACH ROW EXECUTE PROCEDURE statusentry_insert_trigger();
 
 -- TABLE consensus
 -- Contains all of the consensuses published by the directories.
@@ -306,8 +357,6 @@ FROM (
 LEFT JOIN descriptor
 ON status.descriptor = descriptor.descriptor
 ORDER BY validafter, fingerprint;
-
-CREATE LANGUAGE plpgsql;
 
 -- FUNCTION refresh_relay_statuses_per_day()
 -- Updates helper table which is used to refresh the aggregate tables.
