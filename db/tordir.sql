@@ -98,9 +98,10 @@ DECLARE
   n_month INTEGER;
 
 BEGIN
-  v_year := extract(YEAR FROM new.validafter);
-  v_month := extract(MONTH FROM new.validafter);
-  tablename := 'statusentry_y' || v_year || 'm' || v_month;
+  v_year := extract(YEAR FROM NEW.validafter);
+  v_month := extract(MONTH FROM NEW.validafter);
+  tablename := 'statusentry_y' || v_year || 'm' ||
+      TO_CHAR(NEW.validafter, 'mm');
   EXECUTE 'SELECT relname FROM pg_class WHERE relname = '''|| tablename ||
     '''' INTO selectresult;
   IF selectresult IS NULL THEN
@@ -108,9 +109,11 @@ BEGIN
     n_year := extract(YEAR FROM nextmonth);
     n_month := extract(MONTH FROM nextmonth);
     EXECUTE 'CREATE TABLE ' || tablename ||
-      ' ( CHECK ( validafter >= ''' || v_year || '-' || v_month ||
-      '-01 00:00:00'' AND validafter < ''' || n_year || '-' || n_month ||
-      '-01 00:00:00'') ) INHERITS (statusentry_all)';
+      ' ( CHECK ( validafter >= ''' || v_year || '-' ||
+      TO_CHAR(NEW.validafter, 'mm') || '-01 00:00:00'' ' ||
+      'AND validafter < ''' || n_year || '-' ||
+      TO_CHAR(nextmonth, 'mm') ||
+      '-01 00:00:00'') ) INHERITS (statusentry)';
     EXECUTE 'ALTER TABLE ' || tablename || ' ADD CONSTRAINT ' ||
       tablename || '_pkey PRIMARY KEY (validafter, fingerprint)';
     EXECUTE 'CREATE INDEX ' || tablename || '_address ON ' ||
@@ -132,7 +135,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER insert_statusentry_trigger
-  BEFORE INSERT ON statusentry_all
+  BEFORE INSERT ON statusentry
   FOR EACH ROW EXECUTE PROCEDURE statusentry_insert_trigger();
 
 -- TABLE consensus
