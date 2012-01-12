@@ -531,15 +531,22 @@ CREATE OR REPLACE FUNCTION refresh_relay_countries() RETURNS INTEGER AS $$
     (date, country, relays)
     SELECT date, country, relays / count AS relays
     FROM (
-        SELECT DATE(validafter),
+        SELECT date,
                COALESCE(lower((geoip_lookup(address)).country), ''zz'')
                  AS country,
-               COUNT(*) AS relays
-        FROM statusentry
-        WHERE isrunning = TRUE
-              AND validafter >= ''' || min_date || '''
-              AND validafter < ''' || max_date || '''
-              AND DATE(validafter) IN (SELECT date FROM updates)
+               SUM(relays) AS relays
+        FROM (
+            SELECT DATE(validafter) AS date,
+                   fingerprint,
+                   address,
+                   COUNT(*) AS relays
+            FROM statusentry
+            WHERE isrunning = TRUE
+                  AND validafter >= ''' || min_date || '''
+                  AND validafter < ''' || max_date || '''
+                  AND DATE(validafter) IN (SELECT date FROM updates)
+            GROUP BY 1, 2, 3
+            ) c
         GROUP BY 1, 2
         ) b
     NATURAL JOIN relay_statuses_per_day';
