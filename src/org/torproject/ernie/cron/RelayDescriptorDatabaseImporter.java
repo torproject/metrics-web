@@ -244,7 +244,8 @@ public final class RelayDescriptorDatabaseImporter {
         this.psSs = conn.prepareStatement("SELECT COUNT(*) "
             + "FROM statusentry WHERE validafter = ?");
         this.psRs = conn.prepareStatement("SELECT COUNT(*) "
-            + "FROM statusentry WHERE validafter = ? AND descriptor = ?");
+            + "FROM statusentry WHERE validafter = ? AND "
+            + "fingerprint = ?");
         this.psDs = conn.prepareStatement("SELECT COUNT(*) "
             + "FROM descriptor WHERE descriptor = ?");
         this.psEs = conn.prepareStatement("SELECT COUNT(*) "
@@ -362,7 +363,7 @@ public final class RelayDescriptorDatabaseImporter {
         if (separateStatusEntryCheckNecessary ||
             insertedStatusEntries.contains(fingerprint)) {
           this.psRs.setTimestamp(1, validAfterTimestamp, cal);
-          this.psRs.setString(2, descriptor);
+          this.psRs.setString(2, fingerprint);
           ResultSet rs = psRs.executeQuery();
           rs.next();
           if (rs.getInt(1) > 0) {
