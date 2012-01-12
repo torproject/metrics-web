@@ -343,6 +343,7 @@ public class RelaySearchServlet extends HttpServlet {
       queryBuilder.append(timeInterval);
       queryBuilder.append("ORDER BY validafter DESC LIMIT 31) AND ");
       queryBuilder.append(conditionBuilder.toString());
+      queryBuilder.append(timeInterval);
       queries.add(queryBuilder.toString());
     }
 
