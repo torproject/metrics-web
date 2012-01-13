@@ -52,6 +52,8 @@ public class RelaySearchServlet extends HttpServlet {
   private SimpleDateFormat dateTimeFormat =
       new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+  private long minValidAfterMillis;
+
   private DataSource ds;
 
   private Logger logger;
@@ -73,6 +75,27 @@ public class RelaySearchServlet extends HttpServlet {
       this.logger.info("Successfully looked up data source.");
     } catch (NamingException e) {
       this.logger.log(Level.WARNING, "Could not look up data source", e);
+    }
+
+    /* Look up first consensus in the database. */
+    try {
+      long requestedConnection = System.currentTimeMillis();
+      Connection conn = this.ds.getConnection();
+      String query = "SELECT MIN(validafter) AS first FROM consensus";
+      Statement statement = conn.createStatement();
+      ResultSet rs = statement.executeQuery(query);
+      if (rs.next()) {
+        this.minValidAfterMillis = rs.getTimestamp(1).getTime();
+      }
+      rs.close();
+      statement.close();
+      conn.close();
+      this.logger.info("Returned a database connection to the pool "
+          + "after " + (System.currentTimeMillis()
+          - requestedConnection) + " millis.");
+    } catch (SQLException e) {
+      this.logger.log(Level.WARNING, "Could not look up first consensus "
+          + "valid-after time in the database.", e);
     }
   }
 
@@ -304,6 +327,12 @@ public class RelaySearchServlet extends HttpServlet {
       boolean addOr = false;
       timeIntervalBuilder.append("AND (");
       for (long searchTimestamp : searchDayTimestamps) {
+        if (searchTimestamp < this.minValidAfterMillis) {
+          request.setAttribute("outsideInterval", "Returned search "
+              + "results may be incomplete, as our data only dates back "
+              + "to " + dateTimeFormat.format(this.minValidAfterMillis)
+              + ".  Older archives are not available.");
+        }
         timeIntervalBuilder.append((addOr ? "OR " : "")
             + "(validafter >= '"
             + dateTimeFormat.format(searchTimestamp) + "' AND "
@@ -312,6 +341,12 @@ public class RelaySearchServlet extends HttpServlet {
         addOr = true;
       }
       for (long searchTimestamp : searchMonthTimestamps) {
+        if (searchTimestamp < this.minValidAfterMillis) {
+          request.setAttribute("outsideInterval", "Returned search "
+              + "results may be incomplete, as our data only dates back "
+              + "to " + dateTimeFormat.format(this.minValidAfterMillis)
+              + ".  Older archives are not available.");
+        }
         Calendar firstOfNextMonth = Calendar.getInstance(
             TimeZone.getTimeZone("UTC"));
         firstOfNextMonth.setTimeInMillis(searchTimestamp);

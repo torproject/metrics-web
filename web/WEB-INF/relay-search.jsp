@@ -39,6 +39,9 @@
         (e.g., "80.190"). You can also provide at most three months or
         days in ISO 8601 format (e.g., "2010-09" or "2010-09-17").</p>
       </c:if>
+      <c:if test="${not empty outsideInterval}">
+        <p>${outsideInterval}</p>
+      </c:if>
       <c:if test="${not empty searchNotice}">
         <p>${searchNotice}</p>
       </c:if>
