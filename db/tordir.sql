@@ -168,16 +168,6 @@ CREATE TABLE connbidirect (
     CONSTRAINT connbidirect_pkey PRIMARY KEY (source, statsend)
 );
 
--- Create the various indexes we need for searching relays
-CREATE INDEX statusentry_address ON statusentry (address);
-CREATE INDEX statusentry_fingerprint ON statusentry (fingerprint);
-CREATE INDEX statusentry_nickname ON statusentry (LOWER(nickname));
-CREATE INDEX statusentry_validafter ON statusentry (validafter);
-
--- And create an index that we use for precalculating statistics
-CREATE INDEX statusentry_descriptor ON statusentry (descriptor);
-CREATE INDEX statusentry_validafter_date ON statusentry (DATE(validafter));
-
 -- TABLE network_size
 CREATE TABLE network_size (
     date DATE NOT NULL,
