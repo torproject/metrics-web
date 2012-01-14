@@ -71,7 +71,7 @@ public class RouterDetailServlet extends HttpServlet {
         + "FROM statusentry JOIN descriptor "
         + "ON descriptor.descriptor = statusentry.descriptor "
         + "WHERE statusentry.validafter = "
-        + "(SELECT MAX(validafter) FROM statusentry) "
+        + "(SELECT MAX(validafter) FROM consensus) "
         + "AND statusentry.fingerprint = ?";
 
     try {
