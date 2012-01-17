@@ -21,7 +21,10 @@ Tor</a></h3>
 <p>The following graphs show the performance of the Tor network as
 experienced by its users. The graphs contain the average (median) time to
 request files of three different sizes over Tor as well as first and third
-quartile of request times.</p>
+quartile of request times. Medians and quartiles are calculated multiple
+times per day for completed days only, resulting in a delay of 1 to 1.5
+days before changes to network performance become visible in the
+graph.</p>
 <img src="torperf.png${torperf_url}"
      width="576" height="360" alt="Torperf graph">
 <form action="performance.html#torperf">
