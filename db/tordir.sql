@@ -329,28 +329,6 @@ RETURNS geoip_result AS $$
   BETWEEN geoipdb.ipstart AND geoipdb.ipend LIMIT 1;
 $$ LANGUAGE SQL;
 
--- View that contains the relays of the first known consensuses of all
--- months in the database.
-CREATE OR REPLACE VIEW relays_monthly_snapshots AS
-SELECT status.validafter, status.fingerprint, status.nickname,
-    status.address, (status.geoip).country, (status.geoip).latitude,
-    (status.geoip).longitude, status.isexit, status.isfast,
-    status.isguard, status.isstable, status.version, status.ports,
-    descriptor.bandwidthavg, descriptor.bandwidthburst,
-    descriptor.bandwidthobserved
-FROM (
-  SELECT *, geoip_lookup(address) AS geoip
-  FROM statusentry
-  WHERE validafter IN (
-    SELECT MIN(validafter)
-    FROM consensus
-    GROUP BY DATE_TRUNC('month', validafter)
-  )
-) AS status
-LEFT JOIN descriptor
-ON status.descriptor = descriptor.descriptor
-ORDER BY validafter, fingerprint;
-
 -- FUNCTION refresh_relay_statuses_per_day()
 -- Updates helper table which is used to refresh the aggregate tables.
 CREATE OR REPLACE FUNCTION refresh_relay_statuses_per_day()
