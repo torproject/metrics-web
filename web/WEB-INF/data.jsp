@@ -31,6 +31,9 @@
           <li><a href="#performance">Performance data</a></li>
           <li><a href="#exitlist">Exit lists</a></li>
         </ul>
+        <p>The tarballs listed on this page and the raw files that were
+        published on the last three days are also available via
+        "rsync metrics.torproject.org::".</p>
         <br>
         <a name="relaydesc"></a>
         <h3><a href="#relaydesc" class="anchor">Relay descriptor
