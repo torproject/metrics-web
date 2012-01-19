@@ -100,7 +100,7 @@ public class NetworkStatusServlet extends HttpServlet {
           + "descriptor.platform FROM statusentry JOIN descriptor "
           + "ON descriptor.descriptor = statusentry.descriptor "
           + "WHERE statusentry.validafter = "
-          + "(SELECT MAX(validafter) FROM statusentry) "
+          + "(SELECT MAX(validafter) FROM consensus) "
           + "ORDER BY " + orderBy + " " + orderParameter.toUpperCase();
 
       ResultSet rs = statement.executeQuery(query);
