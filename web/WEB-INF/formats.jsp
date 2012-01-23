@@ -289,10 +289,11 @@ public key.
 Replacing keys by newly generated ones seemed to be unnecessary (and would
 involve keeping a state over months/years), so that all cryptographic
 objects have simply been removed.</li>
-<li><b>Replace IP address with IP address hash:</b> Of course, the IP
-address needs to be removed, too.
-It is replaced with <tt>10.x.x.x</tt> with <tt>x.x.x</tt> being the 3 byte
-output of <tt>H(IP address | bridge identity | secret)[:3]</tt>.
+<li><b>Replace IP address with IP address hash:</b> Of course, IP
+addresses need to be sanitized, too.
+<ul><li>IPv4 addresses are replaced with <tt>10.x.x.x</tt> with
+<tt>x.x.x</tt> being the 3 byte output of
+<tt>H(IP address | bridge identity | secret)[:3]</tt>.
 The input <tt>IP address</tt> is the 4-byte long binary representation of
 the bridge's current IP address.
 The <tt>bridge identity</tt> is the 20-byte long binary representation of
@@ -302,6 +303,11 @@ per month for all descriptors and statuses published in that month.
 <tt>H()</tt> is SHA-256.
 The <tt>[:3]</tt> operator means that we pick the 3 most significant bytes
 of the result.</li>
+<li>IPv6 addresses are replaced with <tt>[fd9f:2e19:3bcf::xx:xxxx]</tt>
+with <tt>xx:xxxx</tt> being the hex-formatted 3 byte output of a similar
+hash function as described for IPv4 addresses.
+The only differences are that the input <tt>IP address</tt> is 16 bytes
+long and the <tt>secret</tt> is only 19 bytes long.</li></ul>
 <li><b>Replace contact information:</b> If there is contact
 information in a descriptor, the contact line is changed to
 <tt>somebody</tt>.</li>
