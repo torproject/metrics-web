@@ -81,7 +81,7 @@
   </target>
 
   <!-- Create a .war file for deployment. -->
-  <target name="make-war"
+  <target name="war"
           depends="compile">
     <war destfile="${warfile}"
          webxml="${webxmlfile}">
