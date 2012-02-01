@@ -665,7 +665,7 @@ The <tt>.data</tt> file contains timestamps for nine substeps and the byte
 summaries for downloading a test file via Tor.
 The document below shows an example output of a Torperf run.
 The timestamps in the upper part of this output are seconds and
-nanoseconds since 1970-01-01 00:00:00.000000.
+microseconds since 1970-01-01 00:00:00.000000.
 </p>
 
 <p>
