@@ -22,6 +22,9 @@ public class TorperfProcessor {
     SortedMap<String, String> rawObs = new TreeMap<String, String>();
     SortedMap<String, String> stats = new TreeMap<String, String>();
     int addedRawObs = 0;
+    SimpleDateFormat formatter =
+        new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
+    formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
     try {
       if (rawFile.exists()) {
         logger.fine("Reading file " + rawFile.getAbsolutePath() + "...");
@@ -80,9 +83,6 @@ public class TorperfProcessor {
                 size.length() - "xb.data".length()));
             BufferedReader br = new BufferedReader(new FileReader(pop));
             String line = null;
-            SimpleDateFormat formatter =
-                new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
-            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
             while ((line = br.readLine()) != null) {
               String[] parts = line.split(" ");
               // remove defective lines as they occurred on gabelmoo
@@ -230,22 +230,33 @@ public class TorperfProcessor {
         + "Last known obserations by source and file size are:");
     String lastSource = null;
     String lastLine = null;
+    Level logLevel = Level.INFO;
+    String cutoff = formatter.format(System.currentTimeMillis()
+        - 12L * 60L * 60L * 1000L).replaceAll(",", " ");
     for (String s : rawObs.keySet()) {
       String[] parts = s.split(",");
       if (lastSource == null) {
         lastSource = parts[0];
       } else if (!parts[0].equals(lastSource)) {
-        dumpStats.append("\n" + lastSource + " " + lastLine.split(",")[1]
-            + " " + lastLine.split(",")[2]);
+        String lastKnownObservation = lastLine.split(",")[1] + " "
+            + lastLine.split(",")[2];
+        dumpStats.append("\n" + lastSource + " " + lastKnownObservation);
         lastSource = parts[0];
+        if (cutoff.compareTo(lastKnownObservation) > 0) {
+          logLevel = Level.WARNING;
+        }
       }
       lastLine = s;
     }
     if (lastSource != null) {
-      dumpStats.append("\n" + lastSource + " " + lastLine.split(",")[1]
-          + " " + lastLine.split(",")[2]);
+      String lastKnownObservation = lastLine.split(",")[1] + " "
+          + lastLine.split(",")[2];
+      dumpStats.append("\n" + lastSource + " " + lastKnownObservation);
+      if (cutoff.compareTo(lastKnownObservation) > 0) {
+        logLevel = Level.WARNING;
+      }
     }
-    logger.info(dumpStats.toString());
+    logger.log(logLevel, dumpStats.toString());
 
     /* Write results to database. */
     if (connectionURL != null) {
