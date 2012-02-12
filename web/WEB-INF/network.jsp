@@ -163,8 +163,6 @@ The following graph shows the number of relays by version.</p>
   </div>
 </form>
 <p><a href="csv/versions.csv">CSV</a> file containing all data.</p>
-<p><a href="csv/current-platform-strings.csv">CSV</a> file containing
-platform strings of currently running relays.</p>
 <br>
 
 <a name="platforms"></a>
@@ -197,8 +195,6 @@ platform.</p>
   </div>
 </form>
 <p><a href="csv/platforms.csv">CSV</a> file containing all data.</p>
-<p><a href="csv/current-platform-strings.csv">CSV</a> file containing
-platform strings of currently running relays.</p>
 <br>
 
 <a name="bandwidth"></a>

@@ -40,22 +40,6 @@ export_versions <- function(path) {
   write.csv(versions, path, quote = FALSE, row.names = FALSE)
 }
 
-export_current_platform_strings <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT platform FROM statusentry",
-             "JOIN descriptor ON statusentry.descriptor =",
-             "descriptor.descriptor WHERE validafter IN (",
-             "SELECT MAX(validafter) FROM consensus)",
-             "ORDER BY platform DESC")
-  rs <- dbSendQuery(con, q)
-  platforms <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  write.table(platforms, path, quote = FALSE, row.names = FALSE,
-              col.names = FALSE)
-}
-
 export_platforms <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
