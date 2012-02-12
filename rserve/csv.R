@@ -46,7 +46,7 @@ export_current_platform_strings <- function(path) {
   q <- paste("SELECT platform FROM statusentry",
              "JOIN descriptor ON statusentry.descriptor =",
              "descriptor.descriptor WHERE validafter IN (",
-             "SELECT MAX(validafter) FROM statusentry)",
+             "SELECT MAX(validafter) FROM consensus)",
              "ORDER BY platform DESC")
   rs <- dbSendQuery(con, q)
   platforms <- fetch(rs, n = -1)
