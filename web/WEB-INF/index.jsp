@@ -32,29 +32,9 @@
         <br>
         <h3>News</h3>
         <ul>
-          <li>July 4, 2011: Technical report
-          <a href="papers/relay-stability-2011-06-30.pdf">An Analysis of
-          Tor Relay Stability</a> is available for download on the
-          <a href="papers.html">Papers</a> page.</li>
-          <li>March 14, 2011:
-          <a href="data.html#bridgeassignments">Sanitized bridge pool
-          assignments</a> containing lists of running bridges with
-          information about the rings, subrings, and file buckets to which
-          they are assigned are now available.</li>
-          <li>January 27, 2011: New <a href="performance.html">Torperf</a>
-          graphs combining the download times of all sources and showing
-          the fraction of timeouts and failures are now available.</li>
-          <li>December 29, 2010: Tech report with an
-          <a href="papers/data-2010-12-29.pdf">Overview of Statistical
-          Data in the Tor Network</a> is available for download on the
-          <a href="papers.html">Papers</a> page.</li>
-          <li>December 16, 2010: Graph and raw data on
-          <a href="performance.html">Fraction of connections used
-          uni-/bidirectionally</a> is available.</li>
-          <li>November 30, 2010: Tech report on
-          <a href="papers/countingusers-2010-11-30.pdf">Privacy-preserving
-          Ways to Estimate the Number of Tor Users</a> is available for
-          download on the <a href="papers.html">Papers</a> page.</li>
+          <li>January 17, 2012:
+          <a href="https://svn.torproject.org/svn/projects/roadmaps/metrics-roadmap-2012-01-17.pdf">Tor
+          Metrics Roadmap</a> published.</li>
         </ul>
     </div>
   </div>
