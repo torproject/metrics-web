@@ -42,10 +42,6 @@
                  currentPage.endsWith("consensus-health.jsp")) {
      %><br>
       <font size="2">
-        <a <%if (currentPage.endsWith("networkstatus.jsp") ||
-                 currentPage.endsWith("routerdetail.jsp")){
-            %>class="current"<%} else {%>href="/networkstatus.html"<%}
-            %>>Network Status</a>
         <a <%if (currentPage.endsWith("exonerator.jsp")){
             %>class="current"<%} else {%>href="/exonerator.html"<%}
             %>>ExoneraTor</a>
