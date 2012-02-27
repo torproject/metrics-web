@@ -899,35 +899,3 @@ plot_connbidirect <- function(start, end, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
-## TODO The bandwidth history shouldn't be based on the consensus weights
-## which aren't bandwidths anymore, but either on the advertised bandwidth
-## contained in server descriptors or better on the bandwidth history
-## reported in extra-info descriptors.
-plot_routerdetail <- function(fingerprint, path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT AVG(bandwidth)::INTEGER AS bw, ",
-      "DATE(validafter) AS date ",
-      "FROM statusentry WHERE fingerprint = '", fingerprint, "' ",
-      "AND validafter > CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - ",
-      "interval '1 week' GROUP BY DATE(validafter)", sep = "")
-  rs <- dbSendQuery(con, q)
-  routerdetail <- fetch(rs, n = -1)
-  ## TODO We should add NA's for missing dates.
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  date_breaks <- date_breaks(
-    as.numeric(max(as.Date(routerdetail$date, "%Y-%m-%d")) -
-    min(as.Date(routerdetail$date, "%Y-%m-%d"))))
-  ggplot(routerdetail, aes(x = as.Date(date, "%Y-%m-%d"), y = bw)) +
-    geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
-        format = date_breaks$format, major = date_breaks$major,
-        minor = date_breaks$minor) +
-    scale_y_continuous(name = "") +
-    opts(title = paste("Bandwidth history for ", fingerprint, "\n",
-        sep = ""))
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
-}
-

@@ -59,7 +59,6 @@ public class GraphParameterChecker {
     this.availableGraphs.put("torperf-failures",
          "start,end,source,filesize,filename,dpi");
     this.availableGraphs.put("connbidirect", "start,end,filename,dpi");
-    this.availableGraphs.put("routerdetail", "fingerprint,filename");
 
     this.knownParameterValues = new HashMap<String, String>();
     this.knownParameterValues.put("flag",
