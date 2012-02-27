@@ -94,7 +94,7 @@ descriptors, even though the incentive to do so is probably low.
 
 <blockquote>
 <p>
-<i>Server descriptor published by relay <tt>blugmagie</tt> (without
+<i>Server descriptor published by relay <tt>blutmagie</tt> (without
 cryptographic keys and hashes):</i>
 </p>
 <p>
