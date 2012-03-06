@@ -57,7 +57,6 @@ Maybe you find what you're looking for on our sitemap:
 </ul></li>
 <li><a href="status.html">Status</a>
 <ul>
-<li><a href="networkstatus.html">Network Status</a></li>
 <li><a href="exonerator.html">ExoneraTor</a></li>
 <li><a href="relay-search.html">Relay Search</a></li>
 <li><a href="consensus-health.html">Consensus Health</a></li>
