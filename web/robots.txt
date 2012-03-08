@@ -4,8 +4,6 @@ Disallow: /routerdetail.html
 Disallow: /relay.html
 Disallow: /csv/
 Disallow: /serverdesc
-Disallow: /extrainfodesc
 Disallow: /consensus
-Disallow: /votes
 Disallow: /consensus-health.html
 

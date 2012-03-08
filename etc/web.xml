@@ -276,6 +276,7 @@
     <url-pattern>/serverdesc</url-pattern>
   </servlet-mapping>
 
+<!--
   <servlet>
     <servlet-name>ExtraInfoDescriptor</servlet-name>
     <servlet-class>
@@ -286,6 +287,7 @@
     <servlet-name>ExtraInfoDescriptor</servlet-name>
     <url-pattern>/extrainfodesc</url-pattern>
   </servlet-mapping>
+-->
 
 <!--
   <servlet>
@@ -311,6 +313,7 @@
     <url-pattern>/consensus</url-pattern>
   </servlet-mapping>
 
+<!--
   <servlet>
     <servlet-name>Votes</servlet-name>
     <servlet-class>
@@ -321,6 +324,7 @@
     <servlet-name>Votes</servlet-name>
     <url-pattern>/votes</url-pattern>
   </servlet-mapping>
+-->
 
   <servlet>
     <servlet-name>ErnieGeneratedFile</servlet-name>
