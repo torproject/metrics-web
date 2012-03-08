@@ -266,17 +266,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>ExoneraTorBeta</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.web.ExoneraTorBetaServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ExoneraTorBeta</servlet-name>
-    <url-pattern>/exonerator-beta.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>ServerDescriptor</servlet-name>
     <servlet-class>
       org.torproject.ernie.web.ServerDescriptorServlet

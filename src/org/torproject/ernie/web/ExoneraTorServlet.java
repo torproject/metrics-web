@@ -30,7 +30,7 @@ public class ExoneraTorServlet extends HttpServlet {
     /* Look up data source. */
     try {
       Context cxt = new InitialContext();
-      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/tordir");
+      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/exonerator");
       this.logger.info("Successfully looked up data source.");
     } catch (NamingException e) {
       this.logger.log(Level.WARNING, "Could not look up data source", e);
@@ -86,7 +86,7 @@ public class ExoneraTorServlet extends HttpServlet {
           + "to a given server and/or TCP port. ExoneraTor learns about "
           + "these facts from parsing the public relay lists and relay "
           + "descriptors that are collected from the Tor directory "
-          + "authorities.</p>\n"
+          + "authorities and the exit lists collected by TorDNSEL.</p>\n"
         + "        <br>\n"
         + "        <p><font color=\"red\"><b>Notice:</b> Note that the "
           + "information you are providing below may be leaked to anyone "
@@ -136,11 +136,24 @@ public class ExoneraTorServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
     writeHeader(out);
 
+    /* Open a database connection that we'll use to handle the whole
+     * request. */
+    Connection conn = null;
+    long requestedConnection = System.currentTimeMillis();
+    try {
+      conn = this.ds.getConnection();
+    } catch (SQLException e) {
+      out.println("<p><font color=\"red\"><b>Warning: </b></font>Unable "
+          + "to connect to the database. If this problem persists, "
+          + "please <a href=\"mailto:tor-assistants@torproject.org\">let "
+          + "us know</a>!</p>\n");
+      writeFooter(out);
+      return;
+    }
+
     /* Look up first and last consensus in the database. */
     long firstValidAfter = -1L, lastValidAfter = -1L;
     try {
-      long requestedConnection = System.currentTimeMillis();
-      Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
       String query = "SELECT MIN(validafter) AS first, "
           + "MAX(validafter) AS last FROM consensus";
@@ -151,10 +164,6 @@ public class ExoneraTorServlet extends HttpServlet {
       }
       rs.close();
       statement.close();
-      conn.close();
-      this.logger.info("Returned a database connection to the pool after "
-          + (System.currentTimeMillis() - requestedConnection)
-          + " millis.");
     } catch (SQLException e) {
       /* Looks like we don't have any consensuses. */
     }
@@ -165,6 +174,13 @@ public class ExoneraTorServlet extends HttpServlet {
           + "<a href=\"mailto:tor-assistants@torproject.org\">let us "
           + "know</a>!</p>\n");
       writeFooter(out);
+      try {
+        conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
+      } catch (SQLException e) {
+      }
       return;
     }
 
@@ -172,6 +188,7 @@ public class ExoneraTorServlet extends HttpServlet {
         + "on this IP address?</h3>");
 
     /* Parse IP parameter. */
+    /* TODO Extend the parsing code to accept IPv6 addresses, too. */
     Pattern ipAddressPattern = Pattern.compile(
         "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
         "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -198,19 +215,29 @@ public class ExoneraTorServlet extends HttpServlet {
     /* Parse timestamp parameter. */
     String timestampParameter = request.getParameter("timestamp");
     long timestamp = 0L;
+    boolean timestampIsDate = false;
     String timestampStr = "", timestampWarning = "";
     SimpleDateFormat shortDateTimeFormat = new SimpleDateFormat(
         "yyyy-MM-dd HH:mm");
     shortDateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     if (timestampParameter != null && timestampParameter.length() > 0) {
       try {
-        timestamp = shortDateTimeFormat.parse(timestampParameter).
-            getTime();
-        timestampStr = shortDateTimeFormat.format(timestamp);
+        if (timestampParameter.split(" ").length == 1) {
+          timestamp = dateFormat.parse(timestampParameter).getTime();
+          timestampStr = dateFormat.format(timestamp);
+          timestampIsDate = true;
+        } else {
+          timestamp = shortDateTimeFormat.parse(timestampParameter).
+              getTime();
+          timestampStr = shortDateTimeFormat.format(timestamp);
+        }
         if (timestamp < firstValidAfter || timestamp > lastValidAfter) {
-          timestampWarning = "Please pick a value between \""
+          timestampWarning = "Please pick a date or timestamp between \""
               + shortDateTimeFormat.format(firstValidAfter) + "\" and \""
               + shortDateTimeFormat.format(lastValidAfter) + "\".";
+          timestamp = 0L;
         }
       } catch (ParseException e) {
         /* We have no way to handle this exception, other than leaving
@@ -219,7 +246,7 @@ public class ExoneraTorServlet extends HttpServlet {
             StringEscapeUtils.escapeHtml(timestampParameter.
             substring(0, 20)) + "[...]" :
             StringEscapeUtils.escapeHtml(timestampParameter))
-            + "\" is not a valid timestamp.";
+            + "\" is not a valid date or timestamp.";
       }
     }
 
@@ -229,9 +256,9 @@ public class ExoneraTorServlet extends HttpServlet {
         ipWarning.length() < 1) {
       ipWarning = "Please provide an IP address.";
     }
-    if (relayIP.length() > 0 && timestampStr.length() < 1 &&
+    if (relayIP.length() > 0 && timestamp < 1 &&
         timestampWarning.length() < 1) {
-      timestampWarning = "Please provide a timestamp.";
+      timestampWarning = "Please provide a date or timestamp.";
     }
 
     /* Parse target IP parameter. */
@@ -284,13 +311,14 @@ public class ExoneraTorServlet extends HttpServlet {
 
     /* If target port is provided, a target address must be provided,
      * too. */
+    /* TODO Relax this requirement. */
     if (targetPort.length() > 0 && targetIP.length() < 1 &&
         targetAddrWarning.length() < 1) {
       targetAddrWarning = "Please provide an IP address.";
     }
 
     /* Write form with IP address and timestamp. */
-    out.println("        <form action=\"exonerator.html#relay\">\n"
+    out.println("        <form action=\"#relay\">\n"
         + "          <input type=\"hidden\" name=\"targetaddr\" "
         + (targetIP.length() > 0 ? " value=\"" + targetIP + "\"" : "")
         + ">\n"
@@ -311,7 +339,8 @@ public class ExoneraTorServlet extends HttpServlet {
         + "              <td><i>(Ex.: 1.2.3.4)</i></td>\n"
         + "            </tr>\n"
         + "            <tr>\n"
-        + "              <td align=\"right\">Timestamp, in UTC:</td>\n"
+        + "              <td align=\"right\">Date or timestamp, in "
+          + "UTC:</td>\n"
         + "              <td><input type=\"text\" name=\"timestamp\""
           + (timestampStr.length() > 0 ? " value=\"" + timestampStr + "\""
             : "")
@@ -319,7 +348,8 @@ public class ExoneraTorServlet extends HttpServlet {
           + (timestampWarning.length() > 0 ? "<br><font color=\"red\">"
               + timestampWarning + "</font>" : "")
         + "</td>\n"
-        + "              <td><i>(Ex.: 2010-01-01 12:00)</i></td>\n"
+        + "              <td><i>(Ex.: 2010-01-01 or 2010-01-01 12:00)"
+          + "</i></td>\n"
         + "            </tr>\n"
         + "            <tr>\n"
         + "              <td></td>\n"
@@ -332,191 +362,278 @@ public class ExoneraTorServlet extends HttpServlet {
         + "          </table>\n"
         + "        </form>\n");
 
-    if (relayIP.length() < 1 || timestampStr.length() < 1) {
+    if (relayIP.length() < 1 || timestamp < 1) {
       writeFooter(out);
+      try {
+        conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
+      } catch (SQLException e) {
+      }
       return;
     }
 
-    /* Look up relevant consensuses. */
-    long timestampTooOld = timestamp - 15L * 60L * 60L * 1000L;
-    long timestampFrom = timestamp - 3L * 60L * 60L * 1000L;
-    long timestampTooNew = timestamp + 12L * 60L * 60L * 1000L;
-    out.printf("<p>Looking up IP address %s in the relay lists published "
-        + "between %s and %s. "
-        + "Clients could have used any of these relay lists to "
-        + "select relays for their paths and build circuits using them. "
+    out.printf("<p>Looking up IP address %s in the relay lists "
+        + "published ", relayIP);
+    long timestampFrom, timestampTo;
+    if (timestampIsDate) {
+      /* If we only have a date, consider all consensuses published on the
+       * given date, plus the ones published 3 hours before the given date
+       * and until 23:59:59. */
+      timestampFrom = timestamp - 3L * 60L * 60L * 1000L;
+      timestampTo = timestamp + (24L * 60L * 60L - 1L) * 1000L;
+      out.printf("on %s", timestampStr);
+    } else {
+      /* If we have an exact timestamp, consider the consensuses published
+       * in the 3 hours preceding the UTC timestamp. */
+      timestampFrom = timestamp - 3L * 60L * 60L * 1000L;
+      timestampTo = timestamp;
+      out.printf("between %s and %s UTC",
+        shortDateTimeFormat.format(timestampFrom),
+        shortDateTimeFormat.format(timestampTo));
+    }
+    /* If we don't find any relays in the given time interval, also look
+     * at consensuses published 12 hours before and 12 hours after the
+     * interval, in case the user got the "UTC" bit wrong. */
+    long timestampTooOld = timestampFrom - 12L * 60L * 60L * 1000L;
+    long timestampTooNew = timestampTo + 12L * 60L * 60L * 1000L;
+    out.print(" as well as in the relevant exit lists. Clients could "
+        + "have selected any of these relays to build circuits. "
         + "You may follow the links to relay lists and relay descriptors "
         + "to grep for the lines printed below and confirm that results "
-        + "are correct.<br>", relayIP,
-        shortDateTimeFormat.format(timestampFrom), timestampStr);
+        + "are correct.<br>");
     SimpleDateFormat validAfterTimeFormat = new SimpleDateFormat(
         "yyyy-MM-dd HH:mm:ss");
     validAfterTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     String fromValidAfter = validAfterTimeFormat.format(timestampTooOld);
     String toValidAfter = validAfterTimeFormat.format(timestampTooNew);
-    SortedMap<Long, String> tooOldConsensuses =
-        new TreeMap<Long, String>();
-    SortedMap<Long, String> relevantConsensuses =
-        new TreeMap<Long, String>();
-    SortedMap<Long, String> tooNewConsensuses =
-        new TreeMap<Long, String>();
+    SortedSet<Long> tooOldConsensuses = new TreeSet<Long>();
+    SortedSet<Long> relevantConsensuses = new TreeSet<Long>();
+    SortedSet<Long> tooNewConsensuses = new TreeSet<Long>();
     try {
-      long requestedConnection = System.currentTimeMillis();
-      Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
-      String query = "SELECT validafter, rawdesc FROM consensus "
+      String query = "SELECT validafter FROM consensus "
           + "WHERE validafter >= '" + fromValidAfter
           + "' AND validafter <= '" + toValidAfter + "'";
       ResultSet rs = statement.executeQuery(query);
       while (rs.next()) {
         long consensusTime = rs.getTimestamp(1).getTime();
-        String rawConsensusString = new String(rs.getBytes(2), "US-ASCII");
         if (consensusTime < timestampFrom) {
-          tooOldConsensuses.put(consensusTime, rawConsensusString);
-        } else if (consensusTime > timestamp) {
-          tooNewConsensuses.put(consensusTime, rawConsensusString);
+          tooOldConsensuses.add(consensusTime);
+        } else if (consensusTime > timestampTo) {
+          tooNewConsensuses.add(consensusTime);
         } else {
-          relevantConsensuses.put(consensusTime, rawConsensusString);
+          relevantConsensuses.add(consensusTime);
         }
       }
       rs.close();
       statement.close();
-      conn.close();
-      this.logger.info("Returned a database connection to the pool after "
-          + (System.currentTimeMillis() - requestedConnection)
-          + " millis.");
     } catch (SQLException e) {
       /* Looks like we don't have any consensuses in the requested
-         interval. */
+       * interval. */
     }
-    SortedMap<Long, String> allConsensuses = new TreeMap<Long, String>();
-    allConsensuses.putAll(tooOldConsensuses);
-    allConsensuses.putAll(relevantConsensuses);
-    allConsensuses.putAll(tooNewConsensuses);
+    SortedSet<Long> allConsensuses = new TreeSet<Long>();
+    allConsensuses.addAll(tooOldConsensuses);
+    allConsensuses.addAll(relevantConsensuses);
+    allConsensuses.addAll(tooNewConsensuses);
     if (allConsensuses.isEmpty()) {
       out.println("        <p>No relay lists found!</p>\n"
           + "        <p>Result is INDECISIVE!</p>\n"
           + "        <p>We cannot make any statement whether there was "
-          + "a Tor relay running on IP address "
-          + relayIP + " at " + timestampStr + "! We "
-          + "did not find any relevant relay lists preceding the given "
-          + "time. If you think this is an error on our side, please "
+          + "a Tor relay running on IP address " + relayIP
+          + (timestampIsDate ? " on " : " at ") + timestampStr + "! We "
+          + "did not find any relevant relay lists at the given time. If "
+          + "you think this is an error on our side, please "
           + "<a href=\"mailto:tor-assistants@torproject.org\">contact "
           + "us</a>!</p>\n");
       writeFooter(out);
+      try {
+        conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
+      } catch (SQLException e) {
+      }
       return;
     }
 
-    /* Parse consensuses to find descriptors belonging to the IP
-       address. */
+    /* Search for status entries with the given IP address as onion
+     * routing address, plus status entries of relays having an exit list
+     * entry with the given IP address as exit address. */
+    SortedMap<Long, SortedMap<String, String>> statusEntries =
+        new TreeMap<Long, SortedMap<String, String>>();
     SortedSet<Long> positiveConsensusesNoTarget = new TreeSet<Long>();
-    Set<String> addressesInSameNetwork = new HashSet<String>();
     SortedMap<String, Set<Long>> relevantDescriptors =
         new TreeMap<String, Set<Long>>();
+    try {
+      CallableStatement cs = conn.prepareCall(
+          "{call search_statusentries_by_address_date(?, ?)}");
+      cs.setString(1, relayIP);
+      cs.setDate(2, new java.sql.Date(timestamp));
+      ResultSet rs = cs.executeQuery();
+      while (rs.next()) {
+        byte[] rawstatusentry = rs.getBytes(1);
+        String descriptor = rs.getString(2);
+        long validafter = rs.getTimestamp(3).getTime();
+        positiveConsensusesNoTarget.add(validafter);
+        if (!relevantDescriptors.containsKey(descriptor)) {
+          relevantDescriptors.put(descriptor, new HashSet<Long>());
+        }
+        relevantDescriptors.get(descriptor).add(validafter);
+        String fingerprint = rs.getString(4);
+        boolean orAddressMatches = rs.getString(5).equals(relayIP);
+        String exitaddress = rs.getString(6);
+        String rLine = new String(rawstatusentry);
+        rLine = rLine.substring(0, rLine.indexOf("\n"));
+        String[] parts = rLine.split(" ");
+        String htmlString = "r " + parts[1] + " " + parts[2] + " "
+            + "<a href=\"serverdesc?desc-id=" + descriptor + "\" "
+            + "target=\"_blank\">" + parts[3] + "</a> " + parts[4]
+            + " " + parts[5] + " " + (orAddressMatches ? "<b>" : "")
+            + parts[6] + (orAddressMatches ? "</b>" : "") + " " + parts[7]
+            + " " + parts[8] + "\n";
+        if (exitaddress != null && exitaddress.length() > 0) {
+          long scanned = rs.getTimestamp(7).getTime();
+          htmlString += "  [ExitAddress <b>" + exitaddress
+              + "</b> " + validAfterTimeFormat.format(scanned)
+              + "]\n";
+        }
+        if (!statusEntries.containsKey(validafter)) {
+          statusEntries.put(validafter, new TreeMap<String, String>());
+        }
+        statusEntries.get(validafter).put(fingerprint, htmlString);
+      }
+      rs.close();
+      cs.close();
+    } catch (SQLException e) {
+      /* Nothing found. */
+    }
+
+    /* Print out what we found. */
     SimpleDateFormat validAfterUrlFormat = new SimpleDateFormat(
         "yyyy-MM-dd-HH-mm-ss");
     validAfterUrlFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    for (Map.Entry<Long, String> e : allConsensuses.entrySet()) {
-      long consensus = e.getKey();
-      if (relevantConsensuses.containsKey(consensus)) {
-        long validAfterTime = -1L;
+    out.print("<pre><code>");
+    for (long consensus : allConsensuses) {
+      if (relevantConsensuses.contains(consensus)) {
         String validAfterDatetime = validAfterTimeFormat.format(
             consensus);
         String validAfterString = validAfterUrlFormat.format(consensus);
-        out.println("        <br><tt>valid-after <b>"
+        out.print("valid-after <b>"
             + "<a href=\"consensus?valid-after="
             + validAfterString + "\" target=\"_blank\">"
-            + validAfterDatetime + "</b></a></tt><br>");
-      }
-      String rawConsensusString = e.getValue();
-      BufferedReader br = new BufferedReader(new StringReader(
-          rawConsensusString));
-      String line = null;
-      while ((line = br.readLine()) != null) {
-        if (!line.startsWith("r ")) {
-          continue;
-        }
-        String[] parts = line.split(" ");
-        String address = parts[6];
-        if (address.equals(relayIP)) {
-          String hex = String.format("%040x", new BigInteger(1,
-              Base64.decodeBase64(parts[3] + "==")));
-          if (!relevantDescriptors.containsKey(hex)) {
-            relevantDescriptors.put(hex, new HashSet<Long>());
-          }
-          relevantDescriptors.get(hex).add(consensus);
-          positiveConsensusesNoTarget.add(consensus);
-          if (relevantConsensuses.containsKey(consensus)) {
-            out.println("    <tt>r " + parts[1] + " " + parts[2] + " "
-                + "<a href=\"serverdesc?desc-id=" + hex + "\" "
-                + "target=\"_blank\">" + parts[3] + "</a> " + parts[4]
-                + " " + parts[5] + " <b>" + parts[6] + "</b> " + parts[7]
-                + " " + parts[8] + "</tt><br>");
-          }
-        } else {
-          if (relayIP.startsWith(address.substring(0,
-              address.lastIndexOf(".")))) {
-            addressesInSameNetwork.add(address);
+            + validAfterDatetime + "</b></a>\n");
+        if (statusEntries.containsKey(consensus)) {
+          for (String htmlString :
+              statusEntries.get(consensus).values()) {
+            out.print(htmlString);
           }
         }
+        out.print("\n");
       }
-      br.close();
     }
+    out.print("</code></pre>");
     if (relevantDescriptors.isEmpty()) {
       out.printf("        <p>None found!</p>\n"
-          + "        <p>Result is NEGATIVE with moderate certainty!</p>\n"
+          + "        <p>Result is NEGATIVE with high certainty!</p>\n"
           + "        <p>We did not find IP "
-          + "address " + relayIP + " in any of the relay lists that were "
-          + "published between %s and %s.\n\nA possible "
-          + "reason for false negatives is that the relay is using a "
-          + "different IP address when generating a descriptor than for "
-          + "exiting to the Internet. We hope to provide better checks "
-          + "for this case in the future.</p>\n",
-          shortDateTimeFormat.format(timestampTooOld),
-          shortDateTimeFormat.format(timestampTooNew));
-      if (!addressesInSameNetwork.isEmpty()) {
-        out.println("        <p>The following other IP addresses of Tor "
-            + "relays were found in the mentioned relay lists that "
-            + "are in the same /24 network and that could be related to "
-            + "IP address " + relayIP + ":</p>\n");
-        for (String s : addressesInSameNetwork) {
-          out.println("        <p>" + s + "</p>\n");
+          + "address " + relayIP + " in any of the relay or exit lists "
+          + "that were published between %s and %s.</p>\n",
+          dateFormat.format(timestampTooOld),
+          dateFormat.format(timestampTooNew));
+      /* Run another query to find out if there are relays running on
+       * other IP addresses in the same /24 network and tell the user
+       * about it. */
+      SortedSet<String> addressesInSameNetwork = new TreeSet<String>();
+      String[] relayIPParts = relayIP.split("\\.");
+      byte[] address24Bytes = new byte[3];
+      address24Bytes[0] = (byte) Integer.parseInt(relayIPParts[0]);
+      address24Bytes[1] = (byte) Integer.parseInt(relayIPParts[1]);
+      address24Bytes[2] = (byte) Integer.parseInt(relayIPParts[2]);
+      String address24 = Hex.encodeHexString(address24Bytes);
+      try {
+        CallableStatement cs = conn.prepareCall(
+            "{call search_addresses_in_same_24 (?, ?)}");
+        cs.setString(1, address24);
+        cs.setDate(2, new java.sql.Date(timestamp));
+        ResultSet rs = cs.executeQuery();
+        while (rs.next()) {
+          Map<String, String> resultEntry = new HashMap<String, String>();
+          String address = rs.getString(1);
+          addressesInSameNetwork.add(address);
         }
+        rs.close();
+        cs.close();
+      } catch (SQLException e) {
+        /* No other addresses in the same /24 found. */
+      }
+      if (!addressesInSameNetwork.isEmpty()) {
+        out.print("        <p>The following other IP addresses of Tor "
+            + "relays in the same /24 network were found in relay and/or "
+            + "exit lists around the time that could be related to IP "
+            + "address " + relayIP + ":</p>\n");
+        out.print("        <ul>\n");
+        for (String s : addressesInSameNetwork) {
+          out.print("        <li>" + s + "</li>\n");
+        }
+        out.print("        </ul>\n");
       }
       writeFooter(out);
+      try {
+        conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
+      } catch (SQLException e) {
+      }
       return;
     }
 
     /* Print out result. */
-    Set<Long> matches = positiveConsensusesNoTarget;
-    if (matches.contains(relevantConsensuses.lastKey())) {
-      out.println("        <p>Result is POSITIVE with high certainty!"
+    boolean inMostRelevantConsensuses = false,
+        inOtherRelevantConsensus = false,
+        inTooOldConsensuses = false,
+        inTooNewConsensuses = false;
+    for (long match : positiveConsensusesNoTarget) {
+      if (timestampIsDate &&
+          dateFormat.format(match).equals(timestampStr)) {
+        inMostRelevantConsensuses = true;
+      } else if (!timestampIsDate &&
+          match == relevantConsensuses.last()) {
+        inMostRelevantConsensuses = true;
+      } else if (relevantConsensuses.contains(match)) {
+        inOtherRelevantConsensus = true;
+      } else if (tooOldConsensuses.contains(match)) {
+        inTooOldConsensuses = true;
+      } else if (tooNewConsensuses.contains(match)) {
+        inTooNewConsensuses = true;
+      }
+    }
+    if (inMostRelevantConsensuses) {
+      out.print("        <p>Result is POSITIVE with high certainty!"
             + "</p>\n"
           + "        <p>We found one or more relays on IP address "
-          + relayIP
-          + " in the most recent relay list preceding " + timestampStr
-          + " that clients were likely to know.</p>\n");
-    } else {
-      boolean inOtherRelevantConsensus = false,
-          inTooOldConsensuses = false,
-          inTooNewConsensuses = false;
-      for (long match : matches) {
-        if (relevantConsensuses.containsKey(match)) {
-          inOtherRelevantConsensus = true;
-        } else if (tooOldConsensuses.containsKey(match)) {
-          inTooOldConsensuses = true;
-        } else if (tooNewConsensuses.containsKey(match)) {
-          inTooNewConsensuses = true;
-        }
+          + relayIP + " in ");
+      if (timestampIsDate) {
+        out.print("relay list published on " + timestampStr);
+      } else {
+        out.print("the most recent relay list preceding " + timestampStr);
       }
+      out.print(" that clients were likely to know.</p>\n");
+    } else {
       if (inOtherRelevantConsensus) {
         out.println("        <p>Result is POSITIVE "
             + "with moderate certainty!</p>\n");
         out.println("<p>We found one or more relays on IP address "
-            + relayIP + ", but not in the relay list immediately "
-            + "preceding " + timestampStr + ". A possible reason for the "
-            + "relay being missing in the last relay list preceding the "
-            + "given time might be that some of the directory "
+            + relayIP + ", but not in ");
+        if (timestampIsDate) {
+          out.print("a relay list published on " + timestampStr);
+        } else {
+          out.print("the most recent relay list preceding " + timestampStr);
+        }
+        out.print(". A possible reason for the relay being missing in a "
+            + "relay list might be that some of the directory "
             + "authorities had difficulties connecting to the relay. "
             + "However, clients might still have used the relay.</p>\n");
       } else {
@@ -529,22 +646,36 @@ public class ExoneraTorServlet extends HttpServlet {
         if (inTooOldConsensuses || inTooNewConsensuses) {
           if (inTooOldConsensuses && !inTooNewConsensuses) {
             out.println("        <p>Note that we found a matching relay "
-                + "in relay lists that were published between 5 and 3 "
+                + "in relay lists that were published between 15 and 3 "
                 + "hours before " + timestampStr + ".</p>\n");
           } else if (!inTooOldConsensuses && inTooNewConsensuses) {
             out.println("        <p>Note that we found a matching relay "
-                + "in relay lists that were published up to 2 hours "
+                + "in relay lists that were published up to 12 hours "
                 + "after " + timestampStr + ".</p>\n");
           } else {
             out.println("        <p>Note that we found a matching relay "
-                + "in relay lists that were published between 5 and 3 "
+                + "in relay lists that were published between 15 and 3 "
                 + "hours before and in relay lists that were published "
-                + "up to 2 hours after " + timestampStr + ".</p>\n");
+                + "up to 12 hours after " + timestampStr + ".</p>\n");
           }
-          out.println("<p>Make sure that the timestamp you provided is "
-              + "in the correct timezone: UTC (or GMT).</p>");
+          if (timestampIsDate) {
+            out.println("<p>Be sure to try out the previous/next day or "
+                + "provide an exact timestamp in UTC.</p>");
+          } else {
+            out.println("<p>Make sure that the timestamp you "
+                + "provided is correctly converted to the UTC "
+                + "timezone.</p>");
+          }
         }
+        /* We didn't find any descriptor.  No need to look up targets. */
         writeFooter(out);
+        try {
+          conn.close();
+          this.logger.info("Returned a database connection to the pool "
+              + "after " + (System.currentTimeMillis()
+              - requestedConnection) + " millis.");
+        } catch (SQLException e) {
+        }
         return;
       }
     }
@@ -553,7 +684,7 @@ public class ExoneraTorServlet extends HttpServlet {
     out.println("<br><a name=\"exit\"></a><h3>Was this relay configured "
         + "to permit exiting to a given target?</h3>");
 
-    out.println("        <form action=\"exonerator.html#exit\">\n"
+    out.println("        <form action=\"#exit\">\n"
         + "              <input type=\"hidden\" name=\"timestamp\"\n"
         + "                         value=\"" + timestampStr + "\">\n"
         + "              <input type=\"hidden\" name=\"ip\" "
@@ -593,6 +724,13 @@ public class ExoneraTorServlet extends HttpServlet {
 
     if (targetIP.length() < 1) {
       writeFooter(out);
+      try {
+        conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
+      } catch (SQLException e) {
+      }
       return;
     }
 
@@ -608,28 +746,23 @@ public class ExoneraTorServlet extends HttpServlet {
     for (String descriptor : descriptors) {
       byte[] rawDescriptor = null;
       try {
-        long requestedConnection = System.currentTimeMillis();
-        Connection conn = this.ds.getConnection();
-        Statement statement = conn.createStatement();
-        String query = "SELECT rawdesc FROM descriptor "
+        String query = "SELECT rawdescriptor FROM descriptor "
             + "WHERE descriptor = '" + descriptor + "'";
+        Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(query);
         if (rs.next()) {
           rawDescriptor = rs.getBytes(1);
         }
         rs.close();
         statement.close();
-        conn.close();
-        this.logger.info("Returned a database connection to the pool "
-            + "after " + (System.currentTimeMillis()
-            - requestedConnection) + " millis.");
       } catch (SQLException e) {
         /* Consider this descriptors as 'missing'. */
         continue;
       }
       if (rawDescriptor != null && rawDescriptor.length > 0) {
         missingDescriptors.remove(descriptor);
-        String rawDescriptorString = new String(rawDescriptor, "US-ASCII");
+        String rawDescriptorString = new String(rawDescriptor,
+            "US-ASCII");
         try {
           BufferedReader br = new BufferedReader(
               new StringReader(rawDescriptorString));
@@ -644,7 +777,7 @@ public class ExoneraTorServlet extends HttpServlet {
             } else if (line.startsWith("reject ") ||
                 line.startsWith("accept ")) {
               if (foundMatch) {
-                out.println("<tt> " + line + "</tt><br>");
+                out.println(line);
                 continue;
               }
               boolean ruleAccept = line.split(" ")[0].equals("accept");
@@ -653,7 +786,7 @@ public class ExoneraTorServlet extends HttpServlet {
                 if (!ruleAddress.contains("/") &&
                     !ruleAddress.equals(targetIP)) {
                   /* IP address does not match. */
-                  acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
+                  acceptRejectLines.append(line + "\n");
                   continue;
                 }
                 String[] ruleIPParts = ruleAddress.split("/")[0].
@@ -680,7 +813,7 @@ public class ExoneraTorServlet extends HttpServlet {
                 }
                 if (ruleNetwork > 0) {
                   /* IP address does not match. */
-                  acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
+                  acceptRejectLines.append(line + "\n");
                   continue;
                 }
               }
@@ -689,7 +822,7 @@ public class ExoneraTorServlet extends HttpServlet {
                   !rulePort.equals("*")) {
                 /* With no port given, we only consider reject :* rules as
                    matching. */
-                acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
+                acceptRejectLines.append(line + "\n");
                 continue;
               }
               if (targetPort.length() > 0 && !rulePort.equals("*") &&
@@ -708,28 +841,28 @@ public class ExoneraTorServlet extends HttpServlet {
                     !rulePort.contains("-") &&
                     !targetPort.equals(rulePort)) {
                   /* Ports do not match. */
-                  acceptRejectLines.append("<tt> " + line + "</tt><br>\n");
+                  acceptRejectLines.append(line + "\n");
                   continue;
                 }
               }
               boolean relevantMatch = false;
               for (long match : relevantDescriptors.get(descriptor)) {
-                if (relevantConsensuses.containsKey(match)) {
+                if (relevantConsensuses.contains(match)) {
                   relevantMatch = true;
                 }
               }
               if (relevantMatch) {
                 String[] routerParts = routerLine.split(" ");
-                out.println("<br><tt>" + routerParts[0] + " "
+                out.println("<pre><code>" + routerParts[0] + " "
                     + routerParts[1] + " <b>" + routerParts[2] + "</b> "
                     + routerParts[3] + " " + routerParts[4] + " "
-                    + routerParts[5] + "</tt><br>");
+                    + routerParts[5]);
                 String[] publishedParts = publishedLine.split(" ");
-                out.println("<tt>" + publishedParts[0] + " <b>"
+                out.println(publishedParts[0] + " <b>"
                     + publishedParts[1] + " " + publishedParts[2]
-                    + "</b></tt><br>");
-                out.println(acceptRejectLines.toString());
-                out.println("<tt><b>" + line + "</b></tt><br>");
+                    + "</b>");
+                out.print(acceptRejectLines.toString());
+                out.println("<b>" + line + "</b>");
                 foundMatch = true;
               }
               if (ruleAccept) {
@@ -739,6 +872,9 @@ public class ExoneraTorServlet extends HttpServlet {
             }
           }
           br.close();
+          if (foundMatch) {
+            out.println("</code></pre>");
+          }
         } catch (IOException e) {
           /* Could not read descriptor string. */
           continue;
@@ -747,15 +883,43 @@ public class ExoneraTorServlet extends HttpServlet {
     }
 
     /* Print out result. */
-    matches = positiveConsensuses;
-    if (matches.contains(relevantConsensuses.lastKey())) {
-      out.println("        <p>Result is POSITIVE with high certainty!</p>"
-            + "\n"
+    inMostRelevantConsensuses = false;
+    inOtherRelevantConsensus = false;
+    inTooOldConsensuses = false;
+    inTooNewConsensuses = false;
+    for (long match : positiveConsensuses) {
+      if (timestampIsDate &&
+          dateFormat.format(match).equals(timestampStr)) {
+        inMostRelevantConsensuses = true;
+      } else if (!timestampIsDate && match == relevantConsensuses.last()) {
+        inMostRelevantConsensuses = true;
+      } else if (relevantConsensuses.contains(match)) {
+        inOtherRelevantConsensus = true;
+      } else if (tooOldConsensuses.contains(match)) {
+        inTooOldConsensuses = true;
+      } else if (tooNewConsensuses.contains(match)) {
+        inTooNewConsensuses = true;
+      }
+    }
+    if (inMostRelevantConsensuses) {
+      out.print("        <p>Result is POSITIVE with high certainty!"
+            + "</p>\n"
           + "        <p>We found one or more relays on IP address "
-          + relayIP + " permitting exit to " + target
-          + " in the most recent relay list preceding " + timestampStr
-          + " that clients were likely to know.</p>\n");
+          + relayIP + " permitting exit to " + target + " in ");
+      if (timestampIsDate) {
+        out.print("relay list published on " + timestampStr);
+      } else {
+        out.print("the most recent relay list preceding " + timestampStr);
+      }
+      out.print(" that clients were likely to know.</p>\n");
       writeFooter(out);
+      try {
+        conn.close();
+        this.logger.info("Returned a database connection to the pool "
+            + "after " + (System.currentTimeMillis()
+            - requestedConnection) + " millis.");
+      } catch (SQLException e) {
+      }
       return;
     }
     boolean resultIndecisive = target.length() > 0
@@ -770,30 +934,22 @@ public class ExoneraTorServlet extends HttpServlet {
       for (String desc : missingDescriptors)
         out.println("        <p>" + desc + "</p>\n");
     }
-    boolean inOtherRelevantConsensus = false, inTooOldConsensuses = false,
-        inTooNewConsensuses = false;
-    for (long match : matches) {
-      if (relevantConsensuses.containsKey(match)) {
-        inOtherRelevantConsensus = true;
-      } else if (tooOldConsensuses.containsKey(match)) {
-        inTooOldConsensuses = true;
-      } else if (tooNewConsensuses.containsKey(match)) {
-        inTooNewConsensuses = true;
-      }
-    }
     if (inOtherRelevantConsensus) {
       if (!resultIndecisive) {
         out.println("        <p>Result is POSITIVE "
             + "with moderate certainty!</p>\n");
       }
       out.println("<p>We found one or more relays on IP address "
-          + relayIP + " permitting exit to " + target + ", but not in "
-          + "the relay list immediately preceding " + timestampStr
-          + ". A possible reason for the relay being missing in the last "
-          + "relay list preceding the given time might be that some of "
-          + "the directory authorities had difficulties connecting to "
-          + "the relay. However, clients might still have used the "
-          + "relay.</p>\n");
+          + relayIP + " permitting exit to " + target + ", but not in ");
+      if (timestampIsDate) {
+        out.print("a relay list published on " + timestampStr);
+      } else {
+        out.print("the most recent relay list preceding " + timestampStr);
+      }
+      out.print(". A possible reason for the relay being missing in a "
+          + "relay list might be that some of the directory authorities "
+          + "had difficulties connecting to the relay. However, clients "
+          + "might still have used the relay.</p>\n");
     } else {
       if (!resultIndecisive) {
         out.println("        <p>Result is NEGATIVE "
@@ -806,20 +962,25 @@ public class ExoneraTorServlet extends HttpServlet {
       if (inTooOldConsensuses || inTooNewConsensuses) {
         if (inTooOldConsensuses && !inTooNewConsensuses) {
           out.println("        <p>Note that we found a matching relay in "
-              + "relay lists that were published between 5 and 3 "
+              + "relay lists that were published between 15 and 3 "
               + "hours before " + timestampStr + ".</p>\n");
         } else if (!inTooOldConsensuses && inTooNewConsensuses) {
           out.println("        <p>Note that we found a matching relay in "
-              + "relay lists that were published up to 2 hours after "
+              + "relay lists that were published up to 12 hours after "
               + timestampStr + ".</p>\n");
         } else {
           out.println("        <p>Note that we found a matching relay in "
-              + "relay lists that were published between 5 and 3 "
+              + "relay lists that were published between 15 and 3 "
               + "hours before and in relay lists that were published up "
-              + "to 2 hours after " + timestampStr + ".</p>\n");
+              + "to 12 hours after " + timestampStr + ".</p>\n");
         }
-        out.println("<p>Make sure that the timestamp you provided is "
-            + "in the correct timezone: UTC (or GMT).</p>");
+        if (timestampIsDate) {
+          out.println("<p>Be sure to try out the previous/next day or "
+              + "provide an exact timestamp in UTC.</p>");
+        } else {
+          out.println("<p>Make sure that the timestamp you provided is "
+              + "correctly converted to the UTC timezone.</p>");
+        }
       }
     }
     if (target != null) {
@@ -830,8 +991,13 @@ public class ExoneraTorServlet extends HttpServlet {
             + "or more relays running at the given time.</p>");
       }
     }
-
-    /* Finish writing response. */
+    try {
+      conn.close();
+      this.logger.info("Returned a database connection to the pool "
+          + "after " + (System.currentTimeMillis()
+          - requestedConnection) + " millis.");
+    } catch (SQLException e) {
+    }
     writeFooter(out);
   }
 }
