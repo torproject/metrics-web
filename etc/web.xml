@@ -287,6 +287,7 @@
     <url-pattern>/extrainfodesc</url-pattern>
   </servlet-mapping>
 
+<!--
   <servlet>
     <servlet-name>Descriptor</servlet-name>
     <servlet-class>
@@ -297,6 +298,7 @@
     <servlet-name>Descriptor</servlet-name>
     <url-pattern>/descriptor.html</url-pattern>
   </servlet-mapping>
+-->
 
   <servlet>
     <servlet-name>Consensus</servlet-name>

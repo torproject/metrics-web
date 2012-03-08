@@ -434,7 +434,7 @@ public class RelaySearchServlet extends HttpServlet {
                   new BigInteger(1, Base64.decodeBase64(parts[3]
                   + "==")));
               rawStatusEntryBuilder.append("<tt>r " + parts[1] + " "
-                  + parts[2] + " <a href=\"descriptor.html?desc-id="
+                  + parts[2] + " <a href=\"serverdesc?desc-id="
                   + descriptorBase64 + "\" target=\"_blank\">" + parts[3]
                   + "</a> " + parts[4] + " " + parts[5] + " " + parts[6]
                   + " " + parts[7] + " " + parts[8] + "</tt><br>");
