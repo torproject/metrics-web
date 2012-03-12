@@ -46,6 +46,9 @@
         been included in the <a href="#papers">papers</a> above or in the
         daily updated <a href="graphs.html">graphs</a>.
         <ul>
+          <li>What if the Tor network had 50,000 bridges? (<a
+          href="papers/bridge-scaling-2012-03-09.pdf">PDF</a>, 144K from
+          March 9, 2012).</li>
           <li>An Analysis of Tor Bridge Stability&mdash;Making BridgeDB
           give out at least one stable bridge per user (<a
           href="papers/bridge-stability-2011-10-31.pdf">PDF</a>, 419K from

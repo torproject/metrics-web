@@ -32,6 +32,9 @@
         <br>
         <h3>News</h3>
         <ul>
+          <li>March 12, 2012: Added
+          <a href="papers/bridge-scaling-2012-03-09.pdf">tech report</a>:
+          "What if the Tor network had 50,000 bridges?"</li>
           <li>January 17, 2012:
           <a href="https://svn.torproject.org/svn/projects/roadmaps/metrics-roadmap-2012-01-17.pdf">Tor
           Metrics Roadmap</a> published.</li>
