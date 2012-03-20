@@ -20,7 +20,6 @@ import java.util.TreeSet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.http.HttpServletResponse;
 
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
@@ -104,13 +103,40 @@ public class RObjectGenerator implements ServletContextListener {
 
     /* Register ourself, so that servlets can use us. */
     servletContext.setAttribute("RObjectGenerator", this);
+
+    /* Periodically generate R objects with default parameters. */
+    new Thread() {
+      public void run() {
+        long lastUpdated = 0L, sleep;
+        while (true) {
+          while ((sleep = maxCacheAge * 1000L / 2L + lastUpdated
+              - System.currentTimeMillis()) > 0L) {
+            try {
+              Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+            }
+          }
+          for (String csvFile : availableCsvFiles) {
+            generateCsv(csvFile, false);
+          }
+          for (String tableName : availableTables.keySet()) {
+            generateTable(tableName, tableName, new HashMap(), false);
+          }
+          for (String graphName : availableGraphs.keySet()) {
+            generateGraph(graphName, new HashMap(), false);
+          }
+          lastUpdated = System.currentTimeMillis();
+        }
+      };
+    }.start();
   }
 
   public void contextDestroyed(ServletContextEvent event) {
     /* Nothing to do. */
   }
 
-  public byte[] generateGraph(String requestedGraph, Map parameterMap) {
+  public byte[] generateGraph(String requestedGraph, Map parameterMap,
+      boolean checkCache) {
     Map<String, String[]> checkedParameters = GraphParameterChecker.
         getInstance().checkParameters(requestedGraph, parameterMap);
     if (checkedParameters == null) {
@@ -144,19 +170,20 @@ public class RObjectGenerator implements ServletContextListener {
     String imageFilename = imageFilenameBuilder.toString();
     rQueryBuilder.append("path = '%s')");
     String rQuery = rQueryBuilder.toString();
-    return this.generateGraph(rQuery, imageFilename);
+    return this.generateGraph(rQuery, imageFilename, checkCache);
   }
 
   /* Generate a graph using the given R query that has a placeholder for
    * the absolute path to the image to be created. */
-  private byte[] generateGraph(String rQuery, String imageFilename) {
+  private byte[] generateGraph(String rQuery, String imageFilename,
+      boolean checkCache) {
 
     /* See if we need to generate this graph. */
     File imageFile = new File(this.cachedGraphsDirectory + "/"
         + imageFilename);
     long now = System.currentTimeMillis();
-    if (!imageFile.exists() || imageFile.lastModified() < now
-        - this.maxCacheAge * 1000L) {
+    if (!checkCache || !imageFile.exists() ||
+        imageFile.lastModified() < now - this.maxCacheAge * 1000L) {
 
       /* We do. Update the R query to contain the absolute path to the
        * file to be generated, create a connection to Rserve, run the R
@@ -202,24 +229,25 @@ public class RObjectGenerator implements ServletContextListener {
     return this.availableCsvFiles;
   }
 
-  public String generateCsv(String requestedCsvFile) {
+  public String generateCsv(String requestedCsvFile, boolean checkCache) {
     /* Prepare filename and R query string. */
     String rQuery = "export_" + requestedCsvFile.replaceAll("-", "_")
         + "(path = '%s')";
     String csvFilename = requestedCsvFile + ".csv";
-    return this.generateCsv(rQuery, csvFilename);
+    return this.generateCsv(rQuery, csvFilename, checkCache);
   }
 
   /* Generate a comma-separated value file using the given R query that
    * has a placeholder for the absolute path to the file to be created. */
-  private String generateCsv(String rQuery, String csvFilename) {
+  private String generateCsv(String rQuery, String csvFilename,
+      boolean checkCache) {
 
     /* See if we need to generate this .csv file. */
     File csvFile = new File(this.cachedGraphsDirectory + "/"
         + csvFilename);
     long now = System.currentTimeMillis();
-    if (!csvFile.exists() || csvFile.lastModified() < now
-        - this.maxCacheAge * 1000L) {
+    if (!checkCache || !csvFile.exists() ||
+        csvFile.lastModified() < now - this.maxCacheAge * 1000L) {
 
       /* We do. Update the R query to contain the absolute path to the
        * file to be generated, create a connection to Rserve, run the R
@@ -260,7 +288,7 @@ public class RObjectGenerator implements ServletContextListener {
   }
 
   public List<Map<String, String>> generateTable(String tableName,
-      String requestedTable, Map parameterMap) {
+      String requestedTable, Map parameterMap, boolean checkCache) {
 
     Map<String, String[]> checkedParameters = null;
     if (tableName.equals(requestedTable)) {
@@ -303,21 +331,21 @@ public class RObjectGenerator implements ServletContextListener {
     String tableFilename = tableFilenameBuilder.toString();
     rQueryBuilder.append("path = '%s')");
     String rQuery = rQueryBuilder.toString();
-    return this.generateTable(rQuery, tableFilename);
+    return this.generateTable(rQuery, tableFilename, checkCache);
   }
 
   /* Generate table data using the given R query and filename or read
    * previously generated table data from disk if it's not too old and
    * return table data. */
   private List<Map<String, String>> generateTable(String rQuery,
-      String tableFilename) {
+      String tableFilename, boolean checkCache) {
 
     /* See if we need to generate this table. */
     File tableFile = new File(this.cachedGraphsDirectory + "/"
         + tableFilename);
     long now = System.currentTimeMillis();
-    if (!tableFile.exists() || tableFile.lastModified() < now
-        - this.maxCacheAge * 1000L) {
+    if (!checkCache || !tableFile.exists() ||
+        tableFile.lastModified() < now - this.maxCacheAge * 1000L) {
 
       /* We do. Update the R query to contain the absolute path to the
        * file to be generated, create a connection to Rserve, run the R

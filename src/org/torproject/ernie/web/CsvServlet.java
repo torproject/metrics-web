@@ -77,7 +77,7 @@ public class CsvServlet extends HttpServlet {
     /* Request CSV file from R object generator, which asks Rserve to
      * generate it. */
     String csvFileContent = this.rObjectGenerator.generateCsv(
-        requestedCsvFile);
+        requestedCsvFile, true);
 
     /* Make sure that we have a graph to return. */
     if (csvFileContent == null) {

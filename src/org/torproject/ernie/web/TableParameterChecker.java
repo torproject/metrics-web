@@ -55,7 +55,7 @@ public class TableParameterChecker {
   public Map<String, String[]> checkParameters(String tableType,
       Map requestParameters) {
 
-    /* Check if the graph type exists. */
+    /* Check if the table type exists. */
     if (tableType == null ||
         !this.availableTables.containsKey(tableType)) {
       return null;

@@ -134,7 +134,7 @@ public class GraphsSubpagesServlet extends HttpServlet {
           this.availableGraphsSubpageTables.get(requestedPage)) {
         List<Map<String, String>> tableData = rObjectGenerator.
             generateTable(tableName, requestedTable,
-            request.getParameterMap());
+            request.getParameterMap(), true);
         request.setAttribute(tableName.replaceAll("-", "_")
               + "_tabledata", tableData);
       }

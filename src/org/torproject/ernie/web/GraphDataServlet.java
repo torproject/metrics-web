@@ -112,7 +112,7 @@ public class GraphDataServlet extends HttpServlet {
     /* Request CSV file from R object generator, which may ask Rserve to
      * generate it. */
     String csvFileContent = this.rObjectGenerator.generateCsv(
-        requestedCsvFile);
+        requestedCsvFile, true);
 
     /* Make sure that we have a CSV to convert into JSON. */
     if (csvFileContent == null) {

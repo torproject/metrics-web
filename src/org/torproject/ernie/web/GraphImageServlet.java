@@ -49,7 +49,7 @@ public class GraphImageServlet extends HttpServlet {
     /* Request graph from R object generator, which either returns it from
      * its cache or asks Rserve to generate it. */
     byte[] graphBytes = rObjectGenerator.generateGraph(requestedGraph,
-        request.getParameterMap());
+        request.getParameterMap(), true);
 
     /* Make sure that we have a graph to return. */
     if (graphBytes == null) {
