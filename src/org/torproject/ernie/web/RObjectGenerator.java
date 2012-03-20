@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -31,12 +30,7 @@ public class RObjectGenerator implements ServletContextListener {
   private String cachedGraphsDirectory;
   private long maxCacheAge;
 
-  private Logger logger;
-
   public void contextInitialized(ServletContextEvent event) {
-
-    /* Initialize logger. */
-    this.logger = Logger.getLogger(RObjectGenerator.class.toString());
 
     /* Initialize using context parameters. */
     ServletContext servletContext = event.getServletContext();

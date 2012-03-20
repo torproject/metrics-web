@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class GraphsSubpagesServlet extends HttpServlet {
 
+  private static final long serialVersionUID = -5959829347747628403L;
+
   /* Available graphs subpages with corresponding JSP to which requests
    * are forwarded. */
   private Map<String, String> availableGraphsSubpages;

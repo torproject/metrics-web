@@ -149,10 +149,6 @@ public class ConsensusStatsFileHandler {
    */
   public void writeFiles() {
 
-    /* Did we learn anything new about average relay or bridge numbers in
-     * this run? */
-    boolean writeConsensusStats = false;
-
     /* Go through raw observations of numbers of running bridges in bridge
      * statuses, calculate averages per day, and add these averages to
      * final results. */
@@ -175,13 +171,11 @@ public class ConsensusStatsFileHandler {
               this.logger.finer("Adding new average bridge numbers: "
                   + tempDate + line);
               this.bridgesPerDay.put(tempDate, line);
-              writeConsensusStats = true;
             } else if (!line.equals(this.bridgesPerDay.get(tempDate))) {
               this.logger.finer("Replacing existing average bridge "
                   + "numbers (" + this.bridgesPerDay.get(tempDate)
                   + " with new numbers: " + line);
               this.bridgesPerDay.put(tempDate, line);
-              writeConsensusStats = true;
             }
           }
           brunning = statuses = 0;

@@ -461,7 +461,7 @@ public class ExoneraTorDatabaseImporter {
             String exitAddress24 = Hex.encodeHexString(
                 exitAddress24Bytes);
             String scannedTime = parts[2] + " " + parts[3];
-            long scannedMillis = -1L, publishedMillis = -1L;
+            long scannedMillis = -1L;
             try {
               scannedMillis = parseFormat.parse(scannedTime).getTime();
             } catch (ParseException e) {

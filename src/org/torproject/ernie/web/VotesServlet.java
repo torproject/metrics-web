@@ -25,6 +25,8 @@ import javax.sql.DataSource;
 
 public class VotesServlet extends HttpServlet {
 
+  private static final long serialVersionUID = 246279501605993024L;
+
   private DataSource ds;
 
   private Logger logger;

@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class GraphImageServlet extends HttpServlet {
 
+  private static final long serialVersionUID = -7356818641689744288L;
+
   private RObjectGenerator rObjectGenerator;
 
   public void init() {

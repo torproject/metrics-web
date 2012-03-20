@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class RelayServlet extends HttpServlet {
 
+  private static final long serialVersionUID = 2375986581752040224L;
+
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 

@@ -11,9 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -38,6 +36,8 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringEscapeUtils;
 
 public class ExoneraTorServlet extends HttpServlet {
+
+  private static final long serialVersionUID = 1370088989739567509L;
 
   private DataSource ds;
 
@@ -580,7 +580,6 @@ public class ExoneraTorServlet extends HttpServlet {
         cs.setDate(2, new java.sql.Date(timestamp));
         ResultSet rs = cs.executeQuery();
         while (rs.next()) {
-          Map<String, String> resultEntry = new HashMap<String, String>();
           String address = rs.getString(1);
           addressesInSameNetwork.add(address);
         }

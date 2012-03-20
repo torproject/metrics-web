@@ -136,7 +136,7 @@ public class RelayDescriptorParser {
         String validAfterTime = null, nickname = null,
             relayIdentity = null, serverDesc = null, version = null,
             ports = null;
-        String fingerprint = null, dirSource = null, address = null;
+        String dirSource = null, address = null;
         long validAfter = -1L, published = -1L, bandwidth = -1L,
             orPort = 0L, dirPort = 0L;
         SortedSet<String> relayFlags = null;
@@ -150,8 +150,6 @@ public class RelayDescriptorParser {
             validAfter = parseFormat.parse(validAfterTime).getTime();
           } else if (line.startsWith("dir-source ")) {
             dirSource = line.split(" ")[2];
-          } else if (line.startsWith("fingerprint ")) {
-            fingerprint = line.split(" ")[1];
           } else if (line.startsWith("r ")) {
             if (isConsensus && relayIdentity != null &&
                 this.rddi != null) {
@@ -172,7 +170,6 @@ public class RelayDescriptorParser {
                   + line + "' in descriptor. Skipping.");
               break;
             }
-            String publishedTime = parts[4] + " " + parts[5];
             nickname = parts[1];
             relayIdentity = Hex.encodeHexString(
                 Base64.decodeBase64(parts[2] + "=")).
@@ -234,9 +231,8 @@ public class RelayDescriptorParser {
           }
         }
       } else if (line.startsWith("router ")) {
-        String platformLine = null, publishedLine = null,
-            bandwidthLine = null, extraInfoDigest = null,
-            relayIdentifier = null;
+        String platformLine = null, bandwidthLine = null,
+            extraInfoDigest = null, relayIdentifier = null;
         String[] parts = line.split(" ");
         String nickname = parts[1];
         String address = parts[2];
@@ -294,7 +290,6 @@ public class RelayDescriptorParser {
         String statsEnd = null;
         long seconds = -1L;
         List<String> bandwidthHistory = new ArrayList<String>();
-        boolean skip = false;
         while ((line = br.readLine()) != null) {
           if (line.startsWith("published ")) {
             String publishedTime = line.substring("published ".length());

@@ -27,6 +27,8 @@ import javax.sql.DataSource;
 
 public class ServerDescriptorServlet extends HttpServlet {
 
+  private static final long serialVersionUID = -7935883442750583462L;
+
   private DataSource ds;
 
   private Logger logger;

@@ -23,6 +23,8 @@ import javax.sql.DataSource;
 
 public class ConsensusServlet extends HttpServlet {
 
+  private static final long serialVersionUID = 3147332016303032164L;
+
   private DataSource ds;
 
   private Logger logger;

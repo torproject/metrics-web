@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class ResearchPapersServlet extends HttpServlet {
+
+  private static final long serialVersionUID = -8135459207158536268L;
+
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 

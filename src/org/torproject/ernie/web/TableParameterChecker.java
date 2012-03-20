@@ -33,9 +33,6 @@ public class TableParameterChecker {
   /* Available tables with corresponding parameter lists. */
   private Map<String, String> availableTables;
 
-  /* Known parameters and parameter values. */
-  private Map<String, String> knownParameterValues;
-
   /**
    * Initializes map with valid parameters for each of the graphs.
    */
@@ -46,8 +43,6 @@ public class TableParameterChecker {
     this.availableTables = new HashMap<String, String>();
     this.availableTables.put("direct-users", "start,end,filename");
     this.availableTables.put("censorship-events", "start,end,filename");
-
-    this.knownParameterValues = new HashMap<String, String>();
   }
 
   /**

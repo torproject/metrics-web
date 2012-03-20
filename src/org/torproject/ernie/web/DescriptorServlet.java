@@ -27,6 +27,8 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 public class DescriptorServlet extends HttpServlet {
 
+  private static final long serialVersionUID = 7933295702958621380L;
+
   private DataSource ds;
 
   private Logger logger;

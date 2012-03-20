@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class GraphDataServlet extends HttpServlet {
 
+  private static final long serialVersionUID = 1799558498301134024L;
+
   private RObjectGenerator rObjectGenerator;
 
   /* Available graph data files. */
@@ -197,7 +199,6 @@ public class GraphDataServlet extends HttpServlet {
         }
         String[] firstDateAndValue = datesAndValues.first().split("=");
         String firstDate = firstDateAndValue[0];
-        String firstValue = firstDateAndValue[1];
         String lastDate = datesAndValues.last().split("=")[0];
         sb.append(",\n\"" + graphName + "\":{"
             + "\"first\":\"" + firstDate + "\","
@@ -205,7 +206,8 @@ public class GraphDataServlet extends HttpServlet {
             + "\"values\":[");
         int written = 0;
         String previousDate = firstDate;
-        long previousDateMillis = dateFormat.parse(firstDate).getTime();
+        long previousDateMillis = dateFormat.parse(previousDate).
+            getTime();
         for (String dateAndValue : datesAndValues) {
           String parts[] = dateAndValue.split("=");
           String date = parts[0];
@@ -228,12 +230,6 @@ public class GraphDataServlet extends HttpServlet {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     } catch (ParseException e) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
-    }
-
-    /* Make sure that we have a graph to return. */
-    if (jsonString == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }

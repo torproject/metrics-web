@@ -56,6 +56,8 @@ import org.apache.commons.codec.binary.Base64;
  */
 public class RelaySearchServlet extends HttpServlet {
 
+  private static final long serialVersionUID = -1772662230310611805L;
+
   private Pattern alphaNumDotDashDollarSpacePattern =
       Pattern.compile("[A-Za-z0-9\\.\\-$ ]+");
 
@@ -425,7 +427,6 @@ public class RelaySearchServlet extends HttpServlet {
           String validAfter = rs.getTimestamp(1).toString().
               substring(0, 19);
           String fingerprint = rs.getString(2);
-          String descriptor = rs.getString(3);
           if (!foundDescriptors.containsKey(validAfter)) {
             foundDescriptors.put(validAfter, new TreeSet<String>());
           }

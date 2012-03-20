@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CsvServlet extends HttpServlet {
 
+  private static final long serialVersionUID = 7501442926823719958L;
+
   private RObjectGenerator rObjectGenerator;
 
   /* Available CSV files. */

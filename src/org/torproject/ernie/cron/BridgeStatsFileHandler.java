@@ -369,8 +369,6 @@ public class BridgeStatsFileHandler {
         String longKey = e.getKey();
         String[] parts = longKey.split(",");
         String hashedBridgeIdentity = parts[0];
-        String date = parts[1];
-        String time = parts[2];
         if (!this.hashedRelays.contains(hashedBridgeIdentity) &&
             !this.zeroTwoTwoDescriptors.contains(longKey)) {
           Map<String, String> obs = e.getValue();
@@ -400,7 +398,6 @@ public class BridgeStatsFileHandler {
       String[] parts = longKey.split(",");
       String hashedBridgeIdentity = parts[0];
       String date = parts[1];
-      String time = parts[2];
       if (!this.hashedRelays.contains(hashedBridgeIdentity) &&
           !this.zeroTwoTwoDescriptors.contains(longKey)) {
         double[] users = bridgeUsersPerDay.get(date);
