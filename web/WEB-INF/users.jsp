@@ -65,19 +65,6 @@ based on the requests seen by a few dozen directory mirrors.</p>
 <hr>
 <a name="direct-users-table"></a>
 <p><b>Top-10 countries by directly connecting users:</b></p>
-<table>
-  <tr>
-    <th>Country</th>
-    <th>Mean daily users</th>
-  </tr>
-  <c:forEach var="row" items="${direct_users_tabledata}">
-    <tr>
-      <td><a href="users.html?graph=direct-users&country=${row['cc']}#direct-users">${row['country']}</a>&emsp;</td>
-      <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
-    </tr>
-  </c:forEach>
-</table>
-<br>
 <form action="users.html#direct-users-table">
   <div class="formrow">
     <input type="hidden" name="table" value="direct-users">
@@ -93,25 +80,23 @@ based on the requests seen by a few dozen directory mirrors.</p>
     </p>
   </div>
 </form>
+<br>
+<table>
+  <tr>
+    <th>Country</th>
+    <th>Mean daily users</th>
+  </tr>
+  <c:forEach var="row" items="${direct_users_tabledata}">
+    <tr>
+      <td><a href="users.html?graph=direct-users&country=${row['cc']}#direct-users">${row['country']}</a>&emsp;</td>
+      <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
+    </tr>
+  </c:forEach>
+</table>
 <hr>
 <a name="censorship-events"></a>
 <p><b>Top-10 countries by possible censorship events (<a
       href="papers/detector-2011-09-09.pdf">BETA</a>):</b></p>
-<table>
-  <tr>
-    <th>Country</th>
-    <th>Downturns</th>
-    <th>Upturns</th>
-  </tr>
-  <c:forEach var="row" items="${censorship_events_tabledata}">
-    <tr>
-      <td><a href="users.html?graph=direct-users&country=${row['cc']}&events=on#direct-users">${row['country']}</a>&emsp;</td>
-      <td>${row['downturns']}</td>
-      <td>${row['upturns']}</td>
-    </tr>
-  </c:forEach>
-</table>
-<br>
 <form action="users.html#censorship-events">
   <div class="formrow">
     <input type="hidden" name="table" value="censorship-events">
@@ -127,6 +112,21 @@ based on the requests seen by a few dozen directory mirrors.</p>
     </p>
   </div>
 </form>
+<br>
+<table>
+  <tr>
+    <th>Country</th>
+    <th>Downturns</th>
+    <th>Upturns</th>
+  </tr>
+  <c:forEach var="row" items="${censorship_events_tabledata}">
+    <tr>
+      <td><a href="users.html?graph=direct-users&country=${row['cc']}&events=on#direct-users">${row['country']}</a>&emsp;</td>
+      <td>${row['downturns']}</td>
+      <td>${row['upturns']}</td>
+    </tr>
+  </c:forEach>
+</table>
 <hr>
 <p><a href="csv/direct-users.csv">CSV</a> file containing daily directly
 connecting users by country.</p>
