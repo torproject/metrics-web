@@ -2,10 +2,18 @@
  * See LICENSE for licensing information */
 package org.torproject.ernie.cron;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Import a Maxmind GeoLite City database to resolve resolve IP addresses

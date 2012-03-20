@@ -1,14 +1,24 @@
 package org.torproject.ernie.web;
 
-import java.io.*;
-import java.sql.*;
-import java.util.logging.*;
-import java.util.regex.*;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.naming.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.sql.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 public class ExtraInfoDescriptorServlet extends HttpServlet {
 

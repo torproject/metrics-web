@@ -2,11 +2,18 @@
  * See LICENSE for licensing information */
 package org.torproject.ernie.cron;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.logging.*;
-import org.apache.commons.codec.digest.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 public class BridgeDescriptorParser {
   private ConsensusStatsFileHandler csfh;

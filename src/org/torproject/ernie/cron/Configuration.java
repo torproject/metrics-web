@@ -2,10 +2,13 @@
  * See LICENSE for licensing information */
 package org.torproject.ernie.cron;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Initialize configuration with hard-coded defaults, overwrite with

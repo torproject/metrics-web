@@ -2,9 +2,8 @@
  * See LICENSE for licensing information */
 package org.torproject.ernie.cron;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.File;
+import java.util.logging.Logger;
 
 /**
  * Coordinate downloading and parsing of descriptors and extraction of

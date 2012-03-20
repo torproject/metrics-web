@@ -1,6 +1,7 @@
 package org.torproject.ernie.web;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Countries {
 
