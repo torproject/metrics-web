@@ -33,31 +33,11 @@ public class CsvServlet extends HttpServlet {
     /* Initialize logger. */
     this.logger = Logger.getLogger(CsvServlet.class.toString());
 
-    /* Initialize map of available CSV files. */
-    this.availableCsvFiles = new TreeSet<String>();
-    this.availableCsvFiles.add("bandwidth");
-    this.availableCsvFiles.add("bridge-users");
-    this.availableCsvFiles.add("bwhist-flags");
-    this.availableCsvFiles.add("connbidirect");
-    this.availableCsvFiles.add("direct-users");
-    this.availableCsvFiles.add("dirreq-stats");
-    this.availableCsvFiles.add("dirbytes");
-    this.availableCsvFiles.add("gettor");
-    this.availableCsvFiles.add("monthly-users-average");
-    this.availableCsvFiles.add("monthly-users-peak");
-    this.availableCsvFiles.add("networksize");
-    this.availableCsvFiles.add("platforms");
-    this.availableCsvFiles.add("relaycountries");
-    this.availableCsvFiles.add("relayflags");
-    this.availableCsvFiles.add("relayflags-hour");
-    this.availableCsvFiles.add("torperf");
-    this.availableCsvFiles.add("torperf-failures");
-    this.availableCsvFiles.add("versions");
-
     /* Get a reference to the R object generator that we need to generate
      * CSV files. */
     this.rObjectGenerator = (RObjectGenerator) getServletContext().
         getAttribute("RObjectGenerator");
+    this.availableCsvFiles = rObjectGenerator.getAvailableCsvFiles();
   }
 
   public void doGet(HttpServletRequest request,

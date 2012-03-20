@@ -47,28 +47,6 @@ public class GraphParameterChecker {
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    this.availableGraphs = new HashMap<String, String>();
-    this.availableGraphs.put("networksize", "start,end,filename,dpi");
-    this.availableGraphs.put("relaycountries",
-        "start,end,country,filename,dpi");
-    this.availableGraphs.put("relayflags", "start,end,flag,granularity,"
-        + "filename,dpi");
-    this.availableGraphs.put("versions", "start,end,filename,dpi");
-    this.availableGraphs.put("platforms", "start,end,filename,dpi");
-    this.availableGraphs.put("bandwidth", "start,end,filename,dpi");
-    this.availableGraphs.put("bwhist-flags", "start,end,filename,dpi");
-    this.availableGraphs.put("dirbytes", "start,end,filename,dpi");
-    this.availableGraphs.put("direct-users",
-        "start,end,country,events,filename,nocutoff,dpi");
-    this.availableGraphs.put("bridge-users",
-         "start,end,country,filename,dpi");
-    this.availableGraphs.put("gettor", "start,end,language,filename,dpi");
-    this.availableGraphs.put("torperf",
-         "start,end,source,filesize,filename,dpi");
-    this.availableGraphs.put("torperf-failures",
-         "start,end,source,filesize,filename,dpi");
-    this.availableGraphs.put("connbidirect", "start,end,filename,dpi");
-
     this.knownParameterValues = new HashMap<String, String>();
     this.knownParameterValues.put("flag",
         "Running,Exit,Guard,Fast,Stable");
@@ -84,6 +62,10 @@ public class GraphParameterChecker {
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
     this.knownParameterValues.put("nocutoff", "on,off");
     this.knownParameterValues.put("dpi", "72,150,300");
+  }
+
+  public void setAvailableGraphs(Map<String, String> availableGraphs) {
+    this.availableGraphs = availableGraphs;
   }
 
   /**

@@ -41,10 +41,10 @@ public class TableParameterChecker {
   public TableParameterChecker() {
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+  }
 
-    this.availableTables = new HashMap<String, String>();
-    this.availableTables.put("direct-users", "start,end,filename");
-    this.availableTables.put("censorship-events", "start,end,filename");
+  public void setAvailableTables(Map<String, String> availableTables) {
+    this.availableTables = availableTables;
   }
 
   /**

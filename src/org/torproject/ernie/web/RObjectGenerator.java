@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -33,6 +35,10 @@ public class RObjectGenerator implements ServletContextListener {
   private String cachedGraphsDirectory;
   private long maxCacheAge;
 
+  private SortedSet<String> availableCsvFiles;
+  private Map<String, String> availableTables;
+  private Map<String, String> availableGraphs;
+
   public void contextInitialized(ServletContextEvent event) {
 
     /* Initialize using context parameters. */
@@ -44,6 +50,57 @@ public class RObjectGenerator implements ServletContextListener {
         "maxCacheAge"));
     this.cachedGraphsDirectory = servletContext.getInitParameter(
         "cachedGraphsDir");
+
+    /* Initialize map of available CSV files. */
+    this.availableCsvFiles = new TreeSet<String>();
+    this.availableCsvFiles.add("bandwidth");
+    this.availableCsvFiles.add("bridge-users");
+    this.availableCsvFiles.add("bwhist-flags");
+    this.availableCsvFiles.add("connbidirect");
+    this.availableCsvFiles.add("direct-users");
+    this.availableCsvFiles.add("dirreq-stats");
+    this.availableCsvFiles.add("dirbytes");
+    this.availableCsvFiles.add("gettor");
+    this.availableCsvFiles.add("monthly-users-average");
+    this.availableCsvFiles.add("monthly-users-peak");
+    this.availableCsvFiles.add("networksize");
+    this.availableCsvFiles.add("platforms");
+    this.availableCsvFiles.add("relaycountries");
+    this.availableCsvFiles.add("relayflags");
+    this.availableCsvFiles.add("relayflags-hour");
+    this.availableCsvFiles.add("torperf");
+    this.availableCsvFiles.add("torperf-failures");
+    this.availableCsvFiles.add("versions");
+
+    this.availableTables = new HashMap<String, String>();
+    this.availableTables.put("direct-users", "start,end,filename");
+    this.availableTables.put("censorship-events", "start,end,filename");
+    TableParameterChecker.getInstance().setAvailableTables(
+        availableTables);
+
+    this.availableGraphs = new HashMap<String, String>();
+    this.availableGraphs.put("networksize", "start,end,filename,dpi");
+    this.availableGraphs.put("relaycountries",
+        "start,end,country,filename,dpi");
+    this.availableGraphs.put("relayflags", "start,end,flag,granularity,"
+        + "filename,dpi");
+    this.availableGraphs.put("versions", "start,end,filename,dpi");
+    this.availableGraphs.put("platforms", "start,end,filename,dpi");
+    this.availableGraphs.put("bandwidth", "start,end,filename,dpi");
+    this.availableGraphs.put("bwhist-flags", "start,end,filename,dpi");
+    this.availableGraphs.put("dirbytes", "start,end,filename,dpi");
+    this.availableGraphs.put("direct-users",
+        "start,end,country,events,filename,nocutoff,dpi");
+    this.availableGraphs.put("bridge-users",
+         "start,end,country,filename,dpi");
+    this.availableGraphs.put("gettor", "start,end,language,filename,dpi");
+    this.availableGraphs.put("torperf",
+         "start,end,source,filesize,filename,dpi");
+    this.availableGraphs.put("torperf-failures",
+         "start,end,source,filesize,filename,dpi");
+    this.availableGraphs.put("connbidirect", "start,end,filename,dpi");
+    GraphParameterChecker.getInstance().setAvailableGraphs(
+        availableGraphs);
 
     /* Register ourself, so that servlets can use us. */
     servletContext.setAttribute("RObjectGenerator", this);
@@ -139,6 +196,10 @@ public class RObjectGenerator implements ServletContextListener {
 
     /* Return the graph bytes. */
     return result;
+  }
+
+  public SortedSet<String> getAvailableCsvFiles() {
+    return this.availableCsvFiles;
   }
 
   public String generateCsv(String requestedCsvFile) {
