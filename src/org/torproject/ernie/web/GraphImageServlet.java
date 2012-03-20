@@ -46,47 +46,10 @@ public class GraphImageServlet extends HttpServlet {
           lastIndexOf("/") + 1);
     }
 
-    /* Check parameters. */
-    Map<String, String[]> checkedParameters = GraphParameterChecker.
-        getInstance().checkParameters(requestedGraph,
-        request.getParameterMap());
-    if (checkedParameters == null) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return;
-    }
-
-    /* Prepare filename and R query string. */
-    StringBuilder rQueryBuilder = new StringBuilder("plot_"
-        + requestedGraph.replaceAll("-", "_") + "("),
-        imageFilenameBuilder = new StringBuilder(requestedGraph);
-    for (Map.Entry<String, String[]> parameter :
-        checkedParameters.entrySet()) {
-      String parameterName = parameter.getKey();
-      String[] parameterValues = parameter.getValue();
-      for (String param : parameterValues) {
-        imageFilenameBuilder.append("-" + param);
-      }
-      if (parameterValues.length < 2) {
-        rQueryBuilder.append(parameterName + " = '" + parameterValues[0]
-            + "', ");
-      } else {
-        rQueryBuilder.append(parameterName + " = c(");
-        for (int i = 0; i < parameterValues.length - 1; i++) {
-          rQueryBuilder.append("'" + parameterValues[i] + "', ");
-        }
-        rQueryBuilder.append("'" + parameterValues[
-            parameterValues.length - 1] + "'), ");
-      }
-    }
-    imageFilenameBuilder.append(".png");
-    String imageFilename = imageFilenameBuilder.toString();
-    rQueryBuilder.append("path = '%s')");
-    String rQuery = rQueryBuilder.toString();
-
     /* Request graph from R object generator, which either returns it from
      * its cache or asks Rserve to generate it. */
-    byte[] graphBytes = rObjectGenerator.generateGraph(rQuery,
-        imageFilename);
+    byte[] graphBytes = rObjectGenerator.generateGraph(requestedGraph,
+        request.getParameterMap());
 
     /* Make sure that we have a graph to return. */
     if (graphBytes == null) {
@@ -100,7 +63,7 @@ public class GraphImageServlet extends HttpServlet {
     response.setHeader("Content-Length",
         String.valueOf(graphBytes.length));
     response.setHeader("Content-Disposition",
-        "inline; filename=\"" + imageFilename + "\"");
+        "inline; filename=\"" + requestedGraph + ".png\"");
     output = new BufferedOutputStream(response.getOutputStream(), 1024);
     output.write(graphBytes, 0, graphBytes.length);
     output.flush();

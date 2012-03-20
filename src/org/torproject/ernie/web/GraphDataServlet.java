@@ -109,15 +109,10 @@ public class GraphDataServlet extends HttpServlet {
         requestedJsonFile);
     logger.fine("CSV file '" + requestedCsvFile + ".csv' requested.");
 
-    /* Prepare filename and R query string. */
-    String rQuery = "export_" + requestedCsvFile.replaceAll("-", "_")
-        + "(path = '%s')";
-    String csvFilename = requestedCsvFile + ".csv";
-
-    /* Request CSV file from R object generator, which asks Rserve to
+    /* Request CSV file from R object generator, which may ask Rserve to
      * generate it. */
-    String csvFileContent = this.rObjectGenerator.generateCsv(rQuery,
-        csvFilename);
+    String csvFileContent = this.rObjectGenerator.generateCsv(
+        requestedCsvFile);
 
     /* Make sure that we have a CSV to convert into JSON. */
     if (csvFileContent == null) {

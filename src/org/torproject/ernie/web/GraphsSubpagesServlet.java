@@ -126,54 +126,15 @@ public class GraphsSubpagesServlet extends HttpServlet {
       }
     }
 
-    /* Trigger generation of table data if the graphs subpage has any
-     * tables, regardless of whether a table update was requested. */
+    /* Generate table data if the graphs subpage has any tables,
+     * regardless of whether a table update was requested, and add the
+     * table data as request attribute. */
     if (this.availableGraphsSubpageTables.containsKey(requestedPage)) {
       for (String tableName :
           this.availableGraphsSubpageTables.get(requestedPage)) {
-
-        Map<String, String[]> checkedParameters = null;
-        if (tableName.equals(requestedTable)) {
-          checkedParameters = TableParameterChecker.
-              getInstance().checkParameters(requestedTable,
-              request.getParameterMap());
-        } else {
-          checkedParameters = TableParameterChecker.
-              getInstance().checkParameters(tableName, null);
-        }
-
-        /* Prepare filename and R query string. */
-        StringBuilder rQueryBuilder = new StringBuilder("write_"
-            + tableName.replaceAll("-", "_") + "("),
-            tableFilenameBuilder = new StringBuilder(tableName);
-
-        for (Map.Entry<String, String[]> parameter :
-            checkedParameters.entrySet()) {
-          String parameterName = parameter.getKey();
-          String[] parameterValues = parameter.getValue();
-          for (String param : parameterValues) {
-            tableFilenameBuilder.append("-" + param);
-          }
-          if (parameterValues.length < 2) {
-            rQueryBuilder.append(parameterName + " = '"
-                + parameterValues[0] + "', ");
-          } else {
-            rQueryBuilder.append(parameterName + " = c(");
-            for (int i = 0; i < parameterValues.length - 1; i++) {
-              rQueryBuilder.append("'" + parameterValues[i] + "', ");
-            }
-            rQueryBuilder.append("'" + parameterValues[
-                parameterValues.length - 1] + "'), ");
-          }
-        }
-        tableFilenameBuilder.append(".tbl");
-        String tableFilename = tableFilenameBuilder.toString();
-        rQueryBuilder.append("path = '%s')");
-        String rQuery = rQueryBuilder.toString();
-
-        /* Generate table data and add it as request attribute. */
         List<Map<String, String>> tableData = rObjectGenerator.
-            generateTable(rQuery, tableFilename);
+            generateTable(tableName, requestedTable,
+            request.getParameterMap());
         request.setAttribute(tableName.replaceAll("-", "_")
               + "_tabledata", tableData);
       }

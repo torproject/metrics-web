@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpServletResponse;
 
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
@@ -52,9 +53,46 @@ public class RObjectGenerator implements ServletContextListener {
     /* Nothing to do. */
   }
 
+  public byte[] generateGraph(String requestedGraph, Map parameterMap) {
+    Map<String, String[]> checkedParameters = GraphParameterChecker.
+        getInstance().checkParameters(requestedGraph, parameterMap);
+    if (checkedParameters == null) {
+      /* TODO We're going to take the blame by sending an internal server
+       * error to the client, but really the user is to blame. */
+      return null;
+    }
+    StringBuilder rQueryBuilder = new StringBuilder("plot_"
+        + requestedGraph.replaceAll("-", "_") + "("),
+        imageFilenameBuilder = new StringBuilder(requestedGraph);
+    for (Map.Entry<String, String[]> parameter :
+        checkedParameters.entrySet()) {
+      String parameterName = parameter.getKey();
+      String[] parameterValues = parameter.getValue();
+      for (String param : parameterValues) {
+        imageFilenameBuilder.append("-" + param);
+      }
+      if (parameterValues.length < 2) {
+        rQueryBuilder.append(parameterName + " = '" + parameterValues[0]
+            + "', ");
+      } else {
+        rQueryBuilder.append(parameterName + " = c(");
+        for (int i = 0; i < parameterValues.length - 1; i++) {
+          rQueryBuilder.append("'" + parameterValues[i] + "', ");
+        }
+        rQueryBuilder.append("'" + parameterValues[
+            parameterValues.length - 1] + "'), ");
+      }
+    }
+    imageFilenameBuilder.append(".png");
+    String imageFilename = imageFilenameBuilder.toString();
+    rQueryBuilder.append("path = '%s')");
+    String rQuery = rQueryBuilder.toString();
+    return this.generateGraph(rQuery, imageFilename);
+  }
+
   /* Generate a graph using the given R query that has a placeholder for
    * the absolute path to the image to be created. */
-  public byte[] generateGraph(String rQuery, String imageFilename) {
+  private byte[] generateGraph(String rQuery, String imageFilename) {
 
     /* See if we need to generate this graph. */
     File imageFile = new File(this.cachedGraphsDirectory + "/"
@@ -103,9 +141,17 @@ public class RObjectGenerator implements ServletContextListener {
     return result;
   }
 
+  public String generateCsv(String requestedCsvFile) {
+    /* Prepare filename and R query string. */
+    String rQuery = "export_" + requestedCsvFile.replaceAll("-", "_")
+        + "(path = '%s')";
+    String csvFilename = requestedCsvFile + ".csv";
+    return this.generateCsv(rQuery, csvFilename);
+  }
+
   /* Generate a comma-separated value file using the given R query that
    * has a placeholder for the absolute path to the file to be created. */
-  public String generateCsv(String rQuery, String csvFilename) {
+  private String generateCsv(String rQuery, String csvFilename) {
 
     /* See if we need to generate this .csv file. */
     File csvFile = new File(this.cachedGraphsDirectory + "/"
@@ -152,10 +198,57 @@ public class RObjectGenerator implements ServletContextListener {
     return result;
   }
 
+  public List<Map<String, String>> generateTable(String tableName,
+      String requestedTable, Map parameterMap) {
+
+    Map<String, String[]> checkedParameters = null;
+    if (tableName.equals(requestedTable)) {
+      checkedParameters = TableParameterChecker.
+          getInstance().checkParameters(requestedTable,
+          parameterMap);
+    } else {
+      checkedParameters = TableParameterChecker.
+          getInstance().checkParameters(tableName, null);
+    }
+    if (checkedParameters == null) {
+      /* TODO We're going to take the blame by sending an internal server
+       * error to the client, but really the user is to blame. */
+      return null;
+    }
+    StringBuilder rQueryBuilder = new StringBuilder("write_"
+        + tableName.replaceAll("-", "_") + "("),
+        tableFilenameBuilder = new StringBuilder(tableName);
+
+    for (Map.Entry<String, String[]> parameter :
+        checkedParameters.entrySet()) {
+      String parameterName = parameter.getKey();
+      String[] parameterValues = parameter.getValue();
+      for (String param : parameterValues) {
+        tableFilenameBuilder.append("-" + param);
+      }
+      if (parameterValues.length < 2) {
+        rQueryBuilder.append(parameterName + " = '"
+            + parameterValues[0] + "', ");
+      } else {
+        rQueryBuilder.append(parameterName + " = c(");
+        for (int i = 0; i < parameterValues.length - 1; i++) {
+          rQueryBuilder.append("'" + parameterValues[i] + "', ");
+        }
+        rQueryBuilder.append("'" + parameterValues[
+            parameterValues.length - 1] + "'), ");
+      }
+    }
+    tableFilenameBuilder.append(".tbl");
+    String tableFilename = tableFilenameBuilder.toString();
+    rQueryBuilder.append("path = '%s')");
+    String rQuery = rQueryBuilder.toString();
+    return this.generateTable(rQuery, tableFilename);
+  }
+
   /* Generate table data using the given R query and filename or read
    * previously generated table data from disk if it's not too old and
    * return table data. */
-  public List<Map<String, String>> generateTable(String rQuery,
+  private List<Map<String, String>> generateTable(String rQuery,
       String tableFilename) {
 
     /* See if we need to generate this table. */

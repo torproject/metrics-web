@@ -94,15 +94,10 @@ public class CsvServlet extends HttpServlet {
     }
     logger.fine("CSV file '" + requestedCsvFile + ".csv' requested.");
 
-    /* Prepare filename and R query string. */
-    String rQuery = "export_" + requestedCsvFile.replaceAll("-", "_")
-        + "(path = '%s')";
-    String csvFilename = requestedCsvFile + ".csv";
-
     /* Request CSV file from R object generator, which asks Rserve to
      * generate it. */
-    String csvFileContent = this.rObjectGenerator.generateCsv(rQuery,
-        csvFilename);
+    String csvFileContent = this.rObjectGenerator.generateCsv(
+        requestedCsvFile);
 
     /* Make sure that we have a graph to return. */
     if (csvFileContent == null) {
@@ -115,7 +110,7 @@ public class CsvServlet extends HttpServlet {
     response.setHeader("Content-Length", String.valueOf(
         csvFileContent.length()));
     response.setHeader("Content-Disposition",
-        "inline; filename=\"" + csvFilename + "\"");
+        "inline; filename=\"" + requestedCsvFile + ".csv\"");
     response.getWriter().print(csvFileContent);
   }
 }
