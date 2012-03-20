@@ -99,24 +99,31 @@ public class RObjectGenerator implements ServletContextListener {
    * has a placeholder for the absolute path to the file to be created. */
   public String generateCsv(String rQuery, String csvFilename) {
 
-    /* Update the R query to contain the absolute path to the file to be
-     * generated, create a connection to Rserve, run the R query, and
-     * close the connection. The generated csv file will be on disk in the
-     * same directory as the generated graphs. */
+    /* See if we need to generate this .csv file. */
     File csvFile = new File(this.cachedGraphsDirectory + "/"
         + csvFilename);
-    rQuery = String.format(rQuery, csvFile.getAbsolutePath());
-    try {
-      RConnection rc = new RConnection(rserveHost, rservePort);
-      rc.eval(rQuery);
-      rc.close();
-    } catch (RserveException e) {
-      return null;
-    }
+    long now = System.currentTimeMillis();
+    if (!csvFile.exists() || csvFile.lastModified() < now
+        - this.maxCacheAge * 1000L) {
 
-    /* Check that we really just generated the file */
-    if (!csvFile.exists()) {
-      return null;
+      /* We do. Update the R query to contain the absolute path to the
+       * file to be generated, create a connection to Rserve, run the R
+       * query, and close the connection. The generated csv file will be
+       * on disk in the same directory as the generated graphs. */
+      rQuery = String.format(rQuery, csvFile.getAbsolutePath());
+      try {
+        RConnection rc = new RConnection(rserveHost, rservePort);
+        rc.eval(rQuery);
+        rc.close();
+      } catch (RserveException e) {
+        return null;
+      }
+
+      /* Check that we really just generated the file */
+      if (!csvFile.exists() || csvFile.lastModified() < now
+          - this.maxCacheAge * 1000L) {
+        return null;
+      }
     }
 
     /* Read the text file from disk and write it to a string. */
