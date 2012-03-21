@@ -48,8 +48,6 @@ public class ArchiveReader {
    */
   private Logger logger;
 
-  private SimpleDateFormat dateTimeFormat;
-
   public ArchiveReader(RelayDescriptorDatabaseImporter rddi,
       BridgeStatsFileHandler bsfh, File archivesDirectory,
       File statsDirectory, boolean keepImportHistory) {
@@ -62,10 +60,6 @@ public class ArchiveReader {
     this.rddi = rddi;
     this.bsfh = bsfh;
 
-    this.dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    this.dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-    int parsedFiles = 0, ignoredFiles = 0;
     this.logger = Logger.getLogger(ArchiveReader.class.getName());
     if (archivesDirectory.exists()) {
       logger.fine("Importing files in directory " + archivesDirectory
@@ -99,9 +93,7 @@ public class ArchiveReader {
       }
     }
 
-    logger.info("Finished importing relay descriptors from local "
-        + "directory:\nParsed " + parsedFiles + ", ignored "
-        + ignoredFiles + " files.");
+    logger.info("Finished importing relay descriptors.");
   }
 
   private void addRelayNetworkStatusConsensus(
