@@ -2,7 +2,7 @@
 #ImportDirectoryArchives 0
 #
 ## Relative path to directory to import directory archives from
-#DirectoryArchivesDirectory archives/
+#DirectoryArchivesDirectory in/relay-descriptors/
 #
 ## Keep a history of imported directory archive files to know which files
 ## have been imported before. This history can be useful when importing

@@ -1017,21 +1017,14 @@ public final class RelayDescriptorDatabaseImporter {
   /**
    * Insert a conn-bi-direct stats string into the database.
    */
-  public void addConnBiDirect(String source, String statsEnd,
+  public void addConnBiDirect(String source, long statsEndMillis,
       long seconds, long below, long read, long write, long both) {
-    long statsEndTime = 0L;
-    try {
-      statsEndTime = this.dateTimeFormat.parse(statsEnd).getTime();
-    } catch (ParseException e) {
-      this.logger.log(Level.WARNING, "Could not add conn-bi-direct "
-          + "stats string with interval ending '" + statsEnd + "'.", e);
-      return;
-    }
+    String statsEnd = this.dateTimeFormat.format(statsEndMillis);
     if (this.importIntoDatabase) {
       try {
-        this.addDateToScheduledUpdates(statsEndTime);
+        this.addDateToScheduledUpdates(statsEndMillis);
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        Timestamp statsEndTimestamp = new Timestamp(statsEndTime);
+        Timestamp statsEndTimestamp = new Timestamp(statsEndMillis);
         this.psBs.setString(1, source);
         this.psBs.setTimestamp(2, statsEndTimestamp, cal);
         ResultSet rs = psBs.executeQuery();
@@ -1085,21 +1078,14 @@ public final class RelayDescriptorDatabaseImporter {
    * Adds observations on the number of directory requests by country as
    * seen on a directory at a given date to the database.
    */
-  public void addDirReqStats(String source, String statsEnd, long seconds,
-      Map<String, String> dirReqsPerCountry) {
-    long statsEndTime = 0L;
-    try {
-      statsEndTime = this.dateTimeFormat.parse(statsEnd).getTime();
-    } catch (ParseException e) {
-      this.logger.log(Level.WARNING, "Could not add dirreq stats with "
-          + "interval ending '" + statsEnd + "'.", e);
-      return;
-    }
+  public void addDirReqStats(String source, long statsEndMillis,
+      long seconds, Map<String, String> dirReqsPerCountry) {
+    String statsEnd = this.dateTimeFormat.format(statsEndMillis);
     if (this.importIntoDatabase) {
       try {
-        this.addDateToScheduledUpdates(statsEndTime);
+        this.addDateToScheduledUpdates(statsEndMillis);
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        Timestamp statsEndTimestamp = new Timestamp(statsEndTime);
+        Timestamp statsEndTimestamp = new Timestamp(statsEndMillis);
         this.psQs.setString(1, source);
         this.psQs.setTimestamp(2, statsEndTimestamp, cal);
         ResultSet rs = psQs.executeQuery();

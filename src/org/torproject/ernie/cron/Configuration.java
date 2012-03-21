@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class Configuration {
   private boolean importDirectoryArchives = false;
-  private String directoryArchivesDirectory = "archives/";
+  private String directoryArchivesDirectory = "in/relay-descriptors/";
   private boolean keepDirectoryArchiveImportHistory = false;
   private boolean importSanitizedBridges = false;
   private String sanitizedBridgesDirectory = "bridges/";
