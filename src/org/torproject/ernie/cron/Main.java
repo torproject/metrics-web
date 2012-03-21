@@ -37,28 +37,20 @@ public class Main {
         new BridgeStatsFileHandler(
         config.getRelayDescriptorDatabaseJDBC()) : null;
 
-    // Prepare writing relay descriptors to database
-    RelayDescriptorDatabaseImporter rddi =
-        config.getWriteRelayDescriptorDatabase() ||
-        config.getWriteRelayDescriptorsRawFiles() ?
-        new RelayDescriptorDatabaseImporter(
-        config.getWriteRelayDescriptorDatabase() ?
-        config.getRelayDescriptorDatabaseJDBC() : null,
-        config.getWriteRelayDescriptorsRawFiles() ?
-        config.getRelayDescriptorRawFilesDirectory() : null) : null;
-
     // Import relay descriptors
-    if (rddi != null) {
-      if (config.getImportDirectoryArchives()) {
-        new ArchiveReader(rddi, bsfh,
-            new File(config.getDirectoryArchivesDirectory()),
-            statsDirectory,
-            config.getKeepDirectoryArchiveImportHistory());
-      }
-    }
-
-    // Close database connection (if active)
-    if (rddi != null)   {
+    if (config.getImportDirectoryArchives()) {
+      RelayDescriptorDatabaseImporter rddi =
+          config.getWriteRelayDescriptorDatabase() ||
+          config.getWriteRelayDescriptorsRawFiles() ?
+          new RelayDescriptorDatabaseImporter(
+          config.getWriteRelayDescriptorDatabase() ?
+          config.getRelayDescriptorDatabaseJDBC() : null,
+          config.getWriteRelayDescriptorsRawFiles() ?
+          config.getRelayDescriptorRawFilesDirectory() : null) : null;
+      new ArchiveReader(rddi, bsfh,
+          new File(config.getDirectoryArchivesDirectory()),
+          statsDirectory,
+          config.getKeepDirectoryArchiveImportHistory());
       rddi.closeConnection();
     }
 
