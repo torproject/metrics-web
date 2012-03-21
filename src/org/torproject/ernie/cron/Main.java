@@ -68,13 +68,10 @@ public class Main {
         new ConsensusStatsFileHandler(
         config.getRelayDescriptorDatabaseJDBC()) : null;
 
-    // Prepare bridge descriptor parser
-    BridgeDescriptorParser bdp = config.getWriteBridgeStats() ?
-        new BridgeDescriptorParser(csfh, bsfh) : null;
-
     // Import bridge descriptors
-    if (bdp != null && config.getImportSanitizedBridges()) {
-      new SanitizedBridgesReader(bdp,
+    if (config.getWriteBridgeStats() &&
+        config.getImportSanitizedBridges()) {
+      new SanitizedBridgesReader(csfh, bsfh,
           new File(config.getSanitizedBridgesDirectory()),
           statsDirectory, config.getKeepSanitizedBridgesImportHistory());
     }
