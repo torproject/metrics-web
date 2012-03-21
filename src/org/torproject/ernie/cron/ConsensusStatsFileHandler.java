@@ -66,6 +66,8 @@ public class ConsensusStatsFileHandler {
   /* Database connection string. */
   private String connectionURL = null;
 
+  private SimpleDateFormat dateTimeFormat;
+
  /**
   * Initializes this class, including reading in intermediate results
   * files <code>stats/consensus-stats-raw</code> and
@@ -85,6 +87,9 @@ public class ConsensusStatsFileHandler {
 
     /* Initialize database connection string. */
     this.connectionURL = connectionURL;
+
+    this.dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    this.dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
     /* Initialize logger. */
     this.logger = Logger.getLogger(
@@ -128,7 +133,8 @@ public class ConsensusStatsFileHandler {
    * Adds the intermediate results of the number of running bridges in a
    * given bridge status to the existing observations.
    */
-  public void addBridgeConsensusResults(String published, int running) {
+  public void addBridgeConsensusResults(long publishedMillis, int running) {
+    String published = dateTimeFormat.format(publishedMillis);
     String line = published + "," + running;
     if (!this.bridgesRaw.containsKey(published)) {
       this.logger.finer("Adding new bridge numbers: " + line);

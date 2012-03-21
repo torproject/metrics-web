@@ -14,12 +14,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -95,6 +98,8 @@ public class BridgeStatsFileHandler {
   /* Database connection string. */
   private String connectionURL = null;
 
+  private SimpleDateFormat dateTimeFormat;
+
   /**
    * Initializes this class, including reading in intermediate results
    * files <code>stats/bridge-stats-raw</code> and
@@ -121,6 +126,9 @@ public class BridgeStatsFileHandler {
 
     /* Initialize database connection string. */
     this.connectionURL = connectionURL;
+
+    this.dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    this.dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
     /* Initialize logger. */
     this.logger = Logger.getLogger(
@@ -175,7 +183,9 @@ public class BridgeStatsFileHandler {
                   obs.put(headers[i], parts[i]);
                 }
               }
-              this.addObs(hashedBridgeIdentity, date, time, obs);
+              long dateTimeMillis = dateTimeFormat.parse(date + " "
+                  + time).getTime();
+              this.addObs(hashedBridgeIdentity, dateTimeMillis, obs);
             }
           }
         }
@@ -183,6 +193,9 @@ public class BridgeStatsFileHandler {
         this.logger.fine("Finished reading file "
             + this.bridgeStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
+        this.logger.log(Level.WARNING, "Failed to read file "
+            + this.bridgeStatsRawFile.getAbsolutePath() + "!", e);
+      } catch (ParseException e) {
         this.logger.log(Level.WARNING, "Failed to read file "
             + this.bridgeStatsRawFile.getAbsolutePath() + "!", e);
       }
@@ -253,9 +266,10 @@ public class BridgeStatsFileHandler {
    * not included in the results, because stats are very likely broken.
    */
   public void addZeroTwoTwoDescriptor(String hashedBridgeIdentity,
-      String date, String time) {
-    String value = hashedBridgeIdentity.toUpperCase() + "," + date + ","
-        + time;
+      long publishedMillis) {
+    String value = hashedBridgeIdentity.toUpperCase() + ","
+        + this.dateTimeFormat.format(publishedMillis).
+        replaceAll(" ", ",");
     if (!this.zeroTwoTwoDescriptors.contains(value)) {
       this.logger.finer("Adding new bridge 0.2.2.x extra-info "
           + "descriptor: " + value);
@@ -281,11 +295,14 @@ public class BridgeStatsFileHandler {
    * bridge and day, we keep the one with the later publication time and
    * discard the other one.
    */
-  public void addObs(String hashedIdentity, String date, String time,
+  public void addObs(String hashedIdentity, long publishedMillis,
       Map<String, String> obs) {
     for (String country : obs.keySet()) {
       this.countries.add(country);
     }
+    String dateTime = this.dateTimeFormat.format(publishedMillis);
+    String date = dateTime.split(" ")[0];
+    String time = dateTime.split(" ")[1];
     String shortKey = hashedIdentity + "," + date;
     String longKey = shortKey + "," + time;
     SortedMap<String, Map<String, String>> tailMap =
