@@ -47,15 +47,10 @@ public class Main {
         config.getWriteRelayDescriptorsRawFiles() ?
         config.getRelayDescriptorRawFilesDirectory() : null) : null;
 
-    // Prepare relay descriptor parser (only if we are writing the
-    // consensus-health page to disk)
-    RelayDescriptorParser rdp = rddi != null ?
-        new RelayDescriptorParser(rddi, bsfh) : null;
-
     // Import relay descriptors
-    if (rdp != null) {
+    if (rddi != null) {
       if (config.getImportDirectoryArchives()) {
-        new ArchiveReader(rdp,
+        new ArchiveReader(rddi, bsfh,
             new File(config.getDirectoryArchivesDirectory()),
             statsDirectory,
             config.getKeepDirectoryArchiveImportHistory());
