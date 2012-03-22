@@ -109,12 +109,14 @@ public class ArchiveReader {
     for (NetworkStatusEntry statusEntry :
       consensus.getStatusEntries().values()) {
       this.rddi.addStatusEntry(consensus.getValidAfterMillis(),
-          statusEntry.getNickname(), statusEntry.getFingerprint(),
-          statusEntry.getDescriptor(), statusEntry.getPublishedMillis(),
-          statusEntry.getAddress(), statusEntry.getOrPort(),
-          statusEntry.getDirPort(), statusEntry.getFlags(),
-          statusEntry.getVersion(), statusEntry.getBandwidth(),
-          statusEntry.getPortList(), statusEntry.getStatusEntryBytes());
+          statusEntry.getNickname(),
+          statusEntry.getFingerprint().toLowerCase(),
+          statusEntry.getDescriptor().toLowerCase(),
+          statusEntry.getPublishedMillis(), statusEntry.getAddress(),
+          statusEntry.getOrPort(), statusEntry.getDirPort(),
+          statusEntry.getFlags(), statusEntry.getVersion(),
+          statusEntry.getBandwidth(), statusEntry.getPortList(),
+          statusEntry.getStatusEntryBytes());
       try {
         this.bsfh.addHashedRelay(DigestUtils.shaHex(Hex.decodeHex(
             statusEntry.getFingerprint().toCharArray())).toUpperCase());
