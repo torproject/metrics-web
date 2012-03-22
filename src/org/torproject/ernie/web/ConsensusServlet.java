@@ -39,7 +39,7 @@ public class ConsensusServlet extends HttpServlet {
     /* Look up data source. */
     try {
       Context cxt = new InitialContext();
-      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/tordir");
+      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/exonerator");
       this.logger.info("Successfully looked up data source.");
     } catch (NamingException e) {
       this.logger.log(Level.WARNING, "Could not look up data source", e);
@@ -83,7 +83,7 @@ public class ConsensusServlet extends HttpServlet {
       long requestedConnection = System.currentTimeMillis();
       Connection conn = this.ds.getConnection();
       Statement statement = conn.createStatement();
-      String query = "SELECT rawdesc FROM consensus "
+      String query = "SELECT rawconsensus FROM consensus "
           + "WHERE validafter = '" + databaseParameter + "'";
       ResultSet rs = statement.executeQuery(query);
       if (rs.next()) {

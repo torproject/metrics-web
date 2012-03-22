@@ -41,7 +41,7 @@ public class ServerDescriptorServlet extends HttpServlet {
     /* Look up data source. */
     try {
       Context cxt = new InitialContext();
-      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/tordir");
+      this.ds = (DataSource) cxt.lookup("java:comp/env/jdbc/exonerator");
       this.logger.info("Successfully looked up data source.");
     } catch (NamingException e) {
       this.logger.log(Level.WARNING, "Could not look up data source", e);
@@ -78,7 +78,7 @@ public class ServerDescriptorServlet extends HttpServlet {
         long requestedConnection = System.currentTimeMillis();
         Connection conn = ds.getConnection();
         Statement statement = conn.createStatement();
-        String query = "SELECT descriptor, rawdesc FROM descriptor "
+        String query = "SELECT descriptor, rawdescriptor FROM descriptor "
             + "WHERE descriptor LIKE '" + descId + "%'";
         ResultSet rs = statement.executeQuery(query);
         if (rs.next()) {
