@@ -18,20 +18,8 @@ CREATE TABLE descriptor (
     platform CHARACTER VARYING(256),
     published TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     uptime BIGINT,
-    extrainfo CHARACTER(40),
     rawdesc BYTEA NOT NULL,
     CONSTRAINT descriptor_pkey PRIMARY KEY (descriptor)
-);
-
--- TABLE extrainfo
--- Contains all of the extra-info descriptors published by the routers.
-CREATE TABLE extrainfo (
-    extrainfo CHARACTER(40) NOT NULL,
-    nickname CHARACTER VARYING(19) NOT NULL,
-    fingerprint CHARACTER(40) NOT NULL,
-    published TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    rawdesc BYTEA NOT NULL,
-    CONSTRAINT extrainfo_pkey PRIMARY KEY (extrainfo)
 );
 
 -- Contains bandwidth histories reported by relays in extra-info
@@ -144,15 +132,6 @@ CREATE TABLE consensus (
     validafter TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     rawdesc BYTEA NOT NULL,
     CONSTRAINT consensus_pkey PRIMARY KEY (validafter)
-);
-
--- TABLE vote
--- Contains all of the votes published by the directories
-CREATE TABLE vote (
-    validafter TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    dirsource CHARACTER(40) NOT NULL,
-    rawdesc BYTEA NOT NULL,
-    CONSTRAINT vote_pkey PRIMARY KEY (validafter, dirsource)
 );
 
 -- TABLE connbidirect
