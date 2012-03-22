@@ -71,12 +71,6 @@ public final class RelayDescriptorDatabaseImporter {
   private PreparedStatement psRs;
 
   /**
-   * Prepared statement to check whether a given extra-info descriptor has
-   * been imported into the database before.
-   */
-  private PreparedStatement psEs;
-
-  /**
    * Prepared statement to check whether a given server descriptor has
    * been imported into the database before.
    */
@@ -87,12 +81,6 @@ public final class RelayDescriptorDatabaseImporter {
    * has been imported into the database before.
    */
   private PreparedStatement psCs;
-
-  /**
-   * Prepared statement to check whether a given network status vote has
-   * been imported into the database before.
-   */
-  private PreparedStatement psVs;
 
   /**
    * Prepared statement to check whether a given conn-bi-direct stats
@@ -130,12 +118,6 @@ public final class RelayDescriptorDatabaseImporter {
   private PreparedStatement psD;
 
   /**
-   * Prepared statement to insert an extra-info descriptor into the
-   * database.
-   */
-  private PreparedStatement psE;
-
-  /**
    * Callable statement to insert the bandwidth history of an extra-info
    * descriptor into the database.
    */
@@ -146,12 +128,6 @@ public final class RelayDescriptorDatabaseImporter {
    * database.
    */
   private PreparedStatement psC;
-
-  /**
-   * Prepared statement to insert a network status vote into the
-   * database.
-   */
-  private PreparedStatement psV;
 
   /**
    * Prepared statement to insert a conn-bi-direct stats string into the
@@ -186,11 +162,6 @@ public final class RelayDescriptorDatabaseImporter {
   private BufferedWriter descriptorOut;
 
   /**
-   * Raw import file containing extra-info descriptors.
-   */
-  private BufferedWriter extrainfoOut;
-
-  /**
    * Raw import file containing bandwidth histories.
    */
   private BufferedWriter bwhistOut;
@@ -199,11 +170,6 @@ public final class RelayDescriptorDatabaseImporter {
    * Raw import file containing consensuses.
    */
   private BufferedWriter consensusOut;
-
-  /**
-   * Raw import file containing votes.
-   */
-  private BufferedWriter voteOut;
 
   /**
    * Raw import file containing conn-bi-direct stats strings.
@@ -268,12 +234,8 @@ public final class RelayDescriptorDatabaseImporter {
             + "fingerprint = ?");
         this.psDs = conn.prepareStatement("SELECT COUNT(*) "
             + "FROM descriptor WHERE descriptor = ?");
-        this.psEs = conn.prepareStatement("SELECT COUNT(*) "
-            + "FROM extrainfo WHERE extrainfo = ?");
         this.psCs = conn.prepareStatement("SELECT COUNT(*) "
             + "FROM consensus WHERE validafter = ?");
-        this.psVs = conn.prepareStatement("SELECT COUNT(*) "
-            + "FROM vote WHERE validafter = ? AND dirsource = ?");
         this.psBs = conn.prepareStatement("SELECT COUNT(*) "
             + "FROM connbidirect WHERE source = ? AND statsend = ?");
         this.psQs = conn.prepareStatement("SELECT COUNT(*) "
@@ -292,15 +254,10 @@ public final class RelayDescriptorDatabaseImporter {
             + "bandwidthobserved, platform, published, uptime, "
             + "extrainfo, rawdesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
             + "?, ?, ?, ?)");
-        this.psE = conn.prepareStatement("INSERT INTO extrainfo "
-            + "(extrainfo, nickname, fingerprint, published, rawdesc) "
-            + "VALUES (?, ?, ?, ?, ?)");
         this.csH = conn.prepareCall("{call insert_bwhist(?, ?, ?, ?, ?, "
             + "?)}");
         this.psC = conn.prepareStatement("INSERT INTO consensus "
             + "(validafter, rawdesc) VALUES (?, ?)");
-        this.psV = conn.prepareStatement("INSERT INTO vote "
-            + "(validafter, dirsource, rawdesc) VALUES (?, ?, ?)");
         this.psB = conn.prepareStatement("INSERT INTO connbidirect "
             + "(source, statsend, seconds, belownum, readnum, writenum, "
             + "bothnum) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -590,60 +547,6 @@ public final class RelayDescriptorDatabaseImporter {
   public void addExtraInfoDescriptor(String extraInfoDigest,
       String nickname, String fingerprint, long published,
       byte[] rawDescriptor, List<String> bandwidthHistoryLines) {
-    if (this.importIntoDatabase) {
-      try {
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        this.psEs.setString(1, extraInfoDigest);
-        ResultSet rs = psEs.executeQuery();
-        rs.next();
-        if (rs.getInt(1) == 0) {
-          this.psE.clearParameters();
-          this.psE.setString(1, extraInfoDigest);
-          this.psE.setString(2, nickname);
-          this.psE.setString(3, fingerprint);
-          this.psE.setTimestamp(4, new Timestamp(published), cal);
-          this.psE.setBytes(5, rawDescriptor);
-          this.psE.executeUpdate();
-          resCount++;
-          if (resCount % autoCommitCount == 0)  {
-            this.conn.commit();
-          }
-        }
-      } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not add extra-info "
-            + "descriptor.  We won't make any further SQL requests in "
-            + "this execution.", e);
-        this.importIntoDatabase = false;
-      }
-    }
-    if (this.writeRawImportFiles) {
-      try {
-        if (this.extrainfoOut == null) {
-          new File(rawFilesDirectory).mkdirs();
-          this.extrainfoOut = new BufferedWriter(new FileWriter(
-              rawFilesDirectory + "/extrainfo.sql"));
-          this.extrainfoOut.write(" COPY extrainfo (extrainfo, nickname, "
-              + "fingerprint, published, rawdesc) FROM stdin;\n");
-        }
-        this.extrainfoOut.write(extraInfoDigest.toLowerCase() + "\t"
-            + nickname + "\t" + fingerprint.toLowerCase() + "\t"
-            + this.dateTimeFormat.format(published) + "\t");
-        this.extrainfoOut.write(PGbytea.toPGString(rawDescriptor).
-            replaceAll("\\\\", "\\\\\\\\") + "\n");
-      } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Could not write extra-info "
-            + "descriptor to raw database import file.  We won't make "
-            + "any further attempts to write raw import files in this "
-            + "execution.", e);
-        this.writeRawImportFiles = false;
-      } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not write extra-info "
-            + "descriptor to raw database import file.  We won't make "
-            + "any further attempts to write raw import files in this "
-            + "execution.", e);
-        this.writeRawImportFiles = false;
-      }
-    }
     if (!bandwidthHistoryLines.isEmpty()) {
       this.addBandwidthHistory(fingerprint.toLowerCase(), published,
           bandwidthHistoryLines);
@@ -955,66 +858,6 @@ public final class RelayDescriptorDatabaseImporter {
   }
 
   /**
-   * Insert network status vote into database.
-   */
-  public void addVote(long validAfter, String dirSource,
-      byte[] rawDescriptor) {
-    if (this.importIntoDatabase) {
-      try {
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        Timestamp validAfterTimestamp = new Timestamp(validAfter);
-        this.psVs.setTimestamp(1, validAfterTimestamp, cal);
-        this.psVs.setString(2, dirSource);
-        ResultSet rs = psVs.executeQuery();
-        rs.next();
-        if (rs.getInt(1) == 0) {
-          this.psV.clearParameters();
-          this.psV.setTimestamp(1, validAfterTimestamp, cal);
-          this.psV.setString(2, dirSource);
-          this.psV.setBytes(3, rawDescriptor);
-          this.psV.executeUpdate();
-          rvsCount++;
-          if (rvsCount % autoCommitCount == 0)  {
-            this.conn.commit();
-          }
-        }
-      } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not add network status "
-            + "vote.  We won't make any further SQL requests in this "
-            + "execution.", e);
-        this.importIntoDatabase = false;
-      }
-    }
-    if (this.writeRawImportFiles) {
-      try {
-        if (this.voteOut == null) {
-          new File(rawFilesDirectory).mkdirs();
-          this.voteOut = new BufferedWriter(new FileWriter(
-              rawFilesDirectory + "/vote.sql"));
-          this.voteOut.write(" COPY vote (validafter, dirsource, "
-              + "rawdesc) FROM stdin;\n");
-        }
-        String validAfterString = this.dateTimeFormat.format(validAfter);
-        this.voteOut.write(validAfterString + "\t" + dirSource + "\t");
-        this.voteOut.write(PGbytea.toPGString(rawDescriptor).
-            replaceAll("\\\\", "\\\\\\\\") + "\n");
-      } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not write network status "
-            + "vote to raw database import file.  We won't make any "
-            + "further attempts to write raw import files in this "
-            + "execution.", e);
-        this.writeRawImportFiles = false;
-      } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Could not write network status "
-            + "vote to raw database import file.  We won't make any "
-            + "further attempts to write raw import files in this "
-            + "execution.", e);
-        this.writeRawImportFiles = false;
-      }
-    }
-  }
-
-  /**
    * Insert a conn-bi-direct stats string into the database.
    */
   public void addConnBiDirect(String source, long statsEndMillis,
@@ -1195,10 +1038,6 @@ public final class RelayDescriptorDatabaseImporter {
         this.descriptorOut.write("\\.\n");
         this.descriptorOut.close();
       }
-      if (this.extrainfoOut != null) {
-        this.extrainfoOut.write("\\.\n");
-        this.extrainfoOut.close();
-      }
       if (this.bwhistOut != null) {
         this.bwhistOut.write("\\.\n");
         this.bwhistOut.close();
@@ -1206,10 +1045,6 @@ public final class RelayDescriptorDatabaseImporter {
       if (this.consensusOut != null) {
         this.consensusOut.write("\\.\n");
         this.consensusOut.close();
-      }
-      if (this.voteOut != null) {
-        this.voteOut.write("\\.\n");
-        this.voteOut.close();
       }
       if (this.connBiDirectOut != null) {
         this.connBiDirectOut.write("\\.\n");

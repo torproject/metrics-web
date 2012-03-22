@@ -130,27 +130,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>NetworkStatus</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.web.NetworkStatusServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>NetworkStatus</servlet-name>
-    <url-pattern>/networkstatus.html</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>RouterDetail</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.web.RouterDetailServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>RouterDetail</servlet-name>
-    <url-pattern>/routerdetail.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>Relay</servlet-name>
     <servlet-class>
       org.torproject.ernie.web.RelayServlet
@@ -238,10 +217,6 @@
     <servlet-name>GraphImage</servlet-name>
     <url-pattern>/connbidirect.png</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
-    <url-pattern>/routerdetail.png</url-pattern>
-  </servlet-mapping>
 
   <servlet>
     <servlet-name>Csv</servlet-name>
@@ -276,32 +251,6 @@
     <url-pattern>/serverdesc</url-pattern>
   </servlet-mapping>
 
-<!--
-  <servlet>
-    <servlet-name>ExtraInfoDescriptor</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.web.ExtraInfoDescriptorServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ExtraInfoDescriptor</servlet-name>
-    <url-pattern>/extrainfodesc</url-pattern>
-  </servlet-mapping>
--->
-
-<!--
-  <servlet>
-    <servlet-name>Descriptor</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.web.DescriptorServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Descriptor</servlet-name>
-    <url-pattern>/descriptor.html</url-pattern>
-  </servlet-mapping>
--->
-
   <servlet>
     <servlet-name>Consensus</servlet-name>
     <servlet-class>
@@ -312,19 +261,6 @@
     <servlet-name>Consensus</servlet-name>
     <url-pattern>/consensus</url-pattern>
   </servlet-mapping>
-
-<!--
-  <servlet>
-    <servlet-name>Votes</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.web.VotesServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Votes</servlet-name>
-    <url-pattern>/votes</url-pattern>
-  </servlet-mapping>
--->
 
   <servlet>
     <servlet-name>ErnieGeneratedFile</servlet-name>

@@ -35,8 +35,6 @@
             %>>Performance</a>
       </font>
     <%} else if (currentPage.endsWith("status.jsp") ||
-                 currentPage.endsWith("networkstatus.jsp") ||
-                 currentPage.endsWith("routerdetail.jsp") ||
                  currentPage.endsWith("exonerator.jsp") ||
                  currentPage.endsWith("relay-search.jsp") ||
                  currentPage.endsWith("consensus-health.jsp")) {

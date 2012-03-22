@@ -79,9 +79,6 @@ public class ArchiveReader {
             if (descriptor instanceof RelayNetworkStatusConsensus) {
               this.addRelayNetworkStatusConsensus(
                   (RelayNetworkStatusConsensus) descriptor);
-            } else if (descriptor instanceof RelayNetworkStatusVote) {
-              this.addRelayNetworkStatusVote(
-                  (RelayNetworkStatusVote) descriptor);
             } else if (descriptor instanceof ServerDescriptor) {
               this.addServerDescriptor((ServerDescriptor) descriptor);
             } else if (descriptor instanceof ExtraInfoDescriptor) {
@@ -117,11 +114,6 @@ public class ArchiveReader {
     }
     this.rddi.addConsensus(consensus.getValidAfterMillis(),
         consensus.getRawDescriptorBytes());
-  }
-
-  private void addRelayNetworkStatusVote(RelayNetworkStatusVote vote) {
-    this.rddi.addVote(vote.getValidAfterMillis(), vote.getIdentity(),
-        vote.getRawDescriptorBytes());
   }
 
   private void addServerDescriptor(ServerDescriptor descriptor) {

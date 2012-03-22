@@ -1,6 +1,4 @@
 User-agent: *
-Disallow: /networkstatus.html
-Disallow: /routerdetail.html
 Disallow: /relay.html
 Disallow: /csv/
 Disallow: /serverdesc
