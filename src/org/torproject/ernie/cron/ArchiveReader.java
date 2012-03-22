@@ -117,32 +117,14 @@ public class ArchiveReader {
   }
 
   private void addServerDescriptor(ServerDescriptor descriptor) {
-    String digest = null;
-    try {
-      String ascii = new String(descriptor.getRawDescriptorBytes(),
-          "US-ASCII");
-      String startToken = "router ";
-      String sigToken = "\nrouter-signature\n";
-      int start = ascii.indexOf(startToken);
-      int sig = ascii.indexOf(sigToken) + sigToken.length();
-      if (start >= 0 || sig >= 0 || sig > start) {
-        byte[] forDigest = new byte[sig - start];
-        System.arraycopy(descriptor.getRawDescriptorBytes(), start,
-            forDigest, 0, sig - start);
-        digest = DigestUtils.shaHex(forDigest);
-      }
-    } catch (UnsupportedEncodingException e) {
-    }
-    if (digest != null) {
-      this.rddi.addServerDescriptor(digest, descriptor.getNickname(),
-          descriptor.getAddress(), descriptor.getOrPort(),
-          descriptor.getDirPort(), descriptor.getFingerprint(),
-          descriptor.getBandwidthRate(), descriptor.getBandwidthBurst(),
-          descriptor.getBandwidthObserved(), descriptor.getPlatform(),
-          descriptor.getPublishedMillis(), descriptor.getUptime(),
-          descriptor.getExtraInfoDigest(),
-          descriptor.getRawDescriptorBytes());
-    }
+    this.rddi.addServerDescriptor(descriptor.getServerDescriptorDigest(),
+        descriptor.getNickname(), descriptor.getAddress(),
+        descriptor.getOrPort(), descriptor.getDirPort(),
+        descriptor.getFingerprint(), descriptor.getBandwidthRate(),
+        descriptor.getBandwidthBurst(), descriptor.getBandwidthObserved(),
+        descriptor.getPlatform(), descriptor.getPublishedMillis(),
+        descriptor.getUptime(), descriptor.getExtraInfoDigest(),
+        descriptor.getRawDescriptorBytes());
   }
 
   private void addExtraInfoDescriptor(ExtraInfoDescriptor descriptor) {
@@ -185,28 +167,11 @@ public class ArchiveReader {
       bandwidthHistoryLines.add(
           descriptor.getDirreqReadHistory().getLine());
     }
-    String digest = null;
-    try {
-      String ascii = new String(descriptor.getRawDescriptorBytes(),
-          "US-ASCII");
-      String startToken = "extra-info ";
-      String sigToken = "\nrouter-signature\n";
-      int start = ascii.indexOf(startToken);
-      int sig = ascii.indexOf(sigToken) + sigToken.length();
-      if (start >= 0 || sig >= 0 || sig > start) {
-        byte[] forDigest = new byte[sig - start];
-        System.arraycopy(descriptor.getRawDescriptorBytes(), start,
-            forDigest, 0, sig - start);
-        digest = DigestUtils.shaHex(forDigest);
-      }
-    } catch (UnsupportedEncodingException e) {
-    }
-    if (digest != null) {
-      this.rddi.addExtraInfoDescriptor(digest, descriptor.getNickname(),
-          descriptor.getFingerprint().toLowerCase(),
-          descriptor.getPublishedMillis(),
-          descriptor.getRawDescriptorBytes(), bandwidthHistoryLines);
-    }
+    this.rddi.addExtraInfoDescriptor(descriptor.getExtraInfoDigest(),
+        descriptor.getNickname(),
+        descriptor.getFingerprint().toLowerCase(),
+        descriptor.getPublishedMillis(),
+        descriptor.getRawDescriptorBytes(), bandwidthHistoryLines);
   }
 }
 
