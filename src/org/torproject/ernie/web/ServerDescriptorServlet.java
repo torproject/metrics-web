@@ -8,11 +8,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -55,15 +52,14 @@ public class ServerDescriptorServlet extends HttpServlet {
       HttpServletResponse response) throws IOException,
       ServletException {
 
-    /* Read desc-id and/or valid-after parameters. */
-    String validAfterParameter = request.getParameter("valid-after");
+    /* Read desc-id parameter. */
     String descIdParameter = request.getParameter("desc-id");
 
     /* See if we were given a desc-id parameter.  If so, look up this
      * descriptor and return it. */
     List<byte[]> rawDescriptors = new ArrayList<byte[]>();
     String filename = null;
-    if (descIdParameter != null && validAfterParameter == null) {
+    if (descIdParameter != null) {
       if (descIdParameter.length() < 8 ||
           descIdParameter.length() > 40) {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -100,62 +96,7 @@ public class ServerDescriptorServlet extends HttpServlet {
         return;
       }
 
-    /* See if we were given a valid-after parameter.  If so, return all
-     * descriptors referenced from the consensus published at that
-     * time. */
-    } else if (descIdParameter == null && validAfterParameter != null) {
-      if (validAfterParameter.length() !=
-          "yyyy-MM-dd-HH-mm-ss".length()) {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        return;
-      }
-      SimpleDateFormat parameterFormat = new SimpleDateFormat(
-          "yyyy-MM-dd-HH-mm-ss");
-      parameterFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-      long parsedTimestamp = -1L;
-      try {
-        parsedTimestamp = parameterFormat.parse(validAfterParameter).
-            getTime();
-      } catch (ParseException e) {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        return;
-      }
-      if (parsedTimestamp < 0L) {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        return;
-      }
-      filename = validAfterParameter + "-descriptors";
-
-      /* Look up descriptors in the database. */
-      SimpleDateFormat databaseFormat = new SimpleDateFormat(
-          "yyyy-MM-dd HH:mm:ss");
-      databaseFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-      String databaseParameter = databaseFormat.format(parsedTimestamp);
-      try {
-        long requestedConnection = System.currentTimeMillis();
-        Connection conn = this.ds.getConnection();
-        Statement statement = conn.createStatement();
-        String query = "SELECT descriptor.rawdesc FROM statusentry "
-            + "JOIN descriptor ON statusentry.descriptor = "
-            + "descriptor.descriptor WHERE validafter = '"
-            + databaseParameter + "'";
-        ResultSet rs = statement.executeQuery(query);
-        while (rs.next()) {
-          rawDescriptors.add(rs.getBytes(1));
-        }
-        rs.close();
-        statement.close();
-        conn.close();
-        this.logger.info("Returned a database connection to the pool "
-            + "after " + (System.currentTimeMillis()
-            - requestedConnection) + " millis.");
-      } catch (SQLException e) {
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        return;
-      }
-
-    /* Return an error if neither desc-id nor valid-after parameter was
-     * given (or both of them). */
+    /* Return an error if no desc-id parameter was given. */
     } else {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
