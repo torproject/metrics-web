@@ -263,13 +263,13 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>ErnieGeneratedFile</servlet-name>
+    <servlet-name>ConsensusHealthServlet</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.ErnieGeneratedFileServlet
+      org.torproject.ernie.web.ConsensusHealthServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>ErnieGeneratedFile</servlet-name>
+    <servlet-name>ConsensusHealthServlet</servlet-name>
     <url-pattern>/consensus-health.html</url-pattern>
   </servlet-mapping>
 

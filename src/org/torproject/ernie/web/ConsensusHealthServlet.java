@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ErnieGeneratedFileServlet extends HttpServlet {
+public class ConsensusHealthServlet extends HttpServlet {
 
   private static final long serialVersionUID = -5230032733057814869L;
 
@@ -22,17 +22,11 @@ public class ErnieGeneratedFileServlet extends HttpServlet {
       ServletException {
 
     /* Read file from disk and write it to response. */
-    String requestedURL = request.getRequestURI();
-    if (requestedURL.contains("/")) {
-      requestedURL = requestedURL.substring(requestedURL.
-          lastIndexOf("/"));
-    }
-    String fn = "/srv/metrics.torproject.org/ernie/website"
-        + requestedURL;
     BufferedInputStream input = null;
     BufferedOutputStream output = null;
     try {
-      File f = new File(fn);
+      File f = new File("/srv/metrics.torproject.org/ernie/website/"
+          + "consensus-health.html");
       if (!f.exists()) {
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
         return;
