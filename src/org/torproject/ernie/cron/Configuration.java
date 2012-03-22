@@ -20,7 +20,7 @@ public class Configuration {
   private String directoryArchivesDirectory = "in/relay-descriptors/";
   private boolean keepDirectoryArchiveImportHistory = false;
   private boolean importSanitizedBridges = false;
-  private String sanitizedBridgesDirectory = "bridges/";
+  private String sanitizedBridgesDirectory = "in/bridge-descriptors/";
   private boolean keepSanitizedBridgesImportHistory = false;
   private boolean writeRelayDescriptorDatabase = false;
   private String relayDescriptorDatabaseJdbc =
