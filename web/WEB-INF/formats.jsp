@@ -229,8 +229,7 @@ following fields that may be relevant for statistical analysis:
 <tt>s Exit Fast Guard HSDir Named Running Stable V2Dir Valid</tt><br>
 <tt>v Tor 0.2.2.20-alpha</tt><br>
 <tt>w Bandwidth=30800</tt><br>
-<tt>p reject 25,119,135-139,445,465,563,587,1214,4661-4666,6346-6429,
-  6660-6999</tt><br>
+<tt>p reject 25,119,135-139,445,465,563,587,1214,4661-4666,6346-6429,6660-6999</tt><br>
 </p>
 </blockquote>
 
