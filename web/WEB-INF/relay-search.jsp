@@ -14,7 +14,7 @@
     <div class="main-column">
       <h2>Tor Metrics Portal: Relay Search</h2>
       <p>Search for a relay in the relay descriptor archive by typing
-      (part of) a <b>nickname</b>, <b>fingerprint</b>, or <b>IP
+      (part of) a <b>nickname</b>, <b>$-prefixed fingerprint</b>, or <b>IP
       address</b> and optionally a <b>month (yyyy-mm)</b> or up to three
       <b>days (yyyy-mm-dd)</b> in the following search field and
       clicking Search. The search will stop after 30 hits or, unless you
