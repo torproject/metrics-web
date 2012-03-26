@@ -226,14 +226,18 @@ public class RelaySearchServlet extends HttpServlet {
 
         /* If the search term starts with a $ followed by 8 to 40 hex
          * characters, it must be a fingerprint. */
-        else if (searchTerm.length() >= 9 && searchTerm.length() <= 41 &&
+        else if ((searchTerm.length() >= 9 && searchTerm.length() <= 41 &&
             searchTerm.startsWith("$") &&
-            hexPattern.matcher(searchTerm.substring(1)).matches()) {
+            hexPattern.matcher(searchTerm.substring(1)).matches()) ||
+            (searchTerm.length() > 19 && searchTerm.length() <= 40 &&
+            !searchTerm.startsWith("$") &&
+            hexPattern.matcher(searchTerm).matches())) {
           if (searchFingerprint.length() > 0) {
             validQuery = false;
             break;
           }
-          searchFingerprint = searchTerm.substring(1);
+          searchFingerprint = searchTerm.substring(
+              (searchTerm.startsWith("$") ? 1 : 0));
           validQuery = true;
         }
 
