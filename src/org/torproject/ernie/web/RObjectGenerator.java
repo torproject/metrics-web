@@ -137,7 +137,7 @@ public class RObjectGenerator implements ServletContextListener {
     /* Nothing to do. */
   }
 
-  public byte[] generateGraph(String requestedGraph, Map parameterMap,
+  public RObject generateGraph(String requestedGraph, Map parameterMap,
       boolean checkCache) {
     Map<String, String[]> checkedParameters = GraphParameterChecker.
         getInstance().checkParameters(requestedGraph, parameterMap);
@@ -172,7 +172,13 @@ public class RObjectGenerator implements ServletContextListener {
     String imageFilename = imageFilenameBuilder.toString();
     rQueryBuilder.append("path = '%s')");
     String rQuery = rQueryBuilder.toString();
-    return this.generateGraph(rQuery, imageFilename, checkCache);
+    byte[] graphBytes = this.generateGraph(rQuery, imageFilename,
+        checkCache);
+    if (graphBytes != null) {
+      return new RObject(graphBytes, imageFilename);
+    } else {
+      return null;
+    }
   }
 
   /* Generate a graph using the given R query that has a placeholder for

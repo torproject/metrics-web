@@ -48,11 +48,11 @@ public class GraphImageServlet extends HttpServlet {
 
     /* Request graph from R object generator, which either returns it from
      * its cache or asks Rserve to generate it. */
-    byte[] graphBytes = rObjectGenerator.generateGraph(requestedGraph,
+    RObject graph = rObjectGenerator.generateGraph(requestedGraph,
         request.getParameterMap(), true);
 
     /* Make sure that we have a graph to return. */
-    if (graphBytes == null) {
+    if (graph == null || graph.getBytes() == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
@@ -61,11 +61,11 @@ public class GraphImageServlet extends HttpServlet {
     BufferedOutputStream output = null;
     response.setContentType("image/png");
     response.setHeader("Content-Length",
-        String.valueOf(graphBytes.length));
+        String.valueOf(graph.getBytes().length));
     response.setHeader("Content-Disposition",
-        "inline; filename=\"" + requestedGraph + ".png\"");
+        "inline; filename=\"" + graph.getFileName() + "\"");
     output = new BufferedOutputStream(response.getOutputStream(), 1024);
-    output.write(graphBytes, 0, graphBytes.length);
+    output.write(graph.getBytes(), 0, graph.getBytes().length);
     output.flush();
     output.close();
   }
