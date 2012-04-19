@@ -698,7 +698,7 @@ file (reformatted and annotated with comments):</i>
 <tt>1293543301 762678   # Connection process started</tt><br>
 <tt>1293543301 762704   # After socket is created</tt><br>
 <tt>1293543301 763074   # After socket is connected</tt><br>
-<tt>1293543301 763190   # After authentication methods are (SOCKS 5 only)</tt><br>
+<tt>1293543301 763190   # After authentication methods are negotiated (SOCKS 5 only)</tt><br>
 <tt>1293543301 763816   # After SOCKS request is sent</tt><br>
 <tt>1293543302 901783   # After SOCKS response is received</tt><br>
 <tt>1293543302 901818   # After HTTP request is written</tt><br>
@@ -706,6 +706,16 @@ file (reformatted and annotated with comments):</i>
 <tt>1293543305 456664   # After payload is complete</tt><br>
 <tt>75                  # Written bytes</tt><br>
 <tt>51442               # Read bytes</tt><br>
+<tt>0                   # Timeout (optional field)</tt><br>
+<tt>1293543304 546828   # After 10% of expected bytes are read (optional field)</tt><br>
+<tt>1293543304 647924   # After 20% of expected bytes are read (optional field)</tt><br>
+<tt>1293543304 749012   # After 30% of expected bytes are read (optional field)</tt><br>
+<tt>1293543304 850109   # After 40% of expected bytes are read (optional field)</tt><br>
+<tt>1293543304 951201   # After 50% of expected bytes are read (optional field)</tt><br>
+<tt>1293543305 052293   # After 60% of expected bytes are read (optional field)</tt><br>
+<tt>1293543305 153381   # After 70% of expected bytes are read (optional field)</tt><br>
+<tt>1293543305 254482   # After 80% of expected bytes are read (optional field)</tt><br>
+<tt>1293543305 355579   # After 90% of expected bytes are read (optional field)</tt><br>
 <tt></tt><br>
 <tt># Path information contained in .extradata files:</tt><br>
 <tt>ok                  # Status code</tt><br>

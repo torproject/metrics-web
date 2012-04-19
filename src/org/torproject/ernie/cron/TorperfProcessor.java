@@ -118,7 +118,7 @@ public class TorperfProcessor {
                 String key = source + "," + dateTime;
                 String value = key;
                 if ((parts.length == 20 && parts[16].equals("0")) ||
-                    (parts.length == 21 && parts[20].equals("1"))) {
+                    (parts.length >= 21 && parts[20].equals("1"))) {
                   value += ",-2"; // -2 for timeout
                 } else if (Long.parseLong(parts[19]) < receivedBytes) {
                   value += ",-1"; // -1 for failure
