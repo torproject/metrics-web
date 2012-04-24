@@ -13,6 +13,7 @@
   <path id="classpath">
     <pathelement path="${classes}"/>
     <pathelement location="lib/commons-codec-1.4.jar"/>
+    <pathelement location="lib/commons-compress-1.3.jar"/>
     <pathelement location="lib/postgresql-8.4-702.jdbc3.jar"/>
     <pathelement location="lib/junit-4.8.2.jar"/>
     <pathelement location="lib/descriptor.jar"/>
