@@ -32,6 +32,10 @@
         <br>
         <h3>News</h3>
         <ul>
+          <li>April 30, 2012: Added <a
+          href="papers/bridge-report-usage-stats-2012-04-30.pdf">tech
+          report</a>: "What fraction of our bridges are not reporting
+          usage statistics?"</li>
           <li>March 12, 2012: Added
           <a href="papers/bridge-scaling-2012-03-09.pdf">tech report</a>:
           "What if the Tor network had 50,000 bridges?"</li>

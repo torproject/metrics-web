@@ -46,6 +46,10 @@
         been included in the <a href="#papers">papers</a> above or in the
         daily updated <a href="graphs.html">graphs</a>.
         <ul>
+          <li>What fraction of our bridges are not reporting usage
+          statistics? (<a
+          href="papers/bridge-report-usage-stats-2012-04-30.pdf">PDF</a>,
+          339K from April 30, 2012).</li>
           <li>What if the Tor network had 50,000 bridges? (<a
           href="papers/bridge-scaling-2012-03-09.pdf">PDF</a>, 144K from
           March 9, 2012).</li>
