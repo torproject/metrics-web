@@ -53,12 +53,21 @@ public class GetTorProcessor {
           continue;
         }
         Map<String, Integer> obs = new HashMap<String, Integer>();
-        data.put(date, obs);
         for (int i = 2; i < parts.length; i++) {
-          String key = parts[i].split(":")[0].toLowerCase();
-          Integer value = new Integer(parts[i].split(":")[1]);
+          String[] partParts = parts[i].split(":");
+          if (partParts.length != 2) {
+            logger.warning("Illegal line in GetTor stats file: '" + line
+                + "'.  Skipping.");
+            obs = null;
+            break;
+          }
+          String key = partParts[0].toLowerCase();
+          Integer value = new Integer(partParts[1]);
           columns.add(key);
           obs.put(key, value);
+        }
+        if (obs != null) {
+          data.put(date, obs);
         }
       }
       br.close();
