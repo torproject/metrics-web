@@ -44,12 +44,54 @@ including
 </ol>
 
 <p>
-All data described in this report are available for download on the
+All data described on this page are available for download on the
 <a href="data.html">data</a> page.
 This page is based on a technical report
 (<a href="papers/data-2011-03-14.pdf">PDF</a>)
 and is very likely more recent than the report.
 </p>
+<hr>
+<br>
+
+<a name="descriptortypes"></a>
+<h3><a href="#descriptortypes" class="anchor">Descriptor types</a></h3>
+<br>
+<p>
+Any file containing descriptors described on this page may contain meta
+data in its first text line using the format
+<tt>@type $descriptortype $major.$minor</tt>.
+Any tool that processes these descriptors may parse files without meta
+data or with an unknown descriptor type at its own risk, can safely parse
+files with known descriptor type and same major version number, and should
+not parse files with known descriptor type and higher major version
+number.
+</p>
+
+<p>
+The following descriptor types and versions are known.
+Gray entries are either not yet implemented or deprecated, black entries
+are recent:
+</p>
+
+<ul>
+<li><tt><font color="gray">@type server-descriptor 1.0</font></tt></li>
+<li><tt><font color="gray">@type extra-info 1.0</font></tt></li>
+<li><tt><font color="gray">@type directory 1.0</font></tt></li>
+<li><tt><font color="gray">@type network-status-2 1.0</font></tt></li>
+<li><tt><font color="gray">@type network-status-consensus-3
+1.0</font></tt></li>
+<li><tt><font color="gray">@type network-status-vote-3 1.0</font></tt></li>
+<li><tt><font color="gray">@type bridge-network-status 1.0</font></tt></li>
+<li><tt><font color="gray">@type bridge-server-descriptor
+1.0</font></tt></li>
+<li><tt><font color="gray">@type bridge-extra-info 1.0</font></tt></li>
+<li><tt><font color="gray">@type torperf 1.0</font></tt></li>
+<li><tt><font color="gray">@type bridge-pool-assignment
+1.0</font></tt></li>
+<li><tt><font color="gray">@type gettor 1.0</font></tt></li>
+<li><tt><font color="gray">@type tordnsel 1.0</font></tt></li>
+</ul>
+
 <hr>
 <br>
 
