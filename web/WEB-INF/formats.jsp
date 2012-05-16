@@ -74,13 +74,13 @@ are recent:
 </p>
 
 <ul>
-<li><tt><font color="gray">@type server-descriptor 1.0</font></tt></li>
-<li><tt><font color="gray">@type extra-info 1.0</font></tt></li>
+<li><tt>@type server-descriptor 1.0</tt></li>
+<li><tt>@type extra-info 1.0</tt></li>
 <li><tt><font color="gray">@type directory 1.0</font></tt></li>
 <li><tt><font color="gray">@type network-status-2 1.0</font></tt></li>
-<li><tt><font color="gray">@type network-status-consensus-3
-1.0</font></tt></li>
-<li><tt><font color="gray">@type network-status-vote-3 1.0</font></tt></li>
+<li><tt>@type dir-key-certificate-3 1.0</tt></li>
+<li><tt>@type network-status-consensus-3 1.0</tt></li>
+<li><tt>@type network-status-vote-3 1.0</tt></li>
 <li><tt><font color="gray">@type bridge-network-status 1.0</font></tt></li>
 <li><tt><font color="gray">@type bridge-server-descriptor
 1.0</font></tt></li>
