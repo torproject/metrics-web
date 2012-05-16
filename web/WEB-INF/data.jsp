@@ -19,9 +19,7 @@
         gathered data available to the public. This approach enables
         privacy researchers to perform their own analyses using real data
         on the Tor network, and it acts as a safeguard to not gather data
-        that are too sensitive to publish. All signatures can be
-        <a href="https://www.torproject.org/docs/verifying-signatures">verified</a>
-        using Karsten's PGP key (0xF7C11265). The following data are
+        that are too sensitive to publish. The following data are
         available (see the <a href="tools.html">Tools</a> section for
         details on processing the files):</p>
         <ul>
