@@ -4,7 +4,6 @@ package org.torproject.ernie.web;
 
 import java.io.IOException;
 import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
