@@ -131,13 +131,10 @@
         <p>The bridge descriptor archives contain similar documents as the
         relay descriptor archives, but for the non-public bridges. The
         descriptors have been sanitized before publication to remove all
-        information that could otherwise be used to locate bridges.
-        Beginning with May 2010, we stopped resolving IP addresses to
-        country codes and including those in the sanitized descriptors,
-        because it was tough to maintain; if your research requires this
-        or any other detail, contact us and we'll sort something out. The
-        files below contain all documents of a given month.
-        The sanitizing process is described
+        information that could otherwise be used to locate bridges. The
+        files below contain all documents of a given month, including
+        bridge network statuses, bridge server descriptors, and bridge
+        extra-info descriptors. The sanitizing process is described
         <a href="formats.html#bridgedesc">here</a>.</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
           <c:forEach var="item" items="${bridgeDescriptors}" >
