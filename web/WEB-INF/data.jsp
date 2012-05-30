@@ -182,11 +182,25 @@
         <p>We are continuously measuring the performance of the Tor
         network by periodically requesting files of different sizes and
         recording the time needed to do so. These measurements take place
-        on moria, siv, and torperf and use an unmodified Tor client.  The
-        files below contain the output of the torperf application and are
-        updated every hour.
+        on moria, siv, and torperf and use an unmodified Tor client.
+        The files below contain the output of the torperf application.
         The data format is described
         <a href="formats.html#torperf">here</a>.</p>
+        <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
+          <c:forEach var="item" items="${torperfTarballs}" >
+            <fmt:formatDate var="longDate" pattern="MMMM yyyy"
+                            value="${item.key}"/>
+            <tr>
+              <td>
+                <a href="${item.value[0]}">${longDate}</a>
+              </td>
+            </tr>
+          </c:forEach>
+        </table>
+        <br>
+        <p>The output above is the result of combining torperf request
+        data with information about used paths.
+        The raw files are also available below.</p>
         <table width="100%" border="0" cellpadding="5" cellspacing="0" summary="">
           <c:forEach var="item" items="${torperfData}" >
             <tr>

@@ -91,6 +91,8 @@ public class ResearchDataServlet extends HttpServlet {
     SortedMap<Date, String[]> bridgeDescriptors =
         new TreeMap<Date, String[]>(java.util.Collections.reverseOrder());
     String[] relayStatistics = new String[2];
+    SortedMap<Date, String[]> torperfTarballs =
+        new TreeMap<Date, String[]>(java.util.Collections.reverseOrder());
     SortedMap<String, Map<String, String[]>> torperfData =
         new TreeMap<String, Map<String, String[]>>();
     SortedMap<Date, String[]> exitLists =
@@ -171,6 +173,22 @@ public class ResearchDataServlet extends HttpServlet {
       } else if (filename.startsWith("relay-statistics.tar.bz2")) {
         int index = filename.endsWith(".asc") ? 1 : 0;
         relayStatistics[index] = url;
+
+      /* URL contains Torperf tarball. */
+      } else if (filename.startsWith("torperf-20")) {
+        String yearMonth = filename.substring(filename.indexOf("20"));
+        yearMonth = yearMonth.substring(0, 7);
+        Date month = null;
+        try {
+          month = monthFormat.parse(yearMonth);
+        } catch (ParseException e) {
+          /* Ignore this URL. */
+          continue;
+        }
+        if (!torperfTarballs.containsKey(month)) {
+          torperfTarballs.put(month, new String[2]);
+        }
+        torperfTarballs.get(month)[0] = url;
 
       /* URL contains Torperf data file. */
       } else if (filename.endsWith("b.data") ||
@@ -256,6 +274,7 @@ public class ResearchDataServlet extends HttpServlet {
     request.setAttribute("relayStatistics", relayStatistics);
     request.setAttribute("torperfData", torperfData);
     request.setAttribute("exitLists", exitLists);
+    request.setAttribute("torperfTarballs", torperfTarballs);
     request.setAttribute("torperfExperiments", torperfExperiments);
     request.setAttribute("bridgePoolAssignments", bridgePoolAssignments);
     request.getRequestDispatcher("WEB-INF/data.jsp").forward(request,

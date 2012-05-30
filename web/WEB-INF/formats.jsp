@@ -85,7 +85,7 @@ are recent:
 <li><tt><font color="gray">@type bridge-server-descriptor
 1.0</font></tt></li>
 <li><tt><font color="gray">@type bridge-extra-info 1.0</font></tt></li>
-<li><tt><font color="gray">@type torperf 1.0</font></tt></li>
+<li><tt>@type torperf 1.0</tt></li>
 <li><tt><font color="gray">@type bridge-pool-assignment
 1.0</font></tt></li>
 <li><tt><font color="gray">@type gettor 1.0</font></tt></li>
@@ -698,73 +698,166 @@ Torperf can be
 <a href="https://metrics.torproject.org/tools.html">downloaded</a>
 from the metrics
 website.
+A Torperf results file contains a single line per Torperf run with
+<tt>key=value</tt> pairs.
+Such a result line is sufficient to learn about 1) the Tor and Torperf
+configuration, 2) measurement results, and 3) additional information that
+might help explain the results.
+Known keys are explained below.
+</p>
+<ul>
+<li>Configuration
+<ul>
+<li><tt>SOURCE:</tt> Configured name of the data source; required.</li>
+<li><tt>FILESIZE:</tt> Configured file size in bytes; required.</li>
+<li>Other meta data describing the Tor or Torperf configuration, e.g.,
+GUARD for a custom guard choice; optional.</li>
+</ul>
+<li>Measurement results
+<ul>
+<li><tt>START:</tt> Time when the connection process starts;
+required.</li>
+<li><tt>SOCKET:</tt> Time when the socket was created; required.</li>
+<li><tt>CONNECT:</tt> Time when the socket was connected; required.</li>
+<li><tt>NEGOTIATE:</tt> Time when SOCKS 5 authentication methods have been
+negotiated; required.</li>
+<li><tt>REQUEST:</tt> Time when the SOCKS request was sent; required.</li>
+<li><tt>RESPONSE:</tt> Time when the SOCKS response was received;
+required.</li>
+<li><tt>DATAREQUEST:</tt> Time when the HTTP request was written;
+required.</li>
+<li><tt>DATARESPONSE:</tt> Time when the first response was received;
+required.</li>
+<li><tt>DATACOMPLETE:</tt> Time when the payload was complete;
+required.</li>
+<li><tt>WRITEBYTES:</tt> Total number of bytes written; required.</li>
+<li><tt>READBYTES:</tt> Total number of bytes read; required.</li>
+<li><tt>DIDTIMEOUT:</tt> 1 if the request timed out, 0 otherwise;
+optional.</li>
+<li><tt>DATAPERCx:</tt> Time when x% of expected bytes were read for
+x = { 10, 20, 30, 40, 50, 60, 70, 80, 90 }; optional.</li>
+<li>Other measurement results, e.g., START_RENDCIRC, GOT_INTROCIRC, etc.
+for hidden-service measurements; optional.</li>
+</ul>
+<li>Additional information
+<ul>
+<li><tt>LAUNCH:</tt> Time when the circuit was launched; optional.</li>
+<li><tt>USED_AT:</tt> Time when this circuit was used; optional.</li>
+<li><tt>PATH:</tt> List of relays in the circuit, separated by commas;
+optional.</li>
+<li><tt>BUILDTIMES:</tt> List of times when circuit hops were built,
+separated by commas; optional.</li>
+<li><tt>TIMEOUT:</tt> Circuit build timeout that the Tor client used when
+building this circuit; optional.</li>
+<li><tt>QUANTILE:</tt> Circuit build time quantile that the Tor client
+uses to determine its circuit-build timeout; optional.</li>
+<li><tt>CIRC_ID:</tt> Circuit identifier of the circuit used for this
+measurement; optional.</li>
+<li><tt>USED_BY:</tt> Stream identifier of the stream used for this
+measurement; optional.</li>
+<li>Other fields containing additional information; optional.</li>
+</ul>
+</ul>
+
+<blockquote>
+<p>
+<i>Torperf <tt>.tpf</tt> output lines for a single request to download a
+50 KiB file (reformatted):</i>
 </p>
 
 <p>
-Torperf can produce two output files: <tt>.data</tt> and <tt>.extradata</tt>.
-The <tt>.data</tt> file contains timestamps for nine substeps and the byte
-summaries for downloading a test file via Tor.
+<tt>BUILDTIMES=1.16901898384,1.86555600166,2.13295292854</tt><br>
+<tt>CIRC_ID=9878</tt><br>
+<tt>CONNECT=1338357901.42</tt><br>
+<tt>DATACOMPLETE=1338357902.91</tt><br>
+<tt>DATAPERC10=1338357902.48</tt><br>
+<tt>DATAPERC20=1338357902.48</tt><br>
+<tt>DATAPERC30=1338357902.61</tt><br>
+<tt>DATAPERC40=1338357902.64</tt><br>
+<tt>DATAPERC50=1338357902.65</tt><br>
+<tt>DATAPERC60=1338357902.74</tt><br>
+<tt>DATAPERC70=1338357902.74</tt><br>
+<tt>DATAPERC80=1338357902.75</tt><br>
+<tt>DATAPERC90=1338357902.79</tt><br>
+<tt>DATAREQUEST=1338357901.83</tt><br>
+<tt>DATARESPONSE=1338357902.25</tt><br>
+<tt>DIDTIMEOUT=0</tt><br>
+<tt>FILESIZE=51200</tt><br>
+<tt>LAUNCH=1338357661.74</tt><br>
+<tt>NEGOTIATE=1338357901.42</tt><br>
+<tt>PATH=$980D326017CEF4CBBF4089FBABE767DC83D059AF,$03545609092A24C71CCAD2F4523F5CCC6714F159,$CAC3CF7154AE9C656C4096DC38B4EFA145905654</tt><br>
+<tt>QUANTILE=0.800000</tt><br>
+<tt>READBYTES=51442</tt><br>
+<tt>REQUEST=1338357901.42</tt><br>
+<tt>RESPONSE=1338357901.83</tt><br>
+<tt>SOCKET=1338357901.42</tt><br>
+<tt>SOURCE=torperf</tt><br>
+<tt>START=1338357901.42</tt><br>
+<tt>TIMEOUT=5049</tt><br>
+<tt>USED_AT=1338357902.91</tt><br>
+<tt>USED_BY=18869</tt><br>
+<tt>WRITEBYTES=75</tt><br>
+</p>
+</blockquote>
+<br>
+
+<p>
+Torperf can produce two output files: <tt>.data</tt> and
+<tt>.extradata</tt>.
+The <tt>.data</tt> file contains timestamps for request substeps and the
+byte summaries for downloading a test file via Tor.
 The document below shows an example output of a Torperf run.
-The timestamps in the upper part of this output are seconds and
-microseconds since 1970-01-01 00:00:00.000000.
-</p>
-
-<p>
+The timestamps are seconds and microseconds since 1970-01-01
+00:00:00.000000.
 Torperf can be configured to write <tt>.extradata</tt> files by attaching
 a Tor controller and writing certain controller events to disk.
-The content of a <tt>.extradata</tt> line is shown in the lower part of
-the document below.
-The first column indicates if this circuit was actually used to fetch
-the data (<tt>ok</tt>) or if Tor chose a different circuit because this
-circuit was problematic (<tt>error</tt>).
-For every <tt>error</tt> entry there should be a following <tt>ok</tt> entry,
-unless the network of the Torperf instance is dead or the resource is
-unavailable.
-The circuit build completion time in the <tt>.extradata</tt> line is the
-time between Torperf sent a SOCKS request and received a SOCKS response in
-the <tt>.data</tt> file.
-The three or more hops of the circuit are listed by relay fingerprint and
-nickname.
-An <tt>=</tt> sign between the two means that a relay has the <tt>Named</tt>
-flag, whereas the <tt>~</tt> sign means it doesn't.
+The format of a <tt>.extradata</tt> line is similar to the combined format
+as specified above, except that it can only contain "Additional
+information" keywords.
 </p>
 
 <blockquote>
 <p>
-<i>Torperf output lines for a single request to download a 50 KiB
-file (reformatted and annotated with comments):</i>
+<i>Torperf <tt>.data</tt> and <tt>.extradata</tt> output lines for a
+single request to download a 50 KiB file (reformatted and annotated with
+comments):</i>
 </p>
 
 <p>
 <tt># Timestamps and byte summaries contained in .data files:</tt><br>
-<tt>1293543301 762678   # Connection process started</tt><br>
-<tt>1293543301 762704   # After socket is created</tt><br>
-<tt>1293543301 763074   # After socket is connected</tt><br>
-<tt>1293543301 763190   # After authentication methods are negotiated (SOCKS 5 only)</tt><br>
-<tt>1293543301 763816   # After SOCKS request is sent</tt><br>
-<tt>1293543302 901783   # After SOCKS response is received</tt><br>
-<tt>1293543302 901818   # After HTTP request is written</tt><br>
-<tt>1293543304 445732   # After first response is received</tt><br>
-<tt>1293543305 456664   # After payload is complete</tt><br>
+<tt>1338357901 422336   # Connection process started</tt><br>
+<tt>1338357901 422346   # After socket is created</tt><br>
+<tt>1338357901 422521   # After socket is connected</tt><br>
+<tt>1338357901 422604   # After authentication methods are negotiated (SOCKS 5 only)</tt><br>
+<tt>1338357901 423550   # After SOCKS request is sent</tt><br>
+<tt>1338357901 839639   # After SOCKS response is received</tt><br>
+<tt>1338357901 839849   # After HTTP request is written</tt><br>
+<tt>1338357902 258157   # After first response is received</tt><br>
+<tt>1338357902 914263   # After payload is complete</tt><br>
 <tt>75                  # Written bytes</tt><br>
 <tt>51442               # Read bytes</tt><br>
 <tt>0                   # Timeout (optional field)</tt><br>
-<tt>1293543304 546828   # After 10% of expected bytes are read (optional field)</tt><br>
-<tt>1293543304 647924   # After 20% of expected bytes are read (optional field)</tt><br>
-<tt>1293543304 749012   # After 30% of expected bytes are read (optional field)</tt><br>
-<tt>1293543304 850109   # After 40% of expected bytes are read (optional field)</tt><br>
-<tt>1293543304 951201   # After 50% of expected bytes are read (optional field)</tt><br>
-<tt>1293543305 052293   # After 60% of expected bytes are read (optional field)</tt><br>
-<tt>1293543305 153381   # After 70% of expected bytes are read (optional field)</tt><br>
-<tt>1293543305 254482   # After 80% of expected bytes are read (optional field)</tt><br>
-<tt>1293543305 355579   # After 90% of expected bytes are read (optional field)</tt><br>
-<tt></tt><br>
+<tt>1338357902 481591   # After 10% of expected bytes are read (optional field)</tt><br>
+<tt>1338357902 482719   # After 20% of expected bytes are read (optional field)</tt><br>
+<tt>1338357902 613169   # After 30% of expected bytes are read (optional field)</tt><br>
+<tt>1338357902 647108   # After 40% of expected bytes are read (optional field)</tt><br>
+<tt>1338357902 651764   # After 50% of expected bytes are read (optional field)</tt><br>
+<tt>1338357902 743705   # After 60% of expected bytes are read (optional field)</tt><br>
+<tt>1338357902 743876   # After 70% of expected bytes are read (optional field)</tt><br>
+<tt>1338357902 757475   # After 80% of expected bytes are read (optional field)</tt><br>
+<tt>1338357902 795100   # After 90% of expected bytes are read (optional field)</tt><br>
+</p>
+
+<p>
 <tt># Path information contained in .extradata files:</tt><br>
-<tt>ok                  # Status code</tt><br>
-<tt>1293543302          # Circuit build completion time</tt><br>
-<tt>$2F265B37920BDFE474BF795739978EEFA4427510=fejk4        # 1st hop</tt><br>
-<tt>$66CA87E164F1CFCE8C3BB5C095217A28578B8BAF=blutmagie3   # 2nd hop</tt><br>
-<tt>$76997E6557828E8E57F70FDFBD93FB3AA470C620~Amunet8      # 3rd hop</tt><br>
+<tt>CIRC_ID=9878</tt><br>
+<tt>LAUNCH=1338357661.74</tt><br>
+<tt>PATH=$980D326017CEF4CBBF4089FBABE767DC83D059AF,$03545609092A24C71CCAD2F4523F5CCC6714F159,$CAC3CF7154AE9C656C4096DC38B4EFA145905654</tt><br>
+<tt>BUILDTIMES=1.16901898384,1.86555600166,2.13295292854</tt><br>
+<tt>USED_AT=1338357902.91</tt><br>
+<tt>USED_BY=18869</tt><br>
+<tt>TIMEOUT=5049</tt><br>
+<tt>QUANTILE=0.800000</tt><br>
 </p>
 </blockquote>
 <hr>
