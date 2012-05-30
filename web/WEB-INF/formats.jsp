@@ -81,10 +81,9 @@ are recent:
 <li><tt>@type dir-key-certificate-3 1.0</tt></li>
 <li><tt>@type network-status-consensus-3 1.0</tt></li>
 <li><tt>@type network-status-vote-3 1.0</tt></li>
-<li><tt><font color="gray">@type bridge-network-status 1.0</font></tt></li>
-<li><tt><font color="gray">@type bridge-server-descriptor
-1.0</font></tt></li>
-<li><tt><font color="gray">@type bridge-extra-info 1.0</font></tt></li>
+<li><tt>@type bridge-network-status 1.0</tt></li>
+<li><tt>@type bridge-server-descriptor 1.0</tt></li>
+<li><tt>@type bridge-extra-info 1.0</tt></li>
 <li><tt>@type torperf 1.0</tt></li>
 <li><tt><font color="gray">@type bridge-pool-assignment
 1.0</font></tt></li>
@@ -352,12 +351,6 @@ long and the <tt>secret</tt> is only 19 bytes long.</li></ul>
 <li><b>Replace contact information:</b> If there is contact
 information in a descriptor, the contact line is changed to
 <tt>somebody</tt>.</li>
-<li><b>Replace nickname with Unnamed:</b> The bridge nicknames might
-give hints on the location of the bridge if chosen without care; e.g. a
-bridge nickname might be very similar to the operators' relay nicknames
-which might be located on adjacent IP addresses.
-All bridge nicknames are therefore replaced with the string
-<tt>Unnamed</tt>.</li>
 </ol>
 
 <p>
