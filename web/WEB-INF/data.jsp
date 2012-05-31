@@ -284,8 +284,8 @@
         file</a></h3>
         <br>
         <p>GetTor allows users to fetch the Tor software via email.
-        This <a href="data/gettor_stats.txt">file contains statistics on
-        the number of packages requested from GetTor per day.
+        This <a href="data/gettor_stats.txt">file</a> contains statistics
+        on the number of packages requested from GetTor per day.
         The data format is described
         <a href="formats.html#gettor">here</a>.</p>
     </div>
