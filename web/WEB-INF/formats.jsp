@@ -85,8 +85,7 @@ are recent:
 <li><tt>@type bridge-server-descriptor 1.0</tt></li>
 <li><tt>@type bridge-extra-info 1.0</tt></li>
 <li><tt>@type torperf 1.0</tt></li>
-<li><tt><font color="gray">@type bridge-pool-assignment
-1.0</font></tt></li>
+<li><tt>@type bridge-pool-assignment 1.0</tt></li>
 <li><tt><font color="gray">@type gettor 1.0</font></tt></li>
 <li><tt><font color="gray">@type tordnsel 1.0</font></tt></li>
 </ul>
