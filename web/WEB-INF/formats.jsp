@@ -87,7 +87,7 @@ are recent:
 <li><tt>@type torperf 1.0</tt></li>
 <li><tt>@type bridge-pool-assignment 1.0</tt></li>
 <li><tt>@type gettor 1.0</tt></li>
-<li><tt><font color="gray">@type tordnsel 1.0</font></tt></li>
+<li><tt>@type tordnsel 1.0</tt></li>
 </ul>
 
 <hr>
