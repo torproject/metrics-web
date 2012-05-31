@@ -43,6 +43,13 @@ public class GetTorProcessor {
       BufferedReader br = new BufferedReader(new FileReader(getTorFile));
       String line = null;
       while ((line = br.readLine()) != null) {
+        if (line.startsWith("@type ")) {
+          if (!line.startsWith("@type gettor 1.")) {
+            logger.warning("Wrong descriptor type: '" + line + "'.  "
+                + "Aborting.");
+            break;
+          }
+        }
         String[] parts = line.split(" ");
         String date = parts[0];
         try {
