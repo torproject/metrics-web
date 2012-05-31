@@ -237,7 +237,8 @@ public class ExoneraTorDatabaseImporter {
         startToken = "router ";
       } else if (line.equals("network-status-version 3")) {
         startToken = "network-status-version 3";
-      } else if (line.startsWith("ExitNode ")) {
+      } else if (line.startsWith("Downloaded ") ||
+          line.startsWith("ExitNode ")) {
         startToken = "ExitNode ";
       } else {
         System.out.println("Unknown descriptor type in file '" + file
