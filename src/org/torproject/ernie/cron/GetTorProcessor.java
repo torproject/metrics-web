@@ -49,6 +49,7 @@ public class GetTorProcessor {
                 + "Aborting.");
             break;
           }
+          continue;
         }
         String[] parts = line.split(" ");
         String date = parts[0];
