@@ -43,7 +43,7 @@
 #ImportWriteTorperfStats 0
 #
 ## Relative path to directory to import torperf results from
-#TorperfDirectory torperf/
+#TorperfDirectory in/torperf/
 #
 ## Process GetTor stats and import them into the database
 #ProcessGetTorStats 0

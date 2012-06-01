@@ -24,11 +24,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.Stack;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.TorperfResult;
 
 public class TorperfProcessor {
   public TorperfProcessor(File torperfDirectory, File statsDirectory,
@@ -80,58 +85,56 @@ public class TorperfProcessor {
       }
       if (torperfDirectory.exists()) {
         logger.fine("Importing files in " + torperfDirectory + "/...");
-        Stack<File> filesInInputDir = new Stack<File>();
-        filesInInputDir.add(torperfDirectory);
-        while (!filesInInputDir.isEmpty()) {
-          File pop = filesInInputDir.pop();
-          if (pop.isDirectory()) {
-            for (File f : pop.listFiles()) {
-              filesInInputDir.add(f);
-            }
-          } else {
-            String source = pop.getName().substring(0,
-                pop.getName().indexOf("."));
-            String size = pop.getName().split("-")[1];
-            long receivedBytes = 1L;
-            if (pop.getName().endsWith("kb.data")) {
-              receivedBytes *= 1024L;
-            } else if (pop.getName().endsWith("mb.data")) {
-              receivedBytes *= 1024L * 1024L;
-            } else {
-              // not a valid .data file
+        DescriptorReader descriptorReader =
+            DescriptorSourceFactory.createDescriptorReader();
+        descriptorReader.addDirectory(torperfDirectory);
+        descriptorReader.setExcludeFiles(new File(statsDirectory,
+            "torperf-history"));
+        Iterator<DescriptorFile> descriptorFiles =
+            descriptorReader.readDescriptors();
+        while (descriptorFiles.hasNext()) {
+          DescriptorFile descriptorFile = descriptorFiles.next();
+          if (descriptorFile.getException() != null) {
+            logger.log(Level.FINE, "Error parsing file.",
+                descriptorFile.getException());
+            continue;
+          }
+          for (Descriptor descriptor : descriptorFile.getDescriptors()) {
+            if (!(descriptor instanceof TorperfResult)) {
               continue;
             }
-            receivedBytes *= Long.parseLong(size.substring(0,
-                size.length() - "xb.data".length()));
-            BufferedReader br = new BufferedReader(new FileReader(pop));
-            String line = null;
-            while ((line = br.readLine()) != null) {
-              String[] parts = line.split(" ");
-              // remove defective lines as they occurred on gabelmoo
-              if (parts.length >= 20 && parts[0].length() == 10) {
-                long startSec = Long.parseLong(parts[0]);
-                String dateTime = formatter.format(startSec * 1000L);
-                long completeMillis = Long.parseLong(parts[16])
-                    * 1000L + Long.parseLong(parts[17]) / 1000L
-                    - Long.parseLong(parts[0]) * 1000L
-                    + Long.parseLong(parts[1]) / 1000L;
-                String key = source + "," + dateTime;
-                String value = key;
-                if ((parts.length == 20 && parts[16].equals("0")) ||
-                    (parts.length >= 21 && parts[20].equals("1"))) {
-                  value += ",-2"; // -2 for timeout
-                } else if (Long.parseLong(parts[19]) < receivedBytes) {
-                  value += ",-1"; // -1 for failure
-                } else {
-                  value += "," + completeMillis;
-                }
-                if (!rawObs.containsKey(key)) {
-                  rawObs.put(key, value);
-                  addedRawObs++;
-                }
-              }
+            TorperfResult result = (TorperfResult) descriptor;
+            String source = result.getSource();
+            long fileSize = result.getFileSize();
+            if (fileSize == 51200) {
+              source += "-50kb";
+            } else if (fileSize == 1048576) {
+              source += "-1mb";
+            } else if (fileSize == 5242880) {
+              source += "-5mb";
+            } else {
+              logger.fine("Unexpected file size '" + fileSize
+                  + "'.  Skipping.");
+              continue;
             }
-            br.close();
+            String dateTime = formatter.format(result.getStartMillis());
+            long completeMillis = result.getDataCompleteMillis()
+                - result.getStartMillis();
+            String key = source + "," + dateTime;
+            String value = key;
+            if ((result.didTimeout() == null &&
+                result.getDataCompleteMillis() < 1) ||
+                (result.didTimeout() != null && result.didTimeout())) {
+              value += ",-2"; // -2 for timeout
+            } else if (result.getReadBytes() < fileSize) {
+              value += ",-1"; // -1 for failure
+            } else {
+              value += "," + completeMillis;
+            }
+            if (!rawObs.containsKey(key)) {
+              rawObs.put(key, value);
+              addedRawObs++;
+            }
           }
         }
         logger.fine("Finished importing files in " + torperfDirectory

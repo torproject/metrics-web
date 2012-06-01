@@ -29,7 +29,7 @@ public class Configuration {
   private String relayDescriptorRawFilesDirectory = "pg-import/";
   private boolean writeBridgeStats = false;
   private boolean importWriteTorperfStats = false;
-  private String torperfDirectory = "torperf/";
+  private String torperfDirectory = "in/torperf/";
   private boolean processGetTorStats = false;
   private String getTorDirectory = "in/gettor/";
   private String exoneraTorDatabaseJdbc = "jdbc:postgresql:"
