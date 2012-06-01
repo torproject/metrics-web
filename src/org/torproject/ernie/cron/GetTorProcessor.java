@@ -2,19 +2,16 @@
  * See LICENSE for licensing information */
 package org.torproject.ernie.cron;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -22,6 +19,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.GetTorStatistics;
 
 public class GetTorProcessor {
   public GetTorProcessor(File getTorDirectory, String connectionURL) {
@@ -38,53 +41,37 @@ public class GetTorProcessor {
     SortedSet<String> columns = new TreeSet<String>();
     SortedMap<String, Map<String, Integer>> data =
         new TreeMap<String, Map<String, Integer>>();
-    try {
-      logger.fine("Parsing GetTor stats...");
-      BufferedReader br = new BufferedReader(new FileReader(getTorFile));
-      String line = null;
-      while ((line = br.readLine()) != null) {
-        if (line.startsWith("@type ")) {
-          if (!line.startsWith("@type gettor 1.")) {
-            logger.warning("Wrong descriptor type: '" + line + "'.  "
-                + "Aborting.");
-            break;
+
+    logger.fine("Importing GetTor stats files in directory "
+        + getTorDirectory + "/...");
+    DescriptorReader reader =
+        DescriptorSourceFactory.createDescriptorReader();
+    reader.addDirectory(getTorDirectory);
+    Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
+    while (descriptorFiles.hasNext()) {
+      DescriptorFile descriptorFile = descriptorFiles.next();
+      if (descriptorFile.getException() != null) {
+        logger.log(Level.WARNING, "Could not parse descriptor file '"
+            + descriptorFile.getFileName() + "'.  Skipping.",
+            descriptorFile.getException());
+        continue;
+      }
+      if (descriptorFile.getDescriptors() != null) {
+        for (Descriptor descriptor : descriptorFile.getDescriptors()) {
+          if (!(descriptor instanceof GetTorStatistics)) {
+            continue;
           }
-          continue;
-        }
-        String[] parts = line.split(" ");
-        String date = parts[0];
-        try {
-          dateFormat.parse(date);
-        } catch (ParseException e) {
-          logger.warning("Illegal line in GetTor stats file: '" + line
-              + "'.  Skipping.");
-          continue;
-        }
-        Map<String, Integer> obs = new HashMap<String, Integer>();
-        for (int i = 2; i < parts.length; i++) {
-          String[] partParts = parts[i].split(":");
-          if (partParts.length != 2) {
-            logger.warning("Illegal line in GetTor stats file: '" + line
-                + "'.  Skipping.");
-            obs = null;
-            break;
+          GetTorStatistics stats = (GetTorStatistics) descriptor;
+          String date = dateFormat.format(stats.getDateMillis());
+          Map<String, Integer> obs = new HashMap<String, Integer>();
+          for (Map.Entry<String, Integer> e :
+              stats.getDownloadedPackages().entrySet()) {
+            columns.add(e.getKey().toLowerCase());
+            obs.put(e.getKey().toLowerCase(), e.getValue());
           }
-          String key = partParts[0].toLowerCase();
-          Integer value = new Integer(partParts[1]);
-          columns.add(key);
-          obs.put(key, value);
-        }
-        if (obs != null) {
           data.put(date, obs);
         }
       }
-      br.close();
-    } catch (IOException e) {
-      logger.log(Level.WARNING, "Failed parsing GetTor stats!", e);
-      return;
-    } catch (NumberFormatException e) {
-      logger.log(Level.WARNING, "Failed parsing GetTor stats!", e);
-      return;
     }
 
     /* Write results to database. */
