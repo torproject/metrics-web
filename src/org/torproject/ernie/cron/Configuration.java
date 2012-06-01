@@ -31,7 +31,7 @@ public class Configuration {
   private boolean importWriteTorperfStats = false;
   private String torperfDirectory = "torperf/";
   private boolean processGetTorStats = false;
-  private String getTorDirectory = "gettor/";
+  private String getTorDirectory = "in/gettor/";
   private String exoneraTorDatabaseJdbc = "jdbc:postgresql:"
       + "//localhost/exonerator?user=metrics&password=password";
   private String exoneraTorImportDirectory = "exonerator-import/";

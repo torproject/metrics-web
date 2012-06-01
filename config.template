@@ -49,7 +49,7 @@
 #ProcessGetTorStats 0
 #
 ## Relative path to directory where to find GetTor stats
-#GetTorDirectory gettor/
+#GetTorDirectory in/gettor/
 #
 ## JDBC string for ExoneraTor database
 #ExoneraTorDatabaseJdbc jdbc:postgresql://localhost/exonerator?user=metrics&password=password
