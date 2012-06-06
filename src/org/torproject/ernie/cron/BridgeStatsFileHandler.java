@@ -50,6 +50,11 @@ public class BridgeStatsFileHandler {
   private File bridgeStatsRawFile;
 
   /**
+   * Temp file for writing intermediate results.
+   */
+  private File bridgeStatsRawTempFile;
+
+  /**
    * Bridge user numbers by country as seen by single bridges on a given
    * day. Map keys are bridge and date written as "bridge,date", map
    * values are lines as read from <code>stats/bridge-stats-raw</code>.
@@ -118,6 +123,7 @@ public class BridgeStatsFileHandler {
 
     /* Initialize file names for intermediate and final results. */
     this.bridgeStatsRawFile = new File("stats/bridge-stats-raw");
+    this.bridgeStatsRawTempFile = new File("stats/bridge-stats-raw.tmp");
     this.bridgeStatsFile = new File("stats/bridge-stats");
     this.hashedRelayIdentitiesFile = new File(
         "stats/hashed-relay-identities");
@@ -368,10 +374,12 @@ public class BridgeStatsFileHandler {
     /* Write observations made by single bridges to disk. */
     try {
       this.logger.fine("Writing file "
-          + this.bridgeStatsRawFile.getAbsolutePath() + "...");
-      this.bridgeStatsRawFile.getParentFile().mkdirs();
+          + this.bridgeStatsRawFile.getAbsolutePath() + " (using "
+          + this.bridgeStatsRawTempFile.getAbsolutePath() + " as temp "
+          + "file)...");
+      this.bridgeStatsRawTempFile.getParentFile().mkdirs();
       BufferedWriter bw = new BufferedWriter(new FileWriter(
-          this.bridgeStatsRawFile));
+          this.bridgeStatsRawTempFile));
       bw.append("bridge,date,time");
       for (String c : this.countries) {
         if (c.equals("zy")) {
@@ -399,11 +407,19 @@ public class BridgeStatsFileHandler {
         }
       }
       bw.close();
+      if (!this.bridgeStatsRawTempFile.renameTo(
+          this.bridgeStatsRawFile)) {
+        this.logger.fine("Failed to rename "
+            + this.bridgeStatsRawTempFile.getAbsolutePath() + " to "
+            + this.bridgeStatsRawFile.getAbsolutePath() + ".");
+      }
       this.logger.fine("Finished writing file "
           + this.bridgeStatsRawFile.getAbsolutePath() + ".");
     } catch (IOException e) {
       this.logger.log(Level.WARNING, "Failed to write "
-          + this.bridgeStatsRawFile.getAbsolutePath() + "!", e);
+          + this.bridgeStatsRawFile.getAbsolutePath() + " (using "
+          + this.bridgeStatsRawTempFile.getAbsolutePath() + " as temp "
+          + "file)!", e);
     }
 
     /* Aggregate per-day statistics. */
