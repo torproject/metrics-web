@@ -109,14 +109,17 @@ public class ConsensusStatsFileHandler {
             continue;
           }
           String[] parts = line.split(",");
-          if (parts.length != 2) {
+          String dateTime = parts[0];
+          if (parts.length == 2) {
+            this.bridgesRaw.put(dateTime, line + ",0");
+          } else if (parts.length == 3) {
+            this.bridgesRaw.put(dateTime, line);
+          } else {
             this.logger.warning("Corrupt line '" + line + "' in file "
                 + this.bridgeConsensusStatsRawFile.getAbsolutePath()
                 + "! Aborting to read this file!");
             break;
           }
-          String dateTime = parts[0];
-          this.bridgesRaw.put(dateTime, line);
         }
         br.close();
         this.logger.fine("Finished reading file "
@@ -133,9 +136,10 @@ public class ConsensusStatsFileHandler {
    * Adds the intermediate results of the number of running bridges in a
    * given bridge status to the existing observations.
    */
-  public void addBridgeConsensusResults(long publishedMillis, int running) {
+  public void addBridgeConsensusResults(long publishedMillis, int running,
+      int runningEc2Bridges) {
     String published = dateTimeFormat.format(publishedMillis);
-    String line = published + "," + running;
+    String line = published + "," + running + "," + runningEc2Bridges;
     if (!this.bridgesRaw.containsKey(published)) {
       this.logger.finer("Adding new bridge numbers: " + line);
       this.bridgesRaw.put(published, line);
@@ -160,7 +164,7 @@ public class ConsensusStatsFileHandler {
      * final results. */
     if (!this.bridgesRaw.isEmpty()) {
       String tempDate = null;
-      int brunning = 0, statuses = 0;
+      int brunning = 0, brunningEc2 = 0, statuses = 0;
       Iterator<String> it = this.bridgesRaw.values().iterator();
       boolean haveWrittenFinalLine = false;
       while (it.hasNext() || !haveWrittenFinalLine) {
@@ -171,7 +175,8 @@ public class ConsensusStatsFileHandler {
           /* Only write results if we have seen at least half of all
            * statuses. */
           if (statuses >= 24) {
-            String line = "," + (brunning / statuses);
+            String line = "," + (brunning / statuses) + ","
+                + (brunningEc2 / statuses);
             /* Are our results new? */
             if (!this.bridgesPerDay.containsKey(tempDate)) {
               this.logger.finer("Adding new average bridge numbers: "
@@ -184,14 +189,16 @@ public class ConsensusStatsFileHandler {
               this.bridgesPerDay.put(tempDate, line);
             }
           }
-          brunning = statuses = 0;
+          brunning = brunningEc2 = statuses = 0;
           haveWrittenFinalLine = (next == null);
         }
         /* Sum up number of running bridges. */
         if (next != null) {
           tempDate = next.substring(0, 10);
           statuses++;
-          brunning += Integer.parseInt(next.split(",")[1]);
+          String[] parts = next.split(",");
+          brunning += Integer.parseInt(parts[1]);
+          brunningEc2 += Integer.parseInt(parts[2]);
         }
       }
     }
@@ -203,7 +210,7 @@ public class ConsensusStatsFileHandler {
       this.bridgeConsensusStatsRawFile.getParentFile().mkdirs();
       BufferedWriter bw = new BufferedWriter(
           new FileWriter(this.bridgeConsensusStatsRawFile));
-      bw.append("datetime,brunning\n");
+      bw.append("datetime,brunning,brunningec2\n");
       for (String line : this.bridgesRaw.values()) {
         bw.append(line + "\n");
       }
@@ -226,39 +233,50 @@ public class ConsensusStatsFileHandler {
         conn.setAutoCommit(false);
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(
-            "SELECT date, avg_running FROM bridge_network_size");
+            "SELECT date, avg_running, avg_running_ec2 "
+            + "FROM bridge_network_size");
         while (rs.next()) {
           String date = rs.getDate(1).toString();
           if (insertRows.containsKey(date)) {
             String insertRow = insertRows.remove(date);
-            long newAvgRunning = Long.parseLong(insertRow.substring(1));
+            String[] parts = insertRow.substring(1).split(",");
+            long newAvgRunning = Long.parseLong(parts[0]);
+            long newAvgRunningEc2 = Long.parseLong(parts[1]);
             long oldAvgRunning = rs.getLong(2);
-            if (newAvgRunning != oldAvgRunning) {
+            long oldAvgRunningEc2 = rs.getLong(3);
+            if (newAvgRunning != oldAvgRunning ||
+                newAvgRunningEc2 != oldAvgRunningEc2) {
               updateRows.put(date, insertRow);
             }
           }
         }
         rs.close();
         PreparedStatement psU = conn.prepareStatement(
-            "UPDATE bridge_network_size SET avg_running = ? "
-            + "WHERE date = ?");
+            "UPDATE bridge_network_size SET avg_running = ?, "
+            + "avg_running_ec2 = ? WHERE date = ?");
         for (Map.Entry<String, String> e : updateRows.entrySet()) {
           java.sql.Date date = java.sql.Date.valueOf(e.getKey());
-          long avgRunning = Long.parseLong(e.getValue().substring(1));
+          String[] parts = e.getValue().substring(1).split(",");
+          long avgRunning = Long.parseLong(parts[0]);
+          long avgRunningEc2 = Long.parseLong(parts[1]);
           psU.clearParameters();
           psU.setLong(1, avgRunning);
-          psU.setDate(2, date);
+          psU.setLong(2, avgRunningEc2);
+          psU.setDate(3, date);
           psU.executeUpdate();
         }
         PreparedStatement psI = conn.prepareStatement(
-            "INSERT INTO bridge_network_size (avg_running, date) "
-            + "VALUES (?, ?)");
+            "INSERT INTO bridge_network_size (avg_running, "
+            + "avg_running_ec2, date) VALUES (?, ?, ?)");
         for (Map.Entry<String, String> e : insertRows.entrySet()) {
           java.sql.Date date = java.sql.Date.valueOf(e.getKey());
-          long avgRunning = Long.parseLong(e.getValue().substring(1));
+          String[] parts = e.getValue().substring(1).split(",");
+          long avgRunning = Long.parseLong(parts[0]);
+          long avgRunningEc2 = Long.parseLong(parts[1]);
           psI.clearParameters();
           psI.setLong(1, avgRunning);
-          psI.setDate(2, date);
+          psI.setLong(2, avgRunningEc2);
+          psI.setDate(3, date);
           psI.executeUpdate();
         }
         conn.commit();

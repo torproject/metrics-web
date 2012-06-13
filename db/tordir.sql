@@ -860,6 +860,7 @@ $$ LANGUAGE plpgsql;
 CREATE TABLE bridge_network_size (
     "date" DATE NOT NULL,
     avg_running INTEGER NOT NULL,
+    avg_running_ec2 INTEGER NOT NULL,
     CONSTRAINT bridge_network_size_pkey PRIMARY KEY(date)
 );
 

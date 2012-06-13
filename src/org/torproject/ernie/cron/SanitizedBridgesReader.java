@@ -66,15 +66,18 @@ public class SanitizedBridgesReader {
   }
 
   private void addBridgeNetworkStatus(BridgeNetworkStatus status) {
-    int runningBridges = 0;
+    int runningBridges = 0, runningEc2Bridges = 0;
     for (NetworkStatusEntry statusEntry :
         status.getStatusEntries().values()) {
       if (statusEntry.getFlags().contains("Running")) {
         runningBridges++;
+        if (statusEntry.getNickname().startsWith("ec2bridge")) {
+          runningEc2Bridges++;
+        }
       }
     }
     this.csfh.addBridgeConsensusResults(status.getPublishedMillis(),
-        runningBridges);
+        runningBridges, runningEc2Bridges);
   }
 
   private void addServerDescriptor(ServerDescriptor descriptor) {
