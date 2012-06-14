@@ -15,6 +15,18 @@ export_networksize <- function(path) {
   write.csv(networksize, path, quote = FALSE, row.names = FALSE)
 }
 
+export_cloudbridges <- function(path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT date, avg_running_ec2 AS cloudbridges",
+      "FROM bridge_network_size ORDER BY date")
+  rs <- dbSendQuery(con, q)
+  cloudbridges <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  write.csv(cloudbridges, path, quote = FALSE, row.names = FALSE)
+}
+
 export_relaycountries <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)

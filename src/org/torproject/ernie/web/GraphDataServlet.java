@@ -53,6 +53,7 @@ public class GraphDataServlet extends HttpServlet {
     this.availableGraphDataFiles = new TreeMap<String, String>();
     this.availableGraphDataFiles.put("relays", "networksize");
     this.availableGraphDataFiles.put("bridges", "networksize");
+    this.availableGraphDataFiles.put("cloudbridges", "cloudbridges");
     this.availableGraphDataFiles.put("relays-by-country",
         "relaycountries");
     this.availableGraphDataFiles.put("relays-by-flags", "relayflags");

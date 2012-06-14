@@ -324,6 +324,39 @@ plot_networksize <- function(start, end, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
+plot_cloudbridges <- function(start, end, path, dpi) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT date, avg_running_ec2 ",
+      "FROM bridge_network_size WHERE date >= '", start,
+      "' AND date <= '", end, "'", sep = "")
+  rs <- dbSendQuery(con, q)
+  bridges <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
+      to = as.Date(end, "%Y-%m-%d"), by="1 day")
+  missing <- setdiff(dates, bridges$date)
+  if (length(missing) > 0)
+    bridges <- rbind(bridges,
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        avg_running_ec2 = NA))
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(bridges$date, "%Y-%m-%d")) -
+    min(as.Date(bridges$date, "%Y-%m-%d"))))
+  ggplot(bridges, aes(x = as.Date(date, "%Y-%m-%d"),
+      y = avg_running_ec2)) +
+    geom_line(size = 1, colour = "green3") +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
+    scale_y_continuous(name = "", limits = c(0,
+        max(bridges$avg_running_ec2, na.rm = TRUE))) +
+    opts(title = "Number of Tor Cloud bridges\n")
+  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+}
+
 plot_relaycountries <- function(start, end, country, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)

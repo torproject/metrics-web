@@ -57,6 +57,7 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableCsvFiles.add("bridge-users");
     this.availableCsvFiles.add("bwhist-flags");
     this.availableCsvFiles.add("connbidirect");
+    this.availableCsvFiles.add("cloudbridges");
     this.availableCsvFiles.add("direct-users");
     this.availableCsvFiles.add("dirreq-stats");
     this.availableCsvFiles.add("dirbytes");
@@ -80,6 +81,7 @@ public class RObjectGenerator implements ServletContextListener {
 
     this.availableGraphs = new HashMap<String, String>();
     this.availableGraphs.put("networksize", "start,end,filename,dpi");
+    this.availableGraphs.put("cloudbridges", "start,end,filename,dpi");
     this.availableGraphs.put("relaycountries",
         "start,end,country,filename,dpi");
     this.availableGraphs.put("relayflags", "start,end,flag,granularity,"

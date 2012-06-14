@@ -197,6 +197,38 @@ platform.</p>
 <p><a href="csv/platforms.csv">CSV</a> file containing all data.</p>
 <br>
 
+<a name="cloudbridges"></a>
+<h3><a href="#cloudbridges" class="anchor">Tor Cloud bridges</a></h3>
+<br>
+<p>The following graph shows the average daily number of
+<a href="http://cloud.torproject.org/">Tor Cloud</a> bridges in the
+network.</p>
+<img src="cloudbridges.png${cloudbridges_url}"
+     width="576" height="360" alt="Tor Cloud bridges graph">
+<form action="network.html#cloudbridges">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="cloudbridges">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(cloudbridges_start) == 0}">${default_start_date}</c:when><c:otherwise>${cloudbridges_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(cloudbridges_end) == 0}">${default_end_date}</c:when><c:otherwise>${cloudbridges_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${cloudbridges_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${cloudbridges_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${cloudbridges_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<p><a href="csv/cloudbridges.csv">CSV</a> file containing all data.</p>
+<br>
+
 <a name="bandwidth"></a>
 <h3><a href="#bandwidth" class="anchor">Total relay bandwidth in the
 network</a></h3>
