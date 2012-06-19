@@ -656,26 +656,34 @@ plot_direct_users <- function(start, end, country, events, path, nocutoff,
     dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, r, bwp, brn, bwn, brp, bwr, brr ",
+  q <- paste("SELECT date, r, bwp, brn, bwn, brp, bwr, brr, country ",
       "FROM user_stats WHERE date >= '", start, "' AND date <= '", end,
       "' ", ifelse(nocutoff == "off",
       " AND date < (SELECT MAX(date) FROM user_stats) - 1 ", ""),
-      " AND country = '", ifelse(country == "all", "zy", country), "'",
-      sep = "")
+      " AND (country = 'zy'", ifelse(country == "all", "",
+      paste(" OR country = '", country, "'", sep = "")), ")", sep = "")
   rs <- dbSendQuery(con, q)
   u <- fetch(rs, n = -1)
   dbDisconnect(con)
   dbUnloadDriver(drv)
+  a <- u[u$country == "zy", ]
+  if (country != "all")
+    u <- u[u$country == country, ]
   u <- data.frame(date = u$date,
        users = u$r * (u$bwp * u$brn / u$bwn - u$brp) /
                (u$bwr * u$brn / u$bwn - u$brr) / 10)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, u$date)
+  missing <- setdiff(dates, a$date)
   if (length(missing) > 0)
     u <- rbind(u,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         users = NA))
+  missing <- setdiff(dates, u$date)
+  if (length(missing) > 0)
+    u <- rbind(u,
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        users = 0))
   title <- ifelse(country == "all",
     "Directly connecting users from all countries\n",
     paste("Directly connecting users from ", countryname(country), "\n",
