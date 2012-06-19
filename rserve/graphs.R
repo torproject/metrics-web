@@ -696,10 +696,14 @@ plot_direct_users <- function(start, end, country, events, path, nocutoff,
     downturns <- r[r$users < r$minusers, 1:2]
     plot <- plot +
       geom_ribbon(data = r, aes(ymin = minusers, ymax = maxusers),
-          fill = "gray") +
-      geom_point(data = upturns, aes(x = date, y = users), size = 5,
-          colour = "dodgerblue2") +
-      geom_point(data = downturns, aes(x = date, y = users), size = 5,
+          fill = "gray")
+    if (length(upturns$date) > 0)
+      plot <- plot +
+          geom_point(data = upturns, aes(x = date, y = users), size = 5,
+          colour = "dodgerblue2")
+    if (length(downturns$date) > 0)
+      plot <- plot +
+          geom_point(data = downturns, aes(x = date, y = users), size = 5,
           colour = "firebrick2")
   }
   plot <- plot +
