@@ -350,6 +350,11 @@ long and the <tt>secret</tt> is only 19 bytes long.</li></ul>
 <li><b>Replace contact information:</b> If there is contact
 information in a descriptor, the contact line is changed to
 <tt>somebody</tt>.</li>
+<li><b>Remove pluggable transport addresses and arguments:</b> Bridges may
+provide transports in addition to the onion-routing protocol and include
+information about these transports in their extra-info descriptors for
+BridgeDB.  In that case, any IP addresses, TCP ports, or additional
+arguments are removed, only leaving in the supported transport names.</li>
 </ol>
 
 <p>
