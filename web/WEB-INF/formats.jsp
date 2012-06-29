@@ -83,7 +83,9 @@ are recent:
 <li><tt>@type network-status-vote-3 1.0</tt></li>
 <li><tt>@type bridge-network-status 1.0</tt></li>
 <li><tt>@type bridge-server-descriptor 1.0</tt></li>
-<li><tt>@type bridge-extra-info 1.0</tt></li>
+<li><tt><font color="gray">@type bridge-extra-info 1.0</font></tt></li>
+<li><tt>@type bridge-extra-info 1.1</tt> contain sanitized
+  <tt>transport</tt> lines</li>
 <li><tt>@type torperf 1.0</tt></li>
 <li><tt>@type bridge-pool-assignment 1.0</tt></li>
 <li><tt>@type gettor 1.0</tt></li>
