@@ -146,7 +146,7 @@ public class GetTorProcessor {
 
     logger.info("Finished processing statistics on Tor packages "
         + "delivered by GetTor.\nLast date in statistics is "
-        + data.lastKey() + ".");
+        + (data.isEmpty() ? "(null)" : data.lastKey()) + ".");
   }
 }
 
