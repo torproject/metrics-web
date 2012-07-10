@@ -701,6 +701,8 @@ plot_direct_users <- function(start, end, country, events, path, nocutoff,
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(u$date, "%Y-%m-%d")) -
     min(as.Date(u$date, "%Y-%m-%d"))))
+  max_y <- ifelse(length(na.omit(u$users)) == 0, 0,
+      max(u$users, na.rm = TRUE))
   plot <- ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = users))
   if (length(na.omit(u$users)) > 0 & events == "on" & country != "all") {
     r <- read.csv(
@@ -708,6 +710,8 @@ plot_direct_users <- function(start, end, country, events, path, nocutoff,
       stringsAsFactors = FALSE)
     r <- r[r$date >= start & r$date <= end & r$country == country,
         c("date", "minusers", "maxusers")]
+    if (length(r$maxusers) > 0)
+      max_y <- max(max_y, max(r$maxusers, na.rm = TRUE))
     r <- cast(rbind(melt(u, id.vars = "date"), melt(r, id.vars = "date")))
     upturns <- r[r$users > r$maxusers, 1:2]
     downturns <- r[r$users < r$minusers, 1:2]
@@ -729,10 +733,8 @@ plot_direct_users <- function(start, end, country, events, path, nocutoff,
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0,
-        ifelse(length(na.omit(u$users)) == 0, 0,
-        max(u$users, na.rm = TRUE))), formatter = formatter) +
-    opts(title = title)
+    scale_y_continuous(name = "", limits = c(0, max_y),
+        formatter = formatter) + opts(title = title)
   print(plot)
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
