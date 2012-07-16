@@ -32,6 +32,9 @@
         <br>
         <h3>News</h3>
         <ul>
+          <li>July 16, 2012: Added link to <a
+          href="http://tigerpa.ws/tor_metrics/">interactive graphs</a> of
+          network statistics.</li>
           <li>April 30, 2012: Added <a
           href="papers/bridge-report-usage-stats-2012-04-30.pdf">tech
           report</a>: "What fraction of our bridges are not reporting
