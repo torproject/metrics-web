@@ -20,9 +20,6 @@
           statistics on the network of relays and bridges.</li>
           <li>The <a href="users.html">Users page</a> attempts to estimate
           the number of users in the network.</li>
-          <li>There are numerous ways to download the Tor software. The
-          <a href="packages.html">Packages page</a> has statistics on the
-          number of packages requested from GetTor.</li>
           <li>There are active and passive performance measurements of the
           Tor network available on the
           <a href="performance.html">Performance page</a>.</li>

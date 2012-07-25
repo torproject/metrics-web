@@ -37,8 +37,7 @@ including
 <a href="#exitstats">exit-port statistics</a>, and
 <a href="#bidistats">bidirectional connection use</a>.</li>
 <li>Third, we delineate the output of various Tor services like
-<a href="#bridgepool">BridgeDB</a>,
-<a href="#gettor">GetTor</a>, or
+<a href="#bridgepool">BridgeDB</a>, or
 <a href="#exitlist">Tor Check</a> as well as specific measurement tools like
 <a href="#torperf">Torperf</a>.</li>
 </ol>
@@ -88,7 +87,6 @@ are recent:
   <tt>transport</tt> lines</li>
 <li><tt>@type torperf 1.0</tt></li>
 <li><tt>@type bridge-pool-assignment 1.0</tt></li>
-<li><tt>@type gettor 1.0</tt></li>
 <li><tt>@type tordnsel 1.0</tt></li>
 </ul>
 
@@ -919,42 +917,6 @@ Bridges in the <tt>https</tt> ring can also be assigned to subrings by
 OR port or relay flag which is defined by <tt>port=$port</tt> and/or
 <tt>flag=$flag</tt>.</li>
 </ol>
-<hr>
-<br>
-
-<a name="gettor"></a>
-<h3><a href="#gettor" class="anchor">GetTor statistics file</a></h3>
-<br>
-<p>
-GetTor allows users to fetch the Tor software via email.
-GetTor keeps internal statistics on the number of packages requested
-every day and writes these statistics to a file.
-The document below shows the statistics file for December 27, 2010.
-The <tt>None</tt> entry stands for requests that don't ask for a specific
-bundle, e.g. requests for the bundle list.
-</p>
-
-<blockquote>
-<p>
-<i>GetTor statistics file for December 27, 2010:</i>
-</p>
-<p>
-<tt>2010-12-27 - None:167 macosx-i386-bundle:0 macosx-ppc-bundle:0
-source-bundle:2 tor-browser-bundle:0 tor-browser-bundle_ar:0
-tor-browser-bundle_de:0 tor-browser-bundle_en:39
-tor-browser-bundle_es:0 tor-browser-bundle_fa:5
-tor-browser-bundle_fr:0 tor-browser-bundle_it:0
-tor-browser-bundle_nl:0 tor-browser-bundle_pl:0
-tor-browser-bundle_pt:0 tor-browser-bundle_ru:0
-tor-browser-bundle_zh_CN:77 tor-im-browser-bundle:0
-tor-im-browser-bundle_ar:0 tor-im-browser-bundle_de:0
-tor-im-browser-bundle_en:1 tor-im-browser-bundle_es:0
-tor-im-browser-bundle_fa:0 tor-im-browser-bundle_fr:0
-tor-im-browser-bundle_it:0 tor-im-browser-bundle_nl:0
-tor-im-browser-bundle_pl:0 tor-im-browser-bundle_pt:0
-tor-im-browser-bundle_ru:0 tor-im-browser-bundle_zh_CN:0</tt>
-</p>
-</blockquote>
 <hr>
 <br>
 

@@ -28,7 +28,6 @@
           <li><a href="#bridgeassignments">Bridge pool assignments</a></li>
           <li><a href="#performance">Performance data</a></li>
           <li><a href="#exitlist">Exit lists</a></li>
-          <li><a href="#gettor">GetTor statistics file</a></li>
         </ul>
         <p>The tarballs listed on this page and the raw files that were
         published on the last three days are also available via
@@ -278,16 +277,6 @@
             </tr>
           </c:forEach>
         </table>
-        <br>
-        <a name="gettor"></a>
-        <h3><a href="#gettor" class="anchor">GetTor statistics
-        file</a></h3>
-        <br>
-        <p>GetTor allows users to fetch the Tor software via email.
-        This <a href="data/gettor_stats.txt">file</a> contains statistics
-        on the number of packages requested from GetTor per day.
-        The data format is described
-        <a href="formats.html#gettor">here</a>.</p>
     </div>
   </div>
   <div class="bottom" id="bottom">

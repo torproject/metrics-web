@@ -207,10 +207,6 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphImage</servlet-name>
-    <url-pattern>/gettor.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/torperf.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

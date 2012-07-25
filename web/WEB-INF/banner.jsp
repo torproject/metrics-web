@@ -17,7 +17,6 @@
     <%if (currentPage.endsWith("graphs.jsp") ||
          currentPage.endsWith("network.jsp") ||
          currentPage.endsWith("users.jsp") ||
-         currentPage.endsWith("packages.jsp") ||
          currentPage.endsWith("performance.jsp")) {
      %><br>
       <font size="2">
@@ -27,9 +26,6 @@
         <a <%if (currentPage.endsWith("users.jsp")) {
             %>class="current"<%} else {%>href="/users.html"<%}
             %>>Users</a>
-        <a <%if (currentPage.endsWith("packages.jsp")) {
-            %>class="current"<%} else {%>href="/packages.html"<%}
-            %>>Packages</a>
         <a <%if (currentPage.endsWith("performance.jsp")) {
             %>class="current"<%} else {%>href="/performance.html"<%}
             %>>Performance</a>
