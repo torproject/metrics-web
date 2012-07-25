@@ -153,6 +153,7 @@ public class ExoneraTorDatabaseImporter {
                 + "contains a corrupt entry in line " + lineNumber
                 + ".  Ignoring parse history file entirely.");
             lastImportHistory.clear();
+            br.close();
             return;
           }
           long lastModified = Long.parseLong(parts[0]);

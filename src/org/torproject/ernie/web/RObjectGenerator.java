@@ -410,6 +410,7 @@ public class RObjectGenerator implements ServletContextListener {
         while ((length = bis.read(buffer)) > 0) {
           baos.write(buffer, 0, length);
         }
+        bis.close();
         this.result = baos.toByteArray();
       } catch (IOException e) {
         return;

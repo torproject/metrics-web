@@ -54,6 +54,7 @@ public class ResearchDataServlet extends HttpServlet {
               dataFileUrls.add(line);
             }
           }
+          br.close();
         }
       } catch (SecurityException e) {
         /* We're not permitted to read the file with URLs. Ignore. */
