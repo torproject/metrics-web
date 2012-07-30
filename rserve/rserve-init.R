@@ -8,6 +8,7 @@ library("grid")
 library("reshape")
 library("plyr")
 library("digest")
+library("RColorBrewer")
 
 db = "tordir"
 dbuser = "metrics"

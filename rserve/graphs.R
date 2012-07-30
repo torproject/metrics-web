@@ -414,12 +414,11 @@ plot_versions <- function(start, end, path, dpi) {
   dbUnloadDriver(drv)
   known_versions <- c("0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1",
         "0.2.2", "0.2.3", "0.2.4")
+  colours <- data.frame(breaks = known_versions,
+    values = brewer.pal(length(known_versions), "YlOrBr"),
+    stringsAsFactors = FALSE)
   versions <- versions[versions$version %in% known_versions, ]
   visible_versions <- sort(unique(versions$version))
-  versions <- rbind(data.frame(
-    date = as.Date(rep(end, length(known_versions))),
-    version = known_versions,
-    relays = rep(NA, length(known_versions))), versions)
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(versions$date, "%Y-%m-%d")) -
     min(as.Date(versions$date, "%Y-%m-%d"))))
@@ -432,8 +431,9 @@ plot_versions <- function(start, end, path, dpi) {
         minor = date_breaks$minor) +
     scale_y_continuous(name = "",
       limits = c(0, max(versions$relays, na.rm = TRUE))) +
-    scale_colour_hue(name = "Tor version", h.start = 280,
-      breaks = visible_versions, labels = visible_versions) +
+    scale_colour_manual(name = "Tor version",
+      values = colours[colours$breaks %in% visible_versions, 2],
+      breaks = visible_versions) +
     opts(title = "Relay versions\n")
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
@@ -462,9 +462,10 @@ plot_platforms <- function(start, end, path, dpi) {
         minor = date_breaks$minor) +
     scale_y_continuous(name = "",
       limits = c(0, max(platforms$value, na.rm = TRUE))) +
-    scale_colour_hue(name = "Platform", h.start = 180,
+    scale_colour_manual(name = "Platform",
       breaks = c("avg_linux", "avg_darwin", "avg_bsd", "avg_windows",
           "avg_other"),
+      values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#999999"),
       labels = c("Linux", "Darwin", "FreeBSD", "Windows", "Other")) +
     opts(title = "Relay platforms\n")
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
@@ -547,7 +548,8 @@ plot_bwhist_flags <- function(start, end, path, dpi) {
         minor = date_breaks$minor) +
     scale_y_continuous(name="Bandwidth (MiB/s)",
         limits = c(0, max(bw$value, na.rm = TRUE) / 2^20 / 86400)) +
-    scale_colour_hue(name = "") +
+    scale_colour_manual(name = "",
+        values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2")) +
     opts(title = "Bandwidth history by relay flags",
         legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
@@ -621,14 +623,15 @@ plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
       as.numeric(max(as.Date(networksize$date, "%Y-%m-%d")) -
       min(as.Date(networksize$date, "%Y-%m-%d"))))
     ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-      colour = variable)) + geom_line(size = 1) +
+      colour = as.factor(variable))) + geom_line(size = 1) +
       scale_x_date(name = paste("\nThe Tor Project - ",
           "https://metrics.torproject.org/", sep = ""),
           format = date_breaks$format, major = date_breaks$major,
           minor = date_breaks$minor) +
       scale_y_continuous(name = "", limits = c(0, max(networksize$value,
           na.rm = TRUE))) +
-      scale_colour_hue(name = "Relay flags", h.start = 280,
+      scale_colour_manual(name = "Relay flags", values = c("#E69F00",
+          "#56B4E9", "#009E73", "#000000", "#0072B2"),
           breaks = paste("avg_", tolower(flags), sep = ""),
           labels = flags) +
       opts(title = "Number of relays with relay flags assigned\n")
@@ -653,7 +656,8 @@ plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
           "https://metrics.torproject.org/", sep = "")) +
       scale_y_continuous(name = "", limits = c(0, max(networksize$value,
           na.rm = TRUE))) +
-      scale_colour_hue(name = "Relay flags", h.start = 280,
+      scale_colour_manual(name = "Relay flags", values = c("#E69F00",
+          "#56B4E9", "#009E73", "#000000", "#0072B2"),
           breaks = paste("avg_", tolower(flags), sep = ""),
           labels = flags) +
       opts(title = "Number of relays with relay flags assigned\n")
