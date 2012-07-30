@@ -465,7 +465,7 @@ plot_platforms <- function(start, end, path, dpi) {
     scale_colour_manual(name = "Platform",
       breaks = c("avg_linux", "avg_darwin", "avg_bsd", "avg_windows",
           "avg_other"),
-      values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#999999"),
+      values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#333333"),
       labels = c("Linux", "Darwin", "FreeBSD", "Windows", "Other")) +
     opts(title = "Relay platforms\n")
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
