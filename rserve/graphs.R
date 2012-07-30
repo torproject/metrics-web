@@ -413,13 +413,13 @@ plot_versions <- function(start, end, path, dpi) {
   dbDisconnect(con)
   dbUnloadDriver(drv)
   known_versions <- c("0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1",
-        "0.2.2", "0.2.3")
+        "0.2.2", "0.2.3", "0.2.4")
   versions <- versions[versions$version %in% known_versions, ]
   visible_versions <- sort(unique(versions$version))
   versions <- rbind(data.frame(
-    date = as.Date(rep(end, 7)),
+    date = as.Date(rep(end, length(known_versions))),
     version = known_versions,
-    relays = rep(NA, 7)), versions)
+    relays = rep(NA, length(known_versions))), versions)
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(versions$date, "%Y-%m-%d")) -
     min(as.Date(versions$date, "%Y-%m-%d"))))
