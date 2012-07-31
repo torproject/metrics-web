@@ -94,7 +94,8 @@ export_bandwidth <- function(path) {
 export_bwhist_flags <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, isexit, isguard, read, written",
+  q <- paste("SELECT date, isexit, isguard, read / 86400 AS read,",
+      "written / 86400 AS written",
       "FROM bwhist_flags WHERE date < current_date - 1",
       "ORDER BY date, isexit, isguard")
   rs <- dbSendQuery(con, q)
