@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -112,16 +113,49 @@ public class GraphDataServlet extends HttpServlet {
 
     /* Request CSV file from R object generator, which may ask Rserve to
      * generate it. */
-    String csvFileContent = this.rObjectGenerator.generateCsv(
-        requestedCsvFile, true);
+    RObject csvFile = this.rObjectGenerator.generateCsv(requestedCsvFile,
+        true);
 
     /* Make sure that we have a CSV to convert into JSON. */
-    if (csvFileContent == null) {
+    if (csvFile == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
 
-    /* Convert CSV to JSON format. */
+    /* Look up if we converted this CSV to JSON format before.  If not,
+     * convert it now. */
+    String jsonString;
+    if (!this.lastConvertedCsvFile.containsKey(requestedJsonFile) ||
+        this.lastConvertedCsvFile.get(requestedJsonFile) <
+        csvFile.getLastModified()) {
+      jsonString = this.convertCsvToJson(requestedJsonFile,
+          new String(csvFile.getBytes()));
+      this.lastConvertedCsvFile.put(requestedJsonFile,
+          csvFile.getLastModified());
+      this.convertedCsvFiles.put(requestedJsonFile, jsonString);
+    } else {
+      jsonString = this.convertedCsvFiles.get(requestedJsonFile);
+    }
+
+    /* Make sure we have a JSON string to return. */
+    if (jsonString == null) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    }
+
+    /* Write JSON string to response. */
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setContentType("application/json");
+    response.setCharacterEncoding("utf-8");
+    response.getWriter().print(jsonString);
+  }
+
+  private Map<String, Long> lastConvertedCsvFile =
+      new HashMap<String, Long>();
+  private Map<String, String> convertedCsvFiles =
+      new HashMap<String, String>();
+  private String convertCsvToJson(String requestedJsonFile,
+      String csvFileContent) {
     String jsonString = null;
     try {
       BufferedReader br = new BufferedReader(new StringReader(
@@ -148,17 +182,14 @@ public class GraphDataServlet extends HttpServlet {
         }
       }
       if (columns == null || dateCol < 0 || valueCols.isEmpty()) {
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        return;
+        return null;
       }
       SortedMap<String, SortedSet<String>> graphs =
           new TreeMap<String, SortedSet<String>>();
       while ((line = br.readLine()) != null) {
         String[] elements = line.split(",");
         if (elements.length != columns.length) {
-          response.sendError(
-              HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-          return;
+          return null;
         }
         String date = elements[dateCol];
         String variable = "";
@@ -225,18 +256,11 @@ public class GraphDataServlet extends HttpServlet {
       br.close();
       jsonString = "[" + sb.toString().substring(1) + "\n]";
     } catch (IOException e) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
+      return null;
     } catch (ParseException e) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
+      return null;
     }
-
-    /* Write JSON file to response. */
-    response.setHeader("Access-Control-Allow-Origin", "*");
-    response.setContentType("application/json");
-    response.setCharacterEncoding("utf-8");
-    response.getWriter().print(jsonString);
+    return jsonString;
   }
 }
 

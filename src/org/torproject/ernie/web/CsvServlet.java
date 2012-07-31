@@ -2,7 +2,10 @@
  * See LICENSE for licensing information */
 package org.torproject.ernie.web;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.SortedSet;
 import java.util.logging.Logger;
 
@@ -75,16 +78,17 @@ public class CsvServlet extends HttpServlet {
 
     /* Request CSV file from R object generator, which asks Rserve to
      * generate it. */
-    String csvFileContent = this.rObjectGenerator.generateCsv(
+    RObject csvFile = this.rObjectGenerator.generateCsv(
         requestedCsvFile, true);
 
-    /* Make sure that we have a graph to return. */
-    if (csvFileContent == null) {
+    /* Make sure that we have a .csv file to return. */
+    if (csvFile == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
 
     /* Write CSV file to response. */
+    String csvFileContent = new String(csvFile.getBytes());
     response.setContentType("text/csv");
     response.setHeader("Content-Length", String.valueOf(
         csvFileContent.length()));

@@ -173,69 +173,27 @@ public class RObjectGenerator implements ServletContextListener {
     String imageFilename = imageFilenameBuilder.toString();
     rQueryBuilder.append("path = '%s')");
     String rQuery = rQueryBuilder.toString();
-    byte[] graphBytes = this.generateGraph(rQuery, imageFilename,
-        checkCache);
-    if (graphBytes != null) {
-      return new RObject(graphBytes, imageFilename);
-    } else {
-      return null;
-    }
-  }
-
-  /* Generate a graph using the given R query that has a placeholder for
-   * the absolute path to the image to be created. */
-  private byte[] generateGraph(String rQuery, String imageFilename,
-      boolean checkCache) {
-
-    /* See if we need to generate this graph. */
     File imageFile = new File(this.cachedGraphsDirectory + "/"
         + imageFilename);
-    byte[] imageBytes = this.generateRObject(rQuery, imageFile,
+    return this.generateRObject(rQuery, imageFile, imageFilename,
         checkCache);
-
-    /* Return the graph bytes. */
-    return imageBytes;
   }
 
   public SortedSet<String> getAvailableCsvFiles() {
     return this.availableCsvFiles;
   }
 
-  public String generateCsv(String requestedCsvFile, boolean checkCache) {
+  public RObject generateCsv(String requestedCsvFile,
+      boolean checkCache) {
     /* Prepare filename and R query string. */
     String rQuery = "export_" + requestedCsvFile.replaceAll("-", "_")
         + "(path = '%s')";
     String csvFilename = requestedCsvFile + ".csv";
-    return this.generateCsv(rQuery, csvFilename, checkCache);
-  }
-
-  /* Generate a comma-separated value file using the given R query that
-   * has a placeholder for the absolute path to the file to be created. */
-  private String generateCsv(String rQuery, String csvFilename,
-      boolean checkCache) {
 
     /* See if we need to generate this .csv file. */
     File csvFile = new File(this.cachedGraphsDirectory + "/"
         + csvFilename);
-    byte[] csvBytes = this.generateRObject(rQuery, csvFile, checkCache);
-
-    /* Read the text file from disk and write it to a string. */
-    String result = null;
-    try {
-      StringBuilder sb = new StringBuilder();
-      BufferedReader br = new BufferedReader(new InputStreamReader(
-          new ByteArrayInputStream(csvBytes)));
-      String line = null;
-      while ((line = br.readLine()) != null) {
-        sb.append(line + "\n");
-      }
-      result = sb.toString();
-    } catch (IOException e) {
-      return null;
-    }
-
-    /* Return the csv file content. */
-    return result;
+    return this.generateRObject(rQuery, csvFile, csvFilename, checkCache);
   }
 
   public List<Map<String, String>> generateTable(String tableName,
@@ -295,7 +253,7 @@ public class RObjectGenerator implements ServletContextListener {
     File tableFile = new File(this.cachedGraphsDirectory + "/"
         + tableFilename);
     byte[] tableBytes = this.generateRObject(rQuery, tableFile,
-        checkCache);
+        tableFilename, checkCache).getBytes();
 
     /* Write the table content to a map. */
     List<Map<String, String>> result = null;
@@ -329,15 +287,15 @@ public class RObjectGenerator implements ServletContextListener {
 
   /* Generate an R object in a separate worker thread, or wait for an
    * already running worker thread to finish and get its result. */
-  private byte[] generateRObject(String rQuery, File rObjectFile,
-      boolean checkCache) {
+  private RObject generateRObject(String rQuery, File rObjectFile,
+      String fileName, boolean checkCache) {
     RObjectGeneratorWorker worker = null;
     synchronized (this.rObjectGeneratorThreads) {
       if (this.rObjectGeneratorThreads.containsKey(rQuery)) {
         worker = this.rObjectGeneratorThreads.get(rQuery);
       } else {
         worker = new RObjectGeneratorWorker(rQuery, rObjectFile,
-            checkCache);
+            fileName, checkCache);
         this.rObjectGeneratorThreads.put(rQuery, worker);
         worker.start();
       }
@@ -352,7 +310,7 @@ public class RObjectGenerator implements ServletContextListener {
         this.rObjectGeneratorThreads.remove(rQuery);
       }
     }
-    return worker.getRObjectBytes();
+    return worker.getRObject();
   }
 
   private Map<String, RObjectGeneratorWorker> rObjectGeneratorThreads =
@@ -362,13 +320,15 @@ public class RObjectGenerator implements ServletContextListener {
 
     private String rQuery;
     private File rObjectFile;
+    private String fileName;
     private boolean checkCache;
-    private byte[] result = null;
+    private RObject result = null;
 
     public RObjectGeneratorWorker(String rQuery, File rObjectFile,
-        boolean checkCache) {
+        String fileName, boolean checkCache) {
       this.rQuery = rQuery;
       this.rObjectFile = rObjectFile;
+      this.fileName = fileName;
       this.checkCache = checkCache;
     }
 
@@ -401,6 +361,7 @@ public class RObjectGenerator implements ServletContextListener {
       }
 
       /* Read the R object from disk and write it to a byte array. */
+      long lastModified = this.rObjectFile.lastModified();
       try {
         BufferedInputStream bis = new BufferedInputStream(
             new FileInputStream(this.rObjectFile), 1024);
@@ -411,14 +372,15 @@ public class RObjectGenerator implements ServletContextListener {
           baos.write(buffer, 0, length);
         }
         bis.close();
-        this.result = baos.toByteArray();
+        this.result = new RObject(baos.toByteArray(), this.fileName,
+            lastModified);
       } catch (IOException e) {
         return;
       }
     }
 
-    public byte[] getRObjectBytes() {
-      return result;
+    public RObject getRObject() {
+      return this.result;
     }
   }
 }

@@ -5,14 +5,19 @@ package org.torproject.ernie.web;
 public class RObject {
   private byte[] bytes;
   private String fileName;
-  public RObject(byte[] bytes, String fileName) {
+  private long lastModified;
+  public RObject(byte[] bytes, String fileName, long lastModified) {
     this.bytes = bytes;
     this.fileName = fileName;
+    this.lastModified = lastModified;
   }
   public String getFileName() {
-    return fileName;
+    return this.fileName;
   }
   public byte[] getBytes() {
-    return bytes;
+    return this.bytes;
+  }
+  public long getLastModified() {
+    return this.lastModified;
   }
 }
