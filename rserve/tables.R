@@ -7,8 +7,7 @@ write_direct_users <- function(start, end, path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr ",
       "FROM user_stats WHERE date >= '", start, "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM user_stats) - 1 ",
-      "ORDER BY date, country", sep = "")
+      "' AND date < current_date - 1 ORDER BY date, country", sep = "")
   rs <- dbSendQuery(con, q)
   u <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -35,8 +34,7 @@ write_censorship_events <- function(start, end, path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr ",
       "FROM user_stats WHERE date >= '", start, "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM user_stats) - 1",
-      sep = "")
+      "' AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   u <- fetch(rs, n = -1)
   dbDisconnect(con)

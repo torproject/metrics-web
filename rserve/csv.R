@@ -1,10 +1,12 @@
 export_networksize <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- "SELECT date, avg_running AS relays FROM network_size"
+  q <- paste("SELECT date, avg_running AS relays FROM network_size",
+      "WHERE date < current_date - 1")
   rs <- dbSendQuery(con, q)
   relays <- fetch(rs, n = -1)
-  q <- "SELECT date, avg_running AS bridges FROM bridge_network_size"
+  q <- paste("SELECT date, avg_running AS bridges",
+      "FROM bridge_network_size WHERE date < current_date - 1")
   rs <- dbSendQuery(con, q)
   bridges <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -19,7 +21,8 @@ export_cloudbridges <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, avg_running_ec2 AS cloudbridges",
-      "FROM bridge_network_size ORDER BY date")
+      "FROM bridge_network_size WHERE date < current_date - 1",
+      "ORDER BY date")
   rs <- dbSendQuery(con, q)
   cloudbridges <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -31,7 +34,7 @@ export_relaycountries <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, country, relays FROM relay_countries",
-             "ORDER BY date, country")
+      "WHERE date < current_date - 1 ORDER BY date, country")
   rs <- dbSendQuery(con, q)
   relays <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -42,7 +45,8 @@ export_relaycountries <- function(path) {
 export_versions <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- "SELECT date, version, relays FROM relay_versions"
+  q <- paste("SELECT date, version, relays FROM relay_versions",
+      "WHERE date < current_date - 1")
   rs <- dbSendQuery(con, q)
   versions <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -57,7 +61,7 @@ export_platforms <- function(path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, avg_linux AS linux, avg_darwin AS darwin,",
       "avg_bsd AS bsd, avg_windows AS windows, avg_other AS other",
-      "FROM relay_platforms ORDER BY date")
+      "FROM relay_platforms WHERE date < current_date - 1 ORDER BY date")
   rs <- dbSendQuery(con, q)
   platforms <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -68,11 +72,12 @@ export_platforms <- function(path) {
 export_bandwidth <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- "SELECT date, bwadvertised FROM total_bandwidth"
+  q <- paste("SELECT date, bwadvertised FROM total_bandwidth",
+      "WHERE date < current_date - 1")
   rs <- dbSendQuery(con, q)
   bw_desc <- fetch(rs, n = -1)
   q <- paste("SELECT date, read, written FROM total_bwhist",
-      "WHERE date < (SELECT MAX(date) FROM total_bwhist) - 1")
+      "WHERE date < current_date - 1")
   rs <- dbSendQuery(con, q)
   bw_hist <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -90,8 +95,7 @@ export_bwhist_flags <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, isexit, isguard, read, written",
-      "FROM bwhist_flags",
-      "WHERE date < (SELECT MAX(date) FROM bwhist_flags) - 1",
+      "FROM bwhist_flags WHERE date < current_date - 1",
       "ORDER BY date, isexit, isguard")
   rs <- dbSendQuery(con, q)
   bw <- fetch(rs, n = -1)
@@ -105,7 +109,7 @@ export_dirbytes <- function(path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, dr, dw, brp, bwp, brd, bwd FROM user_stats",
       "WHERE country = 'zy' AND bwp / bwd <= 3",
-      "AND date < (SELECT MAX(date) FROM user_stats) - 1 ORDER BY date")
+      "AND date < current_date - 1 ORDER BY date")
   rs <- dbSendQuery(con, q)
   dir <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -122,7 +126,7 @@ export_relayflags <- function(path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, avg_running AS running, avg_exit AS exit,",
       "avg_guard AS guard, avg_fast AS fast, avg_stable AS stable",
-      "FROM network_size ORDER BY date")
+      "FROM network_size WHERE date < current_date - 1 ORDER BY date")
   rs <- dbSendQuery(con, q)
   relayflags <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -135,7 +139,8 @@ export_relayflags_hour <- function(path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
    q <- paste("SELECT validafter, avg_running AS running,",
       "avg_exit AS exit, avg_guard AS guard, avg_fast AS fast,",
-      "avg_stable AS stable FROM network_size_hour ORDER BY validafter")
+      "avg_stable AS stable FROM network_size_hour",
+      "WHERE DATE(validafter) < current_date - 1 ORDER BY validafter")
   rs <- dbSendQuery(con, q)
   relayflags <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -147,8 +152,7 @@ export_direct_users <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr",
-      "FROM user_stats",
-      "WHERE date < (SELECT MAX(date) FROM user_stats) - 1",
+      "FROM user_stats WHERE date < current_date - 1",
       "ORDER BY date, country")
   rs <- dbSendQuery(con, q)
   u <- fetch(rs, n = -1)
@@ -166,8 +170,7 @@ export_bridge_users <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, country, users AS bridgeusers",
-      "FROM bridge_stats",
-      "WHERE date < (SELECT MAX(date) FROM bridge_stats)",
+      "FROM bridge_stats WHERE date < current_date - 1",
       "ORDER BY date, country")
   rs <- dbSendQuery(con, q)
   bridgeusers <- fetch(rs, n = -1)
@@ -181,7 +184,8 @@ export_bridge_users <- function(path) {
 export_gettor <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- "SELECT date, bundle, downloads FROM gettor_stats"
+  q <- paste("SELECT date, bundle, downloads FROM gettor_stats",
+      "WHERE date < current_date - 1")
   rs <- dbSendQuery(con, q)
   downloads <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -216,7 +220,7 @@ export_torperf <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT source, date, q1, md, q3 FROM torperf_stats",
-      "ORDER BY source, date")
+      "WHERE date < current_date - 1 ORDER BY source, date")
   rs <- dbSendQuery(con, q)
   torperf <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -228,7 +232,8 @@ export_torperf_failures <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT source, date, timeouts, failures, requests",
-      "FROM torperf_stats ORDER BY source, date")
+      "FROM torperf_stats WHERE date < current_date - 1",
+      "ORDER BY source, date")
   rs <- dbSendQuery(con, q)
   torperf <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -240,8 +245,7 @@ help_export_monthly_users <- function(path, aggr_fun) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr",
-      "FROM user_stats",
-      "WHERE date < (SELECT MAX(date) FROM user_stats) - 1",
+      "FROM user_stats WHERE date < current_date - 1",
       "ORDER BY date, country")
   rs <- dbSendQuery(con, q)
   u <- fetch(rs, n = -1)
@@ -249,8 +253,7 @@ help_export_monthly_users <- function(path, aggr_fun) {
        users = u$r * (u$bwp * u$brn / u$bwn - u$brp) /
                (u$bwr * u$brn / u$bwn - u$brr) / 10)
   q <- paste("SELECT date, country, FLOOR(users) AS users",
-      "FROM bridge_stats",
-      "WHERE date < (SELECT MAX(date) FROM bridge_stats)",
+      "FROM bridge_stats WHERE date < current_date - 1",
       "ORDER BY date, country")
   rs <- dbSendQuery(con, q)
   bridge <- fetch(rs, n = -1)
@@ -280,6 +283,7 @@ export_connbidirect <- function(path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT DATE(statsend) AS date, source, belownum AS below,",
       "readnum AS read, writenum AS write, bothnum AS \"both\"",
+      "WHERE DATE(statsend) < current_date - 1",
       "FROM connbidirect ORDER BY 1, 2")
   rs <- dbSendQuery(con, q)
   c <- fetch(rs, n = -1)
@@ -293,8 +297,7 @@ export_dirreq_stats <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, r, bwp, brp, bwn, brn, bwr, brr ",
-      "FROM user_stats ",
-      "WHERE date < (SELECT MAX(date) FROM user_stats) - 1 ",
+      "FROM user_stats WHERE date < current_date - 1",
       "AND country = 'zy' ORDER BY date", sep = "")
   rs <- dbSendQuery(con, q)
   u <- fetch(rs, n = -1)

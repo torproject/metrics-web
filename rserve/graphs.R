@@ -282,12 +282,12 @@ plot_networksize <- function(start, end, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, avg_running AS relays FROM network_size ",
       "WHERE date >= '", start, "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM network_size)", sep = "")
+      "' AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   relays <- fetch(rs, n = -1)
   q <- paste("SELECT date, avg_running AS bridges ",
       "FROM bridge_network_size WHERE date >= '", start,
-      "' AND date <= '", end, "'", sep = "")
+      "' AND date <= '", end, "' AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   bridges <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -329,7 +329,7 @@ plot_cloudbridges <- function(start, end, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, avg_running_ec2 ",
       "FROM bridge_network_size WHERE date >= '", start,
-      "' AND date <= '", end, "'", sep = "")
+      "' AND date <= '", end, "' AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   bridges <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -363,11 +363,11 @@ plot_relaycountries <- function(start, end, country, path, dpi) {
   if (country == "all") {
     q <- paste("SELECT date, avg_running AS relays FROM network_size ",
         "WHERE date >= '", start, "' AND date <= '", end,
-        "' AND date < (SELECT MAX(date) FROM network_size)", sep = "")
+        "' AND date < current_date - 1", sep = "")
   } else {
     q <- paste("SELECT date, relays FROM relay_countries ",
         "WHERE date >= '", start, "' AND date <= '", end,
-        "' AND date < (SELECT MAX(date) FROM relay_countries) ",
+        "' AND date < current_date - 1 ",
         "AND country = '", country, "'", sep = "")
   }
   rs <- dbSendQuery(con, q)
@@ -407,7 +407,7 @@ plot_versions <- function(start, end, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, version, relays FROM relay_versions ",
       "WHERE date >= '", start, "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM relay_versions)", sep = "")
+      "' AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   versions <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -443,8 +443,7 @@ plot_platforms <- function(start, end, path, dpi) {
   con <- dbConnect(drv, user=dbuser, password=dbpassword, dbname=db)
   q <- paste("SELECT date, avg_linux, avg_darwin, avg_bsd, avg_windows, ",
       "avg_other FROM relay_platforms WHERE date >= '", start,
-      "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM relay_platforms)", sep = "")
+      "' AND date <= '", end, "' AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   platforms <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -476,12 +475,12 @@ plot_bandwidth <- function(start, end, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, bwadvertised FROM total_bandwidth ",
       "WHERE date >= '", start, "' AND date <= '", end, "' ",
-      "AND date < (SELECT MAX(date) FROM total_bandwidth) - 1 ", sep = "")
+      "AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   bw_desc <- fetch(rs, n = -1)
   q <- paste("SELECT date, read, written FROM total_bwhist ",
       "WHERE date >= '", start, "' AND date <= '", end, "' ",
-      "AND date < (SELECT MAX(date) FROM total_bwhist) - 1 ", sep = "")
+      "AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   bw_hist <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -514,7 +513,7 @@ plot_bwhist_flags <- function(start, end, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, isexit, isguard, read, written ",
       "FROM bwhist_flags WHERE date >= '", start, "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM bwhist_flags) - 1 ", sep = "")
+      "' AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   bw <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -560,9 +559,8 @@ plot_dirbytes <- function(start, end, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, dr, dw, brp, bwp, brd, bwd FROM user_stats ",
       "WHERE country = 'zy' AND bwp / bwd <= 3 AND date >= '", start,
-      "' AND date <= '", end, "' ",
-      "AND date < (SELECT MAX(date) FROM user_stats) - 1 ORDER BY date",
-      sep = "")
+      "' AND date <= '", end, "' AND date < current_date - 1 ",
+      "ORDER BY date", sep = "")
   rs <- dbSendQuery(con, q)
   dir <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -599,7 +597,7 @@ plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
     columns <- paste("avg_", tolower(flags), sep = "", collapse = ", ")
     q <- paste("SELECT date, ", columns, " FROM network_size ",
         "WHERE date >= '", start, "' AND date <= '", end,
-        "' AND date < (SELECT MAX(date) FROM network_size)", sep = "")
+        "' AND date < current_date - 1", sep = "")
     rs <- dbSendQuery(con, q)
     networksize <- fetch(rs, n = -1)
     dbDisconnect(con)
@@ -639,7 +637,8 @@ plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
     columns <- paste("avg_", tolower(flags), sep = "", collapse = ", ")
     q <- paste("SELECT validafter, ", columns, " FROM network_size_hour ",
         "WHERE DATE(validafter) >= '", start,
-        "' AND DATE(validafter) <= '", end, "'", sep = "")
+        "' AND DATE(validafter) <= '", end, "' ",
+        "AND DATE(validafter) < current_date - 1", sep = "")
     rs <- dbSendQuery(con, q)
     networksize <- fetch(rs, n = -1)
     dbDisconnect(con)
@@ -672,7 +671,7 @@ plot_direct_users <- function(start, end, country, events, path, nocutoff,
   q <- paste("SELECT date, r, bwp, brn, bwn, brp, bwr, brr, country ",
       "FROM user_stats WHERE date >= '", start, "' AND date <= '", end,
       "' ", ifelse(nocutoff == "off",
-      " AND date < (SELECT MAX(date) FROM user_stats) - 1 ", ""),
+      " AND date < current_date - 1 ", ""),
       " AND (country = 'zy'", ifelse(country == "all", "",
       paste(" OR country = '", country, "'", sep = "")), ")", sep = "")
   rs <- dbSendQuery(con, q)
@@ -748,7 +747,7 @@ plot_bridge_users <- function(start, end, country, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, users FROM bridge_stats ",
       "WHERE date >= '", start, "' AND date <= '", end, "' ",
-      "AND date < (SELECT MAX(date) FROM bridge_stats) - 1",
+      "AND date < current_date - 1",
       " AND country = '", ifelse(country == "all", "zy", country), "'",
       sep = "")
   rs <- dbSendQuery(con, q)
@@ -790,8 +789,7 @@ plot_gettor <- function(start, end, language, path, dpi) {
   q <- paste("SELECT date, SUM(downloads) AS downloads ",
       "FROM gettor_stats WHERE bundle ", condition, " AND date >= '",
       start, "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM gettor_stats) GROUP BY date",
-      sep = "")
+      "' AND date < current_date - 1 GROUP BY date", sep = "")
   rs <- dbSendQuery(con, q)
   downloads <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -828,7 +826,7 @@ plot_torperf <- function(start, end, source, filesize, path, dpi) {
   q <- paste("SELECT date, q1, md, q3 FROM torperf_stats ",
       "WHERE source = '", paste(source, filesize, sep = "-"),
       "' AND date >= '", start, "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM torperf_stats)", sep = "")
+      "' AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   torperf <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -879,7 +877,7 @@ plot_torperf_failures <- function(start, end, source, filesize, path,
       "FROM torperf_stats WHERE source = '",
       paste(source, filesize, sep = "-"),
       "' AND date >= '", start, "' AND date <= '", end,
-      "' AND date < (SELECT MAX(date) FROM torperf_stats)", sep = "")
+      "' AND date < current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   torperf <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -932,7 +930,7 @@ plot_connbidirect <- function(start, end, path, dpi) {
   q <- paste("SELECT DATE(statsend) AS date, readnum, writenum, bothnum ",
       "FROM connbidirect WHERE DATE(statsend) >= '", start,
       "' AND DATE(statsend) <= '", end, "' AND DATE(statsend) < ",
-      "(SELECT MAX(DATE(statsend)) FROM connbidirect)", sep = "")
+      "current_date - 1", sep = "")
   rs <- dbSendQuery(con, q)
   c <- fetch(rs, n = -1)
   dbDisconnect(con)
