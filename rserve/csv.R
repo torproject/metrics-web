@@ -284,8 +284,8 @@ export_connbidirect <- function(path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT DATE(statsend) AS date, source, belownum AS below,",
       "readnum AS read, writenum AS write, bothnum AS \"both\"",
-      "WHERE DATE(statsend) < current_date - 1",
-      "FROM connbidirect ORDER BY 1, 2")
+      "FROM connbidirect WHERE DATE(statsend) < current_date - 1",
+      "ORDER BY 1, 2")
   rs <- dbSendQuery(con, q)
   c <- fetch(rs, n = -1)
   dbDisconnect(con)
