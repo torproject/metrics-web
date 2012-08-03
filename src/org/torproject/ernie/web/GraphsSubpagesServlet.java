@@ -39,6 +39,8 @@ public class GraphsSubpagesServlet extends HttpServlet {
     this.availableGraphsSubpages = new HashMap<String, String>();
     this.availableGraphsSubpages.put("network.html",
         "WEB-INF/network.jsp");
+    this.availableGraphsSubpages.put("fast-exits.html",
+        "WEB-INF/fast-exits.jsp");
     this.availableGraphsSubpages.put("users.html", "WEB-INF/users.jsp");
     this.availableGraphsSubpages.put("packages.html",
         "WEB-INF/packages.jsp");

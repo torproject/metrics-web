@@ -16,6 +16,7 @@
         %>class="current"<%} else {%>href="/status.html"<%}%>>Status</a>
     <%if (currentPage.endsWith("graphs.jsp") ||
          currentPage.endsWith("network.jsp") ||
+         currentPage.endsWith("fast-exits.jsp") ||
          currentPage.endsWith("users.jsp") ||
          currentPage.endsWith("performance.jsp")) {
      %><br>
@@ -23,6 +24,9 @@
         <a <%if (currentPage.endsWith("network.jsp")){
             %>class="current"<%} else {%>href="/network.html"<%}
             %>>Network</a>
+        <a <%if (currentPage.endsWith("fast-exits.jsp")){
+            %>class="current"<%} else {%>href="/fast-exits.html"<%}
+            %>>Fast Exits</a>
         <a <%if (currentPage.endsWith("users.jsp")) {
             %>class="current"<%} else {%>href="/users.html"<%}
             %>>Users</a>

@@ -101,6 +101,9 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableGraphs.put("torperf-failures",
          "start,end,source,filesize,filename,dpi");
     this.availableGraphs.put("connbidirect", "start,end,filename,dpi");
+    this.availableGraphs.put("fast-exits", "start,end,filename,dpi");
+    this.availableGraphs.put("almost-fast-exits",
+        "start,end,filename,dpi");
     GraphParameterChecker.getInstance().setAvailableGraphs(
         availableGraphs);
 

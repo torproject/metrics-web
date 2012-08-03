@@ -40,6 +40,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphsSubpages</servlet-name>
+    <url-pattern>/fast-exits.html</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphsSubpages</servlet-name>
     <url-pattern>/users.html</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
@@ -216,6 +220,14 @@
   <servlet-mapping>
     <servlet-name>GraphImage</servlet-name>
     <url-pattern>/connbidirect.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/fast-exits.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/almost-fast-exits.png</url-pattern>
   </servlet-mapping>
 
   <servlet>

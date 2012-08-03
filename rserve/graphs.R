@@ -957,3 +957,62 @@ plot_connbidirect <- function(start, end, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
+plot_fast_exits <- function(start, end, path, dpi) {
+  r <- read.csv(paste("/srv/metrics.torproject.org/task-6498-graphs/",
+    "task-6498/task-6498-results.csv", sep = ""),
+    stringsAsFactors = FALSE)
+  r <- r[r$valid_after >= paste(start, "00:00:00") &
+         r$valid_after <= paste(end, "23:59:59") &
+         r$valid_after < paste(Sys.Date() - 1, "23:59:59"), ]
+  r <- r[r$min_rate == 11875 & r$ports == "80-443-554-1755" &
+    r$min_advbw == 5000, ]
+  r <- aggregate(list(relays = r$relays, P_exit = 100 * r$exit_prob),
+    by = list(date = as.Date(cut.Date(as.Date(r$valid_after), "day"))),
+    FUN = median)
+  r <- melt(r, id.vars = c("date"))
+  r <- data.frame(r, type = ifelse(r$variable == "P_exit",
+    "Total exit probability (in %)", "Number of relays"))
+  ggplot(r, aes(x = date, y = value)) +
+  geom_line(colour = "purple", size = 0.75) +
+  facet_grid(type ~ ., scales = "free_y") +
+  scale_x_date(name = "") +
+  scale_y_continuous(name = "") +
+  scale_colour_manual(values = c("purple", "orange")) +
+  opts(title = paste("Fast exits (95+ Mbit/s configured bandwidth",
+    "rate,\n5000+ KB/s advertised bandwidth capacity,\n",
+    "exit to ports 80, 443, 554, and 1755,\n",
+    "at most 2 relays per /24 network)\n", sep = ""))
+  ggsave(filename = path, width = 8, height = 6, dpi = as.numeric(dpi))
+}
+
+plot_almost_fast_exits <- function(start, end, path, dpi) {
+  t <- read.csv(paste("/srv/metrics.torproject.org/task-6498-graphs/",
+    "task-6498/task-6498-results.csv", sep = ""),
+    stringsAsFactors = FALSE)
+  t <- t[t$valid_after >= paste(start, "00:00:00") &
+         t$valid_after <= paste(end, "23:59:59") &
+         t$valid_after < paste(Sys.Date() - 1, "23:59:59"), ]
+  t1 <- t[t$min_rate == 11875 & t$ports == "80-443-554-1755" &
+    t$min_advbw == 5000, ]
+  t2 <- t[t$min_rate == 10000 & t$ports == "80-443" &
+    t$min_advbw == 2000, ]
+  t <- rbind(
+    data.frame(t1, var = "95+ Mbit/s, 5000+ KB/s, 80/443/554/1755"),
+    data.frame(t2, var = "80+ Mbit/s, 2000+ KB/s, 80/443"))
+  t <- aggregate(list(relays = t$relays, P_exit = 100 * t$exit_prob),
+    by = list(date = as.Date(cut.Date(as.Date(t$valid_after), "day")),
+    var = t$var), FUN = median)
+  t <- melt(t, id.vars = c("date", "var"))
+  t <- data.frame(t, type = ifelse(t$variable == "P_exit",
+    "Total exit probability (in %)", "Number of relays"))
+  ggplot(t, aes(x = date, y = value, colour = var)) +
+  geom_line(size = 0.75) +
+  facet_grid(type ~ ., scales = "free_y") +
+  scale_x_date(name = "") +
+  scale_y_continuous(name = "") +
+  scale_colour_manual(name = "", values = c("purple", "orange")) +
+  opts(title = "Relays almost meeting the fast-exit requirements",
+    legend.position = "top")
+  ggsave(filename = path, width = 8, height = 6, dpi = as.numeric(dpi))
+}
+
