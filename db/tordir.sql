@@ -899,15 +899,6 @@ CREATE TABLE torperf_stats (
     CONSTRAINT torperf_stats_pkey PRIMARY KEY("date", source)
 );
 
--- TABLE gettor_stats
--- Packages requested from GetTor
-CREATE TABLE gettor_stats (
-    "date" DATE NOT NULL,
-    bundle CHARACTER VARYING(64) NOT NULL,
-    downloads INTEGER NOT NULL,
-    CONSTRAINT gettor_stats_pkey PRIMARY KEY("date", bundle)
-);
-
 -- Refresh all statistics in the database.
 CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
   BEGIN

@@ -68,7 +68,6 @@ public class GraphDataServlet extends HttpServlet {
         "direct-users");
     this.availableGraphDataFiles.put("bridge-users-by-country",
         "bridge-users");
-    this.availableGraphDataFiles.put("gettor", "gettor");
     this.availableGraphDataFiles.put("torperf", "torperf");
 
     /* Initialize map of graphs with specific variable columns. */

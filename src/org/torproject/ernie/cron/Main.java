@@ -84,13 +84,6 @@ public class Main {
           statsDirectory, config.getRelayDescriptorDatabaseJDBC());
     }
 
-    // Download and process GetTor stats
-    if (config.getProcessGetTorStats()) {
-      new GetTorProcessor(
-          new File(config.getGetTorDirectory()),
-          config.getRelayDescriptorDatabaseJDBC());
-    }
-
     // Remove lock file
     lf.releaseLock();
 

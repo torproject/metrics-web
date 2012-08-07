@@ -20,8 +20,7 @@ or only the database and the graphing engine, if desired.
 
 The metrics database contains data about the Tor Network coming from
 different sources, including the Tor directory authorities, Torperf
-performance measurement installations, the GetTor software package
-delivery service, and others.
+performance measurement installations, and others.
 
 
 1.1. Preparing the operating system
@@ -283,28 +282,6 @@ Edit /srv/metrics-web/config to contain the following options:
 
 ImportWriteTorperfStats 1
 TorperfDirectory torperf/
-
-Run the database import:
-
-$ ./run.sh
-
-
-1.10. Importing GetTor statistics
-=================================
-
-WARNING: The GetTor statistics are not available for download yet, so that
-this section only applies to the official metrics website.
-
-GetTor is a software distribution service that allows users to fetch the
-Tor software via email.  GetTor produces daily statistics of requested
-packages that can be imported into the metrics database.
-
-Put the GetTor statistics file into /srv/metrics-web/gettor/ .
-
-Edit /srv/metrics-web/config to contain the following options:
-
-ProcessGetTorStats 1
-GetTorDirectory gettor/
 
 Run the database import:
 

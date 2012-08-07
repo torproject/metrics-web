@@ -781,45 +781,6 @@ plot_bridge_users <- function(start, end, country, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
-plot_gettor <- function(start, end, language, path, dpi) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  condition <- ifelse(language == "all", "<> 'none'",
-      paste("LIKE '%_", tolower(language), "'", sep = ""))
-  q <- paste("SELECT date, SUM(downloads) AS downloads ",
-      "FROM gettor_stats WHERE bundle ", condition, " AND date >= '",
-      start, "' AND date <= '", end,
-      "' AND date < current_date - 1 GROUP BY date", sep = "")
-  rs <- dbSendQuery(con, q)
-  downloads <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
-      to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, downloads$date)
-  if (length(missing) > 0)
-    downloads <- rbind(downloads,
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        downloads = NA))
-  title <- ifelse(language == "all",
-    "Total packages requested from GetTor per day\n",
-    paste(languagename(language), " (", language,
-        ") packages requested from GetTor per day\n", sep = ""))
-  date_breaks <- date_breaks(
-    as.numeric(max(as.Date(downloads$date, "%Y-%m-%d")) -
-    min(as.Date(downloads$date, "%Y-%m-%d"))))
-  ggplot(downloads, aes(x = as.Date(date, "%Y-%m-%d"), y = downloads)) +
-    geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
-        format = date_breaks$format, major = date_breaks$major,
-        minor = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0, max(downloads$downloads,
-        na.rm = TRUE))) +
-    opts(title = title)
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
-}
-
 plot_torperf <- function(start, end, source, filesize, path, dpi) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)

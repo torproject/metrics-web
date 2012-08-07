@@ -61,7 +61,6 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableCsvFiles.add("direct-users");
     this.availableCsvFiles.add("dirreq-stats");
     this.availableCsvFiles.add("dirbytes");
-    this.availableCsvFiles.add("gettor");
     this.availableCsvFiles.add("monthly-users-average");
     this.availableCsvFiles.add("monthly-users-peak");
     this.availableCsvFiles.add("networksize");
@@ -95,7 +94,6 @@ public class RObjectGenerator implements ServletContextListener {
         "start,end,country,events,filename,nocutoff,dpi");
     this.availableGraphs.put("bridge-users",
          "start,end,country,filename,dpi");
-    this.availableGraphs.put("gettor", "start,end,language,filename,dpi");
     this.availableGraphs.put("torperf",
          "start,end,source,filesize,filename,dpi");
     this.availableGraphs.put("torperf-failures",

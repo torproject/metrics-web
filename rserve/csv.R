@@ -182,41 +182,6 @@ export_bridge_users <- function(path) {
   write.csv(bridgeusers, path, quote = FALSE, row.names = FALSE)
 }
 
-export_gettor <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, bundle, downloads FROM gettor_stats",
-      "WHERE date < current_date - 1")
-  rs <- dbSendQuery(con, q)
-  downloads <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  downloads_total <- downloads[downloads$bundle != "none", ]
-  downloads_total <- aggregate(downloads_total$downloads,
-      by = list(date = downloads_total$date), sum)
-  downloads_en <- downloads[grep("*_en", downloads$bundle), ]
-  downloads_en <- aggregate(downloads_en$downloads,
-      by = list(date = downloads_en$date), sum)
-  downloads_zh_cn <- downloads[grep("*_zh_cn", downloads$bundle), ]
-  downloads_zh_cn <- aggregate(downloads_zh_cn$downloads,
-      by = list(date = downloads_zh_cn$date), sum)
-  downloads_fa <- downloads[grep("*_fa", downloads$bundle), ]
-  downloads_fa <- aggregate(downloads_fa$downloads,
-      by = list(date = downloads_fa$date), sum)
-  downloads <- rbind(
-      data.frame(date = downloads_total$date,
-        bundle = "total", downloads = downloads_total$x),
-      data.frame(date = downloads_en$date,
-        bundle = "en", downloads = downloads_en$x),
-      data.frame(date = downloads_zh_cn$date,
-        bundle = "zh_cn", downloads = downloads_zh_cn$x),
-      data.frame(date = downloads_fa$date,
-        bundle = "fa", downloads = downloads_fa$x))
-  downloads <- cast(downloads, date ~ bundle, value = "downloads")
-  downloads <- downloads[order(downloads$date), ]
-  write.csv(downloads, path, quote = FALSE, row.names = FALSE)
-}
-
 export_torperf <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
