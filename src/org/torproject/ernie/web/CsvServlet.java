@@ -2,10 +2,7 @@
  * See LICENSE for licensing information */
 package org.torproject.ernie.web;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.SortedSet;
 import java.util.logging.Logger;
 
