@@ -27,7 +27,7 @@
         <ul>
           <li>Karsten Loesing, Steven J. Murdoch, Roger Dingledine. A Case
           Study on Measuring Statistical Data in the Tor Anonymity
-          Network. Accepted for publication at Workshop on Ethics in
+          Network. Workshop on Ethics in
           Computer Security Research (WECSR 2010), Tenerife, Spain,
           January 2010. (<a href="papers/wecsr10.pdf">PDF</a>, 160K)</li>
           <li>Karsten Loesing. Measuring the Tor Network from Public
