@@ -671,7 +671,7 @@ plot_direct_users <- function(start, end, country, events, path, nocutoff,
   q <- paste("SELECT date, r, bwp, brn, bwn, brp, bwr, brr, country ",
       "FROM user_stats WHERE date >= '", start, "' AND date <= '", end,
       "' ", ifelse(nocutoff == "off",
-      " AND date < current_date - 1 ", ""),
+      " AND date < current_date - 3 ", ""),
       " AND (country = 'zy'", ifelse(country == "all", "",
       paste(" OR country = '", country, "'", sep = "")), ")", sep = "")
   rs <- dbSendQuery(con, q)
@@ -747,7 +747,7 @@ plot_bridge_users <- function(start, end, country, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, users FROM bridge_stats ",
       "WHERE date >= '", start, "' AND date <= '", end, "' ",
-      "AND date < current_date - 1",
+      "AND date < current_date - 3",
       " AND country = '", ifelse(country == "all", "zy", country), "'",
       sep = "")
   rs <- dbSendQuery(con, q)

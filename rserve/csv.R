@@ -153,7 +153,7 @@ export_direct_users <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr",
-      "FROM user_stats WHERE date < current_date - 1",
+      "FROM user_stats WHERE date < current_date - 3",
       "ORDER BY date, country")
   rs <- dbSendQuery(con, q)
   u <- fetch(rs, n = -1)
@@ -171,7 +171,7 @@ export_bridge_users <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, country, users AS bridgeusers",
-      "FROM bridge_stats WHERE date < current_date - 1",
+      "FROM bridge_stats WHERE date < current_date - 3",
       "ORDER BY date, country")
   rs <- dbSendQuery(con, q)
   bridgeusers <- fetch(rs, n = -1)
