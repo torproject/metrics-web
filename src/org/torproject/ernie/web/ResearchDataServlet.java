@@ -39,6 +39,7 @@ public class ResearchDataServlet extends HttpServlet {
 
     /* Read local directory with files served by the local Apache HTTP
      * server and add the URLs to the list. */
+    List<String> dataFileUrls = new ArrayList<String>();
     String localDataDir = getServletConfig().getInitParameter(
         "localDataDir");
     if (localDataDir != null) {
