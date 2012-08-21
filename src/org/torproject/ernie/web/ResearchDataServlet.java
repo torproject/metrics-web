@@ -37,30 +37,6 @@ public class ResearchDataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 
-    /* Read file with URLs of metrics data files on other servers. */
-    List<String> dataFileUrls = new ArrayList<String>();
-    String remoteDataFiles = getServletConfig().getInitParameter(
-        "remoteDataFiles");
-    if (remoteDataFiles != null) {
-      try {
-        File remoteDataFilesFile = new File(remoteDataFiles);
-        if (remoteDataFilesFile.exists() &&
-            !remoteDataFilesFile.isDirectory()) {
-          BufferedReader br = new BufferedReader(new FileReader(
-              remoteDataFilesFile));
-          String line = null;
-          while ((line = br.readLine()) != null) {
-            if (!line.startsWith("#")) {
-              dataFileUrls.add(line);
-            }
-          }
-          br.close();
-        }
-      } catch (SecurityException e) {
-        /* We're not permitted to read the file with URLs. Ignore. */
-      }
-    }
-
     /* Read local directory with files served by the local Apache HTTP
      * server and add the URLs to the list. */
     String localDataDir = getServletConfig().getInitParameter(
