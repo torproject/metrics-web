@@ -926,7 +926,7 @@ plot_fast_exits <- function(start, end, path, dpi) {
          r$valid_after <= paste(end, "23:59:59") &
          r$valid_after < paste(Sys.Date() - 1, "23:59:59"), ]
   r <- r[r$min_rate == 11875 & r$ports == "80-443-554-1755" &
-    r$min_advbw == 5000, ]
+    r$min_advbw == 5000 & r$same_network == TRUE, ]
   r <- aggregate(list(relays = r$relays, P_exit = 100 * r$exit_prob),
     by = list(date = as.Date(cut.Date(as.Date(r$valid_after), "day"))),
     FUN = median)
@@ -954,11 +954,11 @@ plot_almost_fast_exits <- function(start, end, path, dpi) {
          t$valid_after <= paste(end, "23:59:59") &
          t$valid_after < paste(Sys.Date() - 1, "23:59:59"), ]
   t1 <- t[t$min_rate == 11875 & t$ports == "80-443-554-1755" &
-    t$min_advbw == 5000, ]
+    t$min_advbw == 5000 & t$same_network == TRUE, ]
   t2 <- t[t$min_rate == 10000 & t$ports == "80-443" &
-    t$min_advbw == 2000, ]
-  t <- rbind(
-    data.frame(t1, var = "95+ Mbit/s, 5000+ KB/s, 80/443/554/1755"),
+    t$min_advbw == 2000 & t$same_network == FALSE, ]
+  t <- rbind(data.frame(t1, var = paste("95+ Mbit/s, 5000+ KB/s,",
+    "80/443/554/1755, 2- per /24")),
     data.frame(t2, var = "80+ Mbit/s, 2000+ KB/s, 80/443"))
   t <- aggregate(list(relays = t$relays, P_exit = 100 * t$exit_prob),
     by = list(date = as.Date(cut.Date(as.Date(t$valid_after), "day")),
