@@ -957,21 +957,30 @@ plot_almost_fast_exits <- function(start, end, path, dpi) {
     t$min_advbw == 5000 & t$same_network == TRUE, ]
   t2 <- t[t$min_rate == 10000 & t$ports == "80-443" &
     t$min_advbw == 2000 & t$same_network == FALSE, ]
-  t <- rbind(data.frame(t1, var = paste("95+ Mbit/s, 5000+ KB/s,",
-    "80/443/554/1755, 2- per /24")),
-    data.frame(t2, var = "80+ Mbit/s, 2000+ KB/s, 80/443"))
-  t <- aggregate(list(relays = t$relays, P_exit = 100 * t$exit_prob),
+  t <- rbind(data.frame(t1, var = "fast"),
+    data.frame(t2, var = "almost_fast"))
+  r <- cast(t, valid_after ~ var, value = "relays")
+  r <- data.frame(valid_after = r$valid_after, fast = r$fast,
+    almost = r$almost_fast - r$fast, var = "relays")
+  e <- cast(t, valid_after ~ var, value = "exit_prob")
+  e <- data.frame(valid_after = e$valid_after, fast = 100 * e$fast,
+    almost = 100 * (e$almost_fast - e$fast), var = "exit_prob")
+  t <- rbind(r, e)
+  t <- aggregate(list(fast = t$fast, almost = t$almost),
     by = list(date = as.Date(cut.Date(as.Date(t$valid_after), "day")),
-    var = t$var), FUN = median)
+    var = ifelse(t$var == "exit_prob", "Total exit probability (in %)",
+    "Number of relays")), FUN = median)
   t <- melt(t, id.vars = c("date", "var"))
-  t <- data.frame(t, type = ifelse(t$variable == "P_exit",
-    "Total exit probability (in %)", "Number of relays"))
-  ggplot(t, aes(x = date, y = value, colour = var)) +
+  t <- data.frame(t, type = ifelse(t$variable == "fast",
+    "fast exits (95+ Mbit/s, 5000+ KB/s, 80/443/554/1755, 2- per /24",
+    paste("almost fast exits (80+ Mbit/s, 2000+ KB/s, 80/443,",
+    "not in set of fast exits)")))
+  ggplot(t, aes(x = date, y = value, colour = type)) +
   geom_line(size = 0.75) +
-  facet_grid(type ~ ., scales = "free_y") +
+  facet_grid(var ~ ., scales = "free_y") +
   scale_x_date(name = "") +
   scale_y_continuous(name = "") +
-  scale_colour_manual(name = "", values = c("purple", "orange")) +
+  scale_colour_manual(name = "", values = c("orange", "purple")) +
   opts(title = "Relays almost meeting the fast-exit requirements",
     legend.position = "top")
   ggsave(filename = path, width = 8, height = 6, dpi = as.numeric(dpi))
