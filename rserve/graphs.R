@@ -939,7 +939,7 @@ plot_fast_exits <- function(start, end, path, dpi) {
   scale_x_date(name = "") +
   scale_y_continuous(name = "") +
   scale_colour_manual(values = c("purple", "orange")) +
-  opts(title = paste("Fast exits (95+ Mbit/s configured bandwidth",
+  opts(title = paste("Fast exits (95+ Mbit/s configured bandwidth ",
     "rate,\n5000+ KB/s advertised bandwidth capacity,\n",
     "exit to ports 80, 443, 554, and 1755,\n",
     "at most 2 relays per /24 network)\n", sep = ""))
