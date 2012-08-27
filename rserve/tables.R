@@ -34,7 +34,7 @@ write_censorship_events <- function(start, end, path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr ",
       "FROM user_stats WHERE date >= '", start, "' AND date <= '", end,
-      "' AND date < current_date - 1", sep = "")
+      "' AND date < current_date - 3", sep = "")
   rs <- dbSendQuery(con, q)
   u <- fetch(rs, n = -1)
   dbDisconnect(con)

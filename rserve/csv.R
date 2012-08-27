@@ -73,11 +73,11 @@ export_bandwidth <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, bwadvertised FROM total_bandwidth",
-      "WHERE date < current_date - 1")
+      "WHERE date < current_date - 3")
   rs <- dbSendQuery(con, q)
   bw_desc <- fetch(rs, n = -1)
   q <- paste("SELECT date, read, written FROM total_bwhist",
-      "WHERE date < current_date - 1")
+      "WHERE date < current_date - 3")
   rs <- dbSendQuery(con, q)
   bw_hist <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -96,7 +96,7 @@ export_bwhist_flags <- function(path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, isexit, isguard, read / 86400 AS read,",
       "written / 86400 AS written",
-      "FROM bwhist_flags WHERE date < current_date - 1",
+      "FROM bwhist_flags WHERE date < current_date - 3",
       "ORDER BY date, isexit, isguard")
   rs <- dbSendQuery(con, q)
   bw <- fetch(rs, n = -1)
@@ -110,7 +110,7 @@ export_dirbytes <- function(path) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, dr, dw, brp, bwp, brd, bwd FROM user_stats",
       "WHERE country = 'zy' AND bwp / bwd <= 3",
-      "AND date < current_date - 1 ORDER BY date")
+      "AND date < current_date - 3 ORDER BY date")
   rs <- dbSendQuery(con, q)
   dir <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -211,7 +211,7 @@ help_export_monthly_users <- function(path, aggr_fun) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr",
-      "FROM user_stats WHERE date < current_date - 1",
+      "FROM user_stats WHERE date < current_date - 3",
       "ORDER BY date, country")
   rs <- dbSendQuery(con, q)
   u <- fetch(rs, n = -1)
@@ -219,7 +219,7 @@ help_export_monthly_users <- function(path, aggr_fun) {
        users = u$r * (u$bwp * u$brn / u$bwn - u$brp) /
                (u$bwr * u$brn / u$bwn - u$brr) / 10)
   q <- paste("SELECT date, country, FLOOR(users) AS users",
-      "FROM bridge_stats WHERE date < current_date - 1",
+      "FROM bridge_stats WHERE date < current_date - 3",
       "ORDER BY date, country")
   rs <- dbSendQuery(con, q)
   bridge <- fetch(rs, n = -1)
@@ -263,7 +263,7 @@ export_dirreq_stats <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, r, bwp, brp, bwn, brn, bwr, brr ",
-      "FROM user_stats WHERE date < current_date - 1",
+      "FROM user_stats WHERE date < current_date - 3",
       "AND country = 'zy' ORDER BY date", sep = "")
   rs <- dbSendQuery(con, q)
   u <- fetch(rs, n = -1)

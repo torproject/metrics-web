@@ -475,12 +475,12 @@ plot_bandwidth <- function(start, end, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, bwadvertised FROM total_bandwidth ",
       "WHERE date >= '", start, "' AND date <= '", end, "' ",
-      "AND date < current_date - 1", sep = "")
+      "AND date < current_date - 3", sep = "")
   rs <- dbSendQuery(con, q)
   bw_desc <- fetch(rs, n = -1)
   q <- paste("SELECT date, read, written FROM total_bwhist ",
       "WHERE date >= '", start, "' AND date <= '", end, "' ",
-      "AND date < current_date - 1", sep = "")
+      "AND date < current_date - 3", sep = "")
   rs <- dbSendQuery(con, q)
   bw_hist <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -513,7 +513,7 @@ plot_bwhist_flags <- function(start, end, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, isexit, isguard, read, written ",
       "FROM bwhist_flags WHERE date >= '", start, "' AND date <= '", end,
-      "' AND date < current_date - 1", sep = "")
+      "' AND date < current_date - 3", sep = "")
   rs <- dbSendQuery(con, q)
   bw <- fetch(rs, n = -1)
   dbDisconnect(con)
@@ -559,7 +559,7 @@ plot_dirbytes <- function(start, end, path, dpi) {
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, dr, dw, brp, bwp, brd, bwd FROM user_stats ",
       "WHERE country = 'zy' AND bwp / bwd <= 3 AND date >= '", start,
-      "' AND date <= '", end, "' AND date < current_date - 1 ",
+      "' AND date <= '", end, "' AND date < current_date - 3 ",
       "ORDER BY date", sep = "")
   rs <- dbSendQuery(con, q)
   dir <- fetch(rs, n = -1)
