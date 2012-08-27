@@ -255,9 +255,6 @@ public class TorperfProcessor {
         + "Last known obserations by source and file size are:");
     String lastSource = null;
     String lastLine = null;
-    Level logLevel = Level.INFO;
-    String cutoff = formatter.format(System.currentTimeMillis()
-        - 12L * 60L * 60L * 1000L).replaceAll(",", " ");
     for (String s : rawObs.keySet()) {
       String[] parts = s.split(",");
       if (lastSource == null) {
@@ -267,9 +264,6 @@ public class TorperfProcessor {
             + lastLine.split(",")[2];
         dumpStats.append("\n" + lastSource + " " + lastKnownObservation);
         lastSource = parts[0];
-        if (cutoff.compareTo(lastKnownObservation) > 0) {
-          logLevel = Level.WARNING;
-        }
       }
       lastLine = s;
     }
@@ -277,11 +271,8 @@ public class TorperfProcessor {
       String lastKnownObservation = lastLine.split(",")[1] + " "
           + lastLine.split(",")[2];
       dumpStats.append("\n" + lastSource + " " + lastKnownObservation);
-      if (cutoff.compareTo(lastKnownObservation) > 0) {
-        logLevel = Level.WARNING;
-      }
     }
-    logger.log(logLevel, dumpStats.toString());
+    logger.info(dumpStats.toString());
 
     /* Write results to database. */
     if (connectionURL != null) {
