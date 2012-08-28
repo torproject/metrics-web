@@ -47,7 +47,7 @@ based on the requests seen by a few dozen directory mirrors.</p>
       </select>
     </p><p>
       Show possible censorship events if available (<a
-      href="papers/detector-2011-09-09.pdf">BETA</a>)
+      href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>)
       <input type="checkbox" name="events" value="on"
         <c:if test="${direct_users_events[0] eq 'on'}"> checked</c:if>
       ></input>
@@ -96,7 +96,7 @@ based on the requests seen by a few dozen directory mirrors.</p>
 <hr>
 <a name="censorship-events"></a>
 <p><b>Top-10 countries by possible censorship events (<a
-      href="papers/detector-2011-09-09.pdf">BETA</a>):</b></p>
+      href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>):</b></p>
 <form action="users.html#censorship-events">
   <div class="formrow">
     <input type="hidden" name="table" value="censorship-events">
