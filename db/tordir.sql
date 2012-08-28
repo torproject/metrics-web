@@ -219,6 +219,15 @@ CREATE TABLE total_bwhist (
     CONSTRAINT total_bwhist_pkey PRIMARY KEY(date)
 );
 
+-- TABLE bandwidth_flags
+CREATE TABLE bandwidth_flags (
+    date DATE NOT NULL,
+    isexit BOOLEAN NOT NULL,
+    isguard BOOLEAN NOT NULL,
+    bwadvertised BIGINT NOT NULL,
+    CONSTRAINT bandwidth_flags_pkey PRIMARY KEY(date, isexit, isguard)
+);
+
 -- TABLE bwhist_flags
 CREATE TABLE bwhist_flags (
     date DATE NOT NULL,
@@ -647,6 +656,40 @@ CREATE OR REPLACE FUNCTION refresh_total_bwhist() RETURNS INTEGER AS $$
   END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION refresh_bandwidth_flags() RETURNS INTEGER AS $$
+    DECLARE
+        min_date TIMESTAMP WITHOUT TIME ZONE;
+        max_date TIMESTAMP WITHOUT TIME ZONE;
+    BEGIN
+
+    min_date := (SELECT MIN(date) FROM updates);
+    max_date := (SELECT MAX(date) + 1 FROM updates);
+
+  DELETE FROM bandwidth_flags WHERE date IN (SELECT date FROM updates);
+  EXECUTE '
+  INSERT INTO bandwidth_flags (date, isexit, isguard, bwadvertised)
+  SELECT DATE(validafter) AS date,
+      BOOL_OR(isexit) AS isexit,
+      BOOL_OR(isguard) AS isguard,
+      (SUM(LEAST(bandwidthavg, bandwidthobserved))
+      / relay_statuses_per_day.count)::BIGINT AS bwadvertised
+    FROM descriptor RIGHT JOIN statusentry
+    ON descriptor.descriptor = statusentry.descriptor
+    JOIN relay_statuses_per_day
+    ON DATE(validafter) = relay_statuses_per_day.date
+    WHERE isrunning = TRUE
+          AND validafter >= ''' || min_date || '''
+          AND validafter < ''' || max_date || '''
+          AND DATE(validafter) IN (SELECT date FROM updates)
+          AND relay_statuses_per_day.date >= ''' || min_date || '''
+          AND relay_statuses_per_day.date < ''' || max_date || '''
+          AND DATE(relay_statuses_per_day.date) IN
+              (SELECT date FROM updates)
+    GROUP BY DATE(validafter), isexit, isguard, relay_statuses_per_day.count';
+  RETURN 1;
+  END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION refresh_bwhist_flags() RETURNS INTEGER AS $$
     DECLARE
         min_date TIMESTAMP WITHOUT TIME ZONE;
@@ -923,6 +966,8 @@ CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
     PERFORM refresh_total_bandwidth();
     RAISE NOTICE '% Refreshing relay bandwidth history.', timeofday();
     PERFORM refresh_total_bwhist();
+    RAISE NOTICE '% Refreshing total relay bandwidth by flags.', timeofday();
+    PERFORM refresh_bandwidth_flags();
     RAISE NOTICE '% Refreshing bandwidth history by flags.', timeofday();
     PERFORM refresh_bwhist_flags();
     RAISE NOTICE '% Refreshing user statistics.', timeofday();

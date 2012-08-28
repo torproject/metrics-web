@@ -64,6 +64,8 @@ public class GraphDataServlet extends HttpServlet {
     this.availableGraphDataFiles.put("relay-dir-bandwidth", "dirbytes");
     this.availableGraphDataFiles.put("relay-bandwidth-history-by-flags",
         "bwhist-flags");
+    this.availableGraphDataFiles.put("relay-bandwidth-by-flags",
+        "bandwidth-flags");
     this.availableGraphDataFiles.put("direct-users-by-country",
         "direct-users");
     this.availableGraphDataFiles.put("bridge-users-by-country",

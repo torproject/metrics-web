@@ -303,6 +303,41 @@ Exit and/or Guard flags assigned by the directory authorities.</p>
 <p><a href="csv/bwhist-flags.csv">CSV</a> file containing all data.</p>
 <br>
 
+<a name="bandwidth-flags"></a>
+<h3><a href="#bandwidth-flags" class="anchor">Advertised bandwidth and
+bandwidth history by relay flags</a></h3>
+<br>
+<p>The following graph shows the advertised bandwidth and bandwidth
+history of all relays with the Exit and/or Guard flags assigned by the
+directory authorities.
+Note that these sets possibly overlap with relays having both Exit and
+Guard flag.</p>
+<img src="bandwidth-flags.png${bandwidth_flags_url}"
+     width="576" height="360" alt="Advertised bandwidth and bandwidth history by relay flags graph">
+<form action="network.html#bandwidth-flags">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="bandwidth-flags">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(bandwidth_flags_start) == 0}">${default_start_date}</c:when><c:otherwise>${bandwidth_flags_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(bandwidth_flags_end) == 0}">${default_end_date}</c:when><c:otherwise>${bandwidth_flags_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+      Resolution: <select name="dpi">
+        <option value="72"<c:if test="${bandwidth_flags_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
+        <option value="150"<c:if test="${bandwidth_flags_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
+        <option value="300"<c:if test="${bandwidth_flags_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
+      </select>
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<p><a href="csv/bandwidth-flags.csv">CSV</a> file containing all data.</p>
+<br>
+
 <a name="dirbytes"></a>
 <h3><a href="#dirbytes" class="anchor">Number of bytes spent on answering
 directory requests</a></h3>

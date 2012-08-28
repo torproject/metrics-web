@@ -193,6 +193,10 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/bandwidth-flags.png</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GraphImage</servlet-name>
     <url-pattern>/dirbytes.png</url-pattern>
   </servlet-mapping>
   <servlet-mapping>

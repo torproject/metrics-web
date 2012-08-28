@@ -279,3 +279,29 @@ export_dirreq_stats <- function(path) {
       quote = FALSE, row.names = FALSE)
 }
 
+export_bandwidth_flags <- function(path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db) 
+  q <- paste("SELECT date, isexit, isguard, bwadvertised AS value",
+      "FROM bandwidth_flags WHERE date < current_date - 3")
+  rs <- dbSendQuery(con, q)
+  bw_desc <- fetch(rs, n = -1) 
+  q <- paste("SELECT date, isexit, isguard,",
+      "(read + written) / (2 * 86400) AS value",
+      "FROM bwhist_flags WHERE date < current_date - 3")
+  rs <- dbSendQuery(con, q)
+  bw_hist <- fetch(rs, n = -1) 
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  bandwidth <- rbind(data.frame(bw_desc, type = "advbw"),
+      data.frame(bw_hist, type = "bwhist"))
+  bandwidth <- rbind(
+    data.frame(bandwidth[bandwidth$isguard == TRUE, ], flag = "guard"),
+    data.frame(bandwidth[bandwidth$isexit == TRUE, ], flag = "exit"))
+  bandwidth <- aggregate(list(value = bandwidth$value),
+    by = list(date = bandwidth$date, type = bandwidth$type,
+    flag = bandwidth$flag), FUN = sum)
+  write.csv(format(bandwidth, trim = TRUE, scientific = FALSE), path,
+      quote = FALSE, row.names = FALSE)
+}
+

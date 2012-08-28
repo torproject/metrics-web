@@ -986,3 +986,66 @@ plot_almost_fast_exits <- function(start, end, path, dpi) {
   ggsave(filename = path, width = 8, height = 6, dpi = as.numeric(dpi))
 }
 
+plot_bandwidth_flags <- function(start, end, path, dpi) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT date, isexit, isguard, bwadvertised AS value ",
+      "FROM bandwidth_flags WHERE date >= '", start, "' AND date <= '",
+      end, "' AND date < current_date - 3", sep = "")
+  rs <- dbSendQuery(con, q)
+  bw_desc <- fetch(rs, n = -1)
+  q <- paste("SELECT date, isexit, isguard, ",
+      "(read + written) / (2 * 86400) ",
+      "AS value FROM bwhist_flags WHERE date >= '", start,
+      "' AND date <= '", end, "' AND date < current_date - 3", sep = "")
+  rs <- dbSendQuery(con, q)
+  bw_hist <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  bandwidth <- rbind(data.frame(bw_desc, type = "advertised bandwidth"),
+      data.frame(bw_hist, type = "bandwidth history"))
+  bandwidth <- rbind(
+    data.frame(bandwidth[bandwidth$isguard == TRUE, ], flag = "Guard"),
+    data.frame(bandwidth[bandwidth$isexit == TRUE, ], flag = "Exit"))
+  bandwidth <- aggregate(list(value = bandwidth$value),
+    by = list(date = bandwidth$date, type = bandwidth$type,
+    flag = bandwidth$flag), FUN = sum)
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(bandwidth$date, "%Y-%m-%d")) -
+    min(as.Date(bandwidth$date, "%Y-%m-%d"))))
+  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
+      to = as.Date(end, "%Y-%m-%d"), by = "1 day")
+  missing <- setdiff(dates, as.Date(bandwidth$date,
+    origin = "1970-01-01"))
+  if (length(missing) > 0) {
+    bandwidth <- rbind(bandwidth,
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        type = "advertised bandwidth", flag = "Exit", value = NA),
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        type = "bandwidth history", flag = "Exit", value = NA),
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        type = "advertised bandwidth", flag = "Guard", value = NA),
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        type = "bandwidth history", flag = "Guard", value = NA))
+  }
+  bandwidth <- data.frame(date = bandwidth$date,
+    variable = as.factor(paste(bandwidth$flag, ", ", bandwidth$type,
+    sep = "")), value = bandwidth$value)
+  bandwidth$variable <- factor(bandwidth$variable,
+    levels = levels(bandwidth$variable)[c(3, 4, 1, 2)])
+  ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20,
+      colour = variable)) +
+    geom_line(size = 1) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
+    scale_y_continuous(name="Bandwidth (MiB/s)",
+        limits = c(0, max(bandwidth$value, na.rm = TRUE) / 2^20)) +
+    scale_colour_manual(name = "",
+        values = c("#E69F00", "#D6C827", "#009E73", "#00C34F")) +
+    opts(title = paste("Advertised bandwidth and bandwidth history by",
+        "relay flags"), legend.position = "top")
+  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+}
+

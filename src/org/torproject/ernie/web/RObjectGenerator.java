@@ -54,6 +54,7 @@ public class RObjectGenerator implements ServletContextListener {
     /* Initialize map of available CSV files. */
     this.availableCsvFiles = new TreeSet<String>();
     this.availableCsvFiles.add("bandwidth");
+    this.availableCsvFiles.add("bandwidth-flags");
     this.availableCsvFiles.add("bridge-users");
     this.availableCsvFiles.add("bwhist-flags");
     this.availableCsvFiles.add("connbidirect");
@@ -88,6 +89,7 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableGraphs.put("versions", "start,end,filename,dpi");
     this.availableGraphs.put("platforms", "start,end,filename,dpi");
     this.availableGraphs.put("bandwidth", "start,end,filename,dpi");
+    this.availableGraphs.put("bandwidth-flags", "start,end,filename,dpi");
     this.availableGraphs.put("bwhist-flags", "start,end,filename,dpi");
     this.availableGraphs.put("dirbytes", "start,end,filename,dpi");
     this.availableGraphs.put("direct-users",
