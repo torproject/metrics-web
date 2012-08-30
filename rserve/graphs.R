@@ -619,14 +619,14 @@ plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
           "stable"), sep = ""),
         value = rep(NA, length(missing) * 5)), networksize)
     date_breaks <- date_breaks(
-      as.numeric(max(as.Date(networksize$date, "%Y-%m-%d")) -
+      as.numeric(max(as.Date(end, "%Y-%m-%d")) -
       min(as.Date(networksize$date, "%Y-%m-%d"))))
     ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
       colour = as.factor(variable))) + geom_line(size = 1) +
       scale_x_date(name = paste("\nThe Tor Project - ",
           "https://metrics.torproject.org/", sep = ""),
           format = date_breaks$format, major = date_breaks$major,
-          minor = date_breaks$minor) +
+          minor = date_breaks$minor, limits = as.Date(c(start, end))) +
       scale_y_continuous(name = "", limits = c(0, max(networksize$value,
           na.rm = TRUE))) +
       scale_colour_manual(name = "Relay flags", values = c("#E69F00",
