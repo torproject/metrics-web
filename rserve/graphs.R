@@ -664,11 +664,8 @@ plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
   ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
 }
 
-plot_direct_users <- function(start, end, country, events, path, nocutoff,
-    dpi) {
-  if (nocutoff != "off") {
-    end <- min(end, as.character(Sys.Date() - 4))
-  }
+plot_direct_users <- function(start, end, country, events, path, dpi) {
+  end <- min(end, as.character(Sys.Date() - 4))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, r, bwp, brn, bwn, brp, bwr, brr, country ",

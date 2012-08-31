@@ -60,7 +60,6 @@ public class GraphParameterChecker {
     this.knownParameterValues.put("language", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "all,siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
-    this.knownParameterValues.put("nocutoff", "on,off");
     this.knownParameterValues.put("dpi", "72,150,300");
   }
 
@@ -290,26 +289,6 @@ public class GraphParameterChecker {
         recognizedGraphParameters.put("fingerprint",
             fingerprintParameter);
       }
-    }
-
-    /* Parse whether the last day(s) of a time series should be cut off.
-     * This parameter can either be "on" or "off," where "off" is the
-     * default. */
-    if (supportedGraphParameters.contains("nocutoff")) {
-      String[] nocutoffParameter = (String[]) requestParameters.get(
-          "nocutoff");
-      List<String> knownValues = Arrays.asList(
-          this.knownParameterValues.get("nocutoff").split(","));
-      if (nocutoffParameter != null) {
-        if (nocutoffParameter.length != 1 ||
-            nocutoffParameter[0].length() == 0 ||
-            !knownValues.contains(nocutoffParameter[0])) {
-          return null;
-        }
-      } else {
-        nocutoffParameter = new String[] { "off" };
-      }
-      recognizedGraphParameters.put("nocutoff", nocutoffParameter);
     }
 
     /* Parse graph resolution in dpi. The default is 72. */

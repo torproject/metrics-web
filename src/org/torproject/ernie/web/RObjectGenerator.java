@@ -93,7 +93,7 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableGraphs.put("bwhist-flags", "start,end,filename,dpi");
     this.availableGraphs.put("dirbytes", "start,end,filename,dpi");
     this.availableGraphs.put("direct-users",
-        "start,end,country,events,filename,nocutoff,dpi");
+        "start,end,country,events,filename,dpi");
     this.availableGraphs.put("bridge-users",
          "start,end,country,filename,dpi");
     this.availableGraphs.put("torperf",
