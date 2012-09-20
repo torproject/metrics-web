@@ -94,6 +94,18 @@ public class GraphDataServlet extends HttpServlet {
       HttpServletResponse response) throws IOException,
       ServletException {
 
+    /* Check if the directory listing was requested. */
+    String requestURI = request.getRequestURI();
+    if (requestURI.equals("/ernie/graphs/")) {
+      request.setAttribute("directory", "/graphs");
+      request.setAttribute("extension", "");
+      request.setAttribute("files",
+          this.availableGraphDataFiles.keySet());
+      request.getRequestDispatcher("/WEB-INF/dir.jsp").forward(request,
+          response);
+      return;
+    }
+
     /* Find out which JSON file was requested and make sure we know this
      * JSON file type. */
     String requestedJsonFile = request.getRequestURI();
