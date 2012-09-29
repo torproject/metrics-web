@@ -56,7 +56,7 @@ public class GraphParameterChecker {
       sb.append("," + country[0]);
     }
     this.knownParameterValues.put("country", sb.toString());
-    this.knownParameterValues.put("events", "on,off");
+    this.knownParameterValues.put("events", "on,off,points");
     this.knownParameterValues.put("language", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "all,siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");

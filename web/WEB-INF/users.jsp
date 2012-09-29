@@ -48,9 +48,11 @@ based on the requests seen by a few dozen directory mirrors.</p>
     </p><p>
       Show possible censorship events if available (<a
       href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>)
-      <input type="checkbox" name="events" value="on"
-        <c:if test="${direct_users_events[0] eq 'on'}"> checked</c:if>
-      ></input>
+      <select name="events">
+        <option value="off">Off</option>
+        <option value="on"<c:if test="${direct_users_events[0] eq 'on'}"> selected</c:if>>On: both points and expected range</option>
+        <option value="points"<c:if test="${direct_users_events[0] eq 'points'}"> selected</c:if>>On: points only, no expected range</option>
+      </select>
     </p><p>
       Resolution: <select name="dpi">
         <option value="72"<c:if test="${direct_users_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>

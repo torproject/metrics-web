@@ -705,20 +705,22 @@ plot_direct_users <- function(start, end, country, events, path, dpi) {
   max_y <- ifelse(length(na.omit(u$users)) == 0, 0,
       max(u$users, na.rm = TRUE))
   plot <- ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = users))
-  if (length(na.omit(u$users)) > 0 & events == "on" & country != "all") {
+  if (length(na.omit(u$users)) > 0 & events != "off" & country != "all") {
     r <- read.csv(
       "/srv/metrics.torproject.org/web/detector/direct-users-ranges.csv",
       stringsAsFactors = FALSE)
     r <- r[r$date >= start & r$date <= end & r$country == country,
         c("date", "minusers", "maxusers")]
-    if (length(r$maxusers) > 0)
-      max_y <- max(max_y, max(r$maxusers, na.rm = TRUE))
     r <- cast(rbind(melt(u, id.vars = "date"), melt(r, id.vars = "date")))
     upturns <- r[r$users > r$maxusers, 1:2]
     downturns <- r[r$users < r$minusers, 1:2]
-    plot <- plot +
-      geom_ribbon(data = r, aes(ymin = minusers, ymax = maxusers),
-          fill = "gray")
+    if (events == "on") {
+      if (length(r$maxusers) > 0)
+        max_y <- max(max_y, max(r$maxusers, na.rm = TRUE))
+      plot <- plot +
+        geom_ribbon(data = r, aes(ymin = minusers, ymax = maxusers),
+            fill = "gray")
+    }
     if (length(upturns$date) > 0)
       plot <- plot +
           geom_point(data = upturns, aes(x = date, y = users), size = 5,
