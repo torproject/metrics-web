@@ -480,7 +480,7 @@ website setup which is slightly different than the one described here.
 
 Now generate the web application.
 
-$ ant make-war
+$ ant war
 
 Create a symbolic link to the ernie.war file:
 
