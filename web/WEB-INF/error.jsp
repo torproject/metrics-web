@@ -44,8 +44,8 @@ Maybe you find what you're looking for on our sitemap:
 <li><a href="graphs.html">Graphs</a>
 <ul>
 <li><a href="network.html">Network</a></li>
+<li><a href="fast-exits.html">Fast Exits</a></li>
 <li><a href="users.html">Users</a></li>
-<li><a href="packages.html">Packages</a></li>
 <li><a href="performance.html">Performance</a></li>
 </ul></li>
 <li><a href="research.html">Research</a>
