@@ -18,6 +18,7 @@ CREATE TABLE descriptor (
     platform CHARACTER VARYING(256),
     published TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     uptime BIGINT,
+    extrainfo CHARACTER(40),
     rawdesc BYTEA NOT NULL,
     CONSTRAINT descriptor_pkey PRIMARY KEY (descriptor)
 );
