@@ -64,6 +64,9 @@ based on the requests seen by a few dozen directory mirrors.</p>
     </p>
   </div>
 </form>
+<p>Download graph as
+<a href="direct-users.pdf${direct_users_url}">PDF</a> or
+<a href="direct-users.svg${direct_users_url}">SVG</a>.</p>
 <hr>
 <a name="direct-users-table"></a>
 <p><b>Top-10 countries by directly connecting users:</b></p>
@@ -175,6 +178,9 @@ by a few hundred bridges.</p>
     </p>
   </div>
 </form>
+<p>Download graph as
+<a href="bridge-users.pdf${bridge_users_url}">PDF</a> or
+<a href="bridge-users.svg${bridge_users_url}">SVG</a>.</p>
 <hr>
 <p><a href="csv/bridge-users.csv">CSV</a> file containing all data.</p>
 <p><a href="csv/monthly-users-peak.csv">CSV</a> file containing peak daily

@@ -59,6 +59,9 @@ graph.</p>
     </p>
   </div>
 </form>
+<p>Download graph as
+<a href="torperf.pdf${torperf_url}">PDF</a> or
+<a href="torperf.svg${torperf_url}">SVG</a>.</p>
 <p><a href="csv/torperf.csv">CSV</a> file containing all data.</p>
 
 <br>
@@ -106,6 +109,9 @@ than 50 KiB (1 MiB, 5 MiB).</p>
     </p>
   </div>
 </form>
+<p>Download graph as
+<a href="torperf-failures.pdf${torperf_failures_url}">PDF</a> or
+<a href="torperf-failures.svg${torperf_failures_url}">SVG</a>.</p>
 <p><a href="csv/torperf-failures.csv">CSV</a> file containing all data.</p>
 
 <br>
@@ -147,6 +153,9 @@ classifying connections, read and write counters are reset for the next
     </p>
   </div>
 </form>
+<p>Download graph as
+<a href="connbidirect.pdf${connbidirect_url}">PDF</a> or
+<a href="connbidirect.svg${connbidirect_url}">SVG</a>.</p>
 <p><a href="csv/connbidirect.csv">CSV</a> file containing all data.</p>
 <br>
 

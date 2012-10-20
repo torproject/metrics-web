@@ -34,11 +34,15 @@ public class GraphImageServlet extends HttpServlet {
       ServletException {
 
     /* Find out which graph type was requested and make sure we know this
-     * graph type. */
+     * graph type and file type. */
     String requestedGraph = request.getRequestURI();
-    if (requestedGraph.endsWith(".png")) {
+    String fileType = null;
+    if (requestedGraph.endsWith(".png") ||
+        requestedGraph.endsWith(".pdf") ||
+        requestedGraph.endsWith(".svg")) {
+      fileType = requestedGraph.substring(requestedGraph.length() - 3);
       requestedGraph = requestedGraph.substring(0, requestedGraph.length()
-          - ".png".length());
+          - 4);
     }
     if (requestedGraph.contains("/")) {
       requestedGraph = requestedGraph.substring(requestedGraph.
@@ -48,17 +52,17 @@ public class GraphImageServlet extends HttpServlet {
     /* Request graph from R object generator, which either returns it from
      * its cache or asks Rserve to generate it. */
     RObject graph = rObjectGenerator.generateGraph(requestedGraph,
-        request.getParameterMap(), true);
+        fileType, request.getParameterMap(), true);
 
     /* Make sure that we have a graph to return. */
-    if (graph == null || graph.getBytes() == null) {
+    if (graph == null || graph.getBytes() == null || fileType == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
 
     /* Write graph bytes to response. */
     BufferedOutputStream output = null;
-    response.setContentType("image/png");
+    response.setContentType("image/" + fileType);
     response.setHeader("Content-Length",
         String.valueOf(graph.getBytes().length));
     response.setHeader("Content-Disposition",

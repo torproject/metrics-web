@@ -158,74 +158,59 @@
   <servlet-mapping>
     <servlet-name>GraphImage</servlet-name>
     <url-pattern>/networksize.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/networksize.pdf</url-pattern>
+    <url-pattern>/networksize.svg</url-pattern>
     <url-pattern>/cloudbridges.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/cloudbridges.pdf</url-pattern>
+    <url-pattern>/cloudbridges.svg</url-pattern>
     <url-pattern>/relaycountries.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/relaycountries.pdf</url-pattern>
+    <url-pattern>/relaycountries.svg</url-pattern>
     <url-pattern>/relayflags.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/relayflags.pdf</url-pattern>
+    <url-pattern>/relayflags.svg</url-pattern>
     <url-pattern>/relayflags-hour.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/relayflags-hour.pdf</url-pattern>
+    <url-pattern>/relayflags-hour.svg</url-pattern>
     <url-pattern>/versions.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/versions.pdf</url-pattern>
+    <url-pattern>/versions.svg</url-pattern>
     <url-pattern>/platforms.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/platforms.pdf</url-pattern>
+    <url-pattern>/platforms.svg</url-pattern>
     <url-pattern>/bandwidth.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/bandwidth.pdf</url-pattern>
+    <url-pattern>/bandwidth.svg</url-pattern>
     <url-pattern>/bwhist-flags.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/bwhist-flags.pdf</url-pattern>
+    <url-pattern>/bwhist-flags.svg</url-pattern>
     <url-pattern>/bandwidth-flags.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/bandwidth-flags.pdf</url-pattern>
+    <url-pattern>/bandwidth-flags.svg</url-pattern>
     <url-pattern>/dirbytes.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/dirbytes.pdf</url-pattern>
+    <url-pattern>/dirbytes.svg</url-pattern>
     <url-pattern>/direct-users.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/direct-users.pdf</url-pattern>
+    <url-pattern>/direct-users.svg</url-pattern>
     <url-pattern>/bridge-users.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/bridge-users.pdf</url-pattern>
+    <url-pattern>/bridge-users.svg</url-pattern>
     <url-pattern>/torperf.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/torperf.pdf</url-pattern>
+    <url-pattern>/torperf.svg</url-pattern>
     <url-pattern>/torperf-failures.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/torperf-failures.pdf</url-pattern>
+    <url-pattern>/torperf-failures.svg</url-pattern>
     <url-pattern>/connbidirect.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/connbidirect.pdf</url-pattern>
+    <url-pattern>/connbidirect.svg</url-pattern>
     <url-pattern>/fast-exits.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphImage</servlet-name>
+    <url-pattern>/fast-exits.pdf</url-pattern>
+    <url-pattern>/fast-exits.svg</url-pattern>
     <url-pattern>/almost-fast-exits.png</url-pattern>
+    <url-pattern>/almost-fast-exits.pdf</url-pattern>
+    <url-pattern>/almost-fast-exits.svg</url-pattern>
   </servlet-mapping>
 
   <servlet>

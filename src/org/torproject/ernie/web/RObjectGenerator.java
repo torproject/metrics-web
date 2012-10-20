@@ -13,8 +13,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -38,6 +40,7 @@ public class RObjectGenerator implements ServletContextListener {
   private SortedSet<String> availableCsvFiles;
   private Map<String, String> availableTables;
   private Map<String, String> availableGraphs;
+  private Set<String> availableGraphFileTypes;
 
   public void contextInitialized(ServletContextEvent event) {
 
@@ -104,6 +107,8 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableGraphs.put("fast-exits", "start,end,filename,dpi");
     this.availableGraphs.put("almost-fast-exits",
         "start,end,filename,dpi");
+    this.availableGraphFileTypes = new HashSet<String>(Arrays.asList(
+        "png,pdf,svg".split(",")));
     GraphParameterChecker.getInstance().setAvailableGraphs(
         availableGraphs);
 
@@ -129,7 +134,9 @@ public class RObjectGenerator implements ServletContextListener {
             generateTable(tableName, tableName, new HashMap(), false);
           }
           for (String graphName : availableGraphs.keySet()) {
-            generateGraph(graphName, new HashMap(), false);
+            for (String fileType : availableGraphFileTypes) {
+              generateGraph(graphName, fileType, new HashMap(), false);
+            }
           }
           lastUpdated = System.currentTimeMillis();
         }
@@ -141,8 +148,8 @@ public class RObjectGenerator implements ServletContextListener {
     /* Nothing to do. */
   }
 
-  public RObject generateGraph(String requestedGraph, Map parameterMap,
-      boolean checkCache) {
+  public RObject generateGraph(String requestedGraph, String fileType,
+      Map parameterMap, boolean checkCache) {
     Map<String, String[]> checkedParameters = GraphParameterChecker.
         getInstance().checkParameters(requestedGraph, parameterMap);
     if (checkedParameters == null) {
@@ -172,7 +179,7 @@ public class RObjectGenerator implements ServletContextListener {
             parameterValues.length - 1] + "'), ");
       }
     }
-    imageFilenameBuilder.append(".png");
+    imageFilenameBuilder.append("." + fileType);
     String imageFilename = imageFilenameBuilder.toString();
     rQueryBuilder.append("path = '%s')");
     String rQuery = rQueryBuilder.toString();

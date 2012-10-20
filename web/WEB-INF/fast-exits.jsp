@@ -47,6 +47,9 @@ requirements</a></h3>
     </p>
   </div>
 </form>
+<p>Download graph as
+<a href="fast-exits.pdf${fast_exits_url}">PDF</a> or
+<a href="fast-exits.svg${fast_exits_url}">SVG</a>.</p>
 <br>
 
 <a name="almostfastexits"></a>
@@ -76,6 +79,9 @@ fast-exit requirements</a></h3>
     </p>
   </div>
 </form>
+<p>Download graph as
+<a href="almost-fast-exits.pdf${almost_fast_exits_url}">PDF</a> or
+<a href="almost-fast-exits.svg${almost_fast_exits_url}">SVG</a>.</p>
 <br>
 
     </div>
