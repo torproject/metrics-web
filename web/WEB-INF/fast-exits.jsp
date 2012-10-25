@@ -37,12 +37,6 @@ requirements</a></h3>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(fast_exits_end) == 0}">${default_end_date}</c:when><c:otherwise>${fast_exits_end[0]}</c:otherwise></c:choose>">
     </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${fast_exits_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x432</option>
-        <option value="150"<c:if test="${fast_exits_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x900</option>
-        <option value="300"<c:if test="${fast_exits_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1800</option>
-      </select>
-    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -68,12 +62,6 @@ fast-exit requirements</a></h3>
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(almost_fast_exits_end) == 0}">${default_end_date}</c:when><c:otherwise>${almost_fast_exits_end[0]}</c:otherwise></c:choose>">
-    </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${almost_fast_exits_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x432</option>
-        <option value="150"<c:if test="${almost_fast_exits_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x900</option>
-        <option value="300"<c:if test="${almost_fast_exits_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1800</option>
-      </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>

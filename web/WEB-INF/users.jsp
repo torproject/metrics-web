@@ -54,12 +54,6 @@ based on the requests seen by a few dozen directory mirrors.</p>
         <option value="points"<c:if test="${direct_users_events[0] eq 'points'}"> selected</c:if>>On: points only, no expected range</option>
       </select>
     </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${direct_users_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${direct_users_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${direct_users_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
-    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -166,12 +160,6 @@ by a few hundred bridges.</p>
         <c:forEach var="country" items="${countries}" >
           <option value="${country[0]}"<c:if test="${bridge_users_country[0] eq country[0]}"> selected</c:if>>${country[1]}</option>
         </c:forEach>
-      </select>
-    </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${bridge_users_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${bridge_users_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${bridge_users_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
       </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">

@@ -277,7 +277,7 @@ date_breaks <- function(days) {
   list(major = major, minor = minor, format = format)
 }
 
-plot_networksize <- function(start, end, path, dpi) {
+plot_networksize <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -321,10 +321,10 @@ plot_networksize <- function(start, end, path, dpi) {
     scale_colour_hue("", breaks = c("relays", "bridges"),
         labels = c("Relays", "Bridges")) +
     opts(title = "Number of relays\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_cloudbridges <- function(start, end, path, dpi) {
+plot_cloudbridges <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -355,10 +355,10 @@ plot_cloudbridges <- function(start, end, path, dpi) {
     scale_y_continuous(name = "", limits = c(0,
         max(bridges$avg_running_ec2, na.rm = TRUE))) +
     opts(title = "Number of Tor Cloud bridges\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_relaycountries <- function(start, end, country, path, dpi) {
+plot_relaycountries <- function(start, end, country, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -399,10 +399,10 @@ plot_relaycountries <- function(start, end, country, path, dpi) {
     scale_y_continuous(name = "", limits = c(0, max(u$relays,
         na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_versions <- function(start, end, path, dpi) {
+plot_versions <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -435,10 +435,10 @@ plot_versions <- function(start, end, path, dpi) {
       values = colours[colours$breaks %in% visible_versions, 2],
       breaks = visible_versions) +
     opts(title = "Relay versions\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_platforms <- function(start, end, path, dpi) {
+plot_platforms <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user=dbuser, password=dbpassword, dbname=db)
@@ -468,10 +468,10 @@ plot_platforms <- function(start, end, path, dpi) {
       values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#333333"),
       labels = c("Linux", "Darwin", "FreeBSD", "Windows", "Other")) +
     opts(title = "Relay platforms\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_bandwidth <- function(start, end, path, dpi) {
+plot_bandwidth <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 4))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -505,10 +505,10 @@ plot_bandwidth <- function(start, end, path, dpi) {
         breaks = c("bwadv", "bwhist"),
         labels = c("Advertised bandwidth", "Bandwidth history")) +
     opts(title = "Total relay bandwidth", legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_bwhist_flags <- function(start, end, path, dpi) {
+plot_bwhist_flags <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 4))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -552,10 +552,10 @@ plot_bwhist_flags <- function(start, end, path, dpi) {
         values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2")) +
     opts(title = "Bandwidth history by relay flags",
         legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_dirbytes <- function(start, end, path, dpi) {
+plot_dirbytes <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 4))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -588,10 +588,10 @@ plot_dirbytes <- function(start, end, path, dpi) {
         labels = c("Written dir bytes", "Read dir bytes")) +
     opts(title = "Number of bytes spent on answering directory requests",
         legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
+plot_relayflags <- function(start, end, flags, granularity, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -661,10 +661,10 @@ plot_relayflags <- function(start, end, flags, granularity, path, dpi) {
           labels = flags) +
       opts(title = "Number of relays with relay flags assigned\n")
   }
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_direct_users <- function(start, end, country, events, path, dpi) {
+plot_direct_users <- function(start, end, country, events, path) {
   end <- min(end, as.character(Sys.Date() - 4))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -739,10 +739,10 @@ plot_direct_users <- function(start, end, country, events, path, dpi) {
     scale_y_continuous(name = "", limits = c(0, max_y),
         formatter = formatter) + opts(title = title)
   print(plot)
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_bridge_users <- function(start, end, country, path, dpi) {
+plot_bridge_users <- function(start, end, country, path) {
   end <- min(end, as.character(Sys.Date() - 4))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -778,10 +778,10 @@ plot_bridge_users <- function(start, end, country, path, dpi) {
         ifelse(length(na.omit(bridgeusers$users)) == 0, 0,
         max(bridgeusers$users, na.rm = TRUE))), formatter = formatter) +
     opts(title = title)
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_torperf <- function(start, end, source, filesize, path, dpi) {
+plot_torperf <- function(start, end, source, filesize, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -827,11 +827,10 @@ plot_torperf <- function(start, end, source, filesize, path, dpi) {
       values = paste(colour, c("", "66"), sep = "")) +
     opts(title = paste("Time in seconds to complete", filesizeStr,
         "request"), legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_torperf_failures <- function(start, end, source, filesize, path,
-    dpi) {
+plot_torperf_failures <- function(start, end, source, filesize, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -882,10 +881,10 @@ plot_torperf_failures <- function(start, end, source, filesize, path,
         labels = c("Timeouts", "Failures")) +
     opts(title = paste("Timeouts and failures of", filesizeStr,
         "requests"), legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_connbidirect <- function(start, end, path, dpi) {
+plot_connbidirect <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -915,10 +914,10 @@ plot_connbidirect <- function(start, end, path, dpi) {
         "Both reading and writing")) +
     opts(title = "Fraction of connections used uni-/bidirectionally",
         legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_fast_exits <- function(start, end, path, dpi) {
+plot_fast_exits <- function(start, end, path) {
   r <- read.csv(paste("/srv/metrics.torproject.org/task-6498-graphs/",
     "task-6498/task-6498-results.csv", sep = ""),
     stringsAsFactors = FALSE)
@@ -943,10 +942,10 @@ plot_fast_exits <- function(start, end, path, dpi) {
     "rate,\n5000+ KB/s advertised bandwidth capacity,\n",
     "exit to ports 80, 443, 554, and 1755,\n",
     "at most 2 relays per /24 network)\n", sep = ""))
-  ggsave(filename = path, width = 8, height = 6, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 6, dpi = 72)
 }
 
-plot_almost_fast_exits <- function(start, end, path, dpi) {
+plot_almost_fast_exits <- function(start, end, path) {
   t <- read.csv(paste("/srv/metrics.torproject.org/task-6498-graphs/",
     "task-6498/task-6498-results.csv", sep = ""),
     stringsAsFactors = FALSE)
@@ -983,10 +982,10 @@ plot_almost_fast_exits <- function(start, end, path, dpi) {
   scale_colour_manual(name = "", values = c("orange", "purple")) +
   opts(title = "Relays almost meeting the fast-exit requirements",
     legend.position = "top")
-  ggsave(filename = path, width = 8, height = 6, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 6, dpi = 72)
 }
 
-plot_bandwidth_flags <- function(start, end, path, dpi) {
+plot_bandwidth_flags <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 4))
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -1047,6 +1046,6 @@ plot_bandwidth_flags <- function(start, end, path, dpi) {
         values = c("#E69F00", "#D6C827", "#009E73", "#00C34F")) +
     opts(title = paste("Advertised bandwidth and bandwidth history by",
         "relay flags"), legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = as.numeric(dpi))
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 

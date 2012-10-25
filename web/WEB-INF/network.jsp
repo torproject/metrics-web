@@ -42,12 +42,6 @@ bridges in the network.</p>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(networksize_end) == 0}">${default_end_date}</c:when><c:otherwise>${networksize_end[0]}</c:otherwise></c:choose>">
     </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${networksize_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${networksize_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${networksize_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
-    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -81,12 +75,6 @@ country.</p>
         <c:forEach var="country" items="${countries}" >
           <option value="${country[0]}"<c:if test="${relaycountries_country[0] eq country[0]}"> selected</c:if>>${country[1]}</option>
         </c:forEach>
-      </select>
-    </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${relaycountries_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${relaycountries_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${relaycountries_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
       </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
@@ -130,12 +118,6 @@ average number of relays with these flags assigned.</p>
         <input type="radio" name="granularity" value="day" <c:if test="${fn:length(relayflags_granularity) == 0 or relayflags_granularity[0] eq 'day'}"> checked</c:if>> 1 day
         <input type="radio" name="granularity" value="hour" <c:if test="${relayflags_granularity[0] eq 'hour'}"> checked</c:if>> 1 hour
     </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${relayflags_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${relayflags_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${relayflags_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
-    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -169,12 +151,6 @@ The following graph shows the number of relays by version.</p>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(versions_end) == 0}">${default_end_date}</c:when><c:otherwise>${versions_end[0]}</c:otherwise></c:choose>">
     </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${versions_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${versions_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${versions_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
-    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -204,12 +180,6 @@ platform.</p>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(platforms_end) == 0}">${default_end_date}</c:when><c:otherwise>${platforms_end[0]}</c:otherwise></c:choose>">
     </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${platforms_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${platforms_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${platforms_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
-    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -238,12 +208,6 @@ network.</p>
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(cloudbridges_end) == 0}">${default_end_date}</c:when><c:otherwise>${cloudbridges_end[0]}</c:otherwise></c:choose>">
-    </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${cloudbridges_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${cloudbridges_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${cloudbridges_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
@@ -276,12 +240,6 @@ in the network.</p>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(bandwidth_end) == 0}">${default_end_date}</c:when><c:otherwise>${bandwidth_end[0]}</c:otherwise></c:choose>">
     </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${bandwidth_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${bandwidth_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${bandwidth_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
-    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -310,12 +268,6 @@ Exit and/or Guard flags assigned by the directory authorities.</p>
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(bwhist_flags_end) == 0}">${default_end_date}</c:when><c:otherwise>${bwhist_flags_end[0]}</c:otherwise></c:choose>">
-    </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${bwhist_flags_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${bwhist_flags_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${bwhist_flags_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
@@ -349,12 +301,6 @@ Guard flag.</p>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(bandwidth_flags_end) == 0}">${default_end_date}</c:when><c:otherwise>${bandwidth_flags_end[0]}</c:otherwise></c:choose>">
     </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${bandwidth_flags_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${bandwidth_flags_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${bandwidth_flags_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
-    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -386,12 +332,6 @@ the number of written and read dir bytes by all relays.</p>
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(dirbytes_end) == 0}">${default_end_date}</c:when><c:otherwise>${dirbytes_end[0]}</c:otherwise></c:choose>">
-    </p><p>
-      Resolution: <select name="dpi">
-        <option value="72"<c:if test="${dirbytes_dpi[0] eq '72'}"> selected</c:if>>Screen - 576x360</option>
-        <option value="150"<c:if test="${dirbytes_dpi[0] eq '150'}"> selected</c:if>>Print low - 1200x750</option>
-        <option value="300"<c:if test="${dirbytes_dpi[0] eq '300'}"> selected</c:if>>Print high - 2400x1500</option>
-      </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>

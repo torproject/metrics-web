@@ -83,30 +83,29 @@ public class RObjectGenerator implements ServletContextListener {
         availableTables);
 
     this.availableGraphs = new HashMap<String, String>();
-    this.availableGraphs.put("networksize", "start,end,filename,dpi");
-    this.availableGraphs.put("cloudbridges", "start,end,filename,dpi");
+    this.availableGraphs.put("networksize", "start,end,filename");
+    this.availableGraphs.put("cloudbridges", "start,end,filename");
     this.availableGraphs.put("relaycountries",
-        "start,end,country,filename,dpi");
+        "start,end,country,filename");
     this.availableGraphs.put("relayflags", "start,end,flag,granularity,"
-        + "filename,dpi");
-    this.availableGraphs.put("versions", "start,end,filename,dpi");
-    this.availableGraphs.put("platforms", "start,end,filename,dpi");
-    this.availableGraphs.put("bandwidth", "start,end,filename,dpi");
-    this.availableGraphs.put("bandwidth-flags", "start,end,filename,dpi");
-    this.availableGraphs.put("bwhist-flags", "start,end,filename,dpi");
-    this.availableGraphs.put("dirbytes", "start,end,filename,dpi");
+        + "filename");
+    this.availableGraphs.put("versions", "start,end,filename");
+    this.availableGraphs.put("platforms", "start,end,filename");
+    this.availableGraphs.put("bandwidth", "start,end,filename");
+    this.availableGraphs.put("bandwidth-flags", "start,end,filename");
+    this.availableGraphs.put("bwhist-flags", "start,end,filename");
+    this.availableGraphs.put("dirbytes", "start,end,filename");
     this.availableGraphs.put("direct-users",
-        "start,end,country,events,filename,dpi");
+        "start,end,country,events,filename");
     this.availableGraphs.put("bridge-users",
-         "start,end,country,filename,dpi");
+         "start,end,country,filename");
     this.availableGraphs.put("torperf",
-         "start,end,source,filesize,filename,dpi");
+         "start,end,source,filesize,filename");
     this.availableGraphs.put("torperf-failures",
-         "start,end,source,filesize,filename,dpi");
-    this.availableGraphs.put("connbidirect", "start,end,filename,dpi");
-    this.availableGraphs.put("fast-exits", "start,end,filename,dpi");
-    this.availableGraphs.put("almost-fast-exits",
-        "start,end,filename,dpi");
+         "start,end,source,filesize,filename");
+    this.availableGraphs.put("connbidirect", "start,end,filename");
+    this.availableGraphs.put("fast-exits", "start,end,filename");
+    this.availableGraphs.put("almost-fast-exits", "start,end,filename");
     this.availableGraphFileTypes = new HashSet<String>(Arrays.asList(
         "png,pdf,svg".split(",")));
     GraphParameterChecker.getInstance().setAvailableGraphs(
