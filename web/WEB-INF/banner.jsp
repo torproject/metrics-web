@@ -51,15 +51,11 @@
             %>>Consensus Health</a>
       </font>
     <%} else if (currentPage.endsWith("research.jsp") ||
-                 currentPage.endsWith("papers.jsp") ||
                  currentPage.endsWith("data.jsp") ||
                  currentPage.endsWith("formats.jsp") ||
                  currentPage.endsWith("tools.jsp")) {
      %><br>
       <font size="2">
-        <a <%if (currentPage.endsWith("papers.jsp")) {
-            %>class="current"<%} else {%> href="/papers.html"<%}
-            %>>Papers</a>
         <a <%if (currentPage.endsWith("data.jsp")) {
             %>class="current"<%} else {%> href="/data.html"<%}
             %>>Data</a>

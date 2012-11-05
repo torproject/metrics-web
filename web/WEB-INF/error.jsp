@@ -50,7 +50,6 @@ Maybe you find what you're looking for on our sitemap:
 </ul></li>
 <li><a href="research.html">Research</a>
 <ul>
-<li><a href="papers.html">Papers</a></li>
 <li><a href="data.html">Data</a></li>
 <li><a href="formats.html">Formats</a></li>
 <li><a href="tools.html">Tools</a></li>

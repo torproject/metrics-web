@@ -21,13 +21,13 @@ statistics in the Tor network:</p>
 
 <ol>
 <li>First, we recap measuring the Tor network from public directory
-information (<a href="papers/hotpets09.pdf">PDF</a>) by describing the
-data format of
+information (<a href="https://research.torproject.org/techreports/metrics-2009-08-07.pdf">PDF</a>)
+by describing the data format of
 <a href="#serverdesc">server descriptors and network statuses</a>,
 and we explain the sanitzation process of (non-public)
 <a href="#bridgedesc">bridge directory information</a>.</li>
 <li>Second, we describe the numerous aggregate statistics that relays
-publish about their usage (<a href="papers/wecsr10.pdf">PDF</a>),
+publish about their usage (<a href="http://freehaven.net/anonbib/cache/wecsr10measuring-tor.pdf">PDF</a>),
 including
 <a href="#bytehist">byte histories</a>,
 <a href="#dirreqstats">directory request statistics</a>,
@@ -46,7 +46,7 @@ including
 All data described on this page are available for download on the
 <a href="data.html">data</a> page.
 This page is based on a technical report
-(<a href="papers/data-2011-03-14.pdf">PDF</a>)
+(<a href="https://research.torproject.org/techreports/data-2011-03-14.pdf">PDF</a>)
 and is very likely more recent than the report.
 </p>
 <hr>
@@ -108,7 +108,8 @@ Both server descriptors and network statuses constitute a solid data basis
 for statistical analysis in the Tor network.
 We described the approach to measure the Tor network from public directory
 information in the HotPETS 2009 paper
-(<a href="papers/hotpets09.pdf">PDF</a>) and provide interactive
+(<a href="https://research.torproject.org/techreports/metrics-2009-08-07.pdf">PDF</a>)
+and provide interactive
 <a href="graphs.html">graphs</a> on the metrics
 website.
 We briefly describe the most interesting pieces of the
@@ -498,7 +499,7 @@ country.</li>
 <li><b>Request share:</b> The percentage in <tt>dirreq-v3-share</tt> is
 an estimate of the share of directory requests that the reporting relay
 expects to see in the Tor network.
-In a tech report (<a href="papers/countingusers-2010-11-30.pdf">PDF</a>)
+In a tech report (<a href="https://research.torproject.org/techreports/countingusers-2010-11-30.pdf">PDF</a>)
 we found that this estimate isn't very useful
 for statistical analysis because of the different approaches that clients
 take to select directory mirrors.
@@ -602,7 +603,7 @@ circuits.
 The document below shows the cell statistics contained in an
 extra-info descriptor by relay <tt>gabelmoo</tt>.
 An early analysis of cell-queue statistics can be found in a tech report
-(<a href="papers/bufferstats-2009-08-25.pdf">PDF</a>).
+(<a href="https://research.torproject.org/techreports/bufferstats-2009-08-25.pdf">PDF</a>).
 More details about these statistics can be found in the <a href="https://gitweb.torproject.org/torspec.git/blob/HEAD:/dir-spec.txt">directory protocol
 specification</a>.
 </p>

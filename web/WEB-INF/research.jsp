@@ -13,8 +13,7 @@
         <h2>Tor Metrics Portal: Research</h2>
         <br>
         <p>The Tor Metrics Project aims at supporting privacy enhancing
-        technologies research by making <a href="papers.html">papers</a>
-        and technical reports, gathered network
+        technologies research by making gathered network
         <a href="data.html">data</a>, and
         <a href="tools.html">tools</a>
         for processing these data available to the public. If you are

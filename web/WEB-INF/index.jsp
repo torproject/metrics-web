@@ -21,7 +21,9 @@
           <li>View daily updated <a href="graphs.html">graphs</a> on
           estimated client numbers, on network performance, and other
           statistics on the Tor network</li>
-          <li>Read <a href="papers.html">papers</a> and technical reports
+          <li>Read <a href="http://freehaven.net/anonbib/">papers</a> and
+          <a href="https://research.torproject.org/techreports.html">technical
+          reports</a>
           on the measurement techniques and results of statistical
           analysis of metrics data</li>
           <li>Download the <a href="data.html">data</a> that is behind the
@@ -36,11 +38,11 @@
           href="http://tigerpa.ws/tor_metrics/">interactive graphs</a> of
           network statistics.</li>
           <li>April 30, 2012: Added <a
-          href="papers/bridge-report-usage-stats-2012-04-30.pdf">tech
+          href="https://research.torproject.org/techreports/bridge-report-usage-stats-2012-04-30.pdf">tech
           report</a>: "What fraction of our bridges are not reporting
           usage statistics?"</li>
           <li>March 12, 2012: Added
-          <a href="papers/bridge-scaling-2012-03-09.pdf">tech report</a>:
+          <a href="https://research.torproject.org/techreports/bridge-scaling-2012-03-09.pdf">tech report</a>:
           "What if the Tor network had 50,000 bridges?"</li>
           <li>January 17, 2012:
           <a href="https://svn.torproject.org/svn/projects/roadmaps/metrics-roadmap-2012-01-17.pdf">Tor

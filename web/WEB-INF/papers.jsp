@@ -17,6 +17,11 @@
         <a href="#blogposts">blog posts</a> listed on this page originate
         from, are based on, or are related to work performed in the Tor
         Metrics Project.</p>
+        <p><font color="red">This page will be removed soon.
+        Its main purpose was to list metrics-related tech reports, but
+        those have now moved
+        <a href="https://research.torproject.org/techreports.html">here</a>.
+        </font></p>
         <br>
         <a name="papers"></a>
         <h3><a href="#papers" class="anchor">Papers</a></h3>
@@ -29,84 +34,26 @@
           Study on Measuring Statistical Data in the Tor Anonymity
           Network. Workshop on Ethics in
           Computer Security Research (WECSR 2010), Tenerife, Spain,
-          January 2010. (<a href="papers/wecsr10.pdf">PDF</a>, 160K)</li>
+          January 2010. (<a href="http://freehaven.net/anonbib/cache/wecsr10measuring-tor.pdf">PDF</a>)</li>
           <li>Karsten Loesing. Measuring the Tor Network from Public
           Directory Information. 2nd Hot Topics in Privacy Enhancing
           Technologies (HotPETs 2009), Seattle, WA, USA, August 2009.
-          (<a href="papers/hotpets09.pdf">PDF</a>, 582K)</li>
+          (<a href="https://research.torproject.org/techreports/metrics-2009-08-07.pdf">PDF</a>)</li>
         </ul>
         <br>
         <a name="techreports"></a>
         <h3><a href="#techreports" class="anchor">Technical
         reports</a></h3>
         <br>
-        The technical reports listed here have been the first place to
+        <p>
+        Some of the
+        <a href="https://research.torproject.org/techreports.html">Tor
+        Technical Reports</a> have been the first place to
         publish novel kinds of statistics on the Tor network. Some, but
-        not all, of the results contained in these technical reports have
+        not all, of the results contained in those technical reports have
         been included in the <a href="#papers">papers</a> above or in the
         daily updated <a href="graphs.html">graphs</a>.
-        <ul>
-          <li>What fraction of our bridges are not reporting usage
-          statistics? (<a
-          href="papers/bridge-report-usage-stats-2012-04-30.pdf">PDF</a>,
-          339K from April 30, 2012).</li>
-          <li>What if the Tor network had 50,000 bridges? (<a
-          href="papers/bridge-scaling-2012-03-09.pdf">PDF</a>, 144K from
-          March 9, 2012).</li>
-          <li>An Analysis of Tor Bridge Stability&mdash;Making BridgeDB
-          give out at least one stable bridge per user (<a
-          href="papers/bridge-stability-2011-10-31.pdf">PDF</a>, 419K from
-          October 31, 2011).</li>
-          <li>Case study: Learning whether a Tor bridge is blocked by
-          looking at its aggregate usage statistics, Part one (<a
-          href="papers/blocking-2011-09-15.pdf">PDF</a>, 767K from
-          September 15, 2011).</li>
-          <li>An anomaly-based censorship-detection system for Tor (<a
-          href="papers/detector-2011-09-09.pdf">PDF</a>, 106K from
-          September 9, 2011).</li>
-          <li>An Analysis of Tor Relay Stability (<a
-          href="papers/relay-stability-2011-06-30.pdf">PDF</a>, 1.3M from
-          June 30, 2011,
-          <a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-2911">code</a>,
-          <a href="data/running-relays-reverse.csv.bz2">data</a>,
-          322M).</li>
-          <li>Overview of Statistical Data in the Tor Network
-          (<a href="papers/data-2011-03-14.pdf">PDF</a>,
-          166K from March 14, 2011).</li>
-          <li>Privacy-preserving Ways to Estimate the Number of Tor Users
-          (<a href="papers/countingusers-2010-11-30.pdf">PDF</a>,
-          307K from November 30, 2010).</li>
-          <li>Comparison of GeoIP Databases for Tor
-          (<a href="papers/geoipdbcomp-2009-10-23.pdf">PDF</a>,
-          546K from October 23, 2009).</li>
-          <li>Analysis of Circuit Queues in Tor
-          (<a href="papers/bufferstats-2009-08-25.pdf">PDF</a>,
-          196K from August 25, 2009).</li>
-          <li>Performance of Requests over the Tor Network
-          (<a href="papers/torperf-2009-09-22.pdf">PDF</a>,
-          2.8M from September 22, 2009).</li>
-          <li>Reducing the Circuit Window Size in Tor
-          (<a href="papers/circwindow-2009-09-20.pdf">PDF</a>,
-          137K from September 20, 2009).</li>
-          <li>Simulation of the number of Fast, Stable, and Guard flags
-          for changed requirements
-          (<a href="papers/flagrequirements-2009-04-11.pdf">PDF</a>,
-          229K from April 11, 2009).</li>
-          <li>Possible problems of directory authorities assigning Stable
-          and Guard flags
-          (<a href="papers/relayflags-2009-04-01.pdf">PDF</a>,
-          2M from April 1, 2009).</li>
-          <li>Evaluation of Client Requests to the Directories to
-          determine total numbers and countries of users
-          (<a href="papers/directory-requests-2009-06-25.pdf">PDF</a>,
-          207K, last updated on June 25, 2009).</li>
-          <li>Analysis of Bridge Usage in Tor
-          (<a href="papers/bridges-2009-06-22.pdf">PDF</a>,
-          76K, last updated on June 22, 2009).</li>
-          <li>Evaluation of Relays from Public Directory Data
-          (<a href="papers/dirarch-2009-06-22.pdf">PDF</a>,
-          558K, last updated on June 22, 2009).</li>
-        </ul>
+        </p>
         <br>
         <a name="blogposts"></a>
         <h3><a href="#blogposts" class="anchor">Blog posts</a></h3>
