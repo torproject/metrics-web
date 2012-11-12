@@ -958,10 +958,11 @@ plot_almost_fast_exits <- function(start, end, path) {
     t$min_advbw == 2000 & t$same_network == FALSE, ]
   t <- rbind(data.frame(t1, var = "fast"),
     data.frame(t2, var = "almost_fast"))
-  r <- cast(t, valid_after ~ var, value = "relays")
+  r <- cast(t, valid_after ~ var, value = "relays", fun.aggregate = max)
   r <- data.frame(valid_after = r$valid_after, fast = r$fast,
     almost = r$almost_fast - r$fast, var = "relays")
-  e <- cast(t, valid_after ~ var, value = "exit_prob")
+  e <- cast(t, valid_after ~ var, value = "exit_prob",
+    fun.aggregate = max)
   e <- data.frame(valid_after = e$valid_after, fast = 100 * e$fast,
     almost = 100 * (e$almost_fast - e$fast), var = "exit_prob")
   t <- rbind(r, e)
