@@ -16,7 +16,10 @@
         technologies research by making gathered network
         <a href="data.html">data</a>, and
         <a href="tools.html">tools</a>
-        for processing these data available to the public. If you are
+        for processing these data available to the public.
+        Some results from analyzing these data can be found in
+        <a href="https://research.torproject.org/techreports.html">Tor
+        Tech Reports</a>.  If you are
         missing anything for your Tor-related research or want to share
         your research results with others, please
         <a href="mailto:tor-assistants@torproject.org">let us know</a>!
