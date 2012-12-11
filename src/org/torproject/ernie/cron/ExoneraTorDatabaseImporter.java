@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -86,7 +87,7 @@ public class ExoneraTorDatabaseImporter {
       insertDescriptorStatement = connection.prepareCall(
           "{call insert_descriptor(?, ?)}");
       insertStatusentryStatement = connection.prepareCall(
-          "{call insert_statusentry(?, ?, ?, ?, ?, ?)}");
+          "{call insert_statusentry(?, ?, ?, ?, ?, ?, ?)}");
       insertConsensusStatement = connection.prepareCall(
           "{call insert_consensus(?, ?)}");
       insertExitlistentryStatement = connection.prepareCall(
@@ -325,8 +326,8 @@ public class ExoneraTorDatabaseImporter {
     try {
       BufferedReader br = new BufferedReader(new StringReader(new String(
           bytes, "US-ASCII")));
-      String line, fingerprint = null, descriptor = null,
-          orAddress24 = null, orAddress = null;
+      String line, fingerprint = null, descriptor = null;
+      Set<String> orAddresses = new HashSet<String>();
       long validAfterMillis = -1L;
       StringBuilder rawStatusentryBuilder = null;
       boolean isRunning = false;
@@ -353,7 +354,8 @@ public class ExoneraTorDatabaseImporter {
             byte[] rawStatusentry = rawStatusentryBuilder.toString().
                 getBytes();
             importStatusentry(validAfterMillis, fingerprint, descriptor,
-                orAddress24, orAddress, rawStatusentry);
+                orAddresses, rawStatusentry);
+            orAddresses = new HashSet<String>();
           }
           if (line.equals("directory-footer")) {
             return;
@@ -369,26 +371,17 @@ public class ExoneraTorDatabaseImporter {
               + "=")).toLowerCase();
           descriptor = Hex.encodeHexString(Base64.decodeBase64(parts[3]
               + "=")).toLowerCase();
-          orAddress = parts[6];
-          /* TODO Extend the following code for IPv6 once Tor supports
-           * it. */
-          String[] orAddressParts = orAddress.split("\\.");
-          byte[] orAddress24Bytes = new byte[3];
-          orAddress24Bytes[0] = (byte) Integer.parseInt(
-              orAddressParts[0]);
-          orAddress24Bytes[1] = (byte) Integer.parseInt(
-              orAddressParts[1]);
-          orAddress24Bytes[2] = (byte) Integer.parseInt(
-              orAddressParts[2]);
-          orAddress24 = Hex.encodeHexString(orAddress24Bytes);
+          orAddresses.add(parts[6]);
+        } else if (line.startsWith("a ")) {
+          rawStatusentryBuilder.append(line + "\n");
+          orAddresses.add(line.substring("a ".length(),
+              line.lastIndexOf(":")));
         } else if (line.startsWith("s ") || line.equals("s")) {
           rawStatusentryBuilder.append(line + "\n");
           isRunning = line.contains(" Running");
         } else if (rawStatusentryBuilder != null) {
           rawStatusentryBuilder.append(line + "\n");
         }
-        /* TODO Extend this code to parse additional addresses once that's
-         * implemented in Tor. */
       }
     } catch (IOException e) {
       System.out.println("Could not parse consensus.  Skipping.");
@@ -400,20 +393,71 @@ public class ExoneraTorDatabaseImporter {
   private static Calendar calendarUTC = Calendar.getInstance(
       TimeZone.getTimeZone("UTC"));
 
-  /* Import a single status entry into the database. */
+  /* Import a status entry with one or more OR addresses into the
+   * database. */
   private static void importStatusentry(long validAfterMillis,
-      String fingerprint, String descriptor, String orAddress24,
-      String orAddress, byte[] rawStatusentry) {
+      String fingerprint, String descriptor, Set<String> orAddresses,
+      byte[] rawStatusentry) {
     try {
-      insertStatusentryStatement.clearParameters();
-      insertStatusentryStatement.setTimestamp(1,
-          new Timestamp(validAfterMillis), calendarUTC);
-      insertStatusentryStatement.setString(2, fingerprint);
-      insertStatusentryStatement.setString(3, descriptor);
-      insertStatusentryStatement.setString(4, orAddress24);
-      insertStatusentryStatement.setString(5, orAddress);
-      insertStatusentryStatement.setBytes(6, rawStatusentry);
-      insertStatusentryStatement.execute();
+      for (String orAddress : orAddresses) {
+        insertStatusentryStatement.clearParameters();
+        insertStatusentryStatement.setTimestamp(1,
+            new Timestamp(validAfterMillis), calendarUTC);
+        insertStatusentryStatement.setString(2, fingerprint);
+        insertStatusentryStatement.setString(3, descriptor);
+        if (!orAddress.contains(":")) {
+          String[] addressParts = orAddress.split("\\.");
+          byte[] address24Bytes = new byte[3];
+          address24Bytes[0] = (byte) Integer.parseInt(addressParts[0]);
+          address24Bytes[1] = (byte) Integer.parseInt(addressParts[1]);
+          address24Bytes[2] = (byte) Integer.parseInt(addressParts[2]);
+          String orAddress24 = Hex.encodeHexString(address24Bytes);
+          insertStatusentryStatement.setString(4, orAddress24);
+          insertStatusentryStatement.setNull(5, Types.VARCHAR);
+          insertStatusentryStatement.setString(6, orAddress);
+        } else {
+          StringBuilder addressHex = new StringBuilder();
+          int start = orAddress.startsWith("[::") ? 2 : 1;
+          int end = orAddress.length()
+              - (orAddress.endsWith("::]") ? 2 : 1);
+          String[] parts = orAddress.substring(start, end).split(":", -1);
+          for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
+            if (part.length() == 0) {
+              addressHex.append("x");
+            } else if (part.length() <= 4) {
+              addressHex.append(String.format("%4s", part));
+            } else {
+              addressHex = null;
+              break;
+            }
+          }
+          String orAddress48 = null;
+          if (addressHex != null) {
+            String addressHexString = addressHex.toString();
+            addressHexString = addressHexString.replaceFirst("x",
+                String.format("%" + (33 - addressHexString.length())
+                + "s", "0"));
+            if (!addressHexString.contains("x") &&
+                addressHexString.length() == 32) {
+              orAddress48 = addressHexString.replaceAll(" ", "0").
+                  toLowerCase().substring(0, 12);
+            }
+          }
+          if (orAddress48 != null) {
+            insertStatusentryStatement.setNull(4, Types.VARCHAR);
+            insertStatusentryStatement.setString(5, orAddress48);
+            insertStatusentryStatement.setString(6,
+                orAddress.replaceAll("[\\[\\]]", ""));
+          } else {
+            System.err.println("Could not import status entry with IPv6 "
+                + "address '" + orAddress + "'.  Exiting.");
+            System.exit(1);
+          }
+        }
+        insertStatusentryStatement.setBytes(7, rawStatusentry);
+        insertStatusentryStatement.execute();
+      }
     } catch (SQLException e) {
       System.out.println("Could not import status entry.  Exiting.");
       System.exit(1);

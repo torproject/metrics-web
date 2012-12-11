@@ -13,7 +13,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -229,22 +231,59 @@ public class ExoneraTorServlet extends HttpServlet {
         + "on this IP address?</h3>");
 
     /* Parse IP parameter. */
-    /* TODO Extend the parsing code to accept IPv6 addresses, too. */
-    Pattern ipAddressPattern = Pattern.compile(
+    Pattern ipv4AddressPattern = Pattern.compile(
         "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
         "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
         "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
         "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+    Pattern ipv6AddressPattern = Pattern.compile(
+        "^\\[?[0-9a-fA-F:]{3,39}\\]?$");
     String ipParameter = request.getParameter("ip");
     String relayIP = "", ipWarning = "";
     if (ipParameter != null && ipParameter.length() > 0) {
-      Matcher ipParameterMatcher = ipAddressPattern.matcher(ipParameter);
-      if (ipParameterMatcher.matches()) {
+      if (ipv4AddressPattern.matcher(ipParameter).matches()) {
         String[] ipParts = ipParameter.split("\\.");
         relayIP = Integer.parseInt(ipParts[0]) + "."
             + Integer.parseInt(ipParts[1]) + "."
             + Integer.parseInt(ipParts[2]) + "."
             + Integer.parseInt(ipParts[3]);
+      } else if (ipv6AddressPattern.matcher(ipParameter).matches()) {
+        if (ipParameter.startsWith("[") && ipParameter.endsWith("]")) {
+          ipParameter = ipParameter.substring(1,
+              ipParameter.length() - 1);
+        }
+        StringBuilder addressHex = new StringBuilder();
+        int start = ipParameter.startsWith("::") ? 1 : 0;
+        int end = ipParameter.length()
+            - (ipParameter.endsWith("::") ? 1 : 0);
+        String[] parts = ipParameter.substring(start, end).split(":", -1);
+        for (int i = 0; i < parts.length; i++) {
+          String part = parts[i];
+          if (part.length() == 0) {
+            addressHex.append("x");
+          } else if (part.length() <= 4) {
+            addressHex.append(String.format("%4s", part));
+          } else {
+            addressHex = null;
+            break;
+          }
+        }
+        if (addressHex != null) {
+          String addressHexString = addressHex.toString();
+          addressHexString = addressHexString.replaceFirst("x",
+              String.format("%" + (33 - addressHexString.length()) + "s",
+              "0"));
+          if (!addressHexString.contains("x") &&
+              addressHexString.length() == 32) {
+            relayIP = ipParameter.toLowerCase();
+          }
+        }
+        if (relayIP.length() < 1) {
+          ipWarning = "\"" + (ipParameter.length() > 40 ?
+              StringEscapeUtils.escapeHtml(ipParameter.substring(0, 40))
+              + "[...]" : StringEscapeUtils.escapeHtml(ipParameter))
+              + "\" is not a valid IP address.";
+        }
       } else {
         ipWarning = "\"" + (ipParameter.length() > 20 ?
             StringEscapeUtils.escapeHtml(ipParameter.substring(0, 20))
@@ -309,7 +348,7 @@ public class ExoneraTorServlet extends HttpServlet {
     String targetAddrWarning = "";
     if (targetAddrParameter != null && targetAddrParameter.length() > 0) {
       Matcher targetAddrParameterMatcher =
-          ipAddressPattern.matcher(targetAddrParameter);
+          ipv4AddressPattern.matcher(targetAddrParameter);
       if (targetAddrParameterMatcher.matches()) {
         String[] targetAddrParts = targetAddrParameter.split("\\.");
         targetIP = Integer.parseInt(targetAddrParts[0]) + "."
@@ -370,19 +409,21 @@ public class ExoneraTorServlet extends HttpServlet {
         + "            <tr>\n"
         + "              <td align=\"right\">IP address in question:"
           + "</td>\n"
-        + "              <td><input type=\"text\" name=\"ip\""
+        + "              <td><input type=\"text\" name=\"ip\" size=\"30\""
           + (relayIP.length() > 0 ? " value=\"" + relayIP + "\""
             : "")
           + ">"
           + (ipWarning.length() > 0 ? "<br><font color=\"red\">"
           + ipWarning + "</font>" : "")
         + "</td>\n"
-        + "              <td><i>(Ex.: 1.2.3.4)</i></td>\n"
+        + "              <td><i>(Ex.: 86.59.21.38 or "
+          + "2001:858:2:2:aabb:0:563b:1526)</i></td>\n"
         + "            </tr>\n"
         + "            <tr>\n"
         + "              <td align=\"right\">Date or timestamp, in "
           + "UTC:</td>\n"
         + "              <td><input type=\"text\" name=\"timestamp\""
+          + " size=\"30\""
           + (timestampStr.length() > 0 ? " value=\"" + timestampStr + "\""
             : "")
           + ">"
@@ -523,27 +564,35 @@ public class ExoneraTorServlet extends HttpServlet {
         }
         relevantDescriptors.get(descriptor).add(validafter);
         String fingerprint = rs.getString(4);
-        boolean orAddressMatches = rs.getString(5).equals(relayIP);
         String exitaddress = rs.getString(6);
-        String rLine = new String(rawstatusentry);
-        rLine = rLine.substring(0, rLine.indexOf("\n"));
-        String[] parts = rLine.split(" ");
-        String htmlString = "r " + parts[1] + " " + parts[2] + " "
-            + "<a href=\"serverdesc?desc-id=" + descriptor + "\" "
-            + "target=\"_blank\">" + parts[3] + "</a> " + parts[4]
-            + " " + parts[5] + " " + (orAddressMatches ? "<b>" : "")
-            + parts[6] + (orAddressMatches ? "</b>" : "") + " " + parts[7]
-            + " " + parts[8] + "\n";
+        StringBuilder html = new StringBuilder();
+        for (String line : new String(rawstatusentry).split("\n")) {
+          if (line.startsWith("r ")) {
+            String[] parts = line.split(" ");
+            boolean orAddressMatches = parts[6].equals(relayIP);
+            html.append("r " + parts[1] + " " + parts[2] + " "
+                + "<a href=\"serverdesc?desc-id=" + descriptor + "\" "
+                + "target=\"_blank\">" + parts[3] + "</a> " + parts[4]
+                + " " + parts[5] + " " + (orAddressMatches ? "<b>" : "")
+                + parts[6] + (orAddressMatches ? "</b>" : "") + " "
+                + parts[7] + " " + parts[8] + "\n");
+          } else if (line.startsWith("a ") &&
+              line.toLowerCase().contains(relayIP)) {
+            String address = line.substring("a ".length(),
+                line.lastIndexOf(":"));
+            String port = line.substring(line.lastIndexOf(":"));
+            html.append("a <b>" + address + "</b>" + port + "\n");
+          }
+        }
         if (exitaddress != null && exitaddress.length() > 0) {
           long scanned = rs.getTimestamp(7).getTime();
-          htmlString += "  [ExitAddress <b>" + exitaddress
-              + "</b> " + validAfterTimeFormat.format(scanned)
-              + "]\n";
+          html.append("  [ExitAddress <b>" + exitaddress
+              + "</b> " + validAfterTimeFormat.format(scanned) + "]\n");
         }
         if (!statusEntries.containsKey(validafter)) {
           statusEntries.put(validafter, new TreeMap<String, String>());
         }
-        statusEntries.get(validafter).put(fingerprint, htmlString);
+        statusEntries.get(validafter).put(fingerprint, html.toString());
       }
       rs.close();
       cs.close();
@@ -584,35 +633,93 @@ public class ExoneraTorServlet extends HttpServlet {
           dateFormat.format(timestampTooOld),
           dateFormat.format(timestampTooNew));
       /* Run another query to find out if there are relays running on
-       * other IP addresses in the same /24 network and tell the user
-       * about it. */
-      SortedSet<String> addressesInSameNetwork = new TreeSet<String>();
-      String[] relayIPParts = relayIP.split("\\.");
-      byte[] address24Bytes = new byte[3];
-      address24Bytes[0] = (byte) Integer.parseInt(relayIPParts[0]);
-      address24Bytes[1] = (byte) Integer.parseInt(relayIPParts[1]);
-      address24Bytes[2] = (byte) Integer.parseInt(relayIPParts[2]);
-      String address24 = Hex.encodeHexString(address24Bytes);
-      try {
-        CallableStatement cs = conn.prepareCall(
-            "{call search_addresses_in_same_24 (?, ?)}");
-        cs.setString(1, address24);
-        cs.setDate(2, new java.sql.Date(timestamp));
-        ResultSet rs = cs.executeQuery();
-        while (rs.next()) {
-          String address = rs.getString(1);
-          addressesInSameNetwork.add(address);
+       * other IP addresses in the same /24 or /48 network and tell the
+       * user about it. */
+      List<String> addressesInSameNetwork = new ArrayList<String>();
+      if (!relayIP.contains(":")) {
+        String[] relayIPParts = relayIP.split("\\.");
+        byte[] address24Bytes = new byte[3];
+        address24Bytes[0] = (byte) Integer.parseInt(relayIPParts[0]);
+        address24Bytes[1] = (byte) Integer.parseInt(relayIPParts[1]);
+        address24Bytes[2] = (byte) Integer.parseInt(relayIPParts[2]);
+        String address24 = Hex.encodeHexString(address24Bytes);
+        try {
+          CallableStatement cs = conn.prepareCall(
+              "{call search_addresses_in_same_24 (?, ?)}");
+          cs.setString(1, address24);
+          cs.setDate(2, new java.sql.Date(timestamp));
+          ResultSet rs = cs.executeQuery();
+          while (rs.next()) {
+            String address = rs.getString(1);
+            if (!addressesInSameNetwork.contains(address)) {
+              addressesInSameNetwork.add(address);
+            }
+          }
+          rs.close();
+          cs.close();
+        } catch (SQLException e) {
+          /* No other addresses in the same /24 found. */
         }
-        rs.close();
-        cs.close();
-      } catch (SQLException e) {
-        /* No other addresses in the same /24 found. */
+      } else {
+        StringBuilder addressHex = new StringBuilder();
+        int start = relayIP.startsWith("::") ? 1 : 0;
+        int end = relayIP.length() - (relayIP.endsWith("::") ? 1 : 0);
+        String[] parts = relayIP.substring(start, end).split(":", -1);
+        for (int i = 0; i < parts.length; i++) {
+          String part = parts[i];
+          if (part.length() == 0) {
+            addressHex.append("x");
+          } else if (part.length() <= 4) {
+            addressHex.append(String.format("%4s", part));
+          } else {
+            addressHex = null;
+            break;
+          }
+        }
+        String address48 = null;
+        if (addressHex != null) {
+          String addressHexString = addressHex.toString();
+          addressHexString = addressHexString.replaceFirst("x",
+              String.format("%" + (33 - addressHexString.length())
+              + "s", "0"));
+          if (!addressHexString.contains("x") &&
+              addressHexString.length() == 32) {
+            address48 = addressHexString.replaceAll(" ", "0").
+                toLowerCase().substring(0, 12);
+          }
+        }
+        if (address48 != null) {
+          try {
+            CallableStatement cs = conn.prepareCall(
+                "{call search_addresses_in_same_48 (?, ?)}");
+            cs.setString(1, address48);
+            cs.setDate(2, new java.sql.Date(timestamp));
+            ResultSet rs = cs.executeQuery();
+            while (rs.next()) {
+              String address = rs.getString(1);
+              if (!addressesInSameNetwork.contains(address)) {
+                addressesInSameNetwork.add(address);
+              }
+            }
+            rs.close();
+            cs.close();
+          } catch (SQLException e) {
+            /* No other addresses in the same /48 found. */
+          }
+        }
       }
       if (!addressesInSameNetwork.isEmpty()) {
-        out.print("        <p>The following other IP addresses of Tor "
-            + "relays in the same /24 network were found in relay and/or "
-            + "exit lists around the time that could be related to IP "
-            + "address " + relayIP + ":</p>\n");
+        if (!relayIP.contains(":")) {
+          out.print("        <p>The following other IP addresses of Tor "
+              + "relays in the same /24 network were found in relay "
+              + "and/or exit lists around the time that could be related "
+              + "to IP address " + relayIP + ":</p>\n");
+        } else {
+          out.print("        <p>The following other IP addresses of Tor "
+              + "relays in the same /48 network were found in relay "
+              + "lists around the time that could be related to IP "
+              + "address " + relayIP + ":</p>\n");
+        }
         out.print("        <ul>\n");
         for (String s : addressesInSameNetwork) {
           out.print("        <li>" + s + "</li>\n");
@@ -670,7 +777,8 @@ public class ExoneraTorServlet extends HttpServlet {
         if (timestampIsDate) {
           out.print("a relay list published on " + timestampStr);
         } else {
-          out.print("the most recent relay list preceding " + timestampStr);
+          out.print("the most recent relay list preceding "
+              + timestampStr);
         }
         out.print(". A possible reason for the relay being missing in a "
             + "relay list might be that some of the directory "
@@ -718,6 +826,12 @@ public class ExoneraTorServlet extends HttpServlet {
         }
         return;
       }
+    }
+
+    /* Looking up targets for IPv6 is not supported yet. */
+    if (relayIP.contains(":")) {
+      writeFooter(out);
+      return;
     }
 
     /* Second part: target */

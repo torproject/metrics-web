@@ -31,7 +31,8 @@ CREATE TABLE consensus (
 -- a relay as running at a certain point in time.  Only relays with the
 -- Running flag shall be inserted into this table.  If a relay advertises
 -- more than one IP address, there is a distinct entry for each address in
--- this table.
+-- this table.  If a relay advertises more than one TCP port on the same
+-- IP address, there is only a single entry in this table.
 CREATE TABLE statusentry (
 
   -- The valid-after time of the consensus that contains this entry.
@@ -45,11 +46,17 @@ CREATE TABLE statusentry (
   -- descriptor published by the relay.
   descriptor CHARACTER(40) NOT NULL,
 
-  -- The most significant 3 bytes of the relay's onion routing address in
-  -- hex notation.  This column contains the /24 network of the IPv4 or
-  -- IPv6 address.  The purpose is to quickly reduce query results which
-  -- works surprisingly well.
-  oraddress24 CHARACTER(6) NOT NULL,
+  -- The most significant 3 bytes of the relay's onion routing IPv4
+  -- address in lower-case hex notation, or null if the relay's onion
+  -- routing address in this status entry is IPv6.  The purpose is to
+  -- quickly reduce query results for relays in the same /24 network.
+  oraddress24 CHARACTER(6),
+
+  -- The most significant 6 bytes of the relay's onion routing IPv6
+  -- address in lower-case hex notation, or null if the relay's onion
+  -- routing address in this status entry is IPv4.  The purpose is to
+  -- quickly reduce query results for relays in the same /48 network.
+  oraddress48 CHARACTER(12),
 
   -- The relay's onion routing address.  Can be an IPv4 or an IPv6
   -- address.  If a relay advertises more than one address, there are
@@ -77,6 +84,12 @@ CREATE INDEX statusentry_oraddress_validafterdate
 CREATE INDEX statusentry_oraddress24_validafterdate
     ON statusentry (oraddress24, DATE(validafter));
 
+-- The index on the most significant 6 bytes of the relay's onion routing
+-- address and on the valid-after date is used to speed up queries for
+-- other relays in the same /48 network.
+CREATE INDEX statusentry_oraddress48_validafterdate
+    ON statusentry (oraddress48, DATE(validafter));
+
 -- The exitlistentry table stores the results of the active testing,
 -- DNS-based exit list for exit nodes.  An entry in this table means that
 -- a relay was scanned at a given time and found to be exiting to the
@@ -88,10 +101,11 @@ CREATE TABLE exitlistentry (
   -- The 40-character lower-case hex string identifying the relay.
   fingerprint CHARACTER(40) NOT NULL,
 
-  -- The most significant 3 bytes of the relay's exit address in hex
-  -- notation.  This column contains the /24 network of the IPv4 or IPv6
-  -- address.  The purpose is to quickly reduce query results.
-  exitaddress24 CHARACTER(6) NOT NULL,
+  -- The most significant 3 bytes of the relay's exit IPv4 address in
+  -- lower-case hex notation, or null if the relay's exit address in this
+  -- entry is IPv6.  The purpose is to quickly reduce query results for
+  -- relays exiting from the same /24 network.
+  exitaddress24 CHARACTER(6),
 
   -- The IP address that the relay uses for exiting to the Internet.  If
   -- the relay uses more than one IP address, there are multiple entries
@@ -163,6 +177,7 @@ CREATE OR REPLACE FUNCTION insert_statusentry (
     insert_fingerprint CHARACTER(40),
     insert_descriptor CHARACTER(40),
     insert_oraddress24 CHARACTER(6),
+    insert_oraddress48 CHARACTER(12),
     insert_oraddress TEXT,
     insert_rawstatusentry BYTEA)
     RETURNS INTEGER AS $$
@@ -176,10 +191,10 @@ CREATE OR REPLACE FUNCTION insert_statusentry (
         AND oraddress = insert_oraddress::INET) = 0 THEN
       -- Insert the status entry.
       INSERT INTO statusentry (validafter, fingerprint, descriptor,
-            oraddress24, oraddress, rawstatusentry)
+            oraddress24, oraddress48, oraddress, rawstatusentry)
           VALUES (insert_validafter, insert_fingerprint,
-            insert_descriptor, insert_oraddress24, insert_oraddress::INET,
-            insert_rawstatusentry);
+            insert_descriptor, insert_oraddress24, insert_oraddress48,
+            insert_oraddress::INET, insert_rawstatusentry);
       -- Return 1 for a successfully inserted status entry.
       RETURN 1;
     ELSE
@@ -305,9 +320,8 @@ CREATE OR REPLACE FUNCTION search_statusentries_by_address_date (
   ORDER BY 3, 4, 6;
 $$ LANGUAGE SQL;
 
--- Look up all IP adddresses in the /24 network of a given address to
--- suggest other addresses the user may be looking for.
--- TODO Revisit this function when enabling IPv6.
+-- Look up all IPv4 OR and exit addresses in the /24 network of a given
+-- address to suggest other addresses the user may be looking for.
 CREATE OR REPLACE FUNCTION search_addresses_in_same_24 (
     select_address24 CHARACTER(6),
     select_date DATE)
@@ -323,6 +337,20 @@ CREATE OR REPLACE FUNCTION search_addresses_in_same_24 (
       WHERE exitaddress24 = $1
       AND DATE(scanned) >= $2 - 2
       AND DATE(scanned) <= $2 + 1
+  ORDER BY 1;
+$$ LANGUAGE SQL;
+
+-- Look up all IPv6 OR addresses in the /48 network of a given address to
+-- suggest other addresses the user may be looking for.
+CREATE OR REPLACE FUNCTION search_addresses_in_same_48 (
+    select_address48 CHARACTER(12),
+    select_date DATE)
+    RETURNS TABLE(address TEXT) AS $$
+  SELECT HOST(oraddress)
+      FROM statusentry
+      WHERE oraddress48 = $1
+      AND DATE(validafter) >= $2 - 1
+      AND DATE(validafter) <= $2 + 1
   ORDER BY 1;
 $$ LANGUAGE SQL;
 
