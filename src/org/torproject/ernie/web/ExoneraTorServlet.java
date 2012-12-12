@@ -133,12 +133,8 @@ public class ExoneraTorServlet extends HttpServlet {
         + "        <p><font color=\"red\"><b>Notice:</b> Note that the "
           + "information you are providing below may be visible to "
           + "anyone who can read the network traffic between you and "
-          + "this web server or who has access to this web server. For "
-          + "greater confidentiality of the IP addresses and incident "
-          + "times, you should download the "
-          + "<a href=\"tools.html#exonerator\">Java or Python version of "
-          + "ExoneraTor</a> and run it on your local "
-          + "machine.</font></p>\n"
+          + "this web server or who has access to this web "
+          + "server.</font></p>\n"
         + "        <br>\n");
   }
 
