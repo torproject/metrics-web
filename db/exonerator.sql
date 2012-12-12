@@ -325,19 +325,22 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION search_addresses_in_same_24 (
     select_address24 CHARACTER(6),
     select_date DATE)
-    RETURNS TABLE(address TEXT) AS $$
-  SELECT HOST(oraddress)
+    RETURNS TABLE(addresstext TEXT,
+          addressinet INET) AS $$
+  SELECT HOST(oraddress),
+        oraddress
       FROM statusentry
       WHERE oraddress24 = $1
       AND DATE(validafter) >= $2 - 1
       AND DATE(validafter) <= $2 + 1
   UNION
-  SELECT HOST(exitaddress)
+  SELECT HOST(exitaddress),
+        exitaddress
       FROM exitlistentry
       WHERE exitaddress24 = $1
       AND DATE(scanned) >= $2 - 2
       AND DATE(scanned) <= $2 + 1
-  ORDER BY 1;
+  ORDER BY 2;
 $$ LANGUAGE SQL;
 
 -- Look up all IPv6 OR addresses in the /48 network of a given address to
@@ -345,12 +348,14 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION search_addresses_in_same_48 (
     select_address48 CHARACTER(12),
     select_date DATE)
-    RETURNS TABLE(address TEXT) AS $$
-  SELECT HOST(oraddress)
+    RETURNS TABLE(addresstext TEXT,
+          addressinet INET) AS $$
+  SELECT HOST(oraddress),
+        oraddress
       FROM statusentry
       WHERE oraddress48 = $1
       AND DATE(validafter) >= $2 - 1
       AND DATE(validafter) <= $2 + 1
-  ORDER BY 1;
+  ORDER BY 2;
 $$ LANGUAGE SQL;
 
