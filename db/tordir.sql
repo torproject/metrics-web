@@ -19,7 +19,6 @@ CREATE TABLE descriptor (
     published TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     uptime BIGINT,
     extrainfo CHARACTER(40),
-    rawdesc BYTEA NOT NULL,
     CONSTRAINT descriptor_pkey PRIMARY KEY (descriptor)
 );
 
@@ -131,7 +130,6 @@ CREATE TRIGGER insert_statusentry_trigger
 -- Contains all of the consensuses published by the directories.
 CREATE TABLE consensus (
     validafter TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    rawdesc BYTEA NOT NULL,
     CONSTRAINT consensus_pkey PRIMARY KEY (validafter)
 );
 

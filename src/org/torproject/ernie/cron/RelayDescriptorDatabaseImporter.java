@@ -256,12 +256,12 @@ public final class RelayDescriptorDatabaseImporter {
             + "(descriptor, nickname, address, orport, dirport, "
             + "fingerprint, bandwidthavg, bandwidthburst, "
             + "bandwidthobserved, platform, published, uptime, "
-            + "extrainfo, rawdesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
-            + "?, ?, ?, ?)");
+            + "extrainfo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+            + "?)");
         this.csH = conn.prepareCall("{call insert_bwhist(?, ?, ?, ?, ?, "
             + "?)}");
         this.psC = conn.prepareStatement("INSERT INTO consensus "
-            + "(validafter, rawdesc) VALUES (?, ?)");
+            + "(validafter) VALUES (?)");
         this.psQ = conn.prepareStatement("INSERT INTO dirreq_stats "
             + "(source, statsend, seconds, country, requests) VALUES "
             + "(?, ?, ?, ?, ?)");
@@ -454,7 +454,7 @@ public final class RelayDescriptorDatabaseImporter {
       String address, int orPort, int dirPort, String relayIdentifier,
       long bandwidthAvg, long bandwidthBurst, long bandwidthObserved,
       String platform, long published, long uptime,
-      String extraInfoDigest, byte[] rawDescriptor) {
+      String extraInfoDigest) {
     if (this.importIntoDatabase) {
       try {
         this.addDateToScheduledUpdates(published);
@@ -484,7 +484,6 @@ public final class RelayDescriptorDatabaseImporter {
           this.psD.setTimestamp(11, new Timestamp(published), cal);
           this.psD.setLong(12, uptime);
           this.psD.setString(13, extraInfoDigest);
-          this.psD.setBytes(14, rawDescriptor);
           this.psD.executeUpdate();
           rdsCount++;
           if (rdsCount % autoCommitCount == 0)  {
@@ -509,8 +508,7 @@ public final class RelayDescriptorDatabaseImporter {
           this.descriptorOut.write(" COPY descriptor (descriptor, "
               + "nickname, address, orport, dirport, fingerprint, "
               + "bandwidthavg, bandwidthburst, bandwidthobserved, "
-              + "platform, published, uptime, extrainfo, rawdesc) FROM "
-              + "stdin;\n");
+              + "platform, published, uptime, extrainfo) FROM stdin;\n");
         }
         this.descriptorOut.write(descriptor.toLowerCase() + "\t"
             + nickname + "\t" + address + "\t" + orPort + "\t" + dirPort
@@ -521,17 +519,9 @@ public final class RelayDescriptorDatabaseImporter {
             + "\t" + this.dateTimeFormat.format(published) + "\t"
             + (uptime >= 0 ? uptime : "\\N") + "\t"
             + (extraInfoDigest != null ? extraInfoDigest : "\\N")
-            + "\t");
-        this.descriptorOut.write(PGbytea.toPGString(rawDescriptor).
-            replaceAll("\\\\", "\\\\\\\\") + "\n");
+            + "\n");
       } catch (UnsupportedEncodingException e) {
         // US-ASCII is supported for sure
-      } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not write server "
-            + "descriptor to raw database import file.  We won't make "
-            + "any further attempts to write raw import files in this "
-            + "execution.", e);
-        this.writeRawImportFiles = false;
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Could not write server "
             + "descriptor to raw database import file.  We won't make "
@@ -547,7 +537,7 @@ public final class RelayDescriptorDatabaseImporter {
    */
   public void addExtraInfoDescriptor(String extraInfoDigest,
       String nickname, String fingerprint, long published,
-      byte[] rawDescriptor, List<String> bandwidthHistoryLines) {
+      List<String> bandwidthHistoryLines) {
     if (!bandwidthHistoryLines.isEmpty()) {
       this.addBandwidthHistory(fingerprint.toLowerCase(), published,
           bandwidthHistoryLines);
@@ -803,7 +793,7 @@ public final class RelayDescriptorDatabaseImporter {
   /**
    * Insert network status consensus into database.
    */
-  public void addConsensus(long validAfter, byte[] rawDescriptor) {
+  public void addConsensus(long validAfter) {
     if (this.importIntoDatabase) {
       try {
         this.addDateToScheduledUpdates(validAfter);
@@ -815,7 +805,6 @@ public final class RelayDescriptorDatabaseImporter {
         if (rs.getInt(1) == 0) {
           this.psC.clearParameters();
           this.psC.setTimestamp(1, validAfterTimestamp, cal);
-          this.psC.setBytes(2, rawDescriptor);
           this.psC.executeUpdate();
           rcsCount++;
           if (rcsCount % autoCommitCount == 0)  {
@@ -835,19 +824,11 @@ public final class RelayDescriptorDatabaseImporter {
           new File(rawFilesDirectory).mkdirs();
           this.consensusOut = new BufferedWriter(new FileWriter(
               rawFilesDirectory + "/consensus.sql"));
-          this.consensusOut.write(" COPY consensus (validafter, rawdesc) "
+          this.consensusOut.write(" COPY consensus (validafter) "
               + "FROM stdin;\n");
         }
         String validAfterString = this.dateTimeFormat.format(validAfter);
-        this.consensusOut.write(validAfterString + "\t");
-        this.consensusOut.write(PGbytea.toPGString(rawDescriptor).
-            replaceAll("\\\\", "\\\\\\\\") + "\n");
-      } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not write network status "
-            + "consensus to raw database import file.  We won't make "
-            + "any further attempts to write raw import files in this "
-            + "execution.", e);
-        this.writeRawImportFiles = false;
+        this.consensusOut.write(validAfterString + "\n");
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Could not write network status "
             + "consensus to raw database import file.  We won't make "
@@ -967,8 +948,7 @@ public final class RelayDescriptorDatabaseImporter {
           statusEntry.getBandwidth(), statusEntry.getPortList(),
           statusEntry.getStatusEntryBytes());
     }
-    this.addConsensus(consensus.getValidAfterMillis(),
-        consensus.getRawDescriptorBytes());
+    this.addConsensus(consensus.getValidAfterMillis());
   }
 
   private void addServerDescriptor(ServerDescriptor descriptor) {
@@ -978,8 +958,7 @@ public final class RelayDescriptorDatabaseImporter {
         descriptor.getFingerprint(), descriptor.getBandwidthRate(),
         descriptor.getBandwidthBurst(), descriptor.getBandwidthObserved(),
         descriptor.getPlatform(), descriptor.getPublishedMillis(),
-        descriptor.getUptime(), descriptor.getExtraInfoDigest(),
-        descriptor.getRawDescriptorBytes());
+        descriptor.getUptime(), descriptor.getExtraInfoDigest());
   }
 
   private void addExtraInfoDescriptor(ExtraInfoDescriptor descriptor) {
@@ -1016,8 +995,7 @@ public final class RelayDescriptorDatabaseImporter {
     this.addExtraInfoDescriptor(descriptor.getExtraInfoDigest(),
         descriptor.getNickname(),
         descriptor.getFingerprint().toLowerCase(),
-        descriptor.getPublishedMillis(),
-        descriptor.getRawDescriptorBytes(), bandwidthHistoryLines);
+        descriptor.getPublishedMillis(), bandwidthHistoryLines);
   }
 
   /**
