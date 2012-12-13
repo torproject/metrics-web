@@ -2,9 +2,7 @@
  * See LICENSE for licensing information */
 package org.torproject.ernie.web;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
