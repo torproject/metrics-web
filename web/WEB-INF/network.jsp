@@ -114,10 +114,6 @@ average number of relays with these flags assigned.</p>
       <input type="checkbox" name="flag" value="Guard"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Guard')}"> checked</c:if>> Guard
       <input type="checkbox" name="flag" value="Stable"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Stable')}"> checked</c:if>> Stable
     </p><p>
-      Granularity:
-        <input type="radio" name="granularity" value="day" <c:if test="${fn:length(relayflags_granularity) == 0 or relayflags_granularity[0] eq 'day'}"> checked</c:if>> 1 day
-        <input type="radio" name="granularity" value="hour" <c:if test="${relayflags_granularity[0] eq 'hour'}"> checked</c:if>> 1 hour
-    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>

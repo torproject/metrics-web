@@ -50,7 +50,7 @@ public class GraphParameterChecker {
     this.knownParameterValues = new HashMap<String, String>();
     this.knownParameterValues.put("flag",
         "Running,Exit,Guard,Fast,Stable");
-    this.knownParameterValues.put("granularity", "day,hour");
+    this.knownParameterValues.put("granularity", "day");
     StringBuilder sb = new StringBuilder("all");
     for (String[] country : Countries.getInstance().getCountryList()) {
       sb.append("," + country[0]);

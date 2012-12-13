@@ -169,9 +169,6 @@
     <url-pattern>/relayflags.png</url-pattern>
     <url-pattern>/relayflags.pdf</url-pattern>
     <url-pattern>/relayflags.svg</url-pattern>
-    <url-pattern>/relayflags-hour.png</url-pattern>
-    <url-pattern>/relayflags-hour.pdf</url-pattern>
-    <url-pattern>/relayflags-hour.svg</url-pattern>
     <url-pattern>/versions.png</url-pattern>
     <url-pattern>/versions.pdf</url-pattern>
     <url-pattern>/versions.svg</url-pattern>
