@@ -57,9 +57,30 @@ public class ExoneraTorDatabaseImporter {
 
   /* Learn JDBC string and directory to parse descriptors from. */
   private static void readConfiguration() {
-    Configuration config = new Configuration();
-    jdbcString = config.getExoneraTorDatabaseJdbc();
-    importDirString = config.getExoneraTorImportDirectory();
+    File configFile = new File("config");
+    if (!configFile.exists()) {
+      System.err.println("Could not find config file.  Exiting.");
+      System.exit(1);
+    }
+    String line = null;
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(configFile));
+      while ((line = br.readLine()) != null) {
+        if (line.startsWith("#") || line.length() < 1) {
+          continue;
+        } else if (line.startsWith("ExoneraTorDatabaseJdbc")) {
+          jdbcString = line.split(" ")[1];
+        } else if (line.startsWith("ExoneraTorImportDirectory")) {
+          importDirString = line.split(" ")[1];
+        } else {
+          /* Ignore unrecognized configuration keys. */
+        }
+      }
+      br.close();
+    } catch (IOException e) {
+      System.err.println("Could not parse config file.  Exiting.");
+      System.exit(1);
+    }
   }
 
   /* Database connection. */
