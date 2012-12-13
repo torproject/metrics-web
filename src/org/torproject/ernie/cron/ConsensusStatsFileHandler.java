@@ -183,7 +183,7 @@ public class ConsensusStatsFileHandler {
       reader.addDirectory(bridgesDir);
       if (keepImportHistory) {
         reader.setExcludeFiles(new File(statsDirectory,
-            "bridge-descriptor-history"));
+            "consensus-stats-bridge-descriptor-history"));
       }
       Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
       while (descriptorFiles.hasNext()) {

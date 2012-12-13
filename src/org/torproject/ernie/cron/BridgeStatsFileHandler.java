@@ -374,7 +374,7 @@ public class BridgeStatsFileHandler {
       reader.addDirectory(bridgesDir);
       if (keepBridgeDescriptorImportHistory) {
         reader.setExcludeFiles(new File(statsDirectory,
-            "bridge-descriptor-history"));
+            "bridge-stats-bridge-descriptor-history"));
       }
       Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
       while (descriptorFiles.hasNext()) {
@@ -449,7 +449,7 @@ public class BridgeStatsFileHandler {
       reader.addDirectory(archivesDirectory);
       if (keepRelayDescriptorImportHistory) {
         reader.setExcludeFiles(new File(statsDirectory,
-            "relay-descriptor-history"));
+            "bridge-stats-relay-descriptor-history"));
       }
       Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
       while (descriptorFiles.hasNext()) {

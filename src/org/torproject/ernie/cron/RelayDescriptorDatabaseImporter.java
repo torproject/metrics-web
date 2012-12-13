@@ -929,7 +929,7 @@ public final class RelayDescriptorDatabaseImporter {
       reader.addDirectory(archivesDirectory);
       if (keepImportHistory) {
         reader.setExcludeFiles(new File(statsDirectory,
-            "relay-descriptor-history"));
+            "database-importer-relay-descriptor-history"));
       }
       Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
       while (descriptorFiles.hasNext()) {

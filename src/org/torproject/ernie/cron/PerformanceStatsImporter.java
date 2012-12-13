@@ -201,7 +201,7 @@ public class PerformanceStatsImporter {
       reader.addDirectory(archivesDirectory);
       if (keepImportHistory) {
         reader.setExcludeFiles(new File(statsDirectory,
-            "connbidirect-relay-descriptor-history"));
+            "performance-stats-relay-descriptor-history"));
       }
       Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
       while (descriptorFiles.hasNext()) {
