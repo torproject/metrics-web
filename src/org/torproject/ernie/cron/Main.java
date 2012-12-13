@@ -37,7 +37,9 @@ public class Main {
         new BridgeStatsFileHandler(
         config.getRelayDescriptorDatabaseJDBC(),
         new File(config.getSanitizedBridgesDirectory()),
-        statsDirectory, config.getKeepSanitizedBridgesImportHistory()) :
+        statsDirectory, config.getKeepSanitizedBridgesImportHistory(),
+        new File(config.getDirectoryArchivesDirectory()),
+        config.getKeepDirectoryArchiveImportHistory()) :
         null;
 
     // Import relay descriptors
@@ -49,11 +51,16 @@ public class Main {
           config.getWriteRelayDescriptorDatabase() ?
           config.getRelayDescriptorDatabaseJDBC() : null,
           config.getWriteRelayDescriptorsRawFiles() ?
-          config.getRelayDescriptorRawFilesDirectory() : null) : null;
-      new ArchiveReader(rddi, bsfh,
+          config.getRelayDescriptorRawFilesDirectory() : null,
           new File(config.getDirectoryArchivesDirectory()),
           statsDirectory,
-          config.getKeepDirectoryArchiveImportHistory());
+          config.getKeepDirectoryArchiveImportHistory()) : null;
+      if (rddi != null) {
+        rddi.importRelayDescriptors();
+      }
+      if (bsfh != null) {
+        bsfh.importRelayDescriptors();
+      }
       rddi.closeConnection();
     }
 

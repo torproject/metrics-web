@@ -29,11 +29,16 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.torproject.descriptor.Descriptor;
 import org.torproject.descriptor.DescriptorFile;
 import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.ExtraInfoDescriptor;
+import org.torproject.descriptor.NetworkStatusEntry;
+import org.torproject.descriptor.RelayNetworkStatusConsensus;
 import org.torproject.descriptor.ServerDescriptor;
 
 /**
@@ -117,7 +122,11 @@ public class BridgeStatsFileHandler {
 
   private File statsDirectory;
 
-  private boolean keepImportHistory;
+  private boolean keepBridgeDescriptorImportHistory;
+
+  private File archivesDirectory;
+
+  private boolean keepRelayDescriptorImportHistory;
 
   /**
    * Initializes this class, including reading in intermediate results
@@ -125,14 +134,21 @@ public class BridgeStatsFileHandler {
    * <code>stats/hashed-relay-identities</code>.
    */
   public BridgeStatsFileHandler(String connectionURL,
-      File bridgesDir, File statsDirectory, boolean keepImportHistory) {
+      File bridgesDir, File statsDirectory,
+      boolean keepBridgeDescriptorImportHistory, File archivesDirectory,
+      boolean keepRelayDescriptorImportHistory) {
 
-    if (bridgesDir == null || statsDirectory == null) {
-      throw new IllegalArgumentException();
+    if (bridgesDir == null || statsDirectory == null ||
+        archivesDirectory == null || statsDirectory == null) {
+        throw new IllegalArgumentException();
     }
     this.bridgesDir = bridgesDir;
     this.statsDirectory = statsDirectory;
-    this.keepImportHistory = keepImportHistory;
+    this.keepBridgeDescriptorImportHistory =
+        keepBridgeDescriptorImportHistory;
+    this.archivesDirectory = archivesDirectory;
+    this.keepRelayDescriptorImportHistory =
+        keepRelayDescriptorImportHistory;
 
     /* Initialize set of known countries. */
     this.countries = new TreeSet<String>();
@@ -356,7 +372,7 @@ public class BridgeStatsFileHandler {
       DescriptorReader reader =
           DescriptorSourceFactory.createDescriptorReader();
       reader.addDirectory(bridgesDir);
-      if (keepImportHistory) {
+      if (keepBridgeDescriptorImportHistory) {
         reader.setExcludeFiles(new File(statsDirectory,
             "bridge-descriptor-history"));
       }
@@ -420,6 +436,46 @@ public class BridgeStatsFileHandler {
         obs.put("zy", String.format("%.2f", allUsers));
         this.addObs(descriptor.getFingerprint(),
             descriptor.getBridgeStatsEndMillis(), obs);
+      }
+    }
+  }
+
+  public void importRelayDescriptors() {
+    if (archivesDirectory.exists()) {
+      logger.fine("Importing files in directory " + archivesDirectory
+          + "/...");
+      DescriptorReader reader =
+          DescriptorSourceFactory.createDescriptorReader();
+      reader.addDirectory(archivesDirectory);
+      if (keepRelayDescriptorImportHistory) {
+        reader.setExcludeFiles(new File(statsDirectory,
+            "relay-descriptor-history"));
+      }
+      Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
+      while (descriptorFiles.hasNext()) {
+        DescriptorFile descriptorFile = descriptorFiles.next();
+        if (descriptorFile.getDescriptors() != null) {
+          for (Descriptor descriptor : descriptorFile.getDescriptors()) {
+            if (descriptor instanceof RelayNetworkStatusConsensus) {
+              this.addRelayNetworkStatusConsensus(
+                  (RelayNetworkStatusConsensus) descriptor);
+            }
+          }
+        }
+      }
+    }
+
+    logger.info("Finished importing relay descriptors.");
+  }
+
+  private void addRelayNetworkStatusConsensus(
+      RelayNetworkStatusConsensus consensus) {
+    for (NetworkStatusEntry statusEntry :
+      consensus.getStatusEntries().values()) {
+      try {
+        this.addHashedRelay(DigestUtils.shaHex(Hex.decodeHex(
+            statusEntry.getFingerprint().toCharArray())).toUpperCase());
+      } catch (DecoderException e) {
       }
     }
   }

@@ -16,8 +16,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +31,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.postgresql.util.PGbytea;
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.ExtraInfoDescriptor;
+import org.torproject.descriptor.NetworkStatusEntry;
+import org.torproject.descriptor.RelayNetworkStatusConsensus;
+import org.torproject.descriptor.ServerDescriptor;
 
 /**
  * Parse directory data.
@@ -207,12 +218,25 @@ public final class RelayDescriptorDatabaseImporter {
   private boolean importIntoDatabase;
   private boolean writeRawImportFiles;
 
+  private File archivesDirectory;
+  private File statsDirectory;
+  private boolean keepImportHistory;
+
   /**
    * Initialize database importer by connecting to the database and
    * preparing statements.
    */
   public RelayDescriptorDatabaseImporter(String connectionURL,
-      String rawFilesDirectory) {
+      String rawFilesDirectory, File archivesDirectory,
+      File statsDirectory, boolean keepImportHistory) {
+
+    if (archivesDirectory == null ||
+        statsDirectory == null) {
+      throw new IllegalArgumentException();
+    }
+    this.archivesDirectory = archivesDirectory;
+    this.statsDirectory = statsDirectory;
+    this.keepImportHistory = keepImportHistory;
 
     /* Initialize logger. */
     this.logger = Logger.getLogger(
@@ -977,6 +1001,115 @@ public final class RelayDescriptorDatabaseImporter {
         this.writeRawImportFiles = false;
       }
     }
+  }
+
+  public void importRelayDescriptors() {
+    if (archivesDirectory.exists()) {
+      logger.fine("Importing files in directory " + archivesDirectory
+          + "/...");
+      DescriptorReader reader =
+          DescriptorSourceFactory.createDescriptorReader();
+      reader.addDirectory(archivesDirectory);
+      if (keepImportHistory) {
+        reader.setExcludeFiles(new File(statsDirectory,
+            "relay-descriptor-history"));
+      }
+      Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
+      while (descriptorFiles.hasNext()) {
+        DescriptorFile descriptorFile = descriptorFiles.next();
+        if (descriptorFile.getDescriptors() != null) {
+          for (Descriptor descriptor : descriptorFile.getDescriptors()) {
+            if (descriptor instanceof RelayNetworkStatusConsensus) {
+              this.addRelayNetworkStatusConsensus(
+                  (RelayNetworkStatusConsensus) descriptor);
+            } else if (descriptor instanceof ServerDescriptor) {
+              this.addServerDescriptor((ServerDescriptor) descriptor);
+            } else if (descriptor instanceof ExtraInfoDescriptor) {
+              this.addExtraInfoDescriptor(
+                  (ExtraInfoDescriptor) descriptor);
+            }
+          }
+        }
+      }
+    }
+
+    logger.info("Finished importing relay descriptors.");
+  }
+
+  private void addRelayNetworkStatusConsensus(
+      RelayNetworkStatusConsensus consensus) {
+    for (NetworkStatusEntry statusEntry :
+      consensus.getStatusEntries().values()) {
+      this.addStatusEntry(consensus.getValidAfterMillis(),
+          statusEntry.getNickname(),
+          statusEntry.getFingerprint().toLowerCase(),
+          statusEntry.getDescriptor().toLowerCase(),
+          statusEntry.getPublishedMillis(), statusEntry.getAddress(),
+          statusEntry.getOrPort(), statusEntry.getDirPort(),
+          statusEntry.getFlags(), statusEntry.getVersion(),
+          statusEntry.getBandwidth(), statusEntry.getPortList(),
+          statusEntry.getStatusEntryBytes());
+    }
+    this.addConsensus(consensus.getValidAfterMillis(),
+        consensus.getRawDescriptorBytes());
+  }
+
+  private void addServerDescriptor(ServerDescriptor descriptor) {
+    this.addServerDescriptor(descriptor.getServerDescriptorDigest(),
+        descriptor.getNickname(), descriptor.getAddress(),
+        descriptor.getOrPort(), descriptor.getDirPort(),
+        descriptor.getFingerprint(), descriptor.getBandwidthRate(),
+        descriptor.getBandwidthBurst(), descriptor.getBandwidthObserved(),
+        descriptor.getPlatform(), descriptor.getPublishedMillis(),
+        descriptor.getUptime(), descriptor.getExtraInfoDigest(),
+        descriptor.getRawDescriptorBytes());
+  }
+
+  private void addExtraInfoDescriptor(ExtraInfoDescriptor descriptor) {
+    if (descriptor.getDirreqV3Reqs() != null) {
+      int allUsers = 0;
+      Map<String, String> obs = new HashMap<String, String>();
+      for (Map.Entry<String, Integer> e :
+          descriptor.getDirreqV3Reqs().entrySet()) {
+        String country = e.getKey();
+        int users = e.getValue() - 4;
+        allUsers += users;
+        obs.put(country, "" + users);
+      }
+      obs.put("zy", "" + allUsers);
+      this.addDirReqStats(descriptor.getFingerprint(),
+          descriptor.getDirreqStatsEndMillis(),
+          descriptor.getDirreqStatsIntervalLength(), obs);
+    }
+    if (descriptor.getConnBiDirectStatsEndMillis() >= 0L) {
+      this.addConnBiDirect(descriptor.getFingerprint(),
+          descriptor.getConnBiDirectStatsEndMillis(),
+          descriptor.getConnBiDirectStatsIntervalLength(),
+          descriptor.getConnBiDirectBelow(),
+          descriptor.getConnBiDirectRead(),
+          descriptor.getConnBiDirectWrite(),
+          descriptor.getConnBiDirectBoth());
+    }
+    List<String> bandwidthHistoryLines = new ArrayList<String>();
+    if (descriptor.getWriteHistory() != null) {
+      bandwidthHistoryLines.add(descriptor.getWriteHistory().getLine());
+    }
+    if (descriptor.getReadHistory() != null) {
+      bandwidthHistoryLines.add(descriptor.getReadHistory().getLine());
+    }
+    if (descriptor.getDirreqWriteHistory() != null) {
+      bandwidthHistoryLines.add(
+          descriptor.getDirreqWriteHistory().getLine());
+    }
+    if (descriptor.getDirreqReadHistory() != null) {
+      bandwidthHistoryLines.add(
+          descriptor.getDirreqReadHistory().getLine());
+    }
+    this.addExtraInfoDescriptor(descriptor.getExtraInfoDigest(),
+        descriptor.getNickname(),
+        descriptor.getFingerprint().toLowerCase(),
+        descriptor.getPublishedMillis(),
+        descriptor.getRawDescriptorBytes(), bandwidthHistoryLines);
   }
 
   /**
