@@ -25,6 +25,13 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.torproject.descriptor.BridgeNetworkStatus;
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.NetworkStatusEntry;
+
 /**
  * Generates statistics on the average number of relays and bridges per
  * day. Accepts parse results from <code>RelayDescriptorParser</code> and
@@ -68,13 +75,28 @@ public class ConsensusStatsFileHandler {
 
   private SimpleDateFormat dateTimeFormat;
 
+  private File bridgesDir;
+
+  private File statsDirectory;
+
+  private boolean keepImportHistory;
+
  /**
   * Initializes this class, including reading in intermediate results
   * files <code>stats/consensus-stats-raw</code> and
   * <code>stats/bridge-consensus-stats-raw</code> and final results file
   * <code>stats/consensus-stats</code>.
   */
-  public ConsensusStatsFileHandler(String connectionURL) {
+  public ConsensusStatsFileHandler(String connectionURL,
+      File bridgesDir, File statsDirectory,
+      boolean keepImportHistory) {
+
+    if (bridgesDir == null || statsDirectory == null) {
+      throw new IllegalArgumentException();
+    }
+    this.bridgesDir = bridgesDir;
+    this.statsDirectory = statsDirectory;
+    this.keepImportHistory = keepImportHistory;
 
     /* Initialize local data structures to hold intermediate and final
      * results. */
@@ -151,6 +173,47 @@ public class ConsensusStatsFileHandler {
         + "Overwriting!");
       this.bridgesRaw.put(published, line);
     }
+  }
+
+  public void importSanitizedBridges() {
+    if (bridgesDir.exists()) {
+      logger.fine("Importing files in directory " + bridgesDir + "/...");
+      DescriptorReader reader =
+          DescriptorSourceFactory.createDescriptorReader();
+      reader.addDirectory(bridgesDir);
+      if (keepImportHistory) {
+        reader.setExcludeFiles(new File(statsDirectory,
+            "bridge-descriptor-history"));
+      }
+      Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
+      while (descriptorFiles.hasNext()) {
+        DescriptorFile descriptorFile = descriptorFiles.next();
+        if (descriptorFile.getDescriptors() != null) {
+          for (Descriptor descriptor : descriptorFile.getDescriptors()) {
+            if (descriptor instanceof BridgeNetworkStatus) {
+              this.addBridgeNetworkStatus(
+                  (BridgeNetworkStatus) descriptor);
+            }
+          }
+        }
+      }
+      logger.info("Finished importing bridge descriptors.");
+    }
+  }
+
+  private void addBridgeNetworkStatus(BridgeNetworkStatus status) {
+    int runningBridges = 0, runningEc2Bridges = 0;
+    for (NetworkStatusEntry statusEntry :
+        status.getStatusEntries().values()) {
+      if (statusEntry.getFlags().contains("Running")) {
+        runningBridges++;
+        if (statusEntry.getNickname().startsWith("ec2bridge")) {
+          runningEc2Bridges++;
+        }
+      }
+    }
+    this.addBridgeConsensusResults(status.getPublishedMillis(),
+        runningBridges, runningEc2Bridges);
   }
 
   /**

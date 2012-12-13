@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -27,6 +28,13 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.ExtraInfoDescriptor;
+import org.torproject.descriptor.ServerDescriptor;
 
 /**
  * Determines estimates of bridge users per country and day from the
@@ -105,12 +113,26 @@ public class BridgeStatsFileHandler {
 
   private SimpleDateFormat dateTimeFormat;
 
+  private File bridgesDir;
+
+  private File statsDirectory;
+
+  private boolean keepImportHistory;
+
   /**
    * Initializes this class, including reading in intermediate results
    * files <code>stats/bridge-stats-raw</code> and
    * <code>stats/hashed-relay-identities</code>.
    */
-  public BridgeStatsFileHandler(String connectionURL) {
+  public BridgeStatsFileHandler(String connectionURL,
+      File bridgesDir, File statsDirectory, boolean keepImportHistory) {
+
+    if (bridgesDir == null || statsDirectory == null) {
+      throw new IllegalArgumentException();
+    }
+    this.bridgesDir = bridgesDir;
+    this.statsDirectory = statsDirectory;
+    this.keepImportHistory = keepImportHistory;
 
     /* Initialize set of known countries. */
     this.countries = new TreeSet<String>();
@@ -325,6 +347,80 @@ public class BridgeStatsFileHandler {
     } else {
       this.logger.finer("Not replacing existing bridge user numbers (" +
           nextKey + " with new numbers (" + longKey + ").");
+    }
+  }
+
+  public void importSanitizedBridges() {
+    if (bridgesDir.exists()) {
+      logger.fine("Importing files in directory " + bridgesDir + "/...");
+      DescriptorReader reader =
+          DescriptorSourceFactory.createDescriptorReader();
+      reader.addDirectory(bridgesDir);
+      if (keepImportHistory) {
+        reader.setExcludeFiles(new File(statsDirectory,
+            "bridge-descriptor-history"));
+      }
+      Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
+      while (descriptorFiles.hasNext()) {
+        DescriptorFile descriptorFile = descriptorFiles.next();
+        if (descriptorFile.getDescriptors() != null) {
+          for (Descriptor descriptor : descriptorFile.getDescriptors()) {
+            if (descriptor instanceof ServerDescriptor) {
+              this.addServerDescriptor((ServerDescriptor) descriptor);
+            } else if (descriptor instanceof ExtraInfoDescriptor) {
+              this.addExtraInfoDescriptor(
+                  (ExtraInfoDescriptor) descriptor);
+            }
+          }
+        }
+      }
+      logger.info("Finished importing bridge descriptors.");
+    }
+  }
+
+  private void addServerDescriptor(ServerDescriptor descriptor) {
+    if (descriptor.getPlatform() != null &&
+        descriptor.getPlatform().startsWith("Tor 0.2.2")) {
+      this.addZeroTwoTwoDescriptor(descriptor.getFingerprint(),
+          descriptor.getPublishedMillis());
+    }
+  }
+
+  private void addExtraInfoDescriptor(ExtraInfoDescriptor descriptor) {
+    if (!this.isKnownRelay(descriptor.getFingerprint())) {
+      if (descriptor.getGeoipStartTimeMillis() >= 0 &&
+          descriptor.getGeoipClientOrigins() != null) {
+        long seconds = (descriptor.getPublishedMillis()
+            - descriptor.getGeoipStartTimeMillis()) / 1000L;
+        double allUsers = 0.0D;
+        Map<String, String> obs = new HashMap<String, String>();
+        for (Map.Entry<String, Integer> e :
+            descriptor.getGeoipClientOrigins().entrySet()) {
+          String country = e.getKey();
+          double users = ((double) e.getValue() - 4) * 86400.0D
+              / ((double) seconds);
+          allUsers += users;
+          obs.put(country, String.format("%.2f", users));
+        }
+        obs.put("zy", String.format("%.2f", allUsers));
+        this.addObs(descriptor.getFingerprint(),
+            descriptor.getPublishedMillis(), obs);
+      }
+      if (descriptor.getBridgeStatsEndMillis() >= 0 &&
+          descriptor.getBridgeIps() != null) {
+        double allUsers = 0.0D;
+        Map<String, String> obs = new HashMap<String, String>();
+        for (Map.Entry<String, Integer> e :
+            descriptor.getBridgeIps().entrySet()) {
+          String country = e.getKey();
+          double users = (double) e.getValue() - 4;
+          allUsers += users;
+          obs.put(country, String.format("%.2f", users));
+        }
+        obs.put("zy", String.format("%.2f", allUsers));
+        this.addObs(descriptor.getFingerprint(),
+            descriptor.getBridgeStatsEndMillis(), obs);
+      }
     }
   }
 
