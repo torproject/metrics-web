@@ -60,7 +60,6 @@ public final class RelayDescriptorDatabaseImporter {
   private int rrsCount = 0;
   private int rcsCount = 0;
   private int rvsCount = 0;
-  private int rbsCount = 0;
   private int rqsCount = 0;
 
   /**
@@ -92,12 +91,6 @@ public final class RelayDescriptorDatabaseImporter {
    * has been imported into the database before.
    */
   private PreparedStatement psCs;
-
-  /**
-   * Prepared statement to check whether a given conn-bi-direct stats
-   * string has been imported into the database before.
-   */
-  private PreparedStatement psBs;
 
   /**
    * Prepared statement to check whether a given dirreq stats string has
@@ -141,12 +134,6 @@ public final class RelayDescriptorDatabaseImporter {
   private PreparedStatement psC;
 
   /**
-   * Prepared statement to insert a conn-bi-direct stats string into the
-   * database.
-   */
-  private PreparedStatement psB;
-
-  /**
    * Prepared statement to insert a given dirreq stats string into the
    * database.
    */
@@ -181,11 +168,6 @@ public final class RelayDescriptorDatabaseImporter {
    * Raw import file containing consensuses.
    */
   private BufferedWriter consensusOut;
-
-  /**
-   * Raw import file containing conn-bi-direct stats strings.
-   */
-  private BufferedWriter connBiDirectOut;
 
   /**
    * Raw import file containing dirreq stats.
@@ -260,8 +242,6 @@ public final class RelayDescriptorDatabaseImporter {
             + "FROM descriptor WHERE descriptor = ?");
         this.psCs = conn.prepareStatement("SELECT COUNT(*) "
             + "FROM consensus WHERE validafter = ?");
-        this.psBs = conn.prepareStatement("SELECT COUNT(*) "
-            + "FROM connbidirect WHERE source = ? AND statsend = ?");
         this.psQs = conn.prepareStatement("SELECT COUNT(*) "
             + "FROM dirreq_stats WHERE source = ? AND statsend = ?");
         this.psR = conn.prepareStatement("INSERT INTO statusentry "
@@ -282,9 +262,6 @@ public final class RelayDescriptorDatabaseImporter {
             + "?)}");
         this.psC = conn.prepareStatement("INSERT INTO consensus "
             + "(validafter, rawdesc) VALUES (?, ?)");
-        this.psB = conn.prepareStatement("INSERT INTO connbidirect "
-            + "(source, statsend, seconds, belownum, readnum, writenum, "
-            + "bothnum) VALUES (?, ?, ?, ?, ?, ?, ?)");
         this.psQ = conn.prepareStatement("INSERT INTO dirreq_stats "
             + "(source, statsend, seconds, country, requests) VALUES "
             + "(?, ?, ?, ?, ?)");
@@ -882,66 +859,6 @@ public final class RelayDescriptorDatabaseImporter {
   }
 
   /**
-   * Insert a conn-bi-direct stats string into the database.
-   */
-  public void addConnBiDirect(String source, long statsEndMillis,
-      long seconds, long below, long read, long write, long both) {
-    String statsEnd = this.dateTimeFormat.format(statsEndMillis);
-    if (this.importIntoDatabase) {
-      try {
-        this.addDateToScheduledUpdates(statsEndMillis);
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        Timestamp statsEndTimestamp = new Timestamp(statsEndMillis);
-        this.psBs.setString(1, source);
-        this.psBs.setTimestamp(2, statsEndTimestamp, cal);
-        ResultSet rs = psBs.executeQuery();
-        rs.next();
-        if (rs.getInt(1) == 0) {
-          this.psB.clearParameters();
-          this.psB.setString(1, source);
-          this.psB.setTimestamp(2, statsEndTimestamp, cal);
-          this.psB.setLong(3, seconds);
-          this.psB.setLong(4, below);
-          this.psB.setLong(5, read);
-          this.psB.setLong(6, write);
-          this.psB.setLong(7, both);
-          this.psB.executeUpdate();
-          rbsCount++;
-          if (rbsCount % autoCommitCount == 0)  {
-            this.conn.commit();
-          }
-        }
-      } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not add conn-bi-direct "
-            + "stats string. We won't make any further SQL requests in "
-            + "this execution.", e);
-        this.importIntoDatabase = false;
-      }
-    }
-    if (this.writeRawImportFiles) {
-      try {
-        if (this.connBiDirectOut == null) {
-          new File(rawFilesDirectory).mkdirs();
-          this.connBiDirectOut = new BufferedWriter(new FileWriter(
-              rawFilesDirectory + "/connbidirect.sql"));
-          this.connBiDirectOut.write(" COPY connbidirect (source, "
-              + "statsend, seconds, belownum, readnum, writenum, "
-              + "bothnum) FROM stdin;\n");
-        }
-        this.connBiDirectOut.write(source + "\t" + statsEnd + "\t"
-            + seconds + "\t" + below + "\t" + read + "\t" + write + "\t"
-            + both + "\n");
-      } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Could not write conn-bi-direct "
-            + "stats string to raw database import file.  We won't make "
-            + "any further attempts to write raw import files in this "
-            + "execution.", e);
-        this.writeRawImportFiles = false;
-      }
-    }
-  }
-
-  /**
    * Adds observations on the number of directory requests by country as
    * seen on a directory at a given date to the database.
    */
@@ -1081,15 +998,6 @@ public final class RelayDescriptorDatabaseImporter {
           descriptor.getDirreqStatsEndMillis(),
           descriptor.getDirreqStatsIntervalLength(), obs);
     }
-    if (descriptor.getConnBiDirectStatsEndMillis() >= 0L) {
-      this.addConnBiDirect(descriptor.getFingerprint(),
-          descriptor.getConnBiDirectStatsEndMillis(),
-          descriptor.getConnBiDirectStatsIntervalLength(),
-          descriptor.getConnBiDirectBelow(),
-          descriptor.getConnBiDirectRead(),
-          descriptor.getConnBiDirectWrite(),
-          descriptor.getConnBiDirectBoth());
-    }
     List<String> bandwidthHistoryLines = new ArrayList<String>();
     if (descriptor.getWriteHistory() != null) {
       bandwidthHistoryLines.add(descriptor.getWriteHistory().getLine());
@@ -1121,9 +1029,9 @@ public final class RelayDescriptorDatabaseImporter {
     this.logger.info(String.format("Finished importing relay "
         + "descriptors: %d consensuses, %d network status entries, %d "
         + "votes, %d server descriptors, %d extra-info descriptors, %d "
-        + "bandwidth history elements, %d dirreq stats elements, and %d "
-        + "conn-bi-direct stats lines", rcsCount, rrsCount, rvsCount,
-        rdsCount, resCount, rhsCount, rqsCount, rbsCount));
+        + "bandwidth history elements, and %d dirreq stats elements",
+        rcsCount, rrsCount, rvsCount, rdsCount, resCount, rhsCount,
+        rqsCount));
 
     /* Insert scheduled updates a second time, just in case the refresh
      * run has started since inserting them the first time in which case
@@ -1178,10 +1086,6 @@ public final class RelayDescriptorDatabaseImporter {
       if (this.consensusOut != null) {
         this.consensusOut.write("\\.\n");
         this.consensusOut.close();
-      }
-      if (this.connBiDirectOut != null) {
-        this.connBiDirectOut.write("\\.\n");
-        this.connBiDirectOut.close();
       }
     } catch (IOException e) {
       this.logger.log(Level.WARNING, "Could not close one or more raw "

@@ -62,6 +62,18 @@ public class Main {
         bsfh.importRelayDescriptors();
       }
       rddi.closeConnection();
+
+      // Import conn-bi-direct statistics.
+      PerformanceStatsImporter psi = new PerformanceStatsImporter(
+          config.getWriteRelayDescriptorDatabase() ?
+          config.getRelayDescriptorDatabaseJDBC() : null,
+          config.getWriteRelayDescriptorsRawFiles() ?
+          config.getRelayDescriptorRawFilesDirectory() : null,
+          new File(config.getDirectoryArchivesDirectory()),
+          statsDirectory,
+          config.getKeepDirectoryArchiveImportHistory());
+      psi.importRelayDescriptors();
+      psi.closeConnection();
     }
 
     // Import sanitized bridges and write updated stats files to disk
