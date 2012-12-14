@@ -1,6 +1,6 @@
 /* Copyright 2011, 2012 The Tor Project
  * See LICENSE for licensing information */
-package org.torproject.ernie.cron;
+package org.torproject.ernie.cron.network;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,6 +14,8 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.torproject.ernie.cron.Configuration;
 
 /**
  * Import a Maxmind GeoLite City database to resolve resolve IP addresses

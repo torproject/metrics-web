@@ -1,6 +1,6 @@
 /* Copyright 2011, 2012 The Tor Project
  * See LICENSE for licensing information */
-package org.torproject.ernie.cron;
+package org.torproject.ernie.cron.network;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

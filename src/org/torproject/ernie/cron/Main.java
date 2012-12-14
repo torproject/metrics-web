@@ -5,6 +5,11 @@ package org.torproject.ernie.cron;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.torproject.ernie.cron.network.ConsensusStatsFileHandler;
+import org.torproject.ernie.cron.performance.PerformanceStatsImporter;
+import org.torproject.ernie.cron.performance.TorperfProcessor;
+import org.torproject.ernie.cron.users.BridgeStatsFileHandler;
+
 /**
  * Coordinate downloading and parsing of descriptors and extraction of
  * statistically relevant data for later processing with R.

@@ -31,7 +31,7 @@
   <servlet>
     <servlet-name>GraphsSubpages</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.GraphsSubpagesServlet
+      org.torproject.ernie.web.graphs.GraphsSubpagesServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -69,7 +69,7 @@
   <servlet>
     <servlet-name>ResearchData</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.ResearchDataServlet
+      org.torproject.ernie.web.research.ResearchDataServlet
     </servlet-class>
     <init-param>
       <param-name>localDataDir</param-name>
@@ -86,7 +86,7 @@
   <servlet>
     <servlet-name>ResearchPapers</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.ResearchPapersServlet
+      org.torproject.ernie.web.research.ResearchPapersServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -97,7 +97,7 @@
   <servlet>
     <servlet-name>ResearchTools</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.ResearchToolsServlet
+      org.torproject.ernie.web.research.ResearchToolsServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -108,7 +108,7 @@
   <servlet>
     <servlet-name>ResearchFormats</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.ResearchFormatsServlet
+      org.torproject.ernie.web.research.ResearchFormatsServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -130,7 +130,7 @@
   <servlet>
     <servlet-name>RelaySearch</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.RelaySearchServlet
+      org.torproject.ernie.status.relaysearch.RelaySearchServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -141,7 +141,7 @@
   <servlet>
     <servlet-name>GraphImage</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.GraphImageServlet
+      org.torproject.ernie.web.graphs.GraphImageServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -202,7 +202,7 @@
   <servlet>
     <servlet-name>Csv</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.CsvServlet
+      org.torproject.ernie.web.graphs.CsvServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -213,7 +213,7 @@
   <servlet>
     <servlet-name>ExoneraTor</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.ExoneraTorServlet
+      org.torproject.ernie.status.exonerator.ExoneraTorServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -224,7 +224,7 @@
   <servlet>
     <servlet-name>ServerDescriptor</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.ServerDescriptorServlet
+      org.torproject.ernie.status.exonerator.ServerDescriptorServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -235,7 +235,7 @@
   <servlet>
     <servlet-name>Consensus</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.ConsensusServlet
+      org.torproject.ernie.status.exonerator.ConsensusServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -246,7 +246,7 @@
   <servlet>
     <servlet-name>ConsensusHealthServlet</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.ConsensusHealthServlet
+      org.torproject.ernie.status.doctor.ConsensusHealthServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -257,7 +257,7 @@
   <servlet>
     <servlet-name>GraphData</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.GraphDataServlet
+      org.torproject.ernie.web.graphs.GraphDataServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -314,7 +314,7 @@
 
   <listener>
     <listener-class>
-      org.torproject.ernie.web.RObjectGenerator
+      org.torproject.ernie.web.graphs.RObjectGenerator
     </listener-class>
   </listener>
 

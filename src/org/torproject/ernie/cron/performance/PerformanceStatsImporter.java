@@ -1,6 +1,6 @@
 /* Copyright 2012 The Tor Project
  * See LICENSE for licensing information */
-package org.torproject.ernie.cron;
+package org.torproject.ernie.cron.performance;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -99,7 +99,7 @@ public class PerformanceStatsImporter {
 
     /* Initialize logger. */
     this.logger = Logger.getLogger(
-        RelayDescriptorDatabaseImporter.class.getName());
+        PerformanceStatsImporter.class.getName());
 
     if (connectionURL != null) {
       try {
@@ -192,7 +192,7 @@ public class PerformanceStatsImporter {
     }
   }
 
-  void importRelayDescriptors() {
+  public void importRelayDescriptors() {
     if (archivesDirectory.exists()) {
       logger.fine("Importing files in directory " + archivesDirectory
           + "/...");
@@ -235,7 +235,7 @@ public class PerformanceStatsImporter {
   /**
    * Close the relay descriptor database connection.
    */
-  void closeConnection() {
+  public void closeConnection() {
 
     /* Log stats about imported descriptors. */
     this.logger.info(String.format("Finished importing relay "

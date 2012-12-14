@@ -1,6 +1,6 @@
 /* Copyright 2011, 2012 The Tor Project
  * See LICENSE for licensing information */
-package org.torproject.ernie.cron;
+package org.torproject.ernie.status.exonerator;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

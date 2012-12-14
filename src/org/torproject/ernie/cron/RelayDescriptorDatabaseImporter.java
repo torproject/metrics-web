@@ -44,6 +44,9 @@ import org.torproject.descriptor.ServerDescriptor;
  * Parse directory data.
  */
 
+/* TODO Split up this class and move its parts to cron.network,
+ * cron.users, and status.relaysearch packages.  Requires extensive
+ * changes to the database schema though. */
 public final class RelayDescriptorDatabaseImporter {
 
   /**
