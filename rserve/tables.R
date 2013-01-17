@@ -68,3 +68,27 @@ write_censorship_events <- function(start, end, path) {
   write.csv(r, path, quote = FALSE, row.names = FALSE)
 }
 
+write_bridge_users <- function(start, end, path) {
+  drv <- dbDriver("PostgreSQL")
+  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
+  q <- paste("SELECT date, country, users AS bridgeusers ",
+      "FROM bridge_stats WHERE date >= '", start, "' AND date <= '", end,
+      "' AND date < current_date - 3 ORDER BY date, country", sep = "")
+  rs <- dbSendQuery(con, q)
+  d <- fetch(rs, n = -1)
+  dbDisconnect(con)
+  dbUnloadDriver(drv)
+  d <- aggregate(d$bridgeusers, by = list(country = d$country), mean)
+  total <- d[d$country == "zy", "x"]
+  d <- d[!(d$country %in% c("zy", "??", "a1", "a2", "o1", "ap", "eu")), ]
+  d <- data.frame(country = d$country, bridgeusers = d$x)
+  d <- d[order(d$bridgeusers, decreasing = TRUE), ]
+  d <- d[1:10, ]
+  d <- data.frame(
+    cc = as.character(d$country),
+    country = sub('the ', '', countrynames(as.character(d$country))),
+    abs = round(d$bridgeusers),
+    rel = round(100 * d$bridgeusers / total, 2))
+  write.csv(d, path, quote = FALSE, row.names = FALSE)
+}
+

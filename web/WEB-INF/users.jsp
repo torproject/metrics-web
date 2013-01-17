@@ -170,6 +170,37 @@ by a few hundred bridges.</p>
 <a href="bridge-users.pdf${bridge_users_url}">PDF</a> or
 <a href="bridge-users.svg${bridge_users_url}">SVG</a>.</p>
 <hr>
+<a name="bridge-users-table"></a>
+<p><b>Top-10 countries by bridge users:</b></p>
+<form action="users.html#bridge-users-table">
+  <div class="formrow">
+    <input type="hidden" name="table" value="bridge-users">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(bridge_users_start) == 0}">${default_start_date}</c:when><c:otherwise>${bridge_users_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(bridge_users_end) == 0}">${default_end_date}</c:when><c:otherwise>${bridge_users_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+    <input class="submit" type="submit" value="Update table">
+    </p>
+  </div>
+</form>
+<br>
+<table>
+  <tr>
+    <th>Country</th>
+    <th>Mean daily users</th>
+  </tr>
+  <c:forEach var="row" items="${bridge_users_tabledata}">
+    <tr>
+      <td><a href="users.html?graph=bridge-users&country=${row['cc']}#bridge-users">${row['country']}</a>&emsp;</td>
+      <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
+    </tr>
+  </c:forEach>
+</table>
+<hr>
 <p><a href="csv/bridge-users.csv">CSV</a> file containing all data.</p>
 <p><a href="csv/monthly-users-peak.csv">CSV</a> file containing peak daily
 Tor users (direct and bridge) per month by country.</p>

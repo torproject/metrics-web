@@ -51,7 +51,7 @@ public class GraphsSubpagesServlet extends HttpServlet {
         new HashMap<String, Set<String>>();
     this.availableGraphsSubpageTables.put("users.html",
         new HashSet<String>(Arrays.asList(
-        "direct-users,censorship-events".split(","))));
+        "direct-users,censorship-events,bridge-users".split(","))));
 
     this.knownCountries = Countries.getInstance().getCountryList();
   }
