@@ -80,6 +80,7 @@ are recent:
 <li><tt>@type dir-key-certificate-3 1.0</tt></li>
 <li><tt>@type network-status-consensus-3 1.0</tt></li>
 <li><tt>@type network-status-vote-3 1.0</tt></li>
+<li><tt>@type network-status-microdesc-consensus-3 1.0</tt></li>
 <li><tt>@type bridge-network-status 1.0</tt></li>
 <li><tt>@type bridge-server-descriptor 1.0</tt></li>
 <li><tt><font color="gray">@type bridge-extra-info 1.0</font></tt></li>
