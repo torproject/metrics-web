@@ -135,20 +135,6 @@ export_relayflags <- function(path) {
   write.csv(relayflags, path, quote = FALSE, row.names = FALSE)
 }
 
-export_relayflags_hour <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-   q <- paste("SELECT validafter, avg_running AS running,",
-      "avg_exit AS exit, avg_guard AS guard, avg_fast AS fast,",
-      "avg_stable AS stable FROM network_size_hour",
-      "WHERE DATE(validafter) < current_date - 1 ORDER BY validafter")
-  rs <- dbSendQuery(con, q)
-  relayflags <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  write.csv(relayflags, path, quote = FALSE, row.names = FALSE)
-}
-
 export_direct_users <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)

@@ -50,7 +50,6 @@ public class GraphParameterChecker {
     this.knownParameterValues = new HashMap<String, String>();
     this.knownParameterValues.put("flag",
         "Running,Exit,Guard,Fast,Stable");
-    this.knownParameterValues.put("granularity", "day");
     StringBuilder sb = new StringBuilder("all");
     for (String[] country : Countries.getInstance().getCountryList()) {
       sb.append("," + country[0]);
@@ -146,25 +145,6 @@ public class GraphParameterChecker {
         flagParameters = this.knownParameterValues.get("flag").split(",");
       }
       recognizedGraphParameters.put("flag", flagParameters);
-    }
-
-    /* Parse granularity, which can be 1 day or 1 hour, if supported by
-     * the graph type. The default is 1 day. */
-    if (supportedGraphParameters.contains("granularity")) {
-      String[] granularityParameter = (String[]) requestParameters.get(
-          "granularity");
-      List<String> knownGranularities = Arrays.asList(
-          this.knownParameterValues.get("granularity").split(","));
-      if (granularityParameter != null) {
-        if (granularityParameter.length != 1 ||
-            granularityParameter[0] == null ||
-            !knownGranularities.contains(granularityParameter[0])) {
-          return null;
-        }
-      } else {
-        granularityParameter = new String[] { "day" };
-      }
-      recognizedGraphParameters.put("granularity", granularityParameter);
     }
 
     /* Parse country codes if supported by the graph type. If no countries

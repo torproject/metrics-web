@@ -157,17 +157,6 @@ CREATE TABLE network_size (
     CONSTRAINT network_size_pkey PRIMARY KEY(date)
 );
 
--- TABLE network_size_hour
-CREATE TABLE network_size_hour (
-    validafter TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    avg_running INTEGER NOT NULL,
-    avg_exit INTEGER NOT NULL,
-    avg_guard INTEGER NOT NULL,
-    avg_fast INTEGER NOT NULL,
-    avg_stable INTEGER NOT NULL,
-    CONSTRAINT network_size_hour_pkey PRIMARY KEY(validafter)
-);
-
 -- TABLE relay_countries
 CREATE TABLE relay_countries (
     date DATE NOT NULL,
@@ -431,38 +420,6 @@ CREATE OR REPLACE FUNCTION refresh_network_size() RETURNS INTEGER AS $$
             GROUP BY DATE(validafter)
             ) b
         NATURAL JOIN relay_statuses_per_day';
-
-    RETURN 1;
-    END;
-$$ LANGUAGE plpgsql;
-
--- FUNCTION refresh_network_size_hour()
-CREATE OR REPLACE FUNCTION refresh_network_size_hour() RETURNS INTEGER AS $$
-    DECLARE
-        min_date TIMESTAMP WITHOUT TIME ZONE;
-        max_date TIMESTAMP WITHOUT TIME ZONE;
-    BEGIN
-
-    min_date := (SELECT MIN(date) FROM updates);
-    max_date := (SELECT MAX(date) + 1 FROM updates);
-
-    DELETE FROM network_size_hour
-    WHERE DATE(validafter) IN (SELECT date FROM updates);
-
-    EXECUTE '
-    INSERT INTO network_size_hour
-    (validafter, avg_running, avg_exit, avg_guard, avg_fast, avg_stable)
-    SELECT validafter, COUNT(*) AS avg_running,
-    COUNT(NULLIF(isexit, FALSE)) AS avg_exit,
-    COUNT(NULLIF(isguard, FALSE)) AS avg_guard,
-    COUNT(NULLIF(isfast, FALSE)) AS avg_fast,
-    COUNT(NULLIF(isstable, FALSE)) AS avg_stable
-    FROM statusentry
-    WHERE isrunning = TRUE
-    AND validafter >= ''' || min_date || '''
-    AND validafter < ''' || max_date || '''
-    AND DATE(validafter) IN (SELECT date FROM updates)
-    GROUP BY validafter';
 
     RETURN 1;
     END;
@@ -953,8 +910,6 @@ CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
     PERFORM refresh_relay_statuses_per_day();
     RAISE NOTICE '% Refreshing network size.', timeofday();
     PERFORM refresh_network_size();
-    RAISE NOTICE '% Refreshing hourly network size.', timeofday();
-    PERFORM refresh_network_size_hour();
     RAISE NOTICE '% Refreshing relays by country.', timeofday();
     PERFORM refresh_relay_countries();
     RAISE NOTICE '% Refreshing relay platforms.', timeofday();

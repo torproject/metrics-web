@@ -87,8 +87,7 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableGraphs.put("cloudbridges", "start,end,filename");
     this.availableGraphs.put("relaycountries",
         "start,end,country,filename");
-    this.availableGraphs.put("relayflags", "start,end,flag,granularity,"
-        + "filename");
+    this.availableGraphs.put("relayflags", "start,end,flag,filename");
     this.availableGraphs.put("versions", "start,end,filename");
     this.availableGraphs.put("platforms", "start,end,filename");
     this.availableGraphs.put("bandwidth", "start,end,filename");
