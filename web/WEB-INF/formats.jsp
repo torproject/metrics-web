@@ -83,9 +83,11 @@ are recent:
 <li><tt>@type network-status-microdesc-consensus-3 1.0</tt></li>
 <li><tt>@type bridge-network-status 1.0</tt></li>
 <li><tt>@type bridge-server-descriptor 1.0</tt></li>
-<li><tt><font color="gray">@type bridge-extra-info 1.0</font></tt></li>
-<li><tt>@type bridge-extra-info 1.1</tt> contain sanitized
-  <tt>transport</tt> lines</li>
+<li><font color="gray"><tt>@type bridge-extra-info 1.0</tt></font></li>
+<li><font color="gray"><tt>@type bridge-extra-info 1.1</tt> contain
+  sanitized <tt>transport</tt> lines</font></li>
+<li><tt>@type bridge-extra-info 1.2</tt> contain <tt>ntor-onion-key</tt>
+  lines</li>
 <li><tt>@type torperf 1.0</tt></li>
 <li><tt>@type bridge-pool-assignment 1.0</tt></li>
 <li><tt>@type tordnsel 1.0</tt></li>
