@@ -415,7 +415,7 @@ plot_versions <- function(start, end, path) {
   known_versions <- c("0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1",
         "0.2.2", "0.2.3", "0.2.4")
   colours <- data.frame(breaks = known_versions,
-    values = brewer.pal(length(known_versions), "YlOrBr"),
+    values = brewer.pal(length(known_versions), "Accent"),
     stringsAsFactors = FALSE)
   versions <- versions[versions$version %in% known_versions, ]
   visible_versions <- sort(unique(versions$version))
