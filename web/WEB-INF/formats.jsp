@@ -362,8 +362,17 @@ arguments are removed, only leaving in the supported transport names.</li>
 </ol>
 
 <p>
+Apart from these processing steps, sanitized bridge server descriptors
+follow the same format as relay server descriptors.
+The same applies to sanitized bridge extra-info descriptors.
+Sanitized bridge network statuses are similar to version 2 relay network
+statuses, but with only a <tt>published</tt> line in the header and
+without any lines in the footer.
+</p>
+
+<p>
 The two documents below show an example bridge server
-descriptor that is referenced from a bridge network status entry.
+descriptor that is referenced from a bridge network status.
 For more details about this process, see the
 <a href="https://gitweb.torproject.org/metrics-db.git">metrics data processor</a> software.
 </p>
@@ -373,6 +382,7 @@ For more details about this process, see the
 <i>Sanitized bridge server descriptor:</i>
 </p>
 <p>
+<tt>@type bridge-server-descriptor 1.0</tt><br>
 <tt>router Unnamed 10.74.150.129 443 0 0</tt><br>
 <tt>platform Tor 0.2.2.19-alpha (git-1988927edecce4c7) on Linux i686</tt><br>
 <tt>opt protocols Link 1 2 Circuit 1</tt><br>
@@ -389,12 +399,16 @@ For more details about this process, see the
 
 <blockquote>
 <p>
-<i>Sanitized bridge network status entry:</i>
+<i>Sanitized bridge network status:</i>
 </p>
 <p>
+<tt>@type bridge-network-status 1.0</tt><br>
+<tt>published 2010-12-27 22:03:01</tt><br>
+<tt>[...status entries...]</tt><br>
 <tt>r Unnamed pfp/OLAqQV5y/mFMZKHlqSupm70 dByzfWWLas9cen7PtZ3XGYIJHt4
   2010-12-27 18:55:01 10.74.150.129 443 0</tt><br>
 <tt>s Fast Guard HSDir Running Stable Valid</tt><br>
+<tt>[...status entries...]</tt><br>
 </p>
 </blockquote>
 <hr>
