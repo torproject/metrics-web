@@ -606,7 +606,7 @@ plot_relayflags <- function(start, end, flags, path) {
   networksize <- rbind(data.frame(
     date = as.Date(end) + 1,
     variable = paste("avg_", c("running", "exit", "guard", "fast",
-      "stable"), sep = ""),
+      "stable", "hsdir"), sep = ""),
     value = NA), networksize)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
@@ -615,7 +615,7 @@ plot_relayflags <- function(start, end, flags, path) {
     networksize <- rbind(data.frame(
       date = as.Date(rep(missing, 5), origin = "1970-01-01"),
       variable = paste("avg_", c("running", "exit", "guard", "fast",
-        "stable"), sep = ""),
+        "stable", "hsdir"), sep = ""),
       value = rep(NA, length(missing) * 5)), networksize)
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(end, "%Y-%m-%d")) -
@@ -629,7 +629,7 @@ plot_relayflags <- function(start, end, flags, path) {
     scale_y_continuous(name = "", limits = c(0, max(networksize$value,
         na.rm = TRUE))) +
     scale_colour_manual(name = "Relay flags", values = c("#E69F00",
-        "#56B4E9", "#009E73", "#000000", "#0072B2"),
+        "#56B4E9", "#009E73", "#EE6A50", "#000000", "#0072B2"),
         breaks = paste("avg_", tolower(flags), sep = ""),
         labels = flags) +
     opts(title = "Number of relays with relay flags assigned\n")

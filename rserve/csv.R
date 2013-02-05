@@ -126,7 +126,8 @@ export_relayflags <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
   q <- paste("SELECT date, avg_running AS running, avg_exit AS exit,",
-      "avg_guard AS guard, avg_fast AS fast, avg_stable AS stable",
+      "avg_guard AS guard, avg_fast AS fast, avg_stable AS stable,",
+      "avg_hsdir AS hsdir",
       "FROM network_size WHERE date < current_date - 1 ORDER BY date")
   rs <- dbSendQuery(con, q)
   relayflags <- fetch(rs, n = -1)

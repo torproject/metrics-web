@@ -89,7 +89,7 @@ country.</p>
 
 <a name="relayflags"></a>
 <h3><a href="#relayflags" class="anchor">Relays with Exit, Fast, Guard,
-and Stable flags</a></h3>
+Stable, and HSDir flags</a></h3>
 <br>
 <p>The directory authorities assign certain flags to relays that clients
 use for their path selection decisions. The following graph shows the
@@ -113,6 +113,7 @@ average number of relays with these flags assigned.</p>
       <input type="checkbox" name="flag" value="Fast"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Fast')}"> checked</c:if>> Fast
       <input type="checkbox" name="flag" value="Guard"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Guard')}"> checked</c:if>> Guard
       <input type="checkbox" name="flag" value="Stable"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Stable')}"> checked</c:if>> Stable
+      <input type="checkbox" name="flag" value="HSDir"<c:if test="${fn:length(relayflags_flag) > 0 and fn:contains(fn:join(relayflags_flag, ','), 'HSDir')}"> checked</c:if>> HSDir
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>

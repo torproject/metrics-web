@@ -154,6 +154,15 @@ CREATE TABLE network_size (
     avg_guard INTEGER NOT NULL,
     avg_fast INTEGER NOT NULL,
     avg_stable INTEGER NOT NULL,
+    avg_authority INTEGER NOT NULL,
+    avg_badexit INTEGER NOT NULL,
+    avg_baddirectory INTEGER NOT NULL,
+    avg_hsdir INTEGER NOT NULL,
+    avg_named INTEGER NOT NULL,
+    avg_unnamed INTEGER NOT NULL,
+    avg_valid INTEGER NOT NULL,
+    avg_v2dir INTEGER NOT NULL,
+    avg_v3dir INTEGER NOT NULL,
     CONSTRAINT network_size_pkey PRIMARY KEY(date)
 );
 
@@ -398,20 +407,40 @@ CREATE OR REPLACE FUNCTION refresh_network_size() RETURNS INTEGER AS $$
 
     EXECUTE '
         INSERT INTO network_size
-        (date, avg_running, avg_exit, avg_guard, avg_fast, avg_stable)
+        (date, avg_running, avg_exit, avg_guard, avg_fast, avg_stable,
+        avg_authority, avg_badexit, avg_baddirectory, avg_hsdir,
+        avg_named, avg_unnamed, avg_valid, avg_v2dir, avg_v3dir)
         SELECT date,
             isrunning / count AS avg_running,
             isexit / count AS avg_exit,
             isguard / count AS avg_guard,
             isfast / count AS avg_fast,
-            isstable / count AS avg_stable
+            isstable / count AS avg_stable,
+            isauthority / count as avg_authority,
+            isbadexit / count as avg_badexit,
+            isbaddirectory / count as avg_baddirectory,
+            ishsdir / count as avg_hsdir,
+            isnamed / count as avg_named,
+            isunnamed / count as avg_unnamed,
+            isvalid / count as avg_valid,
+            isv2dir / count as avg_v2dir,
+            isv3dir / count as avg_v3dir
         FROM (
             SELECT DATE(validafter) AS date,
                 COUNT(*) AS isrunning,
                 COUNT(NULLIF(isexit, FALSE)) AS isexit,
                 COUNT(NULLIF(isguard, FALSE)) AS isguard,
                 COUNT(NULLIF(isfast, FALSE)) AS isfast,
-                COUNT(NULLIF(isstable, FALSE)) AS isstable
+                COUNT(NULLIF(isstable, FALSE)) AS isstable,
+                COUNT(NULLIF(isauthority, FALSE)) AS isauthority,
+                COUNT(NULLIF(isbadexit, FALSE)) AS isbadexit,
+                COUNT(NULLIF(isbaddirectory, FALSE)) AS isbaddirectory,
+                COUNT(NULLIF(ishsdir, FALSE)) AS ishsdir,
+                COUNT(NULLIF(isnamed, FALSE)) AS isnamed,
+                COUNT(NULLIF(isunnamed, FALSE)) AS isunnamed,
+                COUNT(NULLIF(isvalid, FALSE)) AS isvalid,
+                COUNT(NULLIF(isv2dir, FALSE)) AS isv2dir,
+                COUNT(NULLIF(isv3dir, FALSE)) AS isv3dir
             FROM statusentry
             WHERE isrunning = TRUE
               AND validafter >= ''' || min_date || '''

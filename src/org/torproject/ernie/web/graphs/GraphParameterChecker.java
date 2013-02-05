@@ -49,7 +49,7 @@ public class GraphParameterChecker {
 
     this.knownParameterValues = new HashMap<String, String>();
     this.knownParameterValues.put("flag",
-        "Running,Exit,Guard,Fast,Stable");
+        "Running,Exit,Guard,Fast,Stable,HSDir");
     StringBuilder sb = new StringBuilder("all");
     for (String[] country : Countries.getInstance().getCountryList()) {
       sb.append("," + country[0]);
@@ -142,7 +142,7 @@ public class GraphParameterChecker {
           }
         }
       } else {
-        flagParameters = this.knownParameterValues.get("flag").split(",");
+        flagParameters = "Running,Exit,Guard,Fast,Stable".split(",");
       }
       recognizedGraphParameters.put("flag", flagParameters);
     }
