@@ -383,17 +383,18 @@ For more details about this process, see the
 </p>
 <p>
 <tt>@type bridge-server-descriptor 1.0</tt><br>
-<tt>router Unnamed 10.74.150.129 443 0 0</tt><br>
+<tt>router Hawthorne 10.175.105.22 443 0 0</tt><br>
 <tt>platform Tor 0.2.2.19-alpha (git-1988927edecce4c7) on Linux i686</tt><br>
 <tt>opt protocols Link 1 2 Circuit 1</tt><br>
 <tt>published 2010-12-27 18:55:01</tt><br>
 <tt>opt fingerprint A5FA 7F38 B02A 415E 72FE 614C 64A1 E5A9 2BA9 9BBD</tt><br>
 <tt>uptime 2347112</tt><br>
 <tt>bandwidth 5242880 10485760 1016594</tt><br>
-<tt>opt extra-info-digest 86E6E9E68707AF586FFD09A36FAC236ADA0D11CC</tt><br>
+<tt>opt extra-info-digest E729BCB5E06A5657A73151B55354EB003D2BAE0F</tt><br>
 <tt>opt hidden-service-dir</tt><br>
 <tt>contact somebody</tt><br>
 <tt>reject *:*</tt><br>
+<tt>router-digest 46DFDBE7B67B7C90A1962B0B5AA4526FAF406979</tt><br>
 </p>
 </blockquote>
 
@@ -403,10 +404,10 @@ For more details about this process, see the
 </p>
 <p>
 <tt>@type bridge-network-status 1.0</tt><br>
-<tt>published 2010-12-27 22:03:01</tt><br>
+<tt>published 2010-12-27 22:07:03</tt><br>
 <tt>[...status entries...]</tt><br>
-<tt>r Unnamed pfp/OLAqQV5y/mFMZKHlqSupm70 dByzfWWLas9cen7PtZ3XGYIJHt4
-  2010-12-27 18:55:01 10.74.150.129 443 0</tt><br>
+<tt>r Hawthorne pfp/OLAqQV5y/mFMZKHlqSupm70 Rt/b57Z7fJChlisLWqRSb69AaXk
+  2010-12-27 18:55:01 10.175.105.22 443 0</tt><br>
 <tt>s Fast Guard HSDir Running Stable Valid</tt><br>
 <tt>[...status entries...]</tt><br>
 </p>
