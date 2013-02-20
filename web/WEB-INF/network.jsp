@@ -56,7 +56,11 @@ bridges in the network.</p>
 <h3><a href="#relaycountries" class="anchor">Relays by country</a></h3>
 <br>
 <p>The following graph shows the average daily number of relays by
-country.</p>
+country.
+<font color="red">Note that updating by-country data has been temporarily
+disabled as of February 2013, because it has become prohibitively
+expensive.  This is not a bug, but a known problem that we will work on as
+time permits.</font></p>
 <img src="relaycountries.png${relaycountries_url}"
      width="576" height="360" alt="Relay countries graph">
 <form action="network.html#relaycountries">
