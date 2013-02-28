@@ -68,12 +68,12 @@ number.
 
 <p>
 The following descriptor types and versions are known.
-Gray entries are either not yet implemented or deprecated, black entries
-are recent:
+Gray entries are deprecated, black entries are recent:
 </p>
 
 <ul>
 <li><tt>@type server-descriptor 1.0</tt></li>
+<li><tt>@type microdescriptor 1.0</tt></li>
 <li><tt>@type extra-info 1.0</tt></li>
 <li><tt>@type directory 1.0</tt></li>
 <li><tt>@type network-status-2 1.0</tt></li>
