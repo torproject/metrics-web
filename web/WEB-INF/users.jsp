@@ -207,6 +207,173 @@ Tor users (direct and bridge) per month by country.</p>
 <p><a href="csv/monthly-users-average.csv">CSV</a> file containing average
 daily Tor users (direct and bridge) per month by country.</p>
 <br>
+
+<a name="userstats"></a>
+<h3><a href="#userstats" class="anchor">New approach to estimating daily
+Tor users (BETA)</a></h3>
+<br>
+<p>As of April 2013, we are experimenting with a new approach to estimating
+daily Tor users.
+The new approach works very similar to the existing approach to estimate
+directly connecting users, but can also be applied to bridge users.
+This new approach can break down user numbers by country, pluggable
+transport, and IP version.
+See tech report on
+<a href="https://research.torproject.org/techreports/counting-daily-bridge-users-2012-10-24.pdf">Counting daily bridge users</a>
+and the
+<a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-8462">source code</a>
+for details.
+
+<p><font color="red">Note that this approach should be considered
+experimental and absolute numbers should be taken with care!</font></p>
+
+<a name="userstats-relay-country"></a>
+<p><b>Direct users by country (BETA):</b></p>
+
+<font color="red">In contrast to the graphs above, this graph is based on
+requests to directory mirrors <i>and</i> directory authorities.
+That is why the numbers here are higher.
+It's yet to be decided which approach is more correct.</font>
+
+<img src="userstats-relay-country.png${userstats_relay_country_url}"
+     width="576" height="360" alt="Direct users by country graph (BETA)">
+<form action="users.html#userstats-relay-country">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="userstats-relay-country">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_relay_country_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_relay_country_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_relay_country_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_relay_country_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+      Source: <select name="country">
+        <option value="all"<c:if test="${userstats_relay_country_country[0] eq 'all'}"> selected</c:if>>All users</option>
+        <c:forEach var="country" items="${countries}" >
+          <option value="${country[0]}"<c:if test="${userstats_relay_country_country[0] eq country[0]}"> selected</c:if>>${country[1]}</option>
+        </c:forEach>
+      </select>
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<p>Download graph as
+<a href="userstats-relay-country.pdf${userstats_relay_country_url}">PDF</a> or
+<a href="userstats-relay-country.svg${userstats_relay_country_url}">SVG</a>.</p>
+<hr>
+
+<a name="userstats-bridge-country"></a>
+<p><b>Bridge users by country (BETA):</b></p>
+
+<font color="red">In contrast to the bridge-user graph above, this graph
+uses directory requests to estimate user numbers, not unique IP address sets.
+It's yet to be decided which approach is more correct.</font>
+
+<img src="userstats-bridge-country.png${userstats_bridge_country_url}"
+     width="576" height="360" alt="Bridge users by country graph (BETA)">
+<form action="users.html#userstats-bridge-country">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="userstats-bridge-country">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_bridge_country_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_bridge_country_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_bridge_country_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_bridge_country_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+      Source: <select name="country">
+        <option value="all"<c:if test="${userstats_bridge_country_country[0] eq 'all'}"> selected</c:if>>All users</option>
+        <c:forEach var="country" items="${countries}" >
+          <option value="${country[0]}"<c:if test="${userstats_bridge_country_country[0] eq country[0]}"> selected</c:if>>${country[1]}</option>
+        </c:forEach>
+      </select>
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<p>Download graph as
+<a href="userstats-bridge-country.pdf${userstats_bridge_country_url}">PDF</a> or
+<a href="userstats-bridge-country.svg${userstats_bridge_country_url}">SVG</a>.</p>
+<hr>
+
+<a name="userstats-bridge-transport"></a>
+<p><b>Bridge users by transport (BETA):</b></p>
+
+<font color="red">Almost none of the currently running bridges report the
+transport name of connecting users, which is why non-OR transport usage is
+so low.
+By default, we consider all users of a bridge OR transport users, unless told
+otherwise.
+Non-OR transport numbers will become more accurate over time.</font>
+
+<img src="userstats-bridge-transport.png${userstats_bridge_transport_url}"
+     width="576" height="360" alt="Bridge users by transport graph (BETA)">
+<form action="users.html#userstats-bridge-transport">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="userstats-bridge-transport">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_bridge_transport_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_bridge_transport_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_bridge_transport_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_bridge_transport_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+      Source: <select name="transport">
+        <option value="<OR>"<c:if test="${userstats_bridge_transport_transport[0] eq '<OR>'}"> selected</c:if>>Default OR protocol</option>
+        <option value="obfs2"<c:if test="${userstats_bridge_transport_transport[0] eq 'obfs2'}"> selected</c:if>>obfs2</option>
+        <option value="obfs3"<c:if test="${userstats_bridge_transport_transport[0] eq 'obfs3'}"> selected</c:if>>obfs3</option>
+        <option value="websocket"<c:if test="${userstats_bridge_transport_transport[0] eq 'websocket'}"> selected</c:if>>Flash proxy/websocket</option>
+        <option value="<??>"<c:if test="${userstats_bridge_transport_transport[0] eq '<??>'}"> selected</c:if>>Unknown transport</option>
+      </select>
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<p>Download graph as
+<a href="userstats-bridge-transport.pdf${userstats_bridge_transport_url}">PDF</a> or
+<a href="userstats-bridge-transport.svg${userstats_bridge_transport_url}">SVG</a>.</p>
+<hr>
+
+<a name="userstats-bridge-version"></a>
+<p><b>Bridge users by IP version (BETA):</b></p>
+
+<font color="red">Not all of the currently running bridges report the
+IP version of connecting users.
+By default, we consider all users of a bridge IPv4 users, unless told
+otherwise.
+IPv6 numbers will become more accurate over time.</font>
+
+<img src="userstats-bridge-version.png${userstats_bridge_version_url}"
+     width="576" height="360" alt="Bridge users by IP version graph (BETA)">
+<form action="users.html#userstats-bridge-version">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="userstats-bridge-version">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_bridge_version_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_bridge_version_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_bridge_version_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_bridge_version_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+      Source: <select name="version">
+        <option value="v4"<c:if test="${userstats_bridge_version_version[0] eq 'v4'}"> selected</c:if>>IPv4</option>
+        <option value="v6"<c:if test="${userstats_bridge_version_version[0] eq 'v6'}"> selected</c:if>>IPv6</option>
+      </select>
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<p>Download graph as
+<a href="userstats-bridge-version.pdf${userstats_bridge_version_url}">PDF</a> or
+<a href="userstats-bridge-version.svg${userstats_bridge_version_url}">SVG</a>.</p>
     </div>
   </div>
   <div class="bottom" id="bottom">

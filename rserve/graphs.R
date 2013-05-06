@@ -1022,3 +1022,77 @@ plot_bandwidth_flags <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
+plot_userstats <- function(start, end, node, variable, value, path) {
+  end <- min(end, as.character(Sys.Date()))
+  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
+    "task-8462/userstats.csv", sep = ""),
+    stringsAsFactors = FALSE)
+  if (node == 'relay') {
+    if (value != 'all') {
+      u <- u[u$country == value & u$node == 'relay', ]
+      title <- paste("Directly connecting users from ",
+                     countryname(value), " (BETA)\n", sep = "")
+    } else {
+      u <- u[u$country == '' & u$transport == '' & u$version == '' &
+             u$node == 'relay', ]
+      title <- "Directly connecting users (BETA)\n"
+    }
+  } else if (variable == 'transport') {
+    u <- u[u$transport == value & u$node == 'bridge', ]
+    title <- paste("Bridge users using transport ", value, " (BETA)\n",
+                   sep = "")
+  } else if (variable == 'version') {
+    u <- u[u$version== value & u$node == 'bridge', ]
+    title <- paste("Bridge users using IP", value, " (BETA)\n", sep = "")
+  } else {
+    if (value != 'all') {
+      u <- u[u$country == value & u$node == 'bridge', ]
+      title <- paste("Bridge users from ", countryname(value),
+                     " (BETA)\n", sep = "")
+    } else {
+      u <- u[u$country == '' & u$transport == '' & u$version == '' &
+            u$node == 'bridge', ]
+      title <- "Bridge users (BETA)\n"
+    }
+  }
+  u <- data.frame(date = as.Date(u$date, "%Y-%m-%d"), users = u$users)
+  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
+      to = as.Date(end, "%Y-%m-%d"), by="1 day")
+  missing <- setdiff(dates, u$date)
+  if (length(missing) > 0) {
+    u <- rbind(u,
+        data.frame(date = as.Date(missing, origin = "1970-01-01"),
+        users = NA))
+  }
+  formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
+  date_breaks <- date_breaks(
+    as.numeric(max(u$date) - min(u$date)))
+  ggplot(u, aes(x = date, y = users)) +
+    geom_line(size = 1) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
+    scale_y_continuous(name = "", limits = c(0,
+        ifelse(length(na.omit(u$users)) == 0, 0,
+        max(u$users, na.rm = TRUE))), formatter = formatter) +
+    opts(title = title)
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+
+plot_userstats_relay_country <- function(start, end, country, path) {
+  plot_userstats(start, end, 'relay', 'country', country, path)
+}
+
+plot_userstats_bridge_country <- function(start, end, country, path) {
+  plot_userstats(start, end, 'bridge', 'country', country, path)
+}
+
+plot_userstats_bridge_transport <- function(start, end, transport, path) {
+  plot_userstats(start, end, 'bridge', 'transport', transport, path)
+}
+
+plot_userstats_bridge_version <- function(start, end, version, path) {
+  plot_userstats(start, end, 'bridge', 'version', version, path)
+}
+

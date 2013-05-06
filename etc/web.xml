@@ -197,6 +197,18 @@
     <url-pattern>/almost-fast-exits.png</url-pattern>
     <url-pattern>/almost-fast-exits.pdf</url-pattern>
     <url-pattern>/almost-fast-exits.svg</url-pattern>
+    <url-pattern>/userstats-relay-country.png</url-pattern>
+    <url-pattern>/userstats-relay-country.pdf</url-pattern>
+    <url-pattern>/userstats-relay-country.svg</url-pattern>
+    <url-pattern>/userstats-bridge-country.png</url-pattern>
+    <url-pattern>/userstats-bridge-country.pdf</url-pattern>
+    <url-pattern>/userstats-bridge-country.svg</url-pattern>
+    <url-pattern>/userstats-bridge-transport.png</url-pattern>
+    <url-pattern>/userstats-bridge-transport.pdf</url-pattern>
+    <url-pattern>/userstats-bridge-transport.svg</url-pattern>
+    <url-pattern>/userstats-bridge-version.png</url-pattern>
+    <url-pattern>/userstats-bridge-version.pdf</url-pattern>
+    <url-pattern>/userstats-bridge-version.svg</url-pattern>
   </servlet-mapping>
 
   <servlet>

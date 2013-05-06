@@ -56,9 +56,11 @@ public class GraphParameterChecker {
     }
     this.knownParameterValues.put("country", sb.toString());
     this.knownParameterValues.put("events", "on,off,points");
-    this.knownParameterValues.put("language", "all,en,zh_CN,fa");
     this.knownParameterValues.put("source", "all,siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
+    this.knownParameterValues.put("transport",
+        "obfs2,obfs3,websocket,<OR>,<??>");
+    this.knownParameterValues.put("version", "v4,v6");
   }
 
   public void setAvailableGraphs(Map<String, String> availableGraphs) {
@@ -187,26 +189,6 @@ public class GraphParameterChecker {
       recognizedGraphParameters.put("events", eventsParameter);
     }
 
-    /* Parse language if supported by the graph type. Only a single
-     * language can be passed. If no language is passed, use "all" as
-     * default. */
-    if (supportedGraphParameters.contains("language")) {
-      String[] languageParameter = (String[]) requestParameters.get(
-          "language");
-      List<String> knownBundles = Arrays.asList(
-          this.knownParameterValues.get("language").split(","));
-      if (languageParameter != null) {
-        if (languageParameter.length != 1 ||
-            languageParameter[0].length() == 0 ||
-            !knownBundles.contains(languageParameter[0])) {
-          return null;
-        }
-      } else {
-        languageParameter = new String[] { "all" };
-      }
-      recognizedGraphParameters.put("language", languageParameter);
-    }
-
     /* Parse torperf data source if supported by the graph type. Only a
      * single source can be passed. If no source is passed, use "torperf"
      * as default. */
@@ -251,23 +233,44 @@ public class GraphParameterChecker {
       recognizedGraphParameters.put("filesize", filesizeParameter);
     }
 
-    /* Parse fingerprint if supported/required by the graph type. Make
-     * sure the fingerprint contains only hexadecimal characters and is 40
-     * characters long. Fail if no fingerprint is provided! */
-    if (supportedGraphParameters.contains("fingerprint")) {
-      String[] fingerprintParameter = (String[]) requestParameters.get(
-          "fingerprint");
-      if (fingerprintParameter == null ||
-          fingerprintParameter.length != 1 ||
-          fingerprintParameter[0] == null ||
-          !Pattern.matches("[0-9a-f]{40}",
-          fingerprintParameter[0].toLowerCase())) {
-        return null;
+    /* Parse transports if supported by the graph type. If no transports
+     * are passed, use "<OR>" as default. */
+    if (supportedGraphParameters.contains("transport")) {
+      String[] transportParameters = (String[]) requestParameters.get(
+          "transport");
+      List<String> knownTransports = Arrays.asList(
+          this.knownParameterValues.get("transport").split(","));
+      if (transportParameters != null) {
+        for (String transport : transportParameters) {
+          if (transport == null || transport.length() == 0 ||
+              !knownTransports.contains(transport)) {
+            return null;
+          }
+        }
       } else {
-        fingerprintParameter[0] = fingerprintParameter[0].toLowerCase();
-        recognizedGraphParameters.put("fingerprint",
-            fingerprintParameter);
+        transportParameters = new String[] { "<OR>" };
       }
+      recognizedGraphParameters.put("transport", transportParameters);
+    }
+
+    /* Parse versions if supported by the graph type. If no versions
+     * are passed, use "v4" as default. */
+    if (supportedGraphParameters.contains("version")) {
+      String[] versionParameters = (String[]) requestParameters.get(
+          "version");
+      List<String> knownVersions = Arrays.asList(
+          this.knownParameterValues.get("version").split(","));
+      if (versionParameters != null) {
+        for (String version : versionParameters) {
+          if (version == null || version.length() == 0 ||
+              !knownVersions.contains(version)) {
+            return null;
+          }
+        }
+      } else {
+        versionParameters = new String[] { "v4" };
+      }
+      recognizedGraphParameters.put("version", versionParameters);
     }
 
     /* We now have a map with all required graph parameters. Return it. */

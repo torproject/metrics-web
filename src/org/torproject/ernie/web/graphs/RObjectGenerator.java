@@ -105,6 +105,14 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableGraphs.put("connbidirect", "start,end,filename");
     this.availableGraphs.put("fast-exits", "start,end,filename");
     this.availableGraphs.put("almost-fast-exits", "start,end,filename");
+    this.availableGraphs.put("userstats-relay-country",
+        "start,end,country,filename");
+    this.availableGraphs.put("userstats-bridge-country",
+        "start,end,country,filename");
+    this.availableGraphs.put("userstats-bridge-transport",
+        "start,end,transport,filename");
+    this.availableGraphs.put("userstats-bridge-version",
+        "start,end,version,filename");
     this.availableGraphFileTypes = new HashSet<String>(Arrays.asList(
         "png,pdf,svg".split(",")));
     GraphParameterChecker.getInstance().setAvailableGraphs(
