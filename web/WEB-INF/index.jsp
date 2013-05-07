@@ -31,23 +31,6 @@
           <li>Try out the <a href="tools.html">tools</a> to parse and
           evaluate the metrics data</li>
         </ul>
-        <br>
-        <h3>News</h3>
-        <ul>
-          <li>July 16, 2012: Added link to <a
-          href="http://tigerpa.ws/tor_metrics/">interactive graphs</a> of
-          network statistics.</li>
-          <li>April 30, 2012: Added <a
-          href="https://research.torproject.org/techreports/bridge-report-usage-stats-2012-04-30.pdf">tech
-          report</a>: "What fraction of our bridges are not reporting
-          usage statistics?"</li>
-          <li>March 12, 2012: Added
-          <a href="https://research.torproject.org/techreports/bridge-scaling-2012-03-09.pdf">tech report</a>:
-          "What if the Tor network had 50,000 bridges?"</li>
-          <li>January 17, 2012:
-          <a href="https://svn.torproject.org/svn/projects/roadmaps/metrics-roadmap-2012-01-17.pdf">Tor
-          Metrics Roadmap</a> published.</li>
-        </ul>
     </div>
   </div>
   <div class="bottom" id="bottom">
