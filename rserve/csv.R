@@ -292,3 +292,11 @@ export_bandwidth_flags <- function(path) {
       quote = FALSE, row.names = FALSE)
 }
 
+export_userstats <- function(path) {
+  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
+    "task-8462/userstats.csv", sep = ""),
+    stringsAsFactors = FALSE)
+  write.csv(format(u, trim = TRUE, scientific = FALSE), path,
+      quote = FALSE, row.names = FALSE)
+}
+

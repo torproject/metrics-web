@@ -374,6 +374,12 @@ IPv6 numbers will become more accurate over time.</font>
 <p>Download graph as
 <a href="userstats-bridge-version.pdf${userstats_bridge_version_url}">PDF</a> or
 <a href="userstats-bridge-version.svg${userstats_bridge_version_url}">SVG</a>.</p>
+<hr>
+
+<p><a href="csv/userstats.csv">CSV</a> file containing new user
+estimates (BETA).</p>
+<br>
+
     </div>
   </div>
   <div class="bottom" id="bottom">

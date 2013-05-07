@@ -73,6 +73,7 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableCsvFiles.add("relayflags");
     this.availableCsvFiles.add("torperf");
     this.availableCsvFiles.add("torperf-failures");
+    this.availableCsvFiles.add("userstats");
     this.availableCsvFiles.add("versions");
 
     this.availableTables = new HashMap<String, String>();
