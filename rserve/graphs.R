@@ -1027,6 +1027,7 @@ plot_userstats <- function(start, end, node, variable, value, path) {
   u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
     "task-8462/userstats.csv", sep = ""),
     stringsAsFactors = FALSE)
+  u <- u[u$date >= start & u$date <= end, ]
   if (node == 'relay') {
     if (value != 'all') {
       u <- u[u$country == value & u$node == 'relay', ]
