@@ -276,6 +276,28 @@ public class RelaySearchServlet extends HttpServlet {
       return;
     }
 
+    /* Look up last consensus in the database. */
+    long maxValidAfterMillis = -1L;
+    try {
+      long requestedConnection = System.currentTimeMillis();
+      Connection conn = this.ds.getConnection();
+      String query = "SELECT MAX(validafter) AS last FROM consensus";
+      Statement statement = conn.createStatement();
+      ResultSet rs = statement.executeQuery(query);
+      if (rs.next()) {
+        maxValidAfterMillis = rs.getTimestamp(1).getTime();
+      }
+      rs.close();
+      statement.close();
+      conn.close();
+      this.logger.info("Returned a database connection to the pool "
+          + "after " + (System.currentTimeMillis()
+          - requestedConnection) + " millis.");
+    } catch (SQLException e) {
+      this.logger.log(Level.WARNING, "Could not look up last consensus "
+          + "valid-after time in the database.", e);
+    }
+
     /* Prepare a string that says what we're searching for. */
     List<String> recognizedSearchTerms = new ArrayList<String>();
     if (searchNickname.length() > 0) {
@@ -297,6 +319,11 @@ public class RelaySearchServlet extends HttpServlet {
       recognizedIntervals.add("on <b>" + searchTerm + "</b>");
     }
     StringBuilder searchNoticeBuilder = new StringBuilder();
+    if (maxValidAfterMillis > 0L) {
+      searchNoticeBuilder.append("Most recent consensus in database is "
+          + "from " + dateTimeFormat.format(maxValidAfterMillis)
+          + ".</p><p>");
+    }
     searchNoticeBuilder.append("Searching for relays with ");
     if (recognizedSearchTerms.size() == 1) {
       searchNoticeBuilder.append(recognizedSearchTerms.get(0));
