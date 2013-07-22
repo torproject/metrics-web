@@ -613,10 +613,10 @@ plot_relayflags <- function(start, end, flags, path) {
   missing <- setdiff(dates, networksize$date)
   if (length(missing) > 0)
     networksize <- rbind(data.frame(
-      date = as.Date(rep(missing, 5), origin = "1970-01-01"),
+      date = as.Date(rep(missing, 6), origin = "1970-01-01"),
       variable = paste("avg_", c("running", "exit", "guard", "fast",
         "stable", "hsdir"), sep = ""),
-      value = rep(NA, length(missing) * 5)), networksize)
+      value = rep(NA, length(missing) * 6)), networksize)
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(end, "%Y-%m-%d")) -
     min(as.Date(networksize$date, "%Y-%m-%d"))))
