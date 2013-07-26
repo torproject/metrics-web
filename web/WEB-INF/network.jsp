@@ -22,6 +22,7 @@ the network</a></h3>
 <p>Most of the statistics on this page are also available as
 <a href="http://tigerpa.ws/tor_metrics/">interactive graphs</a>.</p>
 <br>
+<p>Top relays as <a href="bubbles.html">bubble graphs</a>.</p>
 
 <a name="networksize"></a>
 <h3><a href="#networksize" class="anchor">Relays and bridges in the
