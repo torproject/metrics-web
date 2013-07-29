@@ -56,6 +56,17 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>Bubbles</servlet-name>
+    <servlet-class>
+      org.torproject.ernie.web.graphs.BubblesServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Bubbles</servlet-name>
+    <url-pattern>/bubbles.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>Research</servlet-name>
     <servlet-class>
       org.torproject.ernie.web.ResearchServlet
