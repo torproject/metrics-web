@@ -67,6 +67,8 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableCsvFiles.add("dirbytes");
     this.availableCsvFiles.add("monthly-users-average");
     this.availableCsvFiles.add("monthly-users-peak");
+    this.availableCsvFiles.add("monthly-userstats-average");
+    this.availableCsvFiles.add("monthly-userstats-peak");
     this.availableCsvFiles.add("networksize");
     this.availableCsvFiles.add("platforms");
     this.availableCsvFiles.add("relaycountries");

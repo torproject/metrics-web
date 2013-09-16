@@ -448,6 +448,11 @@ IPv6 numbers will become more accurate over time.</font>
 
 <p><a href="csv/userstats.csv">CSV</a> file containing new user
 estimates (BETA).</p>
+<p><a href="csv/monthly-userstats-peak.csv">CSV</a> file containing peak
+daily Tor users (direct and bridge) per month by country (BETA).</p>
+<p><a href="csv/monthly-userstats-average.csv">CSV</a> file containing
+average daily Tor users (direct and bridge) per month by country
+(BETA).</p>
 <br>
 
     </div>

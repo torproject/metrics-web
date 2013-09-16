@@ -300,3 +300,31 @@ export_userstats <- function(path) {
       quote = FALSE, row.names = FALSE)
 }
 
+help_export_monthly_userstats <- function(path, aggr_fun) {
+  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
+    "task-8462/userstats.csv", sep = ""),
+    stringsAsFactors = FALSE)
+  u <- u[u$country != '' & u$transport == '' & u$version == '',
+         c("date", "country", "users")]
+  u <- aggregate(list(users = u$users),
+                      by = list(date = u$date, country = u$country), sum)
+  u <- aggregate(list(users = u$users),
+                      by = list(country = u$country,
+                                month = substr(u$date, 1, 7)), aggr_fun)
+  u <- rbind(u, data.frame(country = "zy",
+                aggregate(list(users = u$users),
+                          by = list(month = u$month), sum)))
+  u <- cast(u, country ~ month, value = "users")
+  u[u$country == "zy", "country"] <- "all"
+  u[, 2:length(u)] <- floor(u[, 2:length(u)])
+  write.csv(u, path, quote = FALSE, row.names = FALSE)
+}
+
+export_monthly_userstats_peak <- function(path) {
+  help_export_monthly_userstats(path, max)
+}
+
+export_monthly_userstats_average <- function(path) {
+  help_export_monthly_userstats(path, mean)
+}
+
