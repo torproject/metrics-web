@@ -690,8 +690,8 @@ plot_direct_users <- function(start, end, country, events, path) {
       if (length(r$maxusers) > 0)
         max_y <- max(max_y, max(r$maxusers, na.rm = TRUE))
       plot <- plot +
-        geom_ribbon(data = r, aes(ymin = minusers, ymax = maxusers),
-            fill = "gray")
+        geom_ribbon(data = r, aes(ymin = max(0, minusers),
+            ymax = maxusers), fill = "gray")
     }
     if (length(upturns$date) > 0)
       plot <- plot +
@@ -1022,7 +1022,8 @@ plot_bandwidth_flags <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_userstats <- function(start, end, node, variable, value, path) {
+plot_userstats <- function(start, end, node, variable, value, events,
+                           path) {
   end <- min(end, as.character(Sys.Date()))
   u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
     "task-8462/userstats.csv", sep = ""),
@@ -1052,7 +1053,7 @@ plot_userstats <- function(start, end, node, variable, value, path) {
                      " (BETA)\n", sep = "")
     } else {
       u <- u[u$country == '' & u$transport == '' & u$version == '' &
-            u$node == 'bridge', ]
+             u$node == 'bridge', ]
       title <- "Bridge users (BETA)\n"
     }
   }
@@ -1068,32 +1069,62 @@ plot_userstats <- function(start, end, node, variable, value, path) {
   formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
   date_breaks <- date_breaks(
     as.numeric(max(u$date) - min(u$date)))
-  ggplot(u, aes(x = date, y = users)) +
+  max_y <- ifelse(length(na.omit(u$users)) == 0, 0,
+      max(u$users, na.rm = TRUE))
+  plot <- ggplot(u, aes(x = date, y = users))
+  if (length(na.omit(u$users)) > 0 & events != "off" &
+      variable == 'country' & value != "all") {
+    r <- read.csv(
+      "/srv/metrics.torproject.org/web/detector/userstats-ranges.csv",
+      stringsAsFactors = FALSE)
+    r <- r[r$date >= start & r$date <= end & r$country == value,
+        c("date", "minusers", "maxusers")]
+    r <- cast(rbind(melt(u, id.vars = "date"), melt(r, id.vars = "date")))
+    upturns <- r[r$users > r$maxusers, 1:2]
+    downturns <- r[r$users < r$minusers, 1:2]
+    if (events == "on") {
+      if (length(r$maxusers) > 0)
+        max_y <- max(max_y, max(r$maxusers, na.rm = TRUE))
+      plot <- plot +
+        geom_ribbon(data = r, aes(ymin = max(0, minusers),
+            ymax = maxusers), fill = "gray")
+    }
+    if (length(upturns$date) > 0)
+      plot <- plot +
+          geom_point(data = upturns, aes(x = date, y = users), size = 5,
+          colour = "dodgerblue2")
+    if (length(downturns$date) > 0)
+      plot <- plot +
+          geom_point(data = downturns, aes(x = date, y = users), size = 5,
+          colour = "firebrick2")
+  }
+  plot <- plot +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0,
-        ifelse(length(na.omit(u$users)) == 0, 0,
-        max(u$users, na.rm = TRUE))), formatter = formatter) +
+    scale_y_continuous(name = "", limits = c(0, max_y),
+        formatter = formatter)
     opts(title = title)
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_userstats_relay_country <- function(start, end, country, path) {
-  plot_userstats(start, end, 'relay', 'country', country, path)
+plot_userstats_relay_country <- function(start, end, country, events,
+    path) {
+  plot_userstats(start, end, 'relay', 'country', country, events, path)
 }
 
 plot_userstats_bridge_country <- function(start, end, country, path) {
-  plot_userstats(start, end, 'bridge', 'country', country, path)
+  plot_userstats(start, end, 'bridge', 'country', country, 'off', path)
 }
 
 plot_userstats_bridge_transport <- function(start, end, transport, path) {
-  plot_userstats(start, end, 'bridge', 'transport', transport, path)
+  plot_userstats(start, end, 'bridge', 'transport', transport, 'off',
+    path)
 }
 
 plot_userstats_bridge_version <- function(start, end, version, path) {
-  plot_userstats(start, end, 'bridge', 'version', version, path)
+  plot_userstats(start, end, 'bridge', 'version', version, 'off', path)
 }
 

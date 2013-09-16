@@ -348,8 +348,8 @@ def plot_all(tss, minx, maxx, INTERV, DAYS=None, rdir="img"):
   summary_file.close()
 
 """Write a CSV report on the minimum/maximum users of each country per date."""
-def write_all(tss, minc, maxc, INTERVAL=7):
-  ranges_file = file("direct-users-ranges.csv", "w")
+def write_all(tss, minc, maxc, RANGES_FILE, INTERVAL=7):
+  ranges_file = file(RANGES_FILE, "w")
   ranges_file.write("date,country,minusers,maxusers\n")
   exclude = set(["all", "??", "date"])
   for c in tss.country_codes:
@@ -415,23 +415,25 @@ def write_ml_report(tss, minx, maxx, INTERV, DAYS, notification_period=None):
 
   report_file.close()
 
-def main():
-  # Change these to customize script
-  CSV_FILE = "direct-users.csv"
-  GRAPH_DIR = "img"
-  # Time interval to model connection rates.
-  INTERV = 7
-  # Consider maximum DAYS days back.
-  DAYS= 6 * 31
-
+# INTERV is the time interval to model connection rates;
+# consider maximum DAYS days back.
+def detect(CSV_FILE = "userstats-detector.csv",
+           RANGES_FILE = "userstats-ranges.csv", GRAPH_DIR = "img",
+           INTERV = 7, DAYS = 6 * 31, REPORT = True):
   tss = torstatstore(CSV_FILE)
   l = tss.get_largest_locations(50)
   minx, maxx = make_tendencies_minmax(l, INTERV)
   #plot_all(tss, minx, maxx, INTERV, DAYS, rdir=GRAPH_DIR)
-  write_all(tss, minx, maxx, INTERV)
+  write_all(tss, minx, maxx, RANGES_FILE, INTERV)
 
-  # Make our short report; only consider events of the last day
-  write_ml_report(tss, minx, maxx, INTERV, DAYS, 1)
+  if REPORT:
+    # Make our short report; only consider events of the last day
+    write_ml_report(tss, minx, maxx, INTERV, DAYS, 1)
+
+def main():
+  detect(CSV_FILE = "direct-users.csv",
+         RANGES_FILE = "direct-users-ranges.csv")
+  detect(REPORT = False)
 
 if __name__ == "__main__":
     main()

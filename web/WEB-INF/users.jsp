@@ -208,6 +208,9 @@ Tor users (direct and bridge) per month by country.</p>
 daily Tor users (direct and bridge) per month by country.</p>
 <br>
 
+<hr>
+<hr>
+
 <a name="userstats"></a>
 <h3><a href="#userstats" class="anchor">New approach to estimating daily
 Tor users (BETA)</a></h3>
@@ -257,6 +260,14 @@ It's yet to be decided which approach is more correct.</font>
         </c:forEach>
       </select>
     </p><p>
+      Show possible censorship events if available (<a
+      href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>)
+      <select name="events">
+        <option value="off">Off</option>
+        <option value="on"<c:if test="${userstats_relay_country_events[0] eq 'on'}"> selected</c:if>>On: both points and expected range</option>
+        <option value="points"<c:if test="${userstats_relay_country_events[0] eq 'points'}"> selected</c:if>>On: points only, no expected range</option>
+      </select>
+    </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
@@ -292,6 +303,40 @@ It's yet to be decided which approach is more correct.</font>
     <tr>
       <td><a href="users.html?graph=userstats-relay-country&country=${row['cc']}#userstats-relay">${row['country']}</a>&emsp;</td>
       <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
+    </tr>
+  </c:forEach>
+</table>
+<hr>
+<a name="userstats-censorship-events"></a>
+<p><b>Top-10 countries by possible censorship events (<a
+      href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>):</b></p>
+<form action="users.html#userstats-censorship-events">
+  <div class="formrow">
+    <input type="hidden" name="table" value="userstats-censorship-events">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_censorship_events_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_censorship_events_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_censorship_events_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_censorship_events_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+    <input class="submit" type="submit" value="Update table">
+    </p>
+  </div>
+</form>
+<br>
+<table>
+  <tr>
+    <th>Country</th>
+    <th>Downturns</th>
+    <th>Upturns</th>
+  </tr>
+  <c:forEach var="row" items="${userstats_censorship_events_tabledata}">
+    <tr>
+      <td><a href="users.html?graph=direct-users&country=${row['cc']}&events=on#direct-users">${row['country']}</a>&emsp;</td>
+      <td>${row['downturns']}</td>
+      <td>${row['upturns']}</td>
     </tr>
   </c:forEach>
 </table>

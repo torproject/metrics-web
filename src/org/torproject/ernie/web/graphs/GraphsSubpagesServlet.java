@@ -52,7 +52,7 @@ public class GraphsSubpagesServlet extends HttpServlet {
     this.availableGraphsSubpageTables.put("users.html",
         new HashSet<String>(Arrays.asList((
         "direct-users,censorship-events,bridge-users,userstats-relay,"
-        + "userstats-bridge").split(","))));
+        + "userstats-censorship-events,userstats-bridge").split(","))));
 
     this.knownCountries = Countries.getInstance().getCountryList();
   }

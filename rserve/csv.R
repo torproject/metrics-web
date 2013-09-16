@@ -328,3 +328,19 @@ export_monthly_userstats_average <- function(path) {
   help_export_monthly_userstats(path, mean)
 }
 
+export_userstats_detector <- function(path) {
+  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
+    "task-8462/userstats.csv", sep = ""),
+    stringsAsFactors = FALSE)
+  u <- u[u$country != '' & u$transport == '' & u$version == '' &
+         u$node == 'relay', c("country", "date", "users")]
+  u <- rbind(u, data.frame(country = "zy",
+                aggregate(list(users = u$users),
+                          by = list(date = u$date), sum)))
+  u <- data.frame(date = u$date, country = u$country,
+                  users = floor(u$users))
+  u <- cast(u, date ~ country, value = "users")
+  names(u)[names(u) == "zy"] <- "all"
+  write.csv(u, path, quote = FALSE, row.names = FALSE)
+}
+

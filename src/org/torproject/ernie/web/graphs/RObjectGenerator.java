@@ -76,6 +76,7 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableCsvFiles.add("torperf");
     this.availableCsvFiles.add("torperf-failures");
     this.availableCsvFiles.add("userstats");
+    this.availableCsvFiles.add("userstats-detector");
     this.availableCsvFiles.add("versions");
 
     this.availableTables = new HashMap<String, String>();
@@ -84,6 +85,8 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableTables.put("bridge-users", "start,end,filename");
     this.availableTables.put("userstats-relay", "start,end,filename");
     this.availableTables.put("userstats-bridge", "start,end,filename");
+    this.availableTables.put("userstats-censorship-events",
+        "start,end,filename");
     TableParameterChecker.getInstance().setAvailableTables(
         availableTables);
 
@@ -111,7 +114,7 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableGraphs.put("fast-exits", "start,end,filename");
     this.availableGraphs.put("almost-fast-exits", "start,end,filename");
     this.availableGraphs.put("userstats-relay-country",
-        "start,end,country,filename");
+        "start,end,country,events,filename");
     this.availableGraphs.put("userstats-bridge-country",
         "start,end,country,filename");
     this.availableGraphs.put("userstats-bridge-transport",
