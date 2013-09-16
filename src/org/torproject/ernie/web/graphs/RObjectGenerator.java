@@ -80,6 +80,8 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableTables.put("direct-users", "start,end,filename");
     this.availableTables.put("censorship-events", "start,end,filename");
     this.availableTables.put("bridge-users", "start,end,filename");
+    this.availableTables.put("userstats-relay", "start,end,filename");
+    this.availableTables.put("userstats-bridge", "start,end,filename");
     TableParameterChecker.getInstance().setAvailableTables(
         availableTables);
 

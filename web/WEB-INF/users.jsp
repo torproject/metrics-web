@@ -230,10 +230,12 @@ experimental and absolute numbers should be taken with care!</font></p>
 <a name="userstats-relay-country"></a>
 <p><b>Direct users by country (BETA):</b></p>
 
+<p>
 <font color="red">In contrast to the graphs above, this graph is based on
 requests to directory mirrors <i>and</i> directory authorities.
 That is why the numbers here are higher.
 It's yet to be decided which approach is more correct.</font>
+</p>
 
 <img src="userstats-relay-country.png${userstats_relay_country_url}"
      width="576" height="360" alt="Direct users by country graph (BETA)">
@@ -263,13 +265,46 @@ It's yet to be decided which approach is more correct.</font>
 <a href="userstats-relay-country.pdf${userstats_relay_country_url}">PDF</a> or
 <a href="userstats-relay-country.svg${userstats_relay_country_url}">SVG</a>.</p>
 <hr>
+<a name="userstats-relay-table"></a>
+<p><b>Top-10 countries by directly connecting users (BETA):</b></p>
+<form action="users.html#userstats-relay-table">
+  <div class="formrow">
+    <input type="hidden" name="table" value="userstats-relay">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_relay_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_relay_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_relay_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_relay_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+    <input class="submit" type="submit" value="Update table">
+    </p>
+  </div>
+</form>
+<br>
+<table>
+  <tr>
+    <th>Country</th>
+    <th>Mean daily users</th>
+  </tr>
+  <c:forEach var="row" items="${userstats_relay_tabledata}">
+    <tr>
+      <td><a href="users.html?graph=userstats-relay-country&country=${row['cc']}#userstats-relay">${row['country']}</a>&emsp;</td>
+      <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
+    </tr>
+  </c:forEach>
+</table>
+<hr>
 
 <a name="userstats-bridge-country"></a>
 <p><b>Bridge users by country (BETA):</b></p>
 
+<p>
 <font color="red">In contrast to the bridge-user graph above, this graph
 uses directory requests to estimate user numbers, not unique IP address sets.
 It's yet to be decided which approach is more correct.</font>
+</p>
 
 <img src="userstats-bridge-country.png${userstats_bridge_country_url}"
      width="576" height="360" alt="Bridge users by country graph (BETA)">
@@ -299,16 +334,49 @@ It's yet to be decided which approach is more correct.</font>
 <a href="userstats-bridge-country.pdf${userstats_bridge_country_url}">PDF</a> or
 <a href="userstats-bridge-country.svg${userstats_bridge_country_url}">SVG</a>.</p>
 <hr>
+<a name="userstats-bridge-table"></a>
+<p><b>Top-10 countries by bridge users (BETA):</b></p>
+<form action="users.html#userstats-bridge-table">
+  <div class="formrow">
+    <input type="hidden" name="table" value="userstats-bridge">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_bridge_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_bridge_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_bridge_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_bridge_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+    <input class="submit" type="submit" value="Update table">
+    </p>
+  </div>
+</form>
+<br>
+<table>
+  <tr>
+    <th>Country</th>
+    <th>Mean daily users</th>
+  </tr>
+  <c:forEach var="row" items="${userstats_bridge_tabledata}">
+    <tr>
+      <td><a href="users.html?graph=userstats-bridge-country&country=${row['cc']}#userstats-bridge">${row['country']}</a>&emsp;</td>
+      <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
+    </tr>
+  </c:forEach>
+</table>
+<hr>
 
 <a name="userstats-bridge-transport"></a>
 <p><b>Bridge users by transport (BETA):</b></p>
 
+<p>
 <font color="red">Almost none of the currently running bridges report the
 transport name of connecting users, which is why non-OR transport usage is
 so low.
 By default, we consider all users of a bridge OR transport users, unless told
 otherwise.
 Non-OR transport numbers will become more accurate over time.</font>
+</p>
 
 <img src="userstats-bridge-transport.png${userstats_bridge_transport_url}"
      width="576" height="360" alt="Bridge users by transport graph (BETA)">
@@ -343,11 +411,13 @@ Non-OR transport numbers will become more accurate over time.</font>
 <a name="userstats-bridge-version"></a>
 <p><b>Bridge users by IP version (BETA):</b></p>
 
+<p>
 <font color="red">Not all of the currently running bridges report the
 IP version of connecting users.
 By default, we consider all users of a bridge IPv4 users, unless told
 otherwise.
 IPv6 numbers will become more accurate over time.</font>
+</p>
 
 <img src="userstats-bridge-version.png${userstats_bridge_version_url}"
      width="576" height="360" alt="Bridge users by IP version graph (BETA)">

@@ -92,3 +92,33 @@ write_bridge_users <- function(start, end, path) {
   write.csv(d, path, quote = FALSE, row.names = FALSE)
 }
 
+write_userstats <- function(start, end, node, path) {
+  end <- min(end, as.character(Sys.Date()))
+  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
+    "task-8462/userstats.csv", sep = ""),
+    stringsAsFactors = FALSE)
+  u <- u[u$date >= start & u$date <= end & u$country != '' &
+         u$transport == '' & u$version == '' & u$node == node,
+         c("country", "users")]
+  u <- aggregate(list(users = u$users), by = list(country = u$country),
+                 mean)
+  total <- sum(u$users)
+  u <- u[!(u$country %in% c("zy", "??", "a1", "a2", "o1", "ap", "eu")), ]
+  u <- u[order(u$users, decreasing = TRUE), ]
+  u <- u[1:10, ]
+  u <- data.frame(
+    cc = as.character(u$country),
+    country = sub('the ', '', countrynames(as.character(u$country))),
+    abs = round(u$users),
+    rel = round(100 * u$users / total, 2))
+  write.csv(u, path, quote = FALSE, row.names = FALSE)
+}
+
+write_userstats_relay <- function(start, end, path) {
+  write_userstats(start, end, 'relay', path)
+}
+
+write_userstats_bridge <- function(start, end, path) {
+  write_userstats(start, end, 'bridge', path)
+}
+
