@@ -221,24 +221,30 @@ The new approach works very similar to the existing approach to estimate
 directly connecting users, but can also be applied to bridge users.
 This new approach can break down user numbers by country, pluggable
 transport, and IP version.
-See tech report on
-<a href="https://research.torproject.org/techreports/counting-daily-bridge-users-2012-10-24.pdf">Counting daily bridge users</a>
+See the tech report on
+<a href="https://research.torproject.org/techreports/counting-daily-bridge-users-2012-10-24.pdf">counting daily bridge users</a>
 and the
 <a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-8462">source code</a>
 for details.
 
-<p><font color="red">Note that this approach should be considered
-experimental and absolute numbers should be taken with care!</font></p>
-
 <a name="userstats-relay-country"></a>
 <p><b>Direct users by country (BETA):</b></p>
 
-<p>
-<font color="red">In contrast to the graphs above, this graph is based on
+<font color="red">
+<p>This graph is quite similar to the graphs above,
+except for the following differences:</p>
+<ul>
+<li>In contrast to the graphs above, this graph is based on
 requests to directory mirrors <i>and</i> directory authorities.
-That is why the numbers here are higher.
-It's yet to be decided which approach is more correct.</font>
-</p>
+The idea is that we want to estimate both new and recurring users.
+That is why the numbers here are higher.</li>
+<li>This graph uses byte histories for written <i>directory bytes</i>
+rather than general byte history to weight what fraction of directory
+requests a relay has answered in the network.</li>
+<li>The implementation behind this graph is much more efficient, which
+reduces time to graph from about 3 days to about 1 day.</li>
+</ul>
+</font>
 
 <img src="userstats-relay-country.png${userstats_relay_country_url}"
      width="576" height="360" alt="Direct users by country graph (BETA)">
