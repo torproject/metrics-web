@@ -1024,7 +1024,7 @@ plot_bandwidth_flags <- function(start, end, path) {
 
 plot_userstats <- function(start, end, node, variable, value, events,
                            path) {
-  end <- min(end, as.character(Sys.Date()))
+  end <- min(end, as.character(Sys.Date() - 2))
   u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
     "task-8462/userstats.csv", sep = ""),
     stringsAsFactors = FALSE)
