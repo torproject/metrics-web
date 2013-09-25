@@ -307,7 +307,7 @@ reduces time to graph from about 3 days to about 1 day.</li>
   </tr>
   <c:forEach var="row" items="${userstats_relay_tabledata}">
     <tr>
-      <td><a href="users.html?graph=userstats-relay-country&country=${row['cc']}#userstats-relay">${row['country']}</a>&emsp;</td>
+      <td><a href="users.html?graph=userstats-relay-country&country=${row['cc']}#userstats-relay-country">${row['country']}</a>&emsp;</td>
       <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
     </tr>
   </c:forEach>
@@ -340,7 +340,7 @@ reduces time to graph from about 3 days to about 1 day.</li>
   </tr>
   <c:forEach var="row" items="${userstats_censorship_events_tabledata}">
     <tr>
-      <td><a href="users.html?graph=direct-users&country=${row['cc']}&events=on#direct-users">${row['country']}</a>&emsp;</td>
+      <td><a href="users.html?graph=userstats-relay-country&country=${row['cc']}&events=on#userstats-relay-country">${row['country']}</a>&emsp;</td>
       <td>${row['downturns']}</td>
       <td>${row['upturns']}</td>
     </tr>
@@ -410,7 +410,7 @@ It's yet to be decided which approach is more correct.</font>
   </tr>
   <c:forEach var="row" items="${userstats_bridge_tabledata}">
     <tr>
-      <td><a href="users.html?graph=userstats-bridge-country&country=${row['cc']}#userstats-bridge">${row['country']}</a>&emsp;</td>
+      <td><a href="users.html?graph=userstats-bridge-country&country=${row['cc']}#userstats-bridge-country">${row['country']}</a>&emsp;</td>
       <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
     </tr>
   </c:forEach>
