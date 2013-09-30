@@ -1,3 +1,5 @@
+options(scipen = 15)
+
 export_networksize <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
