@@ -689,8 +689,9 @@ plot_direct_users <- function(start, end, country, events, path) {
     if (events == "on") {
       if (length(r$maxusers) > 0)
         max_y <- max(max_y, max(r$maxusers, na.rm = TRUE))
+      r[r$minusers < 0, "minusers"] <- 0
       plot <- plot +
-        geom_ribbon(data = r, aes(ymin = max(0, minusers),
+        geom_ribbon(data = r, aes(ymin = minusers,
             ymax = maxusers), fill = "gray")
     }
     if (length(upturns$date) > 0)
@@ -1085,8 +1086,9 @@ plot_userstats <- function(start, end, node, variable, value, events,
     if (events == "on") {
       if (length(r$maxusers) > 0)
         max_y <- max(max_y, max(r$maxusers, na.rm = TRUE))
+      r[r$minusers < 0, "minusers"] <- 0
       plot <- plot +
-        geom_ribbon(data = r, aes(ymin = max(0, minusers),
+        geom_ribbon(data = r, aes(ymin = minusers,
             ymax = maxusers), fill = "gray")
     }
     if (length(upturns$date) > 0)
