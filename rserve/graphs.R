@@ -1034,28 +1034,28 @@ plot_userstats <- function(start, end, node, variable, value, events,
     if (value != 'all') {
       u <- u[u$country == value & u$node == 'relay', ]
       title <- paste("Directly connecting users from ",
-                     countryname(value), " (BETA)\n", sep = "")
+                     countryname(value), "\n", sep = "")
     } else {
       u <- u[u$country == '' & u$transport == '' & u$version == '' &
              u$node == 'relay', ]
-      title <- "Directly connecting users (BETA)\n"
+      title <- "Directly connecting users\n"
     }
   } else if (variable == 'transport') {
     u <- u[u$transport == value & u$node == 'bridge', ]
-    title <- paste("Bridge users using transport ", value, " (BETA)\n",
+    title <- paste("Bridge users using transport ", value, "\n",
                    sep = "")
   } else if (variable == 'version') {
     u <- u[u$version== value & u$node == 'bridge', ]
-    title <- paste("Bridge users using IP", value, " (BETA)\n", sep = "")
+    title <- paste("Bridge users using IP", value, "\n", sep = "")
   } else {
     if (value != 'all') {
       u <- u[u$country == value & u$node == 'bridge', ]
       title <- paste("Bridge users from ", countryname(value),
-                     " (BETA)\n", sep = "")
+                     "\n", sep = "")
     } else {
       u <- u[u$country == '' & u$transport == '' & u$version == '' &
              u$node == 'bridge', ]
-      title <- "Bridge users (BETA)\n"
+      title <- "Bridge users\n"
     }
   }
   u <- data.frame(date = as.Date(u$date, "%Y-%m-%d"), users = u$users)
@@ -1107,7 +1107,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0, max_y),
-        formatter = formatter)
+        formatter = formatter) +
     opts(title = title)
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
