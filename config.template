@@ -45,10 +45,3 @@
 ## Relative path to directory to import torperf results from
 #TorperfDirectory in/torperf/
 #
-## JDBC string for ExoneraTor database
-#ExoneraTorDatabaseJdbc jdbc:postgresql://localhost/exonerator?user=metrics&password=password
-#
-## Relative path to directory where to find descriptors to import into the
-## ExoneraTor database
-#ExoneraTorImportDirectory exonerator-import/
-

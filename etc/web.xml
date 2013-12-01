@@ -245,28 +245,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>ServerDescriptor</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.status.exonerator.ServerDescriptorServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ServerDescriptor</servlet-name>
-    <url-pattern>/serverdesc</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>Consensus</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.status.exonerator.ConsensusServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Consensus</servlet-name>
-    <url-pattern>/consensus</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>ConsensusHealthServlet</servlet-name>
     <servlet-class>
       org.torproject.ernie.status.doctor.ConsensusHealthServlet

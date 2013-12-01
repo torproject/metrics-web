@@ -1,14 +1,4 @@
 <Context cookies="false">
-  <Resource name="jdbc/exonerator"
-            type="javax.sql.DataSource"
-            auth="Container"
-            username="metrics"
-            password="password"
-            driverClassName="org.postgresql.Driver"
-            url="jdbc:postgresql://localhost/exonerator"
-            maxActive="8"
-            maxIdle="4"
-            maxWait="15000"/>
   <Resource name="jdbc/tordir"
             type="javax.sql.DataSource"
             auth="Container"
