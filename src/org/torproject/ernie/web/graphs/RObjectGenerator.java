@@ -58,15 +58,10 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableCsvFiles = new TreeSet<String>();
     this.availableCsvFiles.add("bandwidth");
     this.availableCsvFiles.add("bandwidth-flags");
-    this.availableCsvFiles.add("bridge-users");
     this.availableCsvFiles.add("bwhist-flags");
     this.availableCsvFiles.add("connbidirect");
     this.availableCsvFiles.add("cloudbridges");
-    this.availableCsvFiles.add("direct-users");
-    this.availableCsvFiles.add("dirreq-stats");
     this.availableCsvFiles.add("dirbytes");
-    this.availableCsvFiles.add("monthly-users-average");
-    this.availableCsvFiles.add("monthly-users-peak");
     this.availableCsvFiles.add("monthly-userstats-average");
     this.availableCsvFiles.add("monthly-userstats-peak");
     this.availableCsvFiles.add("networksize");
@@ -80,9 +75,6 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableCsvFiles.add("versions");
 
     this.availableTables = new HashMap<String, String>();
-    this.availableTables.put("direct-users", "start,end,filename");
-    this.availableTables.put("censorship-events", "start,end,filename");
-    this.availableTables.put("bridge-users", "start,end,filename");
     this.availableTables.put("userstats-relay", "start,end,filename");
     this.availableTables.put("userstats-bridge", "start,end,filename");
     this.availableTables.put("userstats-censorship-events",
@@ -102,10 +94,6 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableGraphs.put("bandwidth-flags", "start,end,filename");
     this.availableGraphs.put("bwhist-flags", "start,end,filename");
     this.availableGraphs.put("dirbytes", "start,end,filename");
-    this.availableGraphs.put("direct-users",
-        "start,end,country,events,filename");
-    this.availableGraphs.put("bridge-users",
-         "start,end,country,filename");
     this.availableGraphs.put("torperf",
          "start,end,source,filesize,filename");
     this.availableGraphs.put("torperf-failures",

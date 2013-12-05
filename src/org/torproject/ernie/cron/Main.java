@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import org.torproject.ernie.cron.network.ConsensusStatsFileHandler;
 import org.torproject.ernie.cron.performance.PerformanceStatsImporter;
 import org.torproject.ernie.cron.performance.TorperfProcessor;
-import org.torproject.ernie.cron.users.BridgeStatsFileHandler;
 
 /**
  * Coordinate downloading and parsing of descriptors and extraction of
@@ -37,16 +36,6 @@ public class Main {
     // Define stats directory for temporary files
     File statsDirectory = new File("stats");
 
-    // Prepare bridge stats file handler
-    BridgeStatsFileHandler bsfh = config.getWriteBridgeStats() ?
-        new BridgeStatsFileHandler(
-        config.getRelayDescriptorDatabaseJDBC(),
-        new File(config.getSanitizedBridgesDirectory()),
-        statsDirectory, config.getKeepSanitizedBridgesImportHistory(),
-        new File(config.getDirectoryArchivesDirectory()),
-        config.getKeepDirectoryArchiveImportHistory()) :
-        null;
-
     // Import relay descriptors
     if (config.getImportDirectoryArchives()) {
       RelayDescriptorDatabaseImporter rddi =
@@ -63,9 +52,6 @@ public class Main {
       if (rddi != null) {
         rddi.importRelayDescriptors();
       }
-      if (bsfh != null) {
-        bsfh.importRelayDescriptors();
-      }
       rddi.closeConnection();
 
       // Import conn-bi-direct statistics.
@@ -79,15 +65,6 @@ public class Main {
           config.getKeepDirectoryArchiveImportHistory());
       psi.importRelayDescriptors();
       psi.closeConnection();
-    }
-
-    // Import sanitized bridges and write updated stats files to disk
-    if (bsfh != null) {
-      if (config.getImportSanitizedBridges()) {
-        bsfh.importSanitizedBridges();
-      }
-      bsfh.writeFiles();
-      bsfh = null;
     }
 
     // Prepare consensus stats file handler (used for stats on running

@@ -187,12 +187,6 @@
     <url-pattern>/dirbytes.png</url-pattern>
     <url-pattern>/dirbytes.pdf</url-pattern>
     <url-pattern>/dirbytes.svg</url-pattern>
-    <url-pattern>/direct-users.png</url-pattern>
-    <url-pattern>/direct-users.pdf</url-pattern>
-    <url-pattern>/direct-users.svg</url-pattern>
-    <url-pattern>/bridge-users.png</url-pattern>
-    <url-pattern>/bridge-users.pdf</url-pattern>
-    <url-pattern>/bridge-users.svg</url-pattern>
     <url-pattern>/torperf.png</url-pattern>
     <url-pattern>/torperf.pdf</url-pattern>
     <url-pattern>/torperf.svg</url-pattern>

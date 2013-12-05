@@ -904,15 +904,6 @@ CREATE TABLE dirreq_stats (
     PRIMARY KEY (source, statsend, seconds, country)
 );
 
--- TABLE bridge_stats
--- Contains daily bridge users by country.
-CREATE TABLE bridge_stats (
-    "date" DATE NOT NULL,
-    country CHARACTER(2) NOT NULL,
-    users INTEGER NOT NULL,
-    CONSTRAINT bridge_stats_pkey PRIMARY KEY ("date", country)
-);
-
 -- TABLE torperf_stats
 -- Quantiles and medians of daily torperf results.
 CREATE TABLE torperf_stats (

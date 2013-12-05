@@ -138,39 +138,6 @@ export_relayflags <- function(path) {
   write.csv(relayflags, path, quote = FALSE, row.names = FALSE)
 }
 
-export_direct_users <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr",
-      "FROM user_stats WHERE date < current_date - 3",
-      "ORDER BY date, country")
-  rs <- dbSendQuery(con, q)
-  u <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  directusers <- data.frame(date = u$date, country = u$country,
-       directusers = floor(u$r * (u$bwp * u$brn / u$bwn - u$brp) /
-               (u$bwr * u$brn / u$bwn - u$brr) / 10))
-  directusers <- cast(directusers, date ~ country, value = "directusers")
-  names(directusers)[names(directusers) == "zy"] <- "all"
-  write.csv(directusers, path, quote = FALSE, row.names = FALSE)
-}
-
-export_bridge_users <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, country, users AS bridgeusers",
-      "FROM bridge_stats WHERE date < current_date - 3",
-      "ORDER BY date, country")
-  rs <- dbSendQuery(con, q)
-  bridgeusers <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  bridgeusers <- cast(bridgeusers, date ~ country, value = "bridgeusers")
-  names(bridgeusers)[names(bridgeusers) == "zy"] <- "all"
-  write.csv(bridgeusers, path, quote = FALSE, row.names = FALSE)
-}
-
 export_torperf <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -196,43 +163,6 @@ export_torperf_failures <- function(path) {
   write.csv(torperf, path, quote = FALSE, row.names = FALSE)
 }
 
-help_export_monthly_users <- function(path, aggr_fun) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, country, r, bwp, brn, bwn, brp, bwr, brr",
-      "FROM user_stats WHERE date < current_date - 3",
-      "ORDER BY date, country")
-  rs <- dbSendQuery(con, q)
-  u <- fetch(rs, n = -1)
-  direct <- data.frame(date = u$date, country = u$country,
-       users = u$r * (u$bwp * u$brn / u$bwn - u$brp) /
-               (u$bwr * u$brn / u$bwn - u$brr) / 10)
-  q <- paste("SELECT date, country, FLOOR(users) AS users",
-      "FROM bridge_stats WHERE date < current_date - 3",
-      "ORDER BY date, country")
-  rs <- dbSendQuery(con, q)
-  bridge <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  users <- rbind(bridge, direct)
-  users <- aggregate(users$users,
-      by = list(date = users$date, country = users$country), sum)
-  users <- aggregate(users$x, by = list(month = substr(users$date, 1, 7),
-      country = users$country), aggr_fun)
-  users <- cast(users, country ~ month, value = "x")
-  users[users$country == "zy", 1] <- "all"
-  users[, 2:length(users)] <- floor(users[, 2:length(users)])
-  write.csv(users, path, quote = FALSE, row.names = FALSE)
-}
-
-export_monthly_users_peak <- function(path) {
-  help_export_monthly_users(path, max)
-}
-
-export_monthly_users_average <- function(path) {
-  help_export_monthly_users(path, mean)
-}
-
 export_connbidirect <- function(path) {
   drv <- dbDriver("PostgreSQL")
   con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
@@ -245,26 +175,6 @@ export_connbidirect <- function(path) {
   dbDisconnect(con)
   dbUnloadDriver(drv)
   write.csv(format(c, trim = TRUE, scientific = FALSE), path, 
-      quote = FALSE, row.names = FALSE)
-}
-
-export_dirreq_stats <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, r, bwp, brp, bwn, brn, bwr, brr ",
-      "FROM user_stats WHERE date < current_date - 3",
-      "AND country = 'zy' ORDER BY date", sep = "")
-  rs <- dbSendQuery(con, q)
-  u <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  u <- data.frame(date = u$date,
-       requests = u$r,
-       fraction = (u$bwr * u$brn / u$bwn - u$brr) /
-                (u$bwp * u$brn / u$bwn - u$brp),
-       users = u$r * (u$bwp * u$brn / u$bwn - u$brp) /
-               (u$bwr * u$brn / u$bwn - u$brr) / 10)
-  write.csv(format(u, trim = TRUE, scientific = FALSE), path,
       quote = FALSE, row.names = FALSE)
 }
 
