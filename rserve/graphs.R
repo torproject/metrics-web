@@ -279,34 +279,21 @@ date_breaks <- function(days) {
 
 plot_networksize <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, avg_running AS relays FROM network_size ",
-      "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  relays <- fetch(rs, n = -1)
-  q <- paste("SELECT date, avg_running AS bridges ",
-      "FROM bridge_network_size WHERE date >= '", start,
-      "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  bridges <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$date >= start & s$date <= end & s$flag == '' &
+         s$country == '' & s$version == '' & s$platform == '' &
+         s$ec2bridge == '', ]
+  s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"), relays = s$relays,
+                  bridges = s$bridges)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, as.Date(relays$date, origin = "1970-01-01"))
+  missing <- setdiff(dates, as.Date(s$date, origin = "1970-01-01"))
   if (length(missing) > 0)
-    relays <- rbind(relays,
+    s <- rbind(s,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        relays = NA))
-  missing <- setdiff(dates, bridges$date)
-  if (length(missing) > 0)
-    bridges <- rbind(bridges,
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        bridges = NA))
-  relays <- melt(relays, id = "date")
-  bridges <- melt(bridges, id = "date")
-  networksize <- rbind(relays, bridges)
+        relays = NA, bridges = NA))
+  networksize <- melt(s, id = "date")
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(networksize$date, "%Y-%m-%d")) -
     min(as.Date(networksize$date, "%Y-%m-%d"))))
@@ -326,61 +313,47 @@ plot_networksize <- function(start, end, path) {
 
 plot_cloudbridges <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, avg_running_ec2 ",
-      "FROM bridge_network_size WHERE date >= '", start,
-      "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  bridges <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$date >= start & s$date <= end & s$flag == '' &
+         s$country == '' & s$version == '' & s$platform == '' &
+         s$ec2bridge == 't', ]
+  s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"), bridges = s$bridges)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, bridges$date)
+  missing <- setdiff(dates, s$date)
   if (length(missing) > 0)
-    bridges <- rbind(bridges,
+    s <- rbind(s,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        avg_running_ec2 = NA))
+        bridges = NA))
   date_breaks <- date_breaks(
-    as.numeric(max(as.Date(bridges$date, "%Y-%m-%d")) -
-    min(as.Date(bridges$date, "%Y-%m-%d"))))
-  ggplot(bridges, aes(x = as.Date(date, "%Y-%m-%d"),
-      y = avg_running_ec2)) +
+    as.numeric(max(as.Date(s$date, "%Y-%m-%d")) -
+    min(as.Date(s$date, "%Y-%m-%d"))))
+  ggplot(s, aes(x = as.Date(date, "%Y-%m-%d"), y = bridges)) +
     geom_line(size = 1, colour = "green3") +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0,
-        max(bridges$avg_running_ec2, na.rm = TRUE))) +
+        max(s$bridges, na.rm = TRUE))) +
     opts(title = "Number of Tor Cloud bridges\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
 plot_relaycountries <- function(start, end, country, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  if (country == "all") {
-    q <- paste("SELECT date, avg_running AS relays FROM network_size ",
-        "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
-  } else {
-    q <- paste("SELECT date, relays FROM relay_countries ",
-        "WHERE date >= '", start, "' AND date <= '", end,
-        "' AND country = '", country, "'", sep = "")
-  }
-  rs <- dbSendQuery(con, q)
-  u <- fetch(rs, n = -1)
-  if (length(u$date) == 0)
-    u <- data.frame(date = as.Date(start), relays = 0)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$date >= start & s$date <= end & s$flag == '' &
+         s$country == ifelse(country == "all", '', country) &
+         s$version == '' & s$platform == '' & s$ec2bridge == '', ]
+  s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"), relays = s$relays)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, u$date)
+  missing <- setdiff(dates, s$date)
   if (length(missing) > 0)
-    u <- rbind(u,
+    s <- rbind(s,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         relays = NA))
   title <- ifelse(country == "all",
@@ -388,15 +361,15 @@ plot_relaycountries <- function(start, end, country, path) {
     paste("Number of relays in ", countryname(country), "\n", sep = ""))
   formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
   date_breaks <- date_breaks(
-    as.numeric(max(as.Date(u$date, "%Y-%m-%d")) -
-    min(as.Date(u$date, "%Y-%m-%d"))))
-  ggplot(u, aes(x = as.Date(date, "%Y-%m-%d"), y = relays)) +
+    as.numeric(max(as.Date(s$date, "%Y-%m-%d")) -
+    min(as.Date(s$date, "%Y-%m-%d"))))
+  ggplot(s, aes(x = as.Date(date, "%Y-%m-%d"), y = relays)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0, max(u$relays,
+    scale_y_continuous(name = "", limits = c(0, max(s$relays,
         na.rm = TRUE)), formatter = formatter) +
     opts(title = title)
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
@@ -404,20 +377,19 @@ plot_relaycountries <- function(start, end, country, path) {
 
 plot_versions <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, version, relays FROM relay_versions ",
-      "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  versions <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$date >= start & s$date <= end & s$flag == '' &
+         s$country == '' & s$version != '' & s$platform == '' &
+         s$ec2bridge == '', ]
+  s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"), version = s$version,
+                  relays = s$relays)
   known_versions <- c("0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1",
         "0.2.2", "0.2.3", "0.2.4")
   colours <- data.frame(breaks = known_versions,
     values = brewer.pal(length(known_versions), "Accent"),
     stringsAsFactors = FALSE)
-  versions <- versions[versions$version %in% known_versions, ]
+  versions <- s[s$version %in% known_versions, ]
   visible_versions <- sort(unique(versions$version))
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(versions$date, "%Y-%m-%d")) -
@@ -440,16 +412,13 @@ plot_versions <- function(start, end, path) {
 
 plot_platforms <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user=dbuser, password=dbpassword, dbname=db)
-  q <- paste("SELECT date, avg_linux, avg_darwin, avg_bsd, avg_windows, ",
-      "avg_other FROM relay_platforms WHERE date >= '", start,
-      "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  platforms <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  platforms <- melt(platforms, id = "date")
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$date >= start & s$date <= end & s$flag == '' &
+         s$country == '' & s$version == '' & s$platform != '' &
+         s$ec2bridge == '', ]
+  platforms <- data.frame(date = as.Date(s$date, "%Y-%m-%d"),
+                  variable = s$platform, value = s$relays)
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(platforms$date, "%Y-%m-%d")) -
     min(as.Date(platforms$date, "%Y-%m-%d"))))
@@ -463,32 +432,22 @@ plot_platforms <- function(start, end, path) {
     scale_y_continuous(name = "",
       limits = c(0, max(platforms$value, na.rm = TRUE))) +
     scale_colour_manual(name = "Platform",
-      breaks = c("avg_linux", "avg_darwin", "avg_bsd", "avg_windows",
-          "avg_other"),
-      values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#333333"),
-      labels = c("Linux", "Darwin", "FreeBSD", "Windows", "Other")) +
+      breaks = c("Linux", "Darwin", "FreeBSD", "Windows", "Other"),
+      values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#333333")) +
     opts(title = "Relay platforms\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
 plot_bandwidth <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 4))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, bwadvertised FROM total_bandwidth ",
-      "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  bw_desc <- fetch(rs, n = -1)
-  q <- paste("SELECT date, read, written FROM total_bwhist ",
-      "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  bw_hist <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  bandwidth <- rbind(data.frame(date = bw_desc$date,
-      value = bw_desc$bwadvertised, variable = "bwadv"),
-    data.frame(date = bw_hist$date, value = (bw_hist$read +
-      bw_hist$written) / (2 * 86400), variable = "bwhist"))
+  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
+    stringsAsFactors = FALSE)
+  b <- b[b$date >= start & b$date <= end & b$isexit == '' &
+         b$isguard == '', ]
+  b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
+                  bwadv = b$advbw,
+                  bwhist = (b$bwread + b$bwwrite) / 2)
+  bandwidth <- melt(b, id = "date")
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(bandwidth$date, "%Y-%m-%d")) -
     min(as.Date(bandwidth$date, "%Y-%m-%d"))))
@@ -510,15 +469,13 @@ plot_bandwidth <- function(start, end, path) {
 
 plot_bwhist_flags <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 4))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, isexit, isguard, read, written ",
-      "FROM bwhist_flags WHERE date >= '", start, "' AND date <= '", end,
-      "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  bw <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
+    stringsAsFactors = FALSE)
+  b <- b[b$date >= start & b$date <= end & b$isexit != '' &
+         b$isguard != '', ]
+  bw <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
+                  isexit = b$isexit == 't', isguard = b$isguard == 't',
+                  read = b$bwread, written = b$bwwrite)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by = "1 day")
   missing <- setdiff(dates, as.Date(bw$date, origin = "1970-01-01"))
@@ -539,7 +496,7 @@ plot_bwhist_flags <- function(start, end, path) {
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(bw$date, "%Y-%m-%d")) -
     min(as.Date(bw$date, "%Y-%m-%d"))))
-  ggplot(bw, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20 / 86400,
+  ggplot(bw, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20,
       colour = variable)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
@@ -547,7 +504,7 @@ plot_bwhist_flags <- function(start, end, path) {
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
     scale_y_continuous(name="Bandwidth (MiB/s)",
-        limits = c(0, max(bw$value, na.rm = TRUE) / 2^20 / 86400)) +
+        limits = c(0, max(bw$value, na.rm = TRUE) / 2^20)) +
     scale_colour_manual(name = "",
         values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2")) +
     opts(title = "Bandwidth history by relay flags",
@@ -557,20 +514,13 @@ plot_bwhist_flags <- function(start, end, path) {
 
 plot_dirbytes <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 4))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, dr, dw, brp, bwp, brd, bwd FROM user_stats ",
-      "WHERE country = 'zy' AND bwp / bwd <= 3 AND date >= '", start,
-      "' AND date <= '", end, "' ORDER BY date", sep = "")
-  rs <- dbSendQuery(con, q)
-  dir <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  dir <- data.frame(date = dir$date,
-      dirread = floor(dir$dr * dir$brp / dir$brd / 86400),
-      dirwrite = floor(dir$dw * dir$bwp / dir$bwd / 86400))
-  dir <- na.omit(dir)
-  dir <- melt(dir, id = "date")
+  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
+    stringsAsFactors = FALSE)
+  b <- b[b$date >= start & b$date <= end & b$isexit == '' &
+         b$isguard == '', ]
+  b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
+                  dirread = b$dirread, dirwrite = b$dirwrite)
+  dir <- melt(b, id = "date")
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(dir$date, "%Y-%m-%d")) -
     min(as.Date(dir$date, "%Y-%m-%d"))))
@@ -593,20 +543,17 @@ plot_dirbytes <- function(start, end, path) {
 
 plot_relayflags <- function(start, end, flags, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  columns <- paste("avg_", tolower(flags), sep = "", collapse = ", ")
-  q <- paste("SELECT date, ", columns, " FROM network_size ",
-      "WHERE date >= '", start, "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  networksize <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  networksize <- melt(networksize, id = "date")
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$date >= start & s$date <= end & s$country == '' &
+         s$version == '' & s$platform == '' & s$ec2bridge == '', ]
+  s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"),
+                  variable = ifelse(s$flag == '', 'Running', s$flag),
+                  value = s$relays)
+  networksize <- s[s$variable %in% flags, ]
   networksize <- rbind(data.frame(
     date = as.Date(end) + 1,
-    variable = paste("avg_", c("running", "exit", "guard", "fast",
-      "stable", "hsdir"), sep = ""),
+    variable = c("Running", "Exit", "Guard", "Fast", "Stable", "HSDir"),
     value = NA), networksize)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
@@ -614,8 +561,7 @@ plot_relayflags <- function(start, end, flags, path) {
   if (length(missing) > 0)
     networksize <- rbind(data.frame(
       date = as.Date(rep(missing, 6), origin = "1970-01-01"),
-      variable = paste("avg_", c("running", "exit", "guard", "fast",
-        "stable", "hsdir"), sep = ""),
+      variable = c("Running", "Exit", "Guard", "Fast", "Stable", "HSDir"),
       value = rep(NA, length(missing) * 6)), networksize)
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(end, "%Y-%m-%d")) -
@@ -630,23 +576,21 @@ plot_relayflags <- function(start, end, flags, path) {
         na.rm = TRUE))) +
     scale_colour_manual(name = "Relay flags", values = c("#E69F00",
         "#56B4E9", "#009E73", "#EE6A50", "#000000", "#0072B2"),
-        breaks = paste("avg_", tolower(flags), sep = ""),
-        labels = flags) +
+        breaks = flags, labels = flags) +
     opts(title = "Number of relays with relay flags assigned\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
 plot_torperf <- function(start, end, source, filesize, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, q1, md, q3 FROM torperf_stats ",
-      "WHERE source = '", paste(source, filesize, sep = "-"),
-      "' AND date >= '", start, "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  torperf <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  size <- ifelse(filesize == '50kb', 50 * 1024,
+          ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
+  t <- read.csv("/srv/metrics.torproject.org/web/stats/torperf.csv",
+    stringsAsFactors = FALSE)
+  t <- t[t$date >= start & t$date <= end & t$size == size &
+         t$source == ifelse(source == 'all', '', source), ]
+  torperf <- data.frame(date = as.Date(t$date, "%Y-%m-%d"),
+                        q1 = t$q1, md = t$md, q3 = t$q3)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
   missing <- setdiff(dates, torperf$date)
@@ -687,16 +631,15 @@ plot_torperf <- function(start, end, source, filesize, path) {
 
 plot_torperf_failures <- function(start, end, source, filesize, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, timeouts, failures, requests ",
-      "FROM torperf_stats WHERE source = '",
-      paste(source, filesize, sep = "-"),
-      "' AND date >= '", start, "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  torperf <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  size <- ifelse(filesize == '50kb', 50 * 1024,
+          ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
+  t <- read.csv("/srv/metrics.torproject.org/web/stats/torperf.csv",
+    stringsAsFactors = FALSE)
+  t <- t[t$date >= start & t$date <= end & t$size == size &
+         t$source == ifelse(source == 'all', '', source), ]
+  torperf <- data.frame(date = as.Date(t$date, "%Y-%m-%d"),
+                        timeouts = t$timeouts, failures = t$failures,
+                        requests = t$requests)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
   missing <- setdiff(dates, torperf$date)
@@ -741,15 +684,11 @@ plot_torperf_failures <- function(start, end, source, filesize, path) {
 
 plot_connbidirect <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT DATE(statsend) AS date, readnum, writenum, bothnum ",
-      "FROM connbidirect WHERE DATE(statsend) >= '", start,
-      "' AND DATE(statsend) <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  c <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  c <- read.csv("/srv/metrics.torproject.org/web/stats/connbidirect.csv",
+    stringsAsFactors = FALSE)
+  c <- c[c$date >= start & c$date <= end, ]
+  c <- data.frame(date = as.Date(c$date, "%Y-%m-%d"),
+                  readnum = c$read, writenum = c$write, bothnum = c$both)
   connbidirect <- data.frame(date = c$date, c[, 2:4] /
       (c$readnum + c$writenum + c$bothnum))
   connbidirect <- melt(connbidirect, id = "date")
@@ -773,18 +712,12 @@ plot_connbidirect <- function(start, end, path) {
 }
 
 plot_fast_exits <- function(start, end, path) {
-  r <- read.csv(paste("/srv/metrics.torproject.org/task-6498-graphs/",
-    "task-6498/task-6498-results.csv", sep = ""),
+  f <- read.csv("/srv/metrics.torproject.org/web/stats/fast-exits.csv",
     stringsAsFactors = FALSE)
-  r <- r[r$valid_after >= paste(start, "00:00:00") &
-         r$valid_after <= paste(end, "23:59:59") &
-         r$valid_after < paste(Sys.Date() - 1, "23:59:59"), ]
-  r <- r[r$min_rate == 11875 & r$ports == "80-443-554-1755" &
-    r$min_advbw == 5000 & r$same_network == TRUE, ]
-  r <- aggregate(list(relays = r$relays, P_exit = 100 * r$exit_prob),
-    by = list(date = as.Date(cut.Date(as.Date(r$valid_after), "day"))),
-    FUN = median)
-  r <- melt(r, id.vars = c("date"))
+  f <- f[f$date >= start & f$date <= end, ]
+  f <- data.frame(date = as.Date(f$date, "%Y-%m-%d"),
+                  relays = f$fastnum, P_exit = f$fastprob)
+  r <- melt(f, id.vars = c("date"))
   r <- data.frame(r, type = ifelse(r$variable == "P_exit",
     "Total exit probability (in %)", "Number of relays"))
   ggplot(r, aes(x = date, y = value)) +
@@ -801,31 +734,16 @@ plot_fast_exits <- function(start, end, path) {
 }
 
 plot_almost_fast_exits <- function(start, end, path) {
-  t <- read.csv(paste("/srv/metrics.torproject.org/task-6498-graphs/",
-    "task-6498/task-6498-results.csv", sep = ""),
+  f <- read.csv("/srv/metrics.torproject.org/web/stats/fast-exits.csv",
     stringsAsFactors = FALSE)
-  t <- t[t$valid_after >= paste(start, "00:00:00") &
-         t$valid_after <= paste(end, "23:59:59") &
-         t$valid_after < paste(Sys.Date() - 1, "23:59:59"), ]
-  t1 <- t[t$min_rate == 11875 & t$ports == "80-443-554-1755" &
-    t$min_advbw == 5000 & t$same_network == TRUE, ]
-  t2 <- t[t$min_rate == 10000 & t$ports == "80-443" &
-    t$min_advbw == 2000 & t$same_network == FALSE, ]
-  t <- rbind(data.frame(t1, var = "fast"),
-    data.frame(t2, var = "almost_fast"))
-  r <- cast(t, valid_after ~ var, value = "relays", fun.aggregate = max)
-  r <- data.frame(valid_after = r$valid_after, fast = r$fast,
-    almost = r$almost_fast - r$fast, var = "relays")
-  e <- cast(t, valid_after ~ var, value = "exit_prob",
-    fun.aggregate = max)
-  e <- data.frame(valid_after = e$valid_after, fast = 100 * e$fast,
-    almost = 100 * (e$almost_fast - e$fast), var = "exit_prob")
-  t <- rbind(r, e)
-  t <- aggregate(list(fast = t$fast, almost = t$almost),
-    by = list(date = as.Date(cut.Date(as.Date(t$valid_after), "day")),
-    var = ifelse(t$var == "exit_prob", "Total exit probability (in %)",
-    "Number of relays")), FUN = median)
-  t <- melt(t, id.vars = c("date", "var"))
+  f <- f[f$date >= start & f$date <= end, ]
+  f <- melt(f, id.vars = c("date"))
+  t <- data.frame(date = as.Date(f$date, "%Y-%m-%d"),
+       var = ifelse(f$variable == 'fastnum' | f$variable == 'almostnum',
+             "Number of relays", "Total exit probability (in %)"),
+       variable = ifelse(f$variable == 'fastnum' |
+                  f$variable == 'fastprob', "fast", "almost fast"),
+       value = floor(f$value))
   t <- data.frame(t, type = ifelse(t$variable == "fast",
     "fast exits (95+ Mbit/s, 5000+ KB/s, 80/443/554/1755, 2- per /24",
     paste("almost fast exits (80+ Mbit/s, 2000+ KB/s, 80/443,",
@@ -843,29 +761,28 @@ plot_almost_fast_exits <- function(start, end, path) {
 
 plot_bandwidth_flags <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 4))
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, isexit, isguard, bwadvertised AS value ",
-      "FROM bandwidth_flags WHERE date >= '", start, "' AND date <= '",
-      end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  bw_desc <- fetch(rs, n = -1)
-  q <- paste("SELECT date, isexit, isguard, ",
-      "(read + written) / (2 * 86400) ",
-      "AS value FROM bwhist_flags WHERE date >= '", start,
-      "' AND date <= '", end, "'", sep = "")
-  rs <- dbSendQuery(con, q)
-  bw_hist <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  bandwidth <- rbind(data.frame(bw_desc, type = "advertised bandwidth"),
-      data.frame(bw_hist, type = "bandwidth history"))
-  bandwidth <- rbind(
-    data.frame(bandwidth[bandwidth$isguard == TRUE, ], flag = "Guard"),
-    data.frame(bandwidth[bandwidth$isexit == TRUE, ], flag = "Exit"))
-  bandwidth <- aggregate(list(value = bandwidth$value),
-    by = list(date = bandwidth$date, type = bandwidth$type,
-    flag = bandwidth$flag), FUN = sum)
+  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
+    stringsAsFactors = FALSE)
+  b <- b[b$date >= start & b$date <= end & b$isexit != '' &
+         b$isguard != '', ]
+  b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
+                  isexit = b$isexit == 't', isguard = b$isguard == 't',
+                  advbw = b$advbw,
+                  bwhist = floor((b$bwread + b$bwwrite) / 2))
+  b <- rbind(
+    data.frame(b[b$isguard == TRUE, ], flag = "Guard"),
+    data.frame(b[b$isexit == TRUE, ], flag = "Exit"))
+  b <- data.frame(date = b$date, advbw = b$advbw, bwhist = b$bwhist,
+                  flag = b$flag)
+  b <- aggregate(list(advbw = b$advbw, bwhist = b$bwhist),
+                 by = list(date = b$date, flag = b$flag), FUN = sum,
+                 na.rm = TRUE, na.action = NULL)
+  b <- melt(b, id.vars = c("date", "flag"))
+  b <- data.frame(date = b$date,
+      type = ifelse(b$variable == 'advbw', 'advertised bandwidth',
+                    'bandwidth history'),
+      flag = b$flag, value = b$value)
+  bandwidth <- b[b$value > 0, ]
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(bandwidth$date, "%Y-%m-%d")) -
     min(as.Date(bandwidth$date, "%Y-%m-%d"))))
@@ -908,10 +825,9 @@ plot_bandwidth_flags <- function(start, end, path) {
 plot_userstats <- function(start, end, node, variable, value, events,
                            path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
-    "task-8462/userstats.csv", sep = ""),
+  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
     stringsAsFactors = FALSE)
-  u <- u[u$date >= start & u$date <= end, ]
+  u <- c[c$date >= start & c$date <= end, ]
   if (node == 'relay') {
     if (value != 'all') {
       u <- u[u$country == value & u$node == 'relay', ]
@@ -940,14 +856,15 @@ plot_userstats <- function(start, end, node, variable, value, events,
       title <- "Bridge users\n"
     }
   }
-  u <- data.frame(date = as.Date(u$date, "%Y-%m-%d"), users = u$users)
+  u <- data.frame(date = as.Date(u$date, "%Y-%m-%d"), users = u$clients,
+                  lower = u$lower, upper = u$upper)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
   missing <- setdiff(dates, u$date)
   if (length(missing) > 0) {
     u <- rbind(u,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        users = NA))
+        users = NA, lower = NA, upper = NA))
   }
   formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
   date_breaks <- date_breaks(
@@ -957,21 +874,14 @@ plot_userstats <- function(start, end, node, variable, value, events,
   plot <- ggplot(u, aes(x = date, y = users))
   if (length(na.omit(u$users)) > 0 & events != "off" &
       variable == 'country' & value != "all") {
-    r <- read.csv(
-      "/srv/metrics.torproject.org/web/detector/userstats-ranges.csv",
-      stringsAsFactors = FALSE)
-    r <- r[r$date >= start & r$date <= end & r$country == value,
-        c("date", "minusers", "maxusers")]
-    r <- cast(rbind(melt(u, id.vars = "date"), melt(r, id.vars = "date")))
-    upturns <- r[r$users > r$maxusers, 1:2]
-    downturns <- r[r$users < r$minusers, 1:2]
+    upturns <- u[u$users > u$upper, c("date", "users")]
+    downturns <- u[u$users <= u$lower, c("date", "users")]
     if (events == "on") {
-      if (length(r$maxusers) > 0)
-        max_y <- max(max_y, max(r$maxusers, na.rm = TRUE))
-      r[r$minusers < 0, "minusers"] <- 0
+      if (length(u$upper) > 0)
+        max_y <- max(max_y, max(u$upper, na.rm = TRUE))
+      u[u$lower < 0, "lower"] <- 0
       plot <- plot +
-        geom_ribbon(data = r, aes(ymin = minusers,
-            ymax = maxusers), fill = "gray")
+        geom_ribbon(aes(ymin = lower, ymax = upper), fill = "gray")
     }
     if (length(upturns$date) > 0)
       plot <- plot +

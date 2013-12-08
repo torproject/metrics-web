@@ -54,6 +54,7 @@ Maybe you find what you're looking for on our sitemap:
 <li><a href="data.html">Data</a></li>
 <li><a href="formats.html">Formats</a></li>
 <li><a href="tools.html">Tools</a></li>
+<li><a href="stats.html">Statistics</a></li>
 </ul></li>
 <li><a href="status.html">Status</a>
 <ul>

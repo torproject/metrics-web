@@ -953,3 +953,125 @@ CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
   END;
 $$ LANGUAGE plpgsql;
 
+-- View for exporting server statistics.
+CREATE VIEW stats_servers AS
+  (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
+  NULL AS platform, TRUE AS ec2bridge, NULL AS relays,
+  avg_running_ec2 AS bridges FROM bridge_network_size
+  WHERE date < current_date - 1)
+UNION ALL
+  (SELECT COALESCE(network_size.date, bridge_network_size.date) AS date,
+  NULL AS flag, NULL AS country, NULL AS version, NULL AS platform,
+  NULL AS ec2bridge, network_size.avg_running AS relays,
+  bridge_network_size.avg_running AS bridges FROM network_size
+  FULL OUTER JOIN bridge_network_size
+  ON network_size.date = bridge_network_size.date
+  WHERE COALESCE(network_size.date, bridge_network_size.date) <
+  current_date - 1)
+UNION ALL
+  (SELECT date, 'Exit' AS flag, NULL AS country, NULL AS version,
+  NULL AS platform, NULL AS ec2bridge, avg_exit AS relays,
+  NULL AS bridges FROM network_size WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, 'Guard' AS flag, NULL AS country, NULL AS version,
+  NULL AS platform, NULL AS ec2bridge, avg_guard AS relays,
+  NULL AS bridges FROM network_size WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, 'Fast' AS flag, NULL AS country, NULL AS version,
+  NULL AS platform, NULL AS ec2bridge, avg_fast AS relays,
+  NULL AS bridges FROM network_size WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, 'Stable' AS flag, NULL AS country, NULL AS version,
+  NULL AS platform, NULL AS ec2bridge, avg_stable AS relays,
+  NULL AS bridges FROM network_size WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, 'HSDir' AS flag, NULL AS country, NULL AS version,
+  NULL AS platform, NULL AS ec2bridge, avg_hsdir AS relays,
+  NULL AS bridges FROM network_size WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, NULL AS flag, CASE WHEN country != 'zz' THEN country
+  ELSE '??' END AS country, NULL AS version, NULL AS platform,
+  NULL AS ec2bridge, relays, NULL AS bridges FROM relay_countries
+  WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, NULL AS flag, NULL AS country, version, NULL AS platform,
+  NULL AS ec2bridge, relays, NULL AS bridges FROM relay_versions
+  WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
+  'Linux' AS platform, NULL AS ec2bridge, avg_linux AS relays,
+  NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
+  'Darwin' AS platform, NULL AS ec2bridge, avg_darwin AS relays,
+  NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
+  'FreeBSD' AS platform, NULL AS ec2bridge, avg_bsd AS relays,
+  NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
+  'Windows' AS platform, NULL AS ec2bridge, avg_windows AS relays,
+  NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
+UNION ALL
+  (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
+  'Other' AS platform, NULL AS ec2bridge, avg_other AS relays,
+  NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
+ORDER BY 1, 2, 3, 4, 5, 6;
+
+-- View for exporting bandwidth statistics.
+CREATE VIEW stats_bandwidth AS
+  (SELECT COALESCE(bandwidth_flags.date, bwhist_flags.date) AS date,
+  COALESCE(bandwidth_flags.isexit, bwhist_flags.isexit) AS isexit,
+  COALESCE(bandwidth_flags.isguard, bwhist_flags.isguard) AS isguard,
+  bandwidth_flags.bwadvertised AS advbw,
+  CASE WHEN bwhist_flags.read IS NOT NULL
+  THEN bwhist_flags.read / 86400 END AS bwread,
+  CASE WHEN bwhist_flags.written IS NOT NULL
+  THEN bwhist_flags.written / 86400 END AS bwwrite,
+  NULL AS dirread, NULL AS dirwrite
+  FROM bandwidth_flags FULL OUTER JOIN bwhist_flags
+  ON bandwidth_flags.date = bwhist_flags.date
+  AND bandwidth_flags.isexit = bwhist_flags.isexit
+  AND bandwidth_flags.isguard = bwhist_flags.isguard
+  WHERE COALESCE(bandwidth_flags.date, bwhist_flags.date) <
+  current_date - 3)
+UNION ALL
+  (SELECT COALESCE(total_bandwidth.date, total_bwhist.date, u.date)
+  AS date, NULL AS isexit, NULL AS isguard,
+  total_bandwidth.bwadvertised AS advbw,
+  CASE WHEN total_bwhist.read IS NOT NULL
+  THEN total_bwhist.read / 86400 END AS bwread,
+  CASE WHEN total_bwhist.written IS NOT NULL
+  THEN total_bwhist.written / 86400 END AS bwwrite,
+  CASE WHEN u.date IS NOT NULL
+  THEN FLOOR(CAST(u.dr AS NUMERIC) * CAST(u.brp AS NUMERIC) /
+  CAST(u.brd AS NUMERIC) / CAST(86400 AS NUMERIC)) END AS dirread,
+  CASE WHEN u.date IS NOT NULL
+  THEN FLOOR(CAST(u.dw AS NUMERIC) * CAST(u.bwp AS NUMERIC) /
+  CAST(u.bwd AS NUMERIC) / CAST(86400 AS NUMERIC)) END AS dirwrite
+  FROM total_bandwidth FULL OUTER JOIN total_bwhist
+  ON total_bandwidth.date = total_bwhist.date
+  FULL OUTER JOIN (SELECT * FROM user_stats WHERE country = 'zy'
+  AND bwp / bwd <= 3) u
+  ON COALESCE(total_bandwidth.date, total_bwhist.date) = u.date
+  WHERE COALESCE(total_bandwidth.date, total_bwhist.date, u.date) <
+  current_date - 3)
+ORDER BY 1, 2, 3;
+
+-- View for exporting torperf statistics.
+CREATE VIEW stats_torperf AS
+SELECT date, CASE WHEN source LIKE '%-50kb' THEN 50 * 1024
+  WHEN source LIKE '%-1mb' THEN 1024 * 1024
+  WHEN source LIKE '%-5mb' THEN 5 * 1024 * 1024 END AS size,
+  CASE WHEN source NOT LIKE 'all-%'
+  THEN split_part(source, '-', 1) END AS source, q1, md, q3, timeouts,
+  failures, requests FROM torperf_stats WHERE date < current_date - 1
+  ORDER BY 1, 2, 3;
+
+-- View for exporting connbidirect statistics.
+CREATE VIEW stats_connbidirect AS
+SELECT DATE(statsend) AS date, source, belownum AS below, readnum AS read,
+  writenum AS write, bothnum AS "both" FROM connbidirect
+  WHERE DATE(statsend) < current_date - 1 ORDER BY 1, 2;
+

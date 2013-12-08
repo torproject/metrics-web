@@ -57,7 +57,8 @@
     <%} else if (currentPage.endsWith("research.jsp") ||
                  currentPage.endsWith("data.jsp") ||
                  currentPage.endsWith("formats.jsp") ||
-                 currentPage.endsWith("tools.jsp")) {
+                 currentPage.endsWith("tools.jsp") ||
+                 currentPage.endsWith("stats.jsp")) {
      %><br>
       <font size="2">
         <a <%if (currentPage.endsWith("data.jsp")) {
@@ -69,6 +70,9 @@
         <a <%if (currentPage.endsWith("tools.jsp")) {
             %>class="current"<%} else {%> href="/tools.html"<%}
             %>>Tools</a>
+        <a <%if (currentPage.endsWith("stats.jsp")) {
+            %>class="current"<%} else {%> href="/stats.html"<%}
+            %>>Statistics</a>
       </font>
     <%}%>
   </td>

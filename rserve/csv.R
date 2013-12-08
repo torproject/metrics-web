@@ -1,223 +1,177 @@
 options(scipen = 15)
 
 export_networksize <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, avg_running AS relays FROM network_size",
-      "WHERE date < current_date - 1")
-  rs <- dbSendQuery(con, q)
-  relays <- fetch(rs, n = -1)
-  q <- paste("SELECT date, avg_running AS bridges",
-      "FROM bridge_network_size WHERE date < current_date - 1")
-  rs <- dbSendQuery(con, q)
-  bridges <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  networksize <- rbind(melt(relays, "date"), melt(bridges, "date"))
-  networksize <- cast(networksize, date ~ variable)
-  networksize <- networksize[order(networksize$date), ]
-  write.csv(networksize, path, quote = FALSE, row.names = FALSE)
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$flag == '' & s$country == '' & s$version == '' &
+         s$platform == '' & s$ec2bridge == '',
+         c("date", "relays", "bridges")]
+  write.csv(s, path, quote = FALSE, row.names = FALSE)
 }
 
 export_cloudbridges <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, avg_running_ec2 AS cloudbridges",
-      "FROM bridge_network_size WHERE date < current_date - 1",
-      "ORDER BY date")
-  rs <- dbSendQuery(con, q)
-  cloudbridges <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$flag == '' & s$country == '' & s$version == '' &
+         s$platform == '' & s$ec2bridge == 't', ]
+  cloudbridges <- data.frame(date = s$date, cloudbridges = s$bridges)
   write.csv(cloudbridges, path, quote = FALSE, row.names = FALSE)
 }
 
 export_relaycountries <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, country, relays FROM relay_countries",
-      "WHERE date < current_date - 1 ORDER BY date, country")
-  rs <- dbSendQuery(con, q)
-  relays <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  write.csv(relays, path, quote = FALSE, row.names = FALSE)
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$flag == '' & s$country != '' & s$version == '' &
+         s$platform == '' & s$ec2bridge == '',
+         c("date", "country", "relays")]
+  write.csv(s, path, quote = FALSE, row.names = FALSE)
 }
 
 export_versions <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, version, relays FROM relay_versions",
-      "WHERE date < current_date - 1")
-  rs <- dbSendQuery(con, q)
-  versions <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  versions <- cast(versions, date ~ version, value = "relays")
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$flag == '' & s$country == '' & s$version != '' &
+         s$platform == '' & s$ec2bridge == '',
+         c("date", "version", "relays")]
+  versions <- cast(s, date ~ version, value = "relays")
   versions <- versions[order(versions$date), ]
   write.csv(versions, path, quote = FALSE, row.names = FALSE)
 }
 
 export_platforms <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, avg_linux AS linux, avg_darwin AS darwin,",
-      "avg_bsd AS bsd, avg_windows AS windows, avg_other AS other",
-      "FROM relay_platforms WHERE date < current_date - 1 ORDER BY date")
-  rs <- dbSendQuery(con, q)
-  platforms <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$flag == '' & s$country == '' & s$version == '' &
+         s$platform != '' & s$ec2bridge == '',
+         c("date", "platform", "relays")]
+  s <- data.frame(date = s$date,
+                  platform = ifelse(s$platform == 'FreeBSD', 'bsd',
+                  tolower(s$platform)), relays = s$relays)
+  s <- cast(s, date ~ platform, value = "relays")
+  platforms <- s[order(s$date), ]
   write.csv(platforms, path, quote = FALSE, row.names = FALSE)
 }
 
 export_bandwidth <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, bwadvertised FROM total_bandwidth",
-      "WHERE date < current_date - 3")
-  rs <- dbSendQuery(con, q)
-  bw_desc <- fetch(rs, n = -1)
-  q <- paste("SELECT date, read, written FROM total_bwhist",
-      "WHERE date < current_date - 3")
-  rs <- dbSendQuery(con, q)
-  bw_hist <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  bandwidth <- rbind(data.frame(date = bw_desc$date,
-      value = bw_desc$bwadvertised, variable = "bwadv"),
-    data.frame(date = bw_hist$date, value = floor((bw_hist$read +
-      bw_hist$written) / (2 * 86400)), variable = "bwhist"))
-  bandwidth <- cast(bandwidth, date ~ variable, value = "value")
-  bandwidth <- bandwidth[order(bandwidth$date), ]
-  write.csv(bandwidth, path, quote = FALSE, row.names = FALSE)
+  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
+    stringsAsFactors = FALSE)
+  b <- b[b$isexit == '' & b$isguard == '', ]
+  b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
+                  bwadv = b$advbw,
+                  bwhist = floor((b$bwread + b$bwwrite) / 2))
+  b <- b[order(b$date), ]
+  write.csv(b, path, quote = FALSE, row.names = FALSE)
 }
 
 export_bwhist_flags <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, isexit, isguard, read / 86400 AS read,",
-      "written / 86400 AS written",
-      "FROM bwhist_flags WHERE date < current_date - 3",
-      "ORDER BY date, isexit, isguard")
-  rs <- dbSendQuery(con, q)
-  bw <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  write.csv(bw, path, quote = FALSE, row.names = FALSE)
+  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
+    stringsAsFactors = FALSE)
+  b <- b[b$isexit != '' & b$isguard != '' & !is.na(b$bwread) &
+         !is.na(b$bwwrite), ]
+  b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
+                  isexit = b$isexit == 't', isguard = b$isguard == 't',
+                  read = b$bwread, written = b$bwwrite)
+  write.csv(b, path, quote = FALSE, row.names = FALSE)
 }
 
 export_dirbytes <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, dr, dw, brp, bwp, brd, bwd FROM user_stats",
-      "WHERE country = 'zy' AND bwp / bwd <= 3",
-      "AND date < current_date - 3 ORDER BY date")
-  rs <- dbSendQuery(con, q)
-  dir <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  dir <- data.frame(date = dir$date,
-      dirread = floor(dir$dr * dir$brp / dir$brd / 86400),
-      dirwrite = floor(dir$dw * dir$bwp / dir$bwd / 86400))
-  dir <- na.omit(dir)
-  write.csv(dir, path, quote = FALSE, row.names = FALSE)
+  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
+    stringsAsFactors = FALSE)
+  b <- b[b$isexit == '' & b$isguard == '' & !is.na(b$dirread) &
+         !is.na(b$dirwrite), ]
+  b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
+                  dirread = b$dirread, dirwrite = b$dirwrite)
+  b <- b[order(b$date), ]
+  write.csv(b, path, quote = FALSE, row.names = FALSE)
 }
 
 export_relayflags <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT date, avg_running AS running, avg_exit AS exit,",
-      "avg_guard AS guard, avg_fast AS fast, avg_stable AS stable,",
-      "avg_hsdir AS hsdir",
-      "FROM network_size WHERE date < current_date - 1 ORDER BY date")
-  rs <- dbSendQuery(con, q)
-  relayflags <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
+    stringsAsFactors = FALSE)
+  s <- s[s$country == '' & s$version == '' & s$platform == '' &
+         s$ec2bridge == '', ]
+  s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"),
+                  flag = ifelse(s$flag == '', 'running', tolower(s$flag)),
+                  relays = s$relays)
+  s <- cast(s, date ~ flag, value = "relays")
+  relayflags <- s[order(s$date), ]
   write.csv(relayflags, path, quote = FALSE, row.names = FALSE)
 }
 
 export_torperf <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT source, date, q1, md, q3 FROM torperf_stats",
-      "WHERE date < current_date - 1 ORDER BY source, date")
-  rs <- dbSendQuery(con, q)
-  torperf <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  t <- read.csv("/srv/metrics.torproject.org/web/stats/torperf.csv",
+    stringsAsFactors = FALSE)
+  t <- data.frame(
+     source = paste(ifelse(t$source == '', 'all', t$source),
+                    ifelse(t$size == 50 * 1024, '50kb',
+                           ifelse(t$size == 1024 * 1024, '1mb', '5mb')),
+                    sep = '-'),
+     date = as.Date(t$date, "%Y-%m-%d"),
+     q1 = t$q1, md = t$md, q3 = t$q3)
+  torperf <- t[order(t$source, t$date), ]
   write.csv(torperf, path, quote = FALSE, row.names = FALSE)
 }
 
 export_torperf_failures <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT source, date, timeouts, failures, requests",
-      "FROM torperf_stats WHERE date < current_date - 1",
-      "ORDER BY source, date")
-  rs <- dbSendQuery(con, q)
-  torperf <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
+  t <- read.csv("/srv/metrics.torproject.org/web/stats/torperf.csv",
+    stringsAsFactors = FALSE)
+  t <- data.frame(
+     source = paste(ifelse(t$source == '', 'all', t$source),
+                    ifelse(t$size == 50 * 1024, '50kb',
+                           ifelse(t$size == 1024 * 1024, '1mb', '5mb')),
+                    sep = '-'),
+     date = as.Date(t$date, "%Y-%m-%d"),
+     timeouts = t$timeouts, failures = t$failures, requests = t$requests)
+  torperf <- t[order(t$source, t$date), ]
   write.csv(torperf, path, quote = FALSE, row.names = FALSE)
 }
 
 export_connbidirect <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db)
-  q <- paste("SELECT DATE(statsend) AS date, source, belownum AS below,",
-      "readnum AS read, writenum AS write, bothnum AS \"both\"",
-      "FROM connbidirect WHERE DATE(statsend) < current_date - 1",
-      "ORDER BY 1, 2")
-  rs <- dbSendQuery(con, q)
-  c <- fetch(rs, n = -1)
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  write.csv(format(c, trim = TRUE, scientific = FALSE), path, 
+  c <- read.csv("/srv/metrics.torproject.org/web/stats/connbidirect.csv",
+    stringsAsFactors = FALSE)
+  write.csv(format(c, trim = TRUE, scientific = FALSE), path,
       quote = FALSE, row.names = FALSE)
 }
 
 export_bandwidth_flags <- function(path) {
-  drv <- dbDriver("PostgreSQL")
-  con <- dbConnect(drv, user = dbuser, password = dbpassword, dbname = db) 
-  q <- paste("SELECT date, isexit, isguard, bwadvertised AS value",
-      "FROM bandwidth_flags WHERE date < current_date - 3")
-  rs <- dbSendQuery(con, q)
-  bw_desc <- fetch(rs, n = -1) 
-  q <- paste("SELECT date, isexit, isguard,",
-      "(read + written) / (2 * 86400) AS value",
-      "FROM bwhist_flags WHERE date < current_date - 3")
-  rs <- dbSendQuery(con, q)
-  bw_hist <- fetch(rs, n = -1) 
-  dbDisconnect(con)
-  dbUnloadDriver(drv)
-  bandwidth <- rbind(data.frame(bw_desc, type = "advbw"),
-      data.frame(bw_hist, type = "bwhist"))
-  bandwidth <- rbind(
-    data.frame(bandwidth[bandwidth$isguard == TRUE, ], flag = "guard"),
-    data.frame(bandwidth[bandwidth$isexit == TRUE, ], flag = "exit"))
-  bandwidth <- aggregate(list(value = bandwidth$value),
-    by = list(date = bandwidth$date, type = bandwidth$type,
-    flag = bandwidth$flag), FUN = sum)
-  write.csv(format(bandwidth, trim = TRUE, scientific = FALSE), path,
-      quote = FALSE, row.names = FALSE)
+  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
+    stringsAsFactors = FALSE)
+  b <- b[b$isexit != '' & b$isguard != '', ]
+  b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
+                  isexit = b$isexit == 't', isguard = b$isguard == 't',
+                  advbw = b$advbw,
+                  bwhist = floor((b$bwread + b$bwwrite) / 2))
+  b <- rbind(
+    data.frame(b[b$isguard == TRUE, ], flag = "guard"),
+    data.frame(b[b$isexit == TRUE, ], flag = "exit"))
+  b <- data.frame(date = b$date, advbw = b$advbw, bwhist = b$bwhist,
+                  flag = b$flag)
+  b <- aggregate(list(advbw = b$advbw, bwhist = b$bwhist),
+                 by = list(date = b$date, flag = b$flag), FUN = sum,
+                 na.rm = TRUE, na.action = NULL)
+  b <- melt(b, id.vars = c("date", "flag"))
+  b <- data.frame(date = b$date, type = b$variable, flag = b$flag,
+                  value = b$value)
+  b <- b[b$value > 0, ]
+  write.csv(b, path, quote = FALSE, row.names = FALSE)
 }
 
 export_userstats <- function(path) {
-  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
-    "task-8462/userstats.csv", sep = ""),
+  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
     stringsAsFactors = FALSE)
-  write.csv(format(u, trim = TRUE, scientific = FALSE), path,
+  c <- data.frame(date = c$date, node = c$node, country = c$country,
+                  transport = c$transport, version = c$version,
+                  frac = c$frac, users = c$clients)
+  write.csv(format(c, trim = TRUE, scientific = FALSE), path,
       quote = FALSE, row.names = FALSE)
 }
 
 help_export_monthly_userstats <- function(path, aggr_fun) {
-  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
-    "task-8462/userstats.csv", sep = ""),
+  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
     stringsAsFactors = FALSE)
-  u <- u[u$country != '' & u$transport == '' & u$version == '',
-         c("date", "country", "users")]
+  c <- c[c$country != '' & c$transport == '' & c$version == '', ]
+  u <- data.frame(date = c$date, country = c$country, users = c$clients,
+                  stringsAsFactors = FALSE)
   u <- aggregate(list(users = u$users),
                       by = list(date = u$date, country = u$country), sum)
   u <- aggregate(list(users = u$users),
@@ -241,11 +195,12 @@ export_monthly_userstats_average <- function(path) {
 }
 
 export_userstats_detector <- function(path) {
-  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
-    "task-8462/userstats.csv", sep = ""),
+  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
     stringsAsFactors = FALSE)
-  u <- u[u$country != '' & u$transport == '' & u$version == '' &
-         u$node == 'relay', c("country", "date", "users")]
+  c <- c[c$country != '' & c$transport == '' & c$version == '' &
+         c$node == 'relay', ]
+  u <- data.frame(country = c$country, date = c$date, users = c$clients,
+                  stringsAsFactors = FALSE)
   u <- rbind(u, data.frame(country = "zy",
                 aggregate(list(users = u$users),
                           by = list(date = u$date), sum)))

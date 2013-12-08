@@ -128,6 +128,24 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>ResearchStats</servlet-name>
+    <servlet-class>
+      org.torproject.ernie.web.research.ResearchStatsServlet
+    </servlet-class>
+    <init-param>
+      <param-name>statsDir</param-name>
+      <param-value>
+        /srv/metrics.torproject.org/web/stats/
+      </param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResearchStats</servlet-name>
+    <url-pattern>/stats/*</url-pattern>
+    <url-pattern>/stats.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>Status</servlet-name>
     <servlet-class>
       org.torproject.ernie.web.StatusServlet

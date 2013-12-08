@@ -4,12 +4,12 @@ countrynames <- function(countries) {
 
 write_userstats <- function(start, end, node, path) {
   end <- min(end, as.character(Sys.Date()))
-  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
-    "task-8462/userstats.csv", sep = ""),
+  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
     stringsAsFactors = FALSE)
-  u <- u[u$date >= start & u$date <= end & u$country != '' &
-         u$transport == '' & u$version == '' & u$node == node,
-         c("country", "users")]
+  c <- c[c$date >= start & c$date <= end & c$country != '' &
+         c$transport == '' & c$version == '' & c$node == node, ]
+  u <- data.frame(country = c$country, users = c$clients,
+                  stringsAsFactors = FALSE)
   u <- aggregate(list(users = u$users), by = list(country = u$country),
                  mean)
   total <- sum(u$users)
@@ -34,23 +34,13 @@ write_userstats_bridge <- function(start, end, path) {
 
 write_userstats_censorship_events <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date()))
-  u <- read.csv(paste("/srv/metrics.torproject.org/task-8462-graphs/",
-    "task-8462/userstats.csv", sep = ""),
+  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
     stringsAsFactors = FALSE)
-  u <- u[u$date >= start & u$date <= end & u$country != '' &
-         u$transport == '' & u$version == '' & u$node == 'relay',
-         c("date", "country", "users")]
-  r <- read.csv(
-    "/srv/metrics.torproject.org/web/detector/userstats-ranges.csv",
-    stringsAsFactors = FALSE)
-  r <- r[r$date >= start & r$date <= end,
-      c("date", "country", "minusers", "maxusers")]
-  r <- cast(rbind(melt(u, id.vars = c("date", "country")),
-      melt(r, id.vars = c("date", "country"))))
-  r <- na.omit(r[r$users < r$minusers | r$users > r$maxusers, ])
-  r <- data.frame(date = r$date, country = r$country,
-    upturn = ifelse(r$users > r$maxusers, 1, 0),
-    downturn = ifelse(r$users < r$minusers, 1, 0))
+  c <- c[c$date >= start & c$date <= end & c$country != '' &
+         c$transport == '' & c$version == '' & c$node == 'relay', ]
+  r <- data.frame(date = c$date, country = c$country,
+                  upturn = ifelse(c$clients > c$upper, 1, 0),
+                  downturn = ifelse(c$clients <= c$lower, 1, 0))
   r <- aggregate(r[, c("upturn", "downturn")],
     by = list(country = r$country), sum)
   r <- r[!(r$country %in% c("zy", "??", "a1", "a2", "o1", "ap", "eu")), ]
