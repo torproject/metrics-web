@@ -71,20 +71,20 @@
         <h3><a href="#present" class="anchor">Presenting Tor network
         data</a></h3>
         <br>
-        <p>There are currently three main websites and a few additional
-        tools presenting Tor network data:
+        <p>There are a few websites and additional tools presenting Tor
+        network data:
         <ul>
           <li><a href="https://gitweb.torproject.org/metrics-web.git">metrics-web</a>
-          is the software behind this website, including a database to
-          aggregate most of the presented statistics.</li>
+          is the software behind this website, including aggregation code
+          for the presented statistics.</li>
           <li><a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-6498">task-6498</a>
           aggregates data to visualize fast exits in the Tor network.</li>
-          <li><a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-2718">task-2718</a>
-          takes the number of daily Tor users as input and attempts to
-          find anomalies that might be indicative of censorship.</li>
           <li><a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-8462">task-8462</a>
           estimates daily users from reported directory request
           statistics.</li>
+          <li><a href="https://gitweb.torproject.org/exonerator.git">ExoneraTor</a>
+          is a website that tells you whether a given IP address was a Tor
+          relay.</li>
           <li><a href="https://gitweb.torproject.org/doctor.git">DocTor</a>
           is a service that periodically checks the Tor network for
           consensus conflicts and other hiccups.</li>
