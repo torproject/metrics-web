@@ -20,7 +20,8 @@ All aggregated data are also available for download, so that people can
 easily plot their own graphs or even develop a prettier metrics website
 without writing their own data aggregation code.
 Data formats of aggregate statistics are specified below.</p>
-
+<hr>
+<br>
 
 <a name="servers"></a>
 <h3><a href="#servers" class="anchor">Number of relays and
@@ -86,6 +87,8 @@ the previous columns.
 If the values in previous columns are specific to relays only, this column
 contains the empty string.</li>
 </ul>
+<hr>
+<br>
 
 <a name="bandwidth"></a>
 <h3><a href="#bandwidth" class="anchor">Bandwidth provided and consumed by
@@ -130,6 +133,8 @@ flags, so that this column will contain the empty string if either
 <li><b>dirwrite:</b> Similar to <b>dirread</b>, but for traffic written by
 relays when serving directory data.</li>
 </ul>
+<hr>
+<br>
 
 <a name="fast-exits"></a>
 <h3><a href="#fast-exits" class="anchor">Relays meeting or almost meeting
@@ -166,6 +171,8 @@ fast-exit requirements.</li>
 matching fast-exit requirements.</li>
 </li>
 </ul>
+<hr>
+<br>
 
 <a name="clients"></a>
 <h3><a href="#clients" class="anchor">Estimated number of clients in the
@@ -224,6 +231,8 @@ The higher this value, the more reliable is the estimate.
 Values above 50 can be considered reliable enough for most purposes,
 lower values should be handled with more care.</li>
 </ul>
+<hr>
+<br>
 
 <a name="torperf"></a>
 <h3><a href="#torperf" class="anchor">Performance of downloading static
@@ -256,6 +265,8 @@ download the static file over Tor.</li>
 <li><b>requests:</b> Total number of requests made to download the static
 file over Tor.</li>
 </ul>
+<hr>
+<br>
 
 <a name="connbidirect"></a>
 <h3><a href="#connbidirect" class="anchor">Fraction of connections used
