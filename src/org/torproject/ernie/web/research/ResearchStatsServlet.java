@@ -39,7 +39,7 @@ public class ResearchStatsServlet extends HttpServlet {
   public long getLastModified(HttpServletRequest request) {
     File statsFile = this.determineStatsFile(request);
     if (statsFile == null || !statsFile.exists()) {
-      return 0L;
+      return -1L;
     } else {
       return statsFile.lastModified();
     }
