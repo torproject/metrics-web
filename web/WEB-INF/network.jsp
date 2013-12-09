@@ -53,45 +53,6 @@ bridges in the network.</p>
 <p><a href="csv/networksize.csv">CSV</a> file containing all data.</p>
 <br>
 
-<a name="relaycountries"></a>
-<h3><a href="#relaycountries" class="anchor">Relays by country</a></h3>
-<br>
-<p>The following graph shows the average daily number of relays by
-country.
-<font color="red">Note that updating by-country data has been temporarily
-disabled as of February 2013, because it has become prohibitively
-expensive.  This is not a bug, but a known problem that we will work on as
-time permits.</font></p>
-<img src="relaycountries.png${relaycountries_url}"
-     width="576" height="360" alt="Relay countries graph">
-<form action="network.html#relaycountries">
-  <div class="formrow">
-    <input type="hidden" name="graph" value="relaycountries">
-    <p>
-    <label>Start date (yyyy-mm-dd):</label>
-      <input type="text" name="start" size="10"
-             value="<c:choose><c:when test="${fn:length(relaycountries_start) == 0}">${default_start_date}</c:when><c:otherwise>${relaycountries_start[0]}</c:otherwise></c:choose>">
-    <label>End date (yyyy-mm-dd):</label>
-      <input type="text" name="end" size="10"
-             value="<c:choose><c:when test="${fn:length(relaycountries_end) == 0}">${default_end_date}</c:when><c:otherwise>${relaycountries_end[0]}</c:otherwise></c:choose>">
-    </p><p>
-      Source: <select name="country">
-        <option value="all"<c:if test="${relaycountries_country[0] eq 'all'}"> selected</c:if>>All relays</option>
-        <c:forEach var="country" items="${countries}" >
-          <option value="${country[0]}"<c:if test="${relaycountries_country[0] eq country[0]}"> selected</c:if>>${country[1]}</option>
-        </c:forEach>
-      </select>
-    </p><p>
-    <input class="submit" type="submit" value="Update graph">
-    </p>
-  </div>
-</form>
-<p>Download graph as
-<a href="relaycountries.pdf${relaycountries_url}">PDF</a> or
-<a href="relaycountries.svg${relaycountries_url}">SVG</a>.</p>
-<p><a href="csv/relaycountries.csv">CSV</a> file containing all data.</p>
-<br>
-
 <a name="relayflags"></a>
 <h3><a href="#relayflags" class="anchor">Relays with Exit, Fast, Guard,
 Stable, and HSDir flags</a></h3>
