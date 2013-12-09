@@ -21,8 +21,11 @@ easily plot their own graphs or even develop a prettier metrics website
 without writing their own data aggregation code.
 Data formats of aggregate statistics are specified below.</p>
 
-<h3>Number of relays and bridges</h3>
 
+<a name="servers"></a>
+<h3><a href="#servers" class="anchor">Number of relays and
+bridges</a></h3>
+<br>
 <p>Statistics file <a href="stats/servers.csv">servers.csv</a> contains
 the average number of relays and bridges in the Tor network.
 All averages are calculated per day by evaluating the relay and bridge
@@ -84,10 +87,12 @@ If the values in previous columns are specific to relays only, this column
 contains the empty string.</li>
 </ul>
 
-<h3>Bandwidth provided and consumed by relays</h3>
-
-Statistics on bandwidth provided and consumed by relays are contained in
-file <a href="stats/bandwidth.csv">bandwidth.csv</a>.
+<a name="bandwidth"></a>
+<h3><a href="#bandwidth" class="anchor">Bandwidth provided and consumed by
+relays</a></h3>
+<br>
+<p>Statistics on bandwidth provided and consumed by relays are contained
+in file <a href="stats/bandwidth.csv">bandwidth.csv</a>.
 This file contains three different bandwidth metrics:
 (1) bandwidth that relays are capable to provide and bandwidth that relays
 report to have consumed, either (2) for any traffic, or (3) only traffic
@@ -95,7 +100,7 @@ from serving directory data.
 Relays providing bandwidth statistics are categorized by having the
 <b>"Exit"</b> and <b>"Guard"</b> relay flag, having both, or not having
 either.
-The statistics file contains the following columns:
+The statistics file contains the following columns:</p>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data
@@ -126,10 +131,13 @@ flags, so that this column will contain the empty string if either
 relays when serving directory data.</li>
 </ul>
 
-<h3>Relays meeting or almost meeting fast-exit requirements</h3>
-
-Statistics file <a href="stats/fast-exits.csv">fast-exits.csv</a> contains
-the number of relays meeting or almost meeting fast-exit requirements.
+<a name="fast-exits"></a>
+<h3><a href="#fast-exits" class="anchor">Relays meeting or almost meeting
+fast-exit requirements</a></h3>
+<br>
+<p>Statistics file <a href="stats/fast-exits.csv">fast-exits.csv</a>
+contains the number of relays meeting or almost meeting fast-exit
+requirements.
 These requirements originate from a Tor sponsor contract and are defined as
 follows:
 a Tor relay is fast if it has at least 95 Mbit/s configured bandwidth
@@ -143,7 +151,7 @@ configured bandwidth rate, at least 2000 KB/s advertised bandwidth
 capacity, and permits exiting to ports 80 and 443; also, if there are more
 than 2 relays per /24 network meeting fast-exit requirements, all but two
 are considered almost fast.
-The statistics file contains the following columns:
+The statistics file contains the following columns:</p>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as
@@ -159,9 +167,11 @@ matching fast-exit requirements.</li>
 </li>
 </ul>
 
-<h3>Estimated number of clients in the Tor network</h3>
-
-Statistics file <a href="stats/clients.csv">clients.csv</a> contains
+<a name="clients"></a>
+<h3><a href="#clients" class="anchor">Estimated number of clients in the
+Tor network</a></h3>
+<br>
+<p>Statistics file <a href="stats/clients.csv">clients.csv</a> contains
 estimates on the number of clients in the Tor network.
 These estimates are based on the number of directory requests counted on
 directory mirrors and bridges.
@@ -172,7 +182,7 @@ and for bridges, statistics are available by country, by transport, and by
 IP version.
 Statistics further include expected client numbers from past observations
 which can be used to detect censorship or release of censorship.
-The statistics file contains the following columns:
+The statistics file contains the following columns:</p>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) for which client numbers are
@@ -215,13 +225,15 @@ Values above 50 can be considered reliable enough for most purposes,
 lower values should be handled with more care.</li>
 </ul>
 
-<h3>Performance of downloading static files over Tor</h3>
-
-Statistics file <a href="stats/torperf.csv">torperf.csv</a> contains
+<a name="torperf"></a>
+<h3><a href="#torperf" class="anchor">Performance of downloading static
+files over Tor</a></h3>
+<br>
+<p>Statistics file <a href="stats/torperf.csv">torperf.csv</a> contains
 aggregate statistics on download performance over time.
 These statistics come from the Torperf service that periodically downloads
 static files over Tor.
-The statistics file contains the following columns:
+The statistics file contains the following columns:</p>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was
@@ -245,9 +257,11 @@ download the static file over Tor.</li>
 file over Tor.</li>
 </ul>
 
-<h3>Fraction of connections used uni-/bidirectionally</h3>
-
-Statistics file <a href="stats/connbidirect.csv">connbidirect.csv</a>
+<a name="connbidirect"></a>
+<h3><a href="#connbidirect" class="anchor">Fraction of connections used
+uni-/bidirectionally</a></h3>
+<br>
+<p>Statistics file <a href="stats/connbidirect.csv">connbidirect.csv</a>
 contains statistics on the fraction of connections that is used uni- or
 bidirectionally.
 Every 10 seconds, relays determine for every connection whether they read
@@ -260,7 +274,7 @@ All other connections are classified as "both reading and writing."
 After classifying connections, read and write counters are reset for the
 next 10-second interval.
 Statistics are aggregated over 24 hours.
-The statistics file contains the following columns:
+The statistics file contains the following columns:</p>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) for which statistics on
