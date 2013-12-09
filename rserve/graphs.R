@@ -385,9 +385,9 @@ plot_versions <- function(start, end, path) {
   s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"), version = s$version,
                   relays = s$relays)
   known_versions <- c("0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1",
-        "0.2.2", "0.2.3", "0.2.4")
+        "0.2.2", "0.2.3", "0.2.4", "0.2.5")
   colours <- data.frame(breaks = known_versions,
-    values = brewer.pal(length(known_versions), "Accent"),
+    values = brewer.pal(length(known_versions), "Paired"),
     stringsAsFactors = FALSE)
   versions <- s[s$version %in% known_versions, ]
   visible_versions <- sort(unique(versions$version))
