@@ -41,7 +41,7 @@ bridges in the network.</p>
 <p>Download graph as
 <a href="networksize.pdf${networksize_url}">PDF</a> or
 <a href="networksize.svg${networksize_url}">SVG</a>.</p>
-<p><a href="csv/networksize.csv">CSV</a> file containing all data.</p>
+<p><a href="stats/servers.csv">CSV</a> file containing all data.</p>
 <br>
 
 <a name="relayflags"></a>
@@ -79,7 +79,7 @@ average number of relays with these flags assigned.</p>
 <p>Download graph as
 <a href="relayflags.pdf${relayflags_url}">PDF</a> or
 <a href="relayflags.svg${relayflags_url}">SVG</a>.</p>
-<p><a href="csv/relayflags.csv">CSV</a> file containing all data.</p>
+<p><a href="stats/servers.csv">CSV</a> file containing all data.</p>
 <br>
 
 <a name="versions"></a>
@@ -112,7 +112,7 @@ The following graph shows the number of relays by version.</p>
 <p>Download graph as
 <a href="versions.pdf${versions_url}">PDF</a> or
 <a href="versions.svg${versions_url}">SVG</a>.</p>
-<p><a href="csv/versions.csv">CSV</a> file containing all data.</p>
+<p><a href="stats/servers.csv">CSV</a> file containing all data.</p>
 <br>
 
 <a name="platforms"></a>
@@ -141,7 +141,7 @@ platform.</p>
 <p>Download graph as
 <a href="platforms.pdf${platforms_url}">PDF</a> or
 <a href="platforms.svg${platforms_url}">SVG</a>.</p>
-<p><a href="csv/platforms.csv">CSV</a> file containing all data.</p>
+<p><a href="stats/servers.csv">CSV</a> file containing all data.</p>
 <br>
 
 <a name="cloudbridges"></a>
@@ -170,7 +170,7 @@ network.</p>
 <p>Download graph as
 <a href="cloudbridges.pdf${cloudbridges_url}">PDF</a> or
 <a href="cloudbridges.svg${cloudbridges_url}">SVG</a>.</p>
-<p><a href="csv/cloudbridges.csv">CSV</a> file containing all data.</p>
+<p><a href="stats/servers.csv">CSV</a> file containing all data.</p>
 <br>
 
 <a name="bandwidth"></a>
@@ -201,7 +201,7 @@ in the network.</p>
 <p>Download graph as
 <a href="bandwidth.pdf${bandwidth_url}">PDF</a> or
 <a href="bandwidth.svg${bandwidth_url}">SVG</a>.</p>
-<p><a href="csv/bandwidth.csv">CSV</a> file containing all data.</p>
+<p><a href="stats/bandwidth.csv">CSV</a> file containing all data.</p>
 <br>
 
 <a name="bwhist-flags"></a>
@@ -230,7 +230,7 @@ Exit and/or Guard flags assigned by the directory authorities.</p>
 <p>Download graph as
 <a href="bwhist-flags.pdf${bwhist_flags_url}">PDF</a> or
 <a href="bwhist-flags.svg${bwhist_flags_url}">SVG</a>.</p>
-<p><a href="csv/bwhist-flags.csv">CSV</a> file containing all data.</p>
+<p><a href="stats/bandwidth.csv">CSV</a> file containing all data.</p>
 <br>
 
 <a name="bandwidth-flags"></a>
@@ -262,7 +262,7 @@ Guard flag.</p>
 <p>Download graph as
 <a href="bandwidth-flags.pdf${bandwidth_flags_url}">PDF</a> or
 <a href="bandwidth-flags.svg${bandwidth_flags_url}">SVG</a>.</p>
-<p><a href="csv/bandwidth-flags.csv">CSV</a> file containing all data.</p>
+<p><a href="stats/bandwidth.csv">CSV</a> file containing all data.</p>
 <br>
 
 <a name="dirbytes"></a>
@@ -294,7 +294,7 @@ the number of written and read dir bytes by all relays.</p>
 <p>Download graph as
 <a href="dirbytes.pdf${dirbytes_url}">PDF</a> or
 <a href="dirbytes.svg${dirbytes_url}">SVG</a>.</p>
-<p><a href="csv/dirbytes.csv">CSV</a> file containing all data.</p>
+<p><a href="stats/bandwidth.csv">CSV</a> file containing all data.</p>
 <br>
     </div>
   </div>

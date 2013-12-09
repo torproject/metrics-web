@@ -247,12 +247,8 @@
 <a href="userstats-bridge-version.svg${userstats_bridge_version_url}">SVG</a>.</p>
 <hr>
 
-<p><a href="csv/userstats.csv">CSV</a> file containing new user
+<p><a href="stats/clients.csv">CSV</a> file containing new user
 estimates.</p>
-<p><a href="csv/monthly-userstats-peak.csv">CSV</a> file containing peak
-daily Tor users (direct and bridge) per month by country.</p>
-<p><a href="csv/monthly-userstats-average.csv">CSV</a> file containing
-average daily Tor users (direct and bridge) per month by country.</p>
 <br>
 
 <hr>
