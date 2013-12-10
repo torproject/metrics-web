@@ -42,8 +42,6 @@ public class GraphsSubpagesServlet extends HttpServlet {
     this.availableGraphsSubpages.put("fast-exits.html",
         "WEB-INF/fast-exits.jsp");
     this.availableGraphsSubpages.put("users.html", "WEB-INF/users.jsp");
-    this.availableGraphsSubpages.put("packages.html",
-        "WEB-INF/packages.jsp");
     this.availableGraphsSubpages.put("performance.html",
         "WEB-INF/performance.jsp");
 

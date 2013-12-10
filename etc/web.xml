@@ -48,10 +48,6 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphsSubpages</servlet-name>
-    <url-pattern>/packages.html</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphsSubpages</servlet-name>
     <url-pattern>/performance.html</url-pattern>
   </servlet-mapping>
 

@@ -254,18 +254,6 @@ countryname <- function(country) {
   res
 }
 
-languagelist <- list(
-  "en" = "English",
-  "fa" = "Farsi",
-  "zh_CN" = "Simplified Chinese")
-
-languagename <- function(language) {
-  res <- languagelist[[language]]
-  if (is.null(res))
-    res <- "Gibberish"
-  res
-}
-
 date_breaks <- function(days) {
   length <- cut(days, c(0, 7, 12, 56, 180, 600, 5000, Inf), labels=FALSE)
   major <- c("days", "2 days", "weeks", "months", "3 months", "years",
