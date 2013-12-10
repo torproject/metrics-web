@@ -263,17 +263,6 @@
     <url-pattern>/consensus-health.html</url-pattern>
   </servlet-mapping>
 
-  <servlet>
-    <servlet-name>GraphData</servlet-name>
-    <servlet-class>
-      org.torproject.ernie.web.graphs.GraphDataServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>GraphData</servlet-name>
-    <url-pattern>/graphs/*</url-pattern>
-  </servlet-mapping>
-
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
