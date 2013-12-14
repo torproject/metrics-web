@@ -24,13 +24,13 @@
         <br>
         <p>Tor network data is measured at various places:
         <ul>
+          <li><a href="https://gitweb.torproject.org/torperf.git">Torperf</a>
+          is a set of utilities for testing Tor performance from a client
+          perspective.</li>
           <li><a href="https://gitweb.torproject.org/tor.git">tor</a>
           relays and bridges gather aggregate usage statistics and publish
           descriptors containing data about Tor network structure and
           usage.</li>
-          <li><a href="https://gitweb.torproject.org/torperf.git">Torperf</a>
-          is a set of utilities for testing Tor performance from a client
-          perspective.</li>
           <li><a href="https://gitweb.torproject.org/tordnsel.git">TorDNSEL</a>
           is a Tor DNS-based exit list that runs periodic checks whether
           relays use different IP addresses for exiting to the Internet
@@ -59,9 +59,20 @@
         <br>
         <p>In some cases, processing and presenting Tor network data is
         separated for maximum flexibility.
-        In particular, there is currently one tool that processes but does
-        not present Tor network data:</p>
+        In particular, there are currently two main tools that process Tor
+        network data and write an intermediate data format, but don't
+        directly present results:</p>
         <ul>
+          <li><a href="https://gitweb.torproject.org/metrics-web.git">metrics-web</a>
+          is the software behind this website, including aggregation code
+          that produces statistics files.</li>
+          <li><a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-6498">task-6498</a>
+          is a submodule of metric-web that
+          aggregates data to visualize fast exits in the Tor network.</li>
+          <li><a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-8462">task-8462</a>
+          is another submodule of metric-web that
+          estimates daily users from reported directory request
+          statistics.</li>
           <li><a href="https://gitweb.torproject.org/onionoo.git">Onionoo</a>
           provides Tor network status information in JSON format via a
           RESTful web service.</li>
@@ -75,22 +86,17 @@
         network data:
         <ul>
           <li><a href="https://gitweb.torproject.org/metrics-web.git">metrics-web</a>
-          is the software behind this website, including aggregation code
-          for the presented statistics.</li>
-          <li><a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-6498">task-6498</a>
-          aggregates data to visualize fast exits in the Tor network.</li>
-          <li><a href="https://gitweb.torproject.org/metrics-tasks.git/tree/HEAD:/task-8462">task-8462</a>
-          estimates daily users from reported directory request
-          statistics.</li>
+          also contains the code that presents aggregate statistics on
+          this website.</li>
           <li><a href="https://gitweb.torproject.org/exonerator.git">ExoneraTor</a>
           is a website that tells you whether a given IP address was a Tor
           relay.</li>
-          <li><a href="https://gitweb.torproject.org/doctor.git">DocTor</a>
-          is a service that periodically checks the Tor network for
-          consensus conflicts and other hiccups.</li>
           <li><a href="https://gitweb.torproject.org/atlas.git">Atlas</a>
-          is a web application to discover relays and bridges that uses
-          Onionoo as its data back-end.</li>
+          is a web application to discover relays that uses Onionoo as its
+          data back-end.</li>
+          <li><a href="https://gitweb.torproject.org/globe.git">Globe</a>
+          is a Tor relay and bridge explorer that also uses Onionoo as its
+          data back-end.</li>
           <li><a href="https://gitweb.torproject.org/compass.git">Compass</a>
           is a web application that uses Onionoo's data to display
           information about fast exits in the Tor network.</li>
