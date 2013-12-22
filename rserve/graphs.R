@@ -674,28 +674,44 @@ plot_connbidirect <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   c <- read.csv("/srv/metrics.torproject.org/web/stats/connbidirect.csv",
     stringsAsFactors = FALSE)
-  c <- c[c$date >= start & c$date <= end, ]
+  c <- c[c$date >= start & c$date <= end &
+         c$read + c$write + c$both > 0, ]
   c <- data.frame(date = as.Date(c$date, "%Y-%m-%d"),
-                  readnum = c$read, writenum = c$write, bothnum = c$both)
-  connbidirect <- data.frame(date = c$date, c[, 2:4] /
-      (c$readnum + c$writenum + c$bothnum))
-  connbidirect <- melt(connbidirect, id = "date")
+                  both = c$both / (c$read + c$write + c$both),
+                  read = c$read / (c$read + c$write + c$both),
+                  write = c$write / (c$read + c$write + c$both))
+  c <- aggregate(list(both = c$both, read = c$read, write = c$write),
+                 by = list(date = c$date), quantile,
+                 probs = c(0.25, 0.5, 0.75))
+  c <- rbind(
+    data.frame(date = as.Date(c$date), data.frame(c$both),
+               variable = "both"),
+    data.frame(date = as.Date(c$date), data.frame(c$write),
+               variable = "write"),
+    data.frame(date = as.Date(c$date), data.frame(c$read),
+               variable = "read"))
   date_breaks <- date_breaks(
-    as.numeric(max(as.Date(connbidirect$date, "%Y-%m-%d")) -
-    min(as.Date(connbidirect$date, "%Y-%m-%d"))))
-  ggplot(connbidirect, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-      colour = variable)) +
-    geom_point(size = 2.5) +
+    as.numeric(max(as.Date(c$date, "%Y-%m-%d")) -
+    min(as.Date(c$date, "%Y-%m-%d"))))
+  ggplot(c, aes(x = date, y = X50., colour = variable)) +
+    geom_line(size = 0.75) +
+    geom_ribbon(aes(x = date, ymin = X25., ymax = X75., fill = variable),
+                alpha = 0.5, legend = FALSE) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
     scale_y_continuous(name = "", formatter = "percent") +
-    scale_colour_hue("", breaks = c("readnum", "writenum", "bothnum"),
-        labels = c("Mostly reading", "Mostly writing",
-        "Both reading and writing")) +
-    opts(title = "Fraction of connections used uni-/bidirectionally",
-        legend.position = "top")
+    scale_colour_hue(name = "Medians and interquartile ranges",
+                     breaks = c("both", "write", "read"),
+        labels = c("Both reading and writing", "Mostly writing",
+                   "Mostly reading")) +
+    scale_fill_hue(name = "Medians and interquartile ranges",
+                   breaks = c("both", "write", "read"),
+        labels = c("Both reading and writing", "Mostly writing",
+                   "Mostly reading")) +
+    opts(title = "Fraction of connections used uni-/bidirectionally\n",
+      legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
