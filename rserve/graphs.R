@@ -883,7 +883,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
     if (events == "on") {
       if (length(u$upper) > 0)
         max_y <- max(max_y, max(u$upper, na.rm = TRUE))
-      u[u$lower < 0, "lower"] <- 0
+      u[!is.na(u$lower) & u$lower < 0, "lower"] <- 0
       plot <- plot +
         geom_ribbon(aes(ymin = lower, ymax = upper), fill = "gray")
     }
