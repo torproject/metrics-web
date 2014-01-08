@@ -233,6 +233,7 @@ public class Countries {
     this.knownCountries.add("za;South Africa".split(";"));
     this.knownCountries.add(("gs;South Georgia and the South Sandwich "
         + "Islands").split(";"));
+    this.knownCountries.add("ss;South Sudan".split(";"));
     this.knownCountries.add("es;Spain".split(";"));
     this.knownCountries.add("lk;Sri Lanka".split(";"));
     this.knownCountries.add("sd;Sudan".split(";"));

@@ -208,6 +208,7 @@ countries = {
     "sn" : "Senegal",
     "so" : "Somalia",
     "sr" : "Suriname",
+    "ss" : "South Sudan",
     "st" : u"São Tomé and Príncipe",
     "sv" : "El Salvador",
     "sy" : "the Syrian Arab Republic",

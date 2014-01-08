@@ -206,6 +206,7 @@ countrylist <- list(
   "sn" = "Senegal",
   "so" = "Somalia",
   "sr" = "Suriname",
+  "ss" = "South Sudan",
   "st" = "São Tomé and Príncipe",
   "sv" = "El Salvador",
   "sy" = "the Syrian Arab Republic",
