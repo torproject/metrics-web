@@ -337,8 +337,9 @@ graph.
 Q: Why are no numbers available before September 2011?<br/>
 A: We do have descriptor archives from before that time, but those
 descriptors didn't contain all the data we use to estimate user numbers.
-We do have older user numbers from an earlier estimation approach here
-(add link), but we believe the current approach is more accurate.
+We do have older user numbers from an earlier estimation approach
+<a href="/data/old-user-number-estimates.tar.gz">here</a>, but we believe
+the current approach is more accurate.
 </p>
 
 <p>
@@ -355,8 +356,7 @@ Q: And what about the advantage of the current approach over the old one
 when it comes to bridge users?<br/>
 A: Oh, that's a whole different story.  We wrote a 13 page long
 <a href="https://research.torproject.org/techreports/counting-daily-bridge-users-2012-10-24.pdf">technical
-report</a> explaining the reasons for retiring the old approach.  But the
-old data is still <a href="/data/old-user-number-estimates.tar.gz">available</a>.
+report</a> explaining the reasons for retiring the old approach.
 tl;dr: in the old approach we measured the wrong thing, and now we measure
 the right thing.
 </p>
