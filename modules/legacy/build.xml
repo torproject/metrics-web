@@ -15,12 +15,8 @@
       <include name="servlet-api-3.0.jar"/>
       <include name="commons-lang.jar"/>
     </fileset>
-    <fileset dir="deps/metrics-lib">
+    <fileset dir="../../deps/metrics-lib">
       <include name="descriptor.jar"/>
-    </fileset>
-    <fileset dir="lib">
-      <include name="REngine.jar"/>
-      <include name="RserveEngine.jar"/>
     </fileset>
   </path>
 
@@ -29,7 +25,7 @@
     <mkdir dir="${classes}"/>
   </target>
   <target name="metrics-lib">
-    <ant dir="deps/metrics-lib"/>
+    <ant dir="../../deps/metrics-lib"/>
   </target>
 
   <!-- Compile all plain Java classes. -->
@@ -54,18 +50,6 @@
           classname="org.torproject.ernie.cron.Main">
       <classpath refid="classpath"/>
     </java>
-  </target>
-
-  <!-- Run unit tests. -->
-  <target name="test" depends="compile">
-    <junit haltonfailure="true" printsummary="off">
-      <classpath refid="classpath"/>
-      <formatter type="plain" usefile="false"/>
-      <batchtest>
-        <fileset dir="${classes}"
-                 includes="**/*Test.class"/>
-      </batchtest>
-    </junit>
   </target>
 </project>
 
