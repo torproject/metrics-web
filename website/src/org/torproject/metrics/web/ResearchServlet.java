@@ -1,6 +1,6 @@
 /* Copyright 2011, 2012 The Tor Project
  * See LICENSE for licensing information */
-package org.torproject.ernie.status.exonerator;
+package org.torproject.metrics.web;
 
 import java.io.IOException;
 
@@ -9,16 +9,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ExoneraTorServlet extends HttpServlet {
+public class ResearchServlet extends HttpServlet {
 
-  private static final long serialVersionUID = -6227541092325776626L;
+  private static final long serialVersionUID = -9151727188925700665L;
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 
     /* Forward the request to the JSP that does all the hard work. */
-    request.getRequestDispatcher("WEB-INF/exonerator.jsp").forward(
-        request, response);
+    request.getRequestDispatcher("WEB-INF/research.jsp").forward(request,
+        response);
   }
 }
 

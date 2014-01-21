@@ -1,6 +1,6 @@
 /* Copyright 2011, 2012 The Tor Project
  * See LICENSE for licensing information */
-package org.torproject.ernie.status.relaysearch;
+package org.torproject.metrics.web.status;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

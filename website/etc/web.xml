@@ -9,7 +9,7 @@
   <servlet>
     <servlet-name>Index</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.IndexServlet
+      org.torproject.metrics.web.IndexServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -20,7 +20,7 @@
   <servlet>
     <servlet-name>Graphs</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.GraphsServlet
+      org.torproject.metrics.web.GraphsServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -31,7 +31,7 @@
   <servlet>
     <servlet-name>GraphsSubpages</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.graphs.GraphsSubpagesServlet
+      org.torproject.metrics.web.graphs.GraphsSubpagesServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -54,7 +54,7 @@
   <servlet>
     <servlet-name>Bubbles</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.graphs.BubblesServlet
+      org.torproject.metrics.web.graphs.BubblesServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -65,7 +65,7 @@
   <servlet>
     <servlet-name>Research</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.ResearchServlet
+      org.torproject.metrics.web.ResearchServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -76,7 +76,7 @@
   <servlet>
     <servlet-name>ResearchData</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.research.ResearchDataServlet
+      org.torproject.metrics.web.research.ResearchDataServlet
     </servlet-class>
     <init-param>
       <param-name>localDataDir</param-name>
@@ -93,7 +93,7 @@
   <servlet>
     <servlet-name>ResearchPapers</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.research.ResearchPapersServlet
+      org.torproject.metrics.web.research.ResearchPapersServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -104,7 +104,7 @@
   <servlet>
     <servlet-name>ResearchTools</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.research.ResearchToolsServlet
+      org.torproject.metrics.web.research.ResearchToolsServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -115,7 +115,7 @@
   <servlet>
     <servlet-name>ResearchFormats</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.research.ResearchFormatsServlet
+      org.torproject.metrics.web.research.ResearchFormatsServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -126,7 +126,7 @@
   <servlet>
     <servlet-name>ResearchStats</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.research.ResearchStatsServlet
+      org.torproject.metrics.web.research.ResearchStatsServlet
     </servlet-class>
     <init-param>
       <param-name>statsDir</param-name>
@@ -144,7 +144,7 @@
   <servlet>
     <servlet-name>Status</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.StatusServlet
+      org.torproject.metrics.web.StatusServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -155,7 +155,7 @@
   <servlet>
     <servlet-name>RelaySearch</servlet-name>
     <servlet-class>
-      org.torproject.ernie.status.relaysearch.RelaySearchServlet
+      org.torproject.metrics.web.status.RelaySearchServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -166,7 +166,7 @@
   <servlet>
     <servlet-name>GraphImage</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.graphs.GraphImageServlet
+      org.torproject.metrics.web.graphs.GraphImageServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -233,7 +233,7 @@
   <servlet>
     <servlet-name>Csv</servlet-name>
     <servlet-class>
-      org.torproject.ernie.web.graphs.CsvServlet
+      org.torproject.metrics.web.graphs.CsvServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -244,7 +244,7 @@
   <servlet>
     <servlet-name>ExoneraTor</servlet-name>
     <servlet-class>
-      org.torproject.ernie.status.exonerator.ExoneraTorServlet
+      org.torproject.metrics.web.status.ExoneraTorServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -255,7 +255,7 @@
   <servlet>
     <servlet-name>ConsensusHealthServlet</servlet-name>
     <servlet-class>
-      org.torproject.ernie.status.doctor.ConsensusHealthServlet
+      org.torproject.metrics.web.status.ConsensusHealthServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -312,7 +312,7 @@
 
   <listener>
     <listener-class>
-      org.torproject.ernie.web.graphs.RObjectGenerator
+      org.torproject.metrics.web.graphs.RObjectGenerator
     </listener-class>
   </listener>
 

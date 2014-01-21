@@ -1,6 +1,6 @@
-/* Copyright 2013 The Tor Project
+/* Copyright 2011, 2012 The Tor Project
  * See LICENSE for licensing information */
-package org.torproject.ernie.web.graphs;
+package org.torproject.metrics.web;
 
 import java.io.IOException;
 
@@ -9,15 +9,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class BubblesServlet extends HttpServlet {
+public class GraphsServlet extends HttpServlet {
 
-  private static final long serialVersionUID = -6011833075497881033L;
+  private static final long serialVersionUID = 7615715032362498151L;
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 
     /* Forward the request to the JSP that does all the hard work. */
-    request.getRequestDispatcher("WEB-INF/bubbles.jsp").forward(request,
+    request.getRequestDispatcher("WEB-INF/graphs.jsp").forward(request,
         response);
   }
 }

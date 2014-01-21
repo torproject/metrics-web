@@ -1,6 +1,6 @@
 /* Copyright 2013 The Tor Project
  * See LICENSE for licensing information */
-package org.torproject.ernie.web.research;
+package org.torproject.metrics.web.research;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;

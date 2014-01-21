@@ -1,6 +1,6 @@
 /* Copyright 2011, 2012 The Tor Project
  * See LICENSE for licensing information */
-package org.torproject.ernie.web.graphs;
+package org.torproject.metrics.web.graphs;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
