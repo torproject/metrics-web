@@ -185,26 +185,7 @@ Add a crontab entry for the database importer to run once per hour:
 15 * * * * cd /srv/metrics-web/ && ./run.sh
 
 
-1.5. Importing GeoIP information
-================================
-
-Some of the graphs require GeoIP information to resolve IP addresses to
-country codes.  This information is provided in MaxMind's GeoLite City
-database available at http://www.maxmind.com/app/geolitecity.
-
-Download and extract the two files GeoLiteCity-Location.csv and
-GeoLiteCity-Blocks.csv to /srv/metrics-web/.
-
-Import the two files into the metrics database.
-
-$ ant geoipdb
-
-Note that there is no easy way to update the GeoIP information in the
-metrics database yet.  The only way to do so is to manually delete and
-recreate the database table and import the new GeoIP database.
-
-
-1.6. Pre-calculating relay statistics
+1.5. Pre-calculating relay statistics
 =====================================
 
 The relay graphs on the metrics website rely on pre-calculated statistics
@@ -220,7 +201,7 @@ If the metrics database gets updated automatically, write a script and add
 a crontab entry for pre-calculating statistics every 6 or 12 hours.
 
 
-1.7. Generating network status information
+1.6. Generating network status information
 ==========================================
 
 The metrics database importer can analyze the most recently parsed network
@@ -237,7 +218,7 @@ WriteConsensusHealth 1
 WriteNagiosStatusFile 1
 
 
-1.8. Importing sanitized bridge descriptors
+1.7. Importing sanitized bridge descriptors
 ===========================================
 
 The metrics database can store aggregate statistics about running bridges
@@ -267,7 +248,7 @@ Run the database import:
 $ ./run.sh
 
 
-1.9. Importing Torperf performance data
+1.8. Importing Torperf performance data
 =======================================
 
 Torperf measures the performance of the Tor network as users experience

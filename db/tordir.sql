@@ -286,34 +286,6 @@ CREATE TABLE updates (
     date DATE
 );
 
--- GeoIP database that helps resolve IP addresses to country codes,
--- latitudes, and longitudes.
-CREATE TABLE geoipdb (
-  id SERIAL,
-  ipstart INET,
-  ipend INET,
-  country CHARACTER(2) NOT NULL,
-  latitude NUMERIC(7, 4) NOT NULL,
-  longitude NUMERIC(7, 4) NOT NULL
-);
-
--- Indexes to speed up looking up IP addresses in the GeoIP database.
-CREATE INDEX geoip_ipstart ON geoipdb (ipstart);
-CREATE INDEX geoip_ipend ON geoipdb (ipend);
-
--- Result type for GeoIP lookups that encapsulates the country code,
--- latitude, and longitude.
-CREATE TYPE geoip_result AS (country CHARACTER(2),
-  latitude NUMERIC(7, 4), longitude NUMERIC(7, 4));
-
--- GeoIP database lookup function.
-CREATE OR REPLACE FUNCTION geoip_lookup (CHARACTER VARYING)
-RETURNS geoip_result AS $$
-  SELECT country, latitude, longitude FROM geoipdb
-  WHERE INET($1)
-  BETWEEN geoipdb.ipstart AND geoipdb.ipend LIMIT 1;
-$$ LANGUAGE SQL;
-
 -- FUNCTION refresh_relay_statuses_per_day()
 -- Updates helper table which is used to refresh the aggregate tables.
 CREATE OR REPLACE FUNCTION refresh_relay_statuses_per_day()
@@ -449,48 +421,6 @@ CREATE OR REPLACE FUNCTION refresh_network_size() RETURNS INTEGER AS $$
             GROUP BY DATE(validafter)
             ) b
         NATURAL JOIN relay_statuses_per_day';
-
-    RETURN 1;
-    END;
-$$ LANGUAGE plpgsql;
-
--- FUNCTION refresh_relay_countries()
-CREATE OR REPLACE FUNCTION refresh_relay_countries() RETURNS INTEGER AS $$
-    DECLARE
-        min_date TIMESTAMP WITHOUT TIME ZONE;
-        max_date TIMESTAMP WITHOUT TIME ZONE;
-    BEGIN
-
-    min_date := (SELECT MIN(date) FROM updates);
-    max_date := (SELECT MAX(date) + 1 FROM updates);
-
-    DELETE FROM relay_countries
-    WHERE date IN (SELECT date FROM updates);
-
-    EXECUTE '
-    INSERT INTO relay_countries
-    (date, country, relays)
-    SELECT date, country, relays / count AS relays
-    FROM (
-        SELECT date,
-               COALESCE(lower((geoip_lookup(address)).country), ''zz'')
-                 AS country,
-               SUM(relays) AS relays
-        FROM (
-            SELECT DATE(validafter) AS date,
-                   fingerprint,
-                   address,
-                   COUNT(*) AS relays
-            FROM statusentry
-            WHERE isrunning = TRUE
-                  AND validafter >= ''' || min_date || '''
-                  AND validafter < ''' || max_date || '''
-                  AND DATE(validafter) IN (SELECT date FROM updates)
-            GROUP BY 1, 2, 3
-            ) c
-        GROUP BY 1, 2
-        ) b
-    NATURAL JOIN relay_statuses_per_day';
 
     RETURN 1;
     END;
@@ -930,8 +860,6 @@ CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
     PERFORM refresh_relay_statuses_per_day();
     RAISE NOTICE '% Refreshing network size.', timeofday();
     PERFORM refresh_network_size();
-    RAISE NOTICE '% Refreshing relays by country.', timeofday();
-    PERFORM refresh_relay_countries();
     RAISE NOTICE '% Refreshing relay platforms.', timeofday();
     PERFORM refresh_relay_platforms();
     RAISE NOTICE '% Refreshing relay versions.', timeofday();

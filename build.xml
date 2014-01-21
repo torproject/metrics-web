@@ -52,15 +52,6 @@
     </javac>
   </target>
 
-  <!-- Import GeoIP database. -->
-  <target name="geoipdb" depends="compile">
-    <java fork="true"
-          maxmemory="1024m"
-          classname="org.torproject.ernie.cron.network.GeoipDatabaseImporter">
-      <classpath refid="classpath"/>
-    </java>
-  </target>
-
   <!-- Import descriptors into the ExoneraTor database. -->
   <target name="exonerator" depends="compile">
     <java fork="true"
