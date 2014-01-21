@@ -1,0 +1,64 @@
+<project default="war" name="metrics-web" basedir=".">
+
+  <!-- Define build paths. -->
+  <property name="sources" value="src"/>
+  <property name="classes" value="classes"/>
+  <property name="config" value="etc"/>
+  <property name="webxmlfile" value="${config}/web.xml"/>
+  <property name="warfile" value="ernie.war"/>
+  <path id="classpath">
+    <pathelement path="${classes}"/>
+    <fileset dir="/usr/share/java">
+      <include name="commons-codec.jar"/>
+      <include name="servlet-api-3.0.jar"/>
+    </fileset>
+    <fileset dir="lib">
+      <include name="REngine.jar"/>
+      <include name="RserveEngine.jar"/>
+    </fileset>
+  </path>
+
+  <target name="init">
+    <mkdir dir="${classes}"/>
+  </target>
+
+  <!-- Compile all servlets. -->
+  <target name="compile" depends="init">
+    <javac destdir="${classes}"
+           srcdir="${sources}"
+           source="1.5"
+           target="1.5"
+           debug="true"
+           deprecation="true"
+           optimize="false"
+           failonerror="true"
+           includeantruntime="false">
+      <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <!-- Create a .war file for deployment. -->
+  <target name="war"
+          depends="compile">
+    <war destfile="${warfile}"
+         webxml="${webxmlfile}">
+      <fileset dir="web"/>
+      <lib dir="lib">
+          <include name="jstl.jar"/>
+          <include name="REngine.jar"/>
+          <include name="RserveEngine.jar"/>
+          <include name="standard.jar"/>
+      </lib>
+      <lib dir="/usr/share/java">
+          <include name="commons-codec.jar"/>
+      </lib>
+      <classes dir="${classes}"/>
+      <zipfileset dir="${config}"
+                  prefix="WEB-INF/classes"
+                  includes="logging.properties"/>
+      <metainf dir="${config}"
+               includes="context.xml"/>
+    </war>
+  </target>
+</project>
+
