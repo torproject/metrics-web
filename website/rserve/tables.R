@@ -4,8 +4,8 @@ countrynames <- function(countries) {
 
 write_userstats <- function(start, end, node, path) {
   end <- min(end, as.character(Sys.Date()))
-  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
-    stringsAsFactors = FALSE)
+  c <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "clients.csv", sep = ""), stringsAsFactors = FALSE)
   c <- c[c$date >= start & c$date <= end & c$country != '' &
          c$transport == '' & c$version == '' & c$node == node, ]
   u <- data.frame(country = c$country, users = c$clients,
@@ -34,8 +34,8 @@ write_userstats_bridge <- function(start, end, path) {
 
 write_userstats_censorship_events <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date()))
-  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
-    stringsAsFactors = FALSE)
+  c <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "clients.csv", sep = ""), stringsAsFactors = FALSE)
   c <- c[c$date >= start & c$date <= end & c$country != '' &
          c$transport == '' & c$version == '' & c$node == 'relay', ]
   r <- data.frame(date = c$date, country = c$country,

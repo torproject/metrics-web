@@ -1,8 +1,8 @@
 options(scipen = 15)
 
 export_networksize <- function(path) {
-  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
-    stringsAsFactors = FALSE)
+  s <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$flag == '' & s$country == '' & s$version == '' &
          s$platform == '' & s$ec2bridge == '',
          c("date", "relays", "bridges")]
@@ -10,8 +10,8 @@ export_networksize <- function(path) {
 }
 
 export_cloudbridges <- function(path) {
-  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
-    stringsAsFactors = FALSE)
+  s <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$flag == '' & s$country == '' & s$version == '' &
          s$platform == '' & s$ec2bridge == 't', ]
   cloudbridges <- data.frame(date = s$date, cloudbridges = s$bridges)
@@ -19,8 +19,8 @@ export_cloudbridges <- function(path) {
 }
 
 export_relaycountries <- function(path) {
-  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
-    stringsAsFactors = FALSE)
+  s <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$flag == '' & s$country != '' & s$version == '' &
          s$platform == '' & s$ec2bridge == '',
          c("date", "country", "relays")]
@@ -28,8 +28,8 @@ export_relaycountries <- function(path) {
 }
 
 export_versions <- function(path) {
-  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
-    stringsAsFactors = FALSE)
+  s <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$flag == '' & s$country == '' & s$version != '' &
          s$platform == '' & s$ec2bridge == '',
          c("date", "version", "relays")]
@@ -39,8 +39,8 @@ export_versions <- function(path) {
 }
 
 export_platforms <- function(path) {
-  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
-    stringsAsFactors = FALSE)
+  s <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$flag == '' & s$country == '' & s$version == '' &
          s$platform != '' & s$ec2bridge == '',
          c("date", "platform", "relays")]
@@ -53,8 +53,8 @@ export_platforms <- function(path) {
 }
 
 export_bandwidth <- function(path) {
-  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
-    stringsAsFactors = FALSE)
+  b <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "bandwidth.csv", sep = ""), stringsAsFactors = FALSE)
   b <- b[b$isexit == '' & b$isguard == '', ]
   b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
                   bwadv = b$advbw,
@@ -64,8 +64,8 @@ export_bandwidth <- function(path) {
 }
 
 export_bwhist_flags <- function(path) {
-  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
-    stringsAsFactors = FALSE)
+  b <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "bandwidth.csv", sep = ""), stringsAsFactors = FALSE)
   b <- b[b$isexit != '' & b$isguard != '' & !is.na(b$bwread) &
          !is.na(b$bwwrite), ]
   b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
@@ -75,8 +75,8 @@ export_bwhist_flags <- function(path) {
 }
 
 export_dirbytes <- function(path) {
-  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
-    stringsAsFactors = FALSE)
+  b <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "bandwidth.csv", sep = ""), stringsAsFactors = FALSE)
   b <- b[b$isexit == '' & b$isguard == '' & !is.na(b$dirread) &
          !is.na(b$dirwrite), ]
   b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
@@ -86,8 +86,8 @@ export_dirbytes <- function(path) {
 }
 
 export_relayflags <- function(path) {
-  s <- read.csv("/srv/metrics.torproject.org/web/stats/servers.csv",
-    stringsAsFactors = FALSE)
+  s <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$country == '' & s$version == '' & s$platform == '' &
          s$ec2bridge == '', ]
   s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"),
@@ -99,8 +99,8 @@ export_relayflags <- function(path) {
 }
 
 export_torperf <- function(path) {
-  t <- read.csv("/srv/metrics.torproject.org/web/stats/torperf.csv",
-    stringsAsFactors = FALSE)
+  t <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "torperf.csv", sep = ""), stringsAsFactors = FALSE)
   t <- data.frame(
      source = paste(ifelse(t$source == '', 'all', t$source),
                     ifelse(t$size == 50 * 1024, '50kb',
@@ -113,8 +113,8 @@ export_torperf <- function(path) {
 }
 
 export_torperf_failures <- function(path) {
-  t <- read.csv("/srv/metrics.torproject.org/web/stats/torperf.csv",
-    stringsAsFactors = FALSE)
+  t <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "torperf.csv", sep = ""), stringsAsFactors = FALSE)
   t <- data.frame(
      source = paste(ifelse(t$source == '', 'all', t$source),
                     ifelse(t$size == 50 * 1024, '50kb',
@@ -127,15 +127,15 @@ export_torperf_failures <- function(path) {
 }
 
 export_connbidirect <- function(path) {
-  c <- read.csv("/srv/metrics.torproject.org/web/stats/connbidirect.csv",
-    stringsAsFactors = FALSE)
+  c <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "connbidirect.csv", sep = ""), stringsAsFactors = FALSE)
   write.csv(format(c, trim = TRUE, scientific = FALSE), path,
       quote = FALSE, row.names = FALSE)
 }
 
 export_bandwidth_flags <- function(path) {
-  b <- read.csv("/srv/metrics.torproject.org/web/stats/bandwidth.csv",
-    stringsAsFactors = FALSE)
+  b <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "bandwidth.csv", sep = ""), stringsAsFactors = FALSE)
   b <- b[b$isexit != '' & b$isguard != '', ]
   b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
                   isexit = b$isexit == 't', isguard = b$isguard == 't',
@@ -157,8 +157,8 @@ export_bandwidth_flags <- function(path) {
 }
 
 export_userstats <- function(path) {
-  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
-    stringsAsFactors = FALSE)
+  c <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "clients.csv", sep = ""), stringsAsFactors = FALSE)
   c <- data.frame(date = c$date, node = c$node, country = c$country,
                   transport = c$transport, version = c$version,
                   frac = c$frac, users = c$clients)
@@ -167,8 +167,8 @@ export_userstats <- function(path) {
 }
 
 help_export_monthly_userstats <- function(path, aggr_fun) {
-  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
-    stringsAsFactors = FALSE)
+  c <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "clients.csv", sep = ""), stringsAsFactors = FALSE)
   c <- c[c$country != '' & c$transport == '' & c$version == '', ]
   u <- data.frame(date = c$date, country = c$country, users = c$clients,
                   stringsAsFactors = FALSE)
@@ -195,8 +195,8 @@ export_monthly_userstats_average <- function(path) {
 }
 
 export_userstats_detector <- function(path) {
-  c <- read.csv("/srv/metrics.torproject.org/web/stats/clients.csv",
-    stringsAsFactors = FALSE)
+  c <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "clients.csv", sep = ""), stringsAsFactors = FALSE)
   c <- c[c$country != '' & c$transport == '' & c$version == '' &
          c$node == 'relay', ]
   u <- data.frame(country = c$country, date = c$date, users = c$clients,
