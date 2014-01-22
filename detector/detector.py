@@ -373,7 +373,7 @@ the number of direct Tor users in country 'country_code', for a
 Let's hope that the metrics.tpo URL scheme doesn't change often.
 """
 def get_tor_usage_graph_url_for_cc_and_date(country_code, dates, period):
-  url = "https://metrics.torproject.org/users.html?graph=direct-users&start=%s&end=%s&country=%s&events=on&dpi=72#direct-users\n" % \
+  url = "https://metrics.torproject.org/users.html?graph=userstats-relay-country&start=%s&end=%s&country=%s&events=on#userstats-relay-country\n" % \
       (dates[-period], dates[-1], country_code)
   return url
 
