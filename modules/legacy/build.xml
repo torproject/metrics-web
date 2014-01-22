@@ -4,15 +4,12 @@
   <property name="sources" value="src"/>
   <property name="classes" value="classes"/>
   <property name="config" value="etc"/>
-  <property name="warfile" value="ernie.war"/>
   <path id="classpath">
     <pathelement path="${classes}"/>
     <fileset dir="/usr/share/java">
       <include name="commons-codec.jar"/>
       <include name="commons-compress.jar"/>
       <include name="postgresql-jdbc3.jar"/>
-      <include name="junit4.jar"/>
-      <include name="servlet-api-3.0.jar"/>
       <include name="commons-lang.jar"/>
     </fileset>
     <fileset dir="../../deps/metrics-lib">
@@ -20,10 +17,13 @@
     </fileset>
   </path>
 
+  <!-- Prepare build. -->
   <target name="init">
     <copy file="config.template" tofile="config"/>
     <mkdir dir="${classes}"/>
   </target>
+
+  <!-- Build metrics-lib. -->
   <target name="metrics-lib">
     <ant dir="../../deps/metrics-lib"/>
   </target>
