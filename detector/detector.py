@@ -431,9 +431,7 @@ def detect(CSV_FILE = "userstats-detector.csv",
     write_ml_report(tss, minx, maxx, INTERV, DAYS, 1)
 
 def main():
-  detect(CSV_FILE = "direct-users.csv",
-         RANGES_FILE = "direct-users-ranges.csv")
-  detect(REPORT = False)
+  detect()
 
 if __name__ == "__main__":
     main()
