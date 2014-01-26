@@ -131,7 +131,7 @@
     <init-param>
       <param-name>statsDir</param-name>
       <param-value>
-        /srv/metrics.torproject.org/web/stats/
+        /srv/metrics.torproject.org/web/shared/stats/
       </param-value>
     </init-param>
   </servlet>
