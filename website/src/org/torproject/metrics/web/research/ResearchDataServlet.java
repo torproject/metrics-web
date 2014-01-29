@@ -103,7 +103,8 @@ public class ResearchDataServlet extends HttpServlet {
           filename.startsWith("server-descriptors-20") ||
           filename.startsWith("extra-infos-20") ||
           filename.startsWith("votes-20") ||
-          filename.startsWith("consensuses-20")) {
+          filename.startsWith("consensuses-20") ||
+          filename.startsWith("microdescs-20")) {
         String type = filename.substring(0, filename.indexOf("-20"));
         String yearMonth = filename.substring(filename.indexOf("20"));
         yearMonth = yearMonth.substring(0, 7);

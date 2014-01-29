@@ -96,6 +96,14 @@
                   </c:if>
                 </c:if>
               </td>
+              <td>
+                <c:if test="${item.value['microdescs'] ne null}" >
+                  <a href="${item.value['microdescs'][0]}">microdescriptors</a>
+                  <c:if test="${item.value['microdescs'][1] ne null}">
+                    (<a href="${item.value['microdescs'][1]}">sig</a>)
+                  </c:if>
+                </c:if>
+              </td>
             </tr>
           </c:forEach>
         </table>
