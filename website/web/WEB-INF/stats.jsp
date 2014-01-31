@@ -136,6 +136,35 @@ relays when serving directory data.</li>
 <hr>
 <br>
 
+<a name="advbwdist"></a>
+<h3><a href="#advbwdist" class="anchor">Advertised bandwidth distribution
+and n-th fastest relays</a></h3>
+<br>
+<p>Statistics file <a href="stats/advbwdist.csv">advbwdist.csv</a>
+contains statistics on the advertised bandwidth of relays in the network.
+These statistics include advertised bandwidth percentiles and advertised
+bandwidth values of the n-th fastest relays.
+The statistics file contains the following columns:</p>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as
+running.</li>
+<li><b>isexit:</b> Whether relays included in this line have the
+<b>"Exit"</b> relay flag, which would be indicated as <b>"t"</b>.
+If this column contains the empty string, advertised bandwidths from all
+running relays are included, regardless of assigned relay flags.</li>
+<li><b>relay:</b> Position of the relay in an ordered list of all
+advertised bandwidths, starting at 1 for the fastest relay in the network.
+May be the empty string if this line contains advertised bandwidth by
+percentile.</li>
+<li><b>percentile:</b> Advertised bandwidth percentile given in this line.
+May be the empty string if this line contains advertised bandwidth by
+fastest relays.</li>
+<li><b>advbw:</b> Advertised bandwidth in B/s.</li>
+</ul>
+<hr>
+<br>
+
 <a name="fast-exits"></a>
 <h3><a href="#fast-exits" class="anchor">Relays meeting or almost meeting
 fast-exit requirements</a></h3>

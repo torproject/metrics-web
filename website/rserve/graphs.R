@@ -927,3 +927,57 @@ plot_userstats_bridge_version <- function(start, end, version, path) {
   plot_userstats(start, end, 'bridge', 'version', version, 'off', path)
 }
 
+plot_advbwdist_perc <- function(start, end, p, path) {
+  end <- min(end, as.character(Sys.Date() - 2))
+  t <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "advbwdist.csv", sep = ""), stringsAsFactors = FALSE)
+  t <- t[t$date >= start & t$date <= end &
+         t$percentile %in% as.numeric(p), ]
+  t <- data.frame(date = t$date, advbw = t$advbw / 2^20,
+                  variable = ifelse(t$isexit != "t", "All relays",
+                                    "Exits only"),
+                  percentile = as.factor(t$percentile))
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(t$date, "%Y-%m-%d")) -
+    min(as.Date(t$date, "%Y-%m-%d"))))
+  ggplot(t, aes(x = as.Date(date), y = advbw, colour = percentile)) +
+    facet_grid(variable ~ .) +
+    geom_line(size = 0.75) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
+    scale_y_continuous(name = "Advertised bandwidth in MiB/s\n",
+        limits = c(0, max(t$advbw, na.rm = TRUE))) +
+    scale_colour_hue(name = "Percentile",
+        breaks = rev(levels(t$percentile))) +
+    opts(title = "Advertised bandwidth distribution\n")
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+
+plot_advbwdist_relay <- function(start, end, n, path) {
+  end <- min(end, as.character(Sys.Date() - 2))
+  t <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "advbwdist.csv", sep = ""), stringsAsFactors = FALSE)
+  t <- t[t$date >= start & t$date <= end & t$relay %in% as.numeric(n), ]
+  t <- data.frame(date = t$date, advbw = t$advbw / 2^20,
+                  variable = ifelse(t$isexit != "t", "All relays",
+                                    "Exits only"),
+                  relay = as.factor(t$relay))
+  date_breaks <- date_breaks(
+    as.numeric(max(as.Date(t$date, "%Y-%m-%d")) -
+    min(as.Date(t$date, "%Y-%m-%d"))))
+  ggplot(t, aes(x = as.Date(date), y = advbw, colour = relay)) +
+    facet_grid(variable ~ .) +
+    geom_line(size = 0.75) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
+    scale_y_continuous(name = "Advertised bandwidth in MiB/s\n",
+        limits = c(0, max(t$advbw, na.rm = TRUE))) +
+    scale_colour_hue(name = "n", breaks = levels(t$relay)) +
+    opts(title = "Advertised bandwidth of n-th fastest relays\n")
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+

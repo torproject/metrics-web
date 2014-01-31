@@ -61,6 +61,10 @@ public class GraphParameterChecker {
     this.knownParameterValues.put("transport",
         "obfs2,obfs3,websocket,<OR>,<??>");
     this.knownParameterValues.put("version", "v4,v6");
+    this.knownParameterValues.put("p", "100,99,98,97,95,91,90,80,75,70,"
+        + "60,50,40,30,25,20,10,9,5,3,2,1,0");
+    this.knownParameterValues.put("n", "1,2,3,5,10,20,30,50,100,200,300,"
+        + "500,1000,2000,3000,5000");
   }
 
   public void setAvailableGraphs(Map<String, String> availableGraphs) {
@@ -271,6 +275,42 @@ public class GraphParameterChecker {
         versionParameters = new String[] { "v4" };
       }
       recognizedGraphParameters.put("version", versionParameters);
+    }
+
+    /* Parse p if supported by the graph type. If no p's are passed, use
+     * "100" as default. */
+    if (supportedGraphParameters.contains("p")) {
+      String[] pParameters = (String[]) requestParameters.get("p");
+      if (pParameters != null) {
+        List<String> knownPs = Arrays.asList(
+            this.knownParameterValues.get("p").split(","));
+        for (String p : pParameters) {
+          if (p == null || p.length() == 0 || !knownPs.contains(p)) {
+            return null;
+          }
+        }
+      } else {
+        pParameters = new String[] { "100" };
+      }
+      recognizedGraphParameters.put("p", pParameters);
+    }
+
+    /* Parse n if supported by the graph type. If no n's are passed, use
+     * "1" as default. */
+    if (supportedGraphParameters.contains("n")) {
+      String[] nParameters = (String[]) requestParameters.get("n");
+      if (nParameters != null) {
+        List<String> knownNs = Arrays.asList(
+            this.knownParameterValues.get("n").split(","));
+        for (String n : nParameters) {
+          if (n == null || n.length() == 0 || !knownNs.contains(n)) {
+            return null;
+          }
+        }
+      } else {
+        nParameters = new String[] { "1" };
+      }
+      recognizedGraphParameters.put("n", nParameters);
     }
 
     /* We now have a map with all required graph parameters. Return it. */

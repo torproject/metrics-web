@@ -228,6 +228,12 @@
     <url-pattern>/userstats-bridge-version.png</url-pattern>
     <url-pattern>/userstats-bridge-version.pdf</url-pattern>
     <url-pattern>/userstats-bridge-version.svg</url-pattern>
+    <url-pattern>/advbwdist-perc.png</url-pattern>
+    <url-pattern>/advbwdist-perc.pdf</url-pattern>
+    <url-pattern>/advbwdist-perc.svg</url-pattern>
+    <url-pattern>/advbwdist-relay.png</url-pattern>
+    <url-pattern>/advbwdist-relay.pdf</url-pattern>
+    <url-pattern>/advbwdist-relay.svg</url-pattern>
   </servlet-mapping>
 
   <servlet>
