@@ -15,63 +15,19 @@
     <div class="main-column">
 <h2>Tor Metrics Portal: Fast Exits</h2>
 <br>
-<p>This page summarizes progress in operating 125 fast exits, which is a
+<p>This page summarized progress in operating 125 fast exits, which was a
 deliverable for
 <a href="https://trac.torproject.org/projects/tor/wiki/org/sponsors/SponsorJ">SponsorJ</a>.</p>
-<br>
 
-<a name="fastexits"></a>
-<h3><a href="#fastexits" class="anchor">Relays meeting the fast-exit
-requirements</a></h3>
-<br>
-<img src="fast-exits.png${fast_exits_url}"
-     width="576" height="432" alt="Fast exits graph">
-<form action="fast-exits.html#fastexits">
-  <div class="formrow">
-    <input type="hidden" name="graph" value="fast-exits">
-    <p>
-    <label>Start date (yyyy-mm-dd):</label>
-      <input type="text" name="start" size="10"
-             value="<c:choose><c:when test="${fn:length(fast_exits_start) == 0}">${default_start_date}</c:when><c:otherwise>${fast_exits_start[0]}</c:otherwise></c:choose>">
-    <label>End date (yyyy-mm-dd):</label>
-      <input type="text" name="end" size="10"
-             value="<c:choose><c:when test="${fn:length(fast_exits_end) == 0}">${default_end_date}</c:when><c:otherwise>${fast_exits_end[0]}</c:otherwise></c:choose>">
-    </p><p>
-    <input class="submit" type="submit" value="Update graph">
-    </p>
-  </div>
-</form>
-<p>Download graph as
-<a href="fast-exits.pdf${fast_exits_url}">PDF</a> or
-<a href="fast-exits.svg${fast_exits_url}">SVG</a>.</p>
-<br>
+<p>This page is no longer maintained.  You may be interested in the
+following similar graphs:</p>
 
-<a name="almostfastexits"></a>
-<h3><a href="#almostfastexits" class="anchor">Relays almost meeting the
-fast-exit requirements</a></h3>
-<br>
-<img src="almost-fast-exits.png${almost_fast_exits_url}"
-     width="576" height="432" alt="Almost fast exits graph">
-<form action="fast-exits.html#almostfastexits">
-  <div class="formrow">
-    <input type="hidden" name="graph" value="almost-fast-exits">
-    <p>
-    <label>Start date (yyyy-mm-dd):</label>
-      <input type="text" name="start" size="10"
-             value="<c:choose><c:when test="${fn:length(almost_fast_exits_start) == 0}">${default_start_date}</c:when><c:otherwise>${almost_fast_exits_start[0]}</c:otherwise></c:choose>">
-    <label>End date (yyyy-mm-dd):</label>
-      <input type="text" name="end" size="10"
-             value="<c:choose><c:when test="${fn:length(almost_fast_exits_end) == 0}">${default_end_date}</c:when><c:otherwise>${almost_fast_exits_end[0]}</c:otherwise></c:choose>">
-    </p><p>
-    <input class="submit" type="submit" value="Update graph">
-    </p>
-  </div>
-</form>
-<p>Download graph as
-<a href="almost-fast-exits.pdf${almost_fast_exits_url}">PDF</a> or
-<a href="almost-fast-exits.svg${almost_fast_exits_url}">SVG</a>.</p>
-<br>
+<ul>
+<li><a href="https://metrics.torproject.org/network.html#advbwdist-perc">Advertised bandwidth distribution</a></li>
+<li><a href="https://metrics.torproject.org/network.html#advbwdist-relay">Advertised bandwidth of n-th fastest relays</a></li>
+</ul>
 
+<p>This page may be removed in the future, so better not bookmark it.</p>
     </div>
   </div>
   <div class="bottom" id="bottom">

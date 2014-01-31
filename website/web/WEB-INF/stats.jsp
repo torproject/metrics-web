@@ -169,6 +169,8 @@ fastest relays.</li>
 <h3><a href="#fast-exits" class="anchor">Relays meeting or almost meeting
 fast-exit requirements</a></h3>
 <br>
+<p><b><font color="red">This file has been deprecated on January 31, 2014
+and will not be available after March 1, 2014.</font></b></p>
 <p>Statistics file <a href="stats/fast-exits.csv">fast-exits.csv</a>
 contains the number of relays meeting or almost meeting fast-exit
 requirements.

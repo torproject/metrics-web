@@ -99,8 +99,6 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableGraphs.put("torperf-failures",
          "start,end,source,filesize,filename");
     this.availableGraphs.put("connbidirect", "start,end,filename");
-    this.availableGraphs.put("fast-exits", "start,end,filename");
-    this.availableGraphs.put("almost-fast-exits", "start,end,filename");
     this.availableGraphs.put("userstats-relay-country",
         "start,end,country,events,filename");
     this.availableGraphs.put("userstats-bridge-country",

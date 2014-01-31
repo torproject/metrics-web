@@ -716,54 +716,6 @@ plot_connbidirect <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_fast_exits <- function(start, end, path) {
-  f <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
-                "fast-exits.csv", sep = ""), stringsAsFactors = FALSE)
-  f <- f[f$date >= start & f$date <= end, ]
-  f <- data.frame(date = as.Date(f$date, "%Y-%m-%d"),
-                  relays = f$fastnum, P_exit = f$fastprob)
-  r <- melt(f, id.vars = c("date"))
-  r <- data.frame(r, type = ifelse(r$variable == "P_exit",
-    "Total exit probability (in %)", "Number of relays"))
-  ggplot(r, aes(x = date, y = value)) +
-  geom_line(colour = "purple", size = 0.75) +
-  facet_grid(type ~ ., scales = "free_y") +
-  scale_x_date(name = "") +
-  scale_y_continuous(name = "") +
-  scale_colour_manual(values = c("purple", "orange")) +
-  opts(title = paste("Fast exits (95+ Mbit/s configured bandwidth ",
-    "rate,\n5000+ KB/s advertised bandwidth capacity,\n",
-    "exit to ports 80, 443, 554, and 1755,\n",
-    "at most 2 relays per /24 network)\n", sep = ""))
-  ggsave(filename = path, width = 8, height = 6, dpi = 72)
-}
-
-plot_almost_fast_exits <- function(start, end, path) {
-  f <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
-                "fast-exits.csv", sep = ""), stringsAsFactors = FALSE)
-  f <- f[f$date >= start & f$date <= end, ]
-  f <- melt(f, id.vars = c("date"))
-  t <- data.frame(date = as.Date(f$date, "%Y-%m-%d"),
-       var = ifelse(f$variable == 'fastnum' | f$variable == 'almostnum',
-             "Number of relays", "Total exit probability (in %)"),
-       variable = ifelse(f$variable == 'fastnum' |
-                  f$variable == 'fastprob', "fast", "almost fast"),
-       value = floor(f$value))
-  t <- data.frame(t, type = ifelse(t$variable == "fast",
-    "fast exits (95+ Mbit/s, 5000+ KB/s, 80/443/554/1755, 2- per /24",
-    paste("almost fast exits (80+ Mbit/s, 2000+ KB/s, 80/443,",
-    "not in set of fast exits)")))
-  ggplot(t, aes(x = date, y = value, colour = type)) +
-  geom_line(size = 0.75) +
-  facet_grid(var ~ ., scales = "free_y") +
-  scale_x_date(name = "") +
-  scale_y_continuous(name = "") +
-  scale_colour_manual(name = "", values = c("orange", "purple")) +
-  opts(title = "Relays almost meeting the fast-exit requirements",
-    legend.position = "top")
-  ggsave(filename = path, width = 8, height = 6, dpi = 72)
-}
-
 plot_bandwidth_flags <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 4))
   b <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",

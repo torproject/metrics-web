@@ -210,12 +210,6 @@
     <url-pattern>/connbidirect.png</url-pattern>
     <url-pattern>/connbidirect.pdf</url-pattern>
     <url-pattern>/connbidirect.svg</url-pattern>
-    <url-pattern>/fast-exits.png</url-pattern>
-    <url-pattern>/fast-exits.pdf</url-pattern>
-    <url-pattern>/fast-exits.svg</url-pattern>
-    <url-pattern>/almost-fast-exits.png</url-pattern>
-    <url-pattern>/almost-fast-exits.pdf</url-pattern>
-    <url-pattern>/almost-fast-exits.svg</url-pattern>
     <url-pattern>/userstats-relay-country.png</url-pattern>
     <url-pattern>/userstats-relay-country.pdf</url-pattern>
     <url-pattern>/userstats-relay-country.svg</url-pattern>
