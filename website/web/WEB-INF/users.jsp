@@ -272,14 +272,16 @@ A: We put in the assumption that the average client makes 10 such requests
 per day.  A tor client that is connected 24/7 makes about 15 requests per
 day, but not all clients are connected 24/7, so we picked the number 10
 for the average client.  We simply divide directory requests by 10 and
-consider the result as the number of users.
+consider the result as the number of users.  Another way of looking at it,
+is that we assume that each request represents a client that stays online
+for 2 hours and 24 minutes.
 </p>
 
 <p>
 Q: So, are these distinct users per day, average number of users connected
 over the day, or what?<br/>
-A: Average number of users connected over the day.  We can't say how many
-distinct users there are.
+A: Average number of concurrent users, estimated from data collected over
+a day.  We can't say how many distinct users there are.
 </p>
 
 <p>
