@@ -39,8 +39,10 @@ write_userstats_censorship_events <- function(start, end, path) {
   c <- c[c$date >= start & c$date <= end & c$country != '' &
          c$transport == '' & c$version == '' & c$node == 'relay', ]
   r <- data.frame(date = c$date, country = c$country,
-                  upturn = ifelse(c$clients > c$upper, 1, 0),
-                  downturn = ifelse(c$clients <= c$lower, 1, 0))
+                  upturn = ifelse(!is.na(c$upper) &
+                                  c$clients > c$upper, 1, 0),
+                  downturn = ifelse(!is.na(c$lower) &
+                                    c$clients <= c$lower, 1, 0))
   r <- aggregate(r[, c("upturn", "downturn")],
     by = list(country = r$country), sum)
   r <- r[!(r$country %in% c("zy", "??", "a1", "a2", "o1", "ap", "eu")), ]
