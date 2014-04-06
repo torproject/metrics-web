@@ -17,7 +17,9 @@
 <br>
 
 <a name="userstats-relay-country"></a>
-<p><b>Direct users by country:</b></p>
+<h3><a href="#userstats-relay-country" class="anchor">
+Direct users by country:
+</a></h3>
 
 <img src="userstats-relay-country.png${userstats_relay_country_url}"
      width="576" height="360" alt="Direct users by country graph">
@@ -56,7 +58,9 @@
 <a href="userstats-relay-country.svg${userstats_relay_country_url}">SVG</a>.</p>
 <hr>
 <a name="userstats-relay-table"></a>
-<p><b>Top-10 countries by directly connecting users:</b></p>
+<h3><a href="#userstats-relay-table" class="anchor">
+Top-10 countries by directly connecting users:
+</a></h3>
 <form action="users.html#userstats-relay-table">
   <div class="formrow">
     <input type="hidden" name="table" value="userstats-relay">
@@ -87,8 +91,10 @@
 </table>
 <hr>
 <a name="userstats-censorship-events"></a>
-<p><b>Top-10 countries by possible censorship events (<a
-      href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>):</b></p>
+<h3><a href="#userstats-censorship-events" class="anchor">
+Top-10 countries by possible censorship events (<a
+href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>):
+</a></h3>
 <form action="users.html#userstats-censorship-events">
   <div class="formrow">
     <input type="hidden" name="table" value="userstats-censorship-events">
@@ -122,7 +128,9 @@
 <hr>
 
 <a name="userstats-bridge-country"></a>
-<p><b>Bridge users by country:</b></p>
+<h3><a href="#userstats-bridge-country" class="anchor">
+Bridge users by country:
+</a></h3>
 
 <img src="userstats-bridge-country.png${userstats_bridge_country_url}"
      width="576" height="360" alt="Bridge users by country graph">
@@ -153,7 +161,9 @@
 <a href="userstats-bridge-country.svg${userstats_bridge_country_url}">SVG</a>.</p>
 <hr>
 <a name="userstats-bridge-table"></a>
-<p><b>Top-10 countries by bridge users:</b></p>
+<h3><a href="#userstats-bridge-table" class="anchor">
+Top-10 countries by bridge users:
+</a></h3>
 <form action="users.html#userstats-bridge-table">
   <div class="formrow">
     <input type="hidden" name="table" value="userstats-bridge">
@@ -185,7 +195,9 @@
 <hr>
 
 <a name="userstats-bridge-transport"></a>
-<p><b>Bridge users by transport:</b></p>
+<h3><a href="#userstats-bridge-transport" class="anchor">
+Bridge users by transport:
+</a></h3>
 
 <img src="userstats-bridge-transport.png${userstats_bridge_transport_url}"
      width="576" height="360" alt="Bridge users by transport graph">
@@ -219,7 +231,9 @@
 <hr>
 
 <a name="userstats-bridge-version"></a>
-<p><b>Bridge users by IP version:</b></p>
+<h3><a href="#userstats-bridge-version" class="anchor">
+Bridge users by IP version:
+</a></h3>
 
 <img src="userstats-bridge-version.png${userstats_bridge_version_url}"
      width="576" height="360" alt="Bridge users by IP version graph">
