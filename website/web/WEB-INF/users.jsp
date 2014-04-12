@@ -218,6 +218,7 @@ Bridge users by transport:
         <option value="obfs3"<c:if test="${userstats_bridge_transport_transport[0] eq 'obfs3'}"> selected</c:if>>obfs3</option>
         <option value="websocket"<c:if test="${userstats_bridge_transport_transport[0] eq 'websocket'}"> selected</c:if>>Flash proxy/websocket</option>
         <option value="fte"<c:if test="${userstats_bridge_transport_transport[0] eq 'fte'}"> selected</c:if>>FTE</option>
+        <option value="meek"<c:if test="${userstats_bridge_transport_transport[0] eq 'meek'}"> selected</c:if>>meek</option>
         <option value="<??>"<c:if test="${userstats_bridge_transport_transport[0] eq '<??>'}"> selected</c:if>>Unknown transport</option>
       </select>
     </p><p>
