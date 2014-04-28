@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -37,7 +35,6 @@ public class RObjectGenerator implements ServletContextListener {
   private String cachedGraphsDirectory;
   private long maxCacheAge;
 
-  private SortedSet<String> availableCsvFiles;
   private Map<String, String> availableTables;
   private Map<String, String> availableGraphs;
   private Set<String> availableGraphFileTypes;
@@ -53,26 +50,6 @@ public class RObjectGenerator implements ServletContextListener {
         "maxCacheAge"));
     this.cachedGraphsDirectory = servletContext.getInitParameter(
         "cachedGraphsDir");
-
-    /* Initialize map of available CSV files. */
-    this.availableCsvFiles = new TreeSet<String>();
-    this.availableCsvFiles.add("bandwidth");
-    this.availableCsvFiles.add("bandwidth-flags");
-    this.availableCsvFiles.add("bwhist-flags");
-    this.availableCsvFiles.add("connbidirect");
-    this.availableCsvFiles.add("cloudbridges");
-    this.availableCsvFiles.add("dirbytes");
-    this.availableCsvFiles.add("monthly-userstats-average");
-    this.availableCsvFiles.add("monthly-userstats-peak");
-    this.availableCsvFiles.add("networksize");
-    this.availableCsvFiles.add("platforms");
-    this.availableCsvFiles.add("relaycountries");
-    this.availableCsvFiles.add("relayflags");
-    this.availableCsvFiles.add("torperf");
-    this.availableCsvFiles.add("torperf-failures");
-    this.availableCsvFiles.add("userstats");
-    this.availableCsvFiles.add("userstats-detector");
-    this.availableCsvFiles.add("versions");
 
     this.availableTables = new HashMap<String, String>();
     this.availableTables.put("userstats-relay", "start,end,filename");
@@ -129,9 +106,6 @@ public class RObjectGenerator implements ServletContextListener {
               Thread.sleep(sleep);
             } catch (InterruptedException e) {
             }
-          }
-          for (String csvFile : availableCsvFiles) {
-            generateCsv(csvFile, false);
           }
           for (String tableName : availableTables.keySet()) {
             generateTable(tableName, tableName, new HashMap(), false);
@@ -190,23 +164,6 @@ public class RObjectGenerator implements ServletContextListener {
         + imageFilename);
     return this.generateRObject(rQuery, imageFile, imageFilename,
         checkCache);
-  }
-
-  public SortedSet<String> getAvailableCsvFiles() {
-    return this.availableCsvFiles;
-  }
-
-  public RObject generateCsv(String requestedCsvFile,
-      boolean checkCache) {
-    /* Prepare filename and R query string. */
-    String rQuery = "export_" + requestedCsvFile.replaceAll("-", "_")
-        + "(path = '%s')";
-    String csvFilename = requestedCsvFile + ".csv";
-
-    /* See if we need to generate this .csv file. */
-    File csvFile = new File(this.cachedGraphsDirectory + "/"
-        + csvFilename);
-    return this.generateRObject(rQuery, csvFile, csvFilename, checkCache);
   }
 
   public List<Map<String, String>> generateTable(String tableName,

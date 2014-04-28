@@ -231,17 +231,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>Csv</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.graphs.CsvServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Csv</servlet-name>
-    <url-pattern>/csv/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>ExoneraTor</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.status.ExoneraTorServlet
