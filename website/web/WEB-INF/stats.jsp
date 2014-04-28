@@ -165,46 +165,6 @@ fastest relays.</li>
 <hr>
 <br>
 
-<a name="fast-exits"></a>
-<h3><a href="#fast-exits" class="anchor">Relays meeting or almost meeting
-fast-exit requirements</a></h3>
-<br>
-<p><b><font color="red">This file has been deprecated on January 31, 2014
-and will not be available after March 1, 2014.</font></b></p>
-<p>Statistics file <a href="stats/fast-exits.csv">fast-exits.csv</a>
-contains the number of relays meeting or almost meeting fast-exit
-requirements.
-These requirements originate from a Tor sponsor contract and are defined as
-follows:
-a Tor relay is fast if it has at least 95 Mbit/s configured bandwidth
-rate, at least 5000 KB/s advertised bandwidth capacity, and permits
-exiting to ports 80, 443, 554, and 1755; furthermore, there may be at most
-2 relays per /24 network in the set of fast exits.
-Similarly, an almost fast exit is one that almost meets the fast-exit
-requirements, but fails at least one of them.
-In particular, an almost fast exit is one that has at least 80 Mbit/s
-configured bandwidth rate, at least 2000 KB/s advertised bandwidth
-capacity, and permits exiting to ports 80 and 443; also, if there are more
-than 2 relays per /24 network meeting fast-exit requirements, all but two
-are considered almost fast.
-The statistics file contains the following columns:</p>
-
-<ul>
-<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as
-running.</li>
-<li><b>fastnum:</b> Average number of relays matching fast-exit
-requirements.</li>
-<li><b>almostnum:</b> Average number of relays almost matching
-fast-exit requirements.</li>
-<li><b>fastprob:</b> Total exit probability of all relays matching
-fast-exit requirements.</li>
-<li><b>almostprob:</b> Total exit probability of all relays almost
-matching fast-exit requirements.</li>
-</li>
-</ul>
-<hr>
-<br>
-
 <a name="clients"></a>
 <h3><a href="#clients" class="anchor">Estimated number of clients in the
 Tor network</a></h3>

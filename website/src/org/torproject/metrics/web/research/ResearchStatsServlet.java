@@ -30,7 +30,6 @@ public class ResearchStatsServlet extends HttpServlet {
     this.availableStatisticsFiles = new TreeSet<String>();
     this.availableStatisticsFiles.add("servers");
     this.availableStatisticsFiles.add("bandwidth");
-    this.availableStatisticsFiles.add("fast-exits");
     this.availableStatisticsFiles.add("clients");
     this.availableStatisticsFiles.add("torperf");
     this.availableStatisticsFiles.add("connbidirect");

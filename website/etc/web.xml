@@ -40,10 +40,6 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GraphsSubpages</servlet-name>
-    <url-pattern>/fast-exits.html</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphsSubpages</servlet-name>
     <url-pattern>/users.html</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
