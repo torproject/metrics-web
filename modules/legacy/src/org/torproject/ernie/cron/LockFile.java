@@ -27,7 +27,8 @@ public class LockFile {
         BufferedReader br = new BufferedReader(new FileReader("lock"));
         long runStarted = Long.parseLong(br.readLine());
         br.close();
-        if (System.currentTimeMillis() - runStarted < 55L * 60L * 1000L) {
+        if (System.currentTimeMillis() - runStarted <
+            23L * 60L * 60L * 1000L) {
           return false;
         }
       }
