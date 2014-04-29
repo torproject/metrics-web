@@ -369,13 +369,12 @@ plot_versions <- function(start, end, path) {
   s <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
                 "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$date >= start & s$date <= end & s$flag == '' &
-         s$country == '' & s$version != '' &
-         substr(s$version, 1, 2) == '0.' & s$platform == '' &
+         s$country == '' & s$version != '' & s$platform == '' &
          s$ec2bridge == '', ]
   s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"), version = s$version,
                   relays = s$relays)
-  known_versions <- c("0.1.0", "0.1.1", "0.1.2", "0.2.0", "0.2.1",
-        "0.2.2", "0.2.3", "0.2.4", "0.2.5")
+  known_versions <- c("Other", "0.1.0", "0.1.1", "0.1.2", "0.2.0",
+        "0.2.1", "0.2.2", "0.2.3", "0.2.4", "0.2.5")
   colours <- data.frame(breaks = known_versions,
     values = brewer.pal(length(known_versions), "Paired"),
     stringsAsFactors = FALSE)

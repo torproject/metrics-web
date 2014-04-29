@@ -496,7 +496,9 @@ CREATE OR REPLACE FUNCTION refresh_relay_versions() RETURNS INTEGER AS $$
     (date, version, relays)
     SELECT date, version, relays / count AS relays
     FROM (
-        SELECT DATE(validafter), SUBSTRING(platform, 5, 5) AS version,
+        SELECT DATE(validafter),
+               CASE WHEN platform LIKE ''Tor 0._._%'' THEN
+               SUBSTRING(platform, 5, 5) ELSE ''Other'' END AS version,
                COUNT(*) AS relays
         FROM descriptor RIGHT JOIN statusentry
         ON descriptor.descriptor = statusentry.descriptor
