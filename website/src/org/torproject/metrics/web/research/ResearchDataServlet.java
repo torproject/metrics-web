@@ -96,6 +96,11 @@ public class ResearchDataServlet extends HttpServlet {
         continue;
       }
       String filename = url.substring(url.lastIndexOf("/") + 1);
+      /* TODO Remove the following once we stop providing .tar.bz2
+       * files. */
+      if (filename.endsWith(".tar.bz2")) {
+        continue;
+      }
 
       /* URL contains relay descriptors. */
       if (filename.startsWith("tor-20") ||
@@ -147,7 +152,7 @@ public class ResearchDataServlet extends HttpServlet {
         bridgeDescriptors.get(month)[index] = url;
 
       /* URL contains relay statistics. */
-      } else if (filename.startsWith("relay-statistics.tar.bz2")) {
+      } else if (filename.startsWith("relay-statistics.tar")) {
         int index = filename.endsWith(".asc") ? 1 : 0;
         relayStatistics[index] = url;
 

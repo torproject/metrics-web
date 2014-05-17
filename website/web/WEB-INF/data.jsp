@@ -32,6 +32,9 @@
         <p>The tarballs listed on this page and the raw files that were
         published on the last three days are also available via
         "rsync metrics.torproject.org::".</p>
+        <p>Note that most descriptors compress really well. You should
+        expect tarballs to decompress to 20 times the compressed size or
+        even more.</p>
         <br>
         <a name="relaydesc"></a>
         <h3><a href="#relaydesc" class="anchor">Relay descriptor
