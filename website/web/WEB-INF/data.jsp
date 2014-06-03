@@ -15,6 +15,12 @@
     <div class="main-column">
         <h2>Tor Metrics Portal: Data</h2>
         <br>
+        <p><font color="red"><b>Notice:</b> The files linked on this site
+        are now available on:
+        <a href="https://collector.torproject.org/">https://collector.torproject.org/</a>.
+        This page will be automatically redirected there after August 3,
+        2014.</font>
+        </p>
         <p>One of the main goals of the Tor Metrics Project is to make all
         gathered data available to the public. This approach enables
         privacy researchers to perform their own analyses using real data
