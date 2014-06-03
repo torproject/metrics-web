@@ -16,9 +16,8 @@ public class ExoneraTorServlet extends HttpServlet {
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 
-    /* Forward the request to the JSP that does all the hard work. */
-    request.getRequestDispatcher("WEB-INF/exonerator.jsp").forward(
-        request, response);
+    /* Forward to the actual ExoneraTor service. */
+    response.sendRedirect("https://exonerator.torproject.org");
   }
 }
 

@@ -35,13 +35,9 @@
             %>>Performance</a>
       </font>
     <%} else if (currentPage.endsWith("status.jsp") ||
-                 currentPage.endsWith("exonerator.jsp") ||
                  currentPage.endsWith("relay-search.jsp")) {
      %><br>
       <font size="2">
-        <a <%if (currentPage.endsWith("exonerator.jsp")){
-            %>class="current"<%} else {%>href="/exonerator.html"<%}
-            %>>ExoneraTor</a>
         <a <%if (currentPage.endsWith("relay-search.jsp")){
             %>class="current"<%} else {%>href="/relay-search.html"<%}
             %>>Relay Search</a>
