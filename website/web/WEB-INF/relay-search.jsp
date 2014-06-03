@@ -13,6 +13,11 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
       <h2>Tor Metrics Portal: Relay Search</h2>
+      <p><font color="red"><b>Notice:</b> This service will be shut down
+      after June 10, 2014.  Possible alternatives are
+      <a href="https://atlas.torproject.org">Atlas</a> and
+      <a href="https://globe.torproject.org">Globe</a>.
+      </font></p>
       <p>Search for a relay in the relay descriptor archive by typing
       (part of) a <b>nickname</b>, <b>$-prefixed fingerprint</b>, or <b>IP
       address</b> and optionally a <b>month (yyyy-mm)</b> or up to three
