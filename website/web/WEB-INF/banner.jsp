@@ -36,8 +36,7 @@
       </font>
     <%} else if (currentPage.endsWith("status.jsp") ||
                  currentPage.endsWith("exonerator.jsp") ||
-                 currentPage.endsWith("relay-search.jsp") ||
-                 currentPage.endsWith("consensus-health.jsp")) {
+                 currentPage.endsWith("relay-search.jsp")) {
      %><br>
       <font size="2">
         <a <%if (currentPage.endsWith("exonerator.jsp")){
@@ -46,9 +45,6 @@
         <a <%if (currentPage.endsWith("relay-search.jsp")){
             %>class="current"<%} else {%>href="/relay-search.html"<%}
             %>>Relay Search</a>
-        <a <%if (currentPage.endsWith("consensus-health.jsp")){
-            %>class="current"<%} else {%>href="/consensus-health.html"<%}
-            %>>Consensus Health</a>
       </font>
     <%} else if (currentPage.endsWith("research.jsp") ||
                  currentPage.endsWith("data.jsp") ||

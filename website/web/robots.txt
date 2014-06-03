@@ -1,5 +1,4 @@
 User-agent: *
 Disallow: /relay.html
 Disallow: /csv/
-Disallow: /consensus-health.html
 

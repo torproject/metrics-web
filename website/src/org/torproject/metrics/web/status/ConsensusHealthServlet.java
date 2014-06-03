@@ -16,9 +16,8 @@ public class ConsensusHealthServlet extends HttpServlet {
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 
-    /* Forward the request to the JSP that does all the hard work. */
-    request.getRequestDispatcher("WEB-INF/consensus-health.jsp").forward(
-        request, response);
+    /* Forward to the actual consensus-health service. */
+    response.sendRedirect("https://consensus-health.torproject.org");
   }
 }
 
