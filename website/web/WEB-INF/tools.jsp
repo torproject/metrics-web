@@ -12,6 +12,12 @@
     <div class="main-column">
         <h2>Tor Metrics Portal: Tools</h2>
         <br>
+        <p><font color="red"><b>Notice:</b> The tools listed on this site
+        are now available on:
+        <a href="https://collector.torproject.org/#references">https://collector.torproject.org/#references</a>.
+        This page will be automatically redirected there after August 3,
+        2014.</font>
+        </p>
         <p>The metrics website and related websites depend on a collection
         of services that measure, archive, process, and finally present Tor
         network data.

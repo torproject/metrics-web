@@ -13,6 +13,12 @@
 <h2>Tor Metrics Portal: Data Formats</h2>
 <br>
 
+<p><font color="red"><b>Notice:</b> The file formats explained on this
+site are now available on:
+<a href="https://collector.torproject.org/formats.html">https://collector.torproject.org/formats.html</a>.
+This page will be automatically redirected there after August 3,
+2014.</font>
+</p>
 <p>
 Statistical analysis in the Tor network can be performed using various
 kinds of data.
