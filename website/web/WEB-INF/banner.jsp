@@ -12,8 +12,6 @@
         %>class="current"<%} else {%>href="/graphs.html"<%}%>>Graphs</a>
     <a <% if (currentPage.endsWith("research.jsp")) {
         %>class="current"<%} else {%>href="/research.html"<%}%>>Research</a>
-    <a <% if (currentPage.endsWith("status.jsp")) {
-        %>class="current"<%} else {%>href="/status.html"<%}%>>Status</a>
     <%if (currentPage.endsWith("graphs.jsp") ||
          currentPage.endsWith("network.jsp") ||
          currentPage.endsWith("bubbles.jsp") ||
@@ -33,14 +31,6 @@
         <a <%if (currentPage.endsWith("performance.jsp")) {
             %>class="current"<%} else {%>href="/performance.html"<%}
             %>>Performance</a>
-      </font>
-    <%} else if (currentPage.endsWith("status.jsp") ||
-                 currentPage.endsWith("relay-search.jsp")) {
-     %><br>
-      <font size="2">
-        <a <%if (currentPage.endsWith("relay-search.jsp")){
-            %>class="current"<%} else {%>href="/relay-search.html"<%}
-            %>>Relay Search</a>
       </font>
     <%} else if (currentPage.endsWith("research.jsp") ||
                  currentPage.endsWith("data.jsp") ||

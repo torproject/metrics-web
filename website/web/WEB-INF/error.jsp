@@ -55,10 +55,6 @@ Maybe you find what you're looking for on our sitemap:
 <li><a href="tools.html">Tools</a></li>
 <li><a href="stats.html">Statistics</a></li>
 </ul></li>
-<li><a href="status.html">Status</a>
-<ul>
-<li><a href="relay-search.html">Relay Search</a></li>
-</ul></li>
 </ul>
 </p>
 
