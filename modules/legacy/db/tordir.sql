@@ -1,4 +1,4 @@
--- Copyright 2010 The Tor Project
+-- Copyright 2010, 2014 The Tor Project
 -- See LICENSE for licensing information
 
 CREATE LANGUAGE plpgsql;
@@ -22,6 +22,14 @@ CREATE TABLE descriptor (
     CONSTRAINT descriptor_pkey PRIMARY KEY (descriptor)
 );
 
+CREATE OR REPLACE FUNCTION delete_old_descriptor()
+RETURNS INTEGER AS $$
+    BEGIN
+    DELETE FROM descriptor WHERE DATE(published) < current_date - 14;
+    RETURN 1;
+    END;
+$$ LANGUAGE plpgsql;
+
 -- Contains bandwidth histories reported by relays in extra-info
 -- descriptors. Each row contains the reported bandwidth in 15-minute
 -- intervals for each relay and date.
@@ -40,6 +48,14 @@ CREATE TABLE bwhist (
 );
 
 CREATE INDEX bwhist_date ON bwhist (date);
+
+CREATE OR REPLACE FUNCTION delete_old_bwhist()
+RETURNS INTEGER AS $$
+    BEGIN
+    DELETE FROM bwhist WHERE date < current_date - 14;
+    RETURN 1;
+    END;
+$$ LANGUAGE plpgsql;
 
 -- TABLE statusentry
 -- Contains all of the consensus entries published by the directories.
@@ -73,58 +89,13 @@ CREATE TABLE statusentry (
     rawdesc BYTEA NOT NULL
 );
 
-CREATE OR REPLACE FUNCTION statusentry_insert_trigger()
-RETURNS TRIGGER AS $$
-
-DECLARE
-  tablename TEXT;
-  selectresult TEXT;
-  nextmonth TIMESTAMP WITHOUT TIME ZONE;
-  v_year INTEGER;
-  v_month INTEGER;
-  n_year INTEGER;
-  n_month INTEGER;
-
-BEGIN
-  v_year := extract(YEAR FROM NEW.validafter);
-  v_month := extract(MONTH FROM NEW.validafter);
-  tablename := 'statusentry_y' || v_year || 'm' ||
-      TO_CHAR(NEW.validafter, 'mm');
-  EXECUTE 'SELECT relname FROM pg_class WHERE relname = '''|| tablename ||
-    '''' INTO selectresult;
-  IF selectresult IS NULL THEN
-    nextmonth := new.validafter + interval '1 month';
-    n_year := extract(YEAR FROM nextmonth);
-    n_month := extract(MONTH FROM nextmonth);
-    EXECUTE 'CREATE TABLE ' || tablename ||
-      ' ( CHECK ( validafter >= ''' || v_year || '-' ||
-      TO_CHAR(NEW.validafter, 'mm') || '-01 00:00:00'' ' ||
-      'AND validafter < ''' || n_year || '-' ||
-      TO_CHAR(nextmonth, 'mm') ||
-      '-01 00:00:00'') ) INHERITS (statusentry)';
-    EXECUTE 'ALTER TABLE ' || tablename || ' ADD CONSTRAINT ' ||
-      tablename || '_pkey PRIMARY KEY (validafter, fingerprint)';
-    EXECUTE 'CREATE INDEX ' || tablename || '_address ON ' ||
-      tablename || ' (address)';
-    EXECUTE 'CREATE INDEX ' || tablename || '_fingerprint ON ' ||
-      tablename || ' (fingerprint)';
-    EXECUTE 'CREATE INDEX ' || tablename || '_nickname ON ' ||
-      tablename || ' (LOWER(nickname))';
-    EXECUTE 'CREATE INDEX ' || tablename || '_validafter ON ' ||
-      tablename || ' (validafter)';
-    EXECUTE 'CREATE INDEX ' || tablename || '_descriptor ON ' ||
-      tablename || ' (descriptor)';
-    EXECUTE 'CREATE INDEX ' || tablename || '_validafter_date ON ' ||
-      tablename || ' (DATE(validafter))';
-  END IF;
-  EXECUTE 'INSERT INTO ' || tablename || ' SELECT ($1).*' USING NEW;
-  RETURN NULL;
-END;
+CREATE OR REPLACE FUNCTION delete_old_statusentry()
+RETURNS INTEGER AS $$
+    BEGIN
+    DELETE FROM statusentry WHERE DATE(validafter) < current_date - 14;
+    RETURN 1;
+    END;
 $$ LANGUAGE plpgsql;
-
-CREATE TRIGGER insert_statusentry_trigger
-  BEFORE INSERT ON statusentry
-  FOR EACH ROW EXECUTE PROCEDURE statusentry_insert_trigger();
 
 -- TABLE consensus
 -- Contains all of the consensuses published by the directories.
@@ -878,6 +849,12 @@ CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
     PERFORM refresh_user_stats();
     RAISE NOTICE '% Deleting processed dates.', timeofday();
     DELETE FROM scheduled_updates WHERE id IN (SELECT id FROM updates);
+    RAISE NOTICE '% Deleting old descriptors.', timeofday();
+    PERFORM delete_old_descriptor();
+    RAISE NOTICE '% Deleting old bandwidth histories.', timeofday();
+    PERFORM delete_old_bwhist();
+    RAISE NOTICE '% Deleting old status entries.', timeofday();
+    PERFORM delete_old_statusentry();
     RAISE NOTICE '% Terminating refresh run.', timeofday();
   RETURN 1;
   END;

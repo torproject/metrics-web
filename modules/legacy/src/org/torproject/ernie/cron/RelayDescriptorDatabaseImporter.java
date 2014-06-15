@@ -968,12 +968,8 @@ public final class RelayDescriptorDatabaseImporter {
     if (descriptor.getDirreqV3Reqs() != null) {
       int allUsers = 0;
       Map<String, String> obs = new HashMap<String, String>();
-      for (Map.Entry<String, Integer> e :
-          descriptor.getDirreqV3Reqs().entrySet()) {
-        String country = e.getKey();
-        int users = e.getValue() - 4;
-        allUsers += users;
-        obs.put(country, "" + users);
+      for (int users : descriptor.getDirreqV3Reqs().values()) {
+        allUsers += users - 4;
       }
       obs.put("zy", "" + allUsers);
       this.addDirReqStats(descriptor.getFingerprint(),
