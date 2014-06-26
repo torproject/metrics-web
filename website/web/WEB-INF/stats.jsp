@@ -13,6 +13,12 @@
 <h2>Tor Metrics: Statistics</h2>
 <br>
 
+<p><font color="red"><b>Notice:</b> The specification on this page has
+moved
+<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/stats-spec.txt">here</a>.
+This page will be removed after July 26, 2014.</font>
+</p>
+
 <p>Tor Metrics aggregates large amounts of Tor network
 <a href="data.html">data</a> and visualizes results in customizable
 <a href="graphs.html">graphs</a> and tables.

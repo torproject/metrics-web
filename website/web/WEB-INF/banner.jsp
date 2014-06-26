@@ -20,9 +20,6 @@
     <a <% if (currentPage.endsWith("performance.jsp")) {
         %>class="current"<%} else {%>href="/performance.html"<%}
         %>>Performance</a>
-    <a <% if (currentPage.endsWith("stats.jsp")) {
-        %>class="current"<%} else {%>href="/stats.html"<%}
-        %>>Statistics</a>
   </td>
   <td class="banner-right"></td>
 </tr>
