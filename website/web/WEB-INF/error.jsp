@@ -41,20 +41,11 @@ when processing your request!</p>
 Maybe you find what you're looking for on our sitemap:
 <ul>
 <li><a href="index.html">Home</a></li>
-<li><a href="graphs.html">Graphs</a>
-<ul>
 <li><a href="network.html">Network</a></li>
 <li><a href="bubbles.html">Bubbles</a></li>
 <li><a href="users.html">Users</a></li>
 <li><a href="performance.html">Performance</a></li>
-</ul></li>
-<li><a href="research.html">Research</a>
-<ul>
-<li><a href="data.html">Data</a></li>
-<li><a href="formats.html">Formats</a></li>
-<li><a href="tools.html">Tools</a></li>
 <li><a href="stats.html">Statistics</a></li>
-</ul></li>
 </ul>
 </p>
 
