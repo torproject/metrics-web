@@ -221,6 +221,7 @@ Bridge users by transport:
         <option value="meek"<c:if test="${userstats_bridge_transport_transport[0] eq 'meek'}"> selected</c:if>>meek</option>
         <option value="scramblesuit"<c:if test="${userstats_bridge_transport_transport[0] eq 'scramblesuit'}"> selected</c:if>>scramblesuit</option>
         <option value="<??>"<c:if test="${userstats_bridge_transport_transport[0] eq '<??>'}"> selected</c:if>>Unknown transport</option>
+        <option value="!<*>"<c:if test="${userstats_bridge_transport_transport[0] eq '!<*>'}"> selected</c:if>>Any non-<OR> transport</option>
       </select>
     </p><p>
     <input class="submit" type="submit" value="Update graph">

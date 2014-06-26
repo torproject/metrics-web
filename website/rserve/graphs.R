@@ -796,9 +796,15 @@ plot_userstats <- function(start, end, node, variable, value, events,
       title <- "Directly connecting users\n"
     }
   } else if (variable == 'transport') {
-    u <- u[u$transport == value & u$node == 'bridge', ]
-    title <- paste("Bridge users using transport ", value, "\n",
-                   sep = "")
+    if (value != '!<*>') {
+        u <- u[u$transport == value & u$node == 'bridge', ]
+        title <- paste("Bridge users using transport ", value, "\n",
+                    sep = "")
+    } else {
+        u <- u[u$transport != '' & u$transport != '<OR>' &
+               u$node == 'bridge', ]
+        title <- paste("Bridge users using any pluggable transport")
+    }
   } else if (variable == 'version') {
     u <- u[u$version== value & u$node == 'bridge', ]
     title <- paste("Bridge users using IP", value, "\n", sep = "")
@@ -813,8 +819,9 @@ plot_userstats <- function(start, end, node, variable, value, events,
       title <- "Bridge users\n"
     }
   }
-  u <- data.frame(date = as.Date(u$date, "%Y-%m-%d"), users = u$clients,
-                  lower = u$lower, upper = u$upper)
+  u <- aggregate(list(lower = u$lower, upper = u$upper,
+                      users = u$clients),
+                 by = list(date = as.Date(u$date, "%Y-%m-%d")), FUN = sum)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by="1 day")
   missing <- setdiff(dates, u$date)
