@@ -12,25 +12,32 @@
     <div class="main-column">
         <h2>Tor Metrics</h2>
         <br>
-        <p>Tor Metrics aggregates all kinds of interesting
-        data about the Tor network and visualizes them in graphs and
-        reports. This also provides easy access to the underlying
-        data and documentation for performing own analyses based on these
-        data. Find out more here:</p>
-        <ul>
-          <li>View daily updated <a href="graphs.html">graphs</a> on
-          estimated client numbers, on network performance, and other
-          statistics on the Tor network</li>
-          <li>Read <a href="http://freehaven.net/anonbib/">papers</a> and
-          <a href="https://research.torproject.org/techreports.html">technical
-          reports</a>
-          on the measurement techniques and results of statistical
-          analysis of metrics data</li>
-          <li>Download the <a href="data.html">data</a> that is behind the
-          graphs and reports to make your own evaluations</li>
-          <li>Try out the <a href="tools.html">tools</a> to parse and
-          evaluate the metrics data</li>
-        </ul>
+        <p>Welcome to Tor Metrics, the primary place to learn interesting
+        facts about the Tor network, the largest deployed anonymity
+        network to date.
+        If something can be measured safely, you'll find it here.*</p>
+        <p><small>*And if you come across something that is missing here,
+        please let us know.</small></p>
+
+        <a href="network.html"><h3>Servers</h3></a>
+        <p>How many relays and bridges are in the network?
+        How many of them permit exiting?</p>
+
+        <a href="bandwidth.html"><h3>Bandwidth</h3></a>
+        <p>How much bandwidth do relays advertise?
+        And how much of that is actually consumed?</p>
+
+        <a href="bubbles.html"><h3>Diversity</h3></a>
+        <p>How diverse is the network?
+        In which countries are relays located?</p>
+
+        <a href="users.html"><h3>Users</h3></a>
+        <p>Where do users come from?
+        What transports and IP versions are they using?</p>
+
+        <a href="performance.html"><h3>Performance</h3></a>
+        <p>How long does it take to download a megabyte of data over Tor?
+        How about five?</p>
     </div>
   </div>
   <div class="bottom" id="bottom">
