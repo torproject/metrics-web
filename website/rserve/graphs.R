@@ -803,7 +803,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
     } else {
         u <- u[u$transport != '' & u$transport != '<OR>' &
                u$node == 'bridge', ]
-        title <- paste("Bridge users using any pluggable transport")
+        title <- paste("Bridge users using any pluggable transport\n")
     }
   } else if (variable == 'version') {
     u <- u[u$version== value & u$node == 'bridge', ]
