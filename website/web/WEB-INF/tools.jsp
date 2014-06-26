@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics Portal: Tools</title>
+  <title>Tor Metrics: Tools</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -10,7 +10,7 @@
   <div class="center">
     <%@ include file="banner.jsp"%>
     <div class="main-column">
-        <h2>Tor Metrics Portal: Tools</h2>
+        <h2>Tor Metrics: Tools</h2>
         <br>
         <p><font color="red"><b>Notice:</b> The tools listed on this site
         are now available on:

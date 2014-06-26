@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics Portal: Research</title>
+  <title>Tor Metrics: Research</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -10,7 +10,7 @@
   <div class="center">
     <%@ include file="banner.jsp"%>
     <div class="main-column">
-        <h2>Tor Metrics Portal: Research</h2>
+        <h2>Tor Metrics: Research</h2>
         <br>
         <p>The Tor Metrics Project aims at supporting privacy enhancing
         technologies research by making gathered network

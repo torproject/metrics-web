@@ -3,7 +3,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics Portal: Error</title>
+  <title>Tor Metrics: Error</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -12,7 +12,7 @@
   <div class="center">
     <%@ include file="banner.jsp"%>
     <div class="main-column">
-<h2>Tor Metrics Portal: Error</h2>
+<h2>Tor Metrics: Error</h2>
 <br>
 <p>
 Oops! Something went wrong here! We encountered a
