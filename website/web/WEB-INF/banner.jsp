@@ -9,7 +9,9 @@
     <a <% if (currentPage.endsWith("index.jsp")) {
         %>class="current"<%} else {%>href="/index.html"<%}%>>Home</a>
     <a <% if (currentPage.endsWith("network.jsp")) {
-        %>class="current"<%} else {%>href="/network.html"<%}%>>Network</a>
+        %>class="current"<%} else {%>href="/network.html"<%}%>>Servers</a>
+    <a <% if (currentPage.endsWith("bandwidth.jsp")) {
+        %>class="current"<%} else {%>href="/bandwidth.html"<%}%>>Bandwidth</a>
     <a <% if (currentPage.endsWith("bubbles.jsp")) {
         %>class="current"<%} else {%>href="/bubbles.html"<%}
         %>>Diversity</a>

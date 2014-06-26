@@ -41,7 +41,8 @@ when processing your request!</p>
 Maybe you find what you're looking for on our sitemap:
 <ul>
 <li><a href="index.html">Home</a></li>
-<li><a href="network.html">Network</a></li>
+<li><a href="network.html">Servers</a></li>
+<li><a href="bandwidth.html">Bandwidth</a></li>
 <li><a href="bubbles.html">Diversity</a></li>
 <li><a href="users.html">Users</a></li>
 <li><a href="performance.html">Performance</a></li>
