@@ -42,7 +42,7 @@ Maybe you find what you're looking for on our sitemap:
 <ul>
 <li><a href="index.html">Home</a></li>
 <li><a href="network.html">Network</a></li>
-<li><a href="bubbles.html">Bubbles</a></li>
+<li><a href="bubbles.html">Diversity</a></li>
 <li><a href="users.html">Users</a></li>
 <li><a href="performance.html">Performance</a></li>
 <li><a href="stats.html">Statistics</a></li>

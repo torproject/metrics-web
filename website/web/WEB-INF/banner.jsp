@@ -11,7 +11,8 @@
     <a <% if (currentPage.endsWith("network.jsp")) {
         %>class="current"<%} else {%>href="/network.html"<%}%>>Network</a>
     <a <% if (currentPage.endsWith("bubbles.jsp")) {
-        %>class="current"<%} else {%>href="/bubbles.html"<%}%>>Bubbles</a>
+        %>class="current"<%} else {%>href="/bubbles.html"<%}
+        %>>Diversity</a>
     <a <% if (currentPage.endsWith("users.jsp")) {
         %>class="current"<%} else {%>href="/users.html"<%}%>>Users</a>
     <a <% if (currentPage.endsWith("performance.jsp")) {
