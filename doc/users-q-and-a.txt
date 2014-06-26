@@ -1,0 +1,94 @@
+Questions and answers about user statistics
+===========================================
+
+Q: How is it even possible to count users in an anonymity network?
+A: We actually don't count users, but we count requests to the directories
+that clients make periodically to update their list of relays and estimate
+user numbers indirectly from there.
+
+Q: Do all directories report these directory request numbers?
+A: No, but we can see what fraction of directories reported them, and then
+we can extrapolate the total number in the network.
+
+Q: How do you get from these directory requests to user numbers?
+A: We put in the assumption that the average client makes 10 such requests
+per day.  A tor client that is connected 24/7 makes about 15 requests per
+day, but not all clients are connected 24/7, so we picked the number 10
+for the average client.  We simply divide directory requests by 10 and
+consider the result as the number of users.  Another way of looking at it,
+is that we assume that each request represents a client that stays online
+for one tenth of a day, so 2 hours and 24 minutes.
+
+Q: So, are these distinct users per day, average number of users connected
+over the day, or what?
+A: Average number of concurrent users, estimated from data collected over
+a day.  We can't say how many distinct users there are.
+
+Q: Are these tor clients or users?  What if there's more than one user
+behind a tor client?
+A: Then we count those users as one.  We really count clients, but it's
+more intuitive for most people to think of users, that's why we say users
+and not clients.
+
+Q: What if a user runs tor on a laptop and changes their IP address a few
+times per day?  Don't you overcount that user?
+A: No, because that user updates their list of relays as often as a user
+that doesn't change IP address over the day.
+
+Q: How do you know which countries users come from?
+A: The directories resolve IP addresses to country codes and report these
+numbers in aggregate form.  This is one of the reasons why tor ships with
+a GeoIP database.
+
+Q: Why are there so few bridge users that are not using the default OR
+protocol or that are using IPv6?
+A: Very few bridges report data on transports or IP versions yet, and by
+default we consider requests to use the default OR protocol and IPv4.
+Once more bridges report these data, the numbers will become more
+accurate.
+
+Q: Why do the graphs end 2 days in the past and not today?
+A: Relays and bridges report some of the data in 24-hour intervals which
+may end at any time of the day.  And after such an interval is over relays
+and bridges might take another 18 hours to report the data.  We cut off
+the last two days from the graphs, because we want to avoid that the last
+data point in a graph indicates a recent trend change which is in fact
+just an artifact of the algorithm.
+
+Q: But I noticed that the last data point went up/down a bit since I last
+looked a few hours ago.  Why is that?
+A: The reason is that we publish user numbers once we're confident enough
+that they won't change significantly anymore.  But it's always possible
+that a directory reports data a few hours after we were confident enough,
+but which then slightly changed the graph.
+
+Q: Why are no numbers available before September 2011?
+A: We do have descriptor archives from before that time, but those
+descriptors didn't contain all the data we use to estimate user numbers.
+
+Q: Why do you believe the current approach to estimate user numbers is
+more accurate?
+A: For direct users, we include all directories which we didn't do in the
+old approach.  We also use histories that only contain bytes written to
+answer directory requests, which is more precise than using general byte
+histories.
+
+Q: And what about the advantage of the current approach over the old one
+when it comes to bridge users?
+A: Oh, that's a whole different story.  We wrote a 13 page long technical
+report explaining the reasons for retiring the old approach.  tl;dr: in
+the old approach we measured the wrong thing, and now we measure the right
+thing.
+
+  https://research.torproject.org/techreports/counting-daily-bridge-users-2012-10-24.pdf
+
+Q: What are these red and blue dots indicating possible censorship
+events?
+A: We run an anomaly-based censorship-detection system that looks at
+estimated user numbers over a series of days and predicts the user number
+in the next days.  If the actual number is higher or lower, this might
+indicate a possible censorship event or release of censorship.  For more
+details, see our technical report.
+
+  https://research.torproject.org/techreports/detector-2011-09-09.pdf
+
