@@ -26,7 +26,7 @@ graph shows total advertised bandwidth and bandwidth history of all relays
 in the network.</p>
 <img src="bandwidth.png${bandwidth_url}"
      width="576" height="360" alt="Relay bandwidth graph">
-<form action="network.html#bandwidth">
+<form action="bandwidth.html#bandwidth">
   <div class="formrow">
     <input type="hidden" name="graph" value="bandwidth">
     <p>
@@ -55,7 +55,7 @@ Guard flags</a></h3>
 Exit and/or Guard flags assigned by the directory authorities.</p>
 <img src="bwhist-flags.png${bwhist_flags_url}"
      width="576" height="360" alt="Relay bandwidth by flags graph">
-<form action="network.html#bwhist-flags">
+<form action="bandwidth.html#bwhist-flags">
   <div class="formrow">
     <input type="hidden" name="graph" value="bwhist-flags">
     <p>
@@ -87,7 +87,7 @@ Note that these sets possibly overlap with relays having both Exit and
 Guard flag.</p>
 <img src="bandwidth-flags.png${bandwidth_flags_url}"
      width="576" height="360" alt="Advertised bandwidth and bandwidth history by relay flags graph">
-<form action="network.html#bandwidth-flags">
+<form action="bandwidth.html#bandwidth-flags">
   <div class="formrow">
     <input type="hidden" name="graph" value="bandwidth-flags">
     <p>
@@ -119,7 +119,7 @@ dir bytes are extrapolated from those relays who report them to reflect
 the number of written and read dir bytes by all relays.</p>
 <img src="dirbytes.png${dirbytes_url}"
      width="576" height="360" alt="Dir bytes graph">
-<form action="network.html#dirbytes">
+<form action="bandwidth.html#dirbytes">
   <div class="formrow">
     <input type="hidden" name="graph" value="dirbytes">
     <p>
@@ -150,7 +150,7 @@ no sums of advertised bandwidths, but bandwidths of single relays.</p>
 <img src="advbwdist-perc.png${advbwdist_perc_url}"
      width="576" height="360"
      alt="Advertised bandwidth distribution graph">
-<form action="network.html#advbwdist-perc">
+<form action="bandwidth.html#advbwdist-perc">
   <div class="formrow">
     <input type="hidden" name="graph" value="advbwdist-perc">
     <p>
@@ -205,7 +205,7 @@ relays in the network.</p>
 <img src="advbwdist-relay.png${advbwdist_relay_url}"
      width="576" height="360"
      alt="Advertised bandwidth of n-th fastest relays graph">
-<form action="network.html#advbwdist-relay">
+<form action="bandwidth.html#advbwdist-relay">
   <div class="formrow">
     <input type="hidden" name="graph" value="advbwdist-relay">
     <p>
