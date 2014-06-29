@@ -46,6 +46,7 @@ Maybe you find what you're looking for on our sitemap:
 <li><a href="bubbles.html">Diversity</a></li>
 <li><a href="users.html">Users</a></li>
 <li><a href="performance.html">Performance</a></li>
+<li><a href="about.html">About</a></li>
 </ul>
 </p>
 

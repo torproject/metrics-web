@@ -38,6 +38,10 @@
         <a href="performance.html"><h3>Performance</h3></a>
         <p>How long does it take to download a megabyte of data over Tor?
         How about five?</p>
+
+        <a href="about.html"><h3>About</h3></a>
+        <p>How do you obtain all these facts in an anonymity network
+        without hurting user privacy?</p>
     </div>
   </div>
   <div class="bottom" id="bottom">

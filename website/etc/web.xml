@@ -241,6 +241,17 @@
     <url-pattern>/consensus-health.html</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>AboutServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.AboutServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AboutServlet</servlet-name>
+    <url-pattern>/about.html</url-pattern>
+  </servlet-mapping>
+
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
