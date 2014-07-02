@@ -112,8 +112,8 @@ It simply takes time to report, collect, and process all the data.
 <p>
 <b>Q: Are the raw numbers behind graphs available for download?</b>
 <br>
-A: Yes, all raw numbers are available in comma-separated value files
-(.csv), which have their own
+A: Yes, all raw numbers are available in <a href="stats/">comma-separated
+value files (.csv)</a>, which have their own
 <a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/stats-spec.txt">specification
 document</a>.
 In addition to that, the raw data behind those .csv files are available
