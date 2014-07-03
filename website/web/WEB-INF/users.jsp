@@ -55,7 +55,11 @@ Direct users by country:
 </form>
 <p>Download graph as
 <a href="userstats-relay-country.pdf${userstats_relay_country_url}">PDF</a> or
-<a href="userstats-relay-country.svg${userstats_relay_country_url}">SVG</a>.</p>
+<a href="userstats-relay-country.svg${userstats_relay_country_url}">SVG</a>.
+<a href="stats/clients.csv">CSV</a> file containing user estimates.
+<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+and answers about users statistics</a></p>
+
 <hr>
 <a name="userstats-relay-table"></a>
 <h3><a href="#userstats-relay-table" class="anchor">
@@ -89,6 +93,10 @@ Top-10 countries by directly connecting users:
     </tr>
   </c:forEach>
 </table>
+<p><a href="stats/clients.csv">CSV</a> file containing user estimates.
+<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+and answers about users statistics</a></p>
+
 <hr>
 <a name="userstats-censorship-events"></a>
 <h3><a href="#userstats-censorship-events" class="anchor">
@@ -125,6 +133,10 @@ href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</
     </tr>
   </c:forEach>
 </table>
+<p><a href="stats/clients.csv">CSV</a> file containing user estimates.
+<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+and answers about users statistics</a></p>
+
 <hr>
 
 <a name="userstats-bridge-country"></a>
@@ -158,7 +170,11 @@ Bridge users by country:
 </form>
 <p>Download graph as
 <a href="userstats-bridge-country.pdf${userstats_bridge_country_url}">PDF</a> or
-<a href="userstats-bridge-country.svg${userstats_bridge_country_url}">SVG</a>.</p>
+<a href="userstats-bridge-country.svg${userstats_bridge_country_url}">SVG</a>.
+<a href="stats/clients.csv">CSV</a> file containing user estimates.
+<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+and answers about users statistics</a></p>
+
 <hr>
 <a name="userstats-bridge-table"></a>
 <h3><a href="#userstats-bridge-table" class="anchor">
@@ -192,6 +208,10 @@ Top-10 countries by bridge users:
     </tr>
   </c:forEach>
 </table>
+<p><a href="stats/clients.csv">CSV</a> file containing user estimates.
+<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+and answers about users statistics</a></p>
+
 <hr>
 
 <a name="userstats-bridge-transport"></a>
@@ -230,7 +250,11 @@ Bridge users by transport:
 </form>
 <p>Download graph as
 <a href="userstats-bridge-transport.pdf${userstats_bridge_transport_url}">PDF</a> or
-<a href="userstats-bridge-transport.svg${userstats_bridge_transport_url}">SVG</a>.</p>
+<a href="userstats-bridge-transport.svg${userstats_bridge_transport_url}">SVG</a>.
+<a href="stats/clients.csv">CSV</a> file containing user estimates.
+<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+and answers about users statistics</a></p>
+
 <hr>
 
 <a name="userstats-bridge-version"></a>
@@ -262,16 +286,9 @@ Bridge users by IP version:
 </form>
 <p>Download graph as
 <a href="userstats-bridge-version.pdf${userstats_bridge_version_url}">PDF</a> or
-<a href="userstats-bridge-version.svg${userstats_bridge_version_url}">SVG</a>.</p>
-<hr>
-
-<p><a href="stats/clients.csv">CSV</a> file containing new user
-estimates.</p>
-<br>
-
-<hr>
-
-<p><a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+<a href="userstats-bridge-version.svg${userstats_bridge_version_url}">SVG</a>.
+<a href="stats/clients.csv">CSV</a> file containing user estimates.
+<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
 and answers about users statistics</a></p>
 
     </div>
