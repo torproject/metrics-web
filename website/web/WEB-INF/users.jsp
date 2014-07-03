@@ -291,6 +291,28 @@ Bridge users by IP version:
 <a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
 and answers about users statistics</a></p>
 
+<hr>
+
+<a name="oxford-anonymous-internet"></a>
+<h3><a href="#oxford-anonymous-internet" class="anchor">
+Tor users as percentage of larger Internet population
+</a></h3>
+
+<p>The Oxford Internet Institute made a cartogram visualization of Tor
+users as compared to the overall Internet population per country.
+They used the average number of Tor users from August 2012 to August 2013
+and put it in relation to total Internet users per country.
+Be sure to read up the
+<a href="http://geography.oii.ox.ac.uk/?page=tor">details and their
+conclusions</a>.</p>
+
+<a href="http://geography.oii.ox.ac.uk/?page=tor">
+<img src="images/oxford-anonymous-internet.png"
+     alt="The anonymous Internet">
+</a>
+
+<hr>
+
     </div>
   </div>
   <div class="bottom" id="bottom">
