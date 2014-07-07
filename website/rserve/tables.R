@@ -45,7 +45,7 @@ write_userstats_censorship_events <- function(start, end, path) {
                                     c$clients <= c$lower, 1, 0))
   r <- aggregate(r[, c("upturn", "downturn")],
     by = list(country = r$country), sum)
-  r <- r[!(r$country %in% c("zy", "??", "a1", "a2", "o1", "ap", "eu")), ]
+  r <- r[(r$country %in% names(countrylist)), ]
   r <- r[order(r$downturn, r$upturn, decreasing = TRUE), ]
   r <- r[1:10, ]
   r <- data.frame(cc = r$country,
