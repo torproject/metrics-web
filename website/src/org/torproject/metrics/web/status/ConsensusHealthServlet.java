@@ -9,15 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@SuppressWarnings("serial")
 public class ConsensusHealthServlet extends HttpServlet {
-
-  private static final long serialVersionUID = 8349991221914797433L;
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
-
-    /* Forward to the actual consensus-health service. */
-    response.sendRedirect("https://consensus-health.torproject.org");
+    response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+    response.setHeader("Location",
+        "https://consensus-health.torproject.org");
   }
 }
 

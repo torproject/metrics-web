@@ -1,4 +1,4 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2014 The Tor Project
  * See LICENSE for licensing information */
 package org.torproject.metrics.web.status;
 
@@ -9,15 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@SuppressWarnings("serial")
 public class ExoneraTorServlet extends HttpServlet {
-
-  private static final long serialVersionUID = -6227541092325776626L;
 
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
-
-    /* Forward to the actual ExoneraTor service. */
-    response.sendRedirect("https://exonerator.torproject.org");
+    response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+    response.setHeader("Location", "https://exonerator.torproject.org");
   }
 }
 
