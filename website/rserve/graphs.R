@@ -795,19 +795,56 @@ plot_userstats <- function(start, end, node, variable, value, events,
              u$node == 'relay', ]
       title <- "Directly connecting users\n"
     }
+    u <- aggregate(list(lower = u$lower, upper = u$upper,
+                        users = u$clients),
+                   by = list(date = as.Date(u$date, "%Y-%m-%d"),
+                             value = u$country),
+                   FUN = sum)
   } else if (variable == 'transport') {
-    if (value != '!<*>') {
-        u <- u[u$transport == value & u$node == 'bridge', ]
-        title <- paste("Bridge users using transport ", value, "\n",
-                    sep = "")
+    if ('!<OR>' %in% value) {
+      n <- u[u$transport != '' & u$transport != '<OR>' &
+             u$node == 'bridge', ]
+      n <- aggregate(list(lower = n$lower, upper = n$upper,
+                          clients = n$clients),
+                     by = list(date = n$date),
+                     FUN = sum)
+      u <- rbind(u, data.frame(date = n$date, node = 'bridge',
+                               country = '', transport = '!<OR>',
+                               version = '', lower = n$lower,
+                               upper = n$upper, clients = n$clients,
+                               frac = NA))
+    }
+    if (length(value) > 1) {
+      u <- u[u$transport %in% value & u$node == 'bridge', ]
+      u <- aggregate(list(lower = u$lower, upper = u$upper,
+                          users = u$clients),
+                     by = list(date = as.Date(u$date, "%Y-%m-%d"),
+                               value = u$transport),
+                     FUN = sum)
+      title <- paste("Bridge users by transport\n")
     } else {
-        u <- u[u$transport != '' & u$transport != '<OR>' &
-               u$node == 'bridge', ]
-        title <- paste("Bridge users using any pluggable transport\n")
+      u <- u[u$transport == value & u$node == 'bridge', ]
+      u <- aggregate(list(lower = u$lower, upper = u$upper,
+                          users = u$clients),
+                     by = list(date = as.Date(u$date, "%Y-%m-%d"),
+                               value = u$transport),
+                     FUN = sum)
+      title <- paste("Bridge users using ",
+               ifelse(value == '<??>', 'unknown pluggable transport(s)',
+               ifelse(value == '<OR>', 'default OR protocol',
+               ifelse(value == '!<OR>', 'any pluggable transport',
+               ifelse(value == 'fte', 'FTE',
+               ifelse(value == 'websocket', 'Flash proxy/websocket',
+               paste('transport', value)))))), "\n", sep = "")
     }
   } else if (variable == 'version') {
-    u <- u[u$version== value & u$node == 'bridge', ]
+    u <- u[u$version == value & u$node == 'bridge', ]
     title <- paste("Bridge users using IP", value, "\n", sep = "")
+    u <- aggregate(list(lower = u$lower, upper = u$upper,
+                        users = u$clients),
+                   by = list(date = as.Date(u$date, "%Y-%m-%d"),
+                             value = u$version),
+                   FUN = sum)
   } else {
     if (value != 'all') {
       u <- u[u$country == value & u$node == 'bridge', ]
@@ -818,26 +855,28 @@ plot_userstats <- function(start, end, node, variable, value, events,
              u$node == 'bridge', ]
       title <- "Bridge users\n"
     }
+    u <- aggregate(list(lower = u$lower, upper = u$upper,
+                        users = u$clients),
+                   by = list(date = as.Date(u$date, "%Y-%m-%d"),
+                             value = u$country),
+                   FUN = sum)
   }
-  u <- aggregate(list(lower = u$lower, upper = u$upper,
-                      users = u$clients),
-                 by = list(date = as.Date(u$date, "%Y-%m-%d")), FUN = sum)
-  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
-      to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, u$date)
-  if (length(missing) > 0) {
-    u <- rbind(u,
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        users = NA, lower = NA, upper = NA))
-  }
+  u <- merge(x = u, all.y = TRUE, y = data.frame(expand.grid(
+             date = seq(from = as.Date(start, "%Y-%m-%d"),
+             to = as.Date(end, "%Y-%m-%d"), by="1 day"),
+             value = ifelse(value == 'all', '', value))))
   formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
   date_breaks <- date_breaks(
     as.numeric(max(u$date) - min(u$date)))
   max_y <- ifelse(length(na.omit(u$users)) == 0, 0,
       max(u$users, na.rm = TRUE))
-  plot <- ggplot(u, aes(x = date, y = users))
+  if (length(value) > 1) {
+    plot <- ggplot(u, aes(x = date, y = users, colour = value))
+  } else {
+    plot <- ggplot(u, aes(x = date, y = users))
+  }
   if (length(na.omit(u$users)) > 0 & events != "off" &
-      variable == 'country' & value != "all") {
+      variable == 'country' & length(value) == 1 && value != "all") {
     upturns <- u[u$users > u$upper, c("date", "users")]
     downturns <- u[u$users <= u$lower, c("date", "users")]
     if (events == "on") {
@@ -865,6 +904,16 @@ plot_userstats <- function(start, end, node, variable, value, events,
     scale_y_continuous(name = "", limits = c(0, max_y),
         formatter = formatter) +
     opts(title = title)
+  if (length(value) > 1) {
+    plot <- plot +
+      scale_colour_hue(name = "", breaks = value,
+            labels = ifelse(value == '<??>', 'Unknown PT',
+                     ifelse(value == '<OR>', 'Default OR protocol',
+                     ifelse(value == '!<OR>', 'Any PT',
+                     ifelse(value == 'fte', 'FTE',
+                     ifelse(value == 'websocket', 'Flash proxy/websocket',
+                     value))))))
+  }
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 

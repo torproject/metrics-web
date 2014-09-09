@@ -59,7 +59,7 @@ public class GraphParameterChecker {
     this.knownParameterValues.put("source", "all,siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
     this.knownParameterValues.put("transport",
-        "obfs2,obfs3,websocket,fte,meek,scramblesuit,<OR>,<??>,!<*>");
+        "obfs2,obfs3,websocket,fte,meek,scramblesuit,<OR>,<??>,!<OR>");
     this.knownParameterValues.put("version", "v4,v6");
     this.knownParameterValues.put("p", "100,99,98,97,95,91,90,80,75,70,"
         + "60,50,40,30,25,20,10,9,5,3,2,1,0");
@@ -161,6 +161,9 @@ public class GraphParameterChecker {
       List<String> knownCountries = Arrays.asList(
           this.knownParameterValues.get("country").split(","));
       if (countryParameters != null) {
+        if (countryParameters.length != 1) {
+          return null;
+        }
         for (String country : countryParameters) {
           if (country == null || country.length() == 0 ||
               !knownCountries.contains(country)) {
@@ -265,6 +268,9 @@ public class GraphParameterChecker {
       List<String> knownVersions = Arrays.asList(
           this.knownParameterValues.get("version").split(","));
       if (versionParameters != null) {
+        if (versionParameters.length != 1) {
+          return null;
+        }
         for (String version : versionParameters) {
           if (version == null || version.length() == 0 ||
               !knownVersions.contains(version)) {
