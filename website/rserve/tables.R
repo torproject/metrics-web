@@ -10,6 +10,7 @@ write_userstats <- function(start, end, node, path) {
          c$transport == '' & c$version == '' & c$node == node, ]
   u <- data.frame(country = c$country, users = c$clients,
                   stringsAsFactors = FALSE)
+  u <- u[!is.na(u$users), ]
   u <- aggregate(list(users = u$users), by = list(country = u$country),
                  mean)
   total <- sum(u$users)

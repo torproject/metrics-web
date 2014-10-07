@@ -89,7 +89,7 @@ Top-10 countries by directly connecting users:
   <c:forEach var="row" items="${userstats_relay_tabledata}">
     <tr>
       <td><a href="users.html?graph=userstats-relay-country&country=${row['cc']}#userstats-relay-country">${row['country']}</a>&emsp;</td>
-      <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
+      <td>${row['abs']} <c:if test="${row['rel'] != 'NA'}"> (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</c:if></td>
     </tr>
   </c:forEach>
 </table>
@@ -204,7 +204,7 @@ Top-10 countries by bridge users:
   <c:forEach var="row" items="${userstats_bridge_tabledata}">
     <tr>
       <td><a href="users.html?graph=userstats-bridge-country&country=${row['cc']}#userstats-bridge-country">${row['country']}</a>&emsp;</td>
-      <td>${row['abs']} (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</td>
+      <td>${row['abs']} <c:if test="${row['rel'] != 'NA'}"> (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</c:if></td>
     </tr>
   </c:forEach>
 </table>
