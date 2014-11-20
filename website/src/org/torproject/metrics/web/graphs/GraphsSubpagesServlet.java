@@ -4,13 +4,10 @@ package org.torproject.metrics.web.graphs;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TimeZone;
 
 import javax.servlet.ServletException;
@@ -27,7 +24,7 @@ public class GraphsSubpagesServlet extends HttpServlet {
   private Map<String, String> availableGraphsSubpages;
 
   /* Available tables on graphs subpages. */
-  private Map<String, Set<String>> availableGraphsSubpageTables;
+  private Map<String, String> availableGraphsSubpageTables;
 
   /* Country codes and names for per-country graphs. */
   private List<String[]> knownCountries;
@@ -37,20 +34,59 @@ public class GraphsSubpagesServlet extends HttpServlet {
 
   public GraphsSubpagesServlet() {
     this.availableGraphsSubpages = new HashMap<String, String>();
-    this.availableGraphsSubpages.put("network.html",
-        "WEB-INF/network.jsp");
+    this.availableGraphsSubpages.put("networksize.html",
+        "WEB-INF/networksize.jsp");
+    this.availableGraphsSubpages.put("relayflags.html",
+        "WEB-INF/relayflags.jsp");
+    this.availableGraphsSubpages.put("versions.html",
+        "WEB-INF/versions.jsp");
+    this.availableGraphsSubpages.put("platforms.html",
+        "WEB-INF/platforms.jsp");
+    this.availableGraphsSubpages.put("cloudbridges.html",
+        "WEB-INF/cloudbridges.jsp");
     this.availableGraphsSubpages.put("bandwidth.html",
         "WEB-INF/bandwidth.jsp");
-    this.availableGraphsSubpages.put("users.html", "WEB-INF/users.jsp");
-    this.availableGraphsSubpages.put("performance.html",
-        "WEB-INF/performance.jsp");
+    this.availableGraphsSubpages.put("bwhist-flags.html",
+        "WEB-INF/bwhist-flags.jsp");
+    this.availableGraphsSubpages.put("bandwidth-flags.html",
+        "WEB-INF/bandwidth-flags.jsp");
+    this.availableGraphsSubpages.put("dirbytes.html",
+        "WEB-INF/dirbytes.jsp");
+    this.availableGraphsSubpages.put("advbwdist-perc.html",
+        "WEB-INF/advbwdist-perc.jsp");
+    this.availableGraphsSubpages.put("advbwdist-relay.html",
+        "WEB-INF/advbwdist-relay.jsp");
+    this.availableGraphsSubpages.put("userstats-relay-country.html",
+        "WEB-INF/userstats-relay-country.jsp");
+    this.availableGraphsSubpages.put("userstats-relay-table.html",
+        "WEB-INF/userstats-relay-table.jsp");
+    this.availableGraphsSubpages.put("userstats-censorship-events.html",
+        "WEB-INF/userstats-censorship-events.jsp");
+    this.availableGraphsSubpages.put("userstats-bridge-country.html",
+        "WEB-INF/userstats-bridge-country.jsp");
+    this.availableGraphsSubpages.put("userstats-bridge-table.html",
+        "WEB-INF/userstats-bridge-table.jsp");
+    this.availableGraphsSubpages.put("userstats-bridge-transport.html",
+        "WEB-INF/userstats-bridge-transport.jsp");
+    this.availableGraphsSubpages.put("userstats-bridge-version.html",
+        "WEB-INF/userstats-bridge-version.jsp");
+    this.availableGraphsSubpages.put("oxford-anonymous-internet.html",
+        "WEB-INF/oxford-anonymous-internet.jsp");
+    this.availableGraphsSubpages.put("torperf.html",
+        "WEB-INF/torperf.jsp");
+    this.availableGraphsSubpages.put("torperf-failures.html",
+        "WEB-INF/torperf-failures.jsp");
+    this.availableGraphsSubpages.put("connbidirect.html",
+        "WEB-INF/connbidirect.jsp");
 
-    this.availableGraphsSubpageTables =
-        new HashMap<String, Set<String>>();
-    this.availableGraphsSubpageTables.put("users.html",
-        new HashSet<String>(Arrays.asList((
-        "direct-users,censorship-events,bridge-users,userstats-relay,"
-        + "userstats-censorship-events,userstats-bridge").split(","))));
+    this.availableGraphsSubpageTables = new HashMap<String, String>();
+    this.availableGraphsSubpageTables.put("userstats-relay-table.html",
+        "userstats-relay");
+    this.availableGraphsSubpageTables.put(
+        "userstats-censorship-events.html",
+        "userstats-censorship-events");
+    this.availableGraphsSubpageTables.put("userstats-bridge-table.html",
+        "userstats-bridge");
 
     this.knownCountries = Countries.getInstance().getCountryList();
   }
@@ -131,14 +167,13 @@ public class GraphsSubpagesServlet extends HttpServlet {
      * regardless of whether a table update was requested, and add the
      * table data as request attribute. */
     if (this.availableGraphsSubpageTables.containsKey(requestedPage)) {
-      for (String tableName :
-          this.availableGraphsSubpageTables.get(requestedPage)) {
-        List<Map<String, String>> tableData = rObjectGenerator.
-            generateTable(tableName, requestedTable,
-            request.getParameterMap(), true);
-        request.setAttribute(tableName.replaceAll("-", "_")
-              + "_tabledata", tableData);
-      }
+      String tableName = this.availableGraphsSubpageTables.get(
+          requestedPage);
+      List<Map<String, String>> tableData = rObjectGenerator.
+          generateTable(tableName, requestedTable,
+          request.getParameterMap(), true);
+      request.setAttribute(tableName.replaceAll("-", "_")
+            + "_tabledata", tableData);
     }
 
     /* Pass list of known countries in case we want to display them. */

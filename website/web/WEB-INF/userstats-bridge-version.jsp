@@ -1,0 +1,54 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <title>Tor Metrics: Bridge users by IP version</title>
+  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
+  <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
+</head>
+<body>
+  <div class="center">
+    <%@ include file="banner.jsp"%>
+    <div class="main-column">
+
+<h3>Tor Metrics: Bridge users by IP version</h3>
+<br>
+<img src="userstats-bridge-version.png${userstats_bridge_version_url}"
+     width="576" height="360" alt="Bridge users by IP version graph">
+<form action="userstats-bridge-version.html">
+  <div class="formrow">
+    <input type="hidden" name="graph" value="userstats-bridge-version">
+    <p>
+    <label>Start date (yyyy-mm-dd):</label>
+      <input type="text" name="start" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_bridge_version_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_bridge_version_start[0]}</c:otherwise></c:choose>">
+    <label>End date (yyyy-mm-dd):</label>
+      <input type="text" name="end" size="10"
+             value="<c:choose><c:when test="${fn:length(userstats_bridge_version_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_bridge_version_end[0]}</c:otherwise></c:choose>">
+    </p><p>
+      Source: <select name="version">
+        <option value="v4"<c:if test="${userstats_bridge_version_version[0] eq 'v4'}"> selected</c:if>>IPv4</option>
+        <option value="v6"<c:if test="${userstats_bridge_version_version[0] eq 'v6'}"> selected</c:if>>IPv6</option>
+      </select>
+    </p><p>
+    <input class="submit" type="submit" value="Update graph">
+    </p>
+  </div>
+</form>
+<p>Download graph as
+<a href="userstats-bridge-version.pdf${userstats_bridge_version_url}">PDF</a> or
+<a href="userstats-bridge-version.svg${userstats_bridge_version_url}">SVG</a>.
+<a href="stats/clients.csv">CSV</a> file containing user estimates.
+<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+and answers about users statistics</a></p>
+
+    </div>
+  </div>
+  <div class="bottom" id="bottom">
+    <%@ include file="footer.jsp"%>
+  </div>
+</body>
+</html>

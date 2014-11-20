@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics: Diversity</title>
+  <title>Tor Metrics: Network bubble graphs</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -13,10 +13,22 @@
   <div class="center">
     <%@ include file="banner.jsp"%>
     <div class="main-column">
+
 <h2>Tor Metrics: Diversity</h2>
 <br>
-<a name="bubbles"></a>
-<h3><a href="#bubbles" class="anchor">Network bubble graphs</a></h3>
+<p>The graph on this page will soon move to its own subpages.
+This is part of an effort to make navigation on this website more intuitive.
+In the future, this notice will go away, and all graphs/tables can be searched more easily from the start page.
+Sorry for any inconvenience caused by this.</p>
+
+<ul>
+<li>Graph: Network bubble graphs (see below)</li>
+</ul>
+<br>
+<hr>
+<br>
+
+<h3>Tor Metrics: Network bubble graphs</h3>
 <br>
       <p>
         All relays:
@@ -36,6 +48,7 @@
       </p>
       <script>make_bubble_graph();</script>
       <noscript>Sorry, you need to turn on JavaScript.</script>
+
     </div>
   </div>
   <div class="bottom" id="bottom">
@@ -43,3 +56,4 @@
   </div>
 </body>
 </html>
+

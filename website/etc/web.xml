@@ -36,18 +36,40 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>GraphsSubpages</servlet-name>
-    <url-pattern>/network.html</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphsSubpages</servlet-name>
+    <url-pattern>/networksize.html</url-pattern>
+    <url-pattern>/relayflags.html</url-pattern>
+    <url-pattern>/versions.html</url-pattern>
+    <url-pattern>/platforms.html</url-pattern>
+    <url-pattern>/cloudbridges.html</url-pattern>
     <url-pattern>/bandwidth.html</url-pattern>
+    <url-pattern>/bwhist-flags.html</url-pattern>
+    <url-pattern>/bandwidth-flags.html</url-pattern>
+    <url-pattern>/dirbytes.html</url-pattern>
+    <url-pattern>/advbwdist-perc.html</url-pattern>
+    <url-pattern>/advbwdist-relay.html</url-pattern>
+    <url-pattern>/userstats-relay-country.html</url-pattern>
+    <url-pattern>/userstats-relay-table.html</url-pattern>
+    <url-pattern>/userstats-censorship-events.html</url-pattern>
+    <url-pattern>/userstats-bridge-country.html</url-pattern>
+    <url-pattern>/userstats-bridge-table.html</url-pattern>
+    <url-pattern>/userstats-bridge-transport.html</url-pattern>
+    <url-pattern>/userstats-bridge-version.html</url-pattern>
+    <url-pattern>/oxford-anonymous-internet.html</url-pattern>
+    <url-pattern>/torperf.html</url-pattern>
+    <url-pattern>/torperf-failures.html</url-pattern>
+    <url-pattern>/connbidirect.html</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>LegacyGraphsSubpages</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.graphs.LegacyGraphsSubpagesServlet
+    </servlet-class>
+  </servlet>
   <servlet-mapping>
-    <servlet-name>GraphsSubpages</servlet-name>
+    <servlet-name>LegacyGraphsSubpages</servlet-name>
+    <url-pattern>/network.html</url-pattern>
     <url-pattern>/users.html</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>GraphsSubpages</servlet-name>
     <url-pattern>/performance.html</url-pattern>
   </servlet-mapping>
 
