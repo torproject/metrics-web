@@ -58,8 +58,8 @@ public class GraphParameterChecker {
     this.knownParameterValues.put("events", "on,off,points");
     this.knownParameterValues.put("source", "all,siv,moria,torperf");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
-    this.knownParameterValues.put("transport",
-        "obfs2,obfs3,websocket,fte,meek,scramblesuit,<OR>,<??>,!<OR>");
+    this.knownParameterValues.put("transport", "obfs2,obfs3,obfs4,"
+        + "websocket,fte,meek,scramblesuit,<OR>,<??>,!<OR>");
     this.knownParameterValues.put("version", "v4,v6");
     this.knownParameterValues.put("p", "100,99,98,97,95,91,90,80,75,70,"
         + "60,50,40,30,25,20,10,9,5,3,2,1,0");
