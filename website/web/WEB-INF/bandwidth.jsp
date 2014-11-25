@@ -14,27 +14,6 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Bandwidth</h2>
-<br>
-<p>The graphs on this page (except one) have moved to their own subpages.
-This is part of an effort to make navigation on this website more intuitive.
-In the future, this notice will go away, and all graphs/tables can be searched more easily from the start page.
-Sorry for any inconvenience caused by this.</p>
-
-<ul>
-<li>Graph: Total relay bandwidth in the network (see below)</li>
-<li><a href="bwhist-flags.html">Graph: Relay bandwidth by Exit and/or Guard flags</a></li>
-<li><a href="bandwidth-flags.html">Graph: Advertised bandwidth and bandwidth history by relay flags</a></li>
-<li><a href="dirbytes.html">Graph: Number of bytes spent on answering directory requests</a></li>
-<li><a href="advbwdist-perc.html">Graph: Advertised bandwidth distribution</a></li>
-<li><a href="advbwdist-relay.html">Graph: Advertised bandwidth of n-th fastest relays</a></li>
-<li><a href="bandwidth-data.html">Data: Bandwidth provided and consumed by relays</a></li>
-<li><a href="advbwdist-data.html">Data: Advertised bandwidth distribution and n-th fastest relays</a></li>
-</ul>
-<br>
-<hr>
-<br>
-
 <h2><a href="/">Tor Metrics</a> &mdash; Total relay bandwidth in the network</h2>
 <br>
 <p>The following graph shows the total

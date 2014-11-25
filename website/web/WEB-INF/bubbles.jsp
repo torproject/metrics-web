@@ -14,20 +14,6 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Diversity</h2>
-<br>
-<p>The graph on this page will soon move to its own subpages.
-This is part of an effort to make navigation on this website more intuitive.
-In the future, this notice will go away, and all graphs/tables can be searched more easily from the start page.
-Sorry for any inconvenience caused by this.</p>
-
-<ul>
-<li>Graph: Network bubble graphs (see below)</li>
-</ul>
-<br>
-<hr>
-<br>
-
 <h2><a href="/">Tor Metrics</a> &mdash; Network bubble graphs</h2>
 <br>
 <p>The following graph visualizes diversity of currently running
