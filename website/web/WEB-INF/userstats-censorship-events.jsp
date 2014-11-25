@@ -44,7 +44,7 @@ more details, see this
   </tr>
   <c:forEach var="row" items="${userstats_censorship_events_tabledata}">
     <tr>
-      <td><a href="users.html?graph=userstats-relay-country&country=${row['cc']}&events=on#userstats-relay-country">${row['country']}</a>&emsp;</td>
+      <td><a href="userstats-relay-country.html?graph=userstats-relay-country&country=${row['cc']}&events=on">${row['country']}</a>&emsp;</td>
       <td>${row['downturns']}</td>
       <td>${row['upturns']}</td>
     </tr>

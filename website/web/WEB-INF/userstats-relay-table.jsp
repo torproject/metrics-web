@@ -46,7 +46,7 @@ available for most countries.</p>
   </tr>
   <c:forEach var="row" items="${userstats_relay_tabledata}">
     <tr>
-      <td><a href="users.html?graph=userstats-relay-country&country=${row['cc']}#userstats-relay-country">${row['country']}</a>&emsp;</td>
+      <td><a href="userstats-relay-country.html?graph=userstats-relay-country&country=${row['cc']}">${row['country']}</a>&emsp;</td>
       <td>${row['abs']} <c:if test="${row['rel'] != 'NA'}"> (<fmt:formatNumber type="number" minFractionDigits="2" value="${row['rel']}" /> %)</c:if></td>
     </tr>
   </c:forEach>
