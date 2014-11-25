@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics: Relay bandwidth by Exit and/or Guard flags</title>
+  <title>Tor Metrics &mdash; Relay bandwidth by Exit and/or Guard flags</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h3>Tor Metrics: Relay bandwidth by Exit and/or Guard flags</h3>
+<h2><a href="/">Tor Metrics</a> &mdash; Relay bandwidth by Exit and/or Guard flags</h2>
 <br>
 <p>The following graph shows the
 <a href="about.html#bandwidth-history">consumed bandwidth</a> reported by

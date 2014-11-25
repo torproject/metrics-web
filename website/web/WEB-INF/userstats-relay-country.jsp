@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics: Direct users by country</title>
+  <title>Tor Metrics &mdash; Direct users by country</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h3>Tor Metrics: Direct users by country</h3>
+<h2><a href="/">Tor Metrics</a> &mdash; Direct users by country</h2>
 <br>
 <p>The following graph shows the estimated number of directly-connecting
 <a href="about.html#client">clients</a>; that is, it excludes clients

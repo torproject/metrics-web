@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics: Bridge users by IP version</title>
+  <title>Tor Metrics &mdash; Bridge users by IP version</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h3>Tor Metrics: Bridge users by IP version</h3>
+<h2><a href="/">Tor Metrics</a> &mdash; Bridge users by IP version</h2>
 <br>
 <p>The following graph shows the estimated number of
 <a href="about.html#client">clients</a> connecting via

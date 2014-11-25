@@ -3,7 +3,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics: Number of relays and bridges</title>
+  <title>Tor Metrics &mdash; Number of relays and bridges</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -13,7 +13,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h3>Tor Metrics: Number of relays and bridges</h3>
+<h2><a href="/">Tor Metrics</a> &mdash; Number of relays and bridges</h2>
 <br>
 <p>The following data file contains the number of running
 <a href="about.html#relay">relays</a> and

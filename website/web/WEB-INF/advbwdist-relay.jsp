@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics: Advertised bandwidth of n-th fastest relays</title>
+  <title>Tor Metrics &mdash; Advertised bandwidth of n-th fastest relays</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h3>Tor Metrics: Advertised bandwidth of n-th fastest relays</h3>
+<h2><a href="/">Tor Metrics</a> &mdash; Advertised bandwidth of n-th fastest relays</h2>
 <br>
 <p>The following graph shows the
 <a href="about.html#advertised-bandwidth">advertised bandwidth</a> of the

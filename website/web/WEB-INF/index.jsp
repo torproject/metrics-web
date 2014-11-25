@@ -10,7 +10,7 @@
   <div class="center">
     <%@ include file="banner.jsp"%>
     <div class="main-column">
-        <h2>Tor Metrics</h2>
+        <h2><a href="/">Tor Metrics</a></h2>
         <br>
         <p>Welcome to Tor Metrics, the primary place to learn interesting
         facts about the Tor network, the largest deployed anonymity

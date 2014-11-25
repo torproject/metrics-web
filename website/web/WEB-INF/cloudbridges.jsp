@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics: Tor Cloud bridges</title>
+  <title>Tor Metrics &mdash; Tor Cloud bridges</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -15,7 +15,7 @@
     <div class="main-column">
 
 <a name="cloudbridges"></a>
-<h3>Tor Metrics: Tor Cloud bridges</h3>
+<h2><a href="/">Tor Metrics</a> &mdash; Tor Cloud bridges</h2>
 <br>
 <p>The following graph shows the number of running
 <a href="about.html#bridge">bridges</a> that are deployed in
