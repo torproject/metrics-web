@@ -78,6 +78,18 @@ public class GraphsSubpagesServlet extends HttpServlet {
         "WEB-INF/torperf-failures.jsp");
     this.availableGraphsSubpages.put("connbidirect.html",
         "WEB-INF/connbidirect.jsp");
+    this.availableGraphsSubpages.put("servers-data.html",
+        "WEB-INF/servers-data.jsp");
+    this.availableGraphsSubpages.put("bandwidth-data.html",
+        "WEB-INF/bandwidth-data.jsp");
+    this.availableGraphsSubpages.put("advbwdist-data.html",
+        "WEB-INF/advbwdist-data.jsp");
+    this.availableGraphsSubpages.put("clients-data.html",
+        "WEB-INF/clients-data.jsp");
+    this.availableGraphsSubpages.put("torperf-data.html",
+        "WEB-INF/torperf-data.jsp");
+    this.availableGraphsSubpages.put("connbidirect-data.html",
+        "WEB-INF/connbidirect-data.jsp");
 
     this.availableGraphsSubpageTables = new HashMap<String, String>();
     this.availableGraphsSubpageTables.put("userstats-relay-table.html",

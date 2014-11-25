@@ -27,6 +27,7 @@ Sorry for any inconvenience caused by this.</p>
 <li><a href="versions.html">Graph: Relays by version</a></li>
 <li><a href="platforms.html">Graph: Relays by platform</a></li>
 <li><a href="cloudbridges.html">Graph: Tor Cloud bridges</a></li>
+<li><a href="servers-data.html">Data: Number of relays and bridges</a></li>
 </ul>
 
     </div>

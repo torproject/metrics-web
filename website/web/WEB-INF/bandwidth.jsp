@@ -28,6 +28,8 @@ Sorry for any inconvenience caused by this.</p>
 <li><a href="dirbytes.html">Graph: Number of bytes spent on answering directory requests</a></li>
 <li><a href="advbwdist-perc.html">Graph: Advertised bandwidth distribution</a></li>
 <li><a href="advbwdist-relay.html">Graph: Advertised bandwidth of n-th fastest relays</a></li>
+<li><a href="bandwidth-data.html">Data: Bandwidth provided and consumed by relays</a></li>
+<li><a href="advbwdist-data.html">Data: Advertised bandwidth distribution and n-th fastest relays</a></li>
 </ul>
 <br>
 <hr>

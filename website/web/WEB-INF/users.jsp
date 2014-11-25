@@ -31,6 +31,7 @@ Sorry for any inconvenience caused by this.</p>
 <li><a href="userstats-bridge-transport.html">Graph: Bridge users by transport</a></li>
 <li><a href="userstats-bridge-version.html">Graph: Bridge users by IP version</a></li>
 <li><a href="oxford-anonymous-internet.html">Link: Tor users as percentage of larger Internet population</a></li>
+<li><a href="clients-data.html">Data: Estimated number of clients in the Tor network</a></li>
 </ul>
 
     </div>

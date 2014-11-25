@@ -58,6 +58,12 @@
     <url-pattern>/torperf.html</url-pattern>
     <url-pattern>/torperf-failures.html</url-pattern>
     <url-pattern>/connbidirect.html</url-pattern>
+    <url-pattern>/servers-data.html</url-pattern>
+    <url-pattern>/bandwidth-data.html</url-pattern>
+    <url-pattern>/advbwdist-data.html</url-pattern>
+    <url-pattern>/clients-data.html</url-pattern>
+    <url-pattern>/torperf-data.html</url-pattern>
+    <url-pattern>/connbidirect-data.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
