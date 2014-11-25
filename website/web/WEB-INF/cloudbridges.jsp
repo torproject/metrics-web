@@ -43,8 +43,13 @@ which bridge operators usually leave unchanged.</p>
 <p>Download graph as
 <a href="cloudbridges.pdf${cloudbridges_url}">PDF</a> or
 <a href="cloudbridges.svg${cloudbridges_url}">SVG</a>.</p>
-<p><a href="stats/servers.csv">CSV</a> file containing all data.</p>
 <br>
+
+<h4>Related metrics</h4>
+<ul>
+<li><a href="networksize.html">Graph: Relays and bridges in the network</a></li>
+<li><a href="servers-data.html">Data: Number of relays and bridges</a></li>
+</ul>
 
     </div>
   </div>

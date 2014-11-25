@@ -51,8 +51,12 @@ fractions.</p>
 <p>Download graph as
 <a href="connbidirect.pdf${connbidirect_url}">PDF</a> or
 <a href="connbidirect.svg${connbidirect_url}">SVG</a>.</p>
-<p><a href="stats/connbidirect.csv">CSV</a> file containing all data.</p>
 <br>
+
+<h4>Related metrics</h4>
+<ul>
+<li><a href="connbidirect-data.html">Data: Fraction of connections used uni-/bidirectionally</a></li>
+</ul>
 
     </div>
   </div>

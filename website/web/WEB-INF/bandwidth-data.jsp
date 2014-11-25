@@ -58,6 +58,15 @@ flags, so that this column will contain the empty string if either
 relays when serving directory data.</li>
 </ul>
 
+<h4>Related metrics</h4>
+<ul>
+<li><a href="bandwidth.html">Graph: Total relay bandwidth in the network</a></li>
+<li><a href="bwhist-flags.html">Graph: Relay bandwidth by Exit and/or Guard flags</a></li>
+<li><a href="bandwidth-flags.html">Graph: Advertised bandwidth and bandwidth history by relay flags</a></li>
+<li><a href="dirbytes.html">Graph: Number of bytes spent on answering directory requests</a></li>
+<li><a href="bandwidth-data.html">Data: Bandwidth provided and consumed by relays</a></li>
+</ul>
+
     </div>
   </div>
   <div class="bottom" id="bottom">

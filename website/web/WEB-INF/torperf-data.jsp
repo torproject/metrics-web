@@ -49,6 +49,12 @@ download the static file over Tor.</li>
 file over Tor.</li>
 </ul>
 
+<h4>Related metrics</h4>
+<ul>
+<li><a href="torperf.html">Graph: Time to download files over Tor</a></li>
+<li><a href="torperf-failures.html">Graph: Timeouts and failures of downloading files over Tor</a></li>
+</ul>
+
     </div>
   </div>
   <div class="bottom" id="bottom">

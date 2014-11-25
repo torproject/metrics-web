@@ -58,8 +58,13 @@ n-th fastest relays in the network for different values of n.</p>
 <p>Download graph as
 <a href="advbwdist-relay.pdf${advbwdist_relay_url}">PDF</a> or
 <a href="advbwdist-relay.svg${advbwdist_relay_url}">SVG</a>.</p>
-<p><a href="stats/advbwdist.csv">CSV</a> file containing all data.</p>
 <br>
+
+<h4>Related metrics</h4>
+<ul>
+<li><a href="advbwdist-perc.html">Graph: Advertised bandwidth distribution</a></li>
+<li><a href="advbwdist-data.html">Data: Advertised bandwidth distribution and n-th fastest relays</a></li>
+</ul>
 
     </div>
   </div>

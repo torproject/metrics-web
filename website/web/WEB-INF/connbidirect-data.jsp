@@ -48,6 +48,11 @@ than 10 times as many written or read bytes as in the other
 direction.</li>
 </ul>
 
+<h4>Related metrics</h4>
+<ul>
+<li><a href="connbidirect.html">Graph: Fraction of connections used uni-/bidirectionally</a></li>
+</ul>
+
     </div>
   </div>
   <div class="bottom" id="bottom">

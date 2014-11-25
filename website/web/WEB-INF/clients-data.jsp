@@ -74,6 +74,18 @@ Values above 50 can be considered reliable enough for most purposes,
 lower values should be handled with more care.</li>
 </ul>
 
+<h4>Related metrics</h4>
+<ul>
+<li><a href="userstats-relay-country.html">Graph: Direct users by country</a></li>
+<li><a href="userstats-relay-table.html">Table: Top-10 countries by directly connecting users</a></li>
+<li><a href="userstats-censorship-events.html">Table: Top-10 countries by possible censorship events</a></li>
+<li><a href="userstats-bridge-country.html">Graph: Bridge users by country</a></li>
+<li><a href="userstats-bridge-table.html">Table: Top-10 countries by bridge users</a></li>
+<li><a href="userstats-bridge-transport.html">Graph: Bridge users by transport</a></li>
+<li><a href="userstats-bridge-version.html">Graph: Bridge users by IP version</a></li>
+<li><a href="oxford-anonymous-internet.html">Link: Tor users as percentage of larger Internet population</a></li>
+</ul>
+
     </div>
   </div>
   <div class="bottom" id="bottom">

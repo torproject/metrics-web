@@ -40,8 +40,15 @@ network.</p>
 <p>Download graph as
 <a href="platforms.pdf${platforms_url}">PDF</a> or
 <a href="platforms.svg${platforms_url}">SVG</a>.</p>
-<p><a href="stats/servers.csv">CSV</a> file containing all data.</p>
 <br>
+
+<h4>Related metrics</h4>
+<ul>
+<li><a href="networksize.html">Graph: Relays and bridges in the network</a></li>
+<li><a href="relayflags.html">Graph: Relays with Exit, Fast, Guard, Stable, and HSDir flags</a></li>
+<li><a href="versions.html">Graph: Relays by version</a></li>
+<li><a href="servers-data.html">Data: Number of relays and bridges</a></li>
+</ul>
 
     </div>
   </div>

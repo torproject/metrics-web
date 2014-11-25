@@ -71,8 +71,13 @@ amount).</p>
 <p>Download graph as
 <a href="advbwdist-perc.pdf${advbwdist_perc_url}">PDF</a> or
 <a href="advbwdist-perc.svg${advbwdist_perc_url}">SVG</a>.</p>
-<p><a href="stats/advbwdist.csv">CSV</a> file containing all data.</p>
 <br>
+
+<h4>Related metrics</h4>
+<ul>
+<li><a href="advbwdist-relay.html">Graph: Advertised bandwidth of n-th fastest relays</a></li>
+<li><a href="advbwdist-data.html">Data: Advertised bandwidth distribution and n-th fastest relays</a></li>
+</ul>
 
     </div>
   </div>

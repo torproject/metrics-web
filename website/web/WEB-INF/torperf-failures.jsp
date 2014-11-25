@@ -53,7 +53,13 @@ than expected.</p>
 <p>Download graph as
 <a href="torperf-failures.pdf${torperf_failures_url}">PDF</a> or
 <a href="torperf-failures.svg${torperf_failures_url}">SVG</a>.</p>
-<p><a href="stats/torperf.csv">CSV</a> file containing all data.</p>
+<br>
+
+<h4>Related metrics</h4>
+<ul>
+<li><a href="torperf.html">Graph: Time to download files over Tor</a></li>
+<li><a href="torperf-data.html">Data: Performance of downloading static files over Tor</a></li>
+</ul>
 
     </div>
   </div>

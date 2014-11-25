@@ -39,8 +39,16 @@
 <p>Download graph as
 <a href="networksize.pdf${networksize_url}">PDF</a> or
 <a href="networksize.svg${networksize_url}">SVG</a>.</p>
-<p><a href="stats/servers.csv">CSV</a> file containing all data.</p>
 <br>
+
+<h4>Related metrics</h4>
+<ul>
+<li><a href="relayflags.html">Graph: Relays with Exit, Fast, Guard, Stable, and HSDir flags</a></li>
+<li><a href="versions.html">Graph: Relays by version</a></li>
+<li><a href="platforms.html">Graph: Relays by platform</a></li>
+<li><a href="cloudbridges.html">Graph: Tor Cloud bridges</a></li>
+<li><a href="servers-data.html">Data: Number of relays and bridges</a></li>
+</ul>
 
     </div>
   </div>

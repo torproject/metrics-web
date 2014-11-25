@@ -50,9 +50,17 @@ more details, see this
     </tr>
   </c:forEach>
 </table>
-<p><a href="stats/clients.csv">CSV</a> file containing user estimates.
+<p>
 <a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
 and answers about users statistics</a></p>
+
+<h4>Related metrics</h4>
+<ul>
+<li><a href="userstats-relay-country.html">Graph: Direct users by country</a></li>
+<li><a href="userstats-relay-table.html">Table: Top-10 countries by directly connecting users</a></li>
+<li><a href="userstats-censorship-events.html">Table: Top-10 countries by possible censorship events</a></li>
+<li><a href="clients-data.html">Data: Estimated number of clients in the Tor network</a></li>
+</ul>
 
     </div>
   </div>

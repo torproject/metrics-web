@@ -44,8 +44,15 @@ directories reported these statistics.</p>
 <p>Download graph as
 <a href="dirbytes.pdf${dirbytes_url}">PDF</a> or
 <a href="dirbytes.svg${dirbytes_url}">SVG</a>.</p>
-<p><a href="stats/bandwidth.csv">CSV</a> file containing all data.</p>
 <br>
+
+<h4>Related metrics</h4>
+<ul>
+<li><a href="bandwidth.html">Graph: Total relay bandwidth in the network</a></li>
+<li><a href="bwhist-flags.html">Graph: Relay bandwidth by Exit and/or Guard flags</a></li>
+<li><a href="bandwidth-flags.html">Graph: Advertised bandwidth and bandwidth history by relay flags</a></li>
+<li><a href="bandwidth-data.html">Data: Bandwidth provided and consumed by relays</a></li>
+</ul>
 
     </div>
   </div>

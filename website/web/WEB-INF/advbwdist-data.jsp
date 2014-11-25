@@ -46,6 +46,12 @@ fastest relays.</li>
 <li><b>advbw:</b> Advertised bandwidth in B/s.</li>
 </ul>
 
+<h4>Related metrics</h4>
+<ul>
+<li><a href="advbwdist-perc.html">Graph: Advertised bandwidth distribution</a></li>
+<li><a href="advbwdist-relay.html">Graph: Advertised bandwidth of n-th fastest relays</a></li>
+</ul>
+
     </div>
   </div>
   <div class="bottom" id="bottom">

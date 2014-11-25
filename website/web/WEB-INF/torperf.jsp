@@ -52,7 +52,13 @@ graph.</p>
 <p>Download graph as
 <a href="torperf.pdf${torperf_url}">PDF</a> or
 <a href="torperf.svg${torperf_url}">SVG</a>.</p>
-<p><a href="stats/torperf.csv">CSV</a> file containing all data.</p>
+<br>
+
+<h4>Related metrics</h4>
+<ul>
+<li><a href="torperf-failures.html">Graph: Timeouts and failures of downloading files over Tor</a></li>
+<li><a href="torperf-data.html">Data: Performance of downloading static files over Tor</a></li>
+</ul>
 
     </div>
   </div>
