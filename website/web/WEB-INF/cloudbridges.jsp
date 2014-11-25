@@ -17,9 +17,12 @@
 <a name="cloudbridges"></a>
 <h3>Tor Metrics: Tor Cloud bridges</h3>
 <br>
-<p>The following graph shows the average daily number of
-<a href="http://cloud.torproject.org/">Tor Cloud</a> bridges in the
-network.</p>
+<p>The following graph shows the number of running
+<a href="about.html#bridge">bridges</a> that are deployed in
+<a href="http://aws.amazon.com/ec2/">Amazon's EC2 cloud</a> using images
+provided by <a href="https://cloud.torproject.org/">Tor Cloud</a>.
+These bridges have, by default, a nickname that starts with "ec2bridger"
+which bridge operators usually leave unchanged.</p>
 <img src="cloudbridges.png${cloudbridges_url}"
      width="576" height="360" alt="Tor Cloud bridges graph">
 <form action="cloudbridges.html">

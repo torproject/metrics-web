@@ -15,16 +15,21 @@
 
 <h3>Tor Metrics: Fraction of connections used uni-/bidirectionally</h3>
 <br>
-<p>The following graph shows the fraction of connections that is used
-uni- or bi-directionally.  Every 10 seconds, relays determine for every
-connection whether they read and wrote less than a threshold of 20 KiB.
-Connections below this threshold are excluded from these statistics.  For
-the remaining connections, relays report whether they read/wrote at least
-10 times as many bytes as they wrote/read.  If so, they classify a
-connection as "Mostly reading" or "Mostly writing," respectively.  All
-other connections are classified as "Both reading and writing."  After
-classifying connections, read and write counters are reset for the next
-10-second interval.  Statistics are aggregated over 24 hours.</p>
+<p>The following graph shows the fraction of direct connections between a
+<a href="about.html#relay">relay</a> and other nodes in the network that
+are used uni- or bi-directionally.
+Every 10 seconds, relays determine for every direct connection whether
+they read and wrote less than a threshold of 20 KiB.
+Connections below this threshold are excluded from the graph.
+For the remaining connections, relays determine whether they read/wrote at
+least 10 times as many bytes as they wrote/read.
+If so, they classify a connection as "Mostly reading" or "Mostly writing",
+respectively.
+All other connections are classified as "Both reading and writing".
+After classifying connections, read and write counters are reset for the
+next 10-second interval.
+The graph shows daily medians and inter-quartile ranges of reported
+fractions.</p>
 <img src="connbidirect.png${connbidirect_url}"
      width="576" height="360"
      alt="Fraction of direct connections used uni-/bidirectionally">

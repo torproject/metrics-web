@@ -35,10 +35,10 @@ Sorry for any inconvenience caused by this.</p>
 
 <h3>Tor Metrics: Total relay bandwidth in the network</h3>
 <br>
-<p>Relays report how much bandwidth they are willing to contribute and how
-many bytes they have read and written in the past 24 hours. The following
-graph shows total advertised bandwidth and bandwidth history of all relays
-in the network.</p>
+<p>The following graph shows the total
+<a href="about.html#advertised-bandwidth">advertised</a> and
+<a href="about.html#bandwidth-history">consumed bandwidth</a> of all
+<a href="about.html#relay">relays</a> in the network.</p>
 <img src="bandwidth.png${bandwidth_url}"
      width="576" height="360" alt="Relay bandwidth graph">
 <form action="bandwidth.html">

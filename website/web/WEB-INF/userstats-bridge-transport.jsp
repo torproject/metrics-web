@@ -16,6 +16,13 @@
 
 <h3>Tor Metrics: Bridge users by transport</h3>
 <br>
+<p>The following graph shows the estimated number of
+<a href="about.html#client">clients</a> connecting via
+<a href="about.html#bridge">bridges</a>.
+These numbers are derived from directory requests counted on bridges.
+Bridges distinguish connecting clients by transport protocol, which may
+include <a href="about.html#pluggable-transport">pluggable transports</a>,
+so that graphs are available for different transports.</p>
 <img src="userstats-bridge-transport.png${userstats_bridge_transport_url}"
      width="576" height="360" alt="Bridge users by transport graph">
 <form action="userstats-bridge-transport.html">

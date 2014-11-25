@@ -16,8 +16,9 @@
 
 <h3>Tor Metrics: Relays and bridges in the network</h3>
 <br>
-<p>The following graph shows the average daily number of relays and
-bridges in the network.</p>
+<p>The following graph shows the number of running
+<a href="about.html#relay">relays</a> and
+<a href="about.html#bridge">bridges</a> in the network.</p>
 <img src="networksize.png${networksize_url}"
      width="576" height="360" alt="Network size graph">
 <form action="networksize.html">

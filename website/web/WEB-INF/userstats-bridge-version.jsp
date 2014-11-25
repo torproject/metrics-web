@@ -16,6 +16,12 @@
 
 <h3>Tor Metrics: Bridge users by IP version</h3>
 <br>
+<p>The following graph shows the estimated number of
+<a href="about.html#client">clients</a> connecting via
+<a href="about.html#bridge">bridges</a>.
+These numbers are derived from directory requests counted on bridges.
+Bridges distinguish connecting clients by IP version, so that graphs are
+available for both IP versions 4 and 6.</p>
 <img src="userstats-bridge-version.png${userstats_bridge_version_url}"
      width="576" height="360" alt="Bridge users by IP version graph">
 <form action="userstats-bridge-version.html">

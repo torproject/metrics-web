@@ -16,9 +16,10 @@
 
 <h3>Tor Metrics: Relays by platform</a></h3>
 <br>
-<p>Relays report the operating system they are running to the directory
-authorities. The following graph shows the number of relays by
-platform.</p>
+<p>The following graph shows the number of running
+<a href="about.html#relay">relays</a> by operating system.
+Relays report their operating system when they announce themselves in the
+network.</p>
 <img src="platforms.png${platforms_url}"
      width="576" height="360" alt="Relay platforms graph">
 <form action="platforms.html">

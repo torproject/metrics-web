@@ -16,13 +16,15 @@
 
 <h3>Tor Metrics: Relays by version</h3>
 <br>
-<p>Relays report the Tor version that they are running to the directory
-authorities. See the
-<a href="https://www.torproject.org/download/download.html.en">download
-page</a> and
-<a href="https://gitweb.torproject.org/tor.git/blob/HEAD:/ChangeLog">ChangeLog file</a>
-to find out which Tor versions are stable and unstable.
-The following graph shows the number of relays by version.</p>
+<p>The following graph shows the number of running
+<a href="about.html#relay">relays</a> by tor software version.
+Relays report their tor software version when they announce themselves in
+the network.
+More details on when these versions were declared stable or unstable can
+be found on the
+<a href="https://www.torproject.org/download/download.html">download page</a>
+and in the
+<a href="https://gitweb.torproject.org/tor.git/blob/HEAD:/ChangeLog">changes file</a>.</p>
 <img src="versions.png${versions_url}"
      width="576" height="360" alt="Relay versions graph">
 <form action="versions.html">

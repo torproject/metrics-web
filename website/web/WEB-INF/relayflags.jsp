@@ -16,9 +16,15 @@
 
 <h3>Tor Metrics: Relays with Exit, Fast, Guard, Stable, and HSDir flags</h3>
 <br>
-<p>The directory authorities assign certain flags to relays that clients
-use for their path selection decisions. The following graph shows the
-average number of relays with these flags assigned.</p>
+
+<p>The following graph shows the number of running
+<a href="about.html#relay">relays</a> that have had certain
+<a href="about.html#relay-flag">flags</a> assigned by the
+<a href="about.html#directory-authority">directory authorities</a>.
+These flags indicate that a relay should be preferred for either guard
+("Guard") or exit positions ("Exit"), that a relay is suitable for
+high-bandwidth ("Fast") or long-lived circuits ("Stable"), or that a relay
+is considered a hidden service directory ("HSDir").</p>
 <img src="relayflags.png${relayflags_url}"
      width="576" height="360" alt="Relay flags graph">
 <form action="relayflags.html">

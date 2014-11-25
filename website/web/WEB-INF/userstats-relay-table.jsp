@@ -16,6 +16,13 @@
 
 <h3>Tor Metrics: Top-10 countries by directly connecting users</h3>
 <br>
+<p>The following table shows the top-10 countries by estimated number of
+directly-connecting <a href="about.html#client">clients</a>.
+These numbers are derived from directory requests counted on
+<a href="about.html#directory-authority">directory authorities</a> and
+<a href="about.html#directory-mirror">mirrors</a>.
+Relays resolve client IP addresses to country codes, so that numbers are
+available for most countries.</p>
 <form action="userstats-relay-table.html">
   <div class="formrow">
     <input type="hidden" name="table" value="userstats-relay">

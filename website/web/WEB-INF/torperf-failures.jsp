@@ -15,12 +15,13 @@
 
 <h3>Tor Metrics: Timeouts and failures of downloading files over Tor</h3>
 <br>
-<p>The following graphs show the fraction of timeouts and failures of
-downloading files over Tor as experienced by users.
-A timeout occurs when a 50 KiB (1 MiB, 5 MiB) download does not complete
-within 4:55 minutes (29:55 minutes, 59:55 minutes).
+<p>The following graph shows the fraction of timeouts and failures when
+downloading static files of different sizes over Tor.
+A timeout occurs when a download does not complete within the scheduled
+time, in which case it is aborted in order not to overlap with the next
+scheduled download.
 A failure occurs when the download completes, but the response is smaller
-than 50 KiB (1 MiB, 5 MiB).</p>
+than expected.</p>
 <img src="torperf-failures.png${torperf_failures_url}"
      width="576" height="360" alt="Torperf failures graph">
 <form action="torperf-failures.html">

@@ -16,8 +16,9 @@
 
 <h3>Tor Metrics: Advertised bandwidth of n-th fastest relays</h3>
 <br>
-<p>The following graph shows the advertised bandwidth of the n-th fastest
-relays in the network.</p>
+<p>The following graph shows the
+<a href="about.html#advertised-bandwidth">advertised bandwidth</a> of the
+n-th fastest relays in the network for different values of n.</p>
 <img src="advbwdist-relay.png${advbwdist_relay_url}"
      width="576" height="360"
      alt="Advertised bandwidth of n-th fastest relays graph">

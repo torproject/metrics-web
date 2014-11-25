@@ -16,6 +16,12 @@
 
 <h3>Tor Metrics: Top-10 countries by bridge users</h3>
 <br>
+<p>The following table shows the top-10 countries by estimated number of
+<a href="about.html#client">clients</a> connecting via
+<a href="about.html#bridge">bridges</a>.
+These numbers are derived from directory requests counted on bridges.
+Bridges resolve client IP addresses of incoming directory requests to
+country codes, so that numbers are available for most countries.</p>
 <form action="userstats-bridge-table.html">
   <div class="formrow">
     <input type="hidden" name="table" value="userstats-bridge">

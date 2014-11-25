@@ -16,6 +16,12 @@
 
 <h3>Tor Metrics: Bridge users by country</h3>
 <br>
+<p>The following graph shows the estimated number of
+<a href="about.html#client">clients</a> connecting via
+<a href="about.html#bridge">bridges</a>.
+These numbers are derived from directory requests counted on bridges.
+Bridges resolve client IP addresses of incoming directory requests to
+country codes, so that graphs are available for most countries.</p>
 <img src="userstats-bridge-country.png${userstats_bridge_country_url}"
      width="576" height="360" alt="Bridge users by country graph">
 <form action="userstats-bridge-country.html">

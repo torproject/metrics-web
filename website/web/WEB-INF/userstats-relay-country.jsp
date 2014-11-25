@@ -16,6 +16,18 @@
 
 <h3>Tor Metrics: Direct users by country</h3>
 <br>
+<p>The following graph shows the estimated number of directly-connecting
+<a href="about.html#client">clients</a>; that is, it excludes clients
+connecting via <a href="about.html#bridge">bridges</a>.
+These estimates are derived from the number of directory requests counted
+on <a href="about.html#directory-authority">directory authorities</a> and
+<a href="about.html#directory-mirror">mirrors</a>.
+Relays resolve client IP addresses to country codes, so that graphs are
+available for most countries.
+Furthermore, it is possible to display indications of censorship events as
+obtained from an anomaly-based censorship-detection system (for more
+details, see this
+<a href="https://research.torproject.org/techreports/detector-2011-09-09.pdf">technical report</a>).</p>
 <img src="userstats-relay-country.png${userstats_relay_country_url}"
      width="576" height="360" alt="Direct users by country graph">
 <form action="userstats-relay-country.html">

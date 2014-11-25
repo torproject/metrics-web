@@ -16,9 +16,15 @@
 
 <h3>Tor Metrics: Advertised bandwidth distribution</h3>
 <br>
-<p>The following graph shows the distribution of advertised bandwidth in
-the network. In contrast to the graphs above, the following graph contains
-no sums of advertised bandwidths, but bandwidths of single relays.</p>
+<p>The following graph shows the distribution of the
+<a href="about.html#advertised-bandwidth">advertised bandwidth</a> of
+relays in the network.
+Each percentile represents the advertised bandwidth that a given
+percentage of relays does not exceed (and that in turn the remaining
+relays either match or exceed).
+For example, 99% of relays advertise at most the bandwidth value shown in
+the 99th percentile line (and the remaining 1% advertise at least that
+amount).</p>
 <img src="advbwdist-perc.png${advbwdist_perc_url}"
      width="576" height="360"
      alt="Advertised bandwidth distribution graph">

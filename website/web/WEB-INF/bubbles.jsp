@@ -30,6 +30,22 @@ Sorry for any inconvenience caused by this.</p>
 
 <h3>Tor Metrics: Network bubble graphs</h3>
 <br>
+<p>The following graph visualizes diversity of currently running
+<a href="about.html#relay">relays</a> in terms of their probability to be
+selected for <a href="about.html#circuit">circuits</a>.
+Fast relays with at least 100 Mbit/s bandwidth capacity, and which
+therefore have a high probability of being selected for circuits, are
+represented by an onion; smaller relays are shown as a simple dot; and the
+slowest relays, which are almost never selected for circuits, are omitted
+entirely.
+Graphs in the "all relays" category use a relay's
+<a href="about.html#consensus-weight">consensus weight</a> as probability,
+whereas graphs in the "exits only" category use a value derived from a
+relay's consensus weight that resembles the probability of selecting that
+relay as exit node.
+All graphs support grouping relays by same autonomous system, contact
+information, country, or network family.</p>
+
       <p>
         All relays:
         <a href="#no-group" onclick="make_bubble_graph('no-group');">No group</a> |

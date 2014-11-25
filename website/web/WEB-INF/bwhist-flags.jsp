@@ -16,8 +16,10 @@
 
 <h3>Tor Metrics: Relay bandwidth by Exit and/or Guard flags</h3>
 <br>
-<p>The following graph shows the relay bandwidth of all relays with the
-Exit and/or Guard flags assigned by the directory authorities.</p>
+<p>The following graph shows the
+<a href="about.html#bandwidth-history">consumed bandwidth</a> reported by
+relays, subdivided into four distinct subsets by assigned "Exit" and/or
+"Guard" <a href="about.html#relay-flag">flags</a>.</p>
 <img src="bwhist-flags.png${bwhist_flags_url}"
      width="576" height="360" alt="Relay bandwidth by flags graph">
 <form action="bwhist-flags.html">

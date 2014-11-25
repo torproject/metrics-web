@@ -17,12 +17,13 @@
 <h3>Tor Metrics: Tor users as percentage of larger Internet population</h3>
 <br>
 <p>The Oxford Internet Institute made a cartogram visualization of Tor
-users as compared to the overall Internet population per country.
-They used the average number of Tor users from August 2012 to August 2013
-and put it in relation to total Internet users per country.
-Be sure to read up the
-<a href="http://geography.oii.ox.ac.uk/?page=tor">details and their
-conclusions</a>.</p>
+users as compared to the overall Internet population.
+They used the average number of Tor <a href="about.html#client">users</a>
+per country from August 2012 to August 2013 and put it in relation to
+total Internet users per country.
+More details and conclusions can be found on the
+<a href="http://geography.oii.ox.ac.uk/?page=tor">Information Geographies
+website at the Oxford Internet Institute</a>.</p>
 
 <a href="http://geography.oii.ox.ac.uk/?page=tor">
 <img src="images/oxford-anonymous-internet.png"

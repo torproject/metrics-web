@@ -16,11 +16,14 @@
 
 <h3>Tor Metrics: Number of bytes spent on answering directory requests</h3>
 <br>
-<p>Relays running on 0.2.2.15-alpha or higher report the number of bytes
-they spend on answering directory requests. The following graph shows
-total written and read bytes as well as written and read dir bytes. The
-dir bytes are extrapolated from those relays who report them to reflect
-the number of written and read dir bytes by all relays.</p>
+<p>The following graph shows the portion of
+<a href="about.html#bandwidth-history">consumed bandwidth</a> that
+<a href="about.html#directory-authority">directory authorities</a> and
+<a href="about.html#directory-mirror">mirrors</a> have spent on answering
+directory requests.
+Not all directories report these statistics, so the graph shows an
+estimation of total consumed bandwidth as it would be observed if all
+directories reported these statistics.</p>
 <img src="dirbytes.png${dirbytes_url}"
      width="576" height="360" alt="Dir bytes graph">
 <form action="dirbytes.html">

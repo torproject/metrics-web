@@ -16,11 +16,13 @@
 
 <h3>Tor Metrics: Advertised bandwidth and bandwidth history by relay flags</h3>
 <br>
-<p>The following graph shows the advertised bandwidth and bandwidth
-history of all relays with the Exit and/or Guard flags assigned by the
-directory authorities.
-Note that these sets possibly overlap with relays having both Exit and
-Guard flag.</p>
+<p>The following graph shows
+<a href="about.html#advertised-bandwidth">advertised</a> and
+<a href="about.html#bandwidth-history">consumed bandwidth</a> of relays
+with either "Exit" or "Guard" <a href="about.html#relay-flag">flags</a>
+assigned by the directory authorities.
+These sets are not distinct, because a relay that has both the "Exit" and
+"Guard" flags assigned will be included in both sets.</p>
 <img src="bandwidth-flags.png${bandwidth_flags_url}"
      width="576" height="360" alt="Advertised bandwidth and bandwidth history by relay flags graph">
 <form action="bandwidth-flags.html">

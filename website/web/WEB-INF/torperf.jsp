@@ -15,12 +15,11 @@
 
 <h3>Tor Metrics: Time to download files over Tor</h3>
 <br>
-<p>The following graphs show the performance of the Tor network as
-experienced by its users. The graphs contain the average (median) time to
-request files of three different sizes over Tor as well as first and third
-quartile of request times. Medians and quartiles are calculated multiple
-times per day for completed days only, resulting in a delay of 1 to 1.5
-days before changes to network performance become visible in the
+<p>The following graph shows overall performance when downloading static
+files of different sizes over Tor.
+The graph shows the range of measurements from first to third quartile,
+and highlights the median.
+The slowest and fastest quarter of measurements are omitted from the
 graph.</p>
 <img src="torperf.png${torperf_url}"
      width="576" height="360" alt="Torperf graph">

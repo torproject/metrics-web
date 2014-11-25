@@ -14,9 +14,12 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h3>Tor Metrics: Top-10 countries by possible censorship events (<a
-href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>)</h3>
+<h3>Tor Metrics: Top-10 countries by possible censorship events</h3>
 <br>
+<p>The following table shows the top-10 countries by possible censorship
+events, as obtained from an anomaly-based censorship-detection system (for
+more details, see this
+<a href="https://research.torproject.org/techreports/detector-2011-09-09.pdf">technical report</a>).</p>
 <form action="userstats-censorship-events.html">
   <div class="formrow">
     <input type="hidden" name="table" value="userstats-censorship-events">
