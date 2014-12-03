@@ -17,7 +17,9 @@
         network to date.
         If something can be measured safely, you'll find it here.*</p>
         <p><small>*And if you come across something that is missing here,
-        please let us know.</small></p>
+        please
+        <a href="https://www.torproject.org/about/contact.html.en">let us
+        know</a>.</small></p>
 
         <h3>Servers</h3>
         <p>How many relays and bridges are in the network?
