@@ -52,7 +52,7 @@ available for most countries.</p>
   </c:forEach>
 </table>
 <p>
-<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+<a href="https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt">Questions
 and answers about users statistics</a></p>
 
 <h4>Related metrics</h4>

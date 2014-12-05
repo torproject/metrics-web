@@ -63,7 +63,7 @@ details, see this
 <p>Download graph as
 <a href="userstats-relay-country.pdf${userstats_relay_country_url}">PDF</a> or
 <a href="userstats-relay-country.svg${userstats_relay_country_url}">SVG</a>.
-<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+<a href="https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt">Questions
 and answers about users statistics</a></p>
 
 <h4>Related metrics</h4>

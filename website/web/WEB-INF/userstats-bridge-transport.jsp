@@ -55,7 +55,7 @@ so that graphs are available for different transports.</p>
 <p>Download graph as
 <a href="userstats-bridge-transport.pdf${userstats_bridge_transport_url}">PDF</a> or
 <a href="userstats-bridge-transport.svg${userstats_bridge_transport_url}">SVG</a>.
-<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+<a href="https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt">Questions
 and answers about users statistics</a></p>
 
 <h4>Related metrics</h4>

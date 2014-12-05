@@ -104,7 +104,7 @@ and that registers itself with the
 example, "Fast", "Stable"), or roles (for example, "Authority", "HSDir"),
 as assigned by the <a href="#directory-authority">directory
 authorities</a> and further defined in the
-<a href="https://gitweb.torproject.org/torspec.git/blob/HEAD:/dir-spec.txt">directory
+<a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">directory
 protocol specification</a>.</p>
 
 <h3>Frequently asked questions</h3>
@@ -129,7 +129,7 @@ paper</a> where we describe how we measure potentially sensitive data in
 the Tor network.
 Whenever we plan to add new data, this plan needs to go through a rigorous
 process of writing a
-<a href="https://gitweb.torproject.org/torspec.git/blob/HEAD:/proposals/001-process.txt">proposal
+<a href="https://gitweb.torproject.org/torspec.git/tree/proposals/001-process.txt">proposal
 document</a>, which is usually discussed on the
 <a href="https://lists.torproject.org/cgi-bin/mailman/listinfo/tor-dev">public
 development list</a>, and publicly reviewing code patches on the
@@ -182,7 +182,7 @@ counting those requests we can make some rough estimates how many users
 there are.
 If you want to learn more, there's a more detailed document available
 dubbed
-<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/users-q-and-a.txt">Questions
+<a href="https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt">Questions
 and answers about user statistics</a>.
 We also wrote a technical report titled
 <a href="https://research.torproject.org/techreports/counting-daily-bridge-users-2012-10-24.pdf">Counting
@@ -211,7 +211,7 @@ It simply takes time to report, collect, and process all the data.
 <br>
 A: Yes, all raw numbers are available in <a href="stats/">comma-separated
 value files (.csv)</a>, which have their own
-<a href="https://gitweb.torproject.org/metrics-web.git/blob/HEAD:/doc/stats-spec.txt">specification
+<a href="https://gitweb.torproject.org/metrics-web.git/tree/doc/stats-spec.txt">specification
 document</a>.
 In addition to that, the raw data behind those .csv files are available
 via the <a href="https://collector.torproject.org/">CollecTor service</a>.

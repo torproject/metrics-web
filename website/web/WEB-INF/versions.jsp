@@ -24,7 +24,7 @@ More details on when these versions were declared stable or unstable can
 be found on the
 <a href="https://www.torproject.org/download/download.html">download page</a>
 and in the
-<a href="https://gitweb.torproject.org/tor.git/blob/HEAD:/ChangeLog">changes file</a>.</p>
+<a href="https://gitweb.torproject.org/tor.git/tree/ChangeLog">changes file</a>.</p>
 <img src="versions.png${versions_url}"
      width="576" height="360" alt="Relay versions graph">
 <form action="versions.html">
