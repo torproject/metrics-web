@@ -630,10 +630,30 @@ public final class RelayDescriptorDatabaseImporter {
             + "Ignoring this line.");
         continue;
       }
-      if (intervalLength != 900L) {
-        this.logger.fine("Bandwidth history line does not consist of "
-            + "15-minute intervals. Ignoring this line.");
+      String[] values = parts[5].split(",");
+      if (intervalLength % 900L != 0L) {
+        this.logger.fine("Bandwidth history line does not contain "
+            + "multiples of 15-minute intervals. Ignoring this line.");
         continue;
+      } else if (intervalLength != 900L) {
+        /* This is a really dirty hack to support bandwidth history
+         * intervals that are longer than 15 minutes by linearly
+         * distributing reported bytes to 15 minute intervals.  The
+         * alternative would have been to modify the database schema. */
+        try {
+          long factor = intervalLength / 900L;
+          String[] newValues = new String[values.length * (int) factor];
+          for (int i = 0; i < newValues.length; i++) {
+            newValues[i] = String.valueOf(
+                Long.parseLong(values[i / (int) factor]) / factor);
+          }
+          values = newValues;
+          intervalLength = 900L;
+        } catch (NumberFormatException e) {
+          this.logger.fine("Number format exception while parsing "
+              + "bandwidth history line. Ignoring this line.");
+          continue;
+        }
       }
       String type = parts[0];
       String intervalEndTime = parts[1] + " " + parts[2];
@@ -657,7 +677,6 @@ public final class RelayDescriptorDatabaseImporter {
       }
       long currentIntervalEnd = intervalEnd;
       StringBuilder sb = new StringBuilder();
-      String[] values = parts[5].split(",");
       SortedSet<String> newHistoryLines = new TreeSet<String>();
       try {
         for (int i = values.length - 1; i >= -1; i--) {
