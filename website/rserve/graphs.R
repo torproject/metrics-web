@@ -440,15 +440,15 @@ plot_bandwidth <- function(start, end, path) {
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(bandwidth$date, "%Y-%m-%d")) -
     min(as.Date(bandwidth$date, "%Y-%m-%d"))))
-  ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20,
-      colour = variable)) +
+  ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
+      y = value * 8 / 1e9, colour = variable)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name="Bandwidth (MiB/s)",
-        limits = c(0, max(bandwidth$value, na.rm = TRUE) / 2^20)) +
+    scale_y_continuous(name = "Bandwidth (Gbit/s)",
+        limits = c(0, max(bandwidth$value, na.rm = TRUE) * 8 / 1e9)) +
     scale_colour_hue(name = "", h.start = 90,
         breaks = c("bwadv", "bwhist"),
         labels = c("Advertised bandwidth", "Bandwidth history")) +
@@ -485,15 +485,15 @@ plot_bwhist_flags <- function(start, end, path) {
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(bw$date, "%Y-%m-%d")) -
     min(as.Date(bw$date, "%Y-%m-%d"))))
-  ggplot(bw, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20,
+  ggplot(bw, aes(x = as.Date(date, "%Y-%m-%d"), y = value * 8 / 1e9,
       colour = variable)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name="Bandwidth (MiB/s)",
-        limits = c(0, max(bw$value, na.rm = TRUE) / 2^20)) +
+    scale_y_continuous(name="Bandwidth (Gbit/s)",
+        limits = c(0, max(bw$value, na.rm = TRUE) * 8 / 1e9)) +
     scale_colour_manual(name = "",
         values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2")) +
     opts(title = "Bandwidth history by relay flags",
@@ -513,15 +513,15 @@ plot_dirbytes <- function(start, end, path) {
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(dir$date, "%Y-%m-%d")) -
     min(as.Date(dir$date, "%Y-%m-%d"))))
-  ggplot(dir, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20,
+  ggplot(dir, aes(x = as.Date(date, "%Y-%m-%d"), y = value * 8 / 1e9,
       colour = variable)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name="Bandwidth (MiB/s)",
-        limits = c(0, max(dir$value, na.rm = TRUE) / 2^20)) +
+    scale_y_continuous(name="Bandwidth (Gbit/s)",
+        limits = c(0, max(dir$value, na.rm = TRUE) * 8 / 1e9)) +
     scale_colour_hue(name = "",
         breaks = c("dirwrite", "dirread"),
         labels = c("Written dir bytes", "Read dir bytes")) +
@@ -763,15 +763,15 @@ plot_bandwidth_flags <- function(start, end, path) {
     sep = "")), value = bandwidth$value)
   bandwidth$variable <- factor(bandwidth$variable,
     levels = levels(bandwidth$variable)[c(3, 4, 1, 2)])
-  ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"), y = value / 2^20,
-      colour = variable)) +
+  ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
+      y = value * 8 / 1e9, colour = variable)) +
     geom_line(size = 1) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name="Bandwidth (MiB/s)",
-        limits = c(0, max(bandwidth$value, na.rm = TRUE) / 2^20)) +
+    scale_y_continuous(name="Bandwidth (Gbit/s)",
+        limits = c(0, max(bandwidth$value, na.rm = TRUE) * 8 / 1e9)) +
     scale_colour_manual(name = "",
         values = c("#E69F00", "#D6C827", "#009E73", "#00C34F")) +
     opts(title = paste("Advertised bandwidth and bandwidth history by",
@@ -941,7 +941,7 @@ plot_advbwdist_perc <- function(start, end, p, path) {
                 "advbwdist.csv", sep = ""), stringsAsFactors = FALSE)
   t <- t[t$date >= start & t$date <= end &
          t$percentile %in% as.numeric(p), ]
-  t <- data.frame(date = t$date, advbw = t$advbw / 2^20,
+  t <- data.frame(date = t$date, advbw = t$advbw * 8 / 1e9,
                   variable = ifelse(t$isexit != "t", "All relays",
                                     "Exits only"),
                   percentile = as.factor(t$percentile))
@@ -955,7 +955,7 @@ plot_advbwdist_perc <- function(start, end, p, path) {
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name = "Advertised bandwidth in MiB/s\n",
+    scale_y_continuous(name = "Advertised bandwidth in Gbit/s\n",
         limits = c(0, max(t$advbw, na.rm = TRUE))) +
     scale_colour_hue(name = "Percentile",
         breaks = rev(levels(t$percentile))) +
@@ -968,7 +968,7 @@ plot_advbwdist_relay <- function(start, end, n, path) {
   t <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
                 "advbwdist.csv", sep = ""), stringsAsFactors = FALSE)
   t <- t[t$date >= start & t$date <= end & t$relay %in% as.numeric(n), ]
-  t <- data.frame(date = t$date, advbw = t$advbw / 2^20,
+  t <- data.frame(date = t$date, advbw = t$advbw * 8 / 1e9,
                   variable = ifelse(t$isexit != "t", "All relays",
                                     "Exits only"),
                   relay = as.factor(t$relay))
@@ -982,7 +982,7 @@ plot_advbwdist_relay <- function(start, end, n, path) {
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,
         minor = date_breaks$minor) +
-    scale_y_continuous(name = "Advertised bandwidth in MiB/s\n",
+    scale_y_continuous(name = "Advertised bandwidth in Gbit/s\n",
         limits = c(0, max(t$advbw, na.rm = TRUE))) +
     scale_colour_hue(name = "n", breaks = levels(t$relay)) +
     opts(title = "Advertised bandwidth of n-th fastest relays\n")
