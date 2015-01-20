@@ -24,7 +24,9 @@ percentage of relays does not exceed (and that in turn the remaining
 relays either match or exceed).
 For example, 99% of relays advertise at most the bandwidth value shown in
 the 99th percentile line (and the remaining 1% advertise at least that
-amount).</p>
+amount).
+<font color="red">Note that the unit has recently changed from MiB/s to
+Gbit/s.</font></p>
 <img src="advbwdist-perc.png${advbwdist_perc_url}"
      width="576" height="360"
      alt="Advertised bandwidth distribution graph">

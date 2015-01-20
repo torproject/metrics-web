@@ -19,7 +19,9 @@
 <p>The following graph shows the
 <a href="about.html#bandwidth-history">consumed bandwidth</a> reported by
 relays, subdivided into four distinct subsets by assigned "Exit" and/or
-"Guard" <a href="about.html#relay-flag">flags</a>.</p>
+"Guard" <a href="about.html#relay-flag">flags</a>.
+<font color="red">Note that the unit has recently changed from MiB/s to
+Gbit/s.</font></p>
 <img src="bwhist-flags.png${bwhist_flags_url}"
      width="576" height="360" alt="Relay bandwidth by flags graph">
 <form action="bwhist-flags.html">

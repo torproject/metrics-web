@@ -23,7 +23,9 @@
 directory requests.
 Not all directories report these statistics, so the graph shows an
 estimation of total consumed bandwidth as it would be observed if all
-directories reported these statistics.</p>
+directories reported these statistics.
+<font color="red">Note that the unit has recently changed from MiB/s to
+Gbit/s.</font></p>
 <img src="dirbytes.png${dirbytes_url}"
      width="576" height="360" alt="Dir bytes graph">
 <form action="dirbytes.html">

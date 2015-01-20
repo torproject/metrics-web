@@ -22,7 +22,9 @@
 with either "Exit" or "Guard" <a href="about.html#relay-flag">flags</a>
 assigned by the directory authorities.
 These sets are not distinct, because a relay that has both the "Exit" and
-"Guard" flags assigned will be included in both sets.</p>
+"Guard" flags assigned will be included in both sets.
+<font color="red">Note that the unit has recently changed from MiB/s to
+Gbit/s.</font></p>
 <img src="bandwidth-flags.png${bandwidth_flags_url}"
      width="576" height="360" alt="Advertised bandwidth and bandwidth history by relay flags graph">
 <form action="bandwidth-flags.html">

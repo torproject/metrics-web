@@ -19,7 +19,9 @@
 <p>The following graph shows the total
 <a href="about.html#advertised-bandwidth">advertised</a> and
 <a href="about.html#bandwidth-history">consumed bandwidth</a> of all
-<a href="about.html#relay">relays</a> in the network.</p>
+<a href="about.html#relay">relays</a> in the network.
+<font color="red">Note that the unit has recently changed from MiB/s to
+Gbit/s.</font></p>
 <img src="bandwidth.png${bandwidth_url}"
      width="576" height="360" alt="Relay bandwidth graph">
 <form action="bandwidth.html">
