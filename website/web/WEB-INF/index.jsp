@@ -84,6 +84,14 @@
 <li><a href="connbidirect-data.html">Data: Fraction of connections used uni-/bidirectionally</a></li>
 </ul>
 
+        <h3>Hidden services</h3>
+        <p>How many hidden services are there in the network, and how much
+        traffic do they handle?</p>
+
+<ul>
+<li><a href="hidserv-data.html">Data: Hidden-service statistics</a></li>
+</ul>
+
     </div>
   </div>
   <div class="bottom" id="bottom">

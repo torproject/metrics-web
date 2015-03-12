@@ -34,6 +34,7 @@ public class ResearchStatsServlet extends HttpServlet {
     this.availableStatisticsFiles.add("torperf");
     this.availableStatisticsFiles.add("connbidirect");
     this.availableStatisticsFiles.add("advbwdist");
+    this.availableStatisticsFiles.add("hidserv");
   }
 
   public long getLastModified(HttpServletRequest request) {
