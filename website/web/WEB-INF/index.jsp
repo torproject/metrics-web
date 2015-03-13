@@ -89,6 +89,7 @@
         traffic do they handle?</p>
 
 <ul>
+<li><a href="hidserv-dir-onions-seen.html">Graph: Unique .onion addresses</a></li>
 <li><a href="hidserv-data.html">Data: Hidden-service statistics</a></li>
 </ul>
 

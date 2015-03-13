@@ -65,6 +65,7 @@
     <url-pattern>/torperf-data.html</url-pattern>
     <url-pattern>/connbidirect-data.html</url-pattern>
     <url-pattern>/hidserv-data.html</url-pattern>
+    <url-pattern>/hidserv-dir-onions-seen.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -246,6 +247,9 @@
     <url-pattern>/advbwdist-relay.png</url-pattern>
     <url-pattern>/advbwdist-relay.pdf</url-pattern>
     <url-pattern>/advbwdist-relay.svg</url-pattern>
+    <url-pattern>/hidserv-dir-onions-seen.png</url-pattern>
+    <url-pattern>/hidserv-dir-onions-seen.pdf</url-pattern>
+    <url-pattern>/hidserv-dir-onions-seen.svg</url-pattern>
   </servlet-mapping>
 
   <servlet>

@@ -51,6 +51,7 @@ network fraction.</li>
 
 <h4>Related metrics</h4>
 <ul>
+<li><a href="hidserv-dir-onions-seen.html">Graph: Unique .onion addresses</a></li>
 <li><a href="relayflags.html">Graph: Relays with Exit, Fast, Guard, Stable, and HSDir flags</a></li>
 </ul>
 

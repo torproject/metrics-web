@@ -989,3 +989,24 @@ plot_advbwdist_relay <- function(start, end, n, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
+plot_hidserv_dir_onions_seen <- function(start, end, path) {
+  end <- min(end, as.character(Sys.Date() - 2))
+  h <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "hidserv.csv", sep = ""), stringsAsFactors = FALSE)
+  h <- h[h$date >= start & h$date <= end & h$type == "dir-onions-seen", ]
+  h <- rbind(data.frame(date = NA, wiqm = 0),
+             data.frame(date = as.Date(h$date, "%Y-%m-%d"),
+                        wiqm = ifelse(h$frac >= 0.01, h$wiqm, NA)))
+  date_breaks <- date_breaks(as.numeric(max(h$date, na.rm = TRUE)
+                                      - min(h$date, na.rm = TRUE)))
+  ggplot(h, aes(x = date, y = wiqm)) +
+    geom_line(size = 0.75) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
+    scale_y_continuous(name = "") +
+    opts(title = "Unique .onion addresses\n")
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+
