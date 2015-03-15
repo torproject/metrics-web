@@ -210,9 +210,9 @@ It simply takes time to report, collect, and process all the data.
 <b>Q: Are the raw numbers behind graphs available for download?</b>
 <br>
 A: Yes, all raw numbers are available in <a href="stats/">comma-separated
-value files (.csv)</a>, which have their own
-<a href="https://gitweb.torproject.org/metrics-web.git/tree/doc/stats-spec.txt">specification
-document</a>.
+value files (.csv)</a>, which are further explained on the "Data:" pages,
+e.g., <a href="https://metrics.torproject.org/servers-data.html">"Data:
+Number of relays and bridges"</a>.
 In addition to that, the raw data behind those .csv files are available
 via the <a href="https://collector.torproject.org/">CollecTor service</a>.
 If you do something cool with either the .csv files or the raw data,
