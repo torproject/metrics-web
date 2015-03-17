@@ -94,6 +94,10 @@ public class GraphsSubpagesServlet extends HttpServlet {
         "WEB-INF/hidserv-data.jsp");
     this.availableGraphsSubpages.put("hidserv-dir-onions-seen.html",
         "WEB-INF/hidserv-dir-onions-seen.jsp");
+    this.availableGraphsSubpages.put("hidserv-rend-relayed-cells.html",
+        "WEB-INF/hidserv-rend-relayed-cells.jsp");
+    this.availableGraphsSubpages.put("hidserv-frac-reporting.html",
+        "WEB-INF/hidserv-frac-reporting.jsp");
 
     this.availableGraphsSubpageTables = new HashMap<String, String>();
     this.availableGraphsSubpageTables.put("userstats-relay-table.html",

@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics &mdash; Unique .onion addresses</title>
+  <title>Tor Metrics &mdash; Fraction of relays reporting hidden-service statistics</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -14,46 +14,45 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Unique .onion addresses</h2>
+<h2><a href="/">Tor Metrics</a> &mdash; Fraction of relays reporting hidden-service statistics</h2>
 <br>
-<p>The following graph shows the number of unique .onion addresses in
-the network per day.
-These numbers are extrapolated from aggregated statistics on unique
-.onion addresses reported by single <a href="about.html#relay">relays</a>
-acting as <a href="about.html#hidden-service">hidden-service</a>
-directories, if at least 1% of relays reported these statistics.
+<p>The following graph shows the fraction of
+<a href="about.html#relay">relays</a> that report statistics on
+<a href="about.html#hidden-service">hidden service</a> usage.
+If at least 1% of relays report a statistic, it gets extrapolated towards
+a network total, where higher fractions are produce more accurate results.
 For more details on the extrapolation algorithm, see <a
 href="https://blog.torproject.org/blog/some-statistics-about-onions">this
 blog post</a> and <a
 href="https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf">this
 technical report</a>.</p>
 
-<img src="hidserv-dir-onions-seen.png${hidserv_dir_onions_seen_url}"
-     width="576" height="360" alt="Unique .onion addresses graph">
-<form action="hidserv-dir-onions-seen.html">
+<img src="hidserv-frac-reporting.png${hidserv_frac_reporting_url}"
+     width="576" height="360" alt="Fraction of relays reporting hidden-service statistics graph">
+<form action="hidserv-frac-reporting.html">
   <div class="formrow">
-    <input type="hidden" name="graph" value="hidserv-dir-onions-seen">
+    <input type="hidden" name="graph" value="hidserv-frac-reporting">
     <p>
     <label>Start date (yyyy-mm-dd):</label>
       <input type="text" name="start" size="10"
-             value="<c:choose><c:when test="${fn:length(hidserv_dir_onions_seen_start) == 0}">${default_start_date}</c:when><c:otherwise>${hidserv_dir_onions_seen_start[0]}</c:otherwise></c:choose>">
+             value="<c:choose><c:when test="${fn:length(hidserv_frac_reporting_start) == 0}">${default_start_date}</c:when><c:otherwise>${hidserv_frac_reporting_start[0]}</c:otherwise></c:choose>">
     <label>End date (yyyy-mm-dd):</label>
       <input type="text" name="end" size="10"
-             value="<c:choose><c:when test="${fn:length(hidserv_dir_onions_seen_end) == 0}">${default_end_date}</c:when><c:otherwise>${hidserv_dir_onions_seen_end[0]}</c:otherwise></c:choose>">
+             value="<c:choose><c:when test="${fn:length(hidserv_frac_reporting_end) == 0}">${default_end_date}</c:when><c:otherwise>${hidserv_frac_reporting_end[0]}</c:otherwise></c:choose>">
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
   </div>
 </form>
 <p>Download graph as
-<a href="hidserv-dir-onions-seen.pdf${hidserv_dir_onions_seen_url}">PDF</a> or
-<a href="hidserv-dir-onions-seen.svg${hidserv_dir_onions_seen_url}">SVG</a>.</p>
+<a href="hidserv-frac-reporting.pdf${hidserv_frac_reporting_url}">PDF</a> or
+<a href="hidserv-frac-reporting.svg${hidserv_frac_reporting_url}">SVG</a>.</p>
 <br>
 
 <h4>Related metrics</h4>
 <ul>
+<li><a href="hidserv-dir-onions-seen.html">Graph: Unique .onion addresses</a></li>
 <li><a href="hidserv-rend-relayed-cells.html">Graph: Hidden-service traffic</a></li>
-<li><a href="hidserv-frac-reporting.html">Graph: Fraction of relays reporting hidden-service statistics</a></li>
 <li><a href="hidserv-data.html">Data: Hidden-service statistics</a></li>
 </ul>
 

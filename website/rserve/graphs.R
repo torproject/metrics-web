@@ -1010,3 +1010,54 @@ plot_hidserv_dir_onions_seen <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
+plot_hidserv_rend_relayed_cells <- function(start, end, path) {
+  end <- min(end, as.character(Sys.Date() - 2))
+  h <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "hidserv.csv", sep = ""), stringsAsFactors = FALSE)
+  h <- h[h$date >= start & h$date <= end &
+         h$type == "rend-relayed-cells", ]
+  h <- rbind(data.frame(date = NA, wiqm = 0),
+             data.frame(date = as.Date(h$date, "%Y-%m-%d"),
+                        wiqm = ifelse(h$frac >= 0.01, h$wiqm, NA)))
+  date_breaks <- date_breaks(as.numeric(max(h$date, na.rm = TRUE)
+                                      - min(h$date, na.rm = TRUE)))
+  ggplot(h, aes(x = date, y = wiqm * 8 * 512 / (86400 * 1e6))) +
+    geom_line(size = 0.75) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
+    scale_y_continuous(name = "") +
+    opts(title = "Hidden-service traffic in Mbit/s\n")
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+
+plot_hidserv_frac_reporting <- function(start, end, path) {
+  end <- min(end, as.character(Sys.Date() - 2))
+  h <- read.csv(paste("/srv/metrics.torproject.org/web/shared/stats/",
+                "hidserv.csv", sep = ""), stringsAsFactors = FALSE)
+  h <- h[h$date >= start & h$date <= end, ]
+  h <- rbind(data.frame(date = NA, frac = 0,
+                        type = c("rend-relayed-cells",
+                                 "dir-onions-seen")),
+             data.frame(date = as.Date(h$date, "%Y-%m-%d"),
+                        frac = h$frac, type = h$type))
+  date_breaks <- date_breaks(as.numeric(max(h$date, na.rm = TRUE)
+                                      - min(h$date, na.rm = TRUE)))
+  ggplot(h, aes(x = date, y = frac, colour = type)) +
+    geom_line(size = 0.75) +
+    geom_hline(yintercept = 0.01, linetype = 2) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        format = date_breaks$format, major = date_breaks$major,
+        minor = date_breaks$minor) +
+    scale_y_continuous(name = "", formatter = "percent") +
+    scale_colour_hue(name = "",
+                     breaks = c("rend-relayed-cells", "dir-onions-seen"),
+                     labels = c("Hidden-service traffic",
+                                "Unique .onion addresses")) +
+    opts(title = paste("Fraction of relays reporting hidden-service",
+                       "statistics"), legend.position = "top")
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+

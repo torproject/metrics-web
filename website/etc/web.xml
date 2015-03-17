@@ -66,6 +66,8 @@
     <url-pattern>/connbidirect-data.html</url-pattern>
     <url-pattern>/hidserv-data.html</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.html</url-pattern>
+    <url-pattern>/hidserv-rend-relayed-cells.html</url-pattern>
+    <url-pattern>/hidserv-frac-reporting.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -250,6 +252,12 @@
     <url-pattern>/hidserv-dir-onions-seen.png</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.pdf</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.svg</url-pattern>
+    <url-pattern>/hidserv-rend-relayed-cells.png</url-pattern>
+    <url-pattern>/hidserv-rend-relayed-cells.pdf</url-pattern>
+    <url-pattern>/hidserv-rend-relayed-cells.svg</url-pattern>
+    <url-pattern>/hidserv-frac-reporting.png</url-pattern>
+    <url-pattern>/hidserv-frac-reporting.pdf</url-pattern>
+    <url-pattern>/hidserv-frac-reporting.svg</url-pattern>
   </servlet-mapping>
 
   <servlet>

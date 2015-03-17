@@ -88,6 +88,10 @@ public class RObjectGenerator implements ServletContextListener {
     this.availableGraphs.put("advbwdist-relay", "start,end,n,filename");
     this.availableGraphs.put("hidserv-dir-onions-seen",
         "start,end,filename");
+    this.availableGraphs.put("hidserv-rend-relayed-cells",
+        "start,end,filename");
+    this.availableGraphs.put("hidserv-frac-reporting",
+        "start,end,filename");
 
     this.availableGraphFileTypes = new HashSet<String>(Arrays.asList(
         "png,pdf,svg".split(",")));

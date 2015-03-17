@@ -154,6 +154,12 @@ public class IndexServlet extends HttpServlet {
     availableMetrics.add(new Metric("hidserv-dir-onions-seen.html",
         "Unique .onion addresses", new String[] { "Hidden services" },
         "Graph", "Basic"));
+    availableMetrics.add(new Metric("hidserv-rend-relayed-cells.html",
+        "Hidden-service traffic", new String[] { "Hidden services" },
+        "Graph", "Basic"));
+    availableMetrics.add(new Metric("hidserv-frac-reporting.html",
+        "Fraction of relays reporting hidden-service statistics",
+        new String[] { "Hidden services" }, "Graph", "Advanced"));
     availableMetrics.add(new Metric("hidserv-data.html",
         "Hidden-service statistics", new String[] { "Hidden services" },
         "Data", "Advanced"));
