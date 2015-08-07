@@ -68,6 +68,7 @@
     <url-pattern>/hidserv-dir-onions-seen.html</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.html</url-pattern>
     <url-pattern>/hidserv-frac-reporting.html</url-pattern>
+    <url-pattern>/uncharted-data-flow.html</url-pattern>
   </servlet-mapping>
 
   <servlet>

@@ -163,6 +163,9 @@ public class IndexServlet extends HttpServlet {
     availableMetrics.add(new Metric("hidserv-data.html",
         "Hidden-service statistics", new String[] { "Hidden services" },
         "Data", "Advanced"));
+    availableMetrics.add(new Metric("uncharted-data-flow.html",
+        "Data flow in the Tor network", new String[] { "Relays",
+        "Hidden services", "Bandwidth" }, "Link", "Basic"));
   }
 
   public void doGet(HttpServletRequest request,

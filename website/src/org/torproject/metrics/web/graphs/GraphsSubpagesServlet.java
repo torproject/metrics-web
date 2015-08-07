@@ -98,6 +98,8 @@ public class GraphsSubpagesServlet extends HttpServlet {
         "WEB-INF/hidserv-rend-relayed-cells.jsp");
     this.availableGraphsSubpages.put("hidserv-frac-reporting.html",
         "WEB-INF/hidserv-frac-reporting.jsp");
+    this.availableGraphsSubpages.put("uncharted-data-flow.html",
+        "WEB-INF/uncharted-data-flow.jsp");
 
     this.availableGraphsSubpageTables = new HashMap<String, String>();
     this.availableGraphsSubpageTables.put("userstats-relay-table.html",
