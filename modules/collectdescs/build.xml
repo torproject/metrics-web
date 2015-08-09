@@ -1,0 +1,42 @@
+<project default="run" name="collectdescs" basedir=".">
+
+  <property name="sources" value="src"/>
+  <property name="classes" value="classes"/>
+  <path id="classpath">
+    <pathelement path="${classes}"/>
+    <fileset dir="/usr/share/java">
+      <include name="commons-compress-1.4.1.jar"/>
+      <include name="commons-lang-2.6.jar"/>
+    </fileset>
+    <fileset dir="../../deps/metrics-lib">
+      <include name="descriptor.jar"/>
+    </fileset>
+  </path>
+
+  <target name="metrics-lib">
+    <ant dir="../../deps/metrics-lib"/>
+  </target>
+
+  <target name="compile" depends="metrics-lib">
+    <mkdir dir="${classes}"/>
+    <javac destdir="${classes}"
+           srcdir="${sources}"
+           source="1.6"
+           target="1.6"
+           debug="true"
+           deprecation="true"
+           optimize="false"
+           failonerror="true"
+           includeantruntime="false">
+      <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <target name="run" depends="compile">
+    <java fork="true"
+          classname="org.torproject.metrics.collectdescs.Main">
+      <classpath refid="classpath"/>
+    </java>
+  </target>
+</project>
+

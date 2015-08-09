@@ -18,9 +18,9 @@ public class Main {
     /* Initialize directories and file paths. */
     Set<File> inDirectories = new HashSet<File>();
     inDirectories.add(
-        new File("../../shared/in/relay-descriptors/consensuses"));
+        new File("../../shared/in/recent/relay-descriptors/consensuses"));
     inDirectories.add(
-        new File("../../shared/in/relay-descriptors/extra-infos"));
+        new File("../../shared/in/recent/relay-descriptors/extra-infos"));
     File statusDirectory = new File("status");
     File hidservStatsExtrapolatedCsvFile = new File("stats/hidserv.csv");
 

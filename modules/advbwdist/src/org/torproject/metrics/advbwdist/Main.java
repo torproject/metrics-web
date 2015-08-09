@@ -28,7 +28,8 @@ public class Main {
     DescriptorReader descriptorReader =
         DescriptorSourceFactory.createDescriptorReader();
     descriptorReader.addDirectory(
-        new File("../../shared/in/relay-descriptors/server-descriptors"));
+        new File("../../shared/in/recent/relay-descriptors/"
+        + "server-descriptors"));
     Iterator<DescriptorFile> descriptorFiles =
         descriptorReader.readDescriptors();
     Map<String, Long> serverDescriptors =
@@ -52,7 +53,7 @@ public class Main {
     /* Parse consensuses, keeping a parse history. */
     descriptorReader = DescriptorSourceFactory.createDescriptorReader();
     descriptorReader.addDirectory(
-        new File("../../shared/in/relay-descriptors/consensuses"));
+        new File("../../shared/in/recent/relay-descriptors/consensuses"));
     descriptorReader.setExcludeFiles(
         new File("status/parsed-consensuses"));
     descriptorFiles = descriptorReader.readDescriptors();
