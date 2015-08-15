@@ -2,7 +2,7 @@
 #ImportDirectoryArchives 0
 #
 ## Relative path to directory to import directory archives from
-#DirectoryArchivesDirectory /srv/metrics.torproject.org/web/shared/in/recent/relay-descriptors/
+#DirectoryArchivesDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/relay-descriptors/
 #
 ## Keep a history of imported directory archive files to know which files
 ## have been imported before. This history can be useful when importing
@@ -14,7 +14,7 @@
 #ImportSanitizedBridges 0
 #
 ## Relative path to directory to import sanitized bridges from
-#SanitizedBridgesDirectory /srv/metrics.torproject.org/web/shared/in/recent/bridge-descriptors/
+#SanitizedBridgesDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/bridge-descriptors/
 #
 ## Keep a history of imported sanitized bridge descriptors. This history
 ## can be useful when importing from a changing data source to avoid
@@ -43,5 +43,5 @@
 #ImportWriteTorperfStats 0
 #
 ## Relative path to directory to import torperf results from
-#TorperfDirectory /srv/metrics.torproject.org/web/shared/in/recent/torperf/
+#TorperfDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/torperf/
 #

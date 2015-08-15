@@ -164,7 +164,7 @@
     <init-param>
       <param-name>statsDir</param-name>
       <param-value>
-        /srv/metrics.torproject.org/web/shared/stats/
+        /srv/metrics.torproject.org/metrics/shared/stats/
       </param-value>
     </init-param>
   </servlet>
@@ -330,7 +330,7 @@
   <context-param>
     <param-name>cachedGraphsDir</param-name>
     <param-value>
-      /srv/metrics.torproject.org/web/rserve/graphs/
+      /srv/metrics.torproject.org/metrics/website/rserve/graphs/
     </param-value>
   </context-param>
 

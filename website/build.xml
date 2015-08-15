@@ -29,7 +29,7 @@
   <!-- Create a .war file for deployment. -->
   <target name="war"
           depends="compile">
-    <war destfile="ernie.war"
+    <war destfile="metrics.war"
          webxml="etc/web.xml">
       <fileset dir="web"/>
       <lib dir="lib">
