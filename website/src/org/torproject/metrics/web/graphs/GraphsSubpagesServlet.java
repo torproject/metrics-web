@@ -90,6 +90,8 @@ public class GraphsSubpagesServlet extends HttpServlet {
         "WEB-INF/torperf-data.jsp");
     this.availableGraphsSubpages.put("connbidirect-data.html",
         "WEB-INF/connbidirect-data.jsp");
+    this.availableGraphsSubpages.put("connbidirect2-data.html",
+        "WEB-INF/connbidirect2-data.jsp");
     this.availableGraphsSubpages.put("hidserv-data.html",
         "WEB-INF/hidserv-data.jsp");
     this.availableGraphsSubpages.put("hidserv-dir-onions-seen.html",

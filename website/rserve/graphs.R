@@ -674,30 +674,21 @@ plot_torperf_failures <- function(start, end, source, filesize, path) {
 plot_connbidirect <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   c <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
-                "connbidirect.csv", sep = ""), stringsAsFactors = FALSE)
-  c <- c[c$date >= start & c$date <= end &
-         c$read + c$write + c$both > 0, ]
-  c <- data.frame(date = as.Date(c$date, "%Y-%m-%d"),
-                  both = c$both / (c$read + c$write + c$both),
-                  read = c$read / (c$read + c$write + c$both),
-                  write = c$write / (c$read + c$write + c$both))
-  c <- aggregate(list(both = c$both, read = c$read, write = c$write),
-                 by = list(date = c$date), quantile,
-                 probs = c(0.25, 0.5, 0.75))
-  c <- rbind(
-    data.frame(date = as.Date(c$date), data.frame(c$both),
-               variable = "both"),
-    data.frame(date = as.Date(c$date), data.frame(c$write),
-               variable = "write"),
-    data.frame(date = as.Date(c$date), data.frame(c$read),
-               variable = "read"))
+                "connbidirect2.csv", sep = ""), stringsAsFactors = FALSE)
+  c <- c[c$date >= start & c$date <= end, ]
+  c <- data.frame(date = as.Date(c$date),
+                  direction = factor(c$direction,
+                              levels = c("both", "write", "read")),
+                  quantile = paste("X", c$quantile, sep = ""),
+                  fraction = c$fraction / 100)
+  c <- cast(c, date + direction ~ quantile, value = "fraction")
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(c$date, "%Y-%m-%d")) -
     min(as.Date(c$date, "%Y-%m-%d"))))
-  ggplot(c, aes(x = date, y = X50., colour = variable)) +
+  ggplot(c, aes(x = date, y = X0.5, colour = direction)) +
     geom_line(size = 0.75) +
-    geom_ribbon(aes(x = date, ymin = X25., ymax = X75., fill = variable),
-                alpha = 0.5, legend = FALSE) +
+    geom_ribbon(aes(x = date, ymin = X0.25, ymax = X0.75,
+                fill = direction), alpha = 0.5, legend = FALSE) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         format = date_breaks$format, major = date_breaks$major,

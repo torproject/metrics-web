@@ -149,6 +149,9 @@ public class IndexServlet extends HttpServlet {
         "Performance of downloading static files over Tor",
         new String[] { "Performance" }, "Data", "Advanced"));
     availableMetrics.add(new Metric("connbidirect-data.html",
+        "Fraction of connections used uni-/bidirectionally (deprecated)",
+        new String[] { "Performance" }, "Data", "Advanced"));
+    availableMetrics.add(new Metric("connbidirect2-data.html",
         "Fraction of connections used uni-/bidirectionally",
         new String[] { "Performance" }, "Data", "Advanced"));
     availableMetrics.add(new Metric("hidserv-dir-onions-seen.html",

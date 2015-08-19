@@ -64,6 +64,7 @@
     <url-pattern>/clients-data.html</url-pattern>
     <url-pattern>/torperf-data.html</url-pattern>
     <url-pattern>/connbidirect-data.html</url-pattern>
+    <url-pattern>/connbidirect2-data.html</url-pattern>
     <url-pattern>/hidserv-data.html</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.html</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.html</url-pattern>

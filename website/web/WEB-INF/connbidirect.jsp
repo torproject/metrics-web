@@ -55,7 +55,7 @@ fractions.</p>
 
 <h4>Related metrics</h4>
 <ul>
-<li><a href="connbidirect-data.html">Data: Fraction of connections used uni-/bidirectionally</a></li>
+<li><a href="connbidirect2-data.html">Data: Fraction of connections used uni-/bidirectionally</a></li>
 </ul>
 
     </div>

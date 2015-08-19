@@ -25,7 +25,7 @@ Sorry for any inconvenience caused by this.</p>
 <li><a href="torperf-failures.html">Graph: Timeouts and failures of downloading files over Tor</a></li>
 <li><a href="connbidirect.html">Graph: Fraction of connections used uni-/bidirectionally</a></li>
 <li><a href="torperf-data.html">Data: Performance of downloading static files over Tor</a></li>
-<li><a href="connbidirect-data.html">Data: Fraction of connections used uni-/bidirectionally</a></li>
+<li><a href="connbidirect2-data.html">Data: Fraction of connections used uni-/bidirectionally</a></li>
 </ul>
 
     </div>

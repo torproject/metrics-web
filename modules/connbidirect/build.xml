@@ -1,0 +1,68 @@
+<project default="run" name="connbidirect" basedir=".">
+
+  <property name="connbidirect-sources" value="src/main/java"/>
+  <property name="connbidirect-tests" value="src/test/java"/>
+  <property name="connbidirect-classes" value="classes"/>
+  <path id="classpath">
+    <pathelement path="${connbidirect-classes}"/>
+    <fileset dir="/usr/share/java">
+      <include name="commons-codec-1.6.jar"/>
+      <include name="commons-compress-1.4.1.jar"/>
+      <include name="commons-lang-2.6.jar"/>
+      <include name="junit4.jar"/>
+    </fileset>
+    <fileset dir="../../deps/metrics-lib">
+      <include name="descriptor.jar"/>
+    </fileset>
+  </path>
+
+  <target name="metrics-lib">
+    <ant dir="../../deps/metrics-lib"/>
+  </target>
+
+  <target name="compile" depends="metrics-lib">
+    <mkdir dir="${connbidirect-classes}"/>
+    <javac destdir="${connbidirect-classes}"
+           srcdir="${connbidirect-sources}"
+           source="1.6"
+           target="1.6"
+           debug="true"
+           deprecation="true"
+           optimize="false"
+           failonerror="true"
+           includeantruntime="false">
+      <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <target name="test" depends="compile">
+    <javac destdir="${connbidirect-classes}"
+           srcdir="${connbidirect-tests}"
+           source="1.6"
+           target="1.6"
+           debug="true"
+           deprecation="true"
+           optimize="false"
+           failonerror="true"
+           includeantruntime="false">
+      <classpath refid="classpath"/>
+    </javac>
+    <junit fork="true" haltonfailure="true" printsummary="off">
+      <classpath refid="classpath"/>
+      <formatter type="plain" usefile="false"/>
+      <batchtest>
+        <fileset dir="${connbidirect-classes}"
+                 includes="**/*Test.class"/>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="run" depends="compile">
+    <java fork="true"
+          maxmemory="2g"
+          classname="org.torproject.metrics.connbidirect.Main">
+      <classpath refid="classpath"/>
+    </java>
+  </target>
+</project>
+

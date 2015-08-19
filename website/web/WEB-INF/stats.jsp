@@ -24,7 +24,7 @@ Sorry for any inconvenience caused by this.</p>
 <li><a href="advbwdist-data.html">Data: Advertised bandwidth distribution and n-th fastest relays</a></li>
 <li><a href="clients-data.html">Data: Estimated number of clients in the Tor network</a></li>
 <li><a href="torperf-data.html">Data: Performance of downloading static files over Tor</a></li>
-<li><a href="connbidirect-data.html">Data: Fraction of connections used uni-/bidirectionally</a></li>
+<li><a href="connbidirect2-data.html">Data: Fraction of connections used uni-/bidirectionally</a></li>
 </ul>
 
     </div>
