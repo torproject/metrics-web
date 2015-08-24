@@ -63,6 +63,8 @@ public class Main {
         "status/relay-descriptors"));
     descriptorReader.addDirectory(new File(
         "../../shared/in/recent/relay-descriptors"));
+    descriptorReader.addDirectory(new File(
+        "../../shared/in/archive/relay-descriptors"));
     Iterator<DescriptorFile> descriptorFiles =
         descriptorReader.readDescriptors();
     while (descriptorFiles.hasNext()) {
@@ -200,6 +202,8 @@ public class Main {
         "status/bridge-descriptors"));
     descriptorReader.addDirectory(new File(
         "../../shared/in/recent/bridge-descriptors"));
+    descriptorReader.addDirectory(new File(
+        "../../shared/in/archive/bridge-descriptors"));
     Iterator<DescriptorFile> descriptorFiles =
         descriptorReader.readDescriptors();
     while (descriptorFiles.hasNext()) {
