@@ -3,7 +3,7 @@
 package org.torproject.metrics.web.research;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -50,9 +50,9 @@ public class ResearchStatsServlet extends HttpServlet {
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
     String requestURI = request.getRequestURI();
-    if (requestURI.equals("/ernie/stats/")) {
+    if (requestURI.equals("/metrics/stats/")) {
       this.writeDirectoryListing(request, response);
-    } else if (requestURI.equals("/ernie/stats.html")) {
+    } else if (requestURI.equals("/metrics/stats.html")) {
       this.writeStatisticsPage(request, response);
     } else {
       File statsFile = this.determineStatsFile(request);
@@ -82,8 +82,8 @@ public class ResearchStatsServlet extends HttpServlet {
 
   private File determineStatsFile(HttpServletRequest request) {
     String requestedStatsFile = request.getRequestURI();
-    if (requestedStatsFile.equals("/ernie/stats/") ||
-        requestedStatsFile.equals("/ernie/stats.html")) {
+    if (requestedStatsFile.equals("/metrics/stats/") ||
+        requestedStatsFile.equals("/metrics/stats.html")) {
       return null;
     }
     if (requestedStatsFile.endsWith(".csv")) {
@@ -106,28 +106,26 @@ public class ResearchStatsServlet extends HttpServlet {
     if (!statsFile.exists()) {
       return false;
     }
-    byte[] statsFileBytes;
+    response.setContentType("text/csv");
+    response.setHeader("Content-Length", String.valueOf(
+        statsFile.length()));
+    response.setHeader("Content-Disposition",
+        "inline; filename=\"" + statsFile.getName() + "\"");
     try {
       BufferedInputStream bis = new BufferedInputStream(
-          new FileInputStream(statsFile), 1024);
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      byte[] buffer = new byte[1024];
+          new FileInputStream(statsFile), 8192);
+      BufferedOutputStream bos = new BufferedOutputStream(
+          response.getOutputStream());
+      byte[] buffer = new byte[8192];
       int length;
       while ((length = bis.read(buffer)) > 0) {
-        baos.write(buffer, 0, length);
+        bos.write(buffer, 0, length);
       }
+      bos.close();
       bis.close();
-      statsFileBytes = baos.toByteArray();
     } catch (IOException e) {
       return false;
     }
-    String statsFileContent = new String(statsFileBytes);
-    response.setContentType("text/csv");
-    response.setHeader("Content-Length", String.valueOf(
-        statsFileContent.length()));
-    response.setHeader("Content-Disposition",
-        "inline; filename=\"" + statsFile.getName() + "\"");
-    response.getWriter().print(statsFileContent);
     return true;
   }
 }
