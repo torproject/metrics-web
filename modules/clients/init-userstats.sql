@@ -491,6 +491,7 @@ BEGIN
       AND bytes.node = responses.node
       WHERE bytes.metric = 'bytes'
       AND responses.metric = 'responses'
+      AND bytes.seconds > 0
       GROUP BY bytes.date, bytes.node
     ) aggregated_bytes_responses
     WHERE aggregated.date = aggregated_bytes_responses.date
