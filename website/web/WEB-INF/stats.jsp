@@ -11,7 +11,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Statistics</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Statistics</h2>
 <br>
 <p>The data file specifications on this page have moved to their own subpages.
 This is part of an effort to make navigation on this website more intuitive.

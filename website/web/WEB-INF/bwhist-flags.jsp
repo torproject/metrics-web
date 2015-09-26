@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Relay bandwidth by Exit and/or Guard flags</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Relay bandwidth by Exit and/or Guard flags</h2>
 <br>
 <p>The following graph shows the
 <a href="about.html#bandwidth-history">consumed bandwidth</a> reported by

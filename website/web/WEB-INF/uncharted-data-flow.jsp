@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Data flow in the Tor network</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Data flow in the Tor network</h2>
 <br>
 <p>Uncharted made a visualization of data flow in the Tor network where
 they place each <a href="about.html#relay">relay</a> on a world map and

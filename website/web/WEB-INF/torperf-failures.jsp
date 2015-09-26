@@ -13,7 +13,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Timeouts and failures of downloading files over Tor</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Timeouts and failures of downloading files over Tor</h2>
 <br>
 <p>The following graph shows the fraction of timeouts and failures when
 downloading static files of different sizes over Tor.

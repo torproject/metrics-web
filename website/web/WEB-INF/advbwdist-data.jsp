@@ -13,7 +13,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Advertised bandwidth distribution and n-th fastest
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Advertised bandwidth distribution and n-th fastest
 relays</h2>
 <br>
 <p>The following data file contains statistics on the distribution of

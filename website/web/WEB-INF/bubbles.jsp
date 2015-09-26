@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Network bubble graphs</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Network bubble graphs</h2>
 <br>
 <p>The following graph visualizes diversity of currently running
 <a href="about.html#relay">relays</a> in terms of their probability to be

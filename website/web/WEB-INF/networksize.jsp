@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Relays and bridges in the network</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Relays and bridges in the network</h2>
 <br>
 <p>The following graph shows the number of running
 <a href="about.html#relay">relays</a> and

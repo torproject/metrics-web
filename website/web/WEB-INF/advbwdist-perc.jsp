@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Advertised bandwidth distribution</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Advertised bandwidth distribution</h2>
 <br>
 <p>The following graph shows the distribution of the
 <a href="about.html#advertised-bandwidth">advertised bandwidth</a> of

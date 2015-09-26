@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Tor users as percentage of larger Internet population</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Tor users as percentage of larger Internet population</h2>
 <br>
 <p>The Oxford Internet Institute made a cartogram visualization of Tor
 users as compared to the overall Internet population.

@@ -13,7 +13,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Fraction of connections used uni-/bidirectionally (deprecated)</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Fraction of connections used uni-/bidirectionally (deprecated)</h2>
 <br>
 <p><font color="red">As of August 25, 2015, this page and the linked data
 file have been replaced by <a href="connbidirect2-data.html">this page and

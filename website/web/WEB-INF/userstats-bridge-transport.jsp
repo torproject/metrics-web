@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Bridge users by transport</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Bridge users by transport</h2>
 <br>
 <p>The following graph shows the estimated number of
 <a href="about.html#client">clients</a> connecting via

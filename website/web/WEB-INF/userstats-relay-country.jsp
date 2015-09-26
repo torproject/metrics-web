@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Direct users by country</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Direct users by country</h2>
 <br>
 <p>The following graph shows the estimated number of directly-connecting
 <a href="about.html#client">clients</a>; that is, it excludes clients

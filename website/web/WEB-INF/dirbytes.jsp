@@ -14,7 +14,7 @@
     <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/">Tor Metrics</a> &mdash; Number of bytes spent on answering directory requests</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Number of bytes spent on answering directory requests</h2>
 <br>
 <p>The following graph shows the portion of
 <a href="about.html#bandwidth-history">consumed bandwidth</a> that

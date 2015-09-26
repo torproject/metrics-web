@@ -15,7 +15,7 @@
     <div class="main-column">
 
 <a name="cloudbridges"></a>
-<h2><a href="/">Tor Metrics</a> &mdash; Tor Cloud bridges</h2>
+<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Tor Cloud bridges</h2>
 <br>
 <p>The following graph shows the number of running
 <a href="about.html#bridge">bridges</a> that are deployed in
