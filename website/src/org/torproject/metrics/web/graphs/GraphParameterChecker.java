@@ -255,7 +255,7 @@ public class GraphParameterChecker {
           }
         }
       } else {
-        transportParameters = new String[] { "<OR>" };
+        transportParameters = new String[] { "!<OR>" };
       }
       recognizedGraphParameters.put("transport", transportParameters);
     }
