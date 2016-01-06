@@ -1,5 +1,9 @@
 package org.torproject.metrics.hidserv;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /* Computed fraction of hidden-service activity that a single relay is
  * assumed to observe in the network.  These fractions are computed from
  * status entries and bandwidth weights in a network status consensus. */
@@ -70,17 +74,32 @@ public class ComputedNetworkFractions implements Document {
         (int) this.validAfterMillis;
   }
 
+  private static Map<Long, String> previouslyFormattedDates =
+      Collections.synchronizedMap(new HashMap<Long, String>());
+
   /* Return a string representation of this object, consisting of two
    * strings: the first string contains fingerprint and valid-after date,
    * the second string contains the concatenation of all other
    * attributes. */
   @Override
   public String[] format() {
+    long validAfterDateMillis = (this.validAfterMillis
+        / DateTimeHelper.ONE_DAY) * DateTimeHelper.ONE_DAY;
+    String validAfterDate;
+    if (previouslyFormattedDates.containsKey(validAfterDateMillis)) {
+      validAfterDate = previouslyFormattedDates.get(validAfterDateMillis);
+    } else {
+      validAfterDate = DateTimeHelper.format(validAfterDateMillis,
+          DateTimeHelper.ISO_DATE_FORMAT);
+      previouslyFormattedDates.put(validAfterDateMillis, validAfterDate);
+    }
+    long validAfterHourMillis = this.validAfterMillis
+        % DateTimeHelper.ONE_DAY;
+    String validAfterHour = String.format("%02d",
+        validAfterHourMillis / DateTimeHelper.ONE_HOUR);
     String first = String.format("%s,%s", this.fingerprint,
-        DateTimeHelper.format(this.validAfterMillis,
-        DateTimeHelper.ISO_DATE_FORMAT));
-    String second = DateTimeHelper.format(this.validAfterMillis,
-        DateTimeHelper.ISO_HOUR_FORMAT)
+        validAfterDate);
+    String second = validAfterHour
         + (this.fractionRendRelayedCells == 0.0 ? ","
             : String.format(",%f", this.fractionRendRelayedCells))
         + (this.fractionDirOnionsSeen == 0.0 ? ","
@@ -92,6 +111,9 @@ public class ComputedNetworkFractions implements Document {
    * by the parse method. */
   ComputedNetworkFractions() {
   }
+
+  private static Map<String, Long> previouslyParsedDates =
+      Collections.synchronizedMap(new HashMap<String, Long>());
 
   /* Initialize this fractions object using the two provided strings that
    * have been produced by the format method earlier.  Return whether this
@@ -116,12 +138,25 @@ public class ComputedNetworkFractions implements Document {
           + "Skipping.%n");
       return false;
     }
-    long validAfterMillis = DateTimeHelper.parse(firstParts[1] + " "
-        + secondParts[0], DateTimeHelper.ISO_DATE_HOUR_FORMAT);
-    if (validAfterMillis == DateTimeHelper.NO_TIME_AVAILABLE) {
+    String validAfterDate = firstParts[1],
+        validAfterHour = secondParts[0];
+    long validAfterDateMillis;
+    if (previouslyParsedDates.containsKey(validAfterDate)) {
+      validAfterDateMillis = previouslyParsedDates.get(validAfterDate);
+    } else {
+      validAfterDateMillis = DateTimeHelper.parse(validAfterDate,
+          DateTimeHelper.ISO_DATE_FORMAT);
+      previouslyParsedDates.put(validAfterDate, validAfterDateMillis);
+    }
+    long validAfterTimeMillis = Long.parseLong(validAfterHour)
+        * DateTimeHelper.ONE_HOUR;
+    if (validAfterDateMillis == DateTimeHelper.NO_TIME_AVAILABLE ||
+        validAfterTimeMillis < 0L ||
+        validAfterTimeMillis >= DateTimeHelper.ONE_DAY) {
       System.err.printf("Invalid date/hour format.  Skipping.%n");
       return false;
     }
+    long validAfterMillis = validAfterDateMillis + validAfterTimeMillis;
     try {
       double fractionRendRelayedCells = secondParts[1].equals("")
           ? 0.0 : Double.parseDouble(secondParts[1]);
