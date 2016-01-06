@@ -184,21 +184,28 @@ DECLARE
 BEGIN
   RAISE NOTICE '% Starting to merge.', timeofday();
 
-  -- TODO Maybe we'll have to materialize a merged_part table that only
-  -- contains dates IN (SELECT DISTINCT DATE(stats_start) FROM imported)
-  -- and use that in the query below.
+  RAISE NOTICE '% Creating temporary merged_part table.', timeofday();
+
+  -- Materialize a temporary merged_part table that only contains dates of
+  -- newly imported rows for the query below.
+  CREATE TEMPORARY TABLE merged_part AS
+    SELECT * FROM merged
+    WHERE DATE(merged.stats_start) IN (
+      SELECT DISTINCT DATE(stats_start) FROM imported);
+
+  RAISE NOTICE '% Joining imported and merged_part tables.', timeofday();
 
   -- Loop over results from a query that joins new entries in the imported
-  -- table with existing entries in the merged table.
+  -- table with existing entries in the merged_part table.
   FOR cur IN SELECT DISTINCT
 
     -- Select id, interval start and end, and value of the existing entry
-    -- in merged; all these fields may be null if the imported entry is
-    -- not adjacent to an existing one.
-    merged.id AS merged_id,
-    merged.stats_start AS merged_start,
-    merged.stats_end AS merged_end,
-    merged.val AS merged_val,
+    -- in merged_part; all these fields may be null if the imported entry
+    -- is not adjacent to an existing one.
+    merged_part.id AS merged_id,
+    merged_part.stats_start AS merged_start,
+    merged_part.stats_end AS merged_end,
+    merged_part.val AS merged_val,
 
     -- Select interval start and end and value of the newly imported
     -- entry.
@@ -216,33 +223,35 @@ BEGIN
     imported.version AS version
 
     -- Select these columns from all entries in the imported table, plus
-    -- do an outer join on the merged table to find adjacent entries that
-    -- we might want to merge the new entries with.  It's possible that we
-    -- handle the same imported entry twice, if it starts directly after
-    -- one existing entry and ends directly before another existing entry.
-    FROM imported LEFT JOIN merged
+    -- do an outer join on the merged_part table to find adjacent entries
+    -- that we might want to merge the new entries with.  It's possible
+    -- that we handle the same imported entry twice, if it starts directly
+    -- after one existing entry and ends directly before another existing
+    -- entry.
+    FROM imported LEFT JOIN merged_part
 
     -- First two join conditions are to find adjacent intervals.  In fact,
     -- we also include overlapping intervals here, so that we can skip the
     -- overlapping entry in the imported table.
-    ON imported.stats_end >= merged.stats_start AND
-       imported.stats_start <= merged.stats_end AND
+    ON imported.stats_end >= merged_part.stats_start AND
+       imported.stats_start <= merged_part.stats_end AND
 
        -- Further join conditions are same date, fingerprint, node, etc.,
        -- so that we don't merge entries that don't belong together.
-       DATE(imported.stats_start) = DATE(merged.stats_start) AND
-       imported.fingerprint = merged.fingerprint AND
-       imported.node = merged.node AND
-       imported.metric = merged.metric AND
-       imported.country = merged.country AND
-       imported.transport = merged.transport AND
-       imported.version = merged.version
+       DATE(imported.stats_start) = DATE(merged_part.stats_start) AND
+       imported.fingerprint = merged_part.fingerprint AND
+       imported.node = merged_part.node AND
+       imported.metric = merged_part.metric AND
+       imported.country = merged_part.country AND
+       imported.transport = merged_part.transport AND
+       imported.version = merged_part.version
 
     -- Ordering is key, or our approach to merge subsequent entries is
     -- going to break.
     ORDER BY imported.fingerprint, imported.node, imported.metric,
              imported.country, imported.transport, imported.version,
-             imported.stats_start, merged.stats_start, imported.stats_end
+             imported.stats_start, merged_part.stats_start,
+             imported.stats_end
 
   -- Now go through the results one by one.
   LOOP
