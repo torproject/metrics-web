@@ -153,7 +153,8 @@ public class Extrapolator {
         File documentFile = new File(
             this.computedNetworkFractionsDirectory, date);
         Set<ComputedNetworkFractions> fractions
-            = this.computedNetworkFractionsStore.retrieve(documentFile);
+            = this.computedNetworkFractionsStore.retrieve(documentFile,
+            fingerprint);
         for (ComputedNetworkFractions fraction : fractions) {
           knownConsensuses.add(fraction.getValidAfterMillis());
           if (fraction.getFingerprint().equals(fingerprint)) {

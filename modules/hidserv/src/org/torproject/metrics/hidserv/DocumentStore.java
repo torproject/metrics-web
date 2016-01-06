@@ -97,6 +97,12 @@ public class DocumentStore<T extends Document> {
 
   /* Retrieve all previously stored documents from the given file. */
   public Set<T> retrieve(File documentFile) {
+    return this.retrieve(documentFile, "");
+  }
+
+  /* Retrieve previously stored documents from the given file that start
+   * with the given prefix. */
+  public Set<T> retrieve(File documentFile, String prefix) {
 
     /* Check if the document file exists, and if not, return an empty set.
      * This is not an error case. */
@@ -120,6 +126,14 @@ public class DocumentStore<T extends Document> {
               + "documents.%n", documentFile.getAbsolutePath());
           lnr.close();
           return null;
+        } else if (prefix.length() > formattedString0.length() &&
+            !(formattedString0 + line.substring(1)).startsWith(prefix)) {
+          /* Skip combined line not starting with prefix. */
+          continue;
+        } else if (prefix.length() > 0 &&
+            !formattedString0.startsWith(prefix)) {
+          /* Skip line not starting with prefix. */
+          continue;
         } else {
           T document = this.clazz.newInstance();
           if (!document.parse(new String[] { formattedString0,
