@@ -914,7 +914,7 @@ UNION ALL
   NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
 UNION ALL
   (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
-  'FreeBSD' AS platform, NULL AS ec2bridge, avg_bsd AS relays,
+  'BSD' AS platform, NULL AS ec2bridge, avg_bsd AS relays,
   NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
 UNION ALL
   (SELECT date, NULL AS flag, NULL AS country, NULL AS version,

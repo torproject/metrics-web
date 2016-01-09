@@ -421,7 +421,7 @@ plot_platforms <- function(start, end, path) {
     scale_y_continuous(name = "",
       limits = c(0, max(platforms$value, na.rm = TRUE))) +
     scale_colour_manual(name = "Platform",
-      breaks = c("Linux", "Darwin", "FreeBSD", "Windows", "Other"),
+      breaks = c("Linux", "Darwin", "BSD", "Windows", "Other"),
       values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#333333")) +
     opts(title = "Relay platforms\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
