@@ -88,7 +88,7 @@ public class Main {
     // Import and process torperf stats
     if (config.getImportWriteTorperfStats()) {
       new TorperfProcessor(new File(config.getTorperfDirectory()),
-          statsDirectory, config.getRelayDescriptorDatabaseJDBC());
+          statsDirectory);
     }
 
     // Remove lock file

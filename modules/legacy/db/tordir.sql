@@ -807,20 +807,6 @@ CREATE TABLE dirreq_stats (
     PRIMARY KEY (source, statsend, seconds, country)
 );
 
--- TABLE torperf_stats
--- Quantiles and medians of daily torperf results.
-CREATE TABLE torperf_stats (
-    "date" DATE NOT NULL,
-    source CHARACTER VARYING(32) NOT NULL,
-    q1 INTEGER NOT NULL,
-    md INTEGER NOT NULL,
-    q3 INTEGER NOT NULL,
-    timeouts INTEGER NOT NULL,
-    failures INTEGER NOT NULL,
-    requests INTEGER NOT NULL,
-    CONSTRAINT torperf_stats_pkey PRIMARY KEY("date", source)
-);
-
 -- Refresh all statistics in the database.
 CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
   BEGIN
@@ -965,16 +951,6 @@ UNION ALL
   WHERE COALESCE(total_bandwidth.date, total_bwhist.date, u.date) <
   current_date - 3)
 ORDER BY 1, 2, 3;
-
--- View for exporting torperf statistics.
-CREATE VIEW stats_torperf AS
-SELECT date, CASE WHEN source LIKE '%-50kb' THEN 50 * 1024
-  WHEN source LIKE '%-1mb' THEN 1024 * 1024
-  WHEN source LIKE '%-5mb' THEN 5 * 1024 * 1024 END AS size,
-  CASE WHEN source NOT LIKE 'all-%'
-  THEN split_part(source, '-', 1) END AS source, q1, md, q3, timeouts,
-  failures, requests FROM torperf_stats WHERE date < current_date - 1
-  ORDER BY 1, 2, 3;
 
 -- View for exporting connbidirect statistics.
 CREATE VIEW stats_connbidirect AS

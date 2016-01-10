@@ -8,21 +8,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
@@ -36,8 +27,7 @@ import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.TorperfResult;
 
 public class TorperfProcessor {
-  public TorperfProcessor(File torperfDirectory, File statsDirectory,
-      String connectionURL) {
+  public TorperfProcessor(File torperfDirectory, File statsDirectory) {
 
     if (torperfDirectory == null || statsDirectory == null) {
       throw new IllegalArgumentException();
@@ -45,7 +35,7 @@ public class TorperfProcessor {
 
     Logger logger = Logger.getLogger(TorperfProcessor.class.getName());
     File rawFile = new File(statsDirectory, "torperf-raw");
-    File statsFile = new File(statsDirectory, "torperf-stats");
+    File statsFile = new File(statsDirectory, "torperf.csv");
     SortedMap<String, String> rawObs = new TreeMap<String, String>();
     SortedMap<String, String> stats = new TreeMap<String, String>();
     int addedRawObs = 0;
@@ -76,7 +66,9 @@ public class TorperfProcessor {
         BufferedReader br = new BufferedReader(new FileReader(statsFile));
         String line = br.readLine(); // ignore header
         while ((line = br.readLine()) != null) {
-          String key = line.split(",")[0] + "," + line.split(",")[1];
+          String[] parts = line.split(",");
+          String key = String.format("%s,%s,%s", parts[0], parts[1],
+              parts[2]);
           stats.put(key, line);
         }
         br.close();
@@ -165,18 +157,27 @@ public class TorperfProcessor {
               long q1 = dlTimes.get(dlTimes.size() / 4 - 1);
               long md = dlTimes.get(dlTimes.size() / 2 - 1);
               long q3 = dlTimes.get(dlTimes.size() * 3 / 4 - 1);
-              stats.put(tempSourceDate, tempSourceDate + "," + q1 + ","
-                  + md + "," + q3 + "," + timeouts + "," + failures + ","
-                  + requests);
-              String allSourceDate = "all" + tempSourceDate.substring(
-                  tempSourceDate.indexOf("-"));
-              if (dlTimesAllSources.containsKey(allSourceDate)) {
-                dlTimesAllSources.get(allSourceDate).addAll(dlTimes);
+              String[] tempParts = tempSourceDate.split("[-,]", 3);
+              String tempDate = tempParts[2];
+              int tempSize = Integer.parseInt(
+                  tempParts[1].substring(0, tempParts[1].length() - 2))
+                  * 1024 * (tempParts[1].endsWith("mb") ? 1024 : 1);
+              String tempSource = tempParts[0];
+              String tempDateSizeSource = String.format("%s,%d,%s",
+                  tempDate, tempSize, tempSource);
+              stats.put(tempDateSizeSource,
+                  String.format("%s,%s,%s,%s,%s,%s,%s",
+                  tempDateSizeSource, q1, md, q3, timeouts, failures,
+                  requests));
+              String allDateSizeSource = String.format("%s,%d,",
+                  tempDate, tempSize);
+              if (dlTimesAllSources.containsKey(allDateSizeSource)) {
+                dlTimesAllSources.get(allDateSizeSource).addAll(dlTimes);
               } else {
-                dlTimesAllSources.put(allSourceDate, dlTimes);
+                dlTimesAllSources.put(allDateSizeSource, dlTimes);
               }
-              if (statusesAllSources.containsKey(allSourceDate)) {
-                long[] status = statusesAllSources.get(allSourceDate);
+              if (statusesAllSources.containsKey(allDateSizeSource)) {
+                long[] status = statusesAllSources.get(allDateSizeSource);
                 status[0] += timeouts;
                 status[1] += failures;
                 status[2] += requests;
@@ -185,7 +186,7 @@ public class TorperfProcessor {
                 status[0] = timeouts;
                 status[1] = failures;
                 status[2] = requests;
-                statusesAllSources.put(allSourceDate, status);
+                statusesAllSources.put(allDateSizeSource, status);
               }
             }
             dlTimes = new ArrayList<Long>();
@@ -212,19 +213,20 @@ public class TorperfProcessor {
         bw.close();
         for (Map.Entry<String, List<Long>> e :
             dlTimesAllSources.entrySet()) {
-          String allSourceDate = e.getKey();
+          String allDateSizeSource = e.getKey();
           dlTimes = e.getValue();
           Collections.sort(dlTimes);
           long q1 = dlTimes.get(dlTimes.size() / 4 - 1);
           long md = dlTimes.get(dlTimes.size() / 2 - 1);
           long q3 = dlTimes.get(dlTimes.size() * 3 / 4 - 1);
-          long[] status = statusesAllSources.get(allSourceDate);
+          long[] status = statusesAllSources.get(allDateSizeSource);
           timeouts = status[0];
           failures = status[1];
           requests = status[2];
-          stats.put(allSourceDate, allSourceDate + "," + q1 + "," + md
-              + "," + q3 + "," + timeouts + "," + failures + ","
-              + requests);
+          stats.put(allDateSizeSource,
+              String.format("%s,%s,%s,%s,%s,%s,%s",
+              allDateSizeSource, q1, md, q3, timeouts, failures,
+              requests));
         }
         logger.fine("Finished writing file " + rawFile.getAbsolutePath()
             + ".");
@@ -232,11 +234,18 @@ public class TorperfProcessor {
       if (stats.size() > 0) {
         logger.fine("Writing file " + statsFile.getAbsolutePath()
             + "...");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String yesterday = dateFormat.format(System.currentTimeMillis()
+            - 86400000L);
         statsFile.getParentFile().mkdirs();
         BufferedWriter bw = new BufferedWriter(new FileWriter(statsFile));
-        bw.append("source,date,q1,md,q3,timeouts,failures,requests\n");
+        bw.append("date,size,source,q1,md,q3,timeouts,failures,"
+            + "requests\n");
         for (String s : stats.values()) {
-          bw.append(s + "\n");
+          if (s.compareTo(yesterday) < 0) {
+            bw.append(s + "\n");
+          }
         }
         bw.close();
         logger.fine("Finished writing file " + statsFile.getAbsolutePath()
@@ -273,102 +282,6 @@ public class TorperfProcessor {
       dumpStats.append("\n" + lastSource + " " + lastKnownObservation);
     }
     logger.info(dumpStats.toString());
-
-    /* Write results to database. */
-    if (connectionURL != null) {
-      try {
-        Map<String, String> insertRows = new HashMap<String, String>();
-        insertRows.putAll(stats);
-        Set<String> updateRows = new HashSet<String>();
-        Connection conn = DriverManager.getConnection(connectionURL);
-        conn.setAutoCommit(false);
-        Statement statement = conn.createStatement();
-        ResultSet rs = statement.executeQuery(
-            "SELECT date, source, q1, md, q3, timeouts, failures, "
-            + "requests FROM torperf_stats");
-        while (rs.next()) {
-          String date = rs.getDate(1).toString();
-          String source = rs.getString(2);
-          String key = source + "," + date;
-          if (insertRows.containsKey(key)) {
-            String insertRow = insertRows.remove(key);
-            String[] newStats = insertRow.split(",");
-            long newQ1 = Long.parseLong(newStats[2]);
-            long newMd = Long.parseLong(newStats[3]);
-            long newQ3 = Long.parseLong(newStats[4]);
-            long newTimeouts = Long.parseLong(newStats[5]);
-            long newFailures = Long.parseLong(newStats[6]);
-            long newRequests = Long.parseLong(newStats[7]);
-            long oldQ1 = rs.getLong(3);
-            long oldMd = rs.getLong(4);
-            long oldQ3 = rs.getLong(5);
-            long oldTimeouts = rs.getLong(6);
-            long oldFailures = rs.getLong(7);
-            long oldRequests = rs.getLong(8);
-            if (newQ1 != oldQ1 || newMd != oldMd || newQ3 != oldQ3 ||
-                newTimeouts != oldTimeouts ||
-                newFailures != oldFailures ||
-                newRequests != oldRequests) {
-              updateRows.add(insertRow);
-            }
-          }
-        }
-        PreparedStatement psU = conn.prepareStatement(
-            "UPDATE torperf_stats SET q1 = ?, md = ?, q3 = ?, "
-            + "timeouts = ?, failures = ?, requests = ? "
-            + "WHERE date = ? AND source = ?");
-        for (String row : updateRows) {
-          String[] newStats = row.split(",");
-          String source = newStats[0];
-          java.sql.Date date = java.sql.Date.valueOf(newStats[1]);
-          long q1 = Long.parseLong(newStats[2]);
-          long md = Long.parseLong(newStats[3]);
-          long q3 = Long.parseLong(newStats[4]);
-          long timeouts = Long.parseLong(newStats[5]);
-          long failures = Long.parseLong(newStats[6]);
-          long requests = Long.parseLong(newStats[7]);
-          psU.clearParameters();
-          psU.setLong(1, q1);
-          psU.setLong(2, md);
-          psU.setLong(3, q3);
-          psU.setLong(4, timeouts);
-          psU.setLong(5, failures);
-          psU.setLong(6, requests);
-          psU.setDate(7, date);
-          psU.setString(8, source);
-          psU.executeUpdate();
-        }
-        PreparedStatement psI = conn.prepareStatement(
-            "INSERT INTO torperf_stats (q1, md, q3, timeouts, failures, "
-            + "requests, date, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        for (String row : insertRows.values()) {
-          String[] newStats = row.split(",");
-          String source = newStats[0];
-          java.sql.Date date = java.sql.Date.valueOf(newStats[1]);
-          long q1 = Long.parseLong(newStats[2]);
-          long md = Long.parseLong(newStats[3]);
-          long q3 = Long.parseLong(newStats[4]);
-          long timeouts = Long.parseLong(newStats[5]);
-          long failures = Long.parseLong(newStats[6]);
-          long requests = Long.parseLong(newStats[7]);
-          psI.clearParameters();
-          psI.setLong(1, q1);
-          psI.setLong(2, md);
-          psI.setLong(3, q3);
-          psI.setLong(4, timeouts);
-          psI.setLong(5, failures);
-          psI.setLong(6, requests);
-          psI.setDate(7, date);
-          psI.setString(8, source);
-          psI.executeUpdate();
-        }
-        conn.commit();
-        conn.close();
-      } catch (SQLException e) {
-        logger.log(Level.WARNING, "Failed to add torperf stats to "
-            + "database.", e);
-      }
-    }
   }
 }
 
