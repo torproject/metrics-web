@@ -374,9 +374,12 @@ plot_versions <- function(start, end, path) {
   s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"), version = s$version,
                   relays = s$relays)
   known_versions <- c("Other", "0.1.0", "0.1.1", "0.1.2", "0.2.0",
-        "0.2.1", "0.2.2", "0.2.3", "0.2.4", "0.2.5", "0.2.6", "0.2.7")
+        "0.2.1", "0.2.2", "0.2.3", "0.2.4", "0.2.5", "0.2.6", "0.2.7",
+        "0.2.8")
+  getPalette = colorRampPalette(brewer.pal(12, "Paired"))
   colours <- data.frame(breaks = known_versions,
-    values = brewer.pal(length(known_versions), "Paired"),
+    values = rep(brewer.pal(min(12, length(known_versions)), "Paired"),
+                 len = length(known_versions)),
     stringsAsFactors = FALSE)
   versions <- s[s$version %in% known_versions, ]
   visible_versions <- sort(unique(versions$version))
