@@ -6,7 +6,6 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.torproject.ernie.cron.network.ConsensusStatsFileHandler;
-import org.torproject.ernie.cron.performance.PerformanceStatsImporter;
 import org.torproject.ernie.cron.performance.TorperfProcessor;
 
 /**
@@ -53,18 +52,6 @@ public class Main {
         rddi.importRelayDescriptors();
       }
       rddi.closeConnection();
-
-      // Import conn-bi-direct statistics.
-      PerformanceStatsImporter psi = new PerformanceStatsImporter(
-          config.getWriteRelayDescriptorDatabase() ?
-          config.getRelayDescriptorDatabaseJDBC() : null,
-          config.getWriteRelayDescriptorsRawFiles() ?
-          config.getRelayDescriptorRawFilesDirectory() : null,
-          new File(config.getDirectoryArchivesDirectory()),
-          statsDirectory,
-          config.getKeepDirectoryArchiveImportHistory());
-      psi.importRelayDescriptors();
-      psi.closeConnection();
     }
 
     // Prepare consensus stats file handler (used for stats on running

@@ -18,6 +18,7 @@
 <p><font color="red">As of August 25, 2015, this page and the linked data
 file have been replaced by <a href="connbidirect2-data.html">this page and
 the data file linked from there</a>.
+Starting on January 11, 2016, the linked data file is not updated anymore.
 This page and the linked data file will be removed in the
 future.</font></p>
 

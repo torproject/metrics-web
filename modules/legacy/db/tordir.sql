@@ -104,19 +104,6 @@ CREATE TABLE consensus (
     CONSTRAINT consensus_pkey PRIMARY KEY (validafter)
 );
 
--- TABLE connbidirect
--- Contain conn-bi-direct stats strings
-CREATE TABLE connbidirect (
-    source CHARACTER(40) NOT NULL,
-    statsend TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    seconds INTEGER NOT NULL,
-    belownum BIGINT NOT NULL,
-    readnum BIGINT NOT NULL,
-    writenum BIGINT NOT NULL,
-    bothnum BIGINT NOT NULL,
-    CONSTRAINT connbidirect_pkey PRIMARY KEY (source, statsend)
-);
-
 -- TABLE network_size
 CREATE TABLE network_size (
     date DATE NOT NULL,
@@ -951,10 +938,4 @@ UNION ALL
   WHERE COALESCE(total_bandwidth.date, total_bwhist.date, u.date) <
   current_date - 3)
 ORDER BY 1, 2, 3;
-
--- View for exporting connbidirect statistics.
-CREATE VIEW stats_connbidirect AS
-SELECT DATE(statsend) AS date, source, belownum AS below, readnum AS read,
-  writenum AS write, bothnum AS "both" FROM connbidirect
-  WHERE DATE(statsend) < current_date - 1 ORDER BY 1, 2;
 
