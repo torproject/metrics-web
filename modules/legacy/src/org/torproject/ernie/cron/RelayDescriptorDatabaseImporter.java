@@ -18,7 +18,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -96,12 +95,6 @@ public final class RelayDescriptorDatabaseImporter {
   private PreparedStatement psCs;
 
   /**
-   * Prepared statement to check whether a given dirreq stats string has
-   * been imported into the database before.
-   */
-  private PreparedStatement psQs;
-
-  /**
    * Set of dates that have been inserted into the database for being
    * included in the next refresh run.
    */
@@ -137,12 +130,6 @@ public final class RelayDescriptorDatabaseImporter {
   private PreparedStatement psC;
 
   /**
-   * Prepared statement to insert a given dirreq stats string into the
-   * database.
-   */
-  private PreparedStatement psQ;
-
-  /**
    * Logger for this class.
    */
   private Logger logger;
@@ -171,11 +158,6 @@ public final class RelayDescriptorDatabaseImporter {
    * Raw import file containing consensuses.
    */
   private BufferedWriter consensusOut;
-
-  /**
-   * Raw import file containing dirreq stats.
-   */
-  private BufferedWriter dirReqOut;
 
   /**
    * Date format to parse timestamps.
@@ -245,8 +227,6 @@ public final class RelayDescriptorDatabaseImporter {
             + "FROM descriptor WHERE descriptor = ?");
         this.psCs = conn.prepareStatement("SELECT COUNT(*) "
             + "FROM consensus WHERE validafter = ?");
-        this.psQs = conn.prepareStatement("SELECT COUNT(*) "
-            + "FROM dirreq_stats WHERE source = ? AND statsend = ?");
         this.psR = conn.prepareStatement("INSERT INTO statusentry "
             + "(validafter, nickname, fingerprint, descriptor, "
             + "published, address, orport, dirport, isauthority, "
@@ -265,9 +245,6 @@ public final class RelayDescriptorDatabaseImporter {
             + "?)}");
         this.psC = conn.prepareStatement("INSERT INTO consensus "
             + "(validafter) VALUES (?)");
-        this.psQ = conn.prepareStatement("INSERT INTO dirreq_stats "
-            + "(source, statsend, seconds, country, requests) VALUES "
-            + "(?, ?, ?, ?, ?)");
         this.psU = conn.prepareStatement("INSERT INTO scheduled_updates "
             + "(date) VALUES (?)");
         this.scheduledUpdates = new HashSet<Long>();
@@ -861,68 +838,6 @@ public final class RelayDescriptorDatabaseImporter {
     }
   }
 
-  /**
-   * Adds observations on the number of directory requests by country as
-   * seen on a directory at a given date to the database.
-   */
-  public void addDirReqStats(String source, long statsEndMillis,
-      long seconds, Map<String, String> dirReqsPerCountry) {
-    String statsEnd = this.dateTimeFormat.format(statsEndMillis);
-    if (this.importIntoDatabase) {
-      try {
-        this.addDateToScheduledUpdates(statsEndMillis);
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        Timestamp statsEndTimestamp = new Timestamp(statsEndMillis);
-        this.psQs.setString(1, source);
-        this.psQs.setTimestamp(2, statsEndTimestamp, cal);
-        ResultSet rs = psQs.executeQuery();
-        rs.next();
-        if (rs.getInt(1) == 0) {
-          for (Map.Entry<String, String> e :
-              dirReqsPerCountry.entrySet()) {
-            this.psQ.clearParameters();
-            this.psQ.setString(1, source);
-            this.psQ.setTimestamp(2, statsEndTimestamp, cal);
-            this.psQ.setLong(3, seconds);
-            this.psQ.setString(4, e.getKey());
-            this.psQ.setLong(5, Long.parseLong(e.getValue()));
-            this.psQ.executeUpdate();
-            rqsCount++;
-            if (rqsCount % autoCommitCount == 0)  {
-              this.conn.commit();
-            }
-          }
-        }
-      } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not add dirreq stats.  We "
-            + "won't make any further SQL requests in this execution.",
-            e);
-        this.importIntoDatabase = false;
-      }
-    }
-    if (this.writeRawImportFiles) {
-      try {
-        if (this.dirReqOut == null) {
-          new File(rawFilesDirectory).mkdirs();
-          this.dirReqOut = new BufferedWriter(new FileWriter(
-              rawFilesDirectory + "/dirreq_stats.sql"));
-          this.dirReqOut.write(" COPY dirreq_stats (source, statsend, "
-              + "seconds, country, requests) FROM stdin;\n");
-        }
-        for (Map.Entry<String, String> e :
-            dirReqsPerCountry.entrySet()) {
-          this.dirReqOut.write(source + "\t" + statsEnd + "\t" + seconds
-              + "\t" + e.getKey() + "\t" + e.getValue() + "\n");
-        }
-      } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Could not write dirreq stats to "
-            + "raw database import file.  We won't make any further "
-            + "attempts to write raw import files in this execution.", e);
-        this.writeRawImportFiles = false;
-      }
-    }
-  }
-
   public void importRelayDescriptors() {
     if (archivesDirectory.exists()) {
       logger.fine("Importing files in directory " + archivesDirectory
@@ -984,17 +899,6 @@ public final class RelayDescriptorDatabaseImporter {
   }
 
   private void addExtraInfoDescriptor(ExtraInfoDescriptor descriptor) {
-    if (descriptor.getDirreqV3Reqs() != null) {
-      int allUsers = 0;
-      Map<String, String> obs = new HashMap<String, String>();
-      for (int users : descriptor.getDirreqV3Reqs().values()) {
-        allUsers += users - 4;
-      }
-      obs.put("zy", "" + allUsers);
-      this.addDirReqStats(descriptor.getFingerprint(),
-          descriptor.getDirreqStatsEndMillis(),
-          descriptor.getDirreqStatsIntervalLength(), obs);
-    }
     List<String> bandwidthHistoryLines = new ArrayList<String>();
     if (descriptor.getWriteHistory() != null) {
       bandwidthHistoryLines.add(descriptor.getWriteHistory().getLine());
