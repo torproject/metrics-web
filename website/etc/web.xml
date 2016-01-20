@@ -18,17 +18,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>Graphs</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.GraphsServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Graphs</servlet-name>
-    <url-pattern>/graphs.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>GraphsSubpages</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.graphs.GraphsSubpagesServlet
@@ -73,19 +62,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>LegacyGraphsSubpages</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.graphs.LegacyGraphsSubpagesServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>LegacyGraphsSubpages</servlet-name>
-    <url-pattern>/network.html</url-pattern>
-    <url-pattern>/users.html</url-pattern>
-    <url-pattern>/performance.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>Bubbles</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.graphs.BubblesServlet
@@ -94,67 +70,6 @@
   <servlet-mapping>
     <servlet-name>Bubbles</servlet-name>
     <url-pattern>/bubbles.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>Research</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.ResearchServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Research</servlet-name>
-    <url-pattern>/research.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>ResearchData</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.research.ResearchDataServlet
-    </servlet-class>
-    <init-param>
-      <param-name>localDataDir</param-name>
-      <param-value>
-        /srv/metrics.torproject.org/db/data/
-      </param-value>
-    </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResearchData</servlet-name>
-    <url-pattern>/data.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>ResearchPapers</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.research.ResearchPapersServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResearchPapers</servlet-name>
-    <url-pattern>/papers.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>ResearchTools</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.research.ResearchToolsServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResearchTools</servlet-name>
-    <url-pattern>/tools.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>ResearchFormats</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.research.ResearchFormatsServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResearchFormats</servlet-name>
-    <url-pattern>/formats.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -172,18 +87,6 @@
   <servlet-mapping>
     <servlet-name>ResearchStats</servlet-name>
     <url-pattern>/stats/*</url-pattern>
-    <url-pattern>/stats.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>RelaySearch</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.status.RelaySearchServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>RelaySearch</servlet-name>
-    <url-pattern>/relay-search.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -263,28 +166,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>ExoneraTor</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.status.ExoneraTorServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ExoneraTor</servlet-name>
-    <url-pattern>/exonerator.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>ConsensusHealthServlet</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.status.ConsensusHealthServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ConsensusHealthServlet</servlet-name>
-    <url-pattern>/consensus-health.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>AboutServlet</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.AboutServlet
@@ -293,6 +174,29 @@
   <servlet-mapping>
     <servlet-name>AboutServlet</servlet-name>
     <url-pattern>/about.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>RedirectServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.RedirectServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RedirectServlet</servlet-name>
+    <url-pattern>/consensus-health.html</url-pattern>
+    <url-pattern>/data.html</url-pattern>
+    <url-pattern>/exonerator.html</url-pattern>
+    <url-pattern>/formats.html</url-pattern>
+    <url-pattern>/graphs.html</url-pattern>
+    <url-pattern>/network.html</url-pattern>
+    <url-pattern>/papers.html</url-pattern>
+    <url-pattern>/performance.html</url-pattern>
+    <url-pattern>/relay-search.html</url-pattern>
+    <url-pattern>/research.html</url-pattern>
+    <url-pattern>/stats.html</url-pattern>
+    <url-pattern>/tools.html</url-pattern>
+    <url-pattern>/users.html</url-pattern>
   </servlet-mapping>
 
   <welcome-file-list>

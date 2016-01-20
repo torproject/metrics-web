@@ -52,8 +52,6 @@ public class ResearchStatsServlet extends HttpServlet {
     String requestURI = request.getRequestURI();
     if (requestURI.equals("/metrics/stats/")) {
       this.writeDirectoryListing(request, response);
-    } else if (requestURI.equals("/metrics/stats.html")) {
-      this.writeStatisticsPage(request, response);
     } else {
       File statsFile = this.determineStatsFile(request);
       if (statsFile == null) {
@@ -67,25 +65,12 @@ public class ResearchStatsServlet extends HttpServlet {
 
   private void writeDirectoryListing(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
-    request.setAttribute("directory", "/stats");
-    request.setAttribute("extension", ".csv");
-    request.setAttribute("files", this.availableStatisticsFiles);
-    request.getRequestDispatcher("/WEB-INF/dir.jsp").forward(request,
-        response);
-  }
-
-  private void writeStatisticsPage(HttpServletRequest request,
-      HttpServletResponse response) throws IOException, ServletException {
-    request.getRequestDispatcher("/WEB-INF/stats.jsp").forward(request,
-        response);
+    response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+    response.setHeader("Location", "/?type=dt&level=ad");
   }
 
   private File determineStatsFile(HttpServletRequest request) {
     String requestedStatsFile = request.getRequestURI();
-    if (requestedStatsFile.equals("/metrics/stats/") ||
-        requestedStatsFile.equals("/metrics/stats.html")) {
-      return null;
-    }
     if (requestedStatsFile.endsWith(".csv")) {
       requestedStatsFile = requestedStatsFile.substring(0,
           requestedStatsFile.length() - ".csv".length());
