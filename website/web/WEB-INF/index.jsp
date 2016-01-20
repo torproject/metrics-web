@@ -51,7 +51,6 @@
 </c:forEach>
 </p>
 <p>
-<input type="reset" value="Reset">
 <input type="submit" value="Update">
 </p>
 </form>
