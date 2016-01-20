@@ -24,12 +24,12 @@ more details, see this
   <div class="formrow">
     <input type="hidden" name="table" value="userstats-censorship-events">
     <p>
-    <label>Start date (yyyy-mm-dd):</label>
+    <label>Start date (yyyy-mm-dd):
       <input type="text" name="start" size="10"
-             value="<c:choose><c:when test="${fn:length(userstats_censorship_events_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_censorship_events_start[0]}</c:otherwise></c:choose>">
-    <label>End date (yyyy-mm-dd):</label>
+             value="<c:choose><c:when test="${fn:length(userstats_censorship_events_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_censorship_events_start[0]}</c:otherwise></c:choose>"></label>
+    <label>End date (yyyy-mm-dd):
       <input type="text" name="end" size="10"
-             value="<c:choose><c:when test="${fn:length(userstats_censorship_events_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_censorship_events_end[0]}</c:otherwise></c:choose>">
+             value="<c:choose><c:when test="${fn:length(userstats_censorship_events_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_censorship_events_end[0]}</c:otherwise></c:choose>"></label>
     </p><p>
     <input class="submit" type="submit" value="Update table">
     </p>

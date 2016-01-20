@@ -34,27 +34,27 @@ details, see this
   <div class="formrow">
     <input type="hidden" name="graph" value="userstats-relay-country">
     <p>
-    <label>Start date (yyyy-mm-dd):</label>
+    <label>Start date (yyyy-mm-dd):
       <input type="text" name="start" size="10"
-             value="<c:choose><c:when test="${fn:length(userstats_relay_country_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_relay_country_start[0]}</c:otherwise></c:choose>">
-    <label>End date (yyyy-mm-dd):</label>
+             value="<c:choose><c:when test="${fn:length(userstats_relay_country_start) == 0}">${default_start_date}</c:when><c:otherwise>${userstats_relay_country_start[0]}</c:otherwise></c:choose>"></label>
+    <label>End date (yyyy-mm-dd):
       <input type="text" name="end" size="10"
-             value="<c:choose><c:when test="${fn:length(userstats_relay_country_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_relay_country_end[0]}</c:otherwise></c:choose>">
+             value="<c:choose><c:when test="${fn:length(userstats_relay_country_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_relay_country_end[0]}</c:otherwise></c:choose>"></label>
     </p><p>
-      Source: <select name="country">
+      <label>Source: <select name="country">
         <option value="all"<c:if test="${userstats_relay_country_country[0] eq 'all'}"> selected</c:if>>All users</option>
         <c:forEach var="country" items="${countries}" >
           <option value="${country[0]}"<c:if test="${userstats_relay_country_country[0] eq country[0]}"> selected</c:if>>${country[1]}</option>
         </c:forEach>
-      </select>
+      </select></label>
     </p><p>
-      Show possible censorship events if available (<a
+      <label>Show possible censorship events if available (<a
       href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>)
       <select name="events">
         <option value="off">Off</option>
         <option value="on"<c:if test="${userstats_relay_country_events[0] eq 'on'}"> selected</c:if>>On: both points and expected range</option>
         <option value="points"<c:if test="${userstats_relay_country_events[0] eq 'points'}"> selected</c:if>>On: points only, no expected range</option>
-      </select>
+      </select></label>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>

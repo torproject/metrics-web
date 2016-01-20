@@ -28,30 +28,30 @@ Gbit/s.</font></p>
   <div class="formrow">
     <input type="hidden" name="graph" value="advbwdist-relay">
     <p>
-    <label>Start date (yyyy-mm-dd):</label>
+    <label>Start date (yyyy-mm-dd):
       <input type="text" name="start" size="10"
-             value="<c:choose><c:when test="${fn:length(advbwdist_relay_start) == 0}">${default_start_date}</c:when><c:otherwise>${advbwdist_relay_start[0]}</c:otherwise></c:choose>">
-    <label>End date (yyyy-mm-dd):</label>
+             value="<c:choose><c:when test="${fn:length(advbwdist_relay_start) == 0}">${default_start_date}</c:when><c:otherwise>${advbwdist_relay_start[0]}</c:otherwise></c:choose>"></label>
+    <label>End date (yyyy-mm-dd):
       <input type="text" name="end" size="10"
-             value="<c:choose><c:when test="${fn:length(advbwdist_relay_end) == 0}">${default_end_date}</c:when><c:otherwise>${advbwdist_relay_end[0]}</c:otherwise></c:choose>">
+             value="<c:choose><c:when test="${fn:length(advbwdist_relay_end) == 0}">${default_end_date}</c:when><c:otherwise>${advbwdist_relay_end[0]}</c:otherwise></c:choose>"></label>
     </p><p>
       <label>n-th fastest relays: </label>
-      <input type="checkbox" name="n" value="1"<c:if test="${fn:length(advbwdist_relay_n) == 0 or fn:contains(fn:join(advbwdist_relay_n, ','), '1,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '1')}"> checked</c:if>> 1
-      <input type="checkbox" name="n" value="2"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '2,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '2'))}"> checked</c:if>> 2
-      <input type="checkbox" name="n" value="3"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '3,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '3'))}"> checked</c:if>> 3
-      <input type="checkbox" name="n" value="5"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '5,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '5'))}"> checked</c:if>> 5
-      <input type="checkbox" name="n" value="10"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '10,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '10'))}"> checked</c:if>> 10
-      <input type="checkbox" name="n" value="20"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '20,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '20'))}"> checked</c:if>> 20
-      <input type="checkbox" name="n" value="30"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '30,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '30'))}"> checked</c:if>> 30
-      <input type="checkbox" name="n" value="50"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '50,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '50'))}"> checked</c:if>> 50
-      <input type="checkbox" name="n" value="100"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '100,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '100'))}"> checked</c:if>> 100
-      <input type="checkbox" name="n" value="200"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '200,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '200'))}"> checked</c:if>> 200
-      <input type="checkbox" name="n" value="300"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '300,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '300'))}"> checked</c:if>> 300
-      <input type="checkbox" name="n" value="500"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '500,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '500'))}"> checked</c:if>> 500
-      <input type="checkbox" name="n" value="1000"<c:if test="${fn:length(advbwdist_relay_n) > 0 and fn:contains(fn:join(advbwdist_relay_n, ','), '1000')}"> checked</c:if>> 1000
-      <input type="checkbox" name="n" value="2000"<c:if test="${fn:length(advbwdist_relay_n) > 0 and fn:contains(fn:join(advbwdist_relay_n, ','), '2000')}"> checked</c:if>> 2000
-      <input type="checkbox" name="n" value="3000"<c:if test="${fn:length(advbwdist_relay_n) > 0 and fn:contains(fn:join(advbwdist_relay_n, ','), '3000')}"> checked</c:if>> 3000
-      <input type="checkbox" name="n" value="5000"<c:if test="${fn:length(advbwdist_relay_n) > 0 and fn:contains(fn:join(advbwdist_relay_n, ','), '5000')}"> checked</c:if>> 5000
+      <label><input type="checkbox" name="n" value="1"<c:if test="${fn:length(advbwdist_relay_n) == 0 or fn:contains(fn:join(advbwdist_relay_n, ','), '1,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '1')}"> checked</c:if>> 1</label>
+      <label><input type="checkbox" name="n" value="2"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '2,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '2'))}"> checked</c:if>> 2</label>
+      <label><input type="checkbox" name="n" value="3"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '3,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '3'))}"> checked</c:if>> 3</label>
+      <label><input type="checkbox" name="n" value="5"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '5,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '5'))}"> checked</c:if>> 5</label>
+      <label><input type="checkbox" name="n" value="10"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '10,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '10'))}"> checked</c:if>> 10</label>
+      <label><input type="checkbox" name="n" value="20"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '20,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '20'))}"> checked</c:if>> 20</label>
+      <label><input type="checkbox" name="n" value="30"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '30,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '30'))}"> checked</c:if>> 30</label>
+      <label><input type="checkbox" name="n" value="50"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '50,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '50'))}"> checked</c:if>> 50</label>
+      <label><input type="checkbox" name="n" value="100"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '100,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '100'))}"> checked</c:if>> 100</label>
+      <label><input type="checkbox" name="n" value="200"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '200,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '200'))}"> checked</c:if>> 200</label>
+      <label><input type="checkbox" name="n" value="300"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '300,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '300'))}"> checked</c:if>> 300</label>
+      <label><input type="checkbox" name="n" value="500"<c:if test="${fn:length(advbwdist_relay_n) > 0 and (fn:contains(fn:join(advbwdist_relay_n, ','), '500,') or fn:endsWith(fn:join(advbwdist_relay_n, ','), '500'))}"> checked</c:if>> 500</label>
+      <label><input type="checkbox" name="n" value="1000"<c:if test="${fn:length(advbwdist_relay_n) > 0 and fn:contains(fn:join(advbwdist_relay_n, ','), '1000')}"> checked</c:if>> 1000</label>
+      <label><input type="checkbox" name="n" value="2000"<c:if test="${fn:length(advbwdist_relay_n) > 0 and fn:contains(fn:join(advbwdist_relay_n, ','), '2000')}"> checked</c:if>> 2000</label>
+      <label><input type="checkbox" name="n" value="3000"<c:if test="${fn:length(advbwdist_relay_n) > 0 and fn:contains(fn:join(advbwdist_relay_n, ','), '3000')}"> checked</c:if>> 3000</label>
+      <label><input type="checkbox" name="n" value="5000"<c:if test="${fn:length(advbwdist_relay_n) > 0 and fn:contains(fn:join(advbwdist_relay_n, ','), '5000')}"> checked</c:if>> 5000</label>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>

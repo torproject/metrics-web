@@ -34,37 +34,37 @@ Gbit/s.</font></p>
   <div class="formrow">
     <input type="hidden" name="graph" value="advbwdist-perc">
     <p>
-    <label>Start date (yyyy-mm-dd):</label>
+    <label>Start date (yyyy-mm-dd):
       <input type="text" name="start" size="10"
-             value="<c:choose><c:when test="${fn:length(advbwdist_perc_start) == 0}">${default_start_date}</c:when><c:otherwise>${advbwdist_perc_start[0]}</c:otherwise></c:choose>">
-    <label>End date (yyyy-mm-dd):</label>
+             value="<c:choose><c:when test="${fn:length(advbwdist_perc_start) == 0}">${default_start_date}</c:when><c:otherwise>${advbwdist_perc_start[0]}</c:otherwise></c:choose>"></label>
+    <label>End date (yyyy-mm-dd):
       <input type="text" name="end" size="10"
-             value="<c:choose><c:when test="${fn:length(advbwdist_perc_end) == 0}">${default_end_date}</c:when><c:otherwise>${advbwdist_perc_end[0]}</c:otherwise></c:choose>">
+             value="<c:choose><c:when test="${fn:length(advbwdist_perc_end) == 0}">${default_end_date}</c:when><c:otherwise>${advbwdist_perc_end[0]}</c:otherwise></c:choose>"></label>
     </p><p>
       <label>Percentiles: </label>
-      <input type="checkbox" name="p" value="100"<c:if test="${fn:length(advbwdist_perc_p) == 0 or fn:contains(fn:join(advbwdist_perc_p, ','), '100')}"> checked</c:if>> 100 (maximum)
-      <input type="checkbox" name="p" value="99"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '99')}"> checked</c:if>> 99
-      <input type="checkbox" name="p" value="98"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '98')}"> checked</c:if>> 98
-      <input type="checkbox" name="p" value="97"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '97')}"> checked</c:if>> 97
-      <input type="checkbox" name="p" value="95"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '95')}"> checked</c:if>> 95
-      <input type="checkbox" name="p" value="91"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '91')}"> checked</c:if>> 91
-      <input type="checkbox" name="p" value="90"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '90')}"> checked</c:if>> 90
-      <input type="checkbox" name="p" value="80"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '80')}"> checked</c:if>> 80
-      <input type="checkbox" name="p" value="75"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '75')}"> checked</c:if>> 75 (3rd quartile)
-      <input type="checkbox" name="p" value="70"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '70')}"> checked</c:if>> 70
-      <input type="checkbox" name="p" value="60"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '60')}"> checked</c:if>> 60
-      <input type="checkbox" name="p" value="50"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '50')}"> checked</c:if>> 50 (median)
-      <input type="checkbox" name="p" value="40"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '40')}"> checked</c:if>> 40
-      <input type="checkbox" name="p" value="30"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '30')}"> checked</c:if>> 30
-      <input type="checkbox" name="p" value="25"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '25')}"> checked</c:if>> 25 (first quartile)
-      <input type="checkbox" name="p" value="20"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '20')}"> checked</c:if>> 20
-      <input type="checkbox" name="p" value="10"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '10,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',10,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',10') or (advbwdist_perc_p[0] == '10' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 10
-      <input type="checkbox" name="p" value="9"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '9,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',9,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',9') or (advbwdist_perc_p[0] == '9' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 9
-      <input type="checkbox" name="p" value="5"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '5,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',5,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',5') or (advbwdist_perc_p[0] == '5' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 5
-      <input type="checkbox" name="p" value="3"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '3,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',3,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',3') or (advbwdist_perc_p[0] == '3' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 3
-      <input type="checkbox" name="p" value="2"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '2,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',2,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',2') or (advbwdist_perc_p[0] == '2' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 2
-      <input type="checkbox" name="p" value="1"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '1,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',1,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',1') or (advbwdist_perc_p[0] == '1' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 1
-      <input type="checkbox" name="p" value="0"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '0,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',0,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',0') or (advbwdist_perc_p[0] == '0' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 0 (minimum)
+      <label><input type="checkbox" name="p" value="100"<c:if test="${fn:length(advbwdist_perc_p) == 0 or fn:contains(fn:join(advbwdist_perc_p, ','), '100')}"> checked</c:if>> 100 (maximum)</label>
+      <label><input type="checkbox" name="p" value="99"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '99')}"> checked</c:if>> 99</label>
+      <label><input type="checkbox" name="p" value="98"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '98')}"> checked</c:if>> 98</label>
+      <label><input type="checkbox" name="p" value="97"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '97')}"> checked</c:if>> 97</label>
+      <label><input type="checkbox" name="p" value="95"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '95')}"> checked</c:if>> 95</label>
+      <label><input type="checkbox" name="p" value="91"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '91')}"> checked</c:if>> 91</label>
+      <label><input type="checkbox" name="p" value="90"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '90')}"> checked</c:if>> 90</label>
+      <label><input type="checkbox" name="p" value="80"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '80')}"> checked</c:if>> 80</label>
+      <label><input type="checkbox" name="p" value="75"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '75')}"> checked</c:if>> 75 (3rd quartile)</label>
+      <label><input type="checkbox" name="p" value="70"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '70')}"> checked</c:if>> 70</label>
+      <label><input type="checkbox" name="p" value="60"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '60')}"> checked</c:if>> 60</label>
+      <label><input type="checkbox" name="p" value="50"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '50')}"> checked</c:if>> 50 (median)</label>
+      <label><input type="checkbox" name="p" value="40"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '40')}"> checked</c:if>> 40</label>
+      <label><input type="checkbox" name="p" value="30"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '30')}"> checked</c:if>> 30</label>
+      <label><input type="checkbox" name="p" value="25"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '25')}"> checked</c:if>> 25 (first quartile)</label>
+      <label><input type="checkbox" name="p" value="20"<c:if test="${fn:length(advbwdist_perc_p) > 0 and fn:contains(fn:join(advbwdist_perc_p, ','), '20')}"> checked</c:if>> 20</label>
+      <label><input type="checkbox" name="p" value="10"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '10,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',10,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',10') or (advbwdist_perc_p[0] == '10' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 10</label>
+      <label><input type="checkbox" name="p" value="9"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '9,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',9,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',9') or (advbwdist_perc_p[0] == '9' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 9</label>
+      <label><input type="checkbox" name="p" value="5"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '5,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',5,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',5') or (advbwdist_perc_p[0] == '5' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 5</label>
+      <label><input type="checkbox" name="p" value="3"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '3,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',3,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',3') or (advbwdist_perc_p[0] == '3' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 3</label>
+      <label><input type="checkbox" name="p" value="2"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '2,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',2,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',2') or (advbwdist_perc_p[0] == '2' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 2</label>
+      <label><input type="checkbox" name="p" value="1"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '1,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',1,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',1') or (advbwdist_perc_p[0] == '1' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 1</label>
+      <label><input type="checkbox" name="p" value="0"<c:if test="${fn:length(advbwdist_perc_p) > 0 and (fn:startsWith(fn:join(advbwdist_perc_p, ','), '0,') or fn:contains(fn:join(advbwdist_perc_p, ','), ',0,') or fn:endsWith(fn:join(advbwdist_perc_p, ','), ',0') or (advbwdist_perc_p[0] == '0' and fn:length(advbwdist_perc_p) == 1))}"> checked</c:if>> 0 (minimum)</label>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>

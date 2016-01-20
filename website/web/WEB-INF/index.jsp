@@ -27,27 +27,27 @@
 <div style="border:1px solid gray;border-radius:10px;padding:10px;float:left;overflow:hidden;margin-right:20px;">
 <form action="/">
 <p>
-<label for="tag"><b>Tags</b></label><br>
+<b>Tags</b><br>
 <c:forEach var="row" items="${tags}">
-<input name="tag" type="checkbox" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</br>
+<label><input name="tag" type="checkbox" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</label></br>
 </c:forEach>
 </p>
 <p>
-<label for="type"><b>Type</b></label></br>
+<b>Type</b></br>
 <c:forEach var="row" items="${types}">
-<input name="type" type="checkbox" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</br>
+<label><input name="type" type="checkbox" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</label></br>
 </c:forEach>
 </p>
 <p>
-<label for="level"><b>Level</b></label></br>
+<b>Level</b></br>
 <c:forEach var="row" items="${levels}">
-<input name="level" type="checkbox" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</br>
+<label><input name="level" type="checkbox" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</label></br>
 </c:forEach>
 </p>
 <p>
-<label for="sort"><b>Order</b></label></br>
+<b>Order</b></br>
 <c:forEach var="row" items="${order}">
-<input name="order" type="radio" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</br>
+<label><input name="order" type="radio" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</label></br>
 </c:forEach>
 </p>
 <p>
