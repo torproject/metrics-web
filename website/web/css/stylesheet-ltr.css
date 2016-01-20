@@ -159,3 +159,12 @@ hr {
 	line-height:0;
 	margin:15px 0 5px;
 }
+
+label.checkbox-label {
+    white-space: nowrap;
+}
+
+label.radio-label {
+    white-space: nowrap;
+}
+

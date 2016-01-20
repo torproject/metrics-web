@@ -36,17 +36,17 @@ so that graphs are available for different transports.</p>
       <input type="text" name="end" size="10"
              value="<c:choose><c:when test="${fn:length(userstats_bridge_transport_end) == 0}">${default_end_date}</c:when><c:otherwise>${userstats_bridge_transport_end[0]}</c:otherwise></c:choose>"></label>
     </p><p>
-      <label>Source: </label>
-      <label><input type="checkbox" name="transport" value="!<OR>"<c:if test="${fn:length(userstats_bridge_transport_transport) == 0 or fn:contains(fn:join(userstats_bridge_transport_transport, ','), '!<OR>')}"> checked</c:if>> Any pluggable transport</label>
-      <label><input type="checkbox" name="transport" value="obfs2"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'obfs2')}"> checked</c:if>> obfs2</label>
-      <label><input type="checkbox" name="transport" value="obfs3"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'obfs3')}"> checked</c:if>> obfs3</label>
-      <label><input type="checkbox" name="transport" value="obfs4"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'obfs4')}"> checked</c:if>> obfs4</label>
-      <label><input type="checkbox" name="transport" value="websocket"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'websocket')}"> checked</c:if>> Flash proxy/websocket</label>
-      <label><input type="checkbox" name="transport" value="fte"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'fte')}"> checked</c:if>> FTE</label>
-      <label><input type="checkbox" name="transport" value="meek"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'meek')}"> checked</c:if>> meek</label>
-      <label><input type="checkbox" name="transport" value="scramblesuit"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'scramblesuit')}"> checked</c:if>> scramblesuit</label>
-      <label><input type="checkbox" name="transport" value="<??>"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), '<??>')}"> checked</c:if>> Unknown pluggable transport(s)</label>
-      <label><input type="checkbox" name="transport" value="<OR>"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), '<OR>')}"> checked</c:if>> Default OR protocol</label>
+      Source:
+      <label class="checkbox-label"><input type="checkbox" name="transport" value="!<OR>"<c:if test="${fn:length(userstats_bridge_transport_transport) == 0 or fn:contains(fn:join(userstats_bridge_transport_transport, ','), '!<OR>')}"> checked</c:if>> Any pluggable transport</label>
+      <label class="checkbox-label"><input type="checkbox" name="transport" value="obfs2"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'obfs2')}"> checked</c:if>> obfs2</label>
+      <label class="checkbox-label"><input type="checkbox" name="transport" value="obfs3"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'obfs3')}"> checked</c:if>> obfs3</label>
+      <label class="checkbox-label"><input type="checkbox" name="transport" value="obfs4"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'obfs4')}"> checked</c:if>> obfs4</label>
+      <label class="checkbox-label"><input type="checkbox" name="transport" value="websocket"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'websocket')}"> checked</c:if>> Flash proxy/websocket</label>
+      <label class="checkbox-label"><input type="checkbox" name="transport" value="fte"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'fte')}"> checked</c:if>> FTE</label>
+      <label class="checkbox-label"><input type="checkbox" name="transport" value="meek"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'meek')}"> checked</c:if>> meek</label>
+      <label class="checkbox-label"><input type="checkbox" name="transport" value="scramblesuit"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), 'scramblesuit')}"> checked</c:if>> scramblesuit</label>
+      <label class="checkbox-label"><input type="checkbox" name="transport" value="<??>"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), '<??>')}"> checked</c:if>> Unknown pluggable transport(s)</label>
+      <label class="checkbox-label"><input type="checkbox" name="transport" value="<OR>"<c:if test="${fn:length(userstats_bridge_transport_transport) > 0 and fn:contains(fn:join(userstats_bridge_transport_transport, ','), '<OR>')}"> checked</c:if>> Default OR protocol</label>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>

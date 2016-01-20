@@ -39,12 +39,12 @@ is considered a hidden service directory ("HSDir").</p>
              value="<c:choose><c:when test="${fn:length(relayflags_end) == 0}">${default_end_date}</c:when><c:otherwise>${relayflags_end[0]}</c:otherwise></c:choose>"></label>
     </p><p>
       <label>Relay flags: </label>
-      <label><input type="checkbox" name="flag" value="Running"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Running')}"> checked</c:if>> Running</label>
-      <label><input type="checkbox" name="flag" value="Exit"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Exit')}"> checked</c:if>> Exit</label>
-      <label><input type="checkbox" name="flag" value="Fast"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Fast')}"> checked</c:if>> Fast</label>
-      <label><input type="checkbox" name="flag" value="Guard"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Guard')}"> checked</c:if>> Guard</label>
-      <label><input type="checkbox" name="flag" value="Stable"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Stable')}"> checked</c:if>> Stable</label>
-      <label><input type="checkbox" name="flag" value="HSDir"<c:if test="${fn:length(relayflags_flag) > 0 and fn:contains(fn:join(relayflags_flag, ','), 'HSDir')}"> checked</c:if>> HSDir</label>
+      <label class="checkbox-label"><input type="checkbox" name="flag" value="Running"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Running')}"> checked</c:if>> Running</label>
+      <label class="checkbox-label"><input type="checkbox" name="flag" value="Exit"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Exit')}"> checked</c:if>> Exit</label>
+      <label class="checkbox-label"><input type="checkbox" name="flag" value="Fast"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Fast')}"> checked</c:if>> Fast</label>
+      <label class="checkbox-label"><input type="checkbox" name="flag" value="Guard"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Guard')}"> checked</c:if>> Guard</label>
+      <label class="checkbox-label"><input type="checkbox" name="flag" value="Stable"<c:if test="${fn:length(relayflags_flag) == 0 or fn:contains(fn:join(relayflags_flag, ','), 'Stable')}"> checked</c:if>> Stable</label>
+      <label class="checkbox-label"><input type="checkbox" name="flag" value="HSDir"<c:if test="${fn:length(relayflags_flag) > 0 and fn:contains(fn:join(relayflags_flag, ','), 'HSDir')}"> checked</c:if>> HSDir</label>
     </p><p>
     <input class="submit" type="submit" value="Update graph">
     </p>
