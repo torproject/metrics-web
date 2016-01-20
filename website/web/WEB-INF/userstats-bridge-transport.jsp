@@ -58,12 +58,16 @@ so that graphs are available for different transports.</p>
 <a href="https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt">Questions
 and answers about users statistics</a></p>
 
+<h4>Underlying data</h4>
+<ul>
+<li><a href="clients-data.html">Data: Estimated number of clients in the Tor network</a></li>
+</ul>
+
 <h4>Related metrics</h4>
 <ul>
 <li><a href="userstats-bridge-country.html">Graph: Bridge users by country</a></li>
 <li><a href="userstats-bridge-table.html">Table: Top-10 countries by bridge users</a></li>
 <li><a href="userstats-bridge-version.html">Graph: Bridge users by IP version</a></li>
-<li><a href="clients-data.html">Data: Estimated number of clients in the Tor network</a></li>
 </ul>
 
     </div>

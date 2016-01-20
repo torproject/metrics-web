@@ -45,10 +45,14 @@ which bridge operators usually leave unchanged.</p>
 <a href="cloudbridges.svg${cloudbridges_url}">SVG</a>.</p>
 <br>
 
+<h4>Underlying data</h4>
+<ul>
+<li><a href="servers-data.html">Data: Number of relays and bridges</a></li>
+</ul>
+
 <h4>Related metrics</h4>
 <ul>
 <li><a href="networksize.html">Graph: Relays and bridges in the network</a></li>
-<li><a href="servers-data.html">Data: Number of relays and bridges</a></li>
 </ul>
 
     </div>

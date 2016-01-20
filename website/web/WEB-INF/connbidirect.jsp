@@ -53,7 +53,7 @@ fractions.</p>
 <a href="connbidirect.svg${connbidirect_url}">SVG</a>.</p>
 <br>
 
-<h4>Related metrics</h4>
+<h4>Underlying data</h4>
 <ul>
 <li><a href="connbidirect2-data.html">Data: Fraction of connections used uni-/bidirectionally</a></li>
 </ul>

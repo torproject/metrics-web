@@ -44,12 +44,16 @@ Gbit/s.</font></p>
 <a href="bandwidth.svg${bandwidth_url}">SVG</a>.</p>
 <br>
 
+<h4>Underlying data</h4>
+<ul>
+<li><a href="bandwidth-data.html">Data: Bandwidth provided and consumed by relays</a></li>
+</ul>
+
 <h4>Related metrics</h4>
 <ul>
 <li><a href="bwhist-flags.html">Graph: Relay bandwidth by Exit and/or Guard flags</a></li>
 <li><a href="bandwidth-flags.html">Graph: Advertised bandwidth and bandwidth history by relay flags</a></li>
 <li><a href="dirbytes.html">Graph: Number of bytes spent on answering directory requests</a></li>
-<li><a href="bandwidth-data.html">Data: Bandwidth provided and consumed by relays</a></li>
 </ul>
 
     </div>

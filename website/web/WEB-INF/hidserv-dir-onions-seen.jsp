@@ -50,11 +50,15 @@ technical report</a>.</p>
 <a href="hidserv-dir-onions-seen.svg${hidserv_dir_onions_seen_url}">SVG</a>.</p>
 <br>
 
+<h4>Underlying data</h4>
+<ul>
+<li><a href="hidserv-data.html">Data: Hidden-service statistics</a></li>
+</ul>
+
 <h4>Related metrics</h4>
 <ul>
 <li><a href="hidserv-rend-relayed-cells.html">Graph: Hidden-service traffic</a></li>
 <li><a href="hidserv-frac-reporting.html">Graph: Fraction of relays reporting hidden-service statistics</a></li>
-<li><a href="hidserv-data.html">Data: Hidden-service statistics</a></li>
 </ul>
 
     </div>

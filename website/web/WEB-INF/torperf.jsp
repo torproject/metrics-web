@@ -54,10 +54,14 @@ graph.</p>
 <a href="torperf.svg${torperf_url}">SVG</a>.</p>
 <br>
 
+<h4>Underlying data</h4>
+<ul>
+<li><a href="torperf-data.html">Data: Performance of downloading static files over Tor</a></li>
+</ul>
+
 <h4>Related metrics</h4>
 <ul>
 <li><a href="torperf-failures.html">Graph: Timeouts and failures of downloading files over Tor</a></li>
-<li><a href="torperf-data.html">Data: Performance of downloading static files over Tor</a></li>
 </ul>
 
     </div>

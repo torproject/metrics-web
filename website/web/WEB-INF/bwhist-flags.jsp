@@ -44,13 +44,17 @@ Gbit/s.</font></p>
 <a href="bwhist-flags.svg${bwhist_flags_url}">SVG</a>.</p>
 <br>
 
+<h4>Underlying data</h4>
+<ul>
+<li><a href="bandwidth-data.html">Data: Bandwidth provided and consumed by relays</a></li>
+</ul>
+
 <h4>Related metrics</h4>
 <ul>
 <li><a href="relayflags.html">Graph: Relays with Exit, Fast, Guard, Stable, and HSDir flags</a></li>
 <li><a href="bandwidth.html">Graph: Total relay bandwidth in the network</a></li>
 <li><a href="bandwidth-flags.html">Graph: Advertised bandwidth and bandwidth history by relay flags</a></li>
 <li><a href="dirbytes.html">Graph: Number of bytes spent on answering directory requests</a></li>
-<li><a href="bandwidth-data.html">Data: Bandwidth provided and consumed by relays</a></li>
 </ul>
 
     </div>
