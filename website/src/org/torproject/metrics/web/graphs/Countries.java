@@ -46,6 +46,8 @@ public class Countries {
     this.knownCountries.add("bm;Bermuda".split(";"));
     this.knownCountries.add("bt;Bhutan".split(";"));
     this.knownCountries.add("bo;Bolivia".split(";"));
+    this.knownCountries.add("bq;Bonaire, Sint Eustatius and Saba".
+        split(";"));
     this.knownCountries.add("ba;Bosnia and Herzegovina".split(";"));
     this.knownCountries.add("bw;Botswana".split(";"));
     this.knownCountries.add("bv;Bouvet Island".split(";"));
@@ -78,6 +80,7 @@ public class Countries {
     this.knownCountries.add("ci:C&#244;te d'Ivoire".split(":"));
     this.knownCountries.add("hr;Croatia".split(";"));
     this.knownCountries.add("cu;Cuba".split(";"));
+    this.knownCountries.add("cw;Cura&#231;ao".split(";"));
     this.knownCountries.add("cy;Cyprus".split(";"));
     this.knownCountries.add("cz;Czech Republic".split(";"));
     this.knownCountries.add("dk;Denmark".split(";"));
@@ -95,7 +98,6 @@ public class Countries {
     this.knownCountries.add("fo;Faroe Islands".split(";"));
     this.knownCountries.add("fj;Fiji".split(";"));
     this.knownCountries.add("fi;Finland".split(";"));
-    this.knownCountries.add("fx;France, Metropolitan".split(";"));
     this.knownCountries.add("fr;France".split(";"));
     this.knownCountries.add("gf;French Guiana".split(";"));
     this.knownCountries.add("pf;French Polynesia".split(";"));
@@ -141,6 +143,7 @@ public class Countries {
     this.knownCountries.add("ki;Kiribati".split(";"));
     this.knownCountries.add("kp;North Korea".split(";"));
     this.knownCountries.add("kr;Korea, Republic of".split(";"));
+    this.knownCountries.add("xk;Kosovo".split(";"));
     this.knownCountries.add("kw;Kuwait".split(";"));
     this.knownCountries.add("kg;Kyrgyzstan".split(";"));
     this.knownCountries.add("la;Laos".split(";"));
@@ -226,6 +229,7 @@ public class Countries {
     this.knownCountries.add("sc;Seychelles".split(";"));
     this.knownCountries.add("sl;Sierra Leone".split(";"));
     this.knownCountries.add("sg;Singapore".split(";"));
+    this.knownCountries.add("sx;Sint Maarten".split(";"));
     this.knownCountries.add("sk;Slovakia".split(";"));
     this.knownCountries.add("si;Slovenia".split(";"));
     this.knownCountries.add("sb;Solomon Islands".split(";"));
