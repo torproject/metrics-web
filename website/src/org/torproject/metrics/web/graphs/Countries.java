@@ -80,7 +80,7 @@ public class Countries {
     this.knownCountries.add("ci:C&#244;te d'Ivoire".split(":"));
     this.knownCountries.add("hr;Croatia".split(";"));
     this.knownCountries.add("cu;Cuba".split(";"));
-    this.knownCountries.add("cw;Cura&#231;ao".split(";"));
+    this.knownCountries.add("cw:Cura&#231;ao".split(":"));
     this.knownCountries.add("cy;Cyprus".split(";"));
     this.knownCountries.add("cz;Czech Republic".split(";"));
     this.knownCountries.add("dk;Denmark".split(";"));
