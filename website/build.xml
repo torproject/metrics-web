@@ -15,8 +15,10 @@
       <classpath>
         <fileset dir="/usr/share/java">
           <include name="commons-codec.jar"/>
+          <include name="commons-lang.jar"/>
           <include name="postgresql-jdbc3.jar"/>
-          <include name="servlet-api-3.0.jar"/>
+          <include name="servlet-api-2.5.jar"/>
+          <include name="gson-2.1.jar"/>
         </fileset>
         <fileset dir="lib">
           <include name="REngine.jar"/>
@@ -40,12 +42,17 @@
       </lib>
       <lib dir="/usr/share/java">
           <include name="commons-codec.jar"/>
+          <include name="commons-lang.jar"/>
           <include name="postgresql-jdbc3.jar"/>
+          <include name="gson-2.1.jar"/>
       </lib>
       <classes dir="classes"/>
       <zipfileset dir="etc"
                   prefix="WEB-INF/classes"
                   includes="logging.properties"/>
+      <zipfileset dir="etc"
+                  prefix="WEB-INF/classes"
+                  includes="metrics.json"/>
       <metainf dir="etc"
                includes="context.xml"/>
     </war>

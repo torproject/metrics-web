@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.torproject.metrics.web.Metric;
+import org.torproject.metrics.web.MetricsProvider;
+
 /**
  * Checks request parameters passed to generate tables.
  */
@@ -33,7 +36,7 @@ public class TableParameterChecker {
   private SimpleDateFormat dateFormat;
 
   /* Available tables with corresponding parameter lists. */
-  private Map<String, String> availableTables;
+  private Map<String, String[]> availableTables;
 
   /**
    * Initializes map with valid parameters for each of the graphs.
@@ -41,10 +44,13 @@ public class TableParameterChecker {
   public TableParameterChecker() {
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-  }
 
-  public void setAvailableTables(Map<String, String> availableTables) {
-    this.availableTables = availableTables;
+    this.availableTables = new HashMap<String, String[]>();
+    for (Metric metric : MetricsProvider.getInstance().getMetricsList()) {
+      if ("Table".equals(metric.getType())) {
+        this.availableTables.put(metric.getId(), metric.getParameters());
+      }
+    }
   }
 
   /**
@@ -64,7 +70,7 @@ public class TableParameterChecker {
     /* Find out which other parameters are supported by this table type
      * and parse them if they are given. */
     Set<String> supportedTableParameters = new HashSet<String>(Arrays.
-        asList(this.availableTables.get(tableType).split(",")));
+        asList(this.availableTables.get(tableType)));
     Map<String, String[]> recognizedTableParameters =
         new HashMap<String, String[]>();
 

@@ -3,14 +3,13 @@
 <head>
   <title>Tor Metrics &mdash; About</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-  <link href="../css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
-  <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
+  <link href="css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
+  <link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon">
 </head>
 <body>
   <div class="center">
-    <%@ include file="banner.jsp"%>
     <div class="main-column">
-<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; About</h2>
+<h2><a href="/"><img src="images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; About</h2>
 <br>
 
 <h3>Frequently used terms</h3>

@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-import java.util.regex.Pattern;
+
+import org.torproject.metrics.web.Metric;
+import org.torproject.metrics.web.MetricsProvider;
 
 /**
  * Checks request parameters passed to graph-generating servlets.
@@ -35,7 +37,7 @@ public class GraphParameterChecker {
   private SimpleDateFormat dateFormat;
 
   /* Available graphs with corresponding parameter lists. */
-  private Map<String, String> availableGraphs;
+  private Map<String, String[]> availableGraphs;
 
   /* Known parameters and parameter values. */
   private Map<String, String> knownParameterValues;
@@ -46,7 +48,12 @@ public class GraphParameterChecker {
   public GraphParameterChecker() {
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
+    this.availableGraphs = new HashMap<String, String[]>();
+    for (Metric metric : MetricsProvider.getInstance().getMetricsList()) {
+      if ("Graph".equals(metric.getType())) {
+        this.availableGraphs.put(metric.getId(), metric.getParameters());
+      }
+    }
     this.knownParameterValues = new HashMap<String, String>();
     this.knownParameterValues.put("flag",
         "Running,Exit,Guard,Fast,Stable,HSDir");
@@ -67,10 +74,6 @@ public class GraphParameterChecker {
         + "500,1000,2000,3000,5000");
   }
 
-  public void setAvailableGraphs(Map<String, String> availableGraphs) {
-    this.availableGraphs = availableGraphs;
-  }
-
   /**
    * Checks request parameters for the given graph type and returns a map
    * of recognized parameters, or null if the graph type doesn't exist or
@@ -88,7 +91,7 @@ public class GraphParameterChecker {
     /* Find out which other parameters are supported by this graph type
      * and parse them if they are given. */
     Set<String> supportedGraphParameters = new HashSet<String>(Arrays.
-        asList(this.availableGraphs.get(graphType).split(",")));
+        asList(this.availableGraphs.get(graphType)));
     Map<String, String[]> recognizedGraphParameters =
         new HashMap<String, String[]>();
 

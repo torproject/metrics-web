@@ -4,17 +4,16 @@
 <head>
   <title>Tor Metrics &mdash; Network bubble graphs</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-  <link href="/css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
-  <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
-  <script src="/js/d3.min.js"></script>
-  <script src="/js/bubbles.js"></script>
+  <link href="css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
+  <link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon">
+  <script src="js/d3.min.js"></script>
+  <script src="js/bubbles.js"></script>
 </head>
 <body>
   <div class="center">
-    <%@ include file="banner.jsp"%>
     <div class="main-column">
 
-<h2><a href="/"><img src="/images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Network bubble graphs</h2>
+<h2><a href="/"><img src="images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Network bubble graphs</h2>
 <br>
 <p>The following graph visualizes diversity of currently running
 <a href="about.html#relay">relays</a> in terms of their probability to be

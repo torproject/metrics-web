@@ -18,13 +18,13 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>GraphsSubpages</servlet-name>
+    <servlet-name>Graph</servlet-name>
     <servlet-class>
-      org.torproject.metrics.web.graphs.GraphsSubpagesServlet
+      org.torproject.metrics.web.GraphServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>GraphsSubpages</servlet-name>
+    <servlet-name>Graph</servlet-name>
     <url-pattern>/networksize.html</url-pattern>
     <url-pattern>/relayflags.html</url-pattern>
     <url-pattern>/versions.html</url-pattern>
@@ -37,16 +37,38 @@
     <url-pattern>/advbwdist-perc.html</url-pattern>
     <url-pattern>/advbwdist-relay.html</url-pattern>
     <url-pattern>/userstats-relay-country.html</url-pattern>
-    <url-pattern>/userstats-relay-table.html</url-pattern>
-    <url-pattern>/userstats-censorship-events.html</url-pattern>
     <url-pattern>/userstats-bridge-country.html</url-pattern>
-    <url-pattern>/userstats-bridge-table.html</url-pattern>
     <url-pattern>/userstats-bridge-transport.html</url-pattern>
     <url-pattern>/userstats-bridge-version.html</url-pattern>
-    <url-pattern>/oxford-anonymous-internet.html</url-pattern>
     <url-pattern>/torperf.html</url-pattern>
     <url-pattern>/torperf-failures.html</url-pattern>
     <url-pattern>/connbidirect.html</url-pattern>
+    <url-pattern>/hidserv-dir-onions-seen.html</url-pattern>
+    <url-pattern>/hidserv-rend-relayed-cells.html</url-pattern>
+    <url-pattern>/hidserv-frac-reporting.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Table</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.TableServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Table</servlet-name>
+    <url-pattern>/userstats-relay-table.html</url-pattern>
+    <url-pattern>/userstats-censorship-events.html</url-pattern>
+    <url-pattern>/userstats-bridge-table.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Data</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.DataServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Data</servlet-name>
     <url-pattern>/servers-data.html</url-pattern>
     <url-pattern>/bandwidth-data.html</url-pattern>
     <url-pattern>/advbwdist-data.html</url-pattern>
@@ -55,9 +77,17 @@
     <url-pattern>/connbidirect-data.html</url-pattern>
     <url-pattern>/connbidirect2-data.html</url-pattern>
     <url-pattern>/hidserv-data.html</url-pattern>
-    <url-pattern>/hidserv-dir-onions-seen.html</url-pattern>
-    <url-pattern>/hidserv-rend-relayed-cells.html</url-pattern>
-    <url-pattern>/hidserv-frac-reporting.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Link</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.LinkServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Link</servlet-name>
+    <url-pattern>/oxford-anonymous-internet.html</url-pattern>
     <url-pattern>/uncharted-data-flow.html</url-pattern>
   </servlet-mapping>
 

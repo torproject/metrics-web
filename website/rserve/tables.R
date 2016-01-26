@@ -21,7 +21,7 @@ write_userstats <- function(start, end, node, path) {
     cc = as.character(u$country),
     country = sub('the ', '', countrynames(as.character(u$country))),
     abs = round(u$users),
-    rel = round(100 * u$users / total, 2))
+    rel = sprintf("%.2f", round(100 * u$users / total, 2)))
   write.csv(u, path, quote = FALSE, row.names = FALSE)
 }
 

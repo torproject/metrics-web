@@ -13,10 +13,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -24,6 +23,8 @@ import javax.servlet.ServletContextListener;
 
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
+import org.torproject.metrics.web.Metric;
+import org.torproject.metrics.web.MetricsProvider;
 
 public class RObjectGenerator implements ServletContextListener {
 
@@ -35,9 +36,7 @@ public class RObjectGenerator implements ServletContextListener {
   private String cachedGraphsDirectory;
   private long maxCacheAge;
 
-  private Map<String, String> availableTables;
-  private Map<String, String> availableGraphs;
-  private Set<String> availableGraphFileTypes;
+  private Map<String, Metric> availableGraphs, availableTables;
 
   public void contextInitialized(ServletContextEvent event) {
 
@@ -51,52 +50,16 @@ public class RObjectGenerator implements ServletContextListener {
     this.cachedGraphsDirectory = servletContext.getInitParameter(
         "cachedGraphsDir");
 
-    this.availableTables = new HashMap<String, String>();
-    this.availableTables.put("userstats-relay", "start,end,filename");
-    this.availableTables.put("userstats-bridge", "start,end,filename");
-    this.availableTables.put("userstats-censorship-events",
-        "start,end,filename");
-    TableParameterChecker.getInstance().setAvailableTables(
-        availableTables);
-
-    this.availableGraphs = new HashMap<String, String>();
-    this.availableGraphs.put("networksize", "start,end,filename");
-    this.availableGraphs.put("cloudbridges", "start,end,filename");
-    this.availableGraphs.put("relaycountries",
-        "start,end,country,filename");
-    this.availableGraphs.put("relayflags", "start,end,flag,filename");
-    this.availableGraphs.put("versions", "start,end,filename");
-    this.availableGraphs.put("platforms", "start,end,filename");
-    this.availableGraphs.put("bandwidth", "start,end,filename");
-    this.availableGraphs.put("bandwidth-flags", "start,end,filename");
-    this.availableGraphs.put("bwhist-flags", "start,end,filename");
-    this.availableGraphs.put("dirbytes", "start,end,filename");
-    this.availableGraphs.put("torperf",
-         "start,end,source,filesize,filename");
-    this.availableGraphs.put("torperf-failures",
-         "start,end,source,filesize,filename");
-    this.availableGraphs.put("connbidirect", "start,end,filename");
-    this.availableGraphs.put("userstats-relay-country",
-        "start,end,country,events,filename");
-    this.availableGraphs.put("userstats-bridge-country",
-        "start,end,country,filename");
-    this.availableGraphs.put("userstats-bridge-transport",
-        "start,end,transport,filename");
-    this.availableGraphs.put("userstats-bridge-version",
-        "start,end,version,filename");
-    this.availableGraphs.put("advbwdist-perc", "start,end,p,filename");
-    this.availableGraphs.put("advbwdist-relay", "start,end,n,filename");
-    this.availableGraphs.put("hidserv-dir-onions-seen",
-        "start,end,filename");
-    this.availableGraphs.put("hidserv-rend-relayed-cells",
-        "start,end,filename");
-    this.availableGraphs.put("hidserv-frac-reporting",
-        "start,end,filename");
-
-    this.availableGraphFileTypes = new HashSet<String>(Arrays.asList(
-        "png,pdf,svg".split(",")));
-    GraphParameterChecker.getInstance().setAvailableGraphs(
-        availableGraphs);
+    this.availableGraphs = new LinkedHashMap<String, Metric>();
+    this.availableTables = new LinkedHashMap<String, Metric>();
+    for (Metric metric : MetricsProvider.getInstance().getMetricsList()) {
+      String type = metric.getType(), id = metric.getId();
+      if ("Graph".equals(type)) {
+        this.availableGraphs.put(id, metric);
+      } else if ("Table".equals(type)) {
+        this.availableTables.put(id, metric);
+      }
+    }
 
     /* Register ourself, so that servlets can use us. */
     servletContext.setAttribute("RObjectGenerator", this);
@@ -113,13 +76,11 @@ public class RObjectGenerator implements ServletContextListener {
             } catch (InterruptedException e) {
             }
           }
-          for (String tableName : availableTables.keySet()) {
-            generateTable(tableName, tableName, new HashMap(), false);
+          for (String tableId : availableTables.keySet()) {
+            generateTable(tableId, new HashMap(), false);
           }
-          for (String graphName : availableGraphs.keySet()) {
-            for (String fileType : availableGraphFileTypes) {
-              generateGraph(graphName, fileType, new HashMap(), false);
-            }
+          for (String graphId : availableGraphs.keySet()) {
+            generateGraph(graphId, "png", new HashMap(), false);
           }
           lastUpdated = System.currentTimeMillis();
         }
@@ -133,15 +94,19 @@ public class RObjectGenerator implements ServletContextListener {
 
   public RObject generateGraph(String requestedGraph, String fileType,
       Map parameterMap, boolean checkCache) {
+    if (!this.availableGraphs.containsKey(requestedGraph) ||
+        this.availableGraphs.get(requestedGraph).getFunction() == null) {
+      return null;
+    }
+    String function = this.availableGraphs.get(requestedGraph).
+        getFunction();
     Map<String, String[]> checkedParameters = GraphParameterChecker.
         getInstance().checkParameters(requestedGraph, parameterMap);
     if (checkedParameters == null) {
-      /* TODO We're going to take the blame by sending an internal server
-       * error to the client, but really the user is to blame. */
       return null;
     }
-    StringBuilder rQueryBuilder = new StringBuilder("plot_"
-        + requestedGraph.replaceAll("-", "_") + "("),
+    StringBuilder
+        rQueryBuilder = new StringBuilder().append(function).append("("),
         imageFilenameBuilder = new StringBuilder(requestedGraph);
     for (Map.Entry<String, String[]> parameter :
         checkedParameters.entrySet()) {
@@ -172,27 +137,22 @@ public class RObjectGenerator implements ServletContextListener {
         checkCache);
   }
 
-  public List<Map<String, String>> generateTable(String tableName,
-      String requestedTable, Map parameterMap, boolean checkCache) {
-
-    Map<String, String[]> checkedParameters = null;
-    if (tableName.equals(requestedTable)) {
-      checkedParameters = TableParameterChecker.
-          getInstance().checkParameters(requestedTable,
-          parameterMap);
-    } else {
-      checkedParameters = TableParameterChecker.
-          getInstance().checkParameters(tableName, null);
-    }
-    if (checkedParameters == null) {
-      /* TODO We're going to take the blame by sending an internal server
-       * error to the client, but really the user is to blame. */
+  public List<Map<String, String>> generateTable(String requestedTable,
+      Map parameterMap, boolean checkCache) {
+    if (!this.availableTables.containsKey(requestedTable) ||
+        this.availableTables.get(requestedTable).getFunction() == null) {
       return null;
     }
-    StringBuilder rQueryBuilder = new StringBuilder("write_"
-        + tableName.replaceAll("-", "_") + "("),
-        tableFilenameBuilder = new StringBuilder(tableName);
-
+    String function = this.availableTables.get(requestedTable).
+        getFunction();
+    Map<String, String[]> checkedParameters = TableParameterChecker.
+        getInstance().checkParameters(requestedTable, parameterMap);
+    if (checkedParameters == null) {
+      return null;
+    }
+    StringBuilder
+        rQueryBuilder = new StringBuilder().append(function).append("("),
+        tableFilenameBuilder = new StringBuilder(requestedTable);
     for (Map.Entry<String, String[]> parameter :
         checkedParameters.entrySet()) {
       String parameterName = parameter.getKey();

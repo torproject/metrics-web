@@ -1,4 +1,4 @@
-/* Copyright 2011--2015 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
 package org.torproject.metrics.web;
 
@@ -58,117 +58,16 @@ public class IndexServlet extends HttpServlet {
   };
   private static final String[] defaultOrders = new String[] { "type" };
 
-  private final static List<Metric> availableMetrics;
-  static {
-    availableMetrics = new ArrayList<Metric>();
-    availableMetrics.add(new Metric("networksize.html",
-        "Relays and bridges in the network",
-        new String[] { "Relays", "Bridges" }, "Graph", "Basic"));
-    availableMetrics.add(new Metric("relayflags.html",
-        "Relays with Exit, Fast, Guard, Stable, and HSDir flags",
-        new String[] { "Relays" }, "Graph", "Basic"));
-    availableMetrics.add(new Metric("versions.html",
-        "Relays by version", new String[] { "Relays", "Diversity" },
-        "Graph", "Basic"));
-    availableMetrics.add(new Metric("platforms.html",
-        "Relays by platform", new String[] { "Relays", "Diversity" },
-        "Graph", "Basic"));
-    availableMetrics.add(new Metric("cloudbridges.html",
-        "Tor Cloud bridges", new String[] { "Bridges" }, "Graph",
-        "Basic"));
-    availableMetrics.add(new Metric("servers-data.html",
-        "Number of relays and bridges",
-        new String[] { "Relays", "Bridges", "Diversity" }, "Data",
-        "Advanced"));
-    availableMetrics.add(new Metric("bandwidth.html",
-        "Total relay bandwidth in the network",
-        new String[] { "Relays", "Bandwidth" }, "Graph", "Basic"));
-    availableMetrics.add(new Metric("bwhist-flags.html",
-        "Relay bandwidth by Exit and/or Guard flags",
-        new String[] { "Relays", "Bandwidth" }, "Graph", "Basic"));
-    availableMetrics.add(new Metric("bandwidth-flags.html",
-        "Advertised bandwidth and bandwidth history by relay flags",
-        new String[] { "Relays", "Bandwidth" }, "Graph", "Basic"));
-    availableMetrics.add(new Metric("dirbytes.html",
-        "Number of bytes spent on answering directory requests",
-        new String[] { "Relays", "Bandwidth" }, "Graph", "Basic"));
-    availableMetrics.add(new Metric("advbwdist-perc.html",
-        "Advertised bandwidth distribution",
-        new String[] { "Relays", "Bandwidth" }, "Graph", "Basic"));
-    availableMetrics.add(new Metric("advbwdist-relay.html",
-        "Advertised bandwidth of n-th fastest relays",
-        new String[] { "Relays", "Bandwidth" }, "Graph", "Basic"));
-    availableMetrics.add(new Metric("bandwidth-data.html",
-        "Bandwidth provided and consumed by relays",
-        new String[] { "Relays", "Bandwidth" }, "Data", "Advanced"));
-    availableMetrics.add(new Metric("advbwdist-data.html",
-        "Advertised bandwidth distribution and n-th fastest relays",
-        new String[] { "Relays", "Bandwidth" }, "Data", "Advanced"));
-    availableMetrics.add(new Metric("bubbles.html",
-        "Network bubble graphs", new String[] { "Relays", "Diversity" },
-        "Graph", "Basic"));
-    availableMetrics.add(new Metric("userstats-relay-country.html",
-        "Direct users by country", new String[] { "Clients" }, "Graph",
-        "Basic"));
-    availableMetrics.add(new Metric("userstats-relay-table.html",
-        "Top-10 countries by directly connecting users",
-        new String[] { "Clients" }, "Table", "Basic"));
-    availableMetrics.add(new Metric("userstats-censorship-events.html",
-        "Top-10 countries by possible censorship events",
-        new String[] { "Clients" }, "Table", "Basic"));
-    availableMetrics.add(new Metric("userstats-bridge-country.html",
-        "Bridge users by country", new String[] { "Clients" }, "Graph",
-        "Basic"));
-    availableMetrics.add(new Metric("userstats-bridge-table.html",
-        "Top-10 countries by bridge users", new String[] { "Clients" },
-        "Table", "Basic"));
-    availableMetrics.add(new Metric("userstats-bridge-transport.html",
-        "Bridge users by transport",
-        new String[] { "Clients", "Pluggable transports" }, "Graph",
-        "Basic"));
-    availableMetrics.add(new Metric("userstats-bridge-version.html",
-        "Bridge users by IP version", new String[] { "Clients" }, "Graph",
-        "Basic"));
-    availableMetrics.add(new Metric("oxford-anonymous-internet.html",
-        "Tor users as percentage of larger Internet population",
-        new String[] { "Clients" }, "Link", "Basic"));
-    availableMetrics.add(new Metric("clients-data.html",
-        "Estimated number of clients in the Tor network",
-        new String[] { "Clients", "Pluggable transports" }, "Data",
-        "Advanced"));
-    availableMetrics.add(new Metric("torperf.html",
-        "Time to download files over Tor", new String[] { "Performance" },
-        "Graph", "Basic"));
-    availableMetrics.add(new Metric("torperf-failures.html",
-        "Timeouts and failures of downloading files over Tor",
-        new String[] { "Performance" }, "Graph", "Advanced"));
-    availableMetrics.add(new Metric("connbidirect.html",
-        "Fraction of connections used uni-/bidirectionally",
-        new String[] { "Performance" }, "Graph", "Advanced"));
-    availableMetrics.add(new Metric("torperf-data.html",
-        "Performance of downloading static files over Tor",
-        new String[] { "Performance" }, "Data", "Advanced"));
-    availableMetrics.add(new Metric("connbidirect-data.html",
-        "Fraction of connections used uni-/bidirectionally (deprecated)",
-        new String[] { "Performance" }, "Data", "Advanced"));
-    availableMetrics.add(new Metric("connbidirect2-data.html",
-        "Fraction of connections used uni-/bidirectionally",
-        new String[] { "Performance" }, "Data", "Advanced"));
-    availableMetrics.add(new Metric("hidserv-dir-onions-seen.html",
-        "Unique .onion addresses", new String[] { "Hidden services" },
-        "Graph", "Basic"));
-    availableMetrics.add(new Metric("hidserv-rend-relayed-cells.html",
-        "Hidden-service traffic", new String[] { "Hidden services" },
-        "Graph", "Basic"));
-    availableMetrics.add(new Metric("hidserv-frac-reporting.html",
-        "Fraction of relays reporting hidden-service statistics",
-        new String[] { "Hidden services" }, "Graph", "Advanced"));
-    availableMetrics.add(new Metric("hidserv-data.html",
-        "Hidden-service statistics", new String[] { "Hidden services" },
-        "Data", "Advanced"));
-    availableMetrics.add(new Metric("uncharted-data-flow.html",
-        "Data flow in the Tor network", new String[] { "Relays",
-        "Hidden services", "Bandwidth" }, "Link", "Basic"));
+  private List<Metric> availableMetrics;
+
+  public void init() throws ServletException {
+    this.availableMetrics = new ArrayList<Metric>();
+    for (org.torproject.metrics.web.Metric metric :
+        MetricsProvider.getInstance().getMetricsList()) {
+      this.availableMetrics.add(new Metric(metric.getId() + ".html",
+          metric.getTitle(), metric.getTags(), metric.getType(),
+          metric.getLevel()));
+    }
   }
 
   public void doGet(HttpServletRequest request,
