@@ -77,12 +77,6 @@ public final class RelayDescriptorDatabaseImporter {
   private PreparedStatement psSs;
 
   /**
-   * Prepared statement to check whether a given network status consensus
-   * entry has been imported into the database before.
-   */
-  private PreparedStatement psRs;
-
-  /**
    * Prepared statement to check whether a given server descriptor has
    * been imported into the database before.
    */
@@ -174,13 +168,7 @@ public final class RelayDescriptorDatabaseImporter {
    * Set of fingerprints that we imported for the valid-after time in
    * <code>lastCheckedStatusEntries</code>.
    */
-  private Set<String> insertedStatusEntries;
-
-  /**
-   * Flag that tells us whether we need to check whether a network status
-   * entry is already contained in the database or not.
-   */
-  private boolean separateStatusEntryCheckNecessary;
+  private Set<String> insertedStatusEntries = new HashSet<String>();
 
   private boolean importIntoDatabase;
   private boolean writeRawImportFiles;
@@ -218,11 +206,8 @@ public final class RelayDescriptorDatabaseImporter {
         this.conn.setAutoCommit(false);
 
         /* Prepare statements. */
-        this.psSs = conn.prepareStatement("SELECT COUNT(*) "
+        this.psSs = conn.prepareStatement("SELECT fingerprint "
             + "FROM statusentry WHERE validafter = ?");
-        this.psRs = conn.prepareStatement("SELECT COUNT(*) "
-            + "FROM statusentry WHERE validafter = ? AND "
-            + "fingerprint = ?");
         this.psDs = conn.prepareStatement("SELECT COUNT(*) "
             + "FROM descriptor WHERE descriptor = ?");
         this.psCs = conn.prepareStatement("SELECT COUNT(*) "
@@ -253,10 +238,6 @@ public final class RelayDescriptorDatabaseImporter {
         this.logger.log(Level.WARNING, "Could not connect to database or "
             + "prepare statements.", e);
       }
-
-      /* Initialize set of fingerprints to remember which status entries
-       * we already imported. */
-      this.insertedStatusEntries = new HashSet<String>();
     }
 
     /* Remember where we want to write raw import files. */
@@ -305,33 +286,17 @@ public final class RelayDescriptorDatabaseImporter {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         Timestamp validAfterTimestamp = new Timestamp(validAfter);
         if (lastCheckedStatusEntries != validAfter) {
+          insertedStatusEntries.clear();
           this.psSs.setTimestamp(1, validAfterTimestamp, cal);
           ResultSet rs = psSs.executeQuery();
-          rs.next();
-          if (rs.getInt(1) == 0) {
-            separateStatusEntryCheckNecessary = false;
-            insertedStatusEntries.clear();
-          } else {
-            separateStatusEntryCheckNecessary = true;
+          while (rs.next()) {
+            String insertedFingerprint = rs.getString(1);
+            insertedStatusEntries.add(insertedFingerprint);
           }
           rs.close();
           lastCheckedStatusEntries = validAfter;
         }
-        boolean alreadyContained = false;
-        if (separateStatusEntryCheckNecessary ||
-            insertedStatusEntries.contains(fingerprint)) {
-          this.psRs.setTimestamp(1, validAfterTimestamp, cal);
-          this.psRs.setString(2, fingerprint);
-          ResultSet rs = psRs.executeQuery();
-          rs.next();
-          if (rs.getInt(1) > 0) {
-            alreadyContained = true;
-          }
-          rs.close();
-        } else {
-          insertedStatusEntries.add(fingerprint);
-        }
-        if (!alreadyContained) {
+        if (!insertedStatusEntries.contains(fingerprint)) {
           this.psR.clearParameters();
           this.psR.setTimestamp(1, validAfterTimestamp, cal);
           this.psR.setString(2, nickname);
@@ -364,6 +329,7 @@ public final class RelayDescriptorDatabaseImporter {
           if (rrsCount % autoCommitCount == 0)  {
             this.conn.commit();
           }
+          insertedStatusEntries.add(fingerprint);
         }
       } catch (SQLException e) {
         this.logger.log(Level.WARNING, "Could not add network status "
