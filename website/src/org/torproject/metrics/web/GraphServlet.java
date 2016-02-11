@@ -97,7 +97,8 @@ public class GraphServlet extends MetricServlet {
         { "websocket", "", "Flash proxy/websocket" },
         { "fte", "", "FTE" },
         { "meek", "", "meek" },
-        { "scramblesuit", "", "Unknown pluggable transport(s)" },
+        { "scramblesuit", "", "scramblesuit" },
+        { "<??>", "", "Unknown pluggable transport(s)" },
         { "<OR>", "", "Default OR protocol" } });
     this.defaultParameters.put("version", new String[][] {
         { "v4", " selected", "IPv4" },
