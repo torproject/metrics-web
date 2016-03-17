@@ -45,7 +45,7 @@ public class Main {
           config.getRelayDescriptorDatabaseJDBC() : null,
           config.getWriteRelayDescriptorsRawFiles() ?
           config.getRelayDescriptorRawFilesDirectory() : null,
-          new File(config.getDirectoryArchivesDirectory()),
+          config.getDirectoryArchivesDirectories(),
           statsDirectory,
           config.getKeepDirectoryArchiveImportHistory()) : null;
       if (rddi != null) {

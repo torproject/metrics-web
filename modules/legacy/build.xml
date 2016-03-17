@@ -46,7 +46,7 @@
   <!-- Prepare data for being displayed on the website. -->
   <target name="run" depends="compile">
     <java fork="true"
-          maxmemory="1024m"
+          maxmemory="2g"
           classname="org.torproject.ernie.cron.Main">
       <classpath refid="classpath"/>
     </java>

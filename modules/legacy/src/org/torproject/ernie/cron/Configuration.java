@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +20,8 @@ import java.util.logging.Logger;
  */
 public class Configuration {
   private boolean importDirectoryArchives = false;
-  private String directoryArchivesDirectory = "in/relay-descriptors/";
+  private List<String> directoryArchivesDirectories =
+      new ArrayList<String>();
   private boolean keepDirectoryArchiveImportHistory = false;
   private boolean importSanitizedBridges = false;
   private String sanitizedBridgesDirectory = "in/bridge-descriptors/";
@@ -55,7 +59,7 @@ public class Configuration {
           this.importDirectoryArchives = Integer.parseInt(
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("DirectoryArchivesDirectory")) {
-          this.directoryArchivesDirectory = line.split(" ")[1];
+          this.directoryArchivesDirectories.add(line.split(" ")[1]);
         } else if (line.startsWith("KeepDirectoryArchiveImportHistory")) {
           this.keepDirectoryArchiveImportHistory = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -117,8 +121,15 @@ public class Configuration {
   public boolean getImportDirectoryArchives() {
     return this.importDirectoryArchives;
   }
-  public String getDirectoryArchivesDirectory() {
-    return this.directoryArchivesDirectory;
+  public List<String> getDirectoryArchivesDirectories() {
+    if (this.directoryArchivesDirectories.isEmpty()) {
+      String prefix = "../../shared/in/recent/relay-descriptors/";
+      return Arrays.asList(
+          (prefix + "consensuses/," + prefix + "server-descriptors/,"
+          + prefix + "extra-infos/").split(","));
+    } else {
+      return this.directoryArchivesDirectories;
+    }
   }
   public boolean getKeepDirectoryArchiveImportHistory() {
     return this.keepDirectoryArchiveImportHistory;

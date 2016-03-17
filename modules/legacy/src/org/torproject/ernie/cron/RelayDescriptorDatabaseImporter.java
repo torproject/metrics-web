@@ -173,7 +173,7 @@ public final class RelayDescriptorDatabaseImporter {
   private boolean importIntoDatabase;
   private boolean writeRawImportFiles;
 
-  private File archivesDirectory;
+  private List<String> archivesDirectories;
   private File statsDirectory;
   private boolean keepImportHistory;
 
@@ -182,14 +182,14 @@ public final class RelayDescriptorDatabaseImporter {
    * preparing statements.
    */
   public RelayDescriptorDatabaseImporter(String connectionURL,
-      String rawFilesDirectory, File archivesDirectory,
+      String rawFilesDirectory, List<String> archivesDirectories,
       File statsDirectory, boolean keepImportHistory) {
 
-    if (archivesDirectory == null ||
+    if (archivesDirectories == null ||
         statsDirectory == null) {
       throw new IllegalArgumentException();
     }
-    this.archivesDirectory = archivesDirectory;
+    this.archivesDirectories = archivesDirectories;
     this.statsDirectory = statsDirectory;
     this.keepImportHistory = keepImportHistory;
 
@@ -805,12 +805,18 @@ public final class RelayDescriptorDatabaseImporter {
   }
 
   public void importRelayDescriptors() {
-    if (archivesDirectory.exists()) {
-      logger.fine("Importing files in directory " + archivesDirectory
-          + "/...");
+    logger.fine("Importing files in directories " + archivesDirectories
+        + "/...");
+    if (!this.archivesDirectories.isEmpty()) {
       DescriptorReader reader =
           DescriptorSourceFactory.createDescriptorReader();
-      reader.addDirectory(archivesDirectory);
+      reader.setMaxDescriptorFilesInQueue(10);
+      for (String archivesPath : this.archivesDirectories) {
+        File archivesDirectory = new File(archivesPath);
+        if (archivesDirectory.exists()) {
+          reader.addDirectory(archivesDirectory);
+        }
+      }
       if (keepImportHistory) {
         reader.setExcludeFiles(new File(statsDirectory,
             "database-importer-relay-descriptor-history"));

@@ -1,8 +1,10 @@
 ## Import directory archives from disk, if available
 #ImportDirectoryArchives 0
 #
-## Relative path to directory to import directory archives from
-#DirectoryArchivesDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/relay-descriptors/
+## Relative paths to directories to import directory archives from
+#DirectoryArchivesDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/relay-descriptors/consensuses/
+#DirectoryArchivesDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/relay-descriptors/server-descriptors/
+#DirectoryArchivesDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/relay-descriptors/extra-infos/
 #
 ## Keep a history of imported directory archive files to know which files
 ## have been imported before. This history can be useful when importing

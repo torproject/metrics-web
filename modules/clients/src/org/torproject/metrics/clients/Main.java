@@ -62,9 +62,13 @@ public class Main {
     descriptorReader.setExcludeFiles(new File(
         "status/relay-descriptors"));
     descriptorReader.addDirectory(new File(
-        "../../shared/in/recent/relay-descriptors"));
+        "../../shared/in/recent/relay-descriptors/consensuses"));
     descriptorReader.addDirectory(new File(
-        "../../shared/in/archive/relay-descriptors"));
+        "../../shared/in/recent/relay-descriptors/extra-infos"));
+    descriptorReader.addDirectory(new File(
+        "../../shared/in/archive/relay-descriptors/consensuses"));
+    descriptorReader.addDirectory(new File(
+        "../../shared/in/archive/relay-descriptors/extra-infos"));
     Iterator<DescriptorFile> descriptorFiles =
         descriptorReader.readDescriptors();
     while (descriptorFiles.hasNext()) {
