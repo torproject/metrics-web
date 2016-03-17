@@ -36,6 +36,7 @@ public class ResearchStatsServlet extends HttpServlet {
     this.availableStatisticsFiles.add("connbidirect2");
     this.availableStatisticsFiles.add("advbwdist");
     this.availableStatisticsFiles.add("hidserv");
+    this.availableStatisticsFiles.add("disagreement");
   }
 
   public long getLastModified(HttpServletRequest request) {

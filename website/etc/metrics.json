@@ -834,5 +834,27 @@
     "type": "Link",
     "level": "Basic",
     "description": "<p>Uncharted made a visualization of data flow in the Tor network where they place each <a href=\"about.html#relay\">relay</a> on a world map and illustrate traffic exchanged between relays as animated dots. More details can be found on the <a href=\"https://torflow.uncharted.software/\">Uncharted website</a>.</p><p><a href=\"https://torflow.uncharted.software/\"><img src=\"images/uncharted-data-flow.png\" alt=\"Data flow in the Tor network\"></a></p>"
+  },
+  {
+    "id": "disagreement-data",
+    "title": "Disagreement among the directory authorities",
+    "tags": [
+      "Relays"
+    ],
+    "type": "Data",
+    "level": "Advanced",
+    "description": "<p>The following data file contains statistics about agreement or disagreement among the <a href=\"about.html#directory-authority\">directory authorities</a>.  Once per hour the directory authorities exchange votes with their view of the <a href=\"about.html#relay\">relays</a> in the network including attributes like <a href=\"about.html#relay-flag\">relay flags</a> or bandwidth measurements.  This data file includes counts of relays by number of directory authorities assigning them a given attribute.</p>",
+    "data_file": "stats/disagreement.csv",
+    "data_column_spec": [
+      "<b>validafter:</b> UTC timestamp (YYYY-MM-DD HH:MM:SS) after which votes became valid, which may be used as the vote publication time.",
+      "<b>attribute:</b> Attribute assigned to relays by directory authorities, which includes relay flags like <b>\"Exit\"</b> or <b>\"BadExit\"</b> as well as <b>\"Listed\"</b> for relays being listed in a vote and <b>\"Measured\"</b> for relays being measured by the bandwidth authorities.",
+      "<b>votes:</b> Number of votes assigning the attribute to relays.",
+      "<b>required:</b> Required number of votes for the attribute to be assigned to a relay for being included in the consensus.",
+      "<b>max:</b> Maximum number of possible votes assigning the attribute to relays.",
+      "<b>relays:</b> Number of relays that got the given number of votes for the given attribute."
+    ],
+    "related": [
+      "relayflags"
+    ]
   }
 ]
