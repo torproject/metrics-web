@@ -98,6 +98,7 @@ public class GraphServlet extends MetricServlet {
         { "fte", "", "FTE" },
         { "meek", "", "meek" },
         { "scramblesuit", "", "scramblesuit" },
+        { "snowflake", "", "snowflake" },
         { "<??>", "", "Unknown pluggable transport(s)" },
         { "<OR>", "", "Default OR protocol" } });
     this.defaultParameters.put("version", new String[][] {
