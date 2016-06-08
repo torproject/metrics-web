@@ -862,7 +862,8 @@ plot_userstats <- function(start, end, node, variable, value, events,
              date = seq(from = as.Date(start, "%Y-%m-%d"),
              to = as.Date(end, "%Y-%m-%d"), by="1 day"),
              value = ifelse(value == 'all', '', value))))
-  formatter <- function(x, ...) { format(x, scientific = FALSE, ...) }
+  formatter <- function(x, ...) {
+    format(x, ..., scientific = FALSE, big.mark = '\u2006') }
   date_breaks <- date_breaks(
     as.numeric(max(u$date) - min(u$date)))
   max_y <- ifelse(length(na.omit(u$users)) == 0, 0,
