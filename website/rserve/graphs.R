@@ -303,36 +303,6 @@ plot_networksize <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_cloudbridges <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
-  s <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
-                "servers.csv", sep = ""), stringsAsFactors = FALSE)
-  s <- s[s$date >= start & s$date <= end & s$flag == '' &
-         s$country == '' & s$version == '' & s$platform == '' &
-         s$ec2bridge == 't', ]
-  s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"), bridges = s$bridges)
-  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
-      to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, s$date)
-  if (length(missing) > 0)
-    s <- rbind(s,
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        bridges = NA))
-  date_breaks <- date_breaks(
-    as.numeric(max(as.Date(s$date, "%Y-%m-%d")) -
-    min(as.Date(s$date, "%Y-%m-%d"))))
-  ggplot(s, aes(x = as.Date(date, "%Y-%m-%d"), y = bridges)) +
-    geom_line(size = 1, colour = "green3") +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
-        format = date_breaks$format, major = date_breaks$major,
-        minor = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0,
-        max(s$bridges, na.rm = TRUE))) +
-    opts(title = "Number of Tor Cloud bridges\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
-}
-
 plot_relaycountries <- function(start, end, country, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   s <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",

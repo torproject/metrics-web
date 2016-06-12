@@ -29,7 +29,6 @@
     <url-pattern>/relayflags.html</url-pattern>
     <url-pattern>/versions.html</url-pattern>
     <url-pattern>/platforms.html</url-pattern>
-    <url-pattern>/cloudbridges.html</url-pattern>
     <url-pattern>/bandwidth.html</url-pattern>
     <url-pattern>/bwhist-flags.html</url-pattern>
     <url-pattern>/bandwidth-flags.html</url-pattern>
@@ -131,9 +130,6 @@
     <url-pattern>/networksize.png</url-pattern>
     <url-pattern>/networksize.pdf</url-pattern>
     <url-pattern>/networksize.svg</url-pattern>
-    <url-pattern>/cloudbridges.png</url-pattern>
-    <url-pattern>/cloudbridges.pdf</url-pattern>
-    <url-pattern>/cloudbridges.svg</url-pattern>
     <url-pattern>/relaycountries.png</url-pattern>
     <url-pattern>/relaycountries.pdf</url-pattern>
     <url-pattern>/relaycountries.svg</url-pattern>

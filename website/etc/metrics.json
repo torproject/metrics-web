@@ -20,8 +20,7 @@
     "related": [
       "relayflags",
       "versions",
-      "platforms",
-      "cloudbridges"
+      "platforms"
     ]
   },
   {
@@ -97,27 +96,6 @@
     ]
   },
   {
-    "id": "cloudbridges",
-    "title": "Tor Cloud bridges",
-    "tags": [
-      "Bridges"
-    ],
-    "type": "Graph",
-    "level": "Basic",
-    "description": "<p>The following graph shows the number of running <a href=\"about.html#bridge\">bridges</a> that are deployed in <a href=\"http://aws.amazon.com/ec2/\">Amazon's EC2 cloud</a> using images provided by <a href=\"https://cloud.torproject.org/\">Tor Cloud</a>.  These bridges have, by default, a nickname that starts with \"ec2bridger\" which bridge operators usually leave unchanged.</p>",
-    "function": "plot_cloudbridges",
-    "parameters": [
-      "start",
-      "end"
-    ],
-    "data": [
-      "servers-data"
-    ],
-    "related": [
-      "networksize"
-    ]
-  },
-  {
     "id": "servers-data",
     "title": "Number of relays and bridges",
     "tags": [
@@ -143,8 +121,7 @@
       "networksize",
       "relayflags",
       "versions",
-      "platforms",
-      "cloudbridges"
+      "platforms"
     ]
   },
   {
