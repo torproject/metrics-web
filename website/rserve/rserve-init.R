@@ -7,6 +7,7 @@ library("reshape")
 library("plyr")
 library("digest")
 library("RColorBrewer")
+library("scales")
 
 source('graphs.R')
 source('tables.R')
