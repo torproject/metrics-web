@@ -1,12 +1,13 @@
 <project default="run" name="disagreement" basedir=".">
 
   <property name="disagreement-sources" value="src/main/java"/>
+  <property name="disagreement-libs" value="../../shared/lib"/>
   <property name="disagreement-classes" value="classes"/>
   <path id="classpath">
     <pathelement path="${disagreement-classes}"/>
-    <fileset dir="../../shared/lib">
-      <include name="descriptor-1.1.0.jar"/>
-      <include name="commons-compress-1.4.1.jar"/>
+    <fileset dir="${disagreement-libs}">
+      <include name="descriptor-1.2.0.jar"/>
+      <include name="commons-compress-1.9.jar"/>
       <include name="xz-1.0.jar"/>
     </fileset>
   </path>

@@ -1,24 +1,19 @@
 <project default="run" name="clients" basedir=".">
 
   <property name="sources" value="src"/>
+  <property name="libs" value="../../shared/lib"/>
   <property name="classes" value="classes"/>
   <path id="classpath">
     <pathelement path="${classes}"/>
-    <fileset dir="/usr/share/java">
-      <include name="commons-codec-1.6.jar"/>
-      <include name="commons-compress-1.4.1.jar"/>
+    <fileset dir="${libs}">
+      <include name="commons-codec-1.9.jar"/>
+      <include name="commons-compress-1.9.jar"/>
       <include name="commons-lang-2.6.jar"/>
-    </fileset>
-    <fileset dir="../../deps/metrics-lib">
-      <include name="descriptor.jar"/>
+      <include name="descriptor-1.2.0.jar"/>
     </fileset>
   </path>
 
-  <target name="metrics-lib">
-    <ant dir="../../deps/metrics-lib"/>
-  </target>
-
-  <target name="compile" depends="metrics-lib">
+  <target name="compile">
     <mkdir dir="${classes}"/>
     <javac destdir="${classes}"
            srcdir="${sources}"

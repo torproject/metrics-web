@@ -1,16 +1,16 @@
 # Eclipse files
-.classpath
-.project
+/.classpath
+/.project
 
 # Generated web archive
-website/metrics.war
+/website/metrics.war
 
 # Compiled class files
-classes/
+*.class
 
 # Possibly modified config file
-etc/context.xml
+/website/etc/context.xml
 
 # Copied and possibly modified config file
-config
+/website/etc/config
 

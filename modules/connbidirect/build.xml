@@ -2,25 +2,20 @@
 
   <property name="connbidirect-sources" value="src/main/java"/>
   <property name="connbidirect-tests" value="src/test/java"/>
+  <property name="connbidirect-libs" value="../../shared/lib"/>
   <property name="connbidirect-classes" value="classes"/>
   <path id="classpath">
     <pathelement path="${connbidirect-classes}"/>
-    <fileset dir="/usr/share/java">
+    <fileset dir="${connbidirect-libs}">
       <include name="commons-codec-1.6.jar"/>
-      <include name="commons-compress-1.4.1.jar"/>
+      <include name="commons-compress-1.9.jar"/>
       <include name="commons-lang-2.6.jar"/>
-      <include name="junit4.jar"/>
-    </fileset>
-    <fileset dir="../../deps/metrics-lib">
-      <include name="descriptor.jar"/>
+      <include name="junit4-4.11.jar"/>
+      <include name="descriptor-1.2.0.jar"/>
     </fileset>
   </path>
 
-  <target name="metrics-lib">
-    <ant dir="../../deps/metrics-lib"/>
-  </target>
-
-  <target name="compile" depends="metrics-lib">
+  <target name="compile">
     <mkdir dir="${connbidirect-classes}"/>
     <javac destdir="${connbidirect-classes}"
            srcdir="${connbidirect-sources}"

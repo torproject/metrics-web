@@ -1,5 +1,7 @@
 <project default="war" name="metrics-web" basedir=".">
 
+  <property name="libs" value="../shared/lib"/>
+
   <!-- Compile all servlets. -->
   <target name="compile">
     <mkdir dir="classes"/>
@@ -13,16 +15,14 @@
            failonerror="true"
            includeantruntime="false">
       <classpath>
-        <fileset dir="/usr/share/java">
-          <include name="commons-codec.jar"/>
-          <include name="commons-lang.jar"/>
-          <include name="postgresql-jdbc3.jar"/>
-          <include name="servlet-api-2.5.jar"/>
-          <include name="gson-2.1.jar"/>
-        </fileset>
-        <fileset dir="lib">
+        <fileset dir="${libs}">
+          <include name="commons-codec-1.9.jar"/>
+          <include name="commons-lang-2.6.jar"/>
+          <include name="postgresql-jdbc3-9.2.jar"/>
+          <include name="servlet-api-3.0.jar"/>
+          <include name="gson-2.2.4.jar"/>
           <include name="REngine.jar"/>
-          <include name="RserveEngine.jar"/>
+          <include name="Rserve.jar"/>
         </fileset>
       </classpath>
     </javac>
@@ -34,17 +34,15 @@
     <war destfile="metrics.war"
          webxml="etc/web.xml">
       <fileset dir="web"/>
-      <lib dir="lib">
-          <include name="jstl.jar"/>
+      <lib dir="${libs}">
+          <include name="jstl1.1-1.1.2.jar"/>
           <include name="REngine.jar"/>
-          <include name="RserveEngine.jar"/>
-          <include name="standard.jar"/>
-      </lib>
-      <lib dir="/usr/share/java">
-          <include name="commons-codec.jar"/>
-          <include name="commons-lang.jar"/>
-          <include name="postgresql-jdbc3.jar"/>
-          <include name="gson-2.1.jar"/>
+          <include name="Rserve.jar"/>
+          <include name="standard-1.1.2.jar"/>
+          <include name="commons-codec-1.9.jar"/>
+          <include name="commons-lang-2.6.jar"/>
+          <include name="postgresql-jdbc3-9.2.jar"/>
+          <include name="gson-2.2.4.jar"/>
       </lib>
       <classes dir="classes"/>
       <zipfileset dir="etc"
