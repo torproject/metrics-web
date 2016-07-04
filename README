@@ -29,21 +29,19 @@ This README describes the steps for installing metrics-web on a Debian
 GNU/Linux Jessie server.  Instructions for other operating systems may
 vary.
 
-In the following it is assumed that root privileges are available.
-Commands requiring root privileges will be prefixed with # below.
+In the following it is assumed that sudo (or root) privileges are available.
 
 Start by adding a metrics user that will be used to execute all commands
-that do not require root privileges.  These commands will be prefixed with
-$ below.
+that do not require root privileges.
 
-# adduser metrics
+$ sudo adduser metrics
 
 The database importer and website sources will be installed in
 /srv/metrics.torproject.org/ that is created as follows:
 
-# mkdir /srv/metrics.torproject.org/
-# chmod g+ws /srv/metrics.torproject.org/
-# chown metrics:metrics /srv/metrics.torproject.org/
+$ sudo mkdir /srv/metrics.torproject.org/
+$ sudo chmod g+ws /srv/metrics.torproject.org/
+$ sudo chown metrics:metrics /srv/metrics.torproject.org/
 
 Clone the metrics-web Git repository:
 
@@ -53,7 +51,13 @@ $ git clone git://git.torproject.org/metrics-web metrics
 Install OpenJDK 7, Ant 1.9.4, and PostgreSQL 9.4 that are necessary for
 setting up the metrics database.
 
-# apt-get install openjdk-7-jdk ant postgresql-9.4
+$ sudo apt-get install openjdk-7-jdk ant postgresql-9.4
+
+Setting up the graphing engine (cf. 2.) requires installing R 2.8 or
+higher as well as the ggplot2 library.
+
+$ sudo apt-get install r-base r-cran-rserve r-cran-ggplot2 r-cran-reshape \
+  r-cran-scales r-cran-java
 
 Check the versions of the newly installed tools.
 
@@ -68,6 +72,47 @@ Apache Ant(TM) version 1.9.4 compiled on October 7 2014
 $ psql --version
 psql (PostgreSQL) 9.4.8
 
+Now prepare the library folder for all ant projects.
+
+$ cd /srv/metrics.torproject.org/metrics/
+$ mkdir shared/lib
+
+Download .jar files listed below.  Metrics usually uses Debian stable
+provided libraries, but you can also just download them elsewhere.
+
+Copy or link the following jars, annotated with file names in Debian
+stable packages, to /srv/metrics.torproject.org/metrics/shared/lib:
+commons-codec-1.9.jar
+  [/usr/share/java/commons-codec-1.9.jar in libcommons-codec-java]
+commons-compress-1.9.jar
+  [/usr/share/java/commons-compress-1.9.jar in libcommons-compress-java]
+commons-lang-2.6.jar
+  [/usr/share/java/commons-lang-2.6.jar in libcommons-lang-java]
+gson-2.2.4.jar
+  [/usr/share/java/gson.jar in libgoogle-gson-java]
+jstl1.1-1.1.2.jar
+  [/usr/share/java/jstl1.1-1.1.2.jar in libjstl1.1-java]
+junit4-4.11.jar
+  [/usr/share/java/junit4-4.11.jar in junit4]
+postgresql-jdbc3-9.2.jar
+  [/usr/share/java/postgresql-jdbc3-9.2.jar in libpostgresql-jdbc-java]
+REngine.jar
+  [/usr/lib/R/site-library/Rserve/java/REngine.jar in r-cran-rserve]
+Rserve.jar
+  [/usr/lib/R/site-library/Rserve/java/Rserve.jar in r-cran-rserve]
+servlet-api-3.0.jar
+  [/usr/share/java/servlet-api-3.0.jar in libservlet3.0-java]
+standard-1.1.2.jar
+  [/usr/share/java/standard-1.1.2.jar in libjakarta-taglibs-standard-java]
+xz-1.5.jar
+  [/usr/share/java/xz-1.5.jar in libxz-java]
+
+DescripTor is provided by The Tor Project and can be found here:
+    https://dist.torproject.org/descriptor/
+Download the tar.gz file with the version number listed in build.xml.
+The README inside the tar.gz file has all the information about DescripTor
+and explains how to verify the downloaded files.
+Copy descriptor-<version>.jar to /srv/metrics.torproject.org/shared/lib
 
 1.2. Configuring the database
 =============================
@@ -77,22 +122,22 @@ PostgreSQL database and import a database schema.
 
 Start by creating a new metrics database user.  There is no need to give
 the metrics user superuser privileges or allow it to create databases or
-new roles.
+new roles.  You will be prompted for the password.
 
-# sudo -u postgres createuser -P metrics
+$ sudo -u postgres createuser -P metrics
 
 Create a new database tordir owned by user metrics.
 
-# sudo -u postgres createdb -O metrics tordir
+$ sudo -u postgres createdb -O metrics tordir
 
 Import the metrics database schema.
 
-$ psql -f /srv/metrics.torproject.org/db/tordir.sql tordir
+$ sudo -u metrics psql -f /srv/metrics.torproject.org/metrics/modules/legacy/tordir.sql tordir
 
 Confirm that the database now contains tables to hold metrics data.  In
 the following, => will be used as the database prompt.
 
-$ psql tordir
+$ sudo -u metrics psql tordir
 => \dt+
 => \q
 
@@ -103,10 +148,10 @@ $ psql tordir
 In most cases it makes sense to populate the metrics database with
 archived relay descriptors from the official metrics website.
 
-Download the relay descriptor tarballs from the metrics website at
-https://metrics.torproject.org/data.html#relaydesc and extract them to
-/srv/metrics.torproject.org/archives/ .  The database importer can process
-v3 votes, v3 consensuses, server descriptors, and extra-infos.
+Download the relay descriptor tarballs from the CollecTor website at
+https://collector.torproject.org/archive/relay-descriptors/
+and extract them to /srv/metrics.torproject.org/archives/ .  The database
+importer can process v3 votes, v3 consensuses, server descriptors, and extra-infos.
 
 Edit the config file ~/metrics-web/config (or create it if it's not there)
 to contain the following five lines (be sure to remove the linebreak in
@@ -121,13 +166,13 @@ RelayDescriptorDatabaseJDBC
 
 Compile and run the Java database importer.
 
-$ cd /srv/metrics.torproject.org/
-$ ./run.sh
+$ cd /srv/metrics.torproject.org/metrics/
+$ ./run-web.sh
 
 The database import will take a while.  Once it's complete, check that the
 database tables now contain metrics data:
 
-$ psql tordir
+$ sudo -u metrics psql tordir
 => \dt+
 => \q
 
@@ -143,7 +188,7 @@ experimental feature.
 In a future version of metrics-web it may also be possible to update local
 relay descriptor tarballs from the official metrics server via rsync and
 import only the changes into the metrics database.  The idea is to simply
-rsync the data/ directory from the metrics server and have all information
+rsync the data/ directory from the CollecTor server and have all information
 available.  However, this feature is not implemented yet.
 
 
@@ -172,7 +217,7 @@ $ ln -s /srv/tor/cached-* .
 
 Add a crontab entry for the database importer to run once per hour:
 
-15 * * * * cd /srv/metrics.torproject.org/ && ./run.sh
+15 * * * * cd /srv/metrics.torproject.org/metrics/ && ./run-web.sh
 
 
 1.5. Pre-calculating relay statistics
@@ -185,7 +230,7 @@ sufficient to pre-calculate statistics 2 or 4 times a day.
 
 Calculate statistics manually after large imports (this may take a while):
 
-$ psql tordir -c 'SELECT * FROM refresh_all();'
+$ sudo -u metrics psql tordir -c 'SELECT * FROM refresh_all();'
 
 If the metrics database gets updated automatically, write a script and add
 a crontab entry for pre-calculating statistics every 6 or 12 hours.
@@ -199,8 +244,8 @@ and bridge usage.  These statistics are added by parsing sanitized bridge
 descriptors available on the official metrics website.
 
 Download a sanitized bridge descriptor tarball from the metrics website at
-https://metrics.torproject.org/data.html#bridgedesc and extract it to,
-e.g., /srv/metrics.torproject.org/bridges/bridge-descriptors-2011-05/ .
+https://collector.torproject.org/archive/bridge-descriptors/ and extract
+it to, e.g., /srv/metrics.torproject.org/bridges/bridge-descriptors-2011-05
 
 Edit /srv/metrics.torproject.org/config to contain the following options:
 
@@ -218,7 +263,7 @@ import all relay descriptors once again.
 
 Run the database import:
 
-$ ./run.sh
+$ ./run-web.sh
 
 
 1.7. Importing Torperf performance data
@@ -229,7 +274,7 @@ it.  Torperf's measurement data are available on the metrics website and
 can be imported into the metrics database, too.
 
 Download the Torperf measurement files from the metrics website at
-https://metrics.torproject.org/data.html#performance and put them in a
+https://collector.torproject.org/archive/torperf/ and put them in a
 subdirectory, e.g., /srv/metrics.torproject.org/torperf/ .
 
 Edit /srv/metrics.torproject.org/config to contain the following options:
@@ -239,7 +284,7 @@ TorperfDirectory torperf/
 
 Run the database import:
 
-$ ./run.sh
+$ ./run-web.sh
 
 
 2. Installing the graphing engine
@@ -255,13 +300,6 @@ their own R process.  Rserve also pre-loads R code and R libraries which
 saves time when processing user requests.
 
 In this configuration, Rserve will run in the context of the metrics user.
-
-Setting up the graphing engine requires installing PostgreSQL's header
-files and R 2.8 or higher.  R 2.8 or higher is required for the ggplot2
-library.
-
-# apt-get install r-base r-cran-rserve r-cran-ggplot2 r-cran-reshape \
-  r-cran-scales
 
 Start Rserve, this time with the metrics-web-specific configuration that
 includes pre-loading the graph code:
@@ -299,16 +337,16 @@ Apache Tomcat.
 
 Start by installing Apache 2:
 
-# apt-get install apache2
+$ sudo apt-get install apache2
 
 Disable Apache's default site.
 
-# a2dissite 000-default
+$ sudo a2dissite 000-default
 
 Enable mod_rewrite to tell Apache where to find static resources on disk.
 Also enable mod_proxy to forward requests to Tomcat.
 
-# a2enmod rewrite proxy_http
+$ sudo a2enmod rewrite proxy_http
 
 Create a new virtual host configuration and store it in a new file
 /etc/apache2/sites-available/metrics.torproject.org with the following
@@ -333,11 +371,11 @@ content:
 
 Enable the new virtual host.
 
-# a2ensite metrics.torproject.org
+$ sudo a2ensite metrics.torproject.org
 
 Restart Apache just to be sure that all changes are effective.
 
-# /etc/init.d/apache2 restart
+$ sudo service apache2 restart
 
 
 3.2. Configuring Apache Tomcat
@@ -348,7 +386,7 @@ pages and graphs.
 
 Install Tomcat 8:
 
-# apt-get install tomcat8
+$ sudo apt-get install tomcat8
 
 Replace Tomcat's default configuration in /etc/tomcat8/server.xml with the
 following configuration:
@@ -390,7 +428,7 @@ $ ant war
 
 Create a symbolic link to the ernie.war file:
 
-# ln -s /srv/metrics.torproject.org/metrics/website/metrics.war /var/lib/tomcat8/webapps/
+$ sudo ln -s /srv/metrics.torproject.org/metrics/website/metrics.war /var/lib/tomcat8/webapps/
 
 Tomcat will now attempt to deploy the web application automatically.
 
@@ -399,7 +437,7 @@ file and Tomcat will reload the web application automatically.
 
 Restart Tomcat to make all configuration changes effective:
 
-# service tomcat8 restart
+$ sudo service tomcat8 restart
 
 The metrics website should now work.
 

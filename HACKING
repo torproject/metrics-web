@@ -5,16 +5,9 @@ General:
 - Files end with two newlines.
 
 Java code:
-- Indentation is two spaces in general and four spaces for continued lines.
-- Imports are ordered alphabetically. Imports with different top-level
-  package names or libraries (java, javax, org) are separated by an
-  additional newline.
-- Don't catch Exception, but the specific exceptions that can be thrown
-  and that you can handle. Don't catch RuntimeException at all, but fix
-  the code so that it doesn't throw RuntimeExceptions.
-- Write comments as full sentences as in /* This is a comment. */
-- Don't write your own util classes. Make use of Apache Commons instead.
-- Qualify instance attributes and instance methods using this.
+Please refer to the Metrics Team Java Style Guide:
+https://trac.torproject.org/projects/tor/wiki/org/teams/MetricsTeam/MetricsJavaStyleGuide#CodingStyle
+
 
 SQL code:
 - All SQL keywords and PostgreSQL functions are written in capital
