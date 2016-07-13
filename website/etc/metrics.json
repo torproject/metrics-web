@@ -889,5 +889,33 @@
     "related": [
       "relayflags"
     ]
+  },
+  {
+    "id": "uptimes",
+    "title": "Monthly uptime of relays",
+    "tags": [
+      "Relays"
+    ],
+    "type": "Link",
+    "level": "Advanced",
+    "description": "<p>The following image illustrates the uptime of all known <a href=\"about.html#relay\">relays</a> in a given month.  Each row of pixels denotes one <a href=\"about.html#consensus\">consensus</a> (that is, one hour), and each column denotes one relay.  Each pixel denotes if a given relay was online or offline at a given hour: black means online, white means offline, and red highlights relays with identical uptime patterns.  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\"><img src=\"images/uptimes.jpg\" alt=\"Monthly uptime of relays\"></a></p>",
+    "related": [
+      "networkchurn"
+    ]
+  },
+  {
+    "id": "networkchurn",
+    "title": "Network churn rate by relay flag",
+    "tags": [
+      "Relays"
+    ],
+    "type": "Link",
+    "level": "Advanced",
+    "description": "<p>The following image shows the churn rate of the Tor network by <a href=\"about.html#relay-flag\">relay flag</a> in a given month.  The churn rate, a value in the interval <b>[0,1]</b>, captures the rate of <a href=\"about.html#relay\">relays</a> joining and leaving the network from one <a href=\"about.html#consensus\">consensus</a> to the next (that is, within one hour).  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/churn-values/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/churn-values/\"><img src=\"images/networkchurn.png\" alt=\"Network churn rate by relay flag\"></a></p>",
+    "related": [
+      "uptimes",
+      "networksize",
+      "relayflags"
+    ]
   }
 ]

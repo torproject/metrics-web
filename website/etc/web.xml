@@ -91,6 +91,8 @@
     <servlet-name>Link</servlet-name>
     <url-pattern>/oxford-anonymous-internet.html</url-pattern>
     <url-pattern>/uncharted-data-flow.html</url-pattern>
+    <url-pattern>/uptimes.html</url-pattern>
+    <url-pattern>/networkchurn.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
