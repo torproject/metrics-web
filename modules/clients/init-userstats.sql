@@ -341,7 +341,7 @@ BEGIN
           WHERE id = last_id;
 
       -- If the new entry ends right when an existing entry starts and
-      -- there's no gap between when the previousl processed entry ends
+      -- there's no gap between when the previously processed entry ends
       -- and when the new entry starts, merge the new entry with the other
       -- two entries.  This happens by deleting the previous entry and
       -- expanding the subsequent entry to cover all three entries.
@@ -506,7 +506,7 @@ BEGIN
     WHERE aggregated.date = aggregated_bytes_responses.date
     AND aggregated.node = aggregated_bytes_responses.node;
 
-  -- Update results based on notes reporting responses but no bytes.
+  -- Update results based on nodes reporting responses but no bytes.
   UPDATE aggregated
     SET nrh = aggregated_responses_bytes.nrh
     FROM (
