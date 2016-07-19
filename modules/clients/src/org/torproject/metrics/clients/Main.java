@@ -464,6 +464,7 @@ public class Main {
       bw.write("\\.\n");
       bw.write("SELECT merge();\n");
       bw.write("SELECT aggregate();\n");
+      bw.write("SELECT combine();\n");
       bw.write("TRUNCATE imported;\n");
       bw.write("COMMIT;\n");
       bw.close();

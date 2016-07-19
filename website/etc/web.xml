@@ -38,6 +38,7 @@
     <url-pattern>/userstats-relay-country.html</url-pattern>
     <url-pattern>/userstats-bridge-country.html</url-pattern>
     <url-pattern>/userstats-bridge-transport.html</url-pattern>
+    <url-pattern>/userstats-bridge-combined.html</url-pattern>
     <url-pattern>/userstats-bridge-version.html</url-pattern>
     <url-pattern>/torperf.html</url-pattern>
     <url-pattern>/torperf-failures.html</url-pattern>
@@ -72,6 +73,7 @@
     <url-pattern>/bandwidth-data.html</url-pattern>
     <url-pattern>/advbwdist-data.html</url-pattern>
     <url-pattern>/clients-data.html</url-pattern>
+    <url-pattern>/userstats-combined-data.html</url-pattern>
     <url-pattern>/torperf-data.html</url-pattern>
     <url-pattern>/connbidirect-data.html</url-pattern>
     <url-pattern>/connbidirect2-data.html</url-pattern>
@@ -172,6 +174,9 @@
     <url-pattern>/userstats-bridge-transport.png</url-pattern>
     <url-pattern>/userstats-bridge-transport.pdf</url-pattern>
     <url-pattern>/userstats-bridge-transport.svg</url-pattern>
+    <url-pattern>/userstats-bridge-combined.png</url-pattern>
+    <url-pattern>/userstats-bridge-combined.pdf</url-pattern>
+    <url-pattern>/userstats-bridge-combined.svg</url-pattern>
     <url-pattern>/userstats-bridge-version.png</url-pattern>
     <url-pattern>/userstats-bridge-version.pdf</url-pattern>
     <url-pattern>/userstats-bridge-version.svg</url-pattern>

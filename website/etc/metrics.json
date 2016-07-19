@@ -354,6 +354,7 @@
       "userstats-censorship-events",
       "userstats-bridge-country",
       "userstats-bridge-table",
+      "userstats-bridge-combined",
       "oxford-anonymous-internet"
     ]
   },
@@ -387,6 +388,7 @@
       "userstats-censorship-events",
       "userstats-bridge-country",
       "userstats-bridge-table",
+      "userstats-bridge-combined",
       "oxford-anonymous-internet"
     ]
   },
@@ -444,7 +446,8 @@
     "related": [
       "userstats-relay-country",
       "userstats-relay-table",
-      "userstats-bridge-table"
+      "userstats-bridge-table",
+      "userstats-bridge-combined"
     ]
   },
   {
@@ -477,6 +480,7 @@
       "userstats-relay-table",
       "userstats-bridge-country",
       "userstats-bridge-transport",
+      "userstats-bridge-combined",
       "userstats-bridge-version"
     ]
   },
@@ -502,7 +506,32 @@
     "related": [
       "userstats-bridge-country",
       "userstats-bridge-table",
+      "userstats-bridge-combined",
       "userstats-bridge-version"
+    ]
+  },
+  {
+    "id": "userstats-bridge-combined",
+    "title": "Bridge users by country and transport",
+    "tags": [
+      "Clients",
+      "Pluggable transports"
+    ],
+    "type": "Graph",
+    "level": "Basic",
+    "description": "<p>The following graph shows the estimated number of <a href=\"about.html#client\">clients</a> connecting via <a href=\"about.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, and they distinguish connecting clients by transport protocol, which may include <a href=\"about.html#pluggable-transport\">pluggable transports</a>.  Even though bridges don't report a combination of clients by country and transport, it's possible to derive and graph lower and upper bounds from existing usage statistics.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "function": "plot_userstats_bridge_combined",
+    "parameters": [
+      "start",
+      "end",
+      "country"
+    ],
+    "data": [
+      "userstats-combined-data"
+    ],
+    "related": [
+      "userstats-bridge-country",
+      "userstats-bridge-transport"
     ]
   },
   {
@@ -526,7 +555,8 @@
     "related": [
       "userstats-bridge-country",
       "userstats-bridge-table",
-      "userstats-bridge-transport"
+      "userstats-bridge-transport",
+      "userstats-bridge-combined"
     ]
   },
   {
@@ -573,8 +603,34 @@
       "userstats-bridge-country",
       "userstats-bridge-table",
       "userstats-bridge-transport",
-      "userstats-bridge-version",
+      "userstats-combined-data",
       "oxford-anonymous-internet"
+    ]
+  },
+  {
+    "id": "userstats-combined-data",
+    "title": "Estimated number of clients by country and transport",
+    "tags": [
+      "Clients",
+      "Pluggable transports"
+    ],
+    "type": "Data",
+    "level": "Advanced",
+    "description": "<p>The following data file contains additional statistics on the number of <a href=\"about.html#client\">clients</a> in the network.  This data file is related to the <a href=\"clients-data.html\">clients-data file</a> that contains estimates on the number of clients by country and by transport protocol.  This data file enhances these statistics by containing estimates of clients connecting to <a href=\"about.html#bridge\">bridges</a> by a given country and using a given <a href=\"about.html#pluggable-transport\">transport protocol</a>.  Even though bridges don't report a combination of clients by country and transport, it's possible to derive lower and upper bounds from existing usage statistics.</p>",
+    "data_file": "stats/userstats-combined.csv",
+    "data_column_spec": [
+      "<b>date:</b> UTC date (YYYY-MM-DD) for which client numbers are estimated.",
+      "<b>node:</b> The node type to which clients connect first, which is always <b>\"bridge\"</b>, because relays don't report responses by transport.",
+      "<b>country:</b> Two-letter lower-case country code as found in a GeoIP database by resolving clients' IP addresses, or <b>\"??\"</b> if client IP addresses could not be resolved.",
+      "<b>transport:</b> Transport name used by clients to connect to the Tor network using bridges.  Examples are <b>\"obfs2\"</b>, <b>\"obfs3\"</b>, <b>\"websocket\"</b>, or <b>\"&lt;OR&gt;\"</b> (original onion routing protocol).",
+      "<b>version:</b> IP version used by clients to connect to the Tor network using bridges.  This column always contains the empty string and is only included for compatibility reasons.",
+      "<b>frac:</b> Fraction of relays or bridges in percent that the estimate is based on.  The higher this value, the more reliable is the estimate.  Values above 50 can be considered reliable enough for most purposes, lower values should be handled with more care.",
+      "<b>low:</b> Lower bound of users by country and transport, calculated as sum over all bridges having reports for the given country and transport, that is, the sum of <b>M(b)</b>, where for each bridge <b>b</b> define <b>M(b) := max(0, C(b) + T(b) - S(b))</b> using the following definitions: <b>C(b)</b> is the number of users from a given country reported by <b>b</b>; <b>T(b)</b> is the number of users using a given transport reported by <b>b</b>; and <b>S(b)</b> is the total numbers of users reported by <b>b</b>.  Reasoning: If the sum <b>C(b) + T(b)</b> exceeds the total number of users from all countries and transports <b>S(b)</b>, there must be users from that country and transport.  And if that is not the case, <b>0</b> is the lower limit.",
+      "<b>high:</b> Upper bound of users by country and transport, calculated as sum over all bridges having reports for the given country and transport, that is, the sum of <b>m(b)</b>, where for each bridge <b>b</b> define <b>m(b):=min(C(b), T(b))</b> where we use the definitions from <b>low</b> (above).  Reasoning: there cannot be more users by country and transport than there are users by either of the two numbers."
+    ],
+    "related": [
+      "userstats-bridge-combined",
+      "clients-data"
     ]
   },
   {

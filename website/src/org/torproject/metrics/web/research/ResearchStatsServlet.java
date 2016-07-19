@@ -31,6 +31,7 @@ public class ResearchStatsServlet extends HttpServlet {
     this.availableStatisticsFiles.add("servers");
     this.availableStatisticsFiles.add("bandwidth");
     this.availableStatisticsFiles.add("clients");
+    this.availableStatisticsFiles.add("userstats-combined");
     this.availableStatisticsFiles.add("torperf");
     this.availableStatisticsFiles.add("connbidirect");
     this.availableStatisticsFiles.add("connbidirect2");

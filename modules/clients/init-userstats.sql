@@ -1,4 +1,4 @@
--- Copyright 2013 The Tor Project
+-- Copyright 2013--2016 The Tor Project
 -- See LICENSE for licensing information
 
 -- Use enum types for dimensions that may only change if we write new code
@@ -143,6 +143,38 @@ CREATE TABLE aggregated (
   -- Number of seconds of nodes reporting responses but no bytes.  See
   -- n(R \ H) in the tech report.
   nrh DOUBLE PRECISION NOT NULL DEFAULT 0
+);
+
+-- After aggregating data into the aggregated table, combine responses
+-- reported by bridges by country and by transport into low and high
+-- estimates of responses by both country and transport at the same time.
+-- Like in the aggregate step, only dates with new data in the imported
+-- table will be recomputed in this table.
+CREATE TABLE combined_country_transport (
+
+  -- The date of these aggregated and combined observations.
+  date DATE NOT NULL,
+
+  -- The country and transport columns have the same meaning as in the
+  -- imported and aggregated tables, though these columns are always set
+  -- to non-empty strings.  There is no node column, because that would
+  -- always be 'bridge', and there is no version column, because that
+  -- would always be ''.
+  country CHARACTER VARYING(2) NOT NULL DEFAULT '',
+  transport CHARACTER VARYING(20) NOT NULL DEFAULT '',
+
+  -- Lower limit of responses by country and transport, calculated as:
+  -- max(0, country + transport - total).  If the number of responses from
+  -- a given country and using a given transport exceeds the total number
+  -- of responses from all countries and transports, there must be
+  -- responses from that country *and* transport.  And if that is not the
+  -- case, 0 is the lower limit.
+  low DOUBLE PRECISION NOT NULL DEFAULT 0,
+
+  -- Upper limit of responses by country and transport, calculated as:
+  -- min(country, transport).  There cannot be more responses by country
+  -- and transport than there are responses by either of the two numbers.
+  high DOUBLE PRECISION NOT NULL DEFAULT 0
 );
 
 CREATE LANGUAGE plpgsql;
@@ -531,6 +563,75 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Combine responses reported by bridges by country and by transport into
+-- low and high estimates of responses by both country and transport at
+-- the same time.  This function combines responses for all dates that
+-- have entries in the imported table.  It first creates a temporary table
+-- with new or updated responses, then removes all existing combined
+-- response numbers for the dates to be updated, and finally inserts newly
+-- combined response numbers for these dates.
+CREATE OR REPLACE FUNCTION combine() RETURNS VOID AS $$
+BEGIN
+  RAISE NOTICE '% Starting combine step.', timeofday();
+
+  -- Create a new temporary table containing all relevant information
+  -- needed to update the combined_country_transport table.  In this
+  -- table, we sum up all responses by reporting node.  This query is
+  -- (temporarily) materialized, because we need to combine its entries
+  -- multiple times in various ways.  A (non-materialized) view would have
+  -- meant to re-compute this query multiple times.
+  CREATE TEMPORARY TABLE update2 AS
+    SELECT fingerprint, country, transport,
+           DATE(stats_start) AS date, SUM(val) AS val
+    FROM merged
+    WHERE node = 'bridge'
+    AND metric = 'responses'
+    AND version = ''
+    -- Note: Comment out the following condition to initialize table!
+    AND DATE(stats_start) IN (
+        SELECT DISTINCT DATE(stats_start) FROM imported)
+    GROUP BY fingerprint, country, transport, date;
+
+  -- Delete all entries from the combined table that we're about to
+  -- re-compute.
+  DELETE FROM combined_country_transport
+  WHERE date IN (SELECT DISTINCT date FROM update2);
+
+  -- Combine each country with each transport that a bridge reported
+  -- responses for and also consider total responses reported by the
+  -- bridge.  Compute lower and upper bounds for responses by country and
+  -- transport.  These response numbers will later be transformed into
+  -- user number estimates in the combined view.
+  INSERT INTO combined_country_transport
+    SELECT country.date AS date, country.country AS country,
+           transport.transport AS transport,
+           SUM(GREATEST(0, transport.val + country.val - total.val))
+             AS low,
+           SUM(LEAST(transport.val, country.val)) AS high
+    FROM update2 country,
+         update2 transport,
+         update2 total
+    WHERE country.country <> ''
+    AND transport.transport <> ''
+    AND total.country = ''
+    AND total.transport = ''
+    AND country.date = transport.date
+    AND country.date = total.date
+    AND transport.date = total.date
+    AND country.val > 0
+    AND transport.val > 0
+    AND total.val > 0
+    AND country.fingerprint = transport.fingerprint
+    AND country.fingerprint = total.fingerprint
+    AND transport.fingerprint = total.fingerprint
+    GROUP BY date, country, transport;
+
+  -- We're done combining new data.
+  RAISE NOTICE '% Finishing combine step.', timeofday();
+  RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
 -- User-friendly view on the aggregated table that implements the
 -- algorithm proposed in Tor Tech Report 2012-10-001.  This view returns
 -- user number estimates for both relay and bridge staistics, possibly
@@ -582,4 +683,71 @@ CREATE OR REPLACE VIEW estimated AS SELECT
 
   -- Order results.
   ORDER BY date DESC, node, version, transport, country;
+
+-- User-friendly view on the combined table joined with the aggregated
+-- table.  This view returns lower and upper bounds for user numbers by
+-- country and transport.
+CREATE OR REPLACE VIEW combined AS SELECT
+
+  -- The date of this user number estimate.
+  a.date,
+
+  -- The node type, which is always 'bridge', because relays don't report
+  -- responses by transport.
+  'bridge'::TEXT AS node,
+
+  -- The two-letter lower-case country code of this estimate; can be '??'
+  -- for an estimate of users that could not be resolved to any country.
+  a.country,
+
+  -- The pluggable transport name of this estimate; can be '<OR>' for an
+  -- estimate of users that did not use any pluggable transport, '<??>'
+  -- for unknown pluggable transports.
+  a.transport,
+
+  -- The IP address version of this estimate, which is always ''.
+  ''::TEXT as version,
+
+  -- Estimated fraction of nodes reporting directory requests, which is
+  -- used to extrapolate observed requests to estimated total requests in
+  -- the network.  The closer this fraction is to 1.0, the more precise
+  -- the estimation.
+  CAST(a.frac * 100 AS INTEGER) AS frac,
+
+  -- Lower bound of users by country and transport, calculated as:
+  -- max(0, country + transport - total).  If the number of users from a
+  -- given country and using a given transport exceeds the total number of
+  -- users from all countries and transports, there must be users from
+  -- that country *and* transport.  And if that is not the case, 0 is the
+  -- lower limit.
+  CAST(a.low / (a.frac * 10) AS INTEGER) AS low,
+
+  -- Upper limit of users by country and transport, calculated as:
+  -- min(country, transport).  There cannot be more users by country and
+  -- transport than there are users by either of the two numbers.
+  CAST(a.high / (a.frac * 10) AS INTEGER) AS high
+
+  -- Implement the table join and estimation method in a subquery, so that
+  -- the ugly formula only has to be written once.
+  FROM (
+    SELECT aggregated.date,
+           (hrh * nh + hh * nrh) / (hh * nn) AS frac,
+           combined_country_transport.country,
+           combined_country_transport.transport,
+           combined_country_transport.low,
+           combined_country_transport.high
+    FROM aggregated RIGHT JOIN combined_country_transport
+    ON aggregated.date = combined_country_transport.date
+    AND aggregated.node = 'bridge'
+    WHERE hh * nn > 0.0
+    AND aggregated.country = ''
+    AND aggregated.transport = ''
+    AND aggregated.version = '') a
+
+  -- Only include estimates with at least 10% of nodes reporting directory
+  -- request statistics.
+  WHERE a.frac BETWEEN 0.1 AND 1.0
+
+  -- Order results.
+  ORDER BY date DESC;
 

@@ -920,6 +920,49 @@ plot_userstats_bridge_version <- function(start, end, version, path) {
   plot_userstats(start, end, 'bridge', 'version', version, 'off', path)
 }
 
+plot_userstats_bridge_combined <- function(start, end, country, path) {
+  if (country == "all") {
+    plot_userstats_bridge_country(start, end, country, path)
+  } else {
+    top <- 3
+    country <- ifelse(country == "all", NA, country)
+    end <- min(end, as.character(Sys.Date() - 2))
+    u <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/",
+                        "stats/userstats-combined.csv", sep = ""),
+                  stringsAsFactors = FALSE)
+    u <- u[u$date >= start & u$date <= end
+           & (is.na(country) | u$country == country), ]
+    a <- aggregate(list(mid = (u$high + u$low) / 2),
+                   by = list(transport = u$transport), FUN = sum)
+    a <- a[order(a$mid, decreasing = TRUE)[1:top], ]
+    u <- u[u$transport %in% a$transport, ]
+    formatter <- function(x, ...) {
+      format(x, ..., scientific = FALSE, big.mark = '\u2006') }
+    max_y <- ifelse(length(na.omit(u$high)) == 0, 0,
+        max(u$high, na.rm = TRUE))
+    title <- paste("Bridge users by transport from ",
+                   countryname(country), sep = "")
+    date_breaks <- date_breaks(
+      as.numeric(max(as.Date(u$date, "%Y-%m-%d")) -
+      min(as.Date(u$date, "%Y-%m-%d"))))
+    ggplot(u, aes(x = as.Date(date), ymin = low, ymax = high,
+                colour = transport, fill = transport)) +
+    geom_ribbon(alpha = 0.5, size = 0.5) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        labels = date_format(date_breaks$format),
+        breaks = date_breaks$major,
+        minor_breaks = date_breaks$minor) +
+    scale_y_continuous(name = "", limits = c(0, max_y),
+        labels = formatter) +
+    scale_colour_hue(paste("Top-", top, " transports", sep = "")) +
+    scale_fill_hue(paste("Top-", top, " transports", sep = "")) +
+    ggtitle(title) +
+    theme(legend.position = "top")
+    ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  }
+}
+
 plot_advbwdist_perc <- function(start, end, p, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   t <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
