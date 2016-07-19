@@ -624,7 +624,7 @@ BEGIN
     AND country.fingerprint = transport.fingerprint
     AND country.fingerprint = total.fingerprint
     AND transport.fingerprint = total.fingerprint
-    GROUP BY date, country, transport;
+    GROUP BY country.date, country.country, transport.transport;
 
   -- We're done combining new data.
   RAISE NOTICE '% Finishing combine step.', timeofday();
