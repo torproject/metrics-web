@@ -1,3 +1,6 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.hidserv;
 
 /* Hidden-service statistics reported by a single relay covering a single
@@ -7,21 +10,25 @@ public class ReportedHidServStats implements Document {
 
   /* Relay fingerprint consisting of 40 upper-case hex characters. */
   private String fingerprint;
+
   public String getFingerprint() {
     return this.fingerprint;
   }
 
   /* Hidden-service statistics end timestamp in milliseconds. */
   private long statsEndMillis;
+
   public long getStatsEndMillis() {
     return this.statsEndMillis;
   }
 
   /* Statistics interval length in seconds. */
   private long statsIntervalSeconds;
+
   public void setStatsIntervalSeconds(long statsIntervalSeconds) {
     this.statsIntervalSeconds = statsIntervalSeconds;
   }
+
   public long getStatsIntervalSeconds() {
     return this.statsIntervalSeconds;
   }
@@ -30,9 +37,11 @@ public class ReportedHidServStats implements Document {
    * relay and adjusted by rounding to the nearest right side of a bin and
    * subtracting half of the bin size. */
   private long rendRelayedCells;
+
   public void setRendRelayedCells(long rendRelayedCells) {
     this.rendRelayedCells = rendRelayedCells;
   }
+
   public long getRendRelayedCells() {
     return this.rendRelayedCells;
   }
@@ -41,9 +50,11 @@ public class ReportedHidServStats implements Document {
    * adjusted by rounding to the nearest right side of a bin and
    * subtracting half of the bin size. */
   private long dirOnionsSeen;
+
   public void setDirOnionsSeen(long dirOnionsSeen) {
     this.dirOnionsSeen = dirOnionsSeen;
   }
+
   public long getDirOnionsSeen() {
     return this.dirOnionsSeen;
   }
@@ -63,8 +74,8 @@ public class ReportedHidServStats implements Document {
       return false;
     }
     ReportedHidServStats other = (ReportedHidServStats) otherObject;
-    return this.fingerprint.equals(other.fingerprint) &&
-        this.statsEndMillis == other.statsEndMillis;
+    return this.fingerprint.equals(other.fingerprint)
+        && this.statsEndMillis == other.statsEndMillis;
   }
 
   /* Return a (hopefully unique) hash code based on this object's
@@ -101,7 +112,6 @@ public class ReportedHidServStats implements Document {
           + "Skipping.%n", formattedStrings.length);
       return false;
     }
-    String fingerprint = formattedStrings[0];
     String[] secondParts = formattedStrings[1].split(",", 4);
     if (secondParts.length != 4) {
       return false;
@@ -110,8 +120,9 @@ public class ReportedHidServStats implements Document {
     if (statsEndMillis == DateTimeHelper.NO_TIME_AVAILABLE) {
       return false;
     }
-    long statsIntervalSeconds = -1L, rendRelayedCells = -1L,
-        dirOnionsSeen = -1L;
+    long statsIntervalSeconds = -1L;
+    long rendRelayedCells = -1L;
+    long dirOnionsSeen = -1L;
     try {
       statsIntervalSeconds = Long.parseLong(secondParts[1]);
       rendRelayedCells = Long.parseLong(secondParts[2]);
@@ -119,7 +130,7 @@ public class ReportedHidServStats implements Document {
     } catch (NumberFormatException e) {
       return false;
     }
-    this.fingerprint = fingerprint;
+    this.fingerprint = formattedStrings[0];
     this.statsEndMillis = statsEndMillis;
     this.statsIntervalSeconds = statsIntervalSeconds;
     this.rendRelayedCells = rendRelayedCells;

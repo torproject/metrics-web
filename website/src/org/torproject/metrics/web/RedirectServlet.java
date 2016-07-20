@@ -1,5 +1,6 @@
 /* Copyright 2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web;
 
 import java.io.IOException;
@@ -17,7 +18,8 @@ public class RedirectServlet extends HttpServlet {
   /* Available permanent internal and external redirects. */
   private Map<String, String> redirects = new HashMap<String, String>();
 
-  public RedirectServlet() {
+  @Override
+  public void init() throws ServletException {
 
     /* Internal redirects: */
     this.redirects.put("/metrics/graphs.html",
@@ -50,6 +52,7 @@ public class RedirectServlet extends HttpServlet {
         "https://collector.torproject.org/#related-work");
   }
 
+  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
     String redirect = this.redirects.get(request.getRequestURI());

@@ -1,5 +1,6 @@
 /* Copyright 2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public abstract class MetricServlet extends HttpServlet {
   protected Map<String, List<String[]>> related =
       new HashMap<String, List<String[]>>();
 
+  @Override
   public void init() throws ServletException {
     this.metrics = MetricsProvider.getInstance().getMetricsList();
     Map<String, String> allTypesAndTitles = new HashMap<String, String>();

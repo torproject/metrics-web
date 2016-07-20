@@ -1,5 +1,6 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.ernie.cron;
 
 import java.io.IOException;
@@ -17,22 +18,27 @@ import java.util.logging.Logger;
 /**
  * Initialize logging configuration.
  *
- * Log levels used by ERNIE:
+ * <p>Log levels used by ERNIE:</p>
  *
- * - SEVERE: An event made it impossible to continue program execution.
- * - WARNING: A potential problem occurred that requires the operator to
- *   look after the otherwise unattended setup
- * - INFO: Messages on INFO level are meant to help the operator in making
- *   sure that operation works as expected.
- * - FINE: Debug messages that are used to identify problems and which are
- *   turned on by default.
- * - FINER: More detailed debug messages to investigate problems in more
- *   detail. Not turned on by default. Increase log file limit when using
- *   FINER.
- * - FINEST: Most detailed debug messages. Not used.
+ * <p>
+ * <ul>
+ * <li>SEVERE: An event made it impossible to continue program execution.
+ *     WARNING: A potential problem occurred that requires the operator to
+ *     look after the otherwise unattended setup</li>
+ * <li>INFO: Messages on INFO level are meant to help the operator in
+ *     making sure that operation works as expected.</li>
+ * <li>FINE: Debug messages that are used to identify problems and which
+ *     are turned on by default.</li>
+ * <li>FINER: More detailed debug messages to investigate problems in more
+ *     detail. Not turned on by default. Increase log file limit when
+ *     using FINER.</li>
+ * <li>FINEST: Most detailed debug messages. Not used.</li>
+ * </ul>
+ * </p>
  */
 public class LoggingConfiguration {
 
+  /** Initializes the logging configuration. */
   public LoggingConfiguration() {
 
     /* Remove default console handler. */

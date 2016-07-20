@@ -1,5 +1,6 @@
-/* Copyright 2014 The Tor Project
+/* Copyright 2014--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ public class AboutServlet extends HttpServlet {
 
   private static final long serialVersionUID = 97168997894664L;
 
+  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 

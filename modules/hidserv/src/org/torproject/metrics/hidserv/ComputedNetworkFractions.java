@@ -1,51 +1,60 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.hidserv;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/* Computed fraction of hidden-service activity that a single relay is
+/** Computed fraction of hidden-service activity that a single relay is
  * assumed to observe in the network.  These fractions are computed from
  * status entries and bandwidth weights in a network status consensus. */
 public class ComputedNetworkFractions implements Document {
 
-  /* Relay fingerprint consisting of 40 upper-case hex characters. */
+  /** Relay fingerprint consisting of 40 upper-case hex characters. */
   private String fingerprint;
+
   public String getFingerprint() {
     return this.fingerprint;
   }
 
-  /* Valid-after timestamp of the consensus in milliseconds. */
+  /** Valid-after timestamp of the consensus in milliseconds. */
   private long validAfterMillis;
+
   public long getValidAfterMillis() {
     return this.validAfterMillis;
   }
 
-  /* Fraction of cells on rendezvous circuits that this relay is assumed
+  /** Fraction of cells on rendezvous circuits that this relay is assumed
    * to observe in the network. */
   private double fractionRendRelayedCells;
+
   public void setFractionRendRelayedCells(
       double fractionRendRelayedCells) {
     this.fractionRendRelayedCells = fractionRendRelayedCells;
   }
+
   public double getFractionRendRelayedCells() {
     return this.fractionRendRelayedCells;
   }
 
-  /* Fraction of descriptors that this relay is assumed to observe in the
+  /** Fraction of descriptors that this relay is assumed to observe in the
    * network.  This is calculated as the fraction of descriptors
    * identifiers that this relay was responsible for, divided by 3,
    * because each descriptor that is published to this directory is also
    * published to two other directories. */
   private double fractionDirOnionsSeen;
+
   public void setFractionDirOnionsSeen(double fractionDirOnionsSeen) {
     this.fractionDirOnionsSeen = fractionDirOnionsSeen;
   }
+
   public double getFractionDirOnionsSeen() {
     return this.fractionDirOnionsSeen;
   }
 
-  /* Instantiate a new fractions object using fingerprint and consensus
+  /** Instantiates a new fractions object using fingerprint and consensus
    * valid-after time which together uniquely identify the object. */
   public ComputedNetworkFractions(String fingerprint,
       long validAfterMillis) {
@@ -53,7 +62,7 @@ public class ComputedNetworkFractions implements Document {
     this.validAfterMillis = validAfterMillis;
   }
 
-  /* Return whether this object contains the same fingerprint and
+  /** Returns whether this object contains the same fingerprint and
    * consensus valid-after time as the passed object. */
   @Override
   public boolean equals(Object otherObject) {
@@ -62,22 +71,22 @@ public class ComputedNetworkFractions implements Document {
     }
     ComputedNetworkFractions other =
         (ComputedNetworkFractions) otherObject;
-    return this.fingerprint.equals(other.fingerprint) &&
-        this.validAfterMillis == other.validAfterMillis;
+    return this.fingerprint.equals(other.fingerprint)
+        && this.validAfterMillis == other.validAfterMillis;
   }
 
-  /* Return a (hopefully unique) hash code based on this object's
+  /** Returns a (hopefully unique) hash code based on this object's
    * fingerprint and consensus valid-after time. */
   @Override
   public int hashCode() {
-    return this.fingerprint.hashCode() +
-        (int) this.validAfterMillis;
+    return this.fingerprint.hashCode()
+        + (int) this.validAfterMillis;
   }
 
   private static Map<Long, String> previouslyFormattedDates =
       Collections.synchronizedMap(new HashMap<Long, String>());
 
-  /* Return a string representation of this object, consisting of two
+  /** Returns a string representation of this object, consisting of two
    * strings: the first string contains fingerprint and valid-after date,
    * the second string contains the concatenation of all other
    * attributes. */
@@ -107,7 +116,7 @@ public class ComputedNetworkFractions implements Document {
     return new String[] { first, second };
   }
 
-  /* Instantiate an empty fractions object that will be initialized more
+  /** Instantiates an empty fractions object that will be initialized more
    * by the parse method. */
   ComputedNetworkFractions() {
   }
@@ -115,9 +124,9 @@ public class ComputedNetworkFractions implements Document {
   private static Map<String, Long> previouslyParsedDates =
       Collections.synchronizedMap(new HashMap<String, Long>());
 
-  /* Initialize this fractions object using the two provided strings that
-   * have been produced by the format method earlier.  Return whether this
-   * operation was successful. */
+  /** Initializes this fractions object using the two provided strings
+   * that have been produced by the format method earlier and returns
+   * whether this operation was successful. */
   @Override
   public boolean parse(String[] formattedStrings) {
     if (formattedStrings.length != 2) {
@@ -138,8 +147,8 @@ public class ComputedNetworkFractions implements Document {
           + "Skipping.%n");
       return false;
     }
-    String validAfterDate = firstParts[1],
-        validAfterHour = secondParts[0];
+    String validAfterDate = firstParts[1];
+    String validAfterHour = secondParts[0];
     long validAfterDateMillis;
     if (previouslyParsedDates.containsKey(validAfterDate)) {
       validAfterDateMillis = previouslyParsedDates.get(validAfterDate);
@@ -150,22 +159,20 @@ public class ComputedNetworkFractions implements Document {
     }
     long validAfterTimeMillis = Long.parseLong(validAfterHour)
         * DateTimeHelper.ONE_HOUR;
-    if (validAfterDateMillis == DateTimeHelper.NO_TIME_AVAILABLE ||
-        validAfterTimeMillis < 0L ||
-        validAfterTimeMillis >= DateTimeHelper.ONE_DAY) {
+    if (validAfterDateMillis == DateTimeHelper.NO_TIME_AVAILABLE
+        || validAfterTimeMillis < 0L
+        || validAfterTimeMillis >= DateTimeHelper.ONE_DAY) {
       System.err.printf("Invalid date/hour format.  Skipping.%n");
       return false;
     }
     long validAfterMillis = validAfterDateMillis + validAfterTimeMillis;
     try {
-      double fractionRendRelayedCells = secondParts[1].equals("")
-          ? 0.0 : Double.parseDouble(secondParts[1]);
-      double fractionDirOnionsSeen = secondParts[2].equals("")
-          ? 0.0 : Double.parseDouble(secondParts[2]);
       this.fingerprint = fingerprint;
       this.validAfterMillis = validAfterMillis;
-      this.fractionRendRelayedCells = fractionRendRelayedCells;
-      this.fractionDirOnionsSeen = fractionDirOnionsSeen;
+      this.fractionRendRelayedCells = secondParts[1].equals("")
+          ? 0.0 : Double.parseDouble(secondParts[1]);
+      this.fractionDirOnionsSeen = secondParts[2].equals("")
+          ? 0.0 : Double.parseDouble(secondParts[2]);
       return true;
     } catch (NumberFormatException e) {
       System.err.printf("Invalid number format.  Skipping.%n");

@@ -1,6 +1,12 @@
 /* Copyright 2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web;
+
+import org.torproject.metrics.web.graphs.RObjectGenerator;
+import org.torproject.metrics.web.graphs.TableParameterChecker;
+
+import org.apache.commons.lang.text.StrSubstitutor;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -14,33 +20,31 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.text.StrSubstitutor;
-import org.torproject.metrics.web.graphs.RObjectGenerator;
-import org.torproject.metrics.web.graphs.TableParameterChecker;
-
 @SuppressWarnings("serial")
 public class TableServlet extends MetricServlet {
 
-  private RObjectGenerator rObjectGenerator;
+  private RObjectGenerator objectGenerator;
 
+  @Override
   public void init() throws ServletException {
     super.init();
-    this.rObjectGenerator = (RObjectGenerator) getServletContext().
-        getAttribute("RObjectGenerator");
+    this.objectGenerator = (RObjectGenerator) getServletContext()
+        .getAttribute("RObjectGenerator");
   }
 
+  @Override
   protected void doGet(HttpServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
-    String requestURI = request.getRequestURI();
-    if (requestURI == null || !requestURI.endsWith(".html")) {
+    String requestUri = request.getRequestURI();
+    if (requestUri == null || !requestUri.endsWith(".html")) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    String requestedId = requestURI.substring(
-        requestURI.contains("/") ? requestURI.lastIndexOf("/") + 1 : 0,
-        requestURI.length() - 5);
-    if (!this.idsByType.containsKey("Table") ||
-        !this.idsByType.get("Table").contains(requestedId)) {
+    String requestedId = requestUri.substring(
+        requestUri.contains("/") ? requestUri.lastIndexOf("/") + 1 : 0,
+        requestUri.length() - 5);
+    if (!this.idsByType.containsKey("Table")
+        || !this.idsByType.get("Table").contains(requestedId)) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
@@ -58,14 +62,14 @@ public class TableServlet extends MetricServlet {
     Date defaultStartDate = new Date(defaultEndDate.getTime()
         - 90L * 24L * 60L * 60L * 1000L);
     if (this.parameters.containsKey(requestedId)) {
-      Map<String, String[]> checkedParameters = TableParameterChecker.
-          getInstance().checkParameters(requestedId,
+      Map<String, String[]> checkedParameters = TableParameterChecker
+          .getInstance().checkParameters(requestedId,
           request.getParameterMap());
       for (String parameter : this.parameters.get(requestedId)) {
         if (parameter.equals("start") || parameter.equals("end")) {
           String[] requestParameter;
-          if (checkedParameters != null &&
-              checkedParameters.containsKey(parameter)) {
+          if (checkedParameters != null
+              && checkedParameters.containsKey(parameter)) {
             requestParameter = checkedParameters.get(parameter);
           } else {
             requestParameter = new String[] {
@@ -76,8 +80,8 @@ public class TableServlet extends MetricServlet {
         }
       }
     }
-    List<Map<String, String>> tableData = rObjectGenerator.
-        generateTable(requestedId, request.getParameterMap(), true);
+    List<Map<String, String>> tableData = objectGenerator
+        .generateTable(requestedId, request.getParameterMap(), true);
     List<List<String>> formattedTableData =
         new ArrayList<List<String>>();
     String[] contents = this.tableCellFormats.get(requestedId);

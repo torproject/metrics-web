@@ -1,5 +1,6 @@
 /* Copyright 2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web;
 
 import java.io.IOException;
@@ -11,18 +12,19 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class LinkServlet extends MetricServlet {
 
+  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
-    String requestURI = request.getRequestURI();
-    if (requestURI == null || !requestURI.endsWith(".html")) {
+    String requestUri = request.getRequestURI();
+    if (requestUri == null || !requestUri.endsWith(".html")) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    String requestedId = requestURI.substring(
-        requestURI.contains("/") ? requestURI.lastIndexOf("/") + 1 : 0,
-        requestURI.length() - 5);
-    if (!this.idsByType.containsKey("Link") ||
-        !this.idsByType.get("Link").contains(requestedId)) {
+    String requestedId = requestUri.substring(
+        requestUri.contains("/") ? requestUri.lastIndexOf("/") + 1 : 0,
+        requestUri.length() - 5);
+    if (!this.idsByType.containsKey("Link")
+        || !this.idsByType.get("Link").contains(requestedId)) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }

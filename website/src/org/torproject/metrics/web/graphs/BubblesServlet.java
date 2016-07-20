@@ -1,5 +1,6 @@
-/* Copyright 2013 The Tor Project
+/* Copyright 2013--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web.graphs;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ public class BubblesServlet extends HttpServlet {
 
   private static final long serialVersionUID = -6011833075497881033L;
 
+  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 

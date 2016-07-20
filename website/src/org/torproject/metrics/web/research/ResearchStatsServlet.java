@@ -1,5 +1,6 @@
-/* Copyright 2013 The Tor Project
+/* Copyright 2013--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web.research;
 
 import java.io.BufferedInputStream;
@@ -24,6 +25,7 @@ public class ResearchStatsServlet extends HttpServlet {
 
   private SortedSet<String> availableStatisticsFiles;
 
+  @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     this.statsDir = new File(config.getInitParameter("statsDir"));
@@ -40,6 +42,7 @@ public class ResearchStatsServlet extends HttpServlet {
     this.availableStatisticsFiles.add("disagreement");
   }
 
+  @Override
   public long getLastModified(HttpServletRequest request) {
     File statsFile = this.determineStatsFile(request);
     if (statsFile == null || !statsFile.exists()) {
@@ -49,10 +52,11 @@ public class ResearchStatsServlet extends HttpServlet {
     }
   }
 
+  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
-    String requestURI = request.getRequestURI();
-    if (requestURI.equals("/metrics/stats/")) {
+    String requestUri = request.getRequestURI();
+    if (requestUri.equals("/metrics/stats/")) {
       this.writeDirectoryListing(request, response);
     } else {
       File statsFile = this.determineStatsFile(request);

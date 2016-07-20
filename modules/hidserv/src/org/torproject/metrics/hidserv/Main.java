@@ -1,17 +1,20 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.hidserv;
 
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-/* Main class for updating extrapolated network totals of hidden-service
+/** Main class for updating extrapolated network totals of hidden-service
  * statistics.  The main method of this class can be executed as often as
  * new statistics are needed, though callers must ensure that executions
  * do not overlap. */
 public class Main {
 
-  /* Parse new descriptors, extrapolate contained statistics using
-   * computed network fractions, aggregate results, and write results to
+  /** Parses new descriptors, extrapolate contained statistics using
+   * computed network fractions, aggregate results, and writes results to
    * disk. */
   public static void main(String[] args) {
 
@@ -22,10 +25,11 @@ public class Main {
     inDirectories.add(
         new File("../../shared/in/recent/relay-descriptors/extra-infos"));
     File statusDirectory = new File("status");
-    File hidservStatsExtrapolatedCsvFile = new File("stats/hidserv.csv");
 
-    /* Initialize document stores that will handle writing documents to
-     * files. */
+    /* Initialize parser and read parse history to avoid parsing
+     * descriptor files that haven't changed since the last execution. */
+    System.out.println("Initializing parser and reading parse "
+        + "history...");
     DocumentStore<ReportedHidServStats> reportedHidServStatsStore =
         new DocumentStore<ReportedHidServStats>(
         ReportedHidServStats.class);
@@ -33,14 +37,6 @@ public class Main {
         computedNetworkFractionsStore =
         new DocumentStore<ComputedNetworkFractions>(
         ComputedNetworkFractions.class);
-    DocumentStore<ExtrapolatedHidServStats> extrapolatedHidServStatsStore
-        = new DocumentStore<ExtrapolatedHidServStats>(
-        ExtrapolatedHidServStats.class);
-
-    /* Initialize parser and read parse history to avoid parsing
-     * descriptor files that haven't changed since the last execution. */
-    System.out.println("Initializing parser and reading parse "
-        + "history...");
     Parser parser = new Parser(inDirectories, statusDirectory,
         reportedHidServStatsStore, computedNetworkFractionsStore);
     parser.readParseHistory();
@@ -66,6 +62,9 @@ public class Main {
      * a single file with extrapolated network totals based on reports by
      * single relays. */
     System.out.println("Extrapolating statistics...");
+    DocumentStore<ExtrapolatedHidServStats> extrapolatedHidServStatsStore
+        = new DocumentStore<ExtrapolatedHidServStats>(
+        ExtrapolatedHidServStats.class);
     Extrapolator extrapolator = new Extrapolator(statusDirectory,
         reportedHidServStatsStore, computedNetworkFractionsStore,
         extrapolatedHidServStatsStore);
@@ -80,6 +79,7 @@ public class Main {
      * other statistics.  Write the result to a .csv file that can be
      * processed by other tools. */
     System.out.println("Aggregating statistics...");
+    File hidservStatsExtrapolatedCsvFile = new File("stats/hidserv.csv");
     Aggregator aggregator = new Aggregator(statusDirectory,
         extrapolatedHidServStatsStore, hidservStatsExtrapolatedCsvFile);
     aggregator.aggregateHidServStats();

@@ -1,3 +1,6 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.hidserv;
 
 import java.io.BufferedReader;
@@ -15,23 +18,24 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/* Utility class to store serialized objects implementing the Document
+/** Utility class to store serialized objects implementing the Document
  * interface to a file and later to retrieve them. */
 public class DocumentStore<T extends Document> {
 
-  /* Document class, needed to create new instances when retrieving
+  /** Document class, needed to create new instances when retrieving
    * documents. */
   private Class<T> clazz;
 
-  /* Initialize a new store object for the given type of documents. */
+  /** Initializes a new store object for the given type of documents. */
   DocumentStore(Class<T> clazz) {
     this.clazz = clazz;
   }
 
-  /* Store the provided documents in the given file and return whether the
-   * storage operation was successful.  If the file already existed and if
-   * it contains documents, merge the new documents with the existing
-   * ones. */
+  /** Stores the provided documents in the given file and returns whether
+   * the storage operation was successful.
+   *
+   * <p>If the file already existed and if it contains documents, merge
+   * the new documents with the existing ones.</p> */
   public boolean store(File documentFile, Set<T> documentsToStore) {
 
     /* Retrieve existing documents. */
@@ -75,8 +79,8 @@ public class DocumentStore<T extends Document> {
       documentTempFile.getParentFile().mkdirs();
       BufferedWriter bw = new BufferedWriter(new FileWriter(
           documentTempFile));
-      for (Map.Entry<String, SortedSet<String>> e :
-          formattedDocuments.entrySet()) {
+      for (Map.Entry<String, SortedSet<String>> e
+          : formattedDocuments.entrySet()) {
         bw.write(e.getKey() + "\n");
         for (String s : e.getValue()) {
           bw.write(" " + s + "\n");
@@ -95,12 +99,12 @@ public class DocumentStore<T extends Document> {
     return true;
   }
 
-  /* Retrieve all previously stored documents from the given file. */
+  /** Retrieves all previously stored documents from the given file. */
   public Set<T> retrieve(File documentFile) {
     return this.retrieve(documentFile, "");
   }
 
-  /* Retrieve previously stored documents from the given file that start
+  /** Retrieves previously stored documents from the given file that start
    * with the given prefix. */
   public Set<T> retrieve(File documentFile, String prefix) {
 
@@ -116,7 +120,8 @@ public class DocumentStore<T extends Document> {
     try {
       LineNumberReader lnr = new LineNumberReader(new BufferedReader(
           new FileReader(documentFile)));
-      String line, formattedString0 = null;
+      String line;
+      String formattedString0 = null;
       while ((line = lnr.readLine()) != null) {
         if (!line.startsWith(" ")) {
           formattedString0 = line;
@@ -126,12 +131,13 @@ public class DocumentStore<T extends Document> {
               + "documents.%n", documentFile.getAbsolutePath());
           lnr.close();
           return null;
-        } else if (prefix.length() > formattedString0.length() &&
-            !(formattedString0 + line.substring(1)).startsWith(prefix)) {
+        } else if (prefix.length() > formattedString0.length()
+            && !(formattedString0 + line.substring(1))
+            .startsWith(prefix)) {
           /* Skip combined line not starting with prefix. */
           continue;
-        } else if (prefix.length() > 0 &&
-            !formattedString0.startsWith(prefix)) {
+        } else if (prefix.length() > 0
+            && !formattedString0.startsWith(prefix)) {
           /* Skip line not starting with prefix. */
           continue;
         } else {

@@ -1,6 +1,14 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.ernie.cron.network;
+
+import org.torproject.descriptor.BridgeNetworkStatus;
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.NetworkStatusEntry;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,13 +32,6 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.torproject.descriptor.BridgeNetworkStatus;
-import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
-import org.torproject.descriptor.DescriptorReader;
-import org.torproject.descriptor.DescriptorSourceFactory;
-import org.torproject.descriptor.NetworkStatusEntry;
 
 /**
  * Generates statistics on the average number of relays and bridges per
@@ -71,7 +72,7 @@ public class ConsensusStatsFileHandler {
   private int bridgeResultsAdded = 0;
 
   /* Database connection string. */
-  private String connectionURL = null;
+  private String connectionUrl = null;
 
   private SimpleDateFormat dateTimeFormat;
 
@@ -81,13 +82,13 @@ public class ConsensusStatsFileHandler {
 
   private boolean keepImportHistory;
 
- /**
-  * Initializes this class, including reading in intermediate results
-  * files <code>stats/consensus-stats-raw</code> and
-  * <code>stats/bridge-consensus-stats-raw</code> and final results file
-  * <code>stats/consensus-stats</code>.
-  */
-  public ConsensusStatsFileHandler(String connectionURL,
+  /**
+   * Initializes this class, including reading in intermediate results
+   * files <code>stats/consensus-stats-raw</code> and
+   * <code>stats/bridge-consensus-stats-raw</code> and final results file
+   * <code>stats/consensus-stats</code>.
+   */
+  public ConsensusStatsFileHandler(String connectionUrl,
       File bridgesDir, File statsDirectory,
       boolean keepImportHistory) {
 
@@ -108,7 +109,7 @@ public class ConsensusStatsFileHandler {
         "stats/bridge-consensus-stats-raw");
 
     /* Initialize database connection string. */
-    this.connectionURL = connectionURL;
+    this.connectionUrl = connectionUrl;
 
     this.dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     this.dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -168,13 +169,14 @@ public class ConsensusStatsFileHandler {
       this.bridgeResultsAdded++;
     } else if (!line.equals(this.bridgesRaw.get(published))) {
       this.logger.warning("The numbers of running bridges we were just "
-        + "given (" + line + ") are different from what we learned "
-        + "before (" + this.bridgesRaw.get(published) + ")! "
-        + "Overwriting!");
+          + "given (" + line + ") are different from what we learned "
+          + "before (" + this.bridgesRaw.get(published) + ")! "
+          + "Overwriting!");
       this.bridgesRaw.put(published, line);
     }
   }
 
+  /** Imports sanitized bridge descriptors. */
   public void importSanitizedBridges() {
     if (bridgesDir.exists()) {
       logger.fine("Importing files in directory " + bridgesDir + "/...");
@@ -202,9 +204,10 @@ public class ConsensusStatsFileHandler {
   }
 
   private void addBridgeNetworkStatus(BridgeNetworkStatus status) {
-    int runningBridges = 0, runningEc2Bridges = 0;
-    for (NetworkStatusEntry statusEntry :
-        status.getStatusEntries().values()) {
+    int runningBridges = 0;
+    int runningEc2Bridges = 0;
+    for (NetworkStatusEntry statusEntry
+        : status.getStatusEntries().values()) {
       if (statusEntry.getFlags().contains("Running")) {
         runningBridges++;
         if (statusEntry.getNickname().startsWith("ec2bridge")) {
@@ -227,7 +230,9 @@ public class ConsensusStatsFileHandler {
      * final results. */
     if (!this.bridgesRaw.isEmpty()) {
       String tempDate = null;
-      int brunning = 0, brunningEc2 = 0, statuses = 0;
+      int brunning = 0;
+      int brunningEc2 = 0;
+      int statuses = 0;
       Iterator<String> it = this.bridgesRaw.values().iterator();
       boolean haveWrittenFinalLine = false;
       while (it.hasNext() || !haveWrittenFinalLine) {
@@ -287,12 +292,12 @@ public class ConsensusStatsFileHandler {
     }
 
     /* Add average number of bridges per day to the database. */
-    if (connectionURL != null) {
+    if (connectionUrl != null) {
       try {
-        Map<String, String> insertRows = new HashMap<String, String>(),
-            updateRows = new HashMap<String, String>();
+        Map<String, String> insertRows = new HashMap<String, String>();
+        Map<String, String> updateRows = new HashMap<String, String>();
         insertRows.putAll(this.bridgesPerDay);
-        Connection conn = DriverManager.getConnection(connectionURL);
+        Connection conn = DriverManager.getConnection(connectionUrl);
         conn.setAutoCommit(false);
         Statement statement = conn.createStatement();
         ResultSet rs = statement.executeQuery(
@@ -307,8 +312,8 @@ public class ConsensusStatsFileHandler {
             long newAvgRunningEc2 = Long.parseLong(parts[1]);
             long oldAvgRunning = rs.getLong(2);
             long oldAvgRunningEc2 = rs.getLong(3);
-            if (newAvgRunning != oldAvgRunning ||
-                newAvgRunningEc2 != oldAvgRunningEc2) {
+            if (newAvgRunning != oldAvgRunning
+                || newAvgRunningEc2 != oldAvgRunningEc2) {
               updateRows.put(date, insertRow);
             }
           }

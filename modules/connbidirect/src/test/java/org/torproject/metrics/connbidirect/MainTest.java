@@ -1,8 +1,13 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.connbidirect;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+
+import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -10,8 +15,6 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import org.junit.Test;
 
 public class MainTest {
 
@@ -30,22 +33,26 @@ public class MainTest {
         new TreeMap<String, Long>());
   }
 
-  private final String PATH_A = "a", PATH_B = "/b";
+  private final String pathA = "a";
 
-  private final long LASTMOD_A = 1L, LASTMOD_B = 2L;
+  private final String pathB = "/b";
+
+  private final long lastmodA = 1L;
+
+  private final long lastmodB = 2L;
 
   @Test
   public void testParseHistoryOneEntry() {
     SortedMap<String, Long> parseHistory = new TreeMap<String, Long>();
-    parseHistory.put(PATH_A, LASTMOD_A);
+    parseHistory.put(pathA, lastmodA);
     assertParseHistoryCanBeSerializedAndDeserialized(parseHistory);
   }
 
   @Test
   public void testParseHistoryTwoEntries() {
     SortedMap<String, Long> parseHistory = new TreeMap<String, Long>();
-    parseHistory.put(PATH_A, LASTMOD_A);
-    parseHistory.put(PATH_B, LASTMOD_B);
+    parseHistory.put(pathA, lastmodA);
+    parseHistory.put(pathB, lastmodB);
     assertParseHistoryCanBeSerializedAndDeserialized(parseHistory);
   }
 
@@ -61,13 +68,13 @@ public class MainTest {
 
   @Test
   public void testParseHistoryNoLastModifiedTime() {
-    assertParseHistoryCannotBeDeserialized(String.format("%s%n", PATH_A));
+    assertParseHistoryCannotBeDeserialized(String.format("%s%n", pathA));
   }
 
   @Test
   public void testParseHistoryLastModifiedTimeNoNumber() {
     assertParseHistoryCannotBeDeserialized(String.format("%s%s%n",
-        PATH_A, PATH_B));
+        pathA, pathB));
   }
 
   private void assertAggregateStatsCanBeSerializedAndDeserialized(
@@ -119,12 +126,15 @@ public class MainTest {
         new TreeSet<Main.RawStat>());
   }
 
-  private static final long DATE_A = 16665, /* 2015-08-18 */
-      DATE_B = 16680; /* 2015-09-02 */
+  private static final long DATE_A = 16665; /* 2015-08-18 */
 
-  private static final String
-      FPR_A = "1234567890123456789012345678901234567890",
-      FPR_B = "2345678901234567890123456789012345678901";
+  private static final long DATE_B = 16680; /* 2015-09-02 */
+
+  private static final String FPR_A =
+      "1234567890123456789012345678901234567890";
+
+  private static final String FPR_B =
+      "2345678901234567890123456789012345678901";
 
   @Test
   public void testRawStatsOneEntry() {

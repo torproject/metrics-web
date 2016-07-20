@@ -1,6 +1,17 @@
-/* Copyright 2013 The Tor Project
+/* Copyright 2013--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.clients;
+
+import org.torproject.descriptor.BandwidthHistory;
+import org.torproject.descriptor.BridgeNetworkStatus;
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.ExtraInfoDescriptor;
+import org.torproject.descriptor.NetworkStatusEntry;
+import org.torproject.descriptor.RelayNetworkStatusConsensus;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,18 +25,9 @@ import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
-import org.torproject.descriptor.BandwidthHistory;
-import org.torproject.descriptor.BridgeNetworkStatus;
-import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
-import org.torproject.descriptor.DescriptorReader;
-import org.torproject.descriptor.DescriptorSourceFactory;
-import org.torproject.descriptor.ExtraInfoDescriptor;
-import org.torproject.descriptor.NetworkStatusEntry;
-import org.torproject.descriptor.RelayNetworkStatusConsensus;
-
 public class Main {
 
+  /** Executes this data-processing module. */
   public static void main(String[] args) throws Exception {
     parseArgs(args);
     parseRelayDescriptors();
@@ -52,9 +54,11 @@ public class Main {
     }
   }
 
-  private static final long ONE_HOUR_MILLIS = 60L * 60L * 1000L,
-      ONE_DAY_MILLIS = 24L * ONE_HOUR_MILLIS,
-      ONE_WEEK_MILLIS = 7L * ONE_DAY_MILLIS;
+  private static final long ONE_HOUR_MILLIS = 60L * 60L * 1000L;
+
+  private static final long ONE_DAY_MILLIS = 24L * ONE_HOUR_MILLIS;
+
+  private static final long ONE_WEEK_MILLIS = 7L * ONE_DAY_MILLIS;
 
   private static void parseRelayDescriptors() throws Exception {
     DescriptorReader descriptorReader =
@@ -87,8 +91,8 @@ public class Main {
   private static void parseRelayExtraInfoDescriptor(
       ExtraInfoDescriptor descriptor) throws IOException {
     long publishedMillis = descriptor.getPublishedMillis();
-    String fingerprint = descriptor.getFingerprint().
-        toUpperCase();
+    String fingerprint = descriptor.getFingerprint()
+        .toUpperCase();
     long dirreqStatsEndMillis = descriptor.getDirreqStatsEndMillis();
     long dirreqStatsIntervalLengthMillis =
         descriptor.getDirreqStatsIntervalLength() * 1000L;
@@ -105,9 +109,9 @@ public class Main {
       long publishedMillis, long dirreqStatsEndMillis,
       long dirreqStatsIntervalLengthMillis,
       SortedMap<String, Integer> requests) throws IOException {
-    if (requests == null ||
-        publishedMillis - dirreqStatsEndMillis > ONE_WEEK_MILLIS ||
-        dirreqStatsIntervalLengthMillis != ONE_DAY_MILLIS) {
+    if (requests == null
+        || publishedMillis - dirreqStatsEndMillis > ONE_WEEK_MILLIS
+        || dirreqStatsIntervalLengthMillis != ONE_DAY_MILLIS) {
       /* Cut off all observations that are one week older than
        * the descriptor publication time, or we'll have to update
        * weeks of aggregate values every hour. */
@@ -144,8 +148,8 @@ public class Main {
   private static void parseRelayDirreqWriteHistory(String fingerprint,
       long publishedMillis, BandwidthHistory dirreqWriteHistory)
       throws IOException {
-    if (dirreqWriteHistory == null ||
-        publishedMillis - dirreqWriteHistory.getHistoryEndMillis()
+    if (dirreqWriteHistory == null
+        || publishedMillis - dirreqWriteHistory.getHistoryEndMillis()
         > ONE_WEEK_MILLIS) {
       return;
       /* Cut off all observations that are one week older than
@@ -154,8 +158,8 @@ public class Main {
     }
     long intervalLengthMillis =
         dirreqWriteHistory.getIntervalLength() * 1000L;
-    for (Map.Entry<Long, Long> e :
-        dirreqWriteHistory.getBandwidthValues().entrySet()) {
+    for (Map.Entry<Long, Long> e
+        : dirreqWriteHistory.getBandwidthValues().entrySet()) {
       long intervalEndMillis = e.getKey();
       long intervalStartMillis =
           intervalEndMillis - intervalLengthMillis;
@@ -163,8 +167,8 @@ public class Main {
         long fromMillis = intervalStartMillis;
         long toMillis = intervalEndMillis;
         double writtenBytes = (double) e.getValue();
-        if (intervalStartMillis / ONE_DAY_MILLIS <
-            intervalEndMillis / ONE_DAY_MILLIS) {
+        if (intervalStartMillis / ONE_DAY_MILLIS
+            < intervalEndMillis / ONE_DAY_MILLIS) {
           long utcBreakMillis = (intervalEndMillis
               / ONE_DAY_MILLIS) * ONE_DAY_MILLIS;
           if (i == 0) {
@@ -188,10 +192,10 @@ public class Main {
       RelayNetworkStatusConsensus consensus) throws IOException {
     long fromMillis = consensus.getValidAfterMillis();
     long toMillis = consensus.getFreshUntilMillis();
-    for (NetworkStatusEntry statusEntry :
-        consensus.getStatusEntries().values()) {
-      String fingerprint = statusEntry.getFingerprint().
-          toUpperCase();
+    for (NetworkStatusEntry statusEntry
+        : consensus.getStatusEntries().values()) {
+      String fingerprint = statusEntry.getFingerprint()
+          .toUpperCase();
       if (statusEntry.getFlags().contains("Running")) {
         writeOutputLine(fingerprint, "relay", "status", "", "", "",
             fromMillis, toMillis, 0.0, fromMillis);
@@ -248,9 +252,9 @@ public class Main {
       SortedMap<String, Integer> bridgeIps,
       SortedMap<String, Integer> bridgeIpTransports,
       SortedMap<String, Integer> bridgeIpVersions) throws IOException {
-    if (responses == null ||
-        publishedMillis - dirreqStatsEndMillis > ONE_WEEK_MILLIS ||
-        dirreqStatsIntervalLengthMillis != ONE_DAY_MILLIS) {
+    if (responses == null
+        || publishedMillis - dirreqStatsEndMillis > ONE_WEEK_MILLIS
+        || dirreqStatsIntervalLengthMillis != ONE_DAY_MILLIS) {
       /* Cut off all observations that are one week older than
        * the descriptor publication time, or we'll have to update
        * weeks of aggregate values every hour. */
@@ -300,9 +304,9 @@ public class Main {
         if (e.getValue() < 4.0) {
           continue;
         }
-        double r = ((double) e.getValue()) - 4.0;
-        frequenciesCopy.put(e.getKey(), r);
-        total += r;
+        double frequency = ((double) e.getValue()) - 4.0;
+        frequenciesCopy.put(e.getKey(), frequency);
+        total += frequency;
       }
     }
     /* If we're not told any frequencies, or at least none of them are
@@ -338,8 +342,8 @@ public class Main {
   private static void parseBridgeDirreqWriteHistory(String fingerprint,
       long publishedMillis, BandwidthHistory dirreqWriteHistory)
       throws IOException {
-    if (dirreqWriteHistory == null ||
-        publishedMillis - dirreqWriteHistory.getHistoryEndMillis()
+    if (dirreqWriteHistory == null
+        || publishedMillis - dirreqWriteHistory.getHistoryEndMillis()
         > ONE_WEEK_MILLIS) {
       /* Cut off all observations that are one week older than
        * the descriptor publication time, or we'll have to update
@@ -348,8 +352,8 @@ public class Main {
     }
     long intervalLengthMillis =
         dirreqWriteHistory.getIntervalLength() * 1000L;
-    for (Map.Entry<Long, Long> e :
-        dirreqWriteHistory.getBandwidthValues().entrySet()) {
+    for (Map.Entry<Long, Long> e
+        : dirreqWriteHistory.getBandwidthValues().entrySet()) {
       long intervalEndMillis = e.getKey();
       long intervalStartMillis =
           intervalEndMillis - intervalLengthMillis;
@@ -357,8 +361,8 @@ public class Main {
         long fromMillis = intervalStartMillis;
         long toMillis = intervalEndMillis;
         double writtenBytes = (double) e.getValue();
-        if (intervalStartMillis / ONE_DAY_MILLIS <
-            intervalEndMillis / ONE_DAY_MILLIS) {
+        if (intervalStartMillis / ONE_DAY_MILLIS
+            < intervalEndMillis / ONE_DAY_MILLIS) {
           long utcBreakMillis = (intervalEndMillis
               / ONE_DAY_MILLIS) * ONE_DAY_MILLIS;
           if (i == 0) {
@@ -384,10 +388,10 @@ public class Main {
     long fromMillis = (publishedMillis / ONE_HOUR_MILLIS)
         * ONE_HOUR_MILLIS;
     long toMillis = fromMillis + ONE_HOUR_MILLIS;
-    for (NetworkStatusEntry statusEntry :
-        status.getStatusEntries().values()) {
-      String fingerprint = statusEntry.getFingerprint().
-          toUpperCase();
+    for (NetworkStatusEntry statusEntry
+        : status.getStatusEntries().values()) {
+      String fingerprint = statusEntry.getFingerprint()
+          .toUpperCase();
       if (statusEntry.getFlags().contains("Running")) {
         writeOutputLine(fingerprint, "bridge", "status", "", "", "",
             fromMillis, toMillis, 0.0, publishedMillis);
@@ -397,6 +401,7 @@ public class Main {
 
   private static Map<String, BufferedWriter> openOutputFiles =
       new HashMap<String, BufferedWriter>();
+
   private static void writeOutputLine(String fingerprint, String node,
       String metric, String country, String transport, String version,
       long fromMillis, long toMillis, double val, long publishedMillis)
@@ -413,6 +418,7 @@ public class Main {
   }
 
   private static SimpleDateFormat dateTimeFormat = null;
+
   private static String formatDateTimeMillis(long millis) {
     if (dateTimeFormat == null) {
       dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -1,4 +1,15 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.hidserv;
+
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.ExtraInfoDescriptor;
+import org.torproject.descriptor.NetworkStatusEntry;
+import org.torproject.descriptor.RelayNetworkStatusConsensus;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,45 +31,37 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
-import org.torproject.descriptor.DescriptorReader;
-import org.torproject.descriptor.DescriptorSourceFactory;
-import org.torproject.descriptor.ExtraInfoDescriptor;
-import org.torproject.descriptor.NetworkStatusEntry;
-import org.torproject.descriptor.RelayNetworkStatusConsensus;
-
-/* Parse hidden-service statistics from extra-info descriptors, compute
+/** Parse hidden-service statistics from extra-info descriptors, compute
  * network fractions from consensuses, and write parsed contents to
  * document files for later use. */
 public class Parser {
 
-  /* File containing tuples of last-modified times and file names of
+  /** File containing tuples of last-modified times and file names of
    * descriptor files parsed in the previous execution. */
   private File parseHistoryFile;
 
-  /* Descriptor reader to provide parsed extra-info descriptors and
+  /** Descriptor reader to provide parsed extra-info descriptors and
    * consensuses. */
   private DescriptorReader descriptorReader;
 
-  /* Document file containing previously parsed reported hidden-service
+  /** Document file containing previously parsed reported hidden-service
    * statistics. */
   private File reportedHidServStatsFile;
 
-  /* Document store for storing and retrieving reported hidden-service
+  /** Document store for storing and retrieving reported hidden-service
    * statistics. */
   private DocumentStore<ReportedHidServStats> reportedHidServStatsStore;
 
-  /* Directory containing document files with previously computed network
+  /** Directory containing document files with previously computed network
    * fractions. */
   private File computedNetworkFractionsDirectory;
 
-  /* Document store for storing and retrieving computed network
+  /** Document store for storing and retrieving computed network
    * fractions. */
   private DocumentStore<ComputedNetworkFractions>
       computedNetworkFractionsStore;
 
-  /* Initialize a new parser object using the given directories and
+  /** Initializes a new parser object using the given directories and
    * document stores. */
   public Parser(Set<File> inDirectories, File statusDirectory,
       DocumentStore<ReportedHidServStats> reportedHidServStatsStore,
@@ -90,11 +93,11 @@ public class Parser {
     this.computedNetworkFractionsStore = computedNetworkFractionsStore;
   }
 
-  /* Read the parse history file to avoid parsing descriptor files that
+  /** Reads the parse history file to avoid parsing descriptor files that
    * have not changed since the previous execution. */
   public void readParseHistory() {
-    if (this.parseHistoryFile.exists() &&
-        this.parseHistoryFile.isFile()) {
+    if (this.parseHistoryFile.exists()
+        && this.parseHistoryFile.isFile()) {
       SortedMap<String, Long> excludedFiles =
           new TreeMap<String, Long>();
       try {
@@ -125,9 +128,9 @@ public class Parser {
     }
   }
 
-  /* Write parsed or skipped descriptor files with last-modified times and
-   * absolute paths to the parse history file to avoid parsing these files
-   * again, unless they change until the next execution. */
+  /** Writes parsed or skipped descriptor files with last-modified times
+   * and absolute paths to the parse history file to avoid parsing these
+   * files again, unless they change until the next execution. */
   public void writeParseHistory() {
 
     /* Obtain the list of descriptor files that were either parsed now or
@@ -141,8 +144,8 @@ public class Parser {
       this.parseHistoryFile.getParentFile().mkdirs();
       BufferedWriter bw = new BufferedWriter(new FileWriter(
           this.parseHistoryFile));
-      for (Map.Entry<String, Long> e :
-          excludedAndParsedFiles.entrySet()) {
+      for (Map.Entry<String, Long> e
+          : excludedAndParsedFiles.entrySet()) {
         /* Each line starts with the last-modified time of the descriptor
          * file, followed by its absolute path. */
         String absolutePath = e.getKey();
@@ -158,16 +161,17 @@ public class Parser {
     }
   }
 
-  /* Set of all reported hidden-service statistics.  To date, these
-   * objects are small, and keeping them all in memory is easy.  But if
-   * this ever changes, e.g., when more and more statistics are added,
-   * this may not scale. */
+  /** Set of all reported hidden-service statistics.
+   *
+   * <p>To date, these objects are small, and keeping them all in memory
+   * is easy.  But if this ever changes, e.g., when more and more
+   * statistics are added, this may not scale.</p> */
   private Set<ReportedHidServStats> reportedHidServStats =
       new HashSet<ReportedHidServStats>();
 
-  /* Instruct the descriptor reader to parse descriptor files, and handle
-   * the resulting parsed descriptors if they are either extra-info
-   * descriptors or consensuses. */
+  /** Instructs the descriptor reader to parse descriptor files, and
+   * handles the resulting parsed descriptors if they are either
+   * extra-info descriptors or consensuses. */
   public boolean parseDescriptors() {
     Iterator<DescriptorFile> descriptorFiles =
         this.descriptorReader.readDescriptors();
@@ -194,10 +198,11 @@ public class Parser {
         this.reportedHidServStatsFile, this.reportedHidServStats);
   }
 
-  /* Parse the given extra-info descriptor by extracting its fingerprint
-   * and contained hidserv-* lines.  If a valid set of hidserv-stats can
-   * be extracted, create a new stats object that will later be stored to
-   * a document file. */
+  /** Parses the given extra-info descriptor by extracting its fingerprint
+   * and contained hidserv-* lines.
+   *
+   * <p>If a valid set of hidserv-stats can be extracted, create a new
+   * stats object that will later be stored to a document file.</p> */
   private void parseExtraInfoDescriptor(
       ExtraInfoDescriptor extraInfoDescriptor) {
 
@@ -209,9 +214,12 @@ public class Parser {
      * descriptor-parsing library. */
     Scanner scanner = new Scanner(new ByteArrayInputStream(
         extraInfoDescriptor.getRawDescriptorBytes()));
-    Long statsEndMillis = null, statsIntervalSeconds = null,
-        rendRelayedCells = null, rendRelayedCellsBinSize = null,
-        dirOnionsSeen = null, dirOnionsSeenBinSize = null;
+    Long statsEndMillis = null;
+    Long statsIntervalSeconds = null;
+    Long rendRelayedCells = null;
+    Long rendRelayedCellsBinSize = null;
+    Long dirOnionsSeen = null;
+    Long dirOnionsSeenBinSize = null;
     try {
       while (scanner.hasNext()) {
         String line = scanner.nextLine();
@@ -219,8 +227,8 @@ public class Parser {
           String[] parts = line.split(" ");
           if (parts[0].equals("hidserv-stats-end")) {
             /* Parse statistics end and statistics interval length. */
-            if (parts.length != 5 || !parts[3].startsWith("(") ||
-                !parts[4].equals("s)")) {
+            if (parts.length != 5 || !parts[3].startsWith("(")
+                || !parts[4].equals("s)")) {
               /* Will warn below, because statsEndMillis is still null. */
               continue;
             }
@@ -231,8 +239,8 @@ public class Parser {
             /* Parse the reported number of cells on rendezvous circuits
              * and the bin size used by the relay to obfuscate that
              * number. */
-            if (parts.length != 5 ||
-                !parts[4].startsWith("bin_size=")) {
+            if (parts.length != 5
+                || !parts[4].startsWith("bin_size=")) {
               /* Will warn below, because rendRelayedCells is still
                * null. */
               continue;
@@ -243,8 +251,8 @@ public class Parser {
           } else if (parts[0].equals("hidserv-dir-onions-seen")) {
             /* Parse the reported number of distinct .onion addresses and
              * the bin size used by the relay to obfuscate that number. */
-            if (parts.length != 5 ||
-                !parts[4].startsWith("bin_size=")) {
+            if (parts.length != 5
+                || !parts[4].startsWith("bin_size=")) {
               /* Will warn below, because dirOnionsSeen is still null. */
               continue;
             }
@@ -262,17 +270,17 @@ public class Parser {
      * lines, don't do anything.  This applies to the majority of
      * descriptors, at least as long as only a minority of relays reports
      * these statistics. */
-    if (statsEndMillis == null && rendRelayedCells == null &&
-        dirOnionsSeen == null) {
+    if (statsEndMillis == null && rendRelayedCells == null
+        && dirOnionsSeen == null) {
       return;
 
     /* If the descriptor contained all expected hidserv-* lines, create a
      * new stats object and put it in the local map, so that it will later
      * be written to a document file. */
-    } else if (statsEndMillis != null &&
-        statsEndMillis != DateTimeHelper.NO_TIME_AVAILABLE &&
-        statsIntervalSeconds != null && rendRelayedCells != null &&
-        dirOnionsSeen != null) {
+    } else if (statsEndMillis != null
+        && statsEndMillis != DateTimeHelper.NO_TIME_AVAILABLE
+        && statsIntervalSeconds != null && rendRelayedCells != null
+        && dirOnionsSeen != null) {
       ReportedHidServStats reportedStats = new ReportedHidServStats(
           fingerprint, statsEndMillis);
       reportedStats.setStatsIntervalSeconds(statsIntervalSeconds);
@@ -292,7 +300,7 @@ public class Parser {
     }
   }
 
-  /* Remove noise from a reported stats value by rounding to the nearest
+  /** Removes noise from a reported stats value by rounding to the nearest
    * right side of a bin and subtracting half of the bin size. */
   private long removeNoise(long reportedNumber, long binSize) {
     long roundedToNearestRightSideOfTheBin =
@@ -302,6 +310,7 @@ public class Parser {
     return subtractedHalfOfBinSize;
   }
 
+  /** Parses the given consensus. */
   public boolean parseRelayNetworkStatusConsensus(
       RelayNetworkStatusConsensus consensus) {
 
@@ -345,8 +354,8 @@ public class Parser {
         new TreeMap<String, Double>();
 
     /* Go through all status entries contained in the consensus. */
-    for (Map.Entry<String, NetworkStatusEntry> e :
-        consensus.getStatusEntries().entrySet()) {
+    for (Map.Entry<String, NetworkStatusEntry> e
+        : consensus.getStatusEntries().entrySet()) {
       String fingerprint = e.getKey();
       NetworkStatusEntry statusEntry = e.getValue();
       SortedSet<String> flags = statusEntry.getFlags();
@@ -399,18 +408,18 @@ public class Parser {
 
     /* Define the total ring size to compute fractions below.  This is
      * 16^40 or 2^160. */
-    final double RING_SIZE = new BigInteger(
+    final double ringSize = new BigInteger(
         "10000000000000000000000000000000000000000",
         16).doubleValue();
 
     /* Go through all status entries again, this time computing network
      * fractions. */
-    for (Map.Entry<String, NetworkStatusEntry> e :
-        consensus.getStatusEntries().entrySet()) {
+    for (Map.Entry<String, NetworkStatusEntry> e
+        : consensus.getStatusEntries().entrySet()) {
       String fingerprint = e.getKey();
       NetworkStatusEntry statusEntry = e.getValue();
-      double fractionRendRelayedCells = 0.0,
-          fractionDirOnionsSeen = 0.0;
+      double fractionRendRelayedCells = 0.0;
+      double fractionDirOnionsSeen = 0.0;
       if (statusEntry != null) {
 
         /* Check if the relay is a hidden-service directory by looking up
@@ -424,8 +433,8 @@ public class Parser {
            * this directory by three positions. */
           String startResponsible = fingerprint;
           int positionsToGo = 3;
-          for (String hsDirFingerprint :
-              hsDirs.tailSet(fingerprintPrecededByOne)) {
+          for (String hsDirFingerprint
+              : hsDirs.tailSet(fingerprintPrecededByOne)) {
             startResponsible = hsDirFingerprint;
             if (positionsToGo-- <= 0) {
               break;
@@ -438,7 +447,7 @@ public class Parser {
           fractionDirOnionsSeen =
               new BigInteger(fingerprintPrecededByOne, 16).subtract(
               new BigInteger(startResponsible, 16)).doubleValue()
-              / RING_SIZE;
+              / ringSize;
 
           /* Divide this fraction by three to obtain the fraction of
            * descriptors that this directory has seen.  This step is

@@ -1,4 +1,14 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.disagreement;
+
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.NetworkStatusEntry;
+import org.torproject.descriptor.RelayNetworkStatusVote;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,13 +32,6 @@ import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
-import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
-import org.torproject.descriptor.DescriptorReader;
-import org.torproject.descriptor.DescriptorSourceFactory;
-import org.torproject.descriptor.NetworkStatusEntry;
-import org.torproject.descriptor.RelayNetworkStatusVote;
-
 /* Read all relay network status votes from the in/ subdirectory with a
  * valid-after time of 12:00:00, extract attributes like relay flags or
  * bandwidth measurements that the directory authorities assigned to
@@ -43,10 +46,13 @@ import org.torproject.descriptor.RelayNetworkStatusVote;
  * in each execution. */
 public class Main {
 
+  /** Creates a new instance of this class that executes this
+   * data-processing module. */
   public static void main(String[] args) throws Exception {
     new Main().run();
   }
 
+  /** Executes this data-processing module. */
   public void run() throws Exception {
     readResults();
     readDescriptors();
@@ -73,6 +79,7 @@ public class Main {
       new HashMap<String, Integer>();
   private List<String> attributeStrings = new ArrayList<String>();
 
+  /** Initializes this class. */
   public Main() {
 
     /* Initialize maps from strings to integers and back by adding the
@@ -168,18 +175,33 @@ public class Main {
    * valid-after hour in December 2015 required to keep 420,000 long
    * values in memory, which is roughly 3.2 MiB plus list overhead. */
   protected List<Long> assignments = new ArrayList<Long>();
-  protected final static int VALIDAFTER_LEN = 22, ATTRIBUTE_LEN = 8,
-      FINGERPRINT_LEN = 24, AUTHORITY_LEN = 6;
-  protected final static int
-      VALIDAFTER_SHIFT = ATTRIBUTE_LEN + FINGERPRINT_LEN + AUTHORITY_LEN,
-      ATTRIBUTE_SHIFT = FINGERPRINT_LEN + AUTHORITY_LEN,
-      FINGERPRINT_SHIFT = AUTHORITY_LEN,
-      AUTHORITY_SHIFT = 0;
+
+  protected static final int VALIDAFTER_LEN = 22;
+
+  protected static final int ATTRIBUTE_LEN = 8;
+
+  protected static final int FINGERPRINT_LEN = 24;
+
+  protected static final int AUTHORITY_LEN = 6;
+
+  protected static final int VALIDAFTER_SHIFT = ATTRIBUTE_LEN
+      + FINGERPRINT_LEN + AUTHORITY_LEN;
+
+  protected static final int ATTRIBUTE_SHIFT = FINGERPRINT_LEN
+      + AUTHORITY_LEN;
+
+  protected static final int FINGERPRINT_SHIFT = AUTHORITY_LEN;
+
+  protected static final int AUTHORITY_SHIFT = 0;
 
   /* Define some constants for timestamp math. */
-  protected final static long HALF_HOUR = 30L * 60L * 1000L,
-      ONE_HOUR = 2L * HALF_HOUR, HALF_DAY = 12L * ONE_HOUR,
-      ONE_DAY = 2L * HALF_DAY;
+  protected static final long HALF_HOUR = 30L * 60L * 1000L;
+
+  protected static final long ONE_HOUR = 2L * HALF_HOUR;
+
+  protected static final long HALF_DAY = 12L * ONE_HOUR;
+
+  protected static final long ONE_DAY = 2L * HALF_DAY;
 
   /* Convert the given valid-after time in milliseconds, attribute index,
    * fingerprint index, and authority index to a long integer following
@@ -188,15 +210,15 @@ public class Main {
   protected static long convertToLongValue(long validAfterMillis,
       int attributeIndex, int fingerprintIndex, int authorityIndex) {
     long validAfterHalfHours = validAfterMillis / HALF_HOUR;
-    if (validAfterHalfHours < 0L ||
-        validAfterHalfHours >= (1L << VALIDAFTER_LEN)) {
+    if (validAfterHalfHours < 0L
+        || validAfterHalfHours >= (1L << VALIDAFTER_LEN)) {
       return -1;
     }
     if (attributeIndex < 0 || attributeIndex >= (1 << ATTRIBUTE_LEN)) {
       return -1;
     }
-    if (fingerprintIndex < 0 ||
-        fingerprintIndex >= (1 << FINGERPRINT_LEN)) {
+    if (fingerprintIndex < 0
+        || fingerprintIndex >= (1 << FINGERPRINT_LEN)) {
       return -1;
     }
     if (authorityIndex < 0 || authorityIndex >= (1 << AUTHORITY_LEN)) {
@@ -225,8 +247,8 @@ public class Main {
   /* Extract the fingerprint index from the given long integer value. */
   protected static int extractFingerprintIndexFromLongValue(
       long longValue) {
-    return (int) ((longValue >> FINGERPRINT_SHIFT) %
-        (1 << FINGERPRINT_LEN));
+    return (int) ((longValue >> FINGERPRINT_SHIFT)
+        % (1 << FINGERPRINT_LEN));
   }
 
   /* Extract the authority index from the given long integer value. */
@@ -267,8 +289,8 @@ public class Main {
     LineNumberReader lnr = new LineNumberReader(new BufferedReader(
         new FileReader(this.resultsFile)));
     String line;
-    if ((line = lnr.readLine()) == null ||
-        !line.equals(this.resultsHeaderLine)) {
+    if ((line = lnr.readLine()) == null
+        || !line.equals(this.resultsHeaderLine)) {
       lnr.close();
       throw new IOException("Unexpected line " + lnr.getLineNumber()
           + " in " + this.resultsFile + ".");
@@ -338,8 +360,9 @@ public class Main {
     }
   }
 
-  private static final String LISTED_ATTRIBUTE = "Listed",
-      MEASURED_ATTRIBUTE = "Measured";
+  private static final String LISTED_ATTRIBUTE = "Listed";
+
+  private static final String MEASURED_ATTRIBUTE = "Measured";
 
   /* Process a single relay network status vote. */
   private void processVote(RelayNetworkStatusVote vote) throws Exception {
@@ -363,8 +386,8 @@ public class Main {
 
     /* Go through all status entries in this vote and remember which
      * attributes this authority assigns to which relays. */
-    for (NetworkStatusEntry entry :
-        vote.getStatusEntries().values()) {
+    for (NetworkStatusEntry entry
+        : vote.getStatusEntries().values()) {
 
       /* Use the relay's fingerprint to distinguish relays. */
       String fingerprint = entry.getFingerprint();
@@ -475,8 +498,10 @@ public class Main {
 
     /* Remember long value and some of its components from the last
      * iteration. */
-    long lastLongValue = -1L, lastValidAfterMillis = -1L;
-    int lastAttributeIndex = -1, lastFingerprintIndex = -1;
+    long lastLongValue = -1L;
+    long lastValidAfterMillis = -1L;
+    int lastAttributeIndex = -1;
+    int lastFingerprintIndex = -1;
 
     /* Keep a list of all output lines for a single valid-after time. */
     List<String> outputLines = new ArrayList<String>();
@@ -484,8 +509,9 @@ public class Main {
     /* Keep counters for the number of fingerprints seen at a valid-after
      * time, the number of authorities voting on an attribute, and the
      * number of votes that a relay received for a given attribute. */
-    int knownFingerprintsByAllAuthorities = 0,
-        authoritiesVotingOnAttribute = 0, votesForAttribute = 0;
+    int knownFingerprintsByAllAuthorities = 0;
+    int authoritiesVotingOnAttribute = 0;
+    int votesForAttribute = 0;
 
     /* Keep counters of relays receiving a given number of votes on an
      * attribute.  The number at element i is the number of relays
@@ -505,8 +531,8 @@ public class Main {
        * results for the last fingerprint before moving on. */
       int fingerprintIndex = extractFingerprintIndexFromLongValue(
           longValue);
-      if (lastAttributeIndex > 0 && lastFingerprintIndex > 0 &&
-          lastFingerprintIndex != fingerprintIndex) {
+      if (lastAttributeIndex > 0 && lastFingerprintIndex > 0
+          && lastFingerprintIndex != fingerprintIndex) {
 
         /* This relay received at least one vote for the given attribute,
          * or otherwise it wouldn't be contained in the list of long
@@ -522,8 +548,8 @@ public class Main {
        * attribute before moving on.  And if we just moved to the first
        * attribute, initialize counters. */
       int attributeIndex = extractAttributeIndexFromLongValue(longValue);
-      if (lastAttributeIndex >= 0 &&
-          lastAttributeIndex != attributeIndex) {
+      if (lastAttributeIndex >= 0
+          && lastAttributeIndex != attributeIndex) {
 
         /* If we just finished a non-zero attribute, wrap it up.
          * Determine the number of votes required for getting into the
@@ -555,8 +581,8 @@ public class Main {
        * on. */
       long validAfterMillis = extractValidAfterMillisFromLongValue(
           longValue);
-      if (lastValidAfterMillis >= 0L &&
-          lastValidAfterMillis < validAfterMillis) {
+      if (lastValidAfterMillis >= 0L
+          && lastValidAfterMillis < validAfterMillis) {
 
         /* Check if results already contain lines for this valid-after
          * time.  If so, only replace them with new results lines if there
@@ -565,9 +591,9 @@ public class Main {
          * include as many votes as possible in the aggregation. */
         String validAfterString = dateTimeFormat.format(
             lastValidAfterMillis);
-        if (!this.results.containsKey(validAfterString) ||
-            this.results.get(validAfterString).size() <
-            outputLines.size()) {
+        if (!this.results.containsKey(validAfterString)
+            || this.results.get(validAfterString).size()
+            < outputLines.size()) {
 
           /* Sort results lines, and then put them in. */
           Collections.sort(outputLines);
@@ -591,19 +617,17 @@ public class Main {
        * valid-after time. */
       if (attributeIndex == 0) {
         knownFingerprintsByAllAuthorities++;
-      }
 
       /* Otherwise, if this value doesn't contain a fingerprint index, it
        * was put in for counting authorities voting on a given attribute
        * at the current valid-after time. */
-      else if (fingerprintIndex == 0) {
+      } else if (fingerprintIndex == 0) {
         authoritiesVotingOnAttribute++;
-      }
 
       /* Otherwise, if both indexes are non-zero, this value was put in to
        * count how many authorities assign the attribute to this relay at
        * this valid-after time. */
-      else {
+      } else {
         votesForAttribute++;
       }
 

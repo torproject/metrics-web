@@ -1,5 +1,6 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web.graphs;
 
 import java.io.BufferedOutputStream;
@@ -19,16 +20,18 @@ public class GraphImageServlet extends HttpServlet {
 
   private static final long serialVersionUID = -7356818641689744288L;
 
-  private RObjectGenerator rObjectGenerator;
+  private RObjectGenerator objectGenerator;
 
+  @Override
   public void init() {
 
     /* Get a reference to the R object generator that we need to generate
      * graph images. */
-    this.rObjectGenerator = (RObjectGenerator) getServletContext().
-        getAttribute("RObjectGenerator");
+    this.objectGenerator = (RObjectGenerator) getServletContext()
+        .getAttribute("RObjectGenerator");
   }
 
+  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException,
       ServletException {
@@ -37,21 +40,21 @@ public class GraphImageServlet extends HttpServlet {
      * graph type and file type. */
     String requestedGraph = request.getRequestURI();
     String fileType = null;
-    if (requestedGraph.endsWith(".png") ||
-        requestedGraph.endsWith(".pdf") ||
-        requestedGraph.endsWith(".svg")) {
+    if (requestedGraph.endsWith(".png")
+        || requestedGraph.endsWith(".pdf")
+        || requestedGraph.endsWith(".svg")) {
       fileType = requestedGraph.substring(requestedGraph.length() - 3);
       requestedGraph = requestedGraph.substring(0, requestedGraph.length()
           - 4);
     }
     if (requestedGraph.contains("/")) {
-      requestedGraph = requestedGraph.substring(requestedGraph.
-          lastIndexOf("/") + 1);
+      requestedGraph = requestedGraph.substring(requestedGraph
+          .lastIndexOf("/") + 1);
     }
 
     /* Request graph from R object generator, which either returns it from
      * its cache or asks Rserve to generate it. */
-    RObject graph = rObjectGenerator.generateGraph(requestedGraph,
+    RObject graph = objectGenerator.generateGraph(requestedGraph,
         fileType, request.getParameterMap(), true);
 
     /* Make sure that we have a graph to return. */
@@ -61,13 +64,13 @@ public class GraphImageServlet extends HttpServlet {
     }
 
     /* Write graph bytes to response. */
-    BufferedOutputStream output = null;
     response.setContentType("image/" + fileType);
     response.setHeader("Content-Length",
         String.valueOf(graph.getBytes().length));
     response.setHeader("Content-Disposition",
         "inline; filename=\"" + graph.getFileName() + "\"");
-    output = new BufferedOutputStream(response.getOutputStream(), 1024);
+    BufferedOutputStream output = new BufferedOutputStream(
+        response.getOutputStream(), 1024);
     output.write(graph.getBytes(), 0, graph.getBytes().length);
     output.flush();
     output.close();

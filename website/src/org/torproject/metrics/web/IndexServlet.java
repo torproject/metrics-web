@@ -1,5 +1,6 @@
 /* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web;
 
 import java.io.IOException;
@@ -60,16 +61,18 @@ public class IndexServlet extends HttpServlet {
 
   private List<Metric> availableMetrics;
 
+  @Override
   public void init() throws ServletException {
     this.availableMetrics = new ArrayList<Metric>();
-    for (org.torproject.metrics.web.Metric metric :
-        MetricsProvider.getInstance().getMetricsList()) {
+    for (org.torproject.metrics.web.Metric metric
+        : MetricsProvider.getInstance().getMetricsList()) {
       this.availableMetrics.add(new Metric(metric.getId() + ".html",
           metric.getTitle(), metric.getTags(), metric.getType(),
           metric.getLevel()));
     }
   }
 
+  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
     @SuppressWarnings("rawtypes")
@@ -102,8 +105,8 @@ public class IndexServlet extends HttpServlet {
   private BitSet parseParameter(String[] unparsedValues,
       String[][] knownValues, String[] defaultValues) {
     BitSet result = new BitSet();
-    if (unparsedValues == null || unparsedValues.length == 0 ||
-        unparsedValues.length > knownValues.length) {
+    if (unparsedValues == null || unparsedValues.length == 0
+        || unparsedValues.length > knownValues.length) {
       unparsedValues = defaultValues;
     }
     Set<String> requestedValues =
@@ -130,11 +133,17 @@ public class IndexServlet extends HttpServlet {
   }
 
   private static class Metric {
+
     private String url;
+
     private String name;
+
     private BitSet tags;
+
     private BitSet type;
+
     private BitSet level;
+
     private Metric(String url, String name, String[] tagStrings,
         String typeString, String levelString) {
       this.url = url;
@@ -143,6 +152,7 @@ public class IndexServlet extends HttpServlet {
       this.type = this.convertStringToBitSet(knownTypes, typeString);
       this.level = this.convertStringToBitSet(knownLevels, levelString);
     }
+
     private BitSet convertStringsToBitSet(String[][] knownKeysAndValues,
         String[] givenKeyStrings) {
       BitSet result = new BitSet(knownKeysAndValues.length);
@@ -158,23 +168,26 @@ public class IndexServlet extends HttpServlet {
       }
       return result;
     }
+
     private BitSet convertStringToBitSet(String[][] knownKeysAndValues,
         String givenKeyString) {
       return this.convertStringsToBitSet(knownKeysAndValues,
           new String[] { givenKeyString });
     }
+
     private String[] toStrings() {
       return new String[] { this.url, this.name,
           this.convertBitSetToString(knownTags, this.tags),
           this.convertBitSetToString(knownTypes, this.type),
           this.convertBitSetToString(knownLevels, this.level) };
     }
+
     private String convertBitSetToString(String[][] knownKeysAndValues,
         BitSet bitSet) {
       StringBuilder sb = new StringBuilder();
-      int i = -1;
-      while ((i = bitSet.nextSetBit(i + 1)) >= 0) {
-        sb.append(", " + knownKeysAndValues[i][1]);
+      int index = -1;
+      while ((index = bitSet.nextSetBit(index + 1)) >= 0) {
+        sb.append(", " + knownKeysAndValues[index][1]);
       }
       return sb.substring(Math.min(sb.length(), 2));
     }
@@ -184,9 +197,9 @@ public class IndexServlet extends HttpServlet {
       BitSet requestedTypes, BitSet requestedLevels) {
     List<Metric> filteredMetrics = new ArrayList<Metric>();
     for (Metric metric : availableMetrics) {
-      if (requestedTags.intersects(metric.tags) &&
-          requestedTypes.intersects(metric.type) &&
-          requestedLevels.intersects(metric.level)) {
+      if (requestedTags.intersects(metric.tags)
+          && requestedTypes.intersects(metric.type)
+          && requestedLevels.intersects(metric.level)) {
         filteredMetrics.add(metric);
       }
     }
@@ -196,47 +209,47 @@ public class IndexServlet extends HttpServlet {
   private void orderMetrics(List<Metric> resultMetrics,
       BitSet requestedOrder) {
     switch (requestedOrder.nextSetBit(0)) {
-    case 0:
-      Collections.sort(resultMetrics, new Comparator<Metric>() {
-        public int compare(Metric a, Metric b) {
-          return a.name.compareTo(b.name);
-        }
-      });
-      break;
-    case 1:
-      Collections.sort(resultMetrics, new Comparator<Metric>() {
-        public int compare(Metric a, Metric b) {
-          return compareTwoBitSets(a.tags, b.tags);
-        }
-      });
-      break;
-    case 2:
-      Collections.sort(resultMetrics, new Comparator<Metric>() {
-        public int compare(Metric a, Metric b) {
-          return compareTwoBitSets(a.type, b.type);
-        }
-      });
-      break;
-    case 3:
-      Collections.sort(resultMetrics, new Comparator<Metric>() {
-        public int compare(Metric a, Metric b) {
-          return compareTwoBitSets(a.level, b.level);
-        }
-      });
-      break;
-    default:
-      Collections.shuffle(resultMetrics);
-      break;
+      case 0:
+        Collections.sort(resultMetrics, new Comparator<Metric>() {
+          public int compare(Metric first, Metric second) {
+            return first.name.compareTo(second.name);
+          }
+        });
+        break;
+      case 1:
+        Collections.sort(resultMetrics, new Comparator<Metric>() {
+          public int compare(Metric first, Metric second) {
+            return compareTwoBitSets(first.tags, second.tags);
+          }
+        });
+        break;
+      case 2:
+        Collections.sort(resultMetrics, new Comparator<Metric>() {
+          public int compare(Metric first, Metric second) {
+            return compareTwoBitSets(first.type, second.type);
+          }
+        });
+        break;
+      case 3:
+        Collections.sort(resultMetrics, new Comparator<Metric>() {
+          public int compare(Metric first, Metric second) {
+            return compareTwoBitSets(first.level, second.level);
+          }
+        });
+        break;
+      default:
+        Collections.shuffle(resultMetrics);
+        break;
     }
   }
 
-  private int compareTwoBitSets(BitSet a, BitSet b) {
-    if (a.equals(b)) {
+  private int compareTwoBitSets(BitSet first, BitSet second) {
+    if (first.equals(second)) {
       return 0;
     }
-    BitSet xor = (BitSet) a.clone();
-    xor.xor(b);
-    return xor.length() == b.length() ? -1 : 1;
+    BitSet xor = (BitSet) first.clone();
+    xor.xor(second);
+    return xor.length() == second.length() ? -1 : 1;
   }
 
   private String[][] formatMetrics(

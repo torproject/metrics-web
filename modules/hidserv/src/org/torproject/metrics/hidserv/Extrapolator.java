@@ -1,3 +1,6 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.hidserv;
 
 import java.io.File;
@@ -9,37 +12,37 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/* Extrapolate hidden-service statistics reported by single relays by
+/** Extrapolate hidden-service statistics reported by single relays by
  * dividing them by the computed fraction of hidden-service activity
  * observed by the relay. */
 public class Extrapolator {
 
-  /* Document file containing previously parsed reported hidden-service
+  /** Document file containing previously parsed reported hidden-service
    * statistics. */
   private File reportedHidServStatsFile;
 
-  /* Document store for storing and retrieving reported hidden-service
+  /** Document store for storing and retrieving reported hidden-service
    * statistics. */
   private DocumentStore<ReportedHidServStats> reportedHidServStatsStore;
 
-  /* Directory containing document files with previously computed network
+  /** Directory containing document files with previously computed network
    * fractions. */
   private File computedNetworkFractionsDirectory;
 
-  /* Document store for storing and retrieving computed network
+  /** Document store for storing and retrieving computed network
    * fractions. */
   private DocumentStore<ComputedNetworkFractions>
       computedNetworkFractionsStore;
 
-  /* Document file containing extrapolated hidden-service statistics. */
+  /** Document file containing extrapolated hidden-service statistics. */
   private File extrapolatedHidServStatsFile;
 
-  /* Document store for storing and retrieving extrapolated hidden-service
+  /** Document store for storing and retrieving extrapolated hidden-service
    * statistics. */
   private DocumentStore<ExtrapolatedHidServStats>
       extrapolatedHidServStatsStore;
 
-  /* Initialize a new extrapolator object using the given directory and
+  /** Initializes a new extrapolator object using the given directory and
    * document stores. */
   public Extrapolator(File statusDirectory,
       DocumentStore<ReportedHidServStats> reportedHidServStatsStore,
@@ -63,7 +66,7 @@ public class Extrapolator {
     this.extrapolatedHidServStatsStore = extrapolatedHidServStatsStore;
   }
 
-  /* Iterate over all reported stats and extrapolate network totals for
+  /** Iterates over all reported stats and extrapolate network totals for
    * those that have not been extrapolated before. */
   public boolean extrapolateHidServStats() {
 
@@ -100,8 +103,8 @@ public class Extrapolator {
     }
 
     /* Go through reported stats by fingerprint. */
-    for (Map.Entry<String, Set<ReportedHidServStats>> e :
-        parsedStatsByFingerprint.entrySet()) {
+    for (Map.Entry<String, Set<ReportedHidServStats>> e
+        : parsedStatsByFingerprint.entrySet()) {
       String fingerprint = e.getKey();
 
       /* Iterate over all stats reported by this relay and make a list of
@@ -176,12 +179,12 @@ public class Extrapolator {
         /* Sum up computed network fractions and count known consensus in
          * the relevant interval, so that we can later compute means of
          * network fractions. */
-        double sumFractionRendRelayedCells = 0.0,
-            sumFractionDirOnionsSeen = 0.0;
+        double sumFractionRendRelayedCells = 0.0;
+        double sumFractionDirOnionsSeen = 0.0;
         int consensuses = 0;
         for (long validAfterMillis : knownConsensuses) {
-          if (statsStartMillis <= validAfterMillis &&
-              validAfterMillis < statsEndMillis) {
+          if (statsStartMillis <= validAfterMillis
+              && validAfterMillis < statsEndMillis) {
             if (computedNetworkFractions.containsKey(validAfterMillis)) {
               ComputedNetworkFractions frac =
                   computedNetworkFractions.get(validAfterMillis);
@@ -208,8 +211,8 @@ public class Extrapolator {
 
         /* If at least one fraction is positive, extrapolate network
          * totals. */
-        if (fractionRendRelayedCells > 0.0 ||
-            fractionDirOnionsSeen > 0.0) {
+        if (fractionRendRelayedCells > 0.0
+            || fractionDirOnionsSeen > 0.0) {
           ExtrapolatedHidServStats extrapolated =
               new ExtrapolatedHidServStats(
               statsDateMillis, fingerprint);

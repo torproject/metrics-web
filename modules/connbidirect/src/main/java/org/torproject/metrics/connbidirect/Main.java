@@ -1,6 +1,13 @@
-/* Copyright 2015 The Tor Project
+/* Copyright 2015--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.connbidirect;
+
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.ExtraInfoDescriptor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,12 +29,6 @@ import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
-import org.torproject.descriptor.DescriptorReader;
-import org.torproject.descriptor.DescriptorSourceFactory;
-import org.torproject.descriptor.ExtraInfoDescriptor;
 
 public class Main {
 
@@ -117,17 +118,17 @@ public class Main {
         return false;
       }
       RawStat other = (RawStat) otherObject;
-      return this.dateDays == other.dateDays &&
-          this.fingerprint.equals(other.fingerprint);
+      return this.dateDays == other.dateDays
+          && this.fingerprint.equals(other.fingerprint);
     }
   }
 
   static final long ONE_DAY_IN_MILLIS = 86400000L;
 
+  /** Executes this data-processing module. */
   public static void main(String[] args) throws IOException {
     File parseHistoryFile = new File("stats/parse-history");
     File aggregateStatsFile = new File("stats/connbidirect2.csv");
-    File rawStatsFile = new File("stats/raw-stats");
     File[] descriptorsDirectories = new File[] {
         new File("../../shared/in/archive/relay-descriptors/extra-infos"),
         new File("../../shared/in/recent/relay-descriptors/extra-infos")};
@@ -156,6 +157,7 @@ public class Main {
           + "leave out those descriptors in future runs.");
       return;
     }
+    File rawStatsFile = new File("stats/raw-stats");
     SortedSet<RawStat> rawStats = parseRawStats(
         readStringFromFile(rawStatsFile));
     if (rawStats == null) {
@@ -388,10 +390,10 @@ public class Main {
     if (extraInfo.getConnBiDirectStatsEndMillis() <= 0L) {
       return null;
     }
-    int below = extraInfo.getConnBiDirectBelow(),
-        read = extraInfo.getConnBiDirectRead(),
-        write = extraInfo.getConnBiDirectWrite(),
-        both = extraInfo.getConnBiDirectBoth();
+    int below = extraInfo.getConnBiDirectBelow();
+    int read = extraInfo.getConnBiDirectRead();
+    int write = extraInfo.getConnBiDirectWrite();
+    int both = extraInfo.getConnBiDirectBoth();
     if (below < 0 || read < 0 || write < 0 || both < 0) {
       System.err.println("Could not parse incomplete conn-bi-direct "
           + "statistics.  Skipping descriptor.");
@@ -420,8 +422,8 @@ public class Main {
   static SortedSet<Long> mergeRawStats(
       SortedSet<RawStat> rawStats, SortedSet<RawStat> newRawStats) {
     rawStats.addAll(newRawStats);
-    SortedSet<Long> discardedRawStats = new TreeSet<Long>(),
-        availableRawStats = new TreeSet<Long>();
+    SortedSet<Long> discardedRawStats = new TreeSet<Long>();
+    SortedSet<Long> availableRawStats = new TreeSet<Long>();
     for (RawStat rawStat : rawStats) {
       if (rawStat.fingerprint != null) {
         availableRawStats.add(rawStat.dateDays);
@@ -461,8 +463,8 @@ public class Main {
     }
     final String[] quantiles = new String[] { "0.25", "0.5", "0.75" };
     final int[] centiles = new int[] { 25, 50, 75 };
-    for (Map.Entry<String, List<Short>> e :
-        fractionsByDateAndDirection.entrySet()) {
+    for (Map.Entry<String, List<Short>> e
+        : fractionsByDateAndDirection.entrySet()) {
       String dateAndDirection = e.getKey();
       List<Short> fractions = e.getValue();
       Collections.sort(fractions);

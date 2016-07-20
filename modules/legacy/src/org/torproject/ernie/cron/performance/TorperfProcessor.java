@@ -1,6 +1,13 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.ernie.cron.performance;
+
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.TorperfResult;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,13 +27,10 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
-import org.torproject.descriptor.DescriptorReader;
-import org.torproject.descriptor.DescriptorSourceFactory;
-import org.torproject.descriptor.TorperfResult;
-
 public class TorperfProcessor {
+
+  /** Processes Torperf data from the given directory and writes
+   * aggregates statistics to the given stats directory. */
   public TorperfProcessor(File torperfDirectory, File statsDirectory) {
 
     if (torperfDirectory == null || statsDirectory == null) {
@@ -114,9 +118,9 @@ public class TorperfProcessor {
                 - result.getStartMillis();
             String key = source + "," + dateTime;
             String value = key;
-            if ((result.didTimeout() == null &&
-                result.getDataCompleteMillis() < 1) ||
-                (result.didTimeout() != null && result.didTimeout())) {
+            if ((result.didTimeout() == null
+                && result.getDataCompleteMillis() < 1)
+                || (result.didTimeout() != null && result.didTimeout())) {
               value += ",-2"; // -2 for timeout
             } else if (result.getReadBytes() < fileSize) {
               value += ",-1"; // -1 for failure
@@ -146,9 +150,12 @@ public class TorperfProcessor {
             new TreeMap<String, List<Long>>();
         SortedMap<String, long[]> statusesAllSources =
             new TreeMap<String, long[]>();
-        long failures = 0, timeouts = 0, requests = 0;
+        long failures = 0;
+        long timeouts = 0;
+        long requests = 0;
         while (it.hasNext() || !haveWrittenFinalLine) {
-          Map.Entry<String, String> next = it.hasNext() ? it.next() : null;
+          Map.Entry<String, String> next =
+              it.hasNext() ? it.next() : null;
           if (tempSourceDate != null
               && (next == null || !(next.getValue().split(",")[0] + ","
               + next.getValue().split(",")[1]).equals(tempSourceDate))) {
@@ -211,18 +218,18 @@ public class TorperfProcessor {
           }
         }
         bw.close();
-        for (Map.Entry<String, List<Long>> e :
-            dlTimesAllSources.entrySet()) {
+        for (Map.Entry<String, List<Long>> e
+            : dlTimesAllSources.entrySet()) {
           String allDateSizeSource = e.getKey();
           dlTimes = e.getValue();
           Collections.sort(dlTimes);
-          long q1 = dlTimes.get(dlTimes.size() / 4 - 1);
-          long md = dlTimes.get(dlTimes.size() / 2 - 1);
-          long q3 = dlTimes.get(dlTimes.size() * 3 / 4 - 1);
           long[] status = statusesAllSources.get(allDateSizeSource);
           timeouts = status[0];
           failures = status[1];
           requests = status[2];
+          long q1 = dlTimes.get(dlTimes.size() / 4 - 1);
+          long md = dlTimes.get(dlTimes.size() / 2 - 1);
+          long q3 = dlTimes.get(dlTimes.size() * 3 / 4 - 1);
           stats.put(allDateSizeSource,
               String.format("%s,%s,%s,%s,%s,%s,%s",
               allDateSizeSource, q1, md, q3, timeouts, failures,

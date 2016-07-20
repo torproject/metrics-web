@@ -1,18 +1,21 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
-package org.torproject.ernie.cron;
 
-import java.io.File;
-import java.util.logging.Logger;
+package org.torproject.ernie.cron;
 
 import org.torproject.ernie.cron.network.ConsensusStatsFileHandler;
 import org.torproject.ernie.cron.performance.TorperfProcessor;
+
+import java.io.File;
+import java.util.logging.Logger;
 
 /**
  * Coordinate downloading and parsing of descriptors and extraction of
  * statistically relevant data for later processing with R.
  */
 public class Main {
+
+  /** Executes this data-processing module. */
   public static void main(String[] args) {
 
     /* Initialize logging configuration. */
@@ -38,13 +41,13 @@ public class Main {
     // Import relay descriptors
     if (config.getImportDirectoryArchives()) {
       RelayDescriptorDatabaseImporter rddi =
-          config.getWriteRelayDescriptorDatabase() ||
-          config.getWriteRelayDescriptorsRawFiles() ?
-          new RelayDescriptorDatabaseImporter(
-          config.getWriteRelayDescriptorDatabase() ?
-          config.getRelayDescriptorDatabaseJDBC() : null,
-          config.getWriteRelayDescriptorsRawFiles() ?
-          config.getRelayDescriptorRawFilesDirectory() : null,
+          config.getWriteRelayDescriptorDatabase()
+          || config.getWriteRelayDescriptorsRawFiles()
+          ? new RelayDescriptorDatabaseImporter(
+          config.getWriteRelayDescriptorDatabase()
+          ? config.getRelayDescriptorDatabaseJdbc() : null,
+          config.getWriteRelayDescriptorsRawFiles()
+          ? config.getRelayDescriptorRawFilesDirectory() : null,
           config.getDirectoryArchivesDirectories(),
           statsDirectory,
           config.getKeepDirectoryArchiveImportHistory()) : null;
@@ -56,12 +59,12 @@ public class Main {
 
     // Prepare consensus stats file handler (used for stats on running
     // bridges only)
-    ConsensusStatsFileHandler csfh = config.getWriteBridgeStats() ?
-        new ConsensusStatsFileHandler(
-        config.getRelayDescriptorDatabaseJDBC(),
+    ConsensusStatsFileHandler csfh = config.getWriteBridgeStats()
+        ? new ConsensusStatsFileHandler(
+        config.getRelayDescriptorDatabaseJdbc(),
         new File(config.getSanitizedBridgesDirectory()),
-        statsDirectory, config.getKeepSanitizedBridgesImportHistory()) :
-        null;
+        statsDirectory, config.getKeepSanitizedBridgesImportHistory())
+        : null;
 
     // Import sanitized bridges and write updated stats files to disk
     if (csfh != null) {

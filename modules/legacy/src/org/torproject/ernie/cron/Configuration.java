@@ -1,5 +1,6 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.ernie.cron;
 
 import java.io.BufferedReader;
@@ -19,25 +20,41 @@ import java.util.logging.Logger;
  * configuration.
  */
 public class Configuration {
+
   private boolean importDirectoryArchives = false;
+
   private List<String> directoryArchivesDirectories =
       new ArrayList<String>();
+
   private boolean keepDirectoryArchiveImportHistory = false;
+
   private boolean importSanitizedBridges = false;
+
   private String sanitizedBridgesDirectory = "in/bridge-descriptors/";
+
   private boolean keepSanitizedBridgesImportHistory = false;
+
   private boolean writeRelayDescriptorDatabase = false;
+
   private String relayDescriptorDatabaseJdbc =
       "jdbc:postgresql://localhost/tordir?user=metrics&password=password";
+
   private boolean writeRelayDescriptorsRawFiles = false;
+
   private String relayDescriptorRawFilesDirectory = "pg-import/";
+
   private boolean writeBridgeStats = false;
+
   private boolean importWriteTorperfStats = false;
+
   private String torperfDirectory = "in/torperf/";
+
   private String exoneraTorDatabaseJdbc = "jdbc:postgresql:"
       + "//localhost/exonerator?user=metrics&password=password";
+
   private String exoneraTorImportDirectory = "exonerator-import/";
 
+  /** Initializes this configuration class. */
   public Configuration() {
 
     /* Initialize logger. */
@@ -118,9 +135,12 @@ public class Configuration {
       System.exit(1);
     }
   }
+
   public boolean getImportDirectoryArchives() {
     return this.importDirectoryArchives;
   }
+
+  /** Returns directories containing archived descriptors. */
   public List<String> getDirectoryArchivesDirectories() {
     if (this.directoryArchivesDirectories.isEmpty()) {
       String prefix = "../../shared/in/recent/relay-descriptors/";
@@ -131,42 +151,55 @@ public class Configuration {
       return this.directoryArchivesDirectories;
     }
   }
+
   public boolean getKeepDirectoryArchiveImportHistory() {
     return this.keepDirectoryArchiveImportHistory;
   }
+
   public boolean getWriteRelayDescriptorDatabase() {
     return this.writeRelayDescriptorDatabase;
   }
+
   public boolean getImportSanitizedBridges() {
     return this.importSanitizedBridges;
   }
+
   public String getSanitizedBridgesDirectory() {
     return this.sanitizedBridgesDirectory;
   }
+
   public boolean getKeepSanitizedBridgesImportHistory() {
     return this.keepSanitizedBridgesImportHistory;
   }
-  public String getRelayDescriptorDatabaseJDBC() {
+
+  public String getRelayDescriptorDatabaseJdbc() {
     return this.relayDescriptorDatabaseJdbc;
   }
+
   public boolean getWriteRelayDescriptorsRawFiles() {
     return this.writeRelayDescriptorsRawFiles;
   }
+
   public String getRelayDescriptorRawFilesDirectory() {
     return this.relayDescriptorRawFilesDirectory;
   }
+
   public boolean getWriteBridgeStats() {
     return this.writeBridgeStats;
   }
+
   public boolean getImportWriteTorperfStats() {
     return this.importWriteTorperfStats;
   }
+
   public String getTorperfDirectory() {
     return this.torperfDirectory;
   }
+
   public String getExoneraTorDatabaseJdbc() {
     return this.exoneraTorDatabaseJdbc;
   }
+
   public String getExoneraTorImportDirectory() {
     return this.exoneraTorImportDirectory;
   }

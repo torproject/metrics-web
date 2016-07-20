@@ -1,6 +1,10 @@
 /* Copyright 2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web;
+
+import org.torproject.metrics.web.graphs.Countries;
+import org.torproject.metrics.web.graphs.GraphParameterChecker;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -17,15 +21,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.torproject.metrics.web.graphs.Countries;
-import org.torproject.metrics.web.graphs.GraphParameterChecker;
-
 @SuppressWarnings("serial")
 public class GraphServlet extends MetricServlet {
 
   private Map<String, String[][]> defaultParameters =
       new HashMap<String, String[][]>();
 
+  @Override
   public void init() throws ServletException {
     super.init();
     this.defaultParameters.put("p", new String[][] {
@@ -79,10 +81,10 @@ public class GraphServlet extends MetricServlet {
     List<String[]> knownCountries =
         Countries.getInstance().getCountryList();
     String[][] countries = new String[knownCountries.size() + 1][];
-    int i = 0;
-    countries[i++] = new String[] { "all", " selected", "All users" };
+    int index = 0;
+    countries[index++] = new String[] { "all", " selected", "All users" };
     for (String[] country : knownCountries) {
-      countries[i++] = new String[] { country[0], "", country[1] };
+      countries[index++] = new String[] { country[0], "", country[1] };
     }
     this.defaultParameters.put("country", countries);
     this.defaultParameters.put("events", new String[][] {
@@ -115,18 +117,19 @@ public class GraphServlet extends MetricServlet {
         { "5mb", "", "5 MiB" } });
   }
 
+  @Override
   protected void doGet(HttpServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
-    String requestURI = request.getRequestURI();
-    if (requestURI == null || !requestURI.endsWith(".html")) {
+    String requestUri = request.getRequestURI();
+    if (requestUri == null || !requestUri.endsWith(".html")) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    String requestedId = requestURI.substring(
-        requestURI.contains("/") ? requestURI.lastIndexOf("/") + 1 : 0,
-        requestURI.length() - 5);
-    if (!this.idsByType.containsKey("Graph") ||
-        !this.idsByType.get("Graph").contains(requestedId)) {
+    String requestedId = requestUri.substring(
+        requestUri.contains("/") ? requestUri.lastIndexOf("/") + 1 : 0,
+        requestUri.length() - 5);
+    if (!this.idsByType.containsKey("Graph")
+        || !this.idsByType.get("Graph").contains(requestedId)) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
@@ -142,15 +145,15 @@ public class GraphServlet extends MetricServlet {
     Date defaultStartDate = new Date(defaultEndDate.getTime()
         - 90L * 24L * 60L * 60L * 1000L);
     if (this.parameters.containsKey(requestedId)) {
-      Map<String, String[]> checkedParameters = GraphParameterChecker.
-          getInstance().checkParameters(requestedId,
+      Map<String, String[]> checkedParameters = GraphParameterChecker
+          .getInstance().checkParameters(requestedId,
           request.getParameterMap());
       StringBuilder urlBuilder = new StringBuilder();
       for (String parameter : this.parameters.get(requestedId)) {
         if (parameter.equals("start") || parameter.equals("end")) {
           String[] requestParameter;
-          if (checkedParameters != null &&
-              checkedParameters.containsKey(parameter)) {
+          if (checkedParameters != null
+              && checkedParameters.containsKey(parameter)) {
             requestParameter = checkedParameters.get(parameter);
           } else {
             requestParameter = new String[] {
@@ -160,27 +163,27 @@ public class GraphServlet extends MetricServlet {
           urlBuilder.append(String.format("&amp;%s=%s", parameter,
               requestParameter[0]));
           request.setAttribute(parameter, requestParameter);
-        } else if (parameter.equals("p") ||
-            parameter.equals("n") ||
-            parameter.equals("flag") ||
-            parameter.equals("country") ||
-            parameter.equals("events") ||
-            parameter.equals("transport") ||
-            parameter.equals("version") ||
-            parameter.equals("source") ||
-            parameter.equals("filesize")) {
+        } else if (parameter.equals("p")
+            || parameter.equals("n")
+            || parameter.equals("flag")
+            || parameter.equals("country")
+            || parameter.equals("events")
+            || parameter.equals("transport")
+            || parameter.equals("version")
+            || parameter.equals("source")
+            || parameter.equals("filesize")) {
           String[][] defaultParameters =
               this.defaultParameters.get(parameter);
           String[][] requestParameters =
               new String[defaultParameters.length][];
           Set<String> checked = null;
-          if (checkedParameters != null &&
-              checkedParameters.containsKey(parameter)) {
+          if (checkedParameters != null
+              && checkedParameters.containsKey(parameter)) {
             checked = new HashSet<String>(Arrays.asList(
                 checkedParameters.get(parameter)));
           }
-          String checkedOrSelected = parameter.equals("country") ||
-              parameter.equals("events") || parameter.equals("version")
+          String checkedOrSelected = parameter.equals("country")
+              || parameter.equals("events") || parameter.equals("version")
               ? " selected" : " checked";
           for (int i = 0; i < defaultParameters.length; i++) {
             requestParameters[i] =

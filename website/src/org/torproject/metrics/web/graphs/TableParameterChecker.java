@@ -1,6 +1,10 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web.graphs;
+
+import org.torproject.metrics.web.Metric;
+import org.torproject.metrics.web.MetricsProvider;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,9 +14,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-
-import org.torproject.metrics.web.Metric;
-import org.torproject.metrics.web.MetricsProvider;
 
 /**
  * Checks request parameters passed to generate tables.
@@ -62,15 +63,15 @@ public class TableParameterChecker {
       Map requestParameters) {
 
     /* Check if the table type exists. */
-    if (tableType == null ||
-        !this.availableTables.containsKey(tableType)) {
+    if (tableType == null
+        || !this.availableTables.containsKey(tableType)) {
       return null;
     }
 
     /* Find out which other parameters are supported by this table type
      * and parse them if they are given. */
-    Set<String> supportedTableParameters = new HashSet<String>(Arrays.
-        asList(this.availableTables.get(tableType)));
+    Set<String> supportedTableParameters = new HashSet<String>(
+        Arrays.asList(this.availableTables.get(tableType)));
     Map<String, String[]> recognizedTableParameters =
         new HashMap<String, String[]>();
 
@@ -78,8 +79,8 @@ public class TableParameterChecker {
      * date is provided, set it to today. If no start date is provided,
      * set it to 90 days before the end date. Make sure that start date
      * precedes end date. */
-    if (supportedTableParameters.contains("start") ||
-        supportedTableParameters.contains("end")) {
+    if (supportedTableParameters.contains("start")
+        || supportedTableParameters.contains("end")) {
       String[] startParameter = null;
       String[] endParameter = null;
       if (requestParameters != null) {
@@ -87,8 +88,8 @@ public class TableParameterChecker {
         endParameter = (String[]) requestParameters.get("end");
       }
       long endTimestamp = System.currentTimeMillis();
-      if (endParameter != null && endParameter.length > 0 &&
-          endParameter[0].length() > 0) {
+      if (endParameter != null && endParameter.length > 0
+          && endParameter[0].length() > 0) {
         try {
           endTimestamp = dateFormat.parse(endParameter[0]).getTime();
         } catch (ParseException e)  {
@@ -100,8 +101,8 @@ public class TableParameterChecker {
       }
       endParameter = new String[] { dateFormat.format(endTimestamp) };
       long startTimestamp = endTimestamp - 90L * 24L * 60L * 60L * 1000L;
-      if (startParameter != null && startParameter.length > 0 &&
-          startParameter[0].length() > 0) {
+      if (startParameter != null && startParameter.length > 0
+          && startParameter[0].length() > 0) {
         try {
           startTimestamp = dateFormat.parse(startParameter[0]).getTime();
         } catch (ParseException e)  {
@@ -113,7 +114,7 @@ public class TableParameterChecker {
       }
       startParameter = new String[] { dateFormat.format(startTimestamp) };
       if (startTimestamp > endTimestamp) {
-       return null;
+        return null;
       }
       recognizedTableParameters.put("start", startParameter);
       recognizedTableParameters.put("end", endParameter);

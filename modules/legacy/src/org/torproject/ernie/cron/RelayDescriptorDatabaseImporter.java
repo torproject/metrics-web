@@ -1,6 +1,18 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.ernie.cron;
+
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.ExtraInfoDescriptor;
+import org.torproject.descriptor.NetworkStatusEntry;
+import org.torproject.descriptor.RelayNetworkStatusConsensus;
+import org.torproject.descriptor.ServerDescriptor;
+
+import org.postgresql.util.PGbytea;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,16 +41,6 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.postgresql.util.PGbytea;
-import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
-import org.torproject.descriptor.DescriptorReader;
-import org.torproject.descriptor.DescriptorSourceFactory;
-import org.torproject.descriptor.ExtraInfoDescriptor;
-import org.torproject.descriptor.NetworkStatusEntry;
-import org.torproject.descriptor.RelayNetworkStatusConsensus;
-import org.torproject.descriptor.ServerDescriptor;
-
 /**
  * Parse directory data.
  */
@@ -53,15 +55,21 @@ public final class RelayDescriptorDatabaseImporter {
    */
   private final long autoCommitCount = 500;
 
-  /**
-   * Keep track of the number of records committed before each transaction
-   */
+  /* Counters to keep track of the number of records committed before
+   * each transaction. */
+
   private int rdsCount = 0;
+
   private int resCount = 0;
+
   private int rhsCount = 0;
+
   private int rrsCount = 0;
+
   private int rcsCount = 0;
+
   private int rvsCount = 0;
+
   private int rqsCount = 0;
 
   /**
@@ -171,22 +179,24 @@ public final class RelayDescriptorDatabaseImporter {
   private Set<String> insertedStatusEntries = new HashSet<String>();
 
   private boolean importIntoDatabase;
+
   private boolean writeRawImportFiles;
 
   private List<String> archivesDirectories;
+
   private File statsDirectory;
+
   private boolean keepImportHistory;
 
   /**
    * Initialize database importer by connecting to the database and
    * preparing statements.
    */
-  public RelayDescriptorDatabaseImporter(String connectionURL,
+  public RelayDescriptorDatabaseImporter(String connectionUrl,
       String rawFilesDirectory, List<String> archivesDirectories,
       File statsDirectory, boolean keepImportHistory) {
 
-    if (archivesDirectories == null ||
-        statsDirectory == null) {
+    if (archivesDirectories == null || statsDirectory == null) {
       throw new IllegalArgumentException();
     }
     this.archivesDirectories = archivesDirectories;
@@ -197,10 +207,10 @@ public final class RelayDescriptorDatabaseImporter {
     this.logger = Logger.getLogger(
         RelayDescriptorDatabaseImporter.class.getName());
 
-    if (connectionURL != null) {
+    if (connectionUrl != null) {
       try {
         /* Connect to database. */
-        this.conn = DriverManager.getConnection(connectionURL);
+        this.conn = DriverManager.getConnection(connectionUrl);
 
         /* Turn autocommit off */
         this.conn.setAutoCommit(false);
@@ -275,7 +285,7 @@ public final class RelayDescriptorDatabaseImporter {
   /**
    * Insert network status consensus entry into database.
    */
-  public void addStatusEntry(long validAfter, String nickname,
+  public void addStatusEntryContents(long validAfter, String nickname,
       String fingerprint, String descriptor, long published,
       String address, long orPort, long dirPort,
       SortedSet<String> flags, String version, long bandwidth,
@@ -375,8 +385,8 @@ public final class RelayDescriptorDatabaseImporter {
             + (version != null ? version : "\\N") + "\t"
             + (bandwidth >= 0 ? bandwidth : "\\N") + "\t"
             + (ports != null ? ports : "\\N") + "\t");
-        this.statusentryOut.write(PGbytea.toPGString(rawDescriptor).
-            replaceAll("\\\\", "\\\\\\\\") + "\n");
+        this.statusentryOut.write(PGbytea.toPGString(rawDescriptor)
+            .replaceAll("\\\\", "\\\\\\\\") + "\n");
       } catch (SQLException e) {
         this.logger.log(Level.WARNING, "Could not write network status "
             + "consensus entry to raw database import file.  We won't "
@@ -396,11 +406,11 @@ public final class RelayDescriptorDatabaseImporter {
   /**
    * Insert server descriptor into database.
    */
-  public void addServerDescriptor(String descriptor, String nickname,
-      String address, int orPort, int dirPort, String relayIdentifier,
-      long bandwidthAvg, long bandwidthBurst, long bandwidthObserved,
-      String platform, long published, long uptime,
-      String extraInfoDigest) {
+  public void addServerDescriptorContents(String descriptor,
+      String nickname, String address, int orPort, int dirPort,
+      String relayIdentifier, long bandwidthAvg, long bandwidthBurst,
+      long bandwidthObserved, String platform, long published,
+      long uptime, String extraInfoDigest) {
     if (this.importIntoDatabase) {
       try {
         this.addDateToScheduledUpdates(published);
@@ -481,7 +491,7 @@ public final class RelayDescriptorDatabaseImporter {
   /**
    * Insert extra-info descriptor into database.
    */
-  public void addExtraInfoDescriptor(String extraInfoDigest,
+  public void addExtraInfoDescriptorContents(String extraInfoDigest,
       String nickname, String fingerprint, long published,
       List<String> bandwidthHistoryLines) {
     if (!bandwidthHistoryLines.isEmpty()) {
@@ -520,37 +530,47 @@ public final class RelayDescriptorDatabaseImporter {
     public void free() {
       throw new UnsupportedOperationException();
     }
+
     public Object getArray() {
       throw new UnsupportedOperationException();
     }
+
     public Object getArray(long index, int count) {
       throw new UnsupportedOperationException();
     }
+
     public Object getArray(long index, int count,
         Map<String, Class<?>> map) {
       throw new UnsupportedOperationException();
     }
+
     public Object getArray(Map<String, Class<?>> map) {
       throw new UnsupportedOperationException();
     }
+
     public int getBaseType() {
       throw new UnsupportedOperationException();
     }
+
     public ResultSet getResultSet() {
       throw new UnsupportedOperationException();
     }
+
     public ResultSet getResultSet(long index, int count) {
       throw new UnsupportedOperationException();
     }
+
     public ResultSet getResultSet(long index, int count,
         Map<String, Class<?>> map) {
       throw new UnsupportedOperationException();
     }
+
     public ResultSet getResultSet(Map<String, Class<?>> map) {
       throw new UnsupportedOperationException();
     }
   }
 
+  /** Inserts a bandwidth history into database. */
   public void addBandwidthHistory(String fingerprint, long published,
       List<String> bandwidthHistoryStrings) {
 
@@ -600,18 +620,19 @@ public final class RelayDescriptorDatabaseImporter {
       }
       String type = parts[0];
       String intervalEndTime = parts[1] + " " + parts[2];
-      long intervalEnd, dateStart;
+      long intervalEnd;
+      long dateStart;
       try {
         intervalEnd = dateTimeFormat.parse(intervalEndTime).getTime();
-        dateStart = dateTimeFormat.parse(parts[1] + " 00:00:00").
-            getTime();
+        dateStart = dateTimeFormat.parse(parts[1] + " 00:00:00")
+            .getTime();
       } catch (ParseException e) {
         this.logger.fine("Parse exception while parsing timestamp in "
             + "bandwidth history line. Ignoring this line.");
         continue;
       }
-      if (Math.abs(published - intervalEnd) >
-          7L * 24L * 60L * 60L * 1000L) {
+      if (Math.abs(published - intervalEnd)
+          > 7L * 24L * 60L * 60L * 1000L) {
         this.logger.fine("Extra-info descriptor publication time "
             + dateTimeFormat.format(published) + " and last interval "
             + "time " + intervalEndTime + " in " + type + " line differ "
@@ -651,15 +672,19 @@ public final class RelayDescriptorDatabaseImporter {
     /* Add split history lines to database. */
     String lastDate = null;
     historyLinesByDate.add("EOL");
-    long[] readArray = null, writtenArray = null, dirreadArray = null,
-        dirwrittenArray = null;
-    int readOffset = 0, writtenOffset = 0, dirreadOffset = 0,
-        dirwrittenOffset = 0;
+    long[] readArray = null;
+    long[] writtenArray = null;
+    long[] dirreadArray = null;
+    long[] dirwrittenArray = null;
+    int readOffset = 0;
+    int writtenOffset = 0;
+    int dirreadOffset = 0;
+    int dirwrittenOffset = 0;
     for (String historyLine : historyLinesByDate) {
       String[] parts = historyLine.split(" ");
       String currentDate = parts[0];
-      if (lastDate != null && (historyLine.equals("EOL") ||
-          !currentDate.equals(lastDate))) {
+      if (lastDate != null && (historyLine.equals("EOL")
+          || !currentDate.equals(lastDate))) {
         BigIntArray readIntArray = new BigIntArray(readArray,
             readOffset);
         BigIntArray writtenIntArray = new BigIntArray(writtenArray,
@@ -804,6 +829,7 @@ public final class RelayDescriptorDatabaseImporter {
     }
   }
 
+  /** Imports relay descriptors into the database. */
   public void importRelayDescriptors() {
     logger.fine("Importing files in directories " + archivesDirectories
         + "/...");
@@ -845,9 +871,9 @@ public final class RelayDescriptorDatabaseImporter {
 
   private void addRelayNetworkStatusConsensus(
       RelayNetworkStatusConsensus consensus) {
-    for (NetworkStatusEntry statusEntry :
-      consensus.getStatusEntries().values()) {
-      this.addStatusEntry(consensus.getValidAfterMillis(),
+    for (NetworkStatusEntry statusEntry
+        : consensus.getStatusEntries().values()) {
+      this.addStatusEntryContents(consensus.getValidAfterMillis(),
           statusEntry.getNickname(),
           statusEntry.getFingerprint().toLowerCase(),
           statusEntry.getDescriptor().toLowerCase(),
@@ -861,13 +887,14 @@ public final class RelayDescriptorDatabaseImporter {
   }
 
   private void addServerDescriptor(ServerDescriptor descriptor) {
-    this.addServerDescriptor(descriptor.getServerDescriptorDigest(),
-        descriptor.getNickname(), descriptor.getAddress(),
-        descriptor.getOrPort(), descriptor.getDirPort(),
-        descriptor.getFingerprint(), descriptor.getBandwidthRate(),
-        descriptor.getBandwidthBurst(), descriptor.getBandwidthObserved(),
-        descriptor.getPlatform(), descriptor.getPublishedMillis(),
-        descriptor.getUptime(), descriptor.getExtraInfoDigest());
+    this.addServerDescriptorContents(
+        descriptor.getServerDescriptorDigest(), descriptor.getNickname(),
+        descriptor.getAddress(), descriptor.getOrPort(),
+        descriptor.getDirPort(), descriptor.getFingerprint(),
+        descriptor.getBandwidthRate(), descriptor.getBandwidthBurst(),
+        descriptor.getBandwidthObserved(), descriptor.getPlatform(),
+        descriptor.getPublishedMillis(), descriptor.getUptime(),
+        descriptor.getExtraInfoDigest());
   }
 
   private void addExtraInfoDescriptor(ExtraInfoDescriptor descriptor) {
@@ -886,7 +913,7 @@ public final class RelayDescriptorDatabaseImporter {
       bandwidthHistoryLines.add(
           descriptor.getDirreqReadHistory().getLine());
     }
-    this.addExtraInfoDescriptor(descriptor.getExtraInfoDigest(),
+    this.addExtraInfoDescriptorContents(descriptor.getExtraInfoDigest(),
         descriptor.getNickname(),
         descriptor.getFingerprint().toLowerCase(),
         descriptor.getPublishedMillis(), bandwidthHistoryLines);
@@ -930,8 +957,8 @@ public final class RelayDescriptorDatabaseImporter {
 
         this.conn.commit();
       } catch (SQLException e)  {
-        this.logger.log(Level.WARNING, "Could not commit final records to "
-            + "database", e);
+        this.logger.log(Level.WARNING, "Could not commit final records "
+            + "to database", e);
       }
       try {
         this.conn.close();

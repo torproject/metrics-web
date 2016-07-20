@@ -1,6 +1,10 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web.graphs;
+
+import org.torproject.metrics.web.Metric;
+import org.torproject.metrics.web.MetricsProvider;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,9 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-
-import org.torproject.metrics.web.Metric;
-import org.torproject.metrics.web.MetricsProvider;
 
 /**
  * Checks request parameters passed to graph-generating servlets.
@@ -79,19 +80,20 @@ public class GraphParameterChecker {
    * of recognized parameters, or null if the graph type doesn't exist or
    * the parameters are invalid.
    */
+  @SuppressWarnings("checkstyle:localvariablename")
   public Map<String, String[]> checkParameters(String graphType,
       Map requestParameters) {
 
     /* Check if the graph type exists. */
-    if (graphType == null ||
-        !this.availableGraphs.containsKey(graphType)) {
+    if (graphType == null
+        || !this.availableGraphs.containsKey(graphType)) {
       return null;
     }
 
     /* Find out which other parameters are supported by this graph type
      * and parse them if they are given. */
-    Set<String> supportedGraphParameters = new HashSet<String>(Arrays.
-        asList(this.availableGraphs.get(graphType)));
+    Set<String> supportedGraphParameters = new HashSet<String>(
+        Arrays.asList(this.availableGraphs.get(graphType)));
     Map<String, String[]> recognizedGraphParameters =
         new HashMap<String, String[]>();
 
@@ -99,13 +101,13 @@ public class GraphParameterChecker {
      * date is provided, set it to today. If no start date is provided,
      * set it to 90 days before the end date. Make sure that start date
      * precedes end date. */
-    if (supportedGraphParameters.contains("start") ||
-        supportedGraphParameters.contains("end")) {
+    if (supportedGraphParameters.contains("start")
+        || supportedGraphParameters.contains("end")) {
       String[] startParameter = (String[]) requestParameters.get("start");
       String[] endParameter = (String[]) requestParameters.get("end");
       long endTimestamp = System.currentTimeMillis();
-      if (endParameter != null && endParameter.length > 0 &&
-          endParameter[0].length() > 0) {
+      if (endParameter != null && endParameter.length > 0
+          && endParameter[0].length() > 0) {
         try {
           endTimestamp = dateFormat.parse(endParameter[0]).getTime();
         } catch (ParseException e)  {
@@ -117,8 +119,8 @@ public class GraphParameterChecker {
       }
       endParameter = new String[] { dateFormat.format(endTimestamp) };
       long startTimestamp = endTimestamp - 90L * 24L * 60L * 60L * 1000L;
-      if (startParameter != null && startParameter.length > 0 &&
-          startParameter[0].length() > 0) {
+      if (startParameter != null && startParameter.length > 0
+          && startParameter[0].length() > 0) {
         try {
           startTimestamp = dateFormat.parse(startParameter[0]).getTime();
         } catch (ParseException e)  {
@@ -130,7 +132,7 @@ public class GraphParameterChecker {
       }
       startParameter = new String[] { dateFormat.format(startTimestamp) };
       if (startTimestamp > endTimestamp) {
-       return null;
+        return null;
       }
       recognizedGraphParameters.put("start", startParameter);
       recognizedGraphParameters.put("end", endParameter);
@@ -145,8 +147,8 @@ public class GraphParameterChecker {
           this.knownParameterValues.get("flag").split(","));
       if (flagParameters != null) {
         for (String flag : flagParameters) {
-          if (flag == null || flag.length() == 0 ||
-              !knownFlags.contains(flag)) {
+          if (flag == null || flag.length() == 0
+              || !knownFlags.contains(flag)) {
             return null;
           }
         }
@@ -168,8 +170,8 @@ public class GraphParameterChecker {
           return null;
         }
         for (String country : countryParameters) {
-          if (country == null || country.length() == 0 ||
-              !knownCountries.contains(country)) {
+          if (country == null || country.length() == 0
+              || !knownCountries.contains(country)) {
             return null;
           }
         }
@@ -188,9 +190,9 @@ public class GraphParameterChecker {
       List<String> knownRanges = Arrays.asList(
           this.knownParameterValues.get("events").split(","));
       if (eventsParameter != null) {
-        if (eventsParameter.length != 1 ||
-            eventsParameter[0].length() == 0 ||
-            !knownRanges.contains(eventsParameter[0])) {
+        if (eventsParameter.length != 1
+            || eventsParameter[0].length() == 0
+            || !knownRanges.contains(eventsParameter[0])) {
           return null;
         }
       } else {
@@ -211,8 +213,8 @@ public class GraphParameterChecker {
         if (sourceParameter.length != 1) {
           return null;
         }
-        if (sourceParameter[0].length() == 0 ||
-            !knownSources.contains(sourceParameter[0])) {
+        if (sourceParameter[0].length() == 0
+            || !knownSources.contains(sourceParameter[0])) {
           return null;
         }
       } else {
@@ -233,8 +235,8 @@ public class GraphParameterChecker {
         if (filesizeParameter.length != 1) {
           return null;
         }
-        if (filesizeParameter[0].length() == 0 ||
-            !knownFilesizes.contains(filesizeParameter[0])) {
+        if (filesizeParameter[0].length() == 0
+            || !knownFilesizes.contains(filesizeParameter[0])) {
           return null;
         }
       } else {
@@ -252,8 +254,8 @@ public class GraphParameterChecker {
           this.knownParameterValues.get("transport").split(","));
       if (transportParameters != null) {
         for (String transport : transportParameters) {
-          if (transport == null || transport.length() == 0 ||
-              !knownTransports.contains(transport)) {
+          if (transport == null || transport.length() == 0
+              || !knownTransports.contains(transport)) {
             return null;
           }
         }
@@ -275,8 +277,8 @@ public class GraphParameterChecker {
           return null;
         }
         for (String version : versionParameters) {
-          if (version == null || version.length() == 0 ||
-              !knownVersions.contains(version)) {
+          if (version == null || version.length() == 0
+              || !knownVersions.contains(version)) {
             return null;
           }
         }

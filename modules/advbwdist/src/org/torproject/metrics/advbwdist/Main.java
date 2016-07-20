@@ -1,4 +1,16 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.advbwdist;
+
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorFile;
+import org.torproject.descriptor.DescriptorReader;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.NetworkStatusEntry;
+import org.torproject.descriptor.RelayNetworkStatusConsensus;
+import org.torproject.descriptor.ServerDescriptor;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -12,15 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
-import org.torproject.descriptor.DescriptorReader;
-import org.torproject.descriptor.DescriptorSourceFactory;
-import org.torproject.descriptor.NetworkStatusEntry;
-import org.torproject.descriptor.RelayNetworkStatusConsensus;
-import org.torproject.descriptor.ServerDescriptor;
-
 public class Main {
+
+  /** Executes this data-processing module. */
   public static void main(String[] args) throws IOException {
 
     /* Parse server descriptors, not keeping a parse history, and memorize
@@ -81,23 +87,23 @@ public class Main {
             (RelayNetworkStatusConsensus) descriptor;
         String validAfter = dateTimeFormat.format(
             consensus.getValidAfterMillis());
-        List<Long> advertisedBandwidthsAllRelays = new ArrayList<Long>(),
-            advertisedBandwidthsExitsOnly = new ArrayList<Long>();
-        for (NetworkStatusEntry relay :
-            consensus.getStatusEntries().values()) {
+        List<Long> advertisedBandwidthsAllRelays = new ArrayList<Long>();
+        List<Long> advertisedBandwidthsExitsOnly = new ArrayList<Long>();
+        for (NetworkStatusEntry relay
+            : consensus.getStatusEntries().values()) {
           if (!relay.getFlags().contains("Running")) {
             continue;
           }
-          String serverDescriptorDigest = relay.getDescriptor().
-              toUpperCase();
+          String serverDescriptorDigest = relay.getDescriptor()
+              .toUpperCase();
           if (!serverDescriptors.containsKey(serverDescriptorDigest)) {
             continue;
           }
           long advertisedBandwidth = serverDescriptors.get(
               serverDescriptorDigest);
           advertisedBandwidthsAllRelays.add(advertisedBandwidth);
-          if (relay.getFlags().contains("Exit") &&
-              !relay.getFlags().contains("BadExit")) {
+          if (relay.getFlags().contains("Exit")
+              && !relay.getFlags().contains("BadExit")) {
             advertisedBandwidthsExitsOnly.add(advertisedBandwidth);
           }
         }
@@ -133,16 +139,16 @@ public class Main {
           for (int percentile : percentiles) {
             bw.write(String.format("%s,,,%d,%d%n", validAfter,
                 percentile, advertisedBandwidthsAllRelays.get(
-                ((advertisedBandwidthsAllRelays.size() - 1) *
-                percentile) / 100)));
+                ((advertisedBandwidthsAllRelays.size() - 1)
+                * percentile) / 100)));
           }
         }
         if (!advertisedBandwidthsExitsOnly.isEmpty()) {
           for (int percentile : percentiles) {
             bw.write(String.format("%s,TRUE,,%d,%d%n", validAfter,
                 percentile, advertisedBandwidthsExitsOnly.get(
-                ((advertisedBandwidthsExitsOnly.size() - 1) *
-                percentile) / 100)));
+                ((advertisedBandwidthsExitsOnly.size() - 1)
+                * percentile) / 100)));
           }
         }
       }

@@ -1,5 +1,6 @@
-/* Copyright 2011, 2012 The Tor Project
+/* Copyright 2011--2016 The Tor Project
  * See LICENSE for licensing information */
+
 package org.torproject.metrics.web.graphs;
 
 import java.util.ArrayList;
@@ -46,14 +47,14 @@ public class Countries {
     this.knownCountries.add("bm;Bermuda".split(";"));
     this.knownCountries.add("bt;Bhutan".split(";"));
     this.knownCountries.add("bo;Bolivia".split(";"));
-    this.knownCountries.add("bq;Bonaire, Sint Eustatius and Saba".
-        split(";"));
+    this.knownCountries.add("bq;Bonaire, Sint Eustatius and Saba"
+        .split(";"));
     this.knownCountries.add("ba;Bosnia and Herzegovina".split(";"));
     this.knownCountries.add("bw;Botswana".split(";"));
     this.knownCountries.add("bv;Bouvet Island".split(";"));
     this.knownCountries.add("br;Brazil".split(";"));
-    this.knownCountries.add("io;British Indian Ocean Territory".
-        split(";"));
+    this.knownCountries.add("io;British Indian Ocean Territory"
+        .split(";"));
     this.knownCountries.add("bn;Brunei".split(";"));
     this.knownCountries.add("bg;Bulgaria".split(";"));
     this.knownCountries.add("bf;Burkina Faso".split(";"));
@@ -72,8 +73,8 @@ public class Countries {
     this.knownCountries.add("cc;Cocos (Keeling) Islands".split(";"));
     this.knownCountries.add("co;Colombia".split(";"));
     this.knownCountries.add("km;Comoros".split(";"));
-    this.knownCountries.add("cd;Congo, The Democratic Republic of the".
-        split(";"));
+    this.knownCountries.add("cd;Congo, The Democratic Republic of the"
+        .split(";"));
     this.knownCountries.add("cg;Congo".split(";"));
     this.knownCountries.add("ck;Cook Islands".split(";"));
     this.knownCountries.add("cr;Costa Rica".split(";"));
@@ -119,8 +120,8 @@ public class Countries {
     this.knownCountries.add("gw;Guinea-Bissau".split(";"));
     this.knownCountries.add("gy;Guyana".split(";"));
     this.knownCountries.add("ht;Haiti".split(";"));
-    this.knownCountries.add("hm;Heard Island and McDonald Islands".
-        split(";"));
+    this.knownCountries.add("hm;Heard Island and McDonald Islands"
+        .split(";"));
     this.knownCountries.add("va;Vatican City".split(";"));
     this.knownCountries.add("hn;Honduras".split(";"));
     this.knownCountries.add("hk;Hong Kong".split(";"));
@@ -169,8 +170,8 @@ public class Countries {
     this.knownCountries.add("mu;Mauritius".split(";"));
     this.knownCountries.add("yt;Mayotte".split(";"));
     this.knownCountries.add("mx;Mexico".split(";"));
-    this.knownCountries.add("fm;Micronesia, Federated States of".
-        split(";"));
+    this.knownCountries.add("fm;Micronesia, Federated States of"
+        .split(";"));
     this.knownCountries.add("md;Moldova, Republic of".split(";"));
     this.knownCountries.add("mc;Monaco".split(";"));
     this.knownCountries.add("mn;Mongolia".split(";"));
@@ -217,12 +218,12 @@ public class Countries {
     this.knownCountries.add("lc;Saint Lucia".split(";"));
     this.knownCountries.add("mf;Saint Martin".split(";"));
     this.knownCountries.add("pm;Saint Pierre and Miquelon".split(";"));
-    this.knownCountries.add("vc;Saint Vincent and the Grenadines".
-        split(";"));
+    this.knownCountries.add("vc;Saint Vincent and the Grenadines"
+        .split(";"));
     this.knownCountries.add("ws;Samoa".split(";"));
     this.knownCountries.add("sm;San Marino".split(";"));
-    this.knownCountries.add("st:S&#227;o Tom&#233; and Pr&#237;ncipe".
-        split(":"));
+    this.knownCountries.add("st:S&#227;o Tom&#233; and Pr&#237;ncipe"
+        .split(":"));
     this.knownCountries.add("sa;Saudi Arabia".split(";"));
     this.knownCountries.add("sn;Senegal".split(";"));
     this.knownCountries.add("rs;Serbia".split(";"));
@@ -265,8 +266,8 @@ public class Countries {
     this.knownCountries.add("ua;Ukraine".split(";"));
     this.knownCountries.add("ae;United Arab Emirates".split(";"));
     this.knownCountries.add("gb;United Kingdom".split(";"));
-    this.knownCountries.add("um;United States Minor Outlying Islands".
-        split(";"));
+    this.knownCountries.add("um;United States Minor Outlying Islands"
+        .split(";"));
     this.knownCountries.add("us;United States".split(";"));
     this.knownCountries.add("uy;Uruguay".split(";"));
     this.knownCountries.add("uz;Uzbekistan".split(";"));

@@ -1,3 +1,6 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.hidserv;
 
 import java.io.BufferedWriter;
@@ -13,24 +16,24 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-/* Aggregate extrapolated network totals of hidden-service statistics by
+/** Aggregate extrapolated network totals of hidden-service statistics by
  * calculating statistics like the daily weighted interquartile mean.
  * Also calculate simpler statistics like the number of reported
  * statistics and the total network fraction of reporting relays. */
 public class Aggregator {
 
-  /* Document file containing extrapolated hidden-service statistics. */
+  /** Document file containing extrapolated hidden-service statistics. */
   private File extrapolatedHidServStatsFile;
 
-  /* Document store for storing and retrieving extrapolated hidden-service
+  /** Document store for storing and retrieving extrapolated hidden-service
    * statistics. */
   private DocumentStore<ExtrapolatedHidServStats>
       extrapolatedHidServStatsStore;
 
-  /* Output file for writing aggregated statistics. */
+  /** Output file for writing aggregated statistics. */
   private File hidservStatsCsvFile;
 
-  /* Initialize a new aggregator object using the given directory,
+  /** Initializes a new aggregator object using the given directory,
    * document store, and output file for results. */
   public Aggregator(File statusDirectory,
       DocumentStore<ExtrapolatedHidServStats>
@@ -46,8 +49,8 @@ public class Aggregator {
     this.hidservStatsCsvFile = hidservStatsCsvFile;
   }
 
-  /* Calculate aggregates for all extrapolated hidden-service statistics
-   * and write them to the output file. */
+  /** Calculates aggregates for all extrapolated hidden-service statistics
+   * and writes them to the output file. */
   public void aggregateHidServStats() {
 
     /* Retrieve previously extrapolated network totals. */
@@ -67,9 +70,10 @@ public class Aggregator {
      * dates, map values are double[] arrays with the extrapolated network
      * total as first element and the corresponding computed network
      * fraction as second element. */
-    SortedMap<String, List<double[]>>
-        extrapolatedCells = new TreeMap<String, List<double[]>>(),
-        extrapolatedOnions = new TreeMap<String, List<double[]>>();
+    SortedMap<String, List<double[]>> extrapolatedCells =
+        new TreeMap<String, List<double[]>>();
+    SortedMap<String, List<double[]>> extrapolatedOnions =
+        new TreeMap<String, List<double[]>>();
     for (ExtrapolatedHidServStats extrapolated : extrapolatedStats) {
       String date = DateTimeHelper.format(
           extrapolated.getStatsDateMillis(),
@@ -108,21 +112,22 @@ public class Aggregator {
           ? extrapolatedCells : extrapolatedOnions;
 
       /* Go through all dates. */
-      for (Map.Entry<String, List<double[]>> e :
-          extrapolated.entrySet()) {
-        String date = e.getKey();
+      for (Map.Entry<String, List<double[]>> e
+          : extrapolated.entrySet()) {
         List<double[]> weightedValues = e.getValue();
-        int numStats = weightedValues.size();
 
         /* Sort extrapolated network totals contained in the first array
          * element.  (The second array element contains the computed
          * network fraction as weight.) */
         Collections.sort(weightedValues,
             new Comparator<double[]>() {
-          public int compare(double[] o1, double[] o2) {
-            return o1[0] < o2[0] ? -1 : o1[0] > o2[0] ? 1 : 0;
-          }
-        });
+              public int compare(double[] first, double[] second) {
+                return first[0] < second[0] ? -1
+                    : first[0] > second[0] ? 1
+                    : 0;
+              }
+            }
+        );
 
         /* For the weighted mean, sum up all previously extrapolated
          * values weighted with their network fractions (which happens to
@@ -130,7 +135,8 @@ public class Aggregator {
          * fractions.  Once we have those two sums, we can divide the sum
          * of weighted extrapolated values by the sum of network fractions
          * to obtain the weighted mean of extrapolated values. */
-        double sumReported = 0.0, sumFraction = 0.0;
+        double sumReported = 0.0;
+        double sumFraction = 0.0;
         for (double[] d : weightedValues) {
           sumReported += d[0] * d[1];
           sumFraction += d[1];
@@ -146,18 +152,19 @@ public class Aggregator {
          * 75% range and later compute the weighted mean of those. */
         double weightIntervalEnd = 0.0;
         Double weightedMedian = null;
-        double sumFractionInterquartile = 0.0,
-            sumReportedInterquartile = 0.0;
+        double sumFractionInterquartile = 0.0;
+        double sumReportedInterquartile = 0.0;
         for (double[] d : weightedValues) {
-          double extrapolatedValue = d[0], computedFraction = d[1];
+          double extrapolatedValue = d[0];
+          double computedFraction = d[1];
           double weightIntervalStart = weightIntervalEnd;
           weightIntervalEnd += computedFraction;
-          if (weightedMedian == null &&
-              weightIntervalEnd > sumFraction * 0.5) {
+          if (weightedMedian == null
+              && weightIntervalEnd > sumFraction * 0.5) {
             weightedMedian = extrapolatedValue;
           }
-          if (weightIntervalEnd >= sumFraction * 0.25 &&
-              weightIntervalStart <= sumFraction * 0.75) {
+          if (weightIntervalEnd >= sumFraction * 0.25
+              && weightIntervalStart <= sumFraction * 0.75) {
             double fractionBetweenQuartiles =
                 Math.min(weightIntervalEnd, sumFraction * 0.75)
                 - Math.max(weightIntervalStart, sumFraction * 0.25);
@@ -170,6 +177,8 @@ public class Aggregator {
             sumReportedInterquartile / sumFractionInterquartile;
 
         /* Put together all aggregated values in a single line. */
+        String date = e.getKey();
+        int numStats = weightedValues.size();
         sb.append(String.format("%s,%s,%.0f,%.0f,%.0f,%.8f,%d%n", date,
             type, weightedMean, weightedMedian, weightedInterquartileMean,
             sumFraction, numStats));

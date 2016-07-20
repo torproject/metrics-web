@@ -1,3 +1,6 @@
+/* Copyright 2016 The Tor Project
+ * See LICENSE for licensing information */
+
 package org.torproject.metrics.hidserv;
 
 import java.io.BufferedWriter;
@@ -23,6 +26,7 @@ public class Simulate {
   private static File simOnionsCsvFile =
       new File("out/csv/sim-onions.csv");
 
+  /** Runs two simulations to evaluate this data-processing module. */
   public static void main(String[] args) throws Exception {
     System.out.print("Simulating extrapolation of rendezvous cells");
     simulateManyCells();
@@ -108,9 +112,9 @@ public class Simulate {
     for (int i = 0; i < numberRendPoints; i++) {
       long observed = observedCells[i];
       long afterBinning = ((observed + binSize - 1L) / binSize) * binSize;
-      double p = rnd.nextDouble();
-      double laplaceNoise = -b * (p > 0.5 ? 1.0 : -1.0) *
-          Math.log(1.0 - 2.0 * Math.abs(p - 0.5));
+      double randomDouble = rnd.nextDouble();
+      double laplaceNoise = -b * (randomDouble > 0.5 ? 1.0 : -1.0)
+          * Math.log(1.0 - 2.0 * Math.abs(randomDouble - 0.5));
       long reported = afterBinning + (long) laplaceNoise;
       reportedCells[i] = reported;
       long roundedToNearestRightSideOfTheBin =
@@ -166,27 +170,29 @@ public class Simulate {
           reportingRelays.remove(removeRelay);
           nonReportingRelays.add(removeRelay);
         }
-      } while (totalReportingProbability < fraction - 0.001 ||
-          totalReportingProbability > fraction + 0.001);
+      } while (totalReportingProbability < fraction - 0.001
+          || totalReportingProbability > fraction + 0.001);
       Collections.sort(singleRelayExtrapolations,
           new Comparator<double[]>() {
-        public int compare(double[] o1, double[] o2) {
-          return o1[0] < o2[0] ? -1 : o1[0] > o2[0] ? 1 : 0;
-        }
-      });
-      double totalProbability = 0.0, totalValues = 0.0;
-      double totalInterquartileProbability = 0.0,
-          totalInterquartileValues = 0.0;
+            public int compare(double[] o1, double[] o2) {
+              return o1[0] < o2[0] ? -1 : o1[0] > o2[0] ? 1 : 0;
+            }
+          }
+      );
+      double totalProbability = 0.0;
+      double totalValues = 0.0;
+      double totalInterquartileProbability = 0.0;
+      double totalInterquartileValues = 0.0;
       Double weightedMedian = null;
       for (double[] extrapolation : singleRelayExtrapolations) {
         totalValues += extrapolation[1];
         totalProbability += extrapolation[2];
-        if (weightedMedian == null &&
-            totalProbability > totalReportingProbability * 0.5) {
+        if (weightedMedian == null
+            && totalProbability > totalReportingProbability * 0.5) {
           weightedMedian = extrapolation[0];
         }
-        if (totalProbability > totalReportingProbability * 0.25 &&
-            totalProbability < totalReportingProbability * 0.75) {
+        if (totalProbability > totalReportingProbability * 0.25
+            && totalProbability < totalReportingProbability * 0.75) {
           totalInterquartileValues += extrapolation[1];
           totalInterquartileProbability += extrapolation[2];
         }
@@ -240,8 +246,8 @@ public class Simulate {
     for (int i = 0; i < numberOnions; i++) {
       for (int j = 0; j < replicas; j++) {
         int leftToStore = storeOnDirs;
-        for (double fingerprint :
-            hsDirFingerprints.tailSet(rnd.nextDouble())) {
+        for (double fingerprint
+            : hsDirFingerprints.tailSet(rnd.nextDouble())) {
           storedDescs.get(fingerprint).add(i);
           if (--leftToStore <= 0) {
             break;
@@ -262,16 +268,17 @@ public class Simulate {
      * to remove noise again. */
     final long binSize = 8L;
     final double b = 8.0 / 0.3;
-    SortedMap<Double, Long> reportedOnions = new TreeMap<Double, Long>(),
-        removedNoiseOnions = new TreeMap<Double, Long>();
-    for (Map.Entry<Double, SortedSet<Integer>> e :
-      storedDescs.entrySet()) {
+    SortedMap<Double, Long> reportedOnions = new TreeMap<Double, Long>();
+    SortedMap<Double, Long> removedNoiseOnions =
+        new TreeMap<Double, Long>();
+    for (Map.Entry<Double, SortedSet<Integer>> e
+        : storedDescs.entrySet()) {
       double fingerprint = e.getKey();
       long observed = (long) e.getValue().size();
       long afterBinning = ((observed + binSize - 1L) / binSize) * binSize;
-      double p = rnd.nextDouble();
-      double laplaceNoise = -b * (p > 0.5 ? 1.0 : -1.0) *
-          Math.log(1.0 - 2.0 * Math.abs(p - 0.5));
+      double randomDouble = rnd.nextDouble();
+      double laplaceNoise = -b * (randomDouble > 0.5 ? 1.0 : -1.0)
+          * Math.log(1.0 - 2.0 * Math.abs(randomDouble - 0.5));
       long reported = afterBinning + (long) laplaceNoise;
       reportedOnions.put(fingerprint, reported);
       long roundedToNearestRightSideOfTheBin =
@@ -326,27 +333,29 @@ public class Simulate {
           reportingRelays.remove(removeRelay);
           nonReportingRelays.add(removeRelay);
         }
-      } while (totalReportingProbability < fraction - 0.001 ||
-          totalReportingProbability > fraction + 0.001);
+      } while (totalReportingProbability < fraction - 0.001
+          || totalReportingProbability > fraction + 0.001);
       Collections.sort(singleRelayExtrapolations,
           new Comparator<double[]>() {
-        public int compare(double[] o1, double[] o2) {
-          return o1[0] < o2[0] ? -1 : o1[0] > o2[0] ? 1 : 0;
-        }
-      });
-      double totalProbability = 0.0, totalValues = 0.0;
-      double totalInterquartileProbability = 0.0,
-          totalInterquartileValues = 0.0;
+            public int compare(double[] first, double[] second) {
+              return first[0] < second[0] ? -1 : first[0] > second[0] ? 1 : 0;
+            }
+          }
+      );
+      double totalProbability = 0.0;
+      double totalValues = 0.0;
+      double totalInterquartileProbability = 0.0;
+      double totalInterquartileValues = 0.0;
       Double weightedMedian = null;
       for (double[] extrapolation : singleRelayExtrapolations) {
         totalValues += extrapolation[1];
         totalProbability += extrapolation[2];
-        if (weightedMedian == null &&
-            totalProbability > totalReportingProbability * 0.5) {
+        if (weightedMedian == null
+            && totalProbability > totalReportingProbability * 0.5) {
           weightedMedian = extrapolation[0];
         }
-        if (totalProbability > totalReportingProbability * 0.25 &&
-            totalProbability < totalReportingProbability * 0.75) {
+        if (totalProbability > totalReportingProbability * 0.25
+            && totalProbability < totalReportingProbability * 0.75) {
           totalInterquartileValues += extrapolation[1];
           totalInterquartileProbability += extrapolation[2];
         }
