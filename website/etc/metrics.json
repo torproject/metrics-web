@@ -133,7 +133,7 @@
     ],
     "type": "Graph",
     "level": "Basic",
-    "description": "<p>The following graph shows the total <a href=\"about.html#advertised-bandwidth\">advertised</a> and <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> of all <a href=\"about.html#relay\">relays</a> in the network.  <font color=\"red\">Note that the unit has recently changed from MiB/s to Gbit/s.</font></p>",
+    "description": "<p>The following graph shows the total <a href=\"about.html#advertised-bandwidth\">advertised</a> and <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> of all <a href=\"about.html#relay\">relays</a> in the network.</p>",
     "function": "plot_bandwidth",
     "parameters": [
       "start",
@@ -157,7 +157,7 @@
     ],
     "type": "Graph",
     "level": "Basic",
-    "description": "<p>The following graph shows the <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> reported by relays, subdivided into four distinct subsets by assigned \"Exit\" and/or \"Guard\" <a href=\"about.html#relay-flag\">flags</a>.  <font color=\"red\">Note that the unit has recently changed from MiB/s to Gbit/s.</font></p>",
+    "description": "<p>The following graph shows the <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> reported by relays, subdivided into four distinct subsets by assigned \"Exit\" and/or \"Guard\" <a href=\"about.html#relay-flag\">flags</a>.</p>",
     "function": "plot_bwhist_flags",
     "parameters": [
       "start",
@@ -182,7 +182,7 @@
     ],
     "type": "Graph",
     "level": "Basic",
-    "description": "<p>The following graph shows <a href=\"about.html#advertised-bandwidth\">advertised</a> and <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> of relays with either \"Exit\" or \"Guard\" <a href=\"about.html#relay-flag\">flags</a> assigned by the directory authorities.  These sets are not distinct, because a relay that has both the \"Exit\" and \"Guard\" flags assigned will be included in both sets.  <font color=\"red\">Note that the unit has recently changed from MiB/s to Gbit/s.</font></p>",
+    "description": "<p>The following graph shows <a href=\"about.html#advertised-bandwidth\">advertised</a> and <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> of relays with either \"Exit\" or \"Guard\" <a href=\"about.html#relay-flag\">flags</a> assigned by the directory authorities.  These sets are not distinct, because a relay that has both the \"Exit\" and \"Guard\" flags assigned will be included in both sets.</p>",
     "function": "plot_bandwidth_flags",
     "parameters": [
       "start",
@@ -207,7 +207,7 @@
     ],
     "type": "Graph",
     "level": "Basic",
-    "description": "<p>The following graph shows the portion of <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> that <a href=\"about.html#directory-authority\">directory authorities</a> and <a href=\"about.html#directory-mirror\">mirrors</a> have spent on answering directory requests.  Not all directories report these statistics, so the graph shows an estimation of total consumed bandwidth as it would be observed if all directories reported these statistics.  <font color=\"red\">Note that the unit has recently changed from MiB/s to Gbit/s.</font></p>",
+    "description": "<p>The following graph shows the portion of <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> that <a href=\"about.html#directory-authority\">directory authorities</a> and <a href=\"about.html#directory-mirror\">mirrors</a> have spent on answering directory requests.  Not all directories report these statistics, so the graph shows an estimation of total consumed bandwidth as it would be observed if all directories reported these statistics.</p>",
     "function": "plot_dirbytes",
     "parameters": [
       "start",
@@ -231,7 +231,7 @@
     ],
     "type": "Graph",
     "level": "Basic",
-    "description": "<p>The following graph shows the distribution of the <a href=\"about.html#advertised-bandwidth\">advertised bandwidth</a> of relays in the network.  Each percentile represents the advertised bandwidth that a given percentage of relays does not exceed (and that in turn the remaining relays either match or exceed).  For example, 99% of relays advertise at most the bandwidth value shown in the 99th percentile line (and the remaining 1% advertise at least that amount).  <font color=\"red\">Note that the unit has recently changed from MiB/s to Gbit/s.</font></p>",
+    "description": "<p>The following graph shows the distribution of the <a href=\"about.html#advertised-bandwidth\">advertised bandwidth</a> of relays in the network.  Each percentile represents the advertised bandwidth that a given percentage of relays does not exceed (and that in turn the remaining relays either match or exceed).  For example, 99% of relays advertise at most the bandwidth value shown in the 99th percentile line (and the remaining 1% advertise at least that amount).</p>",
     "function": "plot_advbwdist_perc",
     "parameters": [
       "start",
@@ -254,7 +254,7 @@
     ],
     "type": "Graph",
     "level": "Basic",
-    "description": "<p>The following graph shows the <a href=\"about.html#advertised-bandwidth\">advertised bandwidth</a> of the n-th fastest relays in the network for different values of n.  <font color=\"red\">Note that the unit has recently changed from MiB/s to Gbit/s.</font></p>",
+    "description": "<p>The following graph shows the <a href=\"about.html#advertised-bandwidth\">advertised bandwidth</a> of the n-th fastest relays in the network for different values of n.</p>",
     "function": "plot_advbwdist_relay",
     "parameters": [
       "start",
