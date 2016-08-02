@@ -849,7 +849,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
              to = as.Date(end, "%Y-%m-%d"), by="1 day"),
              value = ifelse(value == 'all', '', value))))
   formatter <- function(x, ...) {
-    format(x, ..., scientific = FALSE, big.mark = '\u2006') }
+    format(x, ..., scientific = FALSE, big.mark = ' ') }
   date_breaks <- date_breaks(
     as.numeric(max(u$date) - min(u$date)))
   max_y <- ifelse(length(na.omit(u$users)) == 0, 0,
@@ -937,7 +937,7 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
     a <- a[order(a$mid, decreasing = TRUE)[1:top], ]
     u <- u[u$transport %in% a$transport, ]
     formatter <- function(x, ...) {
-      format(x, ..., scientific = FALSE, big.mark = '\u2006') }
+      format(x, ..., scientific = FALSE, big.mark = ' ') }
     max_y <- ifelse(length(na.omit(u$high)) == 0, 0,
         max(u$high, na.rm = TRUE))
     title <- paste("Bridge users by transport from ",
