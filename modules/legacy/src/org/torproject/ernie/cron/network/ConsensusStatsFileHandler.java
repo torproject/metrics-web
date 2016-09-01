@@ -139,6 +139,8 @@ public class ConsensusStatsFileHandler {
                 + "! Aborting to read this file!");
             break;
           }
+          /* Assume that all lines without authority nickname are based on
+           * Tonga's network status, not Bifroest's. */
           String key = parts[0] + "," + (parts.length < 4 ? "Tonga" : parts[1]);
           String value = null;
           if (parts.length == 2) {
@@ -147,11 +149,7 @@ public class ConsensusStatsFileHandler {
             value = key + "," + parts[1] + "," + parts[2];
           } else if (parts.length == 4) {
             value = key + "," + parts[2] + "," + parts[3];
-          } else {
-            /* Impossible, we already checked the range above. */
-          }
-          /* Assume that all lines without authority nickname are based on
-           * Tonga's network status, not Bifroest's. */
+          } /* No more cases as we already checked the range above. */
           this.bridgesRaw.put(key, value);
         }
         br.close();
