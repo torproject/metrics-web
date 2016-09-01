@@ -51,15 +51,16 @@ public class ConsensusStatsFileHandler {
   private File bridgeConsensusStatsRawFile;
 
   /**
-   * Number of running bridges in a given bridge status. Map keys are
-   * bridge status times formatted as "yyyy-MM-dd HH:mm:ss", map values
-   * are lines as read from <code>stats/bridge-consensus-stats-raw</code>.
+   * Number of running bridges in a given bridge status. Map keys are the bridge
+   * status time formatted as "yyyy-MM-dd HH:mm:ss", a comma, and the bridge
+   * authority nickname, map values are lines as read from
+   * <code>stats/bridge-consensus-stats-raw</code>.
    */
   private SortedMap<String, String> bridgesRaw;
 
   /**
    * Average number of running bridges per day. Map keys are dates
-   * formatted as "yyyy-MM-dd", map values are the last column as written
+   * formatted as "yyyy-MM-dd", map values are the remaining columns as written
    * to <code>stats/consensus-stats</code>.
    */
   private SortedMap<String, String> bridgesPerDay;
@@ -132,17 +133,26 @@ public class ConsensusStatsFileHandler {
             continue;
           }
           String[] parts = line.split(",");
-          String dateTime = parts[0];
-          if (parts.length == 2) {
-            this.bridgesRaw.put(dateTime, line + ",0");
-          } else if (parts.length == 3) {
-            this.bridgesRaw.put(dateTime, line);
-          } else {
+          if (parts.length < 2 || parts.length > 4) {
             this.logger.warning("Corrupt line '" + line + "' in file "
                 + this.bridgeConsensusStatsRawFile.getAbsolutePath()
                 + "! Aborting to read this file!");
             break;
           }
+          String key = parts[0] + "," + (parts.length < 4 ? "Tonga" : parts[1]);
+          String value = null;
+          if (parts.length == 2) {
+            value = key + "," + parts[1] + ",0";
+          } else if (parts.length == 3) {
+            value = key + "," + parts[1] + "," + parts[2];
+          } else if (parts.length == 4) {
+            value = key + "," + parts[2] + "," + parts[3];
+          } else {
+            /* Impossible, we already checked the range above. */
+          }
+          /* Assume that all lines without authority nickname are based on
+           * Tonga's network status, not Bifroest's. */
+          this.bridgesRaw.put(key, value);
         }
         br.close();
         this.logger.fine("Finished reading file "
@@ -159,20 +169,21 @@ public class ConsensusStatsFileHandler {
    * Adds the intermediate results of the number of running bridges in a
    * given bridge status to the existing observations.
    */
-  public void addBridgeConsensusResults(long publishedMillis, int running,
-      int runningEc2Bridges) {
-    String published = dateTimeFormat.format(publishedMillis);
-    String line = published + "," + running + "," + runningEc2Bridges;
-    if (!this.bridgesRaw.containsKey(published)) {
+  public void addBridgeConsensusResults(long publishedMillis,
+      String authorityNickname, int running, int runningEc2Bridges) {
+    String publishedAuthority = dateTimeFormat.format(publishedMillis) + ","
+        + authorityNickname;
+    String line = publishedAuthority + "," + running + "," + runningEc2Bridges;
+    if (!this.bridgesRaw.containsKey(publishedAuthority)) {
       this.logger.finer("Adding new bridge numbers: " + line);
-      this.bridgesRaw.put(published, line);
+      this.bridgesRaw.put(publishedAuthority, line);
       this.bridgeResultsAdded++;
-    } else if (!line.equals(this.bridgesRaw.get(published))) {
+    } else if (!line.equals(this.bridgesRaw.get(publishedAuthority))) {
       this.logger.warning("The numbers of running bridges we were just "
           + "given (" + line + ") are different from what we learned "
-          + "before (" + this.bridgesRaw.get(published) + ")! "
+          + "before (" + this.bridgesRaw.get(publishedAuthority) + ")! "
           + "Overwriting!");
-      this.bridgesRaw.put(published, line);
+      this.bridgesRaw.put(publishedAuthority, line);
     }
   }
 
@@ -191,10 +202,24 @@ public class ConsensusStatsFileHandler {
       while (descriptorFiles.hasNext()) {
         DescriptorFile descriptorFile = descriptorFiles.next();
         if (descriptorFile.getDescriptors() != null) {
+          String authority = null;
+          if (descriptorFile.getFileName().contains(
+              "4A0CCD2DDC7995083D73F5D667100C8A5831F16D")) {
+            authority = "Tonga";
+          } else if (descriptorFile.getFileName().contains(
+              "1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1")) {
+            authority = "Bifroest";
+          }
           for (Descriptor descriptor : descriptorFile.getDescriptors()) {
             if (descriptor instanceof BridgeNetworkStatus) {
+              if (authority == null) {
+                this.logger.warning("Did not recognize the bridge authority "
+                    + "that generated " + descriptorFile.getFileName()
+                    + ".  Skipping.");
+                continue;
+              }
               this.addBridgeNetworkStatus(
-                  (BridgeNetworkStatus) descriptor);
+                  (BridgeNetworkStatus) descriptor, authority);
             }
           }
         }
@@ -203,7 +228,8 @@ public class ConsensusStatsFileHandler {
     }
   }
 
-  private void addBridgeNetworkStatus(BridgeNetworkStatus status) {
+  private void addBridgeNetworkStatus(BridgeNetworkStatus status,
+      String authority) {
     int runningBridges = 0;
     int runningEc2Bridges = 0;
     for (NetworkStatusEntry statusEntry
@@ -215,7 +241,7 @@ public class ConsensusStatsFileHandler {
         }
       }
     }
-    this.addBridgeConsensusResults(status.getPublishedMillis(),
+    this.addBridgeConsensusResults(status.getPublishedMillis(), authority,
         runningBridges, runningEc2Bridges);
   }
 
@@ -225,49 +251,51 @@ public class ConsensusStatsFileHandler {
    */
   public void writeFiles() {
 
-    /* Go through raw observations of numbers of running bridges in bridge
-     * statuses, calculate averages per day, and add these averages to
-     * final results. */
-    if (!this.bridgesRaw.isEmpty()) {
-      String tempDate = null;
+    /* Go through raw observations and put everything into nested maps by day
+     * and bridge authority. */
+    Map<String, Map<String, int[]>> bridgesPerDayAndAuthority =
+        new HashMap<String, Map<String, int[]>>();
+    for (String bridgesRawLine : this.bridgesRaw.values()) {
+      String date = bridgesRawLine.substring(0, 10);
+      if (!bridgesPerDayAndAuthority.containsKey(date)) {
+        bridgesPerDayAndAuthority.put(date, new TreeMap<String, int[]>());
+      }
+      String[] parts = bridgesRawLine.split(",");
+      String authority = parts[1];
+      if (!bridgesPerDayAndAuthority.get(date).containsKey(authority)) {
+        bridgesPerDayAndAuthority.get(date).put(authority, new int[3]);
+      }
+      int[] bridges = bridgesPerDayAndAuthority.get(date).get(authority);
+      bridges[0] += Integer.parseInt(parts[2]);
+      bridges[1] += Integer.parseInt(parts[3]);
+      bridges[2]++;
+    }
+
+    /* Sum up average numbers of running bridges per day reported by all bridge
+     * authorities and add these averages to final results. */
+    for (Map.Entry<String, Map<String, int[]>> perDay
+        : bridgesPerDayAndAuthority.entrySet()) {
+      String date = perDay.getKey();
       int brunning = 0;
       int brunningEc2 = 0;
-      int statuses = 0;
-      Iterator<String> it = this.bridgesRaw.values().iterator();
-      boolean haveWrittenFinalLine = false;
-      while (it.hasNext() || !haveWrittenFinalLine) {
-        String next = it.hasNext() ? it.next() : null;
-        /* Finished reading a day or even all lines? */
-        if (tempDate != null && (next == null
-            || !next.substring(0, 10).equals(tempDate))) {
-          /* Only write results if we have seen at least half of all
-           * statuses. */
-          if (statuses >= 24) {
-            String line = "," + (brunning / statuses) + ","
-                + (brunningEc2 / statuses);
-            /* Are our results new? */
-            if (!this.bridgesPerDay.containsKey(tempDate)) {
-              this.logger.finer("Adding new average bridge numbers: "
-                  + tempDate + line);
-              this.bridgesPerDay.put(tempDate, line);
-            } else if (!line.equals(this.bridgesPerDay.get(tempDate))) {
-              this.logger.finer("Replacing existing average bridge "
-                  + "numbers (" + this.bridgesPerDay.get(tempDate)
-                  + " with new numbers: " + line);
-              this.bridgesPerDay.put(tempDate, line);
-            }
-          }
-          brunning = brunningEc2 = statuses = 0;
-          haveWrittenFinalLine = (next == null);
+      for (int[] perAuthority : perDay.getValue().values()) {
+        int statuses = perAuthority[2];
+        if (statuses < 12) {
+          /* Only write results if we have seen at least a dozen statuses. */
+          continue;
         }
-        /* Sum up number of running bridges. */
-        if (next != null) {
-          tempDate = next.substring(0, 10);
-          statuses++;
-          String[] parts = next.split(",");
-          brunning += Integer.parseInt(parts[1]);
-          brunningEc2 += Integer.parseInt(parts[2]);
-        }
+        brunning += perAuthority[0] / statuses;
+        brunningEc2 += perAuthority[1] / statuses;
+      }
+      String line = "," + brunning + "," + brunningEc2;
+      /* Are our results new? */
+      if (!this.bridgesPerDay.containsKey(date)) {
+        this.logger.finer("Adding new average bridge numbers: " + date + line);
+        this.bridgesPerDay.put(date, line);
+      } else if (!line.equals(this.bridgesPerDay.get(date))) {
+        this.logger.finer("Replacing existing average bridge numbers ("
+            + this.bridgesPerDay.get(date) + " with new numbers: " + line);
+        this.bridgesPerDay.put(date, line);
       }
     }
 
@@ -278,9 +306,11 @@ public class ConsensusStatsFileHandler {
       this.bridgeConsensusStatsRawFile.getParentFile().mkdirs();
       BufferedWriter bw = new BufferedWriter(
           new FileWriter(this.bridgeConsensusStatsRawFile));
-      bw.append("datetime,brunning,brunningec2\n");
+      bw.append("datetime,authority,brunning,brunningec2");
+      bw.newLine();
       for (String line : this.bridgesRaw.values()) {
-        bw.append(line + "\n");
+        bw.append(line);
+        bw.newLine();
       }
       bw.close();
       this.logger.fine("Finished writing file "
@@ -376,7 +406,7 @@ public class ConsensusStatsFileHandler {
               + "old: " + this.bridgesRaw.lastKey());
         }
       } catch (ParseException e) {
-         /* Can't parse the timestamp? Whatever. */
+        logger.warning("Can't parse the timestamp? Reason: " + e);
       }
     }
     logger.info(dumpStats.toString());
