@@ -259,10 +259,10 @@ countryname <- function(country) {
 }
 
 date_breaks <- function(days) {
-  length <- cut(days, c(0, 7, 12, 56, 180, 600, 5000, Inf), labels=FALSE)
+  length <- cut(days, c(-1, 7, 12, 56, 180, 600, 5000, Inf), labels=FALSE)
   major <- c("days", "2 days", "weeks", "months", "3 months", "years",
     "5 years")[length]
-  minor <- c("10 years", "days", "days", "weeks", "months", "months",
+  minor <- c("days", "days", "days", "weeks", "months", "months",
     "years")[length]
   format <- c("%d-%b", "%d-%b", "%d-%b", "%b-%Y", "%b-%Y", "%Y",
     "%Y")[length]
@@ -768,6 +768,11 @@ plot_userstats <- function(start, end, node, variable, value, events,
   c <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "clients.csv", sep = ""), stringsAsFactors = FALSE)
   u <- c[c$date >= start & c$date <= end, ]
+  u <- rbind(u, data.frame(date = start, node = node,
+      country = ifelse(variable == 'country' & value != 'all', value, ''),
+      transport = ifelse(variable == 'transport', value, ''),
+      version = ifelse(variable == 'version', value, ''),
+      lower = 0, upper = 0, clients = 0, frac = 0))
   if (node == 'relay') {
     if (value != 'all') {
       u <- u[u$country == value & u$node == 'relay', ]
@@ -852,8 +857,6 @@ plot_userstats <- function(start, end, node, variable, value, events,
     format(x, ..., scientific = FALSE, big.mark = ' ') }
   date_breaks <- date_breaks(
     as.numeric(max(u$date) - min(u$date)))
-  max_y <- ifelse(length(na.omit(u$users)) == 0, 0,
-      max(u$users, na.rm = TRUE))
   if (length(value) > 1) {
     plot <- ggplot(u, aes(x = date, y = users, colour = value))
   } else {
@@ -864,8 +867,6 @@ plot_userstats <- function(start, end, node, variable, value, events,
     upturns <- u[u$users > u$upper, c("date", "users")]
     downturns <- u[u$users <= u$lower, c("date", "users")]
     if (events == "on") {
-      if (length(u$upper) > 0)
-        max_y <- max(max_y, max(u$upper, na.rm = TRUE))
       u[!is.na(u$lower) & u$lower < 0, "lower"] <- 0
       plot <- plot +
         geom_ribbon(aes(ymin = lower, ymax = upper), fill = "gray")
@@ -886,8 +887,8 @@ plot_userstats <- function(start, end, node, variable, value, events,
         labels = date_format(date_breaks$format),
         breaks = date_breaks$major,
         minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0, max_y),
-        labels = formatter) +
+    scale_y_continuous(name = "", labels = formatter) +
+    expand_limits(y = 0) +
     ggtitle(title)
   if (length(value) > 1) {
     plot <- plot +
