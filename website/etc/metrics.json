@@ -870,13 +870,13 @@
   },
   {
     "id": "disagreement-data",
-    "title": "Disagreement among the directory authorities",
+    "title": "Disagreement among the directory authorities (deprecated)",
     "tags": [
       "Relays"
     ],
     "type": "Data",
     "level": "Advanced",
-    "description": "<p>The following data file contains statistics about agreement or disagreement among the <a href=\"about.html#directory-authority\">directory authorities</a>.  Once per hour the directory authorities exchange votes with their view of the <a href=\"about.html#relay\">relays</a> in the network including attributes like <a href=\"about.html#relay-flag\">relay flags</a> or bandwidth measurements.  This data file includes counts of relays by number of directory authorities assigning them a given attribute.</p>",
+    "description": "<p><font color=\"red\">As of September 29, 2016, the linked data file is not updated anymore.  This page and the linked data file will be removed in the future.</font></p><p>The following data file contains statistics about agreement or disagreement among the <a href=\"about.html#directory-authority\">directory authorities</a>.  Once per hour the directory authorities exchange votes with their view of the <a href=\"about.html#relay\">relays</a> in the network including attributes like <a href=\"about.html#relay-flag\">relay flags</a> or bandwidth measurements.  This data file includes counts of relays by number of directory authorities assigning them a given attribute.</p>",
     "data_file": "stats/disagreement.csv",
     "data_column_spec": [
       "<b>validafter:</b> UTC timestamp (YYYY-MM-DD HH:MM:SS) after which votes became valid, which may be used as the vote publication time.",
