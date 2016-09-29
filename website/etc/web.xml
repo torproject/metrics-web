@@ -75,7 +75,6 @@
     <url-pattern>/clients-data.html</url-pattern>
     <url-pattern>/userstats-combined-data.html</url-pattern>
     <url-pattern>/torperf-data.html</url-pattern>
-    <url-pattern>/connbidirect-data.html</url-pattern>
     <url-pattern>/connbidirect2-data.html</url-pattern>
     <url-pattern>/hidserv-data.html</url-pattern>
     <url-pattern>/disagreement-data.html</url-pattern>

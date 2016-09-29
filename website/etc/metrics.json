@@ -724,28 +724,6 @@
     ]
   },
   {
-    "id": "connbidirect-data",
-    "title": "Fraction of connections used uni-/bidirectionally (deprecated)",
-    "tags": [
-      "Performance"
-    ],
-    "type": "Data",
-    "level": "Advanced",
-    "description": "<p><font color=\"red\">As of August 25, 2015, this page and the linked data file have been replaced by <a href=\"connbidirect2-data.html\">this page and the data file linked from there</a>.  Starting on January 11, 2016, the linked data file is not updated anymore.  This page and the linked data file will be removed in the future.</font></p><p>The following data file contains statistics on the fraction of direct connections between a <a href=\"about.html#relay\">relay</a> and other nodes in the network that are used uni- or bidirectionally.  Every 10 seconds, relays determine for every direct connection whether they read and wrote less than a threshold of 20 KiB.  For the remaining connections, relays determine whether they read/wrote at least 10 times as many bytes as they wrote/read.  If so, they classify a connection as \"mostly reading\" or \"mostly writing\", respectively.  All other connections are classified as \"both reading and writing\".  After classifying connections, read and write counters are reset for the next 10-second interval.  The data file contains the absolute number of 10-second intervals per relay, aggregated over 24-hour periods.</p>",
-    "data_file": "stats/connbidirect.csv",
-    "data_column_spec": [
-      "<b>date:</b> UTC date (YYYY-MM-DD) for which statistics on uni-/bidirectional connection usage were reported.",
-      "<b>source:</b> Fingerprint of the relay reporting statistics.",
-      "<b>below:</b> Number of 10-second intervals of connections with less than 20 KiB read and written data.",
-      "<b>read:</b> Number of 10-second intervals of connections with 10 times as many read bytes as written bytes.",
-      "<b>write:</b> Number of 10-second intervals of connections with 10 times as many written bytes as read bytes.",
-      "<b>both:</b> Number of 10-second intervals of connections with less than 10 times as many written or read bytes as in the other direction."
-    ],
-    "related": [
-      "connbidirect"
-    ]
-  },
-  {
     "id": "connbidirect2-data",
     "title": "Fraction of connections used uni-/bidirectionally",
     "tags": [
