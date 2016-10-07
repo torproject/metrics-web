@@ -36,21 +36,10 @@ Unknown Error
 </b>
 when processing your request!</p>
 
-<p>
-Maybe you find what you're looking for on our sitemap:
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="network.html">Servers</a></li>
-<li><a href="bandwidth.html">Bandwidth</a></li>
-<li><a href="bubbles.html">Diversity</a></li>
-<li><a href="users.html">Users</a></li>
-<li><a href="performance.html">Performance</a></li>
-<li><a href="about.html">About</a></li>
-</ul>
-</p>
+<p>Maybe start over from the <a href="/">home page</a>.</p>
 
 <p>If this problem persists, please
-<a href="mailto:tor-assistants@torproject.org">let us know</a>!</p>
+<a href="https://www.torproject.org/about/contact">let us know</a>!</p>
 
     </div>
   </div>

@@ -209,29 +209,6 @@
     <url-pattern>/about.html</url-pattern>
   </servlet-mapping>
 
-  <servlet>
-    <servlet-name>RedirectServlet</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.RedirectServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>RedirectServlet</servlet-name>
-    <url-pattern>/consensus-health.html</url-pattern>
-    <url-pattern>/data.html</url-pattern>
-    <url-pattern>/exonerator.html</url-pattern>
-    <url-pattern>/formats.html</url-pattern>
-    <url-pattern>/graphs.html</url-pattern>
-    <url-pattern>/network.html</url-pattern>
-    <url-pattern>/papers.html</url-pattern>
-    <url-pattern>/performance.html</url-pattern>
-    <url-pattern>/relay-search.html</url-pattern>
-    <url-pattern>/research.html</url-pattern>
-    <url-pattern>/stats.html</url-pattern>
-    <url-pattern>/tools.html</url-pattern>
-    <url-pattern>/users.html</url-pattern>
-  </servlet-mapping>
-
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
