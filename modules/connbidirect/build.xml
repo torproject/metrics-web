@@ -11,7 +11,10 @@
       <include name="commons-compress-1.9.jar"/>
       <include name="commons-lang-2.6.jar"/>
       <include name="junit4-4.11.jar"/>
-      <include name="descriptor-1.2.0.jar"/>
+      <include name="descriptor-1.4.0.jar"/>
+      <include name="slf4j-api-1.7.7.jar"/>
+      <include name="logback-core-1.1.2.jar"/>
+      <include name="logback-classic-1.1.2.jar"/>
     </fileset>
   </path>
 
