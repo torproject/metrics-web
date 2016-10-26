@@ -766,21 +766,21 @@ plot_userstats <- function(start, end, node, variable, value, events,
                            path) {
   end <- min(end, as.character(Sys.Date() - 2))
   c <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
-                "clients.csv", sep = ""), stringsAsFactors = FALSE)
+                "clients-", node, ".csv", sep = ""),
+                stringsAsFactors = FALSE)
   u <- c[c$date >= start & c$date <= end, ]
-  u <- rbind(u, data.frame(date = start, node = node,
+  u <- rbind(u, data.frame(date = start,
       country = ifelse(variable == 'country' & value != 'all', value, ''),
       transport = ifelse(variable == 'transport', value, ''),
       version = ifelse(variable == 'version', value, ''),
       lower = 0, upper = 0, clients = 0, frac = 0))
   if (node == 'relay') {
     if (value != 'all') {
-      u <- u[u$country == value & u$node == 'relay', ]
+      u <- u[u$country == value, ]
       title <- paste("Directly connecting users from ",
                      countryname(value), "\n", sep = "")
     } else {
-      u <- u[u$country == '' & u$transport == '' & u$version == '' &
-             u$node == 'relay', ]
+      u <- u[u$country == '', ]
       title <- "Directly connecting users\n"
     }
     u <- aggregate(list(lower = u$lower, upper = u$upper,
@@ -790,20 +790,19 @@ plot_userstats <- function(start, end, node, variable, value, events,
                    FUN = sum)
   } else if (variable == 'transport') {
     if ('!<OR>' %in% value) {
-      n <- u[u$transport != '' & u$transport != '<OR>' &
-             u$node == 'bridge', ]
+      n <- u[u$transport != '' & u$transport != '<OR>', ]
       n <- aggregate(list(lower = n$lower, upper = n$upper,
                           clients = n$clients),
                      by = list(date = n$date),
                      FUN = sum)
-      u <- rbind(u, data.frame(date = n$date, node = 'bridge',
+      u <- rbind(u, data.frame(date = n$date,
                                country = '', transport = '!<OR>',
                                version = '', lower = n$lower,
                                upper = n$upper, clients = n$clients,
                                frac = NA))
     }
     if (length(value) > 1) {
-      u <- u[u$transport %in% value & u$node == 'bridge', ]
+      u <- u[u$transport %in% value, ]
       u <- aggregate(list(lower = u$lower, upper = u$upper,
                           users = u$clients),
                      by = list(date = as.Date(u$date, "%Y-%m-%d"),
@@ -811,7 +810,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
                      FUN = sum)
       title <- paste("Bridge users by transport\n")
     } else {
-      u <- u[u$transport == value & u$node == 'bridge', ]
+      u <- u[u$transport == value, ]
       u <- aggregate(list(lower = u$lower, upper = u$upper,
                           users = u$clients),
                      by = list(date = as.Date(u$date, "%Y-%m-%d"),
@@ -826,7 +825,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
                paste('transport', value)))))), "\n", sep = "")
     }
   } else if (variable == 'version') {
-    u <- u[u$version == value & u$node == 'bridge', ]
+    u <- u[u$version == value, ]
     title <- paste("Bridge users using IP", value, "\n", sep = "")
     u <- aggregate(list(lower = u$lower, upper = u$upper,
                         users = u$clients),
@@ -835,12 +834,11 @@ plot_userstats <- function(start, end, node, variable, value, events,
                    FUN = sum)
   } else {
     if (value != 'all') {
-      u <- u[u$country == value & u$node == 'bridge', ]
+      u <- u[u$country == value, ]
       title <- paste("Bridge users from ", countryname(value),
                      "\n", sep = "")
     } else {
-      u <- u[u$country == '' & u$transport == '' & u$version == '' &
-             u$node == 'bridge', ]
+      u <- u[u$country == '' & u$transport == '' & u$version == '', ]
       title <- "Bridge users\n"
     }
     u <- aggregate(list(lower = u$lower, upper = u$upper,
