@@ -22,6 +22,11 @@
         <a href="https://www.torproject.org/about/contact.html.en">let us
         know</a>.</small></p>
 
+<p>"Tor metrics are the ammunition that lets Tor and other security
+advocates argue for a more private and secure Internet from a position
+of data, rather than just dogma or perspective."
+<i>- Bruce Schneier (June 1, 2016)</i></p>
+
 <div>
 <div style="border:1px solid gray;border-radius:10px;padding:10px;float:left;overflow:hidden;margin-right:20px;">
 <form action="/">
