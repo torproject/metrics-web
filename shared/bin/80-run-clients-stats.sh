@@ -21,12 +21,12 @@ python detector.py
 
 echo `date` "Merging censorship detector results."
 R --slave -f merge-clients.R > /dev/null 2>&1
-
-echo `date` "Splitting results file."
-R --slave -f split-clients.R > /dev/null 2>&1
 mkdir -p stats/
-cp clients*.csv stats/
+cp clients.csv stats/
 cp userstats-combined.csv stats/
+
+echo `date` "Saving results as .RData files."
+R --slave -f split-clients.R > /dev/null 2>&1
 
 echo `date` "Terminating."
 

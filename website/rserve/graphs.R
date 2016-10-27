@@ -765,15 +765,15 @@ plot_bandwidth_flags <- function(start, end, path) {
 plot_userstats <- function(start, end, node, variable, value, events,
                            path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  c <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
-                "clients-", node, ".csv", sep = ""),
-                stringsAsFactors = FALSE)
+  load(paste("/srv/metrics.torproject.org/metrics/shared/RData/clients-",
+             node, ".RData", sep = ""))
+  c <- data
   u <- c[c$date >= start & c$date <= end, ]
   u <- rbind(u, data.frame(date = start,
       country = ifelse(variable == 'country' & value != 'all', value, ''),
       transport = ifelse(variable == 'transport', value, ''),
       version = ifelse(variable == 'version', value, ''),
-      lower = 0, upper = 0, clients = 0, frac = 0))
+      lower = 0, upper = 0, clients = 0))
   if (node == 'relay') {
     if (value != 'all') {
       u <- u[u$country == value, ]
@@ -798,8 +798,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
       u <- rbind(u, data.frame(date = n$date,
                                country = '', transport = '!<OR>',
                                version = '', lower = n$lower,
-                               upper = n$upper, clients = n$clients,
-                               frac = NA))
+                               upper = n$upper, clients = n$clients))
     }
     if (length(value) > 1) {
       u <- u[u$transport %in% value, ]
@@ -926,9 +925,9 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
     top <- 3
     country <- ifelse(country == "all", NA, country)
     end <- min(end, as.character(Sys.Date() - 2))
-    u <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/",
-                        "stats/userstats-combined.csv", sep = ""),
-                  stringsAsFactors = FALSE)
+    load(paste("/srv/metrics.torproject.org/metrics/shared/RData/",
+               "userstats-bridge-combined.RData", sep = ""))
+    u <- data
     u <- u[u$date >= start & u$date <= end
            & (is.na(country) | u$country == country), ]
     a <- aggregate(list(mid = (u$high + u$low) / 2),
