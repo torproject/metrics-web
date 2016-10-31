@@ -13,7 +13,6 @@ import org.torproject.descriptor.RelayNetworkStatusConsensus;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -24,7 +23,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -198,6 +196,8 @@ public class Parser {
         this.reportedHidServStatsFile, this.reportedHidServStats);
   }
 
+  private static final String BIN_SIZE = "bin_size";
+
   /** Parses the given extra-info descriptor by extracting its fingerprint
    * and contained hidserv-* lines.
    *
@@ -209,85 +209,38 @@ public class Parser {
     /* Extract the fingerprint from the parsed descriptor. */
     String fingerprint = extraInfoDescriptor.getFingerprint();
 
-    /* Parse the descriptor once more to extract any hidserv-* lines.
-     * This is necessary, because these lines are not yet supported by the
-     * descriptor-parsing library. */
-    Scanner scanner = new Scanner(new ByteArrayInputStream(
-        extraInfoDescriptor.getRawDescriptorBytes()));
-    Long statsEndMillis = null;
-    Long statsIntervalSeconds = null;
-    Long rendRelayedCells = null;
-    Long rendRelayedCellsBinSize = null;
-    Long dirOnionsSeen = null;
-    Long dirOnionsSeenBinSize = null;
-    try {
-      while (scanner.hasNext()) {
-        String line = scanner.nextLine();
-        if (line.startsWith("hidserv-")) {
-          String[] parts = line.split(" ");
-          if (parts[0].equals("hidserv-stats-end")) {
-            /* Parse statistics end and statistics interval length. */
-            if (parts.length != 5 || !parts[3].startsWith("(")
-                || !parts[4].equals("s)")) {
-              /* Will warn below, because statsEndMillis is still null. */
-              continue;
-            }
-            statsEndMillis = DateTimeHelper.parse(parts[1] + " "
-                + parts[2]);
-            statsIntervalSeconds = Long.parseLong(parts[3].substring(1));
-          } else if (parts[0].equals("hidserv-rend-relayed-cells")) {
-            /* Parse the reported number of cells on rendezvous circuits
-             * and the bin size used by the relay to obfuscate that
-             * number. */
-            if (parts.length != 5
-                || !parts[4].startsWith("bin_size=")) {
-              /* Will warn below, because rendRelayedCells is still
-               * null. */
-              continue;
-            }
-            rendRelayedCells = Long.parseLong(parts[1]);
-            rendRelayedCellsBinSize =
-                Long.parseLong(parts[4].substring(9));
-          } else if (parts[0].equals("hidserv-dir-onions-seen")) {
-            /* Parse the reported number of distinct .onion addresses and
-             * the bin size used by the relay to obfuscate that number. */
-            if (parts.length != 5
-                || !parts[4].startsWith("bin_size=")) {
-              /* Will warn below, because dirOnionsSeen is still null. */
-              continue;
-            }
-            dirOnionsSeen = Long.parseLong(parts[1]);
-            dirOnionsSeenBinSize = Long.parseLong(parts[4].substring(9));
-          }
-        }
-      }
-    } catch (NumberFormatException e) {
-      e.printStackTrace();
-      return;
-    }
-
     /* If the descriptor did not contain any of the expected hidserv-*
      * lines, don't do anything.  This applies to the majority of
      * descriptors, at least as long as only a minority of relays reports
      * these statistics. */
-    if (statsEndMillis == null && rendRelayedCells == null
-        && dirOnionsSeen == null) {
+    if (extraInfoDescriptor.getHidservStatsEndMillis() < 0L
+        && extraInfoDescriptor.getHidservRendRelayedCells() == null
+        && extraInfoDescriptor.getHidservDirOnionsSeen() == null) {
       return;
 
     /* If the descriptor contained all expected hidserv-* lines, create a
      * new stats object and put it in the local map, so that it will later
      * be written to a document file. */
-    } else if (statsEndMillis != null
-        && statsEndMillis != DateTimeHelper.NO_TIME_AVAILABLE
-        && statsIntervalSeconds != null && rendRelayedCells != null
-        && dirOnionsSeen != null) {
+    } else if (extraInfoDescriptor.getHidservStatsEndMillis() >= 0L
+        && extraInfoDescriptor.getHidservStatsIntervalLength() >= 0L
+        && extraInfoDescriptor.getHidservRendRelayedCells() != null
+        && extraInfoDescriptor.getHidservRendRelayedCellsParameters() != null
+        && extraInfoDescriptor.getHidservRendRelayedCellsParameters()
+        .containsKey(BIN_SIZE)
+        && extraInfoDescriptor.getHidservDirOnionsSeen() != null
+        && extraInfoDescriptor.getHidservDirOnionsSeenParameters() != null
+        && extraInfoDescriptor.getHidservDirOnionsSeenParameters()
+        .containsKey(BIN_SIZE)) {
       ReportedHidServStats reportedStats = new ReportedHidServStats(
-          fingerprint, statsEndMillis);
-      reportedStats.setStatsIntervalSeconds(statsIntervalSeconds);
-      reportedStats.setRendRelayedCells(this.removeNoise(rendRelayedCells,
-          rendRelayedCellsBinSize));
-      reportedStats.setDirOnionsSeen(this.removeNoise(dirOnionsSeen,
-          dirOnionsSeenBinSize));
+          fingerprint, extraInfoDescriptor.getHidservStatsEndMillis());
+      reportedStats.setStatsIntervalSeconds(extraInfoDescriptor
+          .getHidservStatsIntervalLength());
+      reportedStats.setRendRelayedCells(this.removeNoise(extraInfoDescriptor
+          .getHidservRendRelayedCells().longValue(), extraInfoDescriptor
+          .getHidservRendRelayedCellsParameters().get(BIN_SIZE).longValue()));
+      reportedStats.setDirOnionsSeen(this.removeNoise(extraInfoDescriptor
+          .getHidservDirOnionsSeen().longValue(), extraInfoDescriptor
+          .getHidservDirOnionsSeenParameters().get(BIN_SIZE).longValue()));
       this.reportedHidServStats.add(reportedStats);
 
     /* If the descriptor contained some but not all hidserv-* lines, print
