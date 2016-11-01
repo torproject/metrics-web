@@ -1,47 +1,25 @@
 <project default="run" name="metrics-web" basedir=".">
 
-  <!-- Define build paths. -->
-  <property name="sources" value="src"/>
-  <property name="libs" value="../../shared/lib"/>
-  <property name="classes" value="classes"/>
-  <property name="config" value="etc"/>
+  <include file="../../shared/build-base.xml" as="basetask"/>
+  <target name="clean" depends="basetask.clean"/>
+  <target name="compile" depends="basetask.compile"/>
+
   <path id="classpath">
     <pathelement path="${classes}"/>
+    <path refid="base.classpath" />
     <fileset dir="${libs}">
       <include name="commons-codec-1.9.jar"/>
-      <include name="commons-compress-1.9.jar"/>
       <include name="postgresql-jdbc3-9.2.jar"/>
-      <include name="commons-lang-2.6.jar"/>
-      <include name="descriptor-1.4.0.jar"/>
-      <include name="logback-classic-1.1.2.jar"/>
-      <include name="logback-core-1.1.2.jar"/>
-      <include name="slf4j-api-1.7.7.jar"/>
     </fileset>
   </path>
 
   <!-- Prepare build. -->
-  <target name="init">
+  <target name="init" depends="basetask.init" >
     <copy file="config.template" tofile="config"/>
-    <mkdir dir="${classes}"/>
-  </target>
-
-  <!-- Compile all plain Java classes. -->
-  <target name="compile" depends="init">
-    <javac destdir="${classes}"
-           srcdir="${sources}"
-           source="1.5"
-           target="1.5"
-           debug="true"
-           deprecation="true"
-           optimize="false"
-           failonerror="true"
-           includeantruntime="false">
-      <classpath refid="classpath"/>
-    </javac>
   </target>
 
   <!-- Prepare data for being displayed on the website. -->
-  <target name="run" depends="compile">
+  <target name="run" depends="compile,init">
     <java fork="true"
           maxmemory="2g"
           classname="org.torproject.ernie.cron.Main">

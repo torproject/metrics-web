@@ -1,0 +1,48 @@
+<project basedir=".">
+
+  <property name="sources" value="src"/>
+  <property name="libs" value="../../shared/lib"/>
+  <property name="generated" value="generated"/>
+  <property name="classes" value="${generated}/classes/"/>
+  <property name="source-and-target-java-version" value="1.7" />
+  <property name="descriptorversion" value="1.5.0" />
+
+  <path id="base.classpath">
+    <pathelement path="${classes}"/>
+    <fileset dir="${libs}">
+      <include name="commons-compress-1.9.jar"/>
+      <include name="commons-lang-2.6.jar"/>
+      <include name="descriptor-${descriptorversion}.jar"/>
+      <include name="slf4j-api-1.7.7.jar"/>
+      <include name="logback-core-1.1.2.jar"/>
+      <include name="logback-classic-1.1.2.jar"/>
+    </fileset>
+  </path>
+
+  <target name="clean">
+    <delete includeEmptyDirs="true" quiet="true">
+      <fileset dir="${generated}" defaultexcludes="false" includes="**" />
+    </delete>
+  </target>
+
+  <target name="init">
+    <mkdir dir="${classes}"/>
+  </target>
+
+  <target name="compile" depends="init" >
+    <javac destdir="${classes}"
+           srcdir="${sources}"
+           source="${source-and-target-java-version}"
+           target="${source-and-target-java-version}"
+           debug="true" debuglevel="lines,source"
+           deprecation="true"
+           optimize="false"
+           failonerror="true"
+           includeantruntime="false">
+      <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+
+</project>
+
