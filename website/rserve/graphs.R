@@ -866,7 +866,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
     if (events == "on") {
       u[!is.na(u$lower) & u$lower < 0, "lower"] <- 0
       plot <- plot +
-        geom_ribbon(aes(ymin = lower, ymax = upper), fill = "gray")
+        geom_ribbon(data = u, aes(ymin = lower, ymax = upper), fill = "gray")
     }
     if (length(upturns$date) > 0)
       plot <- plot +
