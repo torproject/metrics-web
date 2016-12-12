@@ -1,0 +1,67 @@
+[
+  {
+    "id": "clients",
+    "header": "Users",
+    "description": "<p>Where are Tor users from? How do they connect to Tor?</p>",
+    "metrics": [
+      "userstats-relay-country",
+      "userstats-bridge-country",
+      "userstats-bridge-transport",
+      "userstats-bridge-combined",
+      "userstats-bridge-version",
+      "userstats-relay-table",
+      "userstats-censorship-events",
+      "userstats-bridge-table"
+    ]
+  },
+  {
+    "id": "servers",
+    "header": "Relays and Bridges",
+    "description": "<p>How many relays and bridges are online? What do we know about them?</p>",
+    "metrics": [
+      "networksize",
+      "relayflags",
+      "versions",
+      "platforms"
+    ]
+  },
+  {
+    "id": "traffic",
+    "header": "Traffic",
+    "description": "<p>How much traffic can the Tor network handle? How much traffic is there?</p>",
+    "metrics": [
+      "bandwidth",
+      "bandwidth-flags",
+      "advbwdist-perc",
+      "advbwdist-relay",
+      "bwhist-flags",
+      "dirbytes"
+    ]
+  },
+  {
+    "id": "performance",
+    "header": "Performance",
+    "description": "<p>How fast and reliable is the Tor network?</p>",
+    "metrics": [
+      "torperf",
+      "torperf-failures",
+      "connbidirect"
+    ]
+  },
+  {
+    "id": "onion-services",
+    "header": "Onion Services",
+    "description": "<p>How many onion services are there? How much traffic do they pull?</p>",
+    "metrics": [
+      "hidserv-dir-onions-seen",
+      "hidserv-rend-relayed-cells",
+      "hidserv-frac-reporting"
+    ]
+  },
+  {
+    "id": "downloads",
+    "header": "Downloads (coming soon)",
+    "description": "<p>How many downloads of Tor applications are there? How many updates?</p>",
+    "metrics": []
+  }
+]

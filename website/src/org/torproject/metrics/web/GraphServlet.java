@@ -8,6 +8,7 @@ import org.torproject.metrics.web.graphs.GraphParameterChecker;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -135,6 +136,18 @@ public class GraphServlet extends MetricServlet {
     }
     request.setAttribute("id", requestedId);
     request.setAttribute("title", this.titles.get(requestedId));
+    if (this.categories.containsKey(requestedId)) {
+      Category category = this.categories.get(requestedId);
+      request.setAttribute("categoryHeader", category.getHeader());
+      request.setAttribute("categoryDescription", category.getDescription());
+      List<String[]> categoryTabs = new ArrayList<String[]>();
+      for (String metricId : category.getMetrics()) {
+        categoryTabs.add(new String[] {
+            this.titles.get(metricId),
+            requestedId.equals(metricId) ? null : metricId });
+      }
+      request.setAttribute("categoryTabs", categoryTabs);
+    }
     request.setAttribute("description",
         this.descriptions.get(requestedId));
     request.setAttribute("data", this.data.get(requestedId));

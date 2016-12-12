@@ -11,8 +11,34 @@
 <body>
   <div class="center">
     <div class="main-column">
+        <h2><a href="/"><img src="images/metrics-logo.png" width="153" height="200" alt="Metrics logo"><img src="images/metrics-wordmark.png" width="384" height="50" alt="Metrics wordmark"></a></h2>
+        <br>
 
-<h2><a href="."><img src="images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; ${title}</h2>
+<p>"Tor metrics are the ammunition that lets Tor and other security
+advocates argue for a more private and secure Internet from a position
+of data, rather than just dogma or perspective."
+<i>- Bruce Schneier (June 1, 2016)</i></p>
+
+        <!-- Navigation start -->
+        Metrics &#124;
+        <a href="about.html">About</a> &#124;
+        <a href="news.html">News</a> &#124;
+        <a href="sources.html">Sources</a> &#124;
+        <a href="tools.html">Tools</a> &#124;
+        <a href="research.html">Research</a>
+        <br>
+        <br>
+        <!-- Navigation end -->
+
+<h2>${categoryHeader}</h2>
+
+${categoryDescription}
+
+<c:forEach var="tab" items="${categoryTabs}">
+<c:if test="${fn:length(tab[1]) > 0}"><a href="${tab[1]}.html"></c:if>${tab[0]}<c:if test="${fn:length(tab[1]) > 0}"></a></c:if> &#124;
+</c:forEach>
+<br>
+
 <br>
 ${description}
 <img src="${id}.png${parameters}"

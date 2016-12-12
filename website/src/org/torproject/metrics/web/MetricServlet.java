@@ -47,6 +47,8 @@ public abstract class MetricServlet extends HttpServlet {
   protected Map<String, List<String[]>> related =
       new HashMap<String, List<String[]>>();
 
+  protected Map<String, Category> categories = new HashMap<String, Category>();
+
   @Override
   public void init() throws ServletException {
     this.metrics = MetricsProvider.getInstance().getMetricsList();
@@ -111,6 +113,12 @@ public abstract class MetricServlet extends HttpServlet {
           }
           this.related.put(id, relatedLinksTypesAndTitles);
         }
+      }
+    }
+    for (Category category :
+        CategoriesProvider.getInstance().getCategoriesList()) {
+      for (String id : category.getMetrics()) {
+        categories.put(id, category);
       }
     }
   }
