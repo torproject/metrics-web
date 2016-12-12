@@ -43,7 +43,7 @@ ${description}
       </p>
     </c:if>
     <c:if test="${fn:length(n) > 0}">
-      <p>Percentiles:
+      <p>n:
       <c:forEach var="row" items="${n}">
         <label class="checkbox-label">
           <input type="checkbox" name="n" value="${row[0]}"${row[1]}> ${row[0]}
