@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>Tor Metrics &mdash; About</title>
+  <title>Tor Metrics</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
   <link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon">
@@ -9,8 +9,28 @@
 <body>
   <div class="center">
     <div class="main-column">
-<h2><a href="/"><img src="images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; About</h2>
-<br>
+        <h2><a href="/"><img src="images/metrics-logo.png" width="153"
+height="200" al
+t="Metrics logo"><img src="images/metrics-wordmark.png" width="384" height="50"
+alt="M
+etrics wordmark"></a></h2>
+        <br>
+
+<p>"Tor metrics are the ammunition that lets Tor and other security
+advocates argue for a more private and secure Internet from a position
+of data, rather than just dogma or perspective."
+<i>- Bruce Schneier (June 1, 2016)</i></p>
+
+        <!-- Navigation start -->
+        <a href="index.html">Metrics</a> &#124;
+        About &#124;
+        <a href="news.html">News</a> &#124;
+        <a href="sources.html">Sources</a> &#124;
+        <a href="tools.html">Tools</a> &#124;
+        <a href="research.html">Research</a>
+        <br>
+        <br>
+        <!-- Navigation end -->
 
 <h3>Frequently used terms</h3>
 <br>
@@ -280,3 +300,4 @@ Git</a>.
   </div>
 </body>
 </html>
+

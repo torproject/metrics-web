@@ -13,6 +13,23 @@
     <div class="main-column">
         <h2><a href="/"><img src="images/metrics-logo.png" width="153" height="200" alt="Metrics logo"><img src="images/metrics-wordmark.png" width="384" height="50" alt="Metrics wordmark"></a></h2>
         <br>
+
+<p>"Tor metrics are the ammunition that lets Tor and other security
+advocates argue for a more private and secure Internet from a position
+of data, rather than just dogma or perspective."
+<i>- Bruce Schneier (June 1, 2016)</i></p>
+
+        <!-- Navigation start -->
+        Metrics &#124;
+        <a href="about.html">About</a> &#124;
+        <a href="news.html">News</a> &#124;
+        <a href="sources.html">Sources</a> &#124;
+        <a href="tools.html">Tools</a> &#124;
+        <a href="research.html">Research</a>
+        <br>
+        <br>
+        <!-- Navigation end -->
+
         <p>Welcome to Tor Metrics, the primary place to learn interesting
         facts about the Tor network, the largest deployed anonymity
         network to date.
@@ -21,11 +38,6 @@
         please
         <a href="https://www.torproject.org/about/contact.html.en">let us
         know</a>.</small></p>
-
-<p>"Tor metrics are the ammunition that lets Tor and other security
-advocates argue for a more private and secure Internet from a position
-of data, rather than just dogma or perspective."
-<i>- Bruce Schneier (June 1, 2016)</i></p>
 
 <div>
 <div style="border:1px solid gray;border-radius:10px;padding:10px;float:left;overflow:hidden;margin-right:20px;">
@@ -96,3 +108,4 @@ table {
   </div>
 </body>
 </html>
+

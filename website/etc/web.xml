@@ -209,6 +209,50 @@
     <url-pattern>/about.html</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>NewsServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.NewsServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NewsServlet</servlet-name>
+    <url-pattern>/news.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SourcesServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.SourcesServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SourcesServlet</servlet-name>
+    <url-pattern>/sources.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ToolsServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.ToolsServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ToolsServlet</servlet-name>
+    <url-pattern>/tools.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ResearchServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.ResearchServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResearchServlet</servlet-name>
+    <url-pattern>/research.html</url-pattern>
+  </servlet-mapping>
+
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
