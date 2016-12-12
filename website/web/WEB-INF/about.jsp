@@ -9,11 +9,7 @@
 <body>
   <div class="center">
     <div class="main-column">
-        <h2><a href="/"><img src="images/metrics-logo.png" width="153"
-height="200" al
-t="Metrics logo"><img src="images/metrics-wordmark.png" width="384" height="50"
-alt="M
-etrics wordmark"></a></h2>
+        <h2><a href="/"><img src="images/metrics-logo.png" width="153" height="200" alt="Metrics logo"><img src="images/metrics-wordmark.png" width="384" height="50" alt="Metrics wordmark"></a></h2>
         <br>
 
 <p>"Tor metrics are the ammunition that lets Tor and other security

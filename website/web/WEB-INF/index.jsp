@@ -30,76 +30,30 @@ of data, rather than just dogma or perspective."
         <br>
         <!-- Navigation end -->
 
-        <p>Welcome to Tor Metrics, the primary place to learn interesting
-        facts about the Tor network, the largest deployed anonymity
-        network to date.
-        If something can be measured safely, you'll find it here.*</p>
-        <p><small>*And if you come across something that is missing here,
-        please
-        <a href="https://www.torproject.org/about/contact.html.en">let us
-        know</a>.</small></p>
+        <p>Welcome! What would you like to know about the Tor network?</p>
 
 <div>
-<div style="border:1px solid gray;border-radius:10px;padding:10px;float:left;overflow:hidden;margin-right:20px;">
-<form action="/">
-<p>
-<b>Tags</b><br>
-<c:forEach var="row" items="${tags}">
-<label><input name="tag" type="checkbox" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</label></br>
-</c:forEach>
-</p>
-<p>
-<b>Type</b></br>
-<c:forEach var="row" items="${types}">
-<label><input name="type" type="checkbox" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</label></br>
-</c:forEach>
-</p>
-<p>
-<b>Level</b></br>
-<c:forEach var="row" items="${levels}">
-<label><input name="level" type="checkbox" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</label></br>
-</c:forEach>
-</p>
-<p>
-<b>Order</b></br>
-<c:forEach var="row" items="${order}">
-<label><input name="order" type="radio" value="${row[0]}" <c:if test="${fn:length(row[2]) > 0}"> checked</c:if>> ${row[1]}</label></br>
-</c:forEach>
-</p>
-<p>
-<input type="submit" value="Update">
-</p>
-</form>
+<a href="userstats-relay-country.html"><h3>Users</h3></a>
+<p>Where are Tor users from? How do they connect to Tor?</p>
+
+<a href="networksize.html"><h3>Relays and Bridges</h3></a>
+<p>How many relays and bridges are online? What do we know about them?</p>
+
+<a href="bandwidth.html"><h3>Traffic</h3></a>
+<p>How much traffic can the Tor network handle? How much traffic is there?</p>
+
+<a href="torperf.html"><h3>Performance</h3></a>
+<p>How fast and reliable is the Tor network?</p>
+
+<a href="hidserv-dir-onions-seen.html"><h3>Onion Services</h3></a>
+<p>How many onion services are there? How much traffic do they pull?</p>
+
+<h3>Downloads (coming soon)</h3>
+<p>How many downloads of Tor applications are there? How many updates?</p>
 </div>
 
-<div style="overflow:hidden;">
-<style>
-table {
-  border-spacing: 10px;
-}
-</style>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Tags</th>
-<th>Type</th>
-<th>Level</th>
-</tr>
-</thead>
-<tbody>
-<c:forEach var="row" items="${results}">
-<tr>
-<td><a href="${row[0]}">${row[1]}</a></td>
-<td>${row[2]}</td>
-<td>${row[3]}</td>
-<td>${row[4]}</td>
-</tr>
-</c:forEach>
-</tbody>
-</table>
-</div>
-</div>
+<p>Let us know if we're missing anything, or if we should measure something
+else.</p>
 
     </div>
   </div>
