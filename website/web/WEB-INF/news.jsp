@@ -6,6 +6,7 @@
   <title>Tor Metrics</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
+  <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
   <link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon">
 </head>
 <body>
@@ -33,8 +34,20 @@ of data, rather than just dogma or perspective."
 <h3>News</h3>
 <br>
 
+<p>We collect reports of events and aggregate them here for your convenience.
+The process is usually pretty informal.
+Someone tells us of an event, reports it to us, and we aggregate them here.
+If you know of any event that may have caused a measurement anomaly, help us add
+it to this list.</p>
+
 <c:forEach var="category" items="${news}">
-<h3>${category.key}</h3>
+<a href="#${category.key[1]}">${category.key[0]}</a> &#124;
+</c:forEach>
+<br>
+
+<c:forEach var="category" items="${news}">
+<a name="${category.key[1]}"></a>
+<h3>${category.key[0]}</h3>
 <c:forEach var="entry" items="${category.value}">
 <p>${entry[0]}</p>
 </c:forEach>

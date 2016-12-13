@@ -4,7 +4,7 @@
     "end": "2012-12-15",
     "place": "et",
     "protocols": [
-      "&lt;OR&gt;"
+      "<OR>"
     ],
     "description": "Ethiopia blocks Tor TLS.",
     "links": [
@@ -17,7 +17,7 @@
     "start": "2013-08-19",
     "end": "2014-04-28",
     "protocols": [
-      "&lt;OR&gt;",
+      "<OR>",
       "relay"
     ],
     "description": "Relay users increase globally from about 800K to over 5M, when computers in the [https://en.wikipedia.org/wiki/Mevade_Botnet Mevade/Sefnit botnetbegan using Tor to communicate. The user count decreased in the following months through efforts to clean up the botnet. Sometime in 2014-04, the botnet switched from using Tor to using SSH.",
@@ -31,7 +31,7 @@
   {
     "start": "2013-10-27",
     "protocols": [
-      "&lt;OR&gt;",
+      "<OR>",
       "relay"
     ],
     "description": "Microsoft adds the Mevade/Sefnit botnet signature to various security scanners.",
@@ -42,7 +42,7 @@
   {
     "start": "2013-11-03",
     "protocols": [
-      "&lt;OR&gt;",
+      "<OR>",
       "relay"
     ],
     "description": "Microsoft adds the Mevade/Sefnit botnet signature to their Malicious Software Removal Tool.",
@@ -55,7 +55,7 @@
     "end": "2015-12-10",
     "place": "bd",
     "protocols": [
-      "&lt;OR&gt;",
+      "<OR>",
       "obfs3",
       "obfs4"
     ],
@@ -94,7 +94,7 @@
     "end": "2016-05-03",
     "place": "br",
     "protocols": [
-      "&lt;OR&gt;"
+      "<OR>"
     ],
     "description": "WhatsApp block in Brazil",
     "links": [
@@ -107,7 +107,7 @@
     "start": "2016-06-01",
     "place": "kz",
     "protocols": [
-      "&lt;OR&gt;"
+      "<OR>"
     ],
     "description": "Kazakhstan blocks vanilla Tor TLS. Users mostly switch to obfs4.",
     "links": [
@@ -118,7 +118,7 @@
     "start": "2016-08-20",
     "place": "ir",
     "protocols": [
-      "&lt;OR&gt;"
+      "<OR>"
     ],
     "description": "Iran somehow blocks most direct Tor connections. May also affect bridge users, but it's hard to tell because there were few vanilla bridge users anyway.",
     "links": [
@@ -161,7 +161,7 @@
     "start": "2016-09-04",
     "place": "ir",
     "protocols": [
-      "&lt;OR&gt;"
+      "<OR>"
     ],
     "description": "Iran intensifies the blocking begun on 2016-08-20, getting most of the remaining direct users. There is interference in the graphs from the bridge authority changeover on 2016-09-02, but because the changeover would not have affected counts of ''direct'' users, it may be a coincidence.",
     "links": [
@@ -227,7 +227,7 @@
     "end": "2016-10-03",
     "place": "eg",
     "protocols": [
-      "&lt;OR&gt;",
+      "<OR>",
       "relay"
     ],
     "description": "Reports that direct connections from Egypt are blocked; bridges are required. Maybe be the same as the block beginning 2016-10-25.",
@@ -264,7 +264,7 @@
     "start": "2016-10-25",
     "place": "eg",
     "protocols": [
-      "&lt;OR&gt;",
+      "<OR>",
       "relay"
     ],
     "description": "Egypt blocks Tor directory authorities and public relays by TCP RST. Bridges work.",
@@ -334,7 +334,7 @@
     "start": "2016-12-01",
     "place": "by",
     "protocols": [
-      "&lt;OR&gt;",
+      "<OR>",
       "relay"
     ],
     "description": "Belarus blocks the addresses of public Tor relays, apparently by RST injection. Bridges work, even unobfuscated ones.",
@@ -348,7 +348,7 @@
     "start": "2016-02-24",
     "place": "tm",
     "protocols": [
-      "&lt;OR&gt;"
+      "<OR>"
     ],
     "description": "Large drop in direct users in Turkmenistan",
     "links": [
@@ -360,7 +360,7 @@
     "start": "2016-08-24",
     "place": "cn",
     "protocols": [
-      "&lt;OR&gt;"
+      "<OR>"
     ],
     "description": "Large decrease in users in China",
     "links": [
@@ -374,7 +374,7 @@
     "end": "2016-10-25",
     "place": "il",
     "protocols": [
-      "&lt;OR&gt;"
+      "<OR>"
     ],
     "description": "Direct users fluctuate wildly in Israel. Bridge users not affected.",
     "links": [
@@ -386,7 +386,7 @@
     "start": "2016-11-20",
     "place": "sa",
     "protocols": [
-      "&lt;OR&gt;",
+      "<OR>",
       "relay"
     ],
     "description": "Decrease in direct users in Saudi Arabia.",

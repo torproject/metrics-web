@@ -3,19 +3,20 @@
 
 package org.torproject.metrics.web;
 
+import org.torproject.metrics.web.graphs.Countries;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,21 +27,29 @@ public class NewsServlet extends HttpServlet {
 
   private static final long serialVersionUID = -7696996243187241242L;
 
-  protected SortedSet<News> sortedNews;
+  protected List<News> sortedNews;
+
+  protected SortedMap<String, String> countries;
 
   @Override
   public void init() throws ServletException {
-    SortedSet<News> sortedNews = new TreeSet<News>(new Comparator<News>() {
-      public int compare(News o1, News o2) {
-        return o1.getStart().compareTo(o2.getStart()) * -1;
-      }
-    });
+    List<News> sortedNews = new ArrayList<News>();
     for (News news : ContentProvider.getInstance().getNewsList()) {
       if (news.getStart() != null) {
         sortedNews.add(news);
       }
     }
+    Collections.sort(sortedNews, new Comparator<News>() {
+      public int compare(News o1, News o2) {
+        return o1.getStart().compareTo(o2.getStart()) * -1;
+      }
+    });
     this.sortedNews = sortedNews;
+    SortedMap<String, String> countries = new TreeMap<String, String>();
+    for (String[] country : Countries.getInstance().getCountryList()) {
+      countries.put(country[0], country[1]);
+    }
+    this.countries = countries;
   }
 
   @Override
@@ -48,27 +57,33 @@ public class NewsServlet extends HttpServlet {
       HttpServletResponse response) throws IOException, ServletException {
 
     /* Create categories based on current system time. */
-    Map<String, String> cutOffDates = new LinkedHashMap<String, String>();
+    Map<String, String[]> cutOffDates = new LinkedHashMap<String, String[]>();
     Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.US);
     cal.set(Calendar.DAY_OF_WEEK, 1);
-    cutOffDates.put(String.format("%tF", cal), "This week");
+    cutOffDates.put(String.format("%tF", cal),
+        new String[] { "This week", "week" });
     cal.set(Calendar.DAY_OF_MONTH, 1);
-    cutOffDates.put(String.format("%tF", cal), "This month");
+    cutOffDates.put(String.format("%tF", cal),
+        new String[] { "This month", "month" });
     cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) /3 * 3);
-    cutOffDates.put(String.format("%tF", cal), "This quarter");
+    cutOffDates.put(String.format("%tF", cal),
+        new String[] { "This quarter", "quarter" });
     cal.set(Calendar.MONTH, 0);
     String yearStart = String.format("%tF", cal);
-    cutOffDates.put(yearStart, "This year");
+    cutOffDates.put(yearStart,
+        new String[] { "This year", "year" });
     do {
       cal.add(Calendar.YEAR, -1);
       yearStart = String.format("%tF", cal);
-      cutOffDates.put(yearStart, String.format("%tY", cal));
-    } while (yearStart.compareTo(this.sortedNews.first().getStart()) > 0);
+      String year = String.format("%tY", cal);
+      cutOffDates.put(yearStart, new String[] { year, year });
+    } while (!this.sortedNews.isEmpty() &&
+        yearStart.compareTo(this.sortedNews.get(0).getStart()) > 0);
 
     /* Sort news into categories. */
-    Map<String, List<String[]>> newsByCategory =
-        new LinkedHashMap<String, List<String[]>>();
-    for (String category : cutOffDates.values()) {
+    Map<String[], List<String[]>> newsByCategory =
+        new LinkedHashMap<String[], List<String[]>>();
+    for (String[] category : cutOffDates.values()) {
       newsByCategory.put(category, new ArrayList<String[]>());
     }
     for (News news : this.sortedNews) {
@@ -77,17 +92,39 @@ public class NewsServlet extends HttpServlet {
       if (news.getEnd() != null) {
         sb.append("&ndash;" + news.getEnd());
       }
-      sb.append(": ");
       if (news.getPlace() != null) {
-        sb.append(news.getPlace() + ", ");
-      }
-      if (news.getProtocols() != null) {
-        int written = 0;
-        for (String protocol : news.getProtocols()) {
-          sb.append((written++ > 0 ? ", " : "") + protocol);
+        if (this.countries.containsKey(news.getPlace())) {
+          sb.append(" <span class=\"label label-warning\">"
+              + this.countries.get(news.getPlace()) + "</span>");
+        } else {
+          sb.append(" <span class=\"label label-warning\">"
+              + "Unknown country</span>");
         }
       }
-      sb.append(", " + news.getDescription());
+      if (news.getProtocols() != null) {
+        for (String protocol : news.getProtocols()) {
+          if (protocol.equals("relay")) {
+            sb.append(" <span class=\"label label-success\">"
+                + "Relays</span>");
+          } else if (protocol.equals("bridge")) {
+            sb.append(" <span class=\"label label-primary\">"
+                + "Bridges</span>");
+          } else if (protocol.equals("<OR>")) {
+            sb.append(" <span class=\"label label-info\">"
+                + "&lt;OR&gt;</span>");
+          } else {
+            sb.append(" <span class=\"label label-info\">"
+                + protocol + "</span>");
+          }
+        }
+      }
+      if (news.isUnknown()) {
+        sb.append(" <span class=\"label label-default\">"
+            + "Unknown</span>");
+      }
+      sb.append("<br>");
+      sb.append(news.getDescription());
+      sb.append("<br>");
       if (news.getLinks() != null && news.getLinks().length > 0) {
         int written = 0;
         sb.append(" (");
@@ -98,7 +135,7 @@ public class NewsServlet extends HttpServlet {
       }
       sb.append("</p>");
       String[] formattedNews = new String[] { sb.toString() };
-      for (Map.Entry<String, String> category : cutOffDates.entrySet()) {
+      for (Map.Entry<String, String[]> category : cutOffDates.entrySet()) {
         if (news.getStart().compareTo(category.getKey()) >= 0) {
           newsByCategory.get(category.getValue()).add(formattedNews);
           break;
@@ -107,7 +144,7 @@ public class NewsServlet extends HttpServlet {
     }
 
     /* Remove categories without news. */
-    for (String category : cutOffDates.values()) {
+    for (String[] category : cutOffDates.values()) {
       if (newsByCategory.get(category).isEmpty()) {
         newsByCategory.remove(category);
       }

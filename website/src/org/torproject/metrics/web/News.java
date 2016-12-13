@@ -17,28 +17,34 @@ public class News {
 
   private String[] links;
 
+  private boolean unknown;
+
   String getStart() {
-    return start;
+    return this.start;
   }
 
   String getEnd() {
-    return end;
+    return this.end;
   }
 
   String getPlace() {
-    return place;
+    return this.place;
   }
 
   String[] getProtocols() {
-    return protocols;
+    return this.protocols;
   }
 
   String getDescription() {
-    return description;
+    return this.description;
   }
 
   String[] getLinks() {
-    return links;
+    return this.links;
+  }
+
+  boolean isUnknown() {
+    return this.unknown;
   }
 }
 
