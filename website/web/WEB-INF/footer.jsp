@@ -1,4 +1,3 @@
-      <p><a href="about.html">About Tor Metrics</a></p>
       <p>This material is supported in part by the National Science
       Foundation under Grant No. CNS-0959138. Any opinions,
       finding, and conclusions or recommendations expressed in this
