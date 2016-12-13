@@ -6,6 +6,7 @@
   <title>Tor Metrics &mdash; ${title}</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
+  <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
   <link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon">
 </head>
 <body>
@@ -30,9 +31,13 @@ of data, rather than just dogma or perspective."
         <br>
         <!-- Navigation end -->
 
+<c:forEach var="category" items="${categories}"><c:if test="${fn:length(category[0]) > 0}"><a href="${category[0]}.html"></c:if>${category[1]}<c:if test="${fn:length(category[0]) > 0}"></a></c:if> &#124;
+</c:forEach>
+<br>
+
 <h2>${categoryHeader}</h2>
 
-${categoryDescription}
+<p>${categoryDescription}</p>
 
 <c:forEach var="tab" items="${categoryTabs}">
 <c:if test="${fn:length(tab[1]) > 0}"><a href="${tab[1]}.html"></c:if>${tab[0]}<c:if test="${fn:length(tab[1]) > 0}"></a></c:if> &#124;

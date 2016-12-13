@@ -5,6 +5,7 @@
   <title>Tor Metrics &mdash; Network bubble graphs</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
+  <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
   <link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon">
   <script src="js/d3.min.js"></script>
   <script src="js/bubbles.js"></script>

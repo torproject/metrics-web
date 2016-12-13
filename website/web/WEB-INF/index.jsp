@@ -6,6 +6,7 @@
   <title>Tor Metrics</title>
   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
   <link href="css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
+  <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
   <link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon">
 </head>
 <body>
@@ -33,23 +34,13 @@ of data, rather than just dogma or perspective."
         <p>Welcome! What would you like to know about the Tor network?</p>
 
 <div>
-<a href="userstats-relay-country.html"><h3>Users</h3></a>
-<p>Where are Tor users from? How do they connect to Tor?</p>
 
-<a href="networksize.html"><h3>Relays and Bridges</h3></a>
-<p>How many relays and bridges are online? What do we know about them?</p>
+<c:forEach var="category" items="${categories}">
+<c:if test="${fn:length(category[0]) > 0}"><a href="${category[0]}.html"></c:if><h3>${category[1]}</h3><c:if test="${fn:length(category[0]) > 0}"></a></c:if>
+<p>${category[2]}</p>
+</c:forEach>
+<br>
 
-<a href="bandwidth.html"><h3>Traffic</h3></a>
-<p>How much traffic can the Tor network handle? How much traffic is there?</p>
-
-<a href="torperf.html"><h3>Performance</h3></a>
-<p>How fast and reliable is the Tor network?</p>
-
-<a href="hidserv-dir-onions-seen.html"><h3>Onion Services</h3></a>
-<p>How many onion services are there? How much traffic do they pull?</p>
-
-<h3>Downloads (coming soon)</h3>
-<p>How many downloads of Tor applications are there? How many updates?</p>
 </div>
 
 <p>Let us know if we're missing anything, or if we should measure something

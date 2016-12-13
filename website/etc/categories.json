@@ -2,7 +2,7 @@
   {
     "id": "clients",
     "header": "Users",
-    "description": "<p>Where are Tor users from? How do they connect to Tor?</p>",
+    "description": "Where are Tor users from? How do they connect to Tor?",
     "metrics": [
       "userstats-relay-country",
       "userstats-bridge-country",
@@ -17,7 +17,7 @@
   {
     "id": "servers",
     "header": "Relays and Bridges",
-    "description": "<p>How many relays and bridges are online? What do we know about them?</p>",
+    "description": "How many relays and bridges are online? What do we know about them?",
     "metrics": [
       "networksize",
       "relayflags",
@@ -28,7 +28,7 @@
   {
     "id": "traffic",
     "header": "Traffic",
-    "description": "<p>How much traffic can the Tor network handle? How much traffic is there?</p>",
+    "description": "How much traffic can the Tor network handle? How much traffic is there?",
     "metrics": [
       "bandwidth",
       "bandwidth-flags",
@@ -41,7 +41,7 @@
   {
     "id": "performance",
     "header": "Performance",
-    "description": "<p>How fast and reliable is the Tor network?</p>",
+    "description": "How fast and reliable is the Tor network?",
     "metrics": [
       "torperf",
       "torperf-failures",
@@ -51,7 +51,7 @@
   {
     "id": "onion-services",
     "header": "Onion Services",
-    "description": "<p>How many onion services are there? How much traffic do they pull?</p>",
+    "description": "How many onion services are there? How much traffic do they pull?",
     "metrics": [
       "hidserv-dir-onions-seen",
       "hidserv-rend-relayed-cells",
@@ -61,7 +61,7 @@
   {
     "id": "downloads",
     "header": "Downloads (coming soon)",
-    "description": "<p>How many downloads of Tor applications are there? How many updates?</p>",
+    "description": "How many downloads of Tor applications are there? How many updates?",
     "metrics": []
   }
 ]
