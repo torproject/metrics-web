@@ -3,8 +3,8 @@
 
 package org.torproject.metrics.web.graphs;
 
+import org.torproject.metrics.web.ContentProvider;
 import org.torproject.metrics.web.Metric;
-import org.torproject.metrics.web.MetricsProvider;
 
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
@@ -59,7 +59,7 @@ public class RObjectGenerator implements ServletContextListener {
 
     this.availableGraphs = new LinkedHashMap<String, Metric>();
     this.availableTables = new LinkedHashMap<String, Metric>();
-    for (Metric metric : MetricsProvider.getInstance().getMetricsList()) {
+    for (Metric metric : ContentProvider.getInstance().getMetricsList()) {
       String type = metric.getType();
       String id = metric.getId();
       if ("Graph".equals(type)) {

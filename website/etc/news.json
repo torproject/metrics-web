@@ -1,0 +1,398 @@
+[
+  {
+    "start": "2012-05-15",
+    "end": "2012-12-15",
+    "place": "et",
+    "protocols": [
+      "&lt;OR&gt;"
+    ],
+    "description": "Ethiopia blocks Tor TLS.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/6045\">ticket</a>",
+      "<a href=\"https://blog.torproject.org/blog/ethiopia-introduces-deep-packet-inspection\">blog post 1</a>",
+      "<a href=\"https://blog.torproject.org/blog/update-censorship-ethiopia\">blog post 2</a>"
+    ]
+  },
+  {
+    "start": "2013-08-19",
+    "end": "2014-04-28",
+    "protocols": [
+      "&lt;OR&gt;",
+      "relay"
+    ],
+    "description": "Relay users increase globally from about 800K to over 5M, when computers in the [https://en.wikipedia.org/wiki/Mevade_Botnet Mevade/Sefnit botnetbegan using Tor to communicate. The user count decreased in the following months through efforts to clean up the botnet. Sometime in 2014-04, the botnet switched from using Tor to using SSH.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/how-to-handle-millions-new-tor-clients\">blog post</a>",
+      "<a href=\"https://research.torproject.org/techreports/botnet-tr-2013-11-20.pdf\">tech report</a>",
+      "<a href=\"https://blog.fox-it.com/2013/09/05/large-botnet-cause-of-recent-tor-network-overload/\">analysis</a>",
+      "<a href=\"https://www.facebook.com/notes/protect-the-graph/sefnit-is-back/1448087102098103\">switch to SSH</a>"
+    ]
+  },
+  {
+    "start": "2013-10-27",
+    "protocols": [
+      "&lt;OR&gt;",
+      "relay"
+    ],
+    "description": "Microsoft adds the Mevade/Sefnit botnet signature to various security scanners.",
+    "links": [
+      "<a href=\"https://blogs.technet.microsoft.com/mmpc/2014/01/09/tackling-the-sefnit-botnet-tor-hazard/\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2013-11-03",
+    "protocols": [
+      "&lt;OR&gt;",
+      "relay"
+    ],
+    "description": "Microsoft adds the Mevade/Sefnit botnet signature to their Malicious Software Removal Tool.",
+    "links": [
+      "<a href=\"https://blogs.technet.microsoft.com/mmpc/2014/01/09/tackling-the-sefnit-botnet-tor-hazard/\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2015-11-18",
+    "end": "2015-12-10",
+    "place": "bd",
+    "protocols": [
+      "&lt;OR&gt;",
+      "obfs3",
+      "obfs4"
+    ],
+    "description": "Bangladesh blocks Facebook, WhatsApp, and Viber.",
+    "links": [
+      "<a href=\"http://phys.org/news/2015-12-bangladesh-facebook.html\">news article</a>",
+      "<a href=\"https://archive.fo/fc2WQ\">(archive)</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2015-08-01&end=2016-02-01&country=bd&events=off\">relay graph</a>"
+    ]
+  },
+  {
+    "start": "2016-04-28",
+    "protocols": [
+      "fte"
+    ],
+    "description": "Tor Browser 6.0a5 and 6.0a5-hardened released, which lack the fte pluggable transport on Mac.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-60a5-released\">6.0a5 blog post</a>",
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-60a5-hardened-released\">6.0a5 blog post</a>",
+      "<a href=\"https://bugs.torproject.org/18495\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2016-05-30",
+    "protocols": [
+      "fte"
+    ],
+    "description": "Tor Browser 6.0 released, which lacks the fte pluggable transport on Mac.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-60-released\">6.0 blog post</a>",
+      "<a href=\"https://bugs.torproject.org/18495\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2016-05-02",
+    "end": "2016-05-03",
+    "place": "br",
+    "protocols": [
+      "&lt;OR&gt;"
+    ],
+    "description": "WhatsApp block in Brazil",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tracking-impact-whatsapp-blockage-tor\">blog post</a>",
+      "<a href=\"https://ooni.torproject.org/post/brazil-whatsapp-block/\">OONI report</a>",
+      "<a href=\"http://bloqueios.info/en/casos/block-for-non-compliance-with-judicial-requests-for-user-data-3/\">bloqueios report</a>"
+    ]
+  },
+  {
+    "start": "2016-06-01",
+    "place": "kz",
+    "protocols": [
+      "&lt;OR&gt;"
+    ],
+    "description": "Kazakhstan blocks vanilla Tor TLS. Users mostly switch to obfs4.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/20348\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2016-08-20",
+    "place": "ir",
+    "protocols": [
+      "&lt;OR&gt;"
+    ],
+    "description": "Iran somehow blocks most direct Tor connections. May also affect bridge users, but it's hard to tell because there were few vanilla bridge users anyway.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/20216\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2016-08-24",
+    "protocols": [
+      "bridge"
+    ],
+    "description": "tor 0.2.8.7 and 0.2.9.2-alpha are released, changing the bridge authority from Tonga to Bifroest.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tor-0287-released-important-fixes\">0.2.8.7 announcement</a>"
+    ]
+  },
+  {
+    "start": "2016-08-31",
+    "protocols": [
+      "bridge"
+    ],
+    "description": "CollecTor begins publishing bridge stats from the new bridge authority Bifroest.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2016-August/011336.html\">post</a>"
+    ]
+  },
+  {
+    "start": "2016-09-02",
+    "protocols": [
+      "bridge"
+    ],
+    "description": "The former bridge authority Tonga shuts down. Bridges that have not updated to tor 0.2.8.7 or 0.2.9.2-alpha (which include all 5 default obfs3 bridges and 3/16 default obfs4 bridges) stop reporting statistics.",
+    "links": [
+      "<a href=\"https://trac.torproject.org/projects/tor/ticket/19690#comment:17\">shutdown notice</a>",
+      "<a href=\"https://blog.torproject.org/blog/new-bridge-authority\">blog post</a>",
+      "<a href=\"https://metrics.torproject.org/networksize.html?start=2016-07-01&end=2016-09-23\">loss of reporting bridges</a>"
+    ]
+  },
+  {
+    "start": "2016-09-04",
+    "place": "ir",
+    "protocols": [
+      "&lt;OR&gt;"
+    ],
+    "description": "Iran intensifies the blocking begun on 2016-08-20, getting most of the remaining direct users. There is interference in the graphs from the bridge authority changeover on 2016-09-02, but because the changeover would not have affected counts of ''direct'' users, it may be a coincidence.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/20216\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2016-09-20",
+    "protocols": [
+      "meek"
+    ],
+    "description": "macOS 10.12 (Sierra) is released, breaking some programs that are built with Go <1.7, including the meek-client that comes with Tor Browser. (See 2016-11-15 unbreaking event.)",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/20250\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2016-09-23",
+    "protocols": [
+      "obfs3"
+    ],
+    "description": "Default obfs3 bridges ndnop0 and ndnop2 upgrade and begin reporting statistics to the new bridge authority Bifroest.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2016-September/000217.html\">post on bridges not reporting statistics</a>"
+    ]
+  },
+  {
+    "start": "2016-09-23",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Default obfs3 bridges ndnop3 and ndnop5 upgrade and begin reporting statistics to the new bridge authority Bifroest.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2016-September/000217.html\">post on bridges not reporting statistics</a>"
+    ]
+  },
+  {
+    "start": "2016-09-23",
+    "protocols": [
+      "obfs3"
+    ],
+    "description": "Default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>) upgrade and begin reporting statistics to the new bridge authority Bifroest.",
+    "links": []
+  },
+  {
+    "start": "2016-09-24",
+    "protocols": [
+      "obfs3"
+    ],
+    "description": "Default obfs3 bridge LeifEricson upgrades and begins reporting statistics to the new bridge authority Bifroest. This is the last obfs3 bridge that hadn't upgraded.",
+    "links": []
+  },
+  {
+    "start": "2016-09-24",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Default obfs4 bridge LeifEricson upgrades and begins reporting statistics to the new bridge authority Bifroest. This is the last obfs4 bridge that hadn't upgraded.",
+    "links": []
+  },
+  {
+    "start": "2016-10-02",
+    "end": "2016-10-03",
+    "place": "eg",
+    "protocols": [
+      "&lt;OR&gt;",
+      "relay"
+    ],
+    "description": "Reports that direct connections from Egypt are blocked; bridges are required. Maybe be the same as the block beginning 2016-10-25.",
+    "links": [
+      "<a href=\"https://ooni.torproject.org/post/egypt-network-interference/#attempts-to-block-tor\">OONI report</a>"
+    ]
+  },
+  {
+    "start": "2016-10-08",
+    "end": "2016-10-09",
+    "place": "tr",
+    "description": "Turkey blocks storage services including Dropbox, Google Drive, OneDrive, and GitHub. Most (all?) of the blocks were rescinded the next day.",
+    "links": [
+      "<a href=\"https://turkeyblocks.org/2016/10/08/google-drive-dropbox-blocked-in-turkey/\">blocking article</a>",
+      "<a href=\"https://twitter.com/TurkeyBlocks/status/785054084856512512\">unblocking tweet</a>",
+      "<a href=\"https://www.turkishminute.com/2016/10/09/turkey-lifts-block-dropbox-google-drive-onedrive-remains-blocked/\">unblocking article</a>"
+    ]
+  },
+  {
+    "start": "2016-10-19",
+    "end": "2016-11-10",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Large decrease in meek users, perhaps caused by problems in Orbot 15.0.2 BETA 1 that were fixed in Orbot 15.2.0 RC8.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/20495\">ticket</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2016-October/000764.html\">initial email</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2016-November/000778.html\">followup email</a>",
+      "<a href=\"https://groups.google.com/d/msg/traffic-obf/CSJLt3t-_OI/FnAqWqquAwAJ\">Orbot mail</a>"
+    ]
+  },
+  {
+    "start": "2016-10-25",
+    "place": "eg",
+    "protocols": [
+      "&lt;OR&gt;",
+      "relay"
+    ],
+    "description": "Egypt blocks Tor directory authorities and public relays by TCP RST. Bridges work.",
+    "links": [
+      "<a href=\"https://ooni.torproject.org/post/egypt-network-interference/#attempts-to-block-tor\">OONI report</a>"
+    ]
+  },
+  {
+    "start": "2016-11-03",
+    "place": "tr",
+    "description": "Turkey blocks Facebook, Twitter, YouTube, WhatsApp",
+    "links": [
+      "<a href=\"https://turkeyblocks.org/2016/11/04/social-media-shutdown-turkey/\">article</a>"
+    ]
+  },
+  {
+    "start": "2016-11-04",
+    "place": "tr",
+    "description": "Turkey orders a block on VPN services and Tor",
+    "links": [
+      "<a href=\"http://turk-internet.com/portal/yazigoster.php?yaziid=54465\">Turkish article</a>",
+      "<a href=\"https://motherboard.vice.com/read/turkey-doubles-down-on-censorship-with-block-on-vpns-tor\">English article</a>"
+    ]
+  },
+  {
+    "start": "2016-11-15",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Tor Browser 6.0.6 is released, unbreaking meek on macOS 10.12 (Sierra). (See 2016-09-20 breaking event.)",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-606-released\">blog post</a>",
+      "<a href=\"https://bugs.torproject.org/20250#comment:29\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2016-11-15",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Default obfs4 bridges ndnop3 and ndnop5 turn on timing obfuscation (`iat-mode`).",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2016-November/000780.html\">mailing list post</a>",
+      "<a href=\"https://bugs.torproject.org/20837\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2016-11-18",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9C805C955CB124D188C0D44F271E9BE57DE2109\">Lisbeth</a> turns on timing obfuscation (`iat-mode=1`).",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/20837\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2016-09-23",
+    "end": "2016-11-28",
+    "protocols": [
+      "obfs3"
+    ],
+    "description": "Outage of default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>). (Start date not known for sure, though it must have been after 2016-09-23; discussed in non-archived tor-team email.)",
+    "links": []
+  },
+  {
+    "start": "2016-12-01",
+    "place": "by",
+    "protocols": [
+      "&lt;OR&gt;",
+      "relay"
+    ],
+    "description": "Belarus blocks the addresses of public Tor relays, apparently by RST injection. Bridges work, even unobfuscated ones.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/20907\">ticket</a>",
+      "<a href=\"https://geektimes.ru/post/283392/\">article (Russian)</a>",
+      "<a href=\"https://ooni.torproject.org/post/belarus-fries-onion/\">OONI blog post</a>"
+    ]
+  },
+  {
+    "start": "2016-02-24",
+    "place": "tm",
+    "protocols": [
+      "&lt;OR&gt;"
+    ],
+    "description": "Large drop in direct users in Turkmenistan",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2015-11-01&end=2016-04-01&country=tm&events=off\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2016-08-24",
+    "place": "cn",
+    "protocols": [
+      "&lt;OR&gt;"
+    ],
+    "description": "Large decrease in users in China",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-07-30&end=2016-10-28&country=cn&events=off\">relay</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-07-30&end=2016-10-28&country=cn\">bridge</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2016-10-09",
+    "end": "2016-10-25",
+    "place": "il",
+    "protocols": [
+      "&lt;OR&gt;"
+    ],
+    "description": "Direct users fluctuate wildly in Israel. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-07-28&end=2016-10-26&country=il&events=off\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2016-11-20",
+    "place": "sa",
+    "protocols": [
+      "&lt;OR&gt;",
+      "relay"
+    ],
+    "description": "Decrease in direct users in Saudi Arabia.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/20785\">ticket</a>"
+    ],
+    "unknown": true
+  }
+]

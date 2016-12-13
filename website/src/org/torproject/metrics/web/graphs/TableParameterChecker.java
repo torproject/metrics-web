@@ -3,8 +3,8 @@
 
 package org.torproject.metrics.web.graphs;
 
+import org.torproject.metrics.web.ContentProvider;
 import org.torproject.metrics.web.Metric;
-import org.torproject.metrics.web.MetricsProvider;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,7 +47,7 @@ public class TableParameterChecker {
     this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
     this.availableTables = new HashMap<String, String[]>();
-    for (Metric metric : MetricsProvider.getInstance().getMetricsList()) {
+    for (Metric metric : ContentProvider.getInstance().getMetricsList()) {
       if ("Table".equals(metric.getType())) {
         this.availableTables.put(metric.getId(), metric.getParameters());
       }

@@ -3,8 +3,8 @@
 
 package org.torproject.metrics.web.graphs;
 
+import org.torproject.metrics.web.ContentProvider;
 import org.torproject.metrics.web.Metric;
-import org.torproject.metrics.web.MetricsProvider;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,7 +50,7 @@ public class GraphParameterChecker {
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     this.availableGraphs = new HashMap<String, String[]>();
-    for (Metric metric : MetricsProvider.getInstance().getMetricsList()) {
+    for (Metric metric : ContentProvider.getInstance().getMetricsList()) {
       if ("Graph".equals(metric.getType())) {
         this.availableGraphs.put(metric.getId(), metric.getParameters());
       }

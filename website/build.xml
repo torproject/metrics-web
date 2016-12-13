@@ -54,6 +54,9 @@
       <zipfileset dir="etc"
                   prefix="WEB-INF/classes"
                   includes="categories.json"/>
+      <zipfileset dir="etc"
+                  prefix="WEB-INF/classes"
+                  includes="news.json"/>
       <metainf dir="etc"
                includes="context.xml"/>
     </war>

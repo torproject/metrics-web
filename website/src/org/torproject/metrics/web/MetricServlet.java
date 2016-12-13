@@ -51,7 +51,7 @@ public abstract class MetricServlet extends HttpServlet {
 
   @Override
   public void init() throws ServletException {
-    this.metrics = MetricsProvider.getInstance().getMetricsList();
+    this.metrics = ContentProvider.getInstance().getMetricsList();
     Map<String, String> allTypesAndTitles = new HashMap<String, String>();
     Map<String, String[]> dataIds = new HashMap<String, String[]>();
     Map<String, String[]> relatedIds = new HashMap<String, String[]>();
@@ -116,7 +116,7 @@ public abstract class MetricServlet extends HttpServlet {
       }
     }
     for (Category category :
-        CategoriesProvider.getInstance().getCategoriesList()) {
+        ContentProvider.getInstance().getCategoriesList()) {
       for (String id : category.getMetrics()) {
         categories.put(id, category);
       }

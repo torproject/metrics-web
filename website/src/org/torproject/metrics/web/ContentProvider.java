@@ -6,33 +6,48 @@ package org.torproject.metrics.web;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MetricsProvider {
+public class ContentProvider {
 
-  private static MetricsProvider instance = new MetricsProvider();
+  private static ContentProvider instance = new ContentProvider();
 
-  public static MetricsProvider getInstance() {
-    return MetricsProvider.instance;
+  public static ContentProvider getInstance() {
+    return ContentProvider.instance;
   }
 
   private List<Metric> metricsList;
 
-  private MetricsProvider() {
-    InputStream in = this.getClass().getClassLoader()
-        .getResourceAsStream("metrics.json");
+  private List<Category> categoriesList;
+
+  private List<News> newsList;
+
+  private ContentProvider() {
     Gson gson = new GsonBuilder().create();
-    Metric[] metricsArray = gson.fromJson(new InputStreamReader(in),
-        Metric[].class);
-    this.metricsList = Arrays.asList(metricsArray);
+    this.metricsList = Arrays.asList(gson.fromJson(new InputStreamReader(
+        this.getClass().getClassLoader().getResourceAsStream("metrics.json")),
+        Metric[].class));
+    this.categoriesList = Arrays.asList(gson.fromJson(new InputStreamReader(
+        this.getClass().getClassLoader().getResourceAsStream(
+        "categories.json")), Category[].class));
+    this.newsList = Arrays.asList(gson.fromJson(new InputStreamReader(
+        this.getClass().getClassLoader().getResourceAsStream(
+        "news.json")), News[].class));
   }
 
   public List<Metric> getMetricsList() {
     return new ArrayList<Metric>(this.metricsList);
+  }
+
+  public List<Category> getCategoriesList() {
+    return new ArrayList<Category>(this.categoriesList);
+  }
+
+  public List<News> getNewsList() {
+    return new ArrayList<News>(this.newsList);
   }
 }
 

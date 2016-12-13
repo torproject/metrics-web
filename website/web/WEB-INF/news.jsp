@@ -33,6 +33,13 @@ of data, rather than just dogma or perspective."
 <h3>News</h3>
 <br>
 
+<c:forEach var="category" items="${news}">
+<h3>${category.key}</h3>
+<c:forEach var="entry" items="${category.value}">
+<p>${entry[0]}</p>
+</c:forEach>
+</c:forEach>
+
     </div>
   </div>
   <div class="bottom" id="bottom">
