@@ -48,6 +48,19 @@ public class TableServlet extends MetricServlet {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
+    List<String[]> categories = new ArrayList<String[]>();
+    /* TODO Some of the following code should move to init(). */
+    for (Category category :
+        ContentProvider.getInstance().getCategoriesList()) {
+      if (category.getMetrics().isEmpty()
+          || this.categories.get(requestedId).equals(category)) {
+        categories.add(new String[] { "", category.getHeader() });
+      } else {
+        categories.add(new String[] { category.getMetrics().get(0),
+            category.getHeader() });
+      }
+    }
+    request.setAttribute("categories", categories);
     request.setAttribute("id", requestedId);
     request.setAttribute("title", this.titles.get(requestedId));
     if (this.categories.containsKey(requestedId)) {

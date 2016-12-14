@@ -4,6 +4,8 @@
 package org.torproject.metrics.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,8 +30,33 @@ public class LinkServlet extends MetricServlet {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
+    List<String[]> categories = new ArrayList<String[]>();
+    /* TODO Some of the following code should move to init(). */
+    for (Category category :
+        ContentProvider.getInstance().getCategoriesList()) {
+      if (category.getMetrics().isEmpty()
+          || this.categories.get(requestedId).equals(category)) {
+        categories.add(new String[] { "", category.getHeader() });
+      } else {
+        categories.add(new String[] { category.getMetrics().get(0),
+            category.getHeader() });
+      }
+    }
+    request.setAttribute("categories", categories);
     request.setAttribute("id", requestedId);
     request.setAttribute("title", this.titles.get(requestedId));
+    if (this.categories.containsKey(requestedId)) {
+      Category category = this.categories.get(requestedId);
+      request.setAttribute("categoryHeader", category.getHeader());
+      request.setAttribute("categoryDescription", category.getDescription());
+      List<String[]> categoryTabs = new ArrayList<String[]>();
+      for (String metricId : category.getMetrics()) {
+        categoryTabs.add(new String[] {
+            this.titles.get(metricId),
+            requestedId.equals(metricId) ? null : metricId });
+      }
+      request.setAttribute("categoryTabs", categoryTabs);
+    }
     request.setAttribute("description",
         this.descriptions.get(requestedId));
     request.setAttribute("data", this.data.get(requestedId));

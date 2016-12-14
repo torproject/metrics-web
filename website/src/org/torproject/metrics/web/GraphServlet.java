@@ -135,6 +135,7 @@ public class GraphServlet extends MetricServlet {
       return;
     }
     List<String[]> categories = new ArrayList<String[]>();
+    /* TODO Some of the following code should move to init(). */
     for (Category category :
         ContentProvider.getInstance().getCategoriesList()) {
       if (category.getMetrics().isEmpty()

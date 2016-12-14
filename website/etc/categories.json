@@ -12,7 +12,8 @@
       "userstats-bridge-version",
       "userstats-relay-table",
       "userstats-censorship-events",
-      "userstats-bridge-table"
+      "userstats-bridge-table",
+      "oxford-anonymous-internet"
     ]
   },
   {
@@ -24,7 +25,10 @@
       "networksize",
       "relayflags",
       "versions",
-      "platforms"
+      "platforms",
+      "uptimes",
+      "networkchurn",
+      "bubbles"
     ]
   },
   {
@@ -38,7 +42,8 @@
       "advbwdist-perc",
       "advbwdist-relay",
       "bwhist-flags",
-      "dirbytes"
+      "dirbytes",
+      "uncharted-data-flow"
     ]
   },
   {

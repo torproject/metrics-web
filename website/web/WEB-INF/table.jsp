@@ -31,6 +31,10 @@ of data, rather than just dogma or perspective."
         <br>
         <!-- Navigation end -->
 
+<c:forEach var="category" items="${categories}"><c:if test="${fn:length(category[0]) > 0}"><a href="${category[0]}.html"></c:if>${category[1]}<c:if test="${fn:length(category[0]) > 0}"></a></c:if> &#124;
+</c:forEach>
+<br>
+
 <h2>${categoryHeader}</h2>
 
 <p>${categoryDescription}</p>
