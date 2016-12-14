@@ -24,7 +24,6 @@ of data, rather than just dogma or perspective."
         <a href="index.html">Metrics</a> &#124;
         <a href="about.html">About</a> &#124;
         <a href="news.html">News</a> &#124;
-        <a href="sources.html">Sources</a> &#124;
         <a href="tools.html">Tools</a> &#124;
         Research
         <br>

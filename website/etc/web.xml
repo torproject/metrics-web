@@ -221,17 +221,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>SourcesServlet</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.SourcesServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>SourcesServlet</servlet-name>
-    <url-pattern>/sources.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>ToolsServlet</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.ToolsServlet
