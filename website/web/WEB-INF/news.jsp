@@ -30,7 +30,7 @@ of data, rather than just dogma or perspective."
         <br>
         <!-- Navigation end -->
 
-<h3>News</h3>
+<h1>News</h1>
 <br>
 
 <p>We collect reports of events and aggregate them here for your convenience.
@@ -46,7 +46,7 @@ it to this list.</p>
 
 <c:forEach var="category" items="${news}">
 <a name="${category.key[1]}"></a>
-<h3>${category.key[0]}</h3>
+<h2>${category.key[0]}</h2>
 <c:forEach var="entry" items="${category.value}">
 <p>${entry[0]}</p>
 </c:forEach>
