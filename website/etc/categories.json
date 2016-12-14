@@ -2,7 +2,8 @@
   {
     "id": "clients",
     "header": "Users",
-    "description": "Where are Tor users from? How do they connect to Tor?",
+    "summary": "Where are Tor users from and how they connect to Tor.",
+    "description": "We estimate the number of users by analyzing the requests induced by Tor clients. These papers detail on how we count users and how we count bridge users.",
     "metrics": [
       "userstats-relay-country",
       "userstats-bridge-country",
@@ -17,7 +18,8 @@
   {
     "id": "servers",
     "header": "Relays and Bridges",
-    "description": "How many relays and bridges are online? What do we know about them?",
+    "summary": "How many relays and bridges are online and what we know about them.",
+    "description": "Country and ISP diversity are approximated by resolving IP addresses to a country code an an autonomous system. We process the capabilities and properties relays and bridges reported to directory authorities.",
     "metrics": [
       "networksize",
       "relayflags",
@@ -28,7 +30,8 @@
   {
     "id": "traffic",
     "header": "Traffic",
-    "description": "How much traffic can the Tor network handle? How much traffic is there?",
+    "summary": "How much traffic can the Tor network can handle and how much traffic there is.",
+"description": "We measure total available bandwidth and current capacity by aggregating what relays and bridges report to directory authorities.",
     "metrics": [
       "bandwidth",
       "bandwidth-flags",
@@ -41,7 +44,8 @@
   {
     "id": "performance",
     "header": "Performance",
-    "description": "How fast and reliable is the Tor network?",
+    "summary": "How fast and reliable the Tor network is.",
+description": "We use <a href=\"https://gitweb.torproject.org/torperf.git\">Torperf</a> to run performance measurements. It works by fetching files of different sizes over Tor and measuring how long that takes.",
     "metrics": [
       "torperf",
       "torperf-failures",
@@ -51,7 +55,8 @@
   {
     "id": "onion-services",
     "header": "Onion Services",
-    "description": "How many onion services are there? How much traffic do they pull?",
+    "summary": "How many onion services are there and how much traffic they pull.",
+    "description": "Onion services are services that are only accessible via the Tor network.",
     "metrics": [
       "hidserv-dir-onions-seen",
       "hidserv-rend-relayed-cells",
@@ -60,8 +65,9 @@
   },
   {
     "id": "downloads",
-    "header": "Downloads (coming soon)",
-    "description": "How many downloads of Tor applications are there? How many updates?",
+    "header": "Downloads",
+    "summary": "How many downloaded Tor application with respect to version updates.",
+    "description": "We measure how many people downloaded which versions of Tor by using a web stats.",
     "metrics": []
   }
 ]

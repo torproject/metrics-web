@@ -11,24 +11,30 @@ public class Category {
 
   private String header;
 
+  private String summary;
+
   private String description;
 
   private List<String> metrics;
 
   public String getId() {
-    return id;
+    return this.id;
   }
 
   public String getHeader() {
-    return header;
+    return this.header;
+  }
+
+  public String getSummary() {
+    return this.summary;
   }
 
   public String getDescription() {
-    return description;
+    return this.description;
   }
 
   public List<String> getMetrics() {
-    return metrics;
+    return this.metrics;
   }
 }
 

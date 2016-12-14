@@ -31,12 +31,13 @@ of data, rather than just dogma or perspective."
         <br>
         <!-- Navigation end -->
 
-        <p>Welcome! What would you like to know about the Tor network?</p>
+        <h1>Welcome!</h1>
+        <p>What would you like to know about the Tor network?</p>
 
 <div>
 
 <c:forEach var="category" items="${categories}">
-<c:if test="${fn:length(category[0]) > 0}"><a href="${category[0]}.html"></c:if><h3>${category[1]}</h3><c:if test="${fn:length(category[0]) > 0}"></a></c:if>
+<c:if test="${fn:length(category[0]) > 0}"><a href="${category[0]}.html"></c:if><h2>${category[1]}</h2><c:if test="${fn:length(category[0]) > 0}"></a></c:if>
 <p>${category[2]}</p>
 </c:forEach>
 <br>
