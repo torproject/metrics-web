@@ -100,8 +100,7 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
   <a href="index.html"><img src="images/metrics-wordmark-white.png" width="384" height="50" alt="Tor Metrics" id="metrics-wordmark"></a>
   <div>
     <p>
-      <i>&ldquo;Tor metrics are the ammunition that lets Tor and other security advocates argue for a more private and secure Internet from a position of data, rather than just dogma or perspective.&rdquo;</i><br>
-     &ndash;Bruce Schneier (June 1, 2016)
+      <i>&ldquo;Tor metrics are the ammunition that lets Tor and other security advocates argue for a more private and secure Internet from a position of data, rather than just dogma or perspective.&rdquo;<br><small>&mdash; Bruce Schneier (June 1, 2016)</small></i>
     </p>
   </div>
   <div class="clearfix"></div>
