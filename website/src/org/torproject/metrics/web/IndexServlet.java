@@ -4,30 +4,18 @@
 package org.torproject.metrics.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class IndexServlet extends HttpServlet {
+public class IndexServlet extends AnyServlet {
 
   private static final long serialVersionUID = -5156539049907533057L;
 
-  protected List<String[]> categories;
-
   @Override
   public void init() throws ServletException {
-    List<String[]> categories = new ArrayList<String[]>();
-    for (Category category :
-        ContentProvider.getInstance().getCategoriesList()) {
-      categories.add(new String[] {
-          category.getMetrics().isEmpty() ? "" : category.getMetrics().get(0),
-          category.getHeader(), category.getSummary(), category.getIcon() });
-    }
-    this.categories = categories;
+    super.init();
   }
 
   @Override

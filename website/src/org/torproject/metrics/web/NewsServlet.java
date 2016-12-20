@@ -19,11 +19,10 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class NewsServlet extends HttpServlet {
+public class NewsServlet extends AnyServlet {
 
   private static final long serialVersionUID = -7696996243187241242L;
 
@@ -33,6 +32,7 @@ public class NewsServlet extends HttpServlet {
 
   @Override
   public void init() throws ServletException {
+    super.init();
     List<News> sortedNews = new ArrayList<News>();
     for (News news : ContentProvider.getInstance().getNewsList()) {
       if (news.getStart() != null) {
@@ -88,9 +88,9 @@ public class NewsServlet extends HttpServlet {
     }
     for (News news : this.sortedNews) {
       StringBuilder sb = new StringBuilder();
-      sb.append("<p>" + news.getStart());
+      sb.append("<h3 class=\"media-heading\">" + news.getStart());
       if (news.getEnd() != null) {
-        sb.append("&ndash;" + news.getEnd());
+        sb.append(" to " + news.getEnd());
       }
       if (news.getPlace() != null) {
         if (this.countries.containsKey(news.getPlace())) {
@@ -122,18 +122,22 @@ public class NewsServlet extends HttpServlet {
         sb.append(" <span class=\"label label-default\">"
             + "Unknown</span>");
       }
-      sb.append("<br>");
-      sb.append(news.getDescription());
-      sb.append("<br>");
+      sb.append("</h3><p>" + news.getDescription() + "</p>");
       if (news.getLinks() != null && news.getLinks().length > 0) {
         int written = 0;
-        sb.append(" (");
+        sb.append("<p class=\"links\">");
         for (String link : news.getLinks()) {
-          sb.append((written++ > 0 ? " " : "") + link);
+          if (written++ > 0) {
+            sb.append(" ");
+          }
+          if (link.startsWith("https://metrics.torproject.org/")) {
+            sb.append(link);
+          } else {
+            sb.append(link.replaceFirst(">", " target=\"_blank\">"));
+          }
         }
-        sb.append(")");
+        sb.append("</p>");
       }
-      sb.append("</p>");
       String[] formattedNews = new String[] { sb.toString() };
       for (Map.Entry<String, String[]> category : cutOffDates.entrySet()) {
         if (news.getStart().compareTo(category.getKey()) >= 0) {
@@ -150,7 +154,9 @@ public class NewsServlet extends HttpServlet {
       }
     }
 
-    /* Pass news by category to the JSP and let it do the rest of the work. */
+    /* Pass navigation categories and the news to the JSP and let it do the rest
+     * of the work. */
+    request.setAttribute("categories", this.categories);
     request.setAttribute("news", newsByCategory);
     request.getRequestDispatcher("WEB-INF/news.jsp").forward(request,
         response);

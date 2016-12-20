@@ -203,7 +203,7 @@
     "protocols": [
       "obfs3"
     ],
-    "description": "Default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>) upgrade and begin reporting statistics to the new bridge authority Bifroest.",
+    "description": "Default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\" target=\"_blank\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>) upgrade and begin reporting statistics to the new bridge authority Bifroest.",
     "links": []
   },
   {
@@ -305,7 +305,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Default obfs4 bridges ndnop3 and ndnop5 turn on timing obfuscation (`iat-mode`).",
+    "description": "Default obfs4 bridges ndnop3 and ndnop5 turn on timing obfuscation (<code>iat-mode</code>).",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2016-November/000780.html\">mailing list post</a>",
       "<a href=\"https://bugs.torproject.org/20837\">ticket</a>"
@@ -316,7 +316,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9C805C955CB124D188C0D44F271E9BE57DE2109\">Lisbeth</a> turns on timing obfuscation (`iat-mode=1`).",
+    "description": "Default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9C805C955CB124D188C0D44F271E9BE57DE2109\" target=\"_blank\">Lisbeth</a> turns on timing obfuscation (<code>iat-mode=1</code>).",
     "links": [
       "<a href=\"https://bugs.torproject.org/20837\">ticket</a>"
     ]
@@ -327,7 +327,7 @@
     "protocols": [
       "obfs3"
     ],
-    "description": "Outage of default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>). (Start date not known for sure, though it must have been after 2016-09-23; discussed in non-archived tor-team email.)",
+    "description": "Outage of default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\" target=\"_blank\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>). (Start date not known for sure, though it must have been after 2016-09-23; discussed in non-archived tor-team email.)",
     "links": []
   },
   {
