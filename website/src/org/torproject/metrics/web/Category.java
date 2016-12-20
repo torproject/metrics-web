@@ -9,6 +9,8 @@ public class Category {
 
   private String id;
 
+  private String icon;
+
   private String header;
 
   private String summary;
@@ -19,6 +21,10 @@ public class Category {
 
   public String getId() {
     return this.id;
+  }
+
+  public String getIcon() {
+    return this.icon;
   }
 
   public String getHeader() {

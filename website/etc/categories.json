@@ -1,8 +1,9 @@
 [
   {
     "id": "clients",
+    "icon": "fa-users",
     "header": "Users",
-    "summary": "Where are Tor users from and how they connect to Tor.",
+    "summary": "Where Tor users are from and how they connect to Tor.",
     "description": "We estimate the number of users by analyzing the requests induced by Tor clients. These papers detail on how we count users and how we count bridge users.",
     "metrics": [
       "userstats-relay-country",
@@ -18,7 +19,8 @@
   },
   {
     "id": "servers",
-    "header": "Relays and Bridges",
+    "icon": "fa-server",
+    "header": "Servers",
     "summary": "How many relays and bridges are online and what we know about them.",
     "description": "Country and ISP diversity are approximated by resolving IP addresses to a country code an an autonomous system. We process the capabilities and properties relays and bridges reported to directory authorities.",
     "metrics": [
@@ -33,9 +35,10 @@
   },
   {
     "id": "traffic",
+    "icon": "fa-road",
     "header": "Traffic",
-    "summary": "How much traffic can the Tor network can handle and how much traffic there is.",
-"description": "We measure total available bandwidth and current capacity by aggregating what relays and bridges report to directory authorities.",
+    "summary": "How much traffic the Tor network can handle and how much traffic there is.",
+    "description": "We measure total available bandwidth and current capacity by aggregating what relays and bridges report to directory authorities.",
     "metrics": [
       "bandwidth",
       "bandwidth-flags",
@@ -48,9 +51,10 @@
   },
   {
     "id": "performance",
+    "icon": "fa-dashboard",
     "header": "Performance",
     "summary": "How fast and reliable the Tor network is.",
-description": "We use <a href=\"https://gitweb.torproject.org/torperf.git\">Torperf</a> to run performance measurements. It works by fetching files of different sizes over Tor and measuring how long that takes.",
+    "description": "We use <a href=\"https://gitweb.torproject.org/torperf.git\">Torperf</a> to run performance measurements. It works by fetching files of different sizes over Tor and measuring how long that takes.",
     "metrics": [
       "torperf",
       "torperf-failures",
@@ -59,20 +63,14 @@ description": "We use <a href=\"https://gitweb.torproject.org/torperf.git\">Torp
   },
   {
     "id": "onion-services",
+    "icon": "fa-map-signs",
     "header": "Onion Services",
-    "summary": "How many onion services are there and how much traffic they pull.",
+    "summary": "How many onion services there are and how much traffic they pull.",
     "description": "Onion services are services that are only accessible via the Tor network.",
     "metrics": [
       "hidserv-dir-onions-seen",
       "hidserv-rend-relayed-cells",
       "hidserv-frac-reporting"
     ]
-  },
-  {
-    "id": "downloads",
-    "header": "Downloads",
-    "summary": "How many downloaded Tor application with respect to version updates.",
-    "description": "We measure how many people downloaded which versions of Tor by using a web stats.",
-    "metrics": []
   }
 ]

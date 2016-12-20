@@ -25,7 +25,7 @@ public class IndexServlet extends HttpServlet {
         ContentProvider.getInstance().getCategoriesList()) {
       categories.add(new String[] {
           category.getMetrics().isEmpty() ? "" : category.getMetrics().get(0),
-          category.getHeader(), category.getSummary() });
+          category.getHeader(), category.getSummary(), category.getIcon() });
     }
     this.categories = categories;
   }
