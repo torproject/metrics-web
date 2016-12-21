@@ -62,6 +62,7 @@ information, country, or network family.</p>
         <a href="#country-exits-only" onclick="make_bubble_graph('country-exits-only');">Country</a> |
         <a href="#network-family-exits-only" onclick="make_bubble_graph('network-family-exits-only');">Network family (/16)</a>
       </p>
+      <div id="bubble-graph-placeholder"></div>
       <script src="js/d3.min.js"></script>
       <script src="js/bubbles.js"></script>
       <script>make_bubble_graph();</script>

@@ -53,7 +53,7 @@ function make_bubble_graph(graph_name) {
     .size([diameter, diameter])
     .padding(1.5);
 
-  var svg = d3.select("body").append("svg")
+  var svg = d3.select("#bubble-graph-placeholder").append("svg")
     .attr("id", "bubble-graph")
     .attr("width", diameter + legendWidth)
     .attr("height", diameter)
