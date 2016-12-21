@@ -30,7 +30,7 @@
   </div>
 
   <div class="container">
-    <p><a href="?page=about&amp;sub=contact" target="_blank">Let us know</a> if we're missing anything, or if we should measure something else.</p>
+    <p><a href="about.html#contact">Let us know</a> if we're missing anything, or if we should measure something else.</p>
   </div>
 
 <jsp:include page="bottom.jsp"/>
