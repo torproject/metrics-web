@@ -12,10 +12,9 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 
 @SuppressWarnings("serial")
-public abstract class MetricServlet extends HttpServlet {
+public abstract class MetricServlet extends AnyServlet {
 
   protected List<Metric> metrics;
 
@@ -44,17 +43,15 @@ public abstract class MetricServlet extends HttpServlet {
   protected Map<String, List<String[]>> data =
       new HashMap<String, List<String[]>>();
 
-  protected Map<String, List<String[]>> related =
-      new HashMap<String, List<String[]>>();
-
-  protected Map<String, Category> categories = new HashMap<String, Category>();
+  protected Map<String, Category> categoriesById =
+      new HashMap<String, Category>();
 
   @Override
   public void init() throws ServletException {
+    super.init();
     this.metrics = ContentProvider.getInstance().getMetricsList();
     Map<String, String> allTypesAndTitles = new HashMap<String, String>();
     Map<String, String[]> dataIds = new HashMap<String, String[]>();
-    Map<String, String[]> relatedIds = new HashMap<String, String[]>();
     for (Metric metric : this.metrics) {
       String id = metric.getId();
       String title = metric.getTitle();
@@ -84,9 +81,6 @@ public abstract class MetricServlet extends HttpServlet {
       if (metric.getData() != null) {
         dataIds.put(id, metric.getData());
       }
-      if (metric.getRelated() != null) {
-        relatedIds.put(id, metric.getRelated());
-      }
     }
     for (Set<String> ids : idsByType.values()) {
       for (String id : ids) {
@@ -101,24 +95,12 @@ public abstract class MetricServlet extends HttpServlet {
           }
           this.data.put(id, dataLinksTypesAndTitles);
         }
-        if (relatedIds.containsKey(id)) {
-          List<String[]> relatedLinksTypesAndTitles =
-              new ArrayList<String[]>();
-          for (String relatedId : relatedIds.get(id)) {
-            if (allTypesAndTitles.containsKey(relatedId)) {
-              relatedLinksTypesAndTitles.add(new String[] {
-                  relatedId + ".html",
-                  allTypesAndTitles.get(relatedId) } );
-            }
-          }
-          this.related.put(id, relatedLinksTypesAndTitles);
-        }
       }
     }
     for (Category category :
         ContentProvider.getInstance().getCategoriesList()) {
       for (String id : category.getMetrics()) {
-        categories.put(id, category);
+        this.categoriesById.put(id, category);
       }
     }
   }

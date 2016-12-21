@@ -36,7 +36,6 @@ public class DataServlet extends MetricServlet {
     request.setAttribute("data_column_spec",
         this.dataColumnSpecs.get(requestedId));
     request.setAttribute("data", this.data.get(requestedId));
-    request.setAttribute("related", this.related.get(requestedId));
     request.getRequestDispatcher("WEB-INF/data.jsp").forward(request,
         response);
   }

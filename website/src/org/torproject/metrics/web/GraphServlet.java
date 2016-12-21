@@ -134,37 +134,22 @@ public class GraphServlet extends MetricServlet {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    List<String[]> categories = new ArrayList<String[]>();
-    /* TODO Some of the following code should move to init(). */
-    for (Category category :
-        ContentProvider.getInstance().getCategoriesList()) {
-      if (category.getMetrics().isEmpty()
-          || this.categories.get(requestedId).equals(category)) {
-        categories.add(new String[] { "", category.getHeader() });
-      } else {
-        categories.add(new String[] { category.getMetrics().get(0),
-            category.getHeader() });
-      }
-    }
-    request.setAttribute("categories", categories);
+    request.setAttribute("categories", this.categories);
     request.setAttribute("id", requestedId);
     request.setAttribute("title", this.titles.get(requestedId));
-    if (this.categories.containsKey(requestedId)) {
-      Category category = this.categories.get(requestedId);
+    if (this.categoriesById.containsKey(requestedId)) {
+      Category category = this.categoriesById.get(requestedId);
       request.setAttribute("categoryHeader", category.getHeader());
       request.setAttribute("categoryDescription", category.getDescription());
       List<String[]> categoryTabs = new ArrayList<String[]>();
       for (String metricId : category.getMetrics()) {
-        categoryTabs.add(new String[] {
-            this.titles.get(metricId),
-            requestedId.equals(metricId) ? null : metricId });
+        categoryTabs.add(new String[] { this.titles.get(metricId), metricId });
       }
       request.setAttribute("categoryTabs", categoryTabs);
     }
     request.setAttribute("description",
         this.descriptions.get(requestedId));
     request.setAttribute("data", this.data.get(requestedId));
-    request.setAttribute("related", this.related.get(requestedId));
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Date defaultEndDate = new Date();

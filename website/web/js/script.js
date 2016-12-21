@@ -34,19 +34,6 @@ jQuery(function() {
   });
   
   
-  // toggle tabs by JS:
-  jQuery('.nav-tabs a').each(function(){
-    jQuery(this).click(function(e){
-      e.preventDefault();
-      // toggle data-tab:
-      jQuery('.nav-tabs li').removeClass('active');
-      jQuery(this).parent().addClass('active');
-      jQuery( ".tab-pane" ).hide();
-      jQuery( "#tab-" + jQuery(this).data('tab') ).show();
-    });
-  });
-  
-  
   // make main menu items with dropdowns clickable again:
   jQuery('.dropdown-toggle').click(function(){
       location.href = jQuery(this).attr('href');

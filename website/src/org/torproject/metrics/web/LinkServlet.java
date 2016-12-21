@@ -15,6 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 public class LinkServlet extends MetricServlet {
 
   @Override
+  public void init() throws ServletException {
+    super.init();
+  }
+
+  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
     String requestUri = request.getRequestURI();
@@ -30,23 +35,11 @@ public class LinkServlet extends MetricServlet {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    List<String[]> categories = new ArrayList<String[]>();
-    /* TODO Some of the following code should move to init(). */
-    for (Category category :
-        ContentProvider.getInstance().getCategoriesList()) {
-      if (category.getMetrics().isEmpty()
-          || this.categories.get(requestedId).equals(category)) {
-        categories.add(new String[] { "", category.getHeader() });
-      } else {
-        categories.add(new String[] { category.getMetrics().get(0),
-            category.getHeader() });
-      }
-    }
-    request.setAttribute("categories", categories);
+    request.setAttribute("categories", this.categories);
     request.setAttribute("id", requestedId);
     request.setAttribute("title", this.titles.get(requestedId));
-    if (this.categories.containsKey(requestedId)) {
-      Category category = this.categories.get(requestedId);
+    if (this.categoriesById.containsKey(requestedId)) {
+      Category category = this.categoriesById.get(requestedId);
       request.setAttribute("categoryHeader", category.getHeader());
       request.setAttribute("categoryDescription", category.getDescription());
       List<String[]> categoryTabs = new ArrayList<String[]>();
@@ -60,7 +53,6 @@ public class LinkServlet extends MetricServlet {
     request.setAttribute("description",
         this.descriptions.get(requestedId));
     request.setAttribute("data", this.data.get(requestedId));
-    request.setAttribute("related", this.related.get(requestedId));
     request.getRequestDispatcher("WEB-INF/link.jsp").forward(request,
         response);
   }

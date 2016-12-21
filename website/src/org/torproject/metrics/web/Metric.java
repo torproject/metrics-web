@@ -10,11 +10,7 @@ public class Metric {
 
   private String title;
 
-  private String[] tags;
-
   private String type;
-
-  private String level;
 
   private String description;
 
@@ -23,8 +19,6 @@ public class Metric {
   private String[] parameters;
 
   private String[] data;
-
-  private String[] related;
 
   private String[] table_headers;
 
@@ -42,16 +36,8 @@ public class Metric {
     return this.title;
   }
 
-  public String[] getTags() {
-    return this.tags;
-  }
-
   public String getType() {
     return this.type;
-  }
-
-  public String getLevel() {
-    return this.level;
   }
 
   public String getDescription() {
@@ -84,10 +70,6 @@ public class Metric {
 
   public String[] getData() {
     return this.data;
-  }
-
-  public String[] getRelated() {
-    return this.related;
   }
 }
 
