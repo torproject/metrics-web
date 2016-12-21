@@ -63,6 +63,40 @@ body #wrapper {
     .navbar-header .navbar-brand.visible-xs {
         display:block !important;
     }
+    .navbar.hidden-xs {
+        display:none;
+    }
+}
+@media (max-height:800px) {
+    /* make page header smaller on e.g. 10 inch notebooks etc. */
+    .page-header {
+        padding: 0em 2.0em 2.0em 2.0em;
+    }
+    .page-header img#metrics-logo {
+        height:75px;
+        width:auto !important;
+    }
+    
+    .page-header div {
+        bottom: 0.9em;
+        max-width: 400px;
+    }
+    .page-header div p {
+        font-size: 14px;
+        line-height: 16px;
+    }
+    .navbar-secondary .navbar-nav>li>a {
+        margin-bottom: 0px !important;
+    }
+}
+@media (max-height:800px) and (max-width: 1199.99999px) {
+    .page-header div {
+        max-width:330px;
+    }
+    .page-header div p {
+        font-size:12px;
+        line-height:14px;
+    }
 }
 
 
@@ -287,6 +321,42 @@ body .topButton {
 .bs-callout h1, .bs-callout h2, .bs-callout h3, .bs-callout h4, .bs-callout h5, .bs-callout h6, 
 .bs-callout .h1, .bs-callout .h2, .bs-callout .h3, .bs-callout .h4, .bs-callout .h5, .bs-callout .h6 {
     margin-top:0;
+}
+.bs-callout-default {
+    border-left-color: #777;
+}
+.bs-callout-default h2, .bs-callout-default h3, .bs-callout-default h4 {
+    color: #777;
+}
+.bs-callout-primary {
+    border-left-color: #428bca;
+}
+.bs-callout-primary h2, .bs-callout-primary h3, .bs-callout-primary h4 {
+    color: #428bca;
+}
+.bs-callout-success {
+    border-left-color: #5cb85c;
+}
+.bs-callout-success h2, .bs-callout-success h3, .bs-callout-success h4 {
+    color: #5cb85c;
+}
+.bs-callout-danger {
+    border-left-color: #d9534f;
+}
+.bs-callout-danger h2, .bs-callout-danger h3, .bs-callout-danger h4 {
+    color: #d9534f;
+}
+.bs-callout-warning {
+    border-left-color: #f0ad4e;
+}
+.bs-callout-warning h2, .bs-callout-warning h3, .bs-callout-warning h4 {
+    color: #f0ad4e;
+}
+.bs-callout-info {
+    border-left-color: #5bc0de;
+}
+.bs-callout-info h2, .bs-callout-info h3, .bs-callout-info h4 {
+    color: #5bc0de;
 }
 
 
@@ -520,6 +590,7 @@ hr {
 }
 .tools a:before {
     content:'';
+    display:none;
 }
 .tools p {
     color:black;
