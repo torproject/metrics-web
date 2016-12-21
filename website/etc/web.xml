@@ -213,18 +213,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>ToolsServlet</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.ToolsServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ToolsServlet</servlet-name>
-    <url-pattern>/operation.html</url-pattern>
-    <url-pattern>/development.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>StatsServlet</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.StatsServlet
@@ -233,6 +221,28 @@
   <servlet-mapping>
     <servlet-name>StatsServlet</servlet-name>
     <url-pattern>/stats.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>OperationServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.OperationServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OperationServlet</servlet-name>
+    <url-pattern>/operation.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DevelopmentServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.DevelopmentServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DevelopmentServlet</servlet-name>
+    <url-pattern>/development.html</url-pattern>
   </servlet-mapping>
 
   <servlet>

@@ -58,5 +58,13 @@
 
     </div>
 
+    <div class="container">
+<ul>
+<li><a href="https://torps.github.io/">TorPS</a> simulates changes to Tor's path selection algorithm using archived data.</li>
+<li><a href="https://shadow.github.io/">Shadow</a> uses archived Tor directory data to generate realistic network topolog
+ies.</li>
+</ul>
+    </div>
+
 <jsp:include page="bottom.jsp"/>
 
