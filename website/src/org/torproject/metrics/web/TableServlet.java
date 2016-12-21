@@ -56,9 +56,7 @@ public class TableServlet extends MetricServlet {
       request.setAttribute("categoryDescription", category.getDescription());
       List<String[]> categoryTabs = new ArrayList<String[]>();
       for (String metricId : category.getMetrics()) {
-        categoryTabs.add(new String[] {
-            this.titles.get(metricId),
-            requestedId.equals(metricId) ? null : metricId });
+        categoryTabs.add(new String[] { this.titles.get(metricId), metricId });
       }
       request.setAttribute("categoryTabs", categoryTabs);
     }
