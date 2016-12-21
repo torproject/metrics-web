@@ -10,7 +10,7 @@
       "end"
     ],
     "data": [
-      "servers-data"
+      "servers"
     ]
   },
   {
@@ -25,7 +25,7 @@
       "flag"
     ],
     "data": [
-      "servers-data"
+      "servers"
     ]
   },
   {
@@ -39,7 +39,7 @@
       "end"
     ],
     "data": [
-      "servers-data"
+      "servers"
     ]
   },
   {
@@ -53,7 +53,7 @@
       "end"
     ],
     "data": [
-      "servers-data"
+      "servers"
     ]
   },
   {
@@ -67,7 +67,7 @@
       "end"
     ],
     "data": [
-      "bandwidth-data"
+      "bandwidth"
     ]
   },
   {
@@ -81,7 +81,7 @@
       "end"
     ],
     "data": [
-      "bandwidth-data"
+      "bandwidth"
     ]
   },
   {
@@ -95,7 +95,7 @@
       "end"
     ],
     "data": [
-      "bandwidth-data"
+      "bandwidth"
     ]
   },
   {
@@ -109,7 +109,7 @@
       "end"
     ],
     "data": [
-      "bandwidth-data"
+      "bandwidth"
     ]
   },
   {
@@ -124,7 +124,7 @@
       "p"
     ],
     "data": [
-      "advbwdist-data"
+      "advbwdist"
     ]
   },
   {
@@ -139,7 +139,7 @@
       "n"
     ],
     "data": [
-      "advbwdist-data"
+      "advbwdist"
     ]
   },
   {
@@ -160,7 +160,7 @@
       "events"
     ],
     "data": [
-      "clients-data"
+      "clients"
     ]
   },
   {
@@ -182,7 +182,7 @@
       "${abs} (${rel} %)"
     ],
     "data": [
-      "clients-data"
+      "clients"
     ]
   },
   {
@@ -206,7 +206,7 @@
       "${upturns}"
     ],
     "data": [
-      "clients-data"
+      "clients"
     ]
   },
   {
@@ -221,7 +221,7 @@
       "country"
     ],
     "data": [
-      "clients-data"
+      "clients"
     ]
   },
   {
@@ -243,7 +243,7 @@
       "${abs} (${rel} %)"
     ],
     "data": [
-      "clients-data"
+      "clients"
     ]
   },
   {
@@ -258,7 +258,7 @@
       "transport"
     ],
     "data": [
-      "clients-data"
+      "clients"
     ]
   },
   {
@@ -273,7 +273,7 @@
       "country"
     ],
     "data": [
-      "userstats-combined-data"
+      "userstats-combined"
     ]
   },
   {
@@ -288,7 +288,7 @@
       "version"
     ],
     "data": [
-      "clients-data"
+      "clients"
     ]
   },
   {
@@ -310,7 +310,7 @@
       "filesize"
     ],
     "data": [
-      "torperf-data"
+      "torperf"
     ]
   },
   {
@@ -326,7 +326,7 @@
       "filesize"
     ],
     "data": [
-      "torperf-data"
+      "torperf"
     ]
   },
   {
@@ -340,7 +340,7 @@
       "end"
     ],
     "data": [
-      "connbidirect2-data"
+      "connbidirect2"
     ]
   },
   {
@@ -354,7 +354,7 @@
       "end"
     ],
     "data": [
-      "hidserv-data"
+      "hidserv"
     ]
   },
   {
@@ -368,7 +368,7 @@
       "end"
     ],
     "data": [
-      "hidserv-data"
+      "hidserv"
     ]
   },
   {
@@ -382,7 +382,7 @@
       "end"
     ],
     "data": [
-      "hidserv-data"
+      "hidserv"
     ]
   },
   {

@@ -19,6 +19,7 @@
     </div>
 
 <div class="container">
+<a name="servers" id="anchor-servers"></a>
 <h2>Number of relays and bridges</h2>
 
 <p>The following data file contains the number of running <a
@@ -85,6 +86,7 @@ only, this column contains the empty string.</li>
 </div>
 
 <div class="container">
+<a name="bandwidth" id="anchor-bandwidth"></a>
 <h2>Bandwidth provided and consumed by relays</h2>
 
 <p>The following data file contains statistics on <a
@@ -140,6 +142,7 @@ relays when serving directory data.</li>
 </div>
 
 <div class="container">
+<a name="advbwdist" id="anchor-advbwdist"></a>
 <h2>Advertised bandwidth distribution and n-th fastest relays</h2>
 
 <p>The following data file contains statistics on the distribution of <a
@@ -178,6 +181,7 @@ relays.</li>
 </div>
 
 <div class="container">
+<a name="clients" id="anchor-clients"></a>
 <h2>Estimated number of clients in the Tor network</h2>
 
 <p>The following data file contains estimates on the number of <a
@@ -242,6 +246,7 @@ should be handled with more care.</li>
 </div>
 
 <div class="container">
+<a name="userstats-combined" id="anchor-userstats-combined"></a>
 <h2>Estimated number of clients by country and transport</h2>
 
 <p>The following data file contains additional statistics on the number of <a
@@ -306,6 +311,7 @@ there are users by either of the two numbers.</li>
 </div>
 
 <div class="container">
+<a name="torperf" id="anchor-torperf"></a>
 <h2>Performance of downloading static files over Tor</h2>
 
 <p>The following data file contains aggregate statistics on performance when
@@ -356,6 +362,7 @@ over Tor.</li>
 </div>
 
 <div class="container">
+<a name="connbidirect2" id="anchor-connbidirect2"></a>
 <h2>Fraction of connections used uni-/bidirectionally</h2>
 
 <p>The following data file contains statistics on the fraction of direct
@@ -398,6 +405,7 @@ fractions for the three directions "read", "write", and "both" sum up to exactly
 </div>
 
 <div class="container">
+<a name="hidserv" id="anchor-hidserv"></a>
 <h2>Hidden-service statistics</h2>
 
 <p>The following data file contains <a
@@ -442,6 +450,7 @@ fraction.</li>
 </div>
 
 <div class="container">
+<a name="disagreement" id="anchor-disagreement"></a>
 <h2>Disagreement among the directory authorities (deprecated)</h2>
 
 <div class="bs-callout bs-callout-warning">

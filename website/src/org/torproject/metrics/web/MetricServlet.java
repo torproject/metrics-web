@@ -35,8 +35,8 @@ public abstract class MetricServlet extends AnyServlet {
   protected Map<String, String[]> tableCellFormats =
       new HashMap<String, String[]>();
 
-  protected Map<String, List<String[]>> data =
-      new HashMap<String, List<String[]>>();
+  protected Map<String, String[]> data =
+      new HashMap<String, String[]>();
 
   protected Map<String, Category> categoriesById =
       new HashMap<String, Category>();
@@ -46,7 +46,6 @@ public abstract class MetricServlet extends AnyServlet {
     super.init();
     this.metrics = ContentProvider.getInstance().getMetricsList();
     Map<String, String> allTypesAndTitles = new HashMap<String, String>();
-    Map<String, String[]> dataIds = new HashMap<String, String[]>();
     for (Metric metric : this.metrics) {
       String id = metric.getId();
       String title = metric.getTitle();
@@ -68,22 +67,7 @@ public abstract class MetricServlet extends AnyServlet {
         this.tableCellFormats.put(id, metric.getTableCellFormats());
       }
       if (metric.getData() != null) {
-        dataIds.put(id, metric.getData());
-      }
-    }
-    for (Set<String> ids : idsByType.values()) {
-      for (String id : ids) {
-        if (dataIds.containsKey(id)) {
-          List<String[]> dataLinksTypesAndTitles =
-              new ArrayList<String[]>();
-          for (String dataId : dataIds.get(id)) {
-            if (allTypesAndTitles.containsKey(dataId)) {
-              dataLinksTypesAndTitles.add(new String[] { dataId + ".html",
-                  allTypesAndTitles.get(dataId) } );
-            }
-          }
-          this.data.put(id, dataLinksTypesAndTitles);
-        }
+        this.data.put(id, metric.getData());
       }
     }
     for (Category category :

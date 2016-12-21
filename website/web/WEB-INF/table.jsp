@@ -72,7 +72,7 @@
 <h4>Underlying data</h4>
 <ul>
 <c:forEach var="row" items="${data}">
-<li><a href="${row[0]}">${row[1]}</a></li>
+<li><a href="stats.html#${row}"><code>stats/${row}.csv</code></a></li>
 </c:forEach>
 </ul>
 </c:if>
