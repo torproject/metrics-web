@@ -35,11 +35,6 @@ public abstract class MetricServlet extends AnyServlet {
   protected Map<String, String[]> tableCellFormats =
       new HashMap<String, String[]>();
 
-  protected Map<String, String> dataFiles = new HashMap<String, String>();
-
-  protected Map<String, String[]> dataColumnSpecs =
-      new HashMap<String, String[]>();
-
   protected Map<String, List<String[]>> data =
       new HashMap<String, List<String[]>>();
 
@@ -71,12 +66,6 @@ public abstract class MetricServlet extends AnyServlet {
       }
       if (metric.getTableCellFormats() != null) {
         this.tableCellFormats.put(id, metric.getTableCellFormats());
-      }
-      if (metric.getDataFile() != null) {
-        this.dataFiles.put(id, metric.getDataFile());
-      }
-      if (metric.getDataColumnSpec() != null) {
-        this.dataColumnSpecs.put(id, metric.getDataColumnSpec());
       }
       if (metric.getData() != null) {
         dataIds.put(id, metric.getData());

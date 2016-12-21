@@ -57,23 +57,6 @@
     ]
   },
   {
-    "id": "servers-data",
-    "title": "Number of relays and bridges",
-    "type": "Data",
-    "description": "<p>The following data file contains the number of running <a href=\"about.html#relay\">relays</a> and <a href=\"about.html#bridge\">bridges</a> in the network.  Statistics include subsets of relays or bridges by <a href=\"about.html#relay-flag\">relay flag</a> (relays only), country code (relays only, and only until February 2013), tor software version (relays only), operating system (relays only), and by whether or not they are running in the EC2 cloud (bridges only).  The data file contains daily (mean) averages of relay and bridge numbers.</p>",
-    "data_file": "stats/servers.csv",
-    "data_column_spec": [
-      "<b>date:</b> UTC date (YYYY-MM-DD) when relays or bridges have been listed as running.",
-      "<b>flag:</b> Relay flag assigned by the directory authorities.  Examples are <b>\"Exit\"</b>, <b>\"Guard\"</b>, <b>\"Fast\"</b>, <b>\"Stable\"</b>, and <b>\"HSDir\"</b>.  Relays can have none, some, or all these relay flags assigned.  Relays that don't have the <b>\"Running\"</b> flag are not included in these statistics regardless of their other flags.  If this column contains the empty string, all running relays are included, regardless of assigned flags.  There are no statistics on the number of bridges by relay flag.",
-      "<b>country:</b> Two-letter lower-case country code as found in a GeoIP database by resolving the relay's first onion-routing IP address, or <b>\"??\"</b> if an IP addresses could not be resolved.  If this column contains the empty string, all running relays are included, regardless of their resolved country code.  Statistics on relays by country code are only available until January 31, 2013.  There are no statistics on the number of bridges by country code.",
-      "<b>version:</b> First three dotted numbers of the Tor software version as reported by the relay.  An example is <b>\"0.2.5\"</b>.  If this column contains the empty string, all running relays are included, regardless of the Tor software version they run.  There are no statistics on the number of bridges by Tor software version.",
-      "<b>platform:</b> Operating system as reported by the relay.  Examples are <b>\"Linux\"</b>, <b>\"Darwin\"</b> (Mac OS X), <b>\"BSD\"</b>, <b>\"Windows\"</b>, and <b>\"Other\"</b>.  If this column contains the empty string, all running relays are included, regardless of the operating system they run on.  There are no statistics on the number of bridges by operating system.",
-      "<b>ec2bridge:</b> Whether bridges are running in the EC2 cloud or not.  More precisely, bridges in the EC2 cloud running an image provided by Tor by default set their nickname to <b>\"ec2bridger\"</b> plus 8 random hex characters.  This column either contains <b>\"t\"</b> for bridges matching this naming scheme, or the empty string for all bridges regardless of their nickname.  There are no statistics on the number of relays running in the EC2 cloud.",
-      "<b>relays:</b> The average number of relays matching the criteria in the previous columns.  If the values in previous columns are specific to bridges only, this column contains the empty string.",
-      "<b>bridges:</b> The average number of bridges matching the criteria in the previous columns.  If the values in previous columns are specific to relays only, this column contains the empty string."
-    ]
-  },
-  {
     "id": "bandwidth",
     "title": "Total relay bandwidth in the network",
     "type": "Graph",
@@ -157,37 +140,6 @@
     ],
     "data": [
       "advbwdist-data"
-    ]
-  },
-  {
-    "id": "bandwidth-data",
-    "title": "Bandwidth provided and consumed by relays",
-    "type": "Data",
-    "description": "<p>The following data file contains statistics on <a href=\"about.html#advertised-bandwidth\">advertised</a> and <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> of <a href=\"about.html#relay\">relays</a> in the network.  Statistics on advertised bandwidth include any kind of traffic handled by a relay, whereas statistics on consumed bandwidth are available either for all traffic combined, or specifically for directory traffic.  Some of the statistics are available for subsets of relays that have the \"Exit\" and/or the \"Guard\" <a href=\"about.html#relay-flag\">flag</a>.  The data file contains daily (mean) averages of bandwidth numbers.</p>",
-    "data_file": "stats/bandwidth.csv",
-    "data_column_spec": [
-      "<b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.",
-      "<b>isexit:</b> Whether relays included in this line have the <b>\"Exit\"</b> relay flag or not, which can be <b>\"t\"</b> or <b>\"f\"</b>.  If this column contains the empty string, bandwidth data from all running relays are included, regardless of assigned relay flags.",
-      "<b>isguard:</b> Whether relays included in this line have the <b>\"Guard\"</b> relay flag or not, which can be <b>\"t\"</b> or <b>\"f\"</b>.  If this column contains the empty string, bandwidth data from all running relays are included, regardless of assigned relay flags.",
-      "<b>advbw:</b> Total advertised bandwidth in bytes per second that relays are capable to provide.",
-      "<b>bwread:</b> Total bandwidth in bytes per second that relays have read.  This metric includes any kind of traffic.",
-      "<b>bwwrite:</b> Similar to <b>bwread</b>, but for traffic written by relays.",
-      "<b>dirread:</b> Bandwidth in bytes per second that relays have read when serving directory data.  Not all relays report how many bytes they read when serving directory data which is why this value is an estimate from the available data.  This metric is not available for subsets of relays with certain relay flags, so that this column will contain the empty string if either <b>isexit</b> or <b>isguard</b> is non-empty.",
-      "<b>dirwrite:</b> Similar to <b>dirread</b>, but for traffic written by relays when serving directory data."
-    ]
-  },
-  {
-    "id": "advbwdist-data",
-    "title": "Advertised bandwidth distribution and n-th fastest relays",
-    "type": "Data",
-    "description": "<p>The following data file contains statistics on the distribution of <a href=\"about.html#advertised-bandwidth\">advertised bandwidth</a> of relays in the network.  These statistics include advertised bandwidth percentiles and advertised bandwidth values of the n-th fastest relays.  All values are obtained from advertised bandwidths of running relays in a <a href=\"about.html#consensus\">network status consensus</a>.  The data file contains daily (median) averages of percentiles and n-th largest values.</p>",
-    "data_file": "stats/advbwdist.csv",
-    "data_column_spec": [
-      "<b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.",
-      "<b>isexit:</b> Whether relays included in this line have the <b>\"Exit\"</b> relay flag, which would be indicated as <b>\"t\"</b>.  If this column contains the empty string, advertised bandwidths from all running relays are included, regardless of assigned relay flags.",
-      "<b>relay:</b> Position of the relay in an ordered list of all advertised bandwidths, starting at 1 for the fastest relay in the network.  May be the empty string if this line contains advertised bandwidth by percentile.",
-      "<b>percentile:</b> Advertised bandwidth percentile given in this line.  May be the empty string if this line contains advertised bandwidth by fastest relays.",
-      "<b>advbw:</b> Advertised bandwidth in B/s."
     ]
   },
   {
@@ -346,41 +298,6 @@
     "description": "<p>The Oxford Internet Institute made a cartogram visualization of Tor users as compared to the overall Internet population.  They used the average number of Tor <a href=\"about.html#client\">users</a> per country from August 2012 to August 2013 and put it in relation to total Internet users per country.  More details and conclusions can be found on the <a href=\"http://geography.oii.ox.ac.uk/?page=tor\">Information Geographies website at the Oxford Internet Institute</a>.</p><p><a href=\"http://geography.oii.ox.ac.uk/?page=tor\"><img src=\"images/oxford-anonymous-internet.png\" alt=\"The anonymous Internet\"></a></p>"
   },
   {
-    "id": "clients-data",
-    "title": "Estimated number of clients in the Tor network",
-    "type": "Data",
-    "description": "<p>The following data file contains estimates on the number of <a href=\"about.html#client\">clients</a> in the network.  These numbers are derived from directory requests counted on <a href=\"about.html#directory-authority\">directory authorities</a>, <a href=\"about.html#directory-mirror\">directory mirrors</a>, and <a href=\"about.html#bridge\">bridges</a>.  Statistics are available for clients connecting directly relays and clients connecting via bridges.  There are statistics available by country (for both directly-connecting clients and clients connecting via bridges), by transport protocol (only for clients connecting via bridges), and by IP version (only for clients connecting via bridges).  Statistics also include predicted client numbers from past observations, which can be used to detect censorship events.</p>",
-    "data_file": "stats/clients.csv",
-    "data_column_spec": [
-      "<b>date:</b> UTC date (YYYY-MM-DD) for which client numbers are estimated.",
-      "<b>node:</b> The node type to which clients connect first, which can be either <b>\"relay\"</b> or <b>\"bridge\"</b>.",
-      "<b>country:</b> Two-letter lower-case country code as found in a GeoIP database by resolving clients' IP addresses, or <b>\"??\"</b> if client IP addresses could not be resolved.  If this column contains the empty string, all clients are included, regardless of their country code.",
-      "<b>transport:</b> Transport name used by clients to connect to the Tor network using bridges.  Examples are <b>\"obfs2\"</b>, <b>\"obfs3\"</b>, <b>\"websocket\"</b>, or <b>\"&lt;OR&gt;\"</b> (original onion routing protocol).  If this column contains the empty string, all clients are included, regardless of their transport.  There are no statistics on the number of clients by transport that connect to the Tor network via relays.",
-      "<b>version:</b> IP version used by clients to connect to the Tor network using bridges.  Examples are <b>\"v4\"</b> and <b>\"v6\"</b>.  If this column contains the empty string, all clients are included, regardless of their IP version.  There are no statistics on the number of clients by IP version that connect directly to the Tor network using relays.",
-      "<b>lower:</b> Lower number of expected clients under the assumption that there has been no censorship event.  If this column contains the empty string, there are no expectations on the number of clients.",
-      "<b>upper:</b> Upper number of expected clients under the assumption that there has been no release of censorship.  If this column contains the empty string, there are no expectations on the number of clients.",
-      "<b>clients:</b> Estimated number of clients.",
-      "<b>frac:</b> Fraction of relays or bridges in percent that the estimate is based on.  The higher this value, the more reliable is the estimate.  Values above 50 can be considered reliable enough for most purposes, lower values should be handled with more care."
-    ]
-  },
-  {
-    "id": "userstats-combined-data",
-    "title": "Estimated number of clients by country and transport",
-    "type": "Data",
-    "description": "<p>The following data file contains additional statistics on the number of <a href=\"about.html#client\">clients</a> in the network.  This data file is related to the <a href=\"clients-data.html\">clients-data file</a> that contains estimates on the number of clients by country and by transport protocol.  This data file enhances these statistics by containing estimates of clients connecting to <a href=\"about.html#bridge\">bridges</a> by a given country and using a given <a href=\"about.html#pluggable-transport\">transport protocol</a>.  Even though bridges don't report a combination of clients by country and transport, it's possible to derive lower and upper bounds from existing usage statistics.</p>",
-    "data_file": "stats/userstats-combined.csv",
-    "data_column_spec": [
-      "<b>date:</b> UTC date (YYYY-MM-DD) for which client numbers are estimated.",
-      "<b>node:</b> The node type to which clients connect first, which is always <b>\"bridge\"</b>, because relays don't report responses by transport.",
-      "<b>country:</b> Two-letter lower-case country code as found in a GeoIP database by resolving clients' IP addresses, or <b>\"??\"</b> if client IP addresses could not be resolved.",
-      "<b>transport:</b> Transport name used by clients to connect to the Tor network using bridges.  Examples are <b>\"obfs2\"</b>, <b>\"obfs3\"</b>, <b>\"websocket\"</b>, or <b>\"&lt;OR&gt;\"</b> (original onion routing protocol).",
-      "<b>version:</b> IP version used by clients to connect to the Tor network using bridges.  This column always contains the empty string and is only included for compatibility reasons.",
-      "<b>frac:</b> Fraction of relays or bridges in percent that the estimate is based on.  The higher this value, the more reliable is the estimate.  Values above 50 can be considered reliable enough for most purposes, lower values should be handled with more care.",
-      "<b>low:</b> Lower bound of users by country and transport, calculated as sum over all bridges having reports for the given country and transport, that is, the sum of <b>M(b)</b>, where for each bridge <b>b</b> define <b>M(b) := max(0, C(b) + T(b) - S(b))</b> using the following definitions: <b>C(b)</b> is the number of users from a given country reported by <b>b</b>; <b>T(b)</b> is the number of users using a given transport reported by <b>b</b>; and <b>S(b)</b> is the total numbers of users reported by <b>b</b>.  Reasoning: If the sum <b>C(b) + T(b)</b> exceeds the total number of users from all countries and transports <b>S(b)</b>, there must be users from that country and transport.  And if that is not the case, <b>0</b> is the lower limit.",
-      "<b>high:</b> Upper bound of users by country and transport, calculated as sum over all bridges having reports for the given country and transport, that is, the sum of <b>m(b)</b>, where for each bridge <b>b</b> define <b>m(b):=min(C(b), T(b))</b> where we use the definitions from <b>low</b> (above).  Reasoning: there cannot be more users by country and transport than there are users by either of the two numbers."
-    ]
-  },
-  {
     "id": "torperf",
     "title": "Time to download files over Tor",
     "type": "Graph",
@@ -427,37 +344,6 @@
     ]
   },
   {
-    "id": "torperf-data",
-    "title": "Performance of downloading static files over Tor",
-    "type": "Data",
-    "description": "<p>The following data file contains aggregate statistics on performance when downloading static files of different sizes over Tor.  These statistics are generated by the <a href=\"https://gitweb.torproject.org/torperf.git\">Torperf</a> tool, which periodically fetches static files over Tor and records several timestamps in the process.  The data file contains daily medians and quartiles as well as total numbers of requests, timeouts, and failures.  Raw Torperf measurement data are available on the <a href=\"https://collector.torproject.org/formats.html#torperf\">CollecTor</a> website.</p>",
-    "data_file": "stats/torperf.csv",
-    "data_column_spec": [
-      "<b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.",
-      "<b>size:</b> Size of the downloaded file in bytes.",
-      "<b>source:</b> Name of the Torperf service performing measurements.  If this column contains the empty string, all measurements are included, regardless of which Torperf service performed them.  Examples are <b>\"moria\"</b>, <b>\"siv\"</b>, and <b>\"torperf\"</b>.",
-      "<b>q1:</b> First quartile of time until receiving the last byte in milliseconds.",
-      "<b>md:</b> Median of time until receiving the last byte in milliseconds.",
-      "<b>q3:</b> Third quartile of time until receiving the last byte in milliseconds.",
-      "<b>timeouts:</b> Number of timeouts that occurred when attempting to download the static file over Tor.",
-      "<b>failures:</b> Number of failures that occurred when attempting to download the static file over Tor.",
-      "<b>requests:</b> Total number of requests made to download the static file over Tor."
-    ]
-  },
-  {
-    "id": "connbidirect2-data",
-    "title": "Fraction of connections used uni-/bidirectionally",
-    "type": "Data",
-    "description": "<p>The following data file contains statistics on the fraction of direct connections between a <a href=\"about.html#relay\">relay</a> and other nodes in the network that are used uni- or bidirectionally.  Every 10 seconds, relays determine for every direct connection whether they read and wrote less than a threshold of 20 KiB.  Connections below this threshold are excluded from the statistics file.  For the remaining connections, relays determine whether they read/wrote at least 10 times as many bytes as they wrote/read.  If so, they classify a connection as \"mostly reading\" or \"mostly writing\", respectively.  All other connections are classified as \"both reading and writing\".  After classifying connections, read and write counters are reset for the next 10-second interval.  The data file contains daily medians and quartiles of reported fractions.</p>",
-    "data_file": "stats/connbidirect2.csv",
-    "data_column_spec": [
-      "<b>date:</b> UTC date (YYYY-MM-DD) for which statistics on uni-/bidirectional connection usage were reported.",
-      "<b>direction:</b> Direction of reported fraction, which can be <b>\"read\"</b>, <b>\"write\"</b>, or <b>\"both\"</b> for connections classified as \"mostly reading\", \"mostly writing\", or \"both reading as writing\".  Connections below the threshold have been removed from this statistics file entirely.",
-      "<b>quantile:</b> Quantile of the reported fraction when considering all statistics reported for this date.  Examples are <b>\"0.5\"</b> for the median and <b>\"0.25\"</b> and <b>\"0.75\"</b> for the lower and upper quartile.",
-      "<b>fraction:</b> Fraction of connections in percent for the given date, direction, and quantile.  For each daily statistic reported by a relay, fractions for the three directions \"read\", \"write\", and \"both\" sum up to exactly 100."
-    ]
-  },
-  {
     "id": "hidserv-dir-onions-seen",
     "title": "Unique .onion addresses",
     "type": "Graph",
@@ -500,41 +386,10 @@
     ]
   },
   {
-    "id": "hidserv-data",
-    "title": "Hidden-service statistics",
-    "type": "Data",
-    "description": "<p>The following data file contains <a href=\"about.html#hidden-service\">hidden-service</a> statistics gathered by a small subset of <a href=\"about.html#relay\">relays</a> and extrapolated to network totals.  Statistics include the amount of hidden-service traffic and the number of hidden-service addresses in the network per day.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
-    "data_file": "stats/hidserv.csv",
-    "data_column_spec": [
-      "<b>date:</b> UTC date (YYYY-MM-DD) when relays or bridges have been listed as running.",
-      "<b>type:</b> Type of hidden-service statistic reported by relays and extrapolated to network totals.  Examples include <b>\"rend-relayed-cells\"</b> for the number of cells on rendezvous circuits observed by rendezvous points and <b>\"dir-onions-seen\"</b> for the number of unique .onion addresses observed by hidden-service directories.",
-      "<b>wmean:</b> Weighted mean of extrapolated network totals.",
-      "<b>wmedian:</b> Weighted median of extrapolated network totals.",
-      "<b>wiqm:</b> Weighted interquartile mean of extrapolated network totals.",
-      "<b>frac:</b> Total network fraction of reported statistics.",
-      "<b>stats:</b> Number of reported statistics with non-zero computed network fraction."
-    ]
-  },
-  {
     "id": "uncharted-data-flow",
     "title": "Data flow in the Tor network",
     "type": "Link",
     "description": "<p>Uncharted made a visualization of data flow in the Tor network where they place each <a href=\"about.html#relay\">relay</a> on a world map and illustrate traffic exchanged between relays as animated dots. More details can be found on the <a href=\"https://torflow.uncharted.software/\">Uncharted website</a>.</p><p><a href=\"https://torflow.uncharted.software/\"><img src=\"images/uncharted-data-flow.png\" alt=\"Data flow in the Tor network\"></a></p>"
-  },
-  {
-    "id": "disagreement-data",
-    "title": "Disagreement among the directory authorities (deprecated)",
-    "type": "Data",
-    "description": "<p><font color=\"red\">As of September 29, 2016, the linked data file is not updated anymore.  This page and the linked data file will be removed in the future.</font></p><p>The following data file contains statistics about agreement or disagreement among the <a href=\"about.html#directory-authority\">directory authorities</a>.  Once per hour the directory authorities exchange votes with their view of the <a href=\"about.html#relay\">relays</a> in the network including attributes like <a href=\"about.html#relay-flag\">relay flags</a> or bandwidth measurements.  This data file includes counts of relays by number of directory authorities assigning them a given attribute.</p>",
-    "data_file": "stats/disagreement.csv",
-    "data_column_spec": [
-      "<b>validafter:</b> UTC timestamp (YYYY-MM-DD HH:MM:SS) after which votes became valid, which may be used as the vote publication time.",
-      "<b>attribute:</b> Attribute assigned to relays by directory authorities, which includes relay flags like <b>\"Exit\"</b> or <b>\"BadExit\"</b> as well as <b>\"Listed\"</b> for relays being listed in a vote and <b>\"Measured\"</b> for relays being measured by the bandwidth authorities.",
-      "<b>votes:</b> Number of votes assigning the attribute to relays.",
-      "<b>required:</b> Required number of votes for the attribute to be assigned to a relay for being included in the consensus.",
-      "<b>max:</b> Maximum number of possible votes assigning the attribute to relays.",
-      "<b>relays:</b> Number of relays that got the given number of votes for the given attribute."
-    ]
   },
   {
     "id": "uptimes",

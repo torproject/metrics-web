@@ -62,25 +62,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>Data</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.DataServlet
-    </servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Data</servlet-name>
-    <url-pattern>/servers-data.html</url-pattern>
-    <url-pattern>/bandwidth-data.html</url-pattern>
-    <url-pattern>/advbwdist-data.html</url-pattern>
-    <url-pattern>/clients-data.html</url-pattern>
-    <url-pattern>/userstats-combined-data.html</url-pattern>
-    <url-pattern>/torperf-data.html</url-pattern>
-    <url-pattern>/connbidirect2-data.html</url-pattern>
-    <url-pattern>/hidserv-data.html</url-pattern>
-    <url-pattern>/disagreement-data.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>Link</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.LinkServlet
@@ -231,6 +212,17 @@
     <url-pattern>/sources.html</url-pattern>
     <url-pattern>/operation.html</url-pattern>
     <url-pattern>/development.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>StatsServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.StatsServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StatsServlet</servlet-name>
+    <url-pattern>/stats.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
