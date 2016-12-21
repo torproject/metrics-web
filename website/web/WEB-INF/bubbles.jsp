@@ -1,21 +1,35 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
-<head>
-  <title>Tor Metrics &mdash; Network bubble graphs</title>
-  <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-  <link href="css/stylesheet-ltr.css" type="text/css" rel="stylesheet">
-  <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
-  <link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon">
-  <script src="js/d3.min.js"></script>
-  <script src="js/bubbles.js"></script>
-</head>
-<body>
-  <div class="center">
-    <div class="main-column">
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<jsp:include page="top.jsp">
+  <jsp:param name="pageTitle" value="${categoryHeader} &ndash; Tor Metrics"/>
+  <jsp:param name="navActive" value="${categoryHeader}"/>
+</jsp:include>
 
-<h2><a href="/"><img src="images/metrics-wordmark-small.png" width="138" height="18" alt="Metrics wordmark"></a> &mdash; Network bubble graphs</h2>
-<br>
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="index.html">Home</a></li>
+        <li class="active">${categoryHeader}</li>
+      </ul>
+    </div>
+
+    <div class="container">
+      <h1>${categoryHeader}</h1>
+      <p>${categoryDescription}</p>
+    </div>
+
+    <div class="container">
+
+      <!-- tabs -->
+      <ul class="nav nav-tabs">
+        <c:forEach var="tab" items="${categoryTabs}">
+        <li role="presentation"<c:if test="${id.equals(tab[1])}"> class="active"</c:if>><a href="${tab[1]}.html" data-tab="${tab[1]}">${tab[0]}</a></li>
+        </c:forEach>
+      </ul>
+
+      <!-- tab-content -->
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab-${tab[1]}">
+
 <p>The following graph visualizes diversity of currently running
 <a href="about.html#relay">relays</a> in terms of their probability to be
 selected for <a href="about.html#circuit">circuits</a>.
@@ -48,14 +62,14 @@ information, country, or network family.</p>
         <a href="#country-exits-only" onclick="make_bubble_graph('country-exits-only');">Country</a> |
         <a href="#network-family-exits-only" onclick="make_bubble_graph('network-family-exits-only');">Network family (/16)</a>
       </p>
+      <script src="js/d3.min.js"></script>
+      <script src="js/bubbles.js"></script>
       <script>make_bubble_graph();</script>
-      <noscript>Sorry, you need to turn on JavaScript.</script>
+      <noscript>Sorry, you need to turn on JavaScript.</noscript>
 
-    </div>
-  </div>
-  <div class="bottom" id="bottom">
-    <%@ include file="footer.jsp"%>
-  </div>
-</body>
-</html>
+        </div>
+      </div><!-- tab-content -->
+    </div><!-- container -->
+
+<jsp:include page="bottom.jsp"/>
 
