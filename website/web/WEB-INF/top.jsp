@@ -80,12 +80,12 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
         <!-- /end of primary copy -->
 
         <!-- secondary navigation items -->
-        <li <c:if test="${'News'.equals(param.navActive)}"> class="active"</c:if>><a href="news.html"><i class="fa fa-newspaper-o fa-fw" aria-hidden="true"></i> News</a></li>
-        <li <c:if test="${'Sources'.equals(param.navActive)}"> class="active"</c:if>><a href="sources.html"><i class="fa fa-archive fa-fw" aria-hidden="true"></i> Sources</a></li>
-        <li <c:if test="${'Operation'.equals(param.navActive)}"> class="active"</c:if>><a href="operation.html"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i> Operation</a></li>
-        <li <c:if test="${'Development'.equals(param.navActive)}"> class="active"</c:if>><a href="development.html"><i class="fa fa-code fa-fw" aria-hidden="true"></i> Development</a></li>
-        <li <c:if test="${'Research'.equals(param.navActive)}"> class="active"</c:if>><a href="research.html"><i class="fa fa-university fa-fw" aria-hidden="true"></i> Research</a></li>
-        <li <c:if test="${'About'.equals(param.navActive)}"> class="active"</c:if>><a href="about.html"><i class="fa fa-lightbulb-o fa-fw" aria-hidden="true"></i> About</a></li>
+        <li <c:if test="${'News'.equals(param.navActive)}"> class="active"</c:if>><a href="news.html"><i class="fa fa-newspaper-o fa-fw hidden-sm" aria-hidden="true"></i> News</a></li>
+        <li <c:if test="${'Sources'.equals(param.navActive)}"> class="active"</c:if>><a href="sources.html"><i class="fa fa-archive fa-fw hidden-sm" aria-hidden="true"></i> Sources</a></li>
+        <li <c:if test="${'Operation'.equals(param.navActive)}"> class="active"</c:if>><a href="operation.html"><i class="fa fa-cogs fa-fw hidden-sm" aria-hidden="true"></i> Operation</a></li>
+        <li <c:if test="${'Development'.equals(param.navActive)}"> class="active"</c:if>><a href="development.html"><i class="fa fa-code fa-fw hidden-sm" aria-hidden="true"></i> Development</a></li>
+        <li <c:if test="${'Research'.equals(param.navActive)}"> class="active"</c:if>><a href="research.html"><i class="fa fa-university fa-fw hidden-sm" aria-hidden="true"></i> Research</a></li>
+        <li <c:if test="${'About'.equals(param.navActive)}"> class="active"</c:if>><a href="about.html"><i class="fa fa-lightbulb-o fa-fw hidden-sm" aria-hidden="true"></i> About</a></li>
         <!-- /secondary navigation items -->
 
       </ul>
