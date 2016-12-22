@@ -237,6 +237,14 @@
   },
   {
     "start": "2016-10-08",
+    "place": "et",
+    "description": "Ethiopia declares a state of emergency and implements network blocks.",
+    "links": [
+      "<a href=\"https://ooni.torproject.org/post/ethiopia-report/#internet-shutdown\">OONI report</a>"
+    ]
+  },
+  {
+    "start": "2016-10-08",
     "end": "2016-10-09",
     "place": "tr",
     "description": "Turkey blocks storage services including Dropbox, Google Drive, OneDrive, and GitHub. Most (all?) of the blocks were rescinded the next day.",
@@ -286,7 +294,8 @@
     "description": "Turkey orders a block on VPN services and Tor",
     "links": [
       "<a href=\"http://turk-internet.com/portal/yazigoster.php?yaziid=54465\">Turkish article</a>",
-      "<a href=\"https://motherboard.vice.com/read/turkey-doubles-down-on-censorship-with-block-on-vpns-tor\">English article</a>"
+      "<a href=\"https://motherboard.vice.com/read/turkey-doubles-down-on-censorship-with-block-on-vpns-tor\">English article</a>",
+      "<a href=\"https://bugs.torproject.org/21014\">ticket</a>"
     ]
   },
   {
@@ -342,6 +351,29 @@
       "<a href=\"https://bugs.torproject.org/20907\">ticket</a>",
       "<a href=\"https://geektimes.ru/post/283392/\">article (Russian)</a>",
       "<a href=\"https://ooni.torproject.org/post/belarus-fries-onion/\">OONI blog post</a>"
+    ]
+  },
+  {
+    "start": "2016-12-12",
+    "place": "tr",
+    "protocols": [
+      "<OR>"
+    ],
+    "description": "Turkey blocks direct Tor connections. The order to block had come on 2016-11-04.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/21014\">ticket</a>",
+      "<a href=\"https://twitter.com/josswright/status/809379534420185089\">tweet</a>",
+      "<a href=\"https://turkeyblocks.org/2016/12/18/tor-blocked-in-turkey-vpn-ban/\">article</a>"
+    ]
+  },
+  {
+    "start": "2016-12-15",
+    "place": "cd",
+    "description": "The Democratic Republic of the Congo orders a block of social media services.",
+    "links": [
+      "<a href=\"http://wlrn.org/post/congo-block-social-media-sites-ahead-protests-against-president\">article</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-10-01&end=2016-12-20&country=cd\">relay graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-10-01&end=2016-12-20&country=cd\">bridge graph</a>"
     ]
   },
   {
