@@ -191,6 +191,17 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>GlossaryServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.GlossaryServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GlossaryServlet</servlet-name>
+    <url-pattern>/glossary.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>NewsServlet</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.NewsServlet

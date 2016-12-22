@@ -3,7 +3,7 @@
     "id": "networksize",
     "title": "Relays and bridges in the network",
     "type": "Graph",
-    "description": "<p>The following graph shows the number of running <a href=\"about.html#relay\">relays</a> and <a href=\"about.html#bridge\">bridges</a> in the network.</p>",
+    "description": "<p>The following graph shows the number of running <a href=\"glossary.html#relay\">relays</a> and <a href=\"glossary.html#bridge\">bridges</a> in the network.</p>",
     "function": "plot_networksize",
     "parameters": [
       "start",
@@ -17,7 +17,7 @@
     "id": "relayflags",
     "title": "Relays with Exit, Fast, Guard, Stable, and HSDir flags",
     "type": "Graph",
-    "description": "<p>The following graph shows the number of running <a href=\"about.html#relay\">relays</a> that have had certain <a href=\"about.html#relay-flag\">flags</a> assigned by the <a href=\"about.html#directory-authority\">directory authorities</a>.  These flags indicate that a relay should be preferred for either guard (\"Guard\") or exit positions (\"Exit\"), that a relay is suitable for high-bandwidth (\"Fast\") or long-lived circuits (\"Stable\"), or that a relay is considered a hidden service directory (\"HSDir\").</p>",
+    "description": "<p>The following graph shows the number of running <a href=\"glossary.html#relay\">relays</a> that have had certain <a href=\"glossary.html#relay-flag\">flags</a> assigned by the <a href=\"glossary.html#directory-authority\">directory authorities</a>.  These flags indicate that a relay should be preferred for either guard (\"Guard\") or exit positions (\"Exit\"), that a relay is suitable for high-bandwidth (\"Fast\") or long-lived circuits (\"Stable\"), or that a relay is considered a hidden service directory (\"HSDir\").</p>",
     "function": "plot_relayflags",
     "parameters": [
       "start",
@@ -32,7 +32,7 @@
     "id": "versions",
     "title": "Relays by version",
     "type": "Graph",
-    "description": "<p>The following graph shows the number of running <a href=\"about.html#relay\">relays</a> by tor software version.  Relays report their tor software version when they announce themselves in the network.  More details on when these versions were declared stable or unstable can be found on the <a href=\"https://www.torproject.org/download/download.html\">download page</a> and in the <a href=\"https://gitweb.torproject.org/tor.git/tree/ChangeLog\">changes file</a>.</p>",
+    "description": "<p>The following graph shows the number of running <a href=\"glossary.html#relay\">relays</a> by tor software version.  Relays report their tor software version when they announce themselves in the network.  More details on when these versions were declared stable or unstable can be found on the <a href=\"https://www.torproject.org/download/download.html\">download page</a> and in the <a href=\"https://gitweb.torproject.org/tor.git/tree/ChangeLog\">changes file</a>.</p>",
     "function": "plot_versions",
     "parameters": [
       "start",
@@ -46,7 +46,7 @@
     "id": "platforms",
     "title": "Relays by platform",
     "type": "Graph",
-    "description": "<p>The following graph shows the number of running <a href=\"about.html#relay\">relays</a> by operating system.  Relays report their operating system when they announce themselves in the network.</p>",
+    "description": "<p>The following graph shows the number of running <a href=\"glossary.html#relay\">relays</a> by operating system.  Relays report their operating system when they announce themselves in the network.</p>",
     "function": "plot_platforms",
     "parameters": [
       "start",
@@ -60,7 +60,7 @@
     "id": "bandwidth",
     "title": "Total relay bandwidth in the network",
     "type": "Graph",
-    "description": "<p>The following graph shows the total <a href=\"about.html#advertised-bandwidth\">advertised</a> and <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> of all <a href=\"about.html#relay\">relays</a> in the network.</p>",
+    "description": "<p>The following graph shows the total <a href=\"glossary.html#advertised-bandwidth\">advertised</a> and <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> of all <a href=\"glossary.html#relay\">relays</a> in the network.</p>",
     "function": "plot_bandwidth",
     "parameters": [
       "start",
@@ -74,7 +74,7 @@
     "id": "bwhist-flags",
     "title": "Relay bandwidth by Exit and/or Guard flags",
     "type": "Graph",
-    "description": "<p>The following graph shows the <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> reported by relays, subdivided into four distinct subsets by assigned \"Exit\" and/or \"Guard\" <a href=\"about.html#relay-flag\">flags</a>.</p>",
+    "description": "<p>The following graph shows the <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> reported by relays, subdivided into four distinct subsets by assigned \"Exit\" and/or \"Guard\" <a href=\"glossary.html#relay-flag\">flags</a>.</p>",
     "function": "plot_bwhist_flags",
     "parameters": [
       "start",
@@ -88,7 +88,7 @@
     "id": "bandwidth-flags",
     "title": "Advertised bandwidth and bandwidth history by relay flags",
     "type": "Graph",
-    "description": "<p>The following graph shows <a href=\"about.html#advertised-bandwidth\">advertised</a> and <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> of relays with either \"Exit\" or \"Guard\" <a href=\"about.html#relay-flag\">flags</a> assigned by the directory authorities.  These sets are not distinct, because a relay that has both the \"Exit\" and \"Guard\" flags assigned will be included in both sets.</p>",
+    "description": "<p>The following graph shows <a href=\"glossary.html#advertised-bandwidth\">advertised</a> and <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> of relays with either \"Exit\" or \"Guard\" <a href=\"glossary.html#relay-flag\">flags</a> assigned by the directory authorities.  These sets are not distinct, because a relay that has both the \"Exit\" and \"Guard\" flags assigned will be included in both sets.</p>",
     "function": "plot_bandwidth_flags",
     "parameters": [
       "start",
@@ -102,7 +102,7 @@
     "id": "dirbytes",
     "title": "Number of bytes spent on answering directory requests",
     "type": "Graph",
-    "description": "<p>The following graph shows the portion of <a href=\"about.html#bandwidth-history\">consumed bandwidth</a> that <a href=\"about.html#directory-authority\">directory authorities</a> and <a href=\"about.html#directory-mirror\">mirrors</a> have spent on answering directory requests.  Not all directories report these statistics, so the graph shows an estimation of total consumed bandwidth as it would be observed if all directories reported these statistics.</p>",
+    "description": "<p>The following graph shows the portion of <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> that <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a> have spent on answering directory requests.  Not all directories report these statistics, so the graph shows an estimation of total consumed bandwidth as it would be observed if all directories reported these statistics.</p>",
     "function": "plot_dirbytes",
     "parameters": [
       "start",
@@ -116,7 +116,7 @@
     "id": "advbwdist-perc",
     "title": "Advertised bandwidth distribution",
     "type": "Graph",
-    "description": "<p>The following graph shows the distribution of the <a href=\"about.html#advertised-bandwidth\">advertised bandwidth</a> of relays in the network.  Each percentile represents the advertised bandwidth that a given percentage of relays does not exceed (and that in turn the remaining relays either match or exceed).  For example, 99% of relays advertise at most the bandwidth value shown in the 99th percentile line (and the remaining 1% advertise at least that amount).</p>",
+    "description": "<p>The following graph shows the distribution of the <a href=\"glossary.html#advertised-bandwidth\">advertised bandwidth</a> of relays in the network.  Each percentile represents the advertised bandwidth that a given percentage of relays does not exceed (and that in turn the remaining relays either match or exceed).  For example, 99% of relays advertise at most the bandwidth value shown in the 99th percentile line (and the remaining 1% advertise at least that amount).</p>",
     "function": "plot_advbwdist_perc",
     "parameters": [
       "start",
@@ -131,7 +131,7 @@
     "id": "advbwdist-relay",
     "title": "Advertised bandwidth of n-th fastest relays",
     "type": "Graph",
-    "description": "<p>The following graph shows the <a href=\"about.html#advertised-bandwidth\">advertised bandwidth</a> of the n-th fastest relays in the network for different values of n.</p>",
+    "description": "<p>The following graph shows the <a href=\"glossary.html#advertised-bandwidth\">advertised bandwidth</a> of the n-th fastest relays in the network for different values of n.</p>",
     "function": "plot_advbwdist_relay",
     "parameters": [
       "start",
@@ -151,7 +151,7 @@
     "id": "userstats-relay-country",
     "title": "Direct users by country",
     "type": "Graph",
-    "description": "<p>The following graph shows the estimated number of directly-connecting <a href=\"about.html#client\">clients</a>; that is, it excludes clients connecting via <a href=\"about.html#bridge\">bridges</a>.  These estimates are derived from the number of directory requests counted on <a href=\"about.html#directory-authority\">directory authorities</a> and <a href=\"about.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that graphs are available for most countries.  Furthermore, it is possible to display indications of censorship events as obtained from an anomaly-based censorship-detection system (for more details, see this <a href=\"https://research.torproject.org/techreports/detector-2011-09-09.pdf\">technical report</a>).  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>The following graph shows the estimated number of directly-connecting <a href=\"glossary.html#client\">clients</a>; that is, it excludes clients connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These estimates are derived from the number of directory requests counted on <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that graphs are available for most countries.  Furthermore, it is possible to display indications of censorship events as obtained from an anomaly-based censorship-detection system (for more details, see this <a href=\"https://research.torproject.org/techreports/detector-2011-09-09.pdf\">technical report</a>).  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_relay_country",
     "parameters": [
       "start",
@@ -167,7 +167,7 @@
     "id": "userstats-relay-table",
     "title": "Top-10 countries by directly connecting users",
     "type": "Table",
-    "description": "<p>The following table shows the top-10 countries by estimated number of directly-connecting <a href=\"about.html#client\">clients</a>.  These numbers are derived from directory requests counted on <a href=\"about.html#directory-authority\">directory authorities</a> and <a href=\"about.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>The following table shows the top-10 countries by estimated number of directly-connecting <a href=\"glossary.html#client\">clients</a>.  These numbers are derived from directory requests counted on <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "write_userstats_relay",
     "parameters": [
       "start",
@@ -213,7 +213,7 @@
     "id": "userstats-bridge-country",
     "title": "Bridge users by country",
     "type": "Graph",
-    "description": "<p>The following graph shows the estimated number of <a href=\"about.html#client\">clients</a> connecting via <a href=\"about.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, so that graphs are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>The following graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, so that graphs are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_bridge_country",
     "parameters": [
       "start",
@@ -228,7 +228,7 @@
     "id": "userstats-bridge-table",
     "title": "Top-10 countries by bridge users",
     "type": "Table",
-    "description": "<p>The following table shows the top-10 countries by estimated number of <a href=\"about.html#client\">clients</a> connecting via <a href=\"about.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>The following table shows the top-10 countries by estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "write_userstats_bridge",
     "parameters": [
       "start",
@@ -250,7 +250,7 @@
     "id": "userstats-bridge-transport",
     "title": "Bridge users by transport",
     "type": "Graph",
-    "description": "<p>The following graph shows the estimated number of <a href=\"about.html#client\">clients</a> connecting via <a href=\"about.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges distinguish connecting clients by transport protocol, which may include <a href=\"about.html#pluggable-transport\">pluggable transports</a>, so that graphs are available for different transports.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>The following graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges distinguish connecting clients by transport protocol, which may include <a href=\"glossary.html#pluggable-transport\">pluggable transports</a>, so that graphs are available for different transports.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_bridge_transport",
     "parameters": [
       "start",
@@ -265,7 +265,7 @@
     "id": "userstats-bridge-combined",
     "title": "Bridge users by country and transport",
     "type": "Graph",
-    "description": "<p>The following graph shows the estimated number of <a href=\"about.html#client\">clients</a> connecting via <a href=\"about.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, and they distinguish connecting clients by transport protocol, which may include <a href=\"about.html#pluggable-transport\">pluggable transports</a>.  Even though bridges don't report a combination of clients by country and transport, it's possible to derive and graph lower and upper bounds from existing usage statistics.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>The following graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, and they distinguish connecting clients by transport protocol, which may include <a href=\"glossary.html#pluggable-transport\">pluggable transports</a>.  Even though bridges don't report a combination of clients by country and transport, it's possible to derive and graph lower and upper bounds from existing usage statistics.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_bridge_combined",
     "parameters": [
       "start",
@@ -280,7 +280,7 @@
     "id": "userstats-bridge-version",
     "title": "Bridge users by IP version",
     "type": "Graph",
-    "description": "<p>The following graph shows the estimated number of <a href=\"about.html#client\">clients</a> connecting via <a href=\"about.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges distinguish connecting clients by IP version, so that graphs are available for both IP versions 4 and 6.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>The following graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges distinguish connecting clients by IP version, so that graphs are available for both IP versions 4 and 6.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_bridge_version",
     "parameters": [
       "start",
@@ -295,7 +295,7 @@
     "id": "oxford-anonymous-internet",
     "title": "Tor users as percentage of larger Internet population",
     "type": "Link",
-    "description": "<p>The Oxford Internet Institute made a cartogram visualization of Tor users as compared to the overall Internet population.  They used the average number of Tor <a href=\"about.html#client\">users</a> per country from August 2012 to August 2013 and put it in relation to total Internet users per country.  More details and conclusions can be found on the <a href=\"http://geography.oii.ox.ac.uk/?page=tor\">Information Geographies website at the Oxford Internet Institute</a>.</p><p><a href=\"http://geography.oii.ox.ac.uk/?page=tor\"><img src=\"images/oxford-anonymous-internet.png\" alt=\"The anonymous Internet\"></a></p>"
+    "description": "<p>The Oxford Internet Institute made a cartogram visualization of Tor users as compared to the overall Internet population.  They used the average number of Tor <a href=\"glossary.html#client\">users</a> per country from August 2012 to August 2013 and put it in relation to total Internet users per country.  More details and conclusions can be found on the <a href=\"http://geography.oii.ox.ac.uk/?page=tor\">Information Geographies website at the Oxford Internet Institute</a>.</p><p><a href=\"http://geography.oii.ox.ac.uk/?page=tor\"><img src=\"images/oxford-anonymous-internet.png\" alt=\"The anonymous Internet\"></a></p>"
   },
   {
     "id": "torperf",
@@ -333,7 +333,7 @@
     "id": "connbidirect",
     "title": "Fraction of connections used uni-/bidirectionally",
     "type": "Graph",
-    "description": "<p>The following graph shows the fraction of direct connections between a <a href=\"about.html#relay\">relay</a> and other nodes in the network that are used uni- or bi-directionally.  Every 10 seconds, relays determine for every direct connection whether they read and wrote less than a threshold of 20 KiB.  Connections below this threshold are excluded from the graph.  For the remaining connections, relays determine whether they read/wrote at least 10 times as many bytes as they wrote/read.  If so, they classify a connection as \"Mostly reading\" or \"Mostly writing\", respectively.  All other connections are classified as \"Both reading and writing\".  After classifying connections, read and write counters are reset for the next 10-second interval.  The graph shows daily medians and inter-quartile ranges of reported fractions.</p>",
+    "description": "<p>The following graph shows the fraction of direct connections between a <a href=\"glossary.html#relay\">relay</a> and other nodes in the network that are used uni- or bi-directionally.  Every 10 seconds, relays determine for every direct connection whether they read and wrote less than a threshold of 20 KiB.  Connections below this threshold are excluded from the graph.  For the remaining connections, relays determine whether they read/wrote at least 10 times as many bytes as they wrote/read.  If so, they classify a connection as \"Mostly reading\" or \"Mostly writing\", respectively.  All other connections are classified as \"Both reading and writing\".  After classifying connections, read and write counters are reset for the next 10-second interval.  The graph shows daily medians and inter-quartile ranges of reported fractions.</p>",
     "function": "plot_connbidirect",
     "parameters": [
       "start",
@@ -347,7 +347,7 @@
     "id": "hidserv-dir-onions-seen",
     "title": "Unique .onion addresses",
     "type": "Graph",
-    "description": "<p>The following graph shows the number of unique .onion addresses in the network per day.  These numbers are extrapolated from aggregated statistics on unique .onion addresses reported by single <a href=\"about.html#relay\">relays</a> acting as <a href=\"about.html#hidden-service\">hidden-service</a> directories, if at least 1% of relays reported these statistics.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
+    "description": "<p>The following graph shows the number of unique .onion addresses in the network per day.  These numbers are extrapolated from aggregated statistics on unique .onion addresses reported by single <a href=\"glossary.html#relay\">relays</a> acting as <a href=\"glossary.html#hidden-service\">hidden-service</a> directories, if at least 1% of relays reported these statistics.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
     "function": "plot_hidserv_dir_onions_seen",
     "parameters": [
       "start",
@@ -361,7 +361,7 @@
     "id": "hidserv-rend-relayed-cells",
     "title": "Hidden-service traffic",
     "type": "Graph",
-    "description": "<p>The following graph shows the amount of hidden-service traffic in the network per day.  This number is extrapolated from aggregated statistics on hidden-service traffic reported by single <a href=\"about.html#relay\">relays</a> acting as rendezvous points for <a href=\"about.html#hidden-service\">hidden services</a>, if at least 1% of relays reported these statistics.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
+    "description": "<p>The following graph shows the amount of hidden-service traffic in the network per day.  This number is extrapolated from aggregated statistics on hidden-service traffic reported by single <a href=\"glossary.html#relay\">relays</a> acting as rendezvous points for <a href=\"glossary.html#hidden-service\">hidden services</a>, if at least 1% of relays reported these statistics.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
     "function": "plot_hidserv_rend_relayed_cells",
     "parameters": [
       "start",
@@ -375,7 +375,7 @@
     "id": "hidserv-frac-reporting",
     "title": "Fraction of relays reporting hidden-service statistics",
     "type": "Graph",
-    "description": "<p>The following graph shows the fraction of <a href=\"about.html#relay\">relays</a> that report statistics on <a href=\"about.html#hidden-service\">hidden service</a> usage.  If at least 1% of relays report a statistic, it gets extrapolated towards a network total, where higher fractions are produce more accurate results.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
+    "description": "<p>The following graph shows the fraction of <a href=\"glossary.html#relay\">relays</a> that report statistics on <a href=\"glossary.html#hidden-service\">hidden service</a> usage.  If at least 1% of relays report a statistic, it gets extrapolated towards a network total, where higher fractions are produce more accurate results.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
     "function": "plot_hidserv_frac_reporting",
     "parameters": [
       "start",
@@ -389,18 +389,18 @@
     "id": "uncharted-data-flow",
     "title": "Data flow in the Tor network",
     "type": "Link",
-    "description": "<p>Uncharted made a visualization of data flow in the Tor network where they place each <a href=\"about.html#relay\">relay</a> on a world map and illustrate traffic exchanged between relays as animated dots. More details can be found on the <a href=\"https://torflow.uncharted.software/\">Uncharted website</a>.</p><p><a href=\"https://torflow.uncharted.software/\"><img src=\"images/uncharted-data-flow.png\" alt=\"Data flow in the Tor network\"></a></p>"
+    "description": "<p>Uncharted made a visualization of data flow in the Tor network where they place each <a href=\"glossary.html#relay\">relay</a> on a world map and illustrate traffic exchanged between relays as animated dots. More details can be found on the <a href=\"https://torflow.uncharted.software/\">Uncharted website</a>.</p><p><a href=\"https://torflow.uncharted.software/\"><img src=\"images/uncharted-data-flow.png\" alt=\"Data flow in the Tor network\"></a></p>"
   },
   {
     "id": "uptimes",
     "title": "Monthly uptime of relays",
     "type": "Link",
-    "description": "<p>The following image illustrates the uptime of all known <a href=\"about.html#relay\">relays</a> in a given month.  Each row of pixels denotes one <a href=\"about.html#consensus\">consensus</a> (that is, one hour), and each column denotes one relay.  Each pixel denotes if a given relay was online or offline at a given hour: black means online, white means offline, and red highlights relays with identical uptime patterns.  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\"><img src=\"images/uptimes.jpg\" alt=\"Monthly uptime of relays\"></a></p>"
+    "description": "<p>The following image illustrates the uptime of all known <a href=\"glossary.html#relay\">relays</a> in a given month.  Each row of pixels denotes one <a href=\"glossary.html#consensus\">consensus</a> (that is, one hour), and each column denotes one relay.  Each pixel denotes if a given relay was online or offline at a given hour: black means online, white means offline, and red highlights relays with identical uptime patterns.  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\"><img src=\"images/uptimes.jpg\" alt=\"Monthly uptime of relays\"></a></p>"
   },
   {
     "id": "networkchurn",
     "title": "Network churn rate by relay flag",
     "type": "Link",
-    "description": "<p>The following image shows the churn rate of the Tor network by <a href=\"about.html#relay-flag\">relay flag</a> in a given month.  The churn rate, a value in the interval <b>[0,1]</b>, captures the rate of <a href=\"about.html#relay\">relays</a> joining and leaving the network from one <a href=\"about.html#consensus\">consensus</a> to the next (that is, within one hour).  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/churn-values/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/churn-values/\"><img src=\"images/networkchurn.png\" alt=\"Network churn rate by relay flag\"></a></p>"
+    "description": "<p>The following image shows the churn rate of the Tor network by <a href=\"glossary.html#relay-flag\">relay flag</a> in a given month.  The churn rate, a value in the interval <b>[0,1]</b>, captures the rate of <a href=\"glossary.html#relay\">relays</a> joining and leaving the network from one <a href=\"glossary.html#consensus\">consensus</a> to the next (that is, within one hour).  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/churn-values/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/churn-values/\"><img src=\"images/networkchurn.png\" alt=\"Network churn rate by relay flag\"></a></p>"
   }
 ]

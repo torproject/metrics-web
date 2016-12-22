@@ -31,15 +31,15 @@
         <div class="tab-pane active" id="tab-${tab[1]}">
 
 <p>The following graph visualizes diversity of currently running
-<a href="about.html#relay">relays</a> in terms of their probability to be
-selected for <a href="about.html#circuit">circuits</a>.
+<a href="glossary.html#relay">relays</a> in terms of their probability to be
+selected for <a href="glossary.html#circuit">circuits</a>.
 Fast relays with at least 100 Mbit/s bandwidth capacity, and which
 therefore have a high probability of being selected for circuits, are
 represented by an onion; smaller relays are shown as a simple dot; and the
 slowest relays, which are almost never selected for circuits, are omitted
 entirely.
 Graphs in the "all relays" category use a relay's
-<a href="about.html#consensus-weight">consensus weight</a> as probability,
+<a href="glossary.html#consensus-weight">consensus weight</a> as probability,
 whereas graphs in the "exits only" category use a value derived from a
 relay's consensus weight that resembles the probability of selecting that
 relay as exit node.

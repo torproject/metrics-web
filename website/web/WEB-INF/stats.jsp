@@ -22,9 +22,9 @@
 <h2>Number of relays and bridges <a href="#servers" name="servers" class="anchor">#</a></h2>
 
 <p>The following data file contains the number of running <a
-href="about.html#relay">relays</a> and <a href="about.html#bridge">bridges</a>
+href="glossary.html#relay">relays</a> and <a href="glossary.html#bridge">bridges</a>
 in the network.  Statistics include subsets of relays or bridges by <a
-href="about.html#relay-flag">relay flag</a> (relays only), country code (relays
+href="glossary.html#relay-flag">relay flag</a> (relays only), country code (relays
 only, and only until February 2013), tor software version (relays only),
 operating system (relays only), and by whether or not they are running in the
 EC2 cloud (bridges only).  The data file contains daily (mean) averages of relay
@@ -88,14 +88,14 @@ only, this column contains the empty string.</li>
 <h2>Bandwidth provided and consumed by relays <a href="#bandwidth" name="bandwidth" class="anchor">#</a></h2>
 
 <p>The following data file contains statistics on <a
-href="about.html#advertised-bandwidth">advertised</a> and <a
-href="about.html#bandwidth-history">consumed bandwidth</a> of <a
-href="about.html#relay">relays</a> in the network.  Statistics on advertised
+href="glossary.html#advertised-bandwidth">advertised</a> and <a
+href="glossary.html#bandwidth-history">consumed bandwidth</a> of <a
+href="glossary.html#relay">relays</a> in the network.  Statistics on advertised
 bandwidth include any kind of traffic handled by a relay, whereas statistics on
 consumed bandwidth are available either for all traffic combined, or
 specifically for directory traffic.  Some of the statistics are available for
 subsets of relays that have the "Exit" and/or the "Guard" <a
-href="about.html#relay-flag">flag</a>.  The data file contains daily (mean)
+href="glossary.html#relay-flag">flag</a>.  The data file contains daily (mean)
 averages of bandwidth numbers.</p>
 
 <p><b>Download as <a href="stats/bandwidth.csv">CSV file</a>.</b></p>
@@ -143,11 +143,11 @@ relays when serving directory data.</li>
 <h2>Advertised bandwidth distribution and n-th fastest relays <a href="#advbwdist" name="advbwdist" class="anchor">#</a></h2>
 
 <p>The following data file contains statistics on the distribution of <a
-href="about.html#advertised-bandwidth">advertised bandwidth</a> of relays in the
+href="glossary.html#advertised-bandwidth">advertised bandwidth</a> of relays in the
 network.  These statistics include advertised bandwidth percentiles and
 advertised bandwidth values of the n-th fastest relays.  All values are obtained
 from advertised bandwidths of running relays in a <a
-href="about.html#consensus">network status consensus</a>.  The data file
+href="glossary.html#consensus">network status consensus</a>.  The data file
 contains daily (median) averages of percentiles and n-th largest values.</p>
 
 <p><b>Download as <a href="stats/advbwdist.csv">CSV file</a>.</b></p>
@@ -181,11 +181,11 @@ relays.</li>
 <h2>Estimated number of clients in the Tor network <a href="#clients" name="clients" class="anchor">#</a></h2>
 
 <p>The following data file contains estimates on the number of <a
-href="about.html#client">clients</a> in the network.  These numbers are derived
+href="glossary.html#client">clients</a> in the network.  These numbers are derived
 from directory requests counted on <a
-href="about.html#directory-authority">directory authorities</a>, <a
-href="about.html#directory-mirror">directory mirrors</a>, and <a
-href="about.html#bridge">bridges</a>.  Statistics are available for clients
+href="glossary.html#directory-authority">directory authorities</a>, <a
+href="glossary.html#directory-mirror">directory mirrors</a>, and <a
+href="glossary.html#bridge">bridges</a>.  Statistics are available for clients
 connecting directly relays and clients connecting via bridges.  There are
 statistics available by country (for both directly-connecting clients and
 clients connecting via bridges), by transport protocol (only for clients
@@ -245,12 +245,12 @@ should be handled with more care.</li>
 <h2>Estimated number of clients by country and transport <a href="#userstats-combined" name="userstats-combined" class="anchor">#</a></h2>
 
 <p>The following data file contains additional statistics on the number of <a
-href="about.html#client">clients</a> in the network.  This data file is related
+href="glossary.html#client">clients</a> in the network.  This data file is related
 to the <a href="clients-data.html">clients-data file</a> that contains estimates
 on the number of clients by country and by transport protocol.  This data file
 enhances these statistics by containing estimates of clients connecting to <a
-href="about.html#bridge">bridges</a> by a given country and using a given <a
-href="about.html#pluggable-transport">transport protocol</a>.  Even though
+href="glossary.html#bridge">bridges</a> by a given country and using a given <a
+href="glossary.html#pluggable-transport">transport protocol</a>.  Even though
 bridges don't report a combination of clients by country and transport, it's
 possible to derive lower and upper bounds from existing usage statistics.</p>
 
@@ -359,7 +359,7 @@ over Tor.</li>
 <h2>Fraction of connections used uni-/bidirectionally <a href="#connbidirect2" name="connbidirect2" class="anchor">#</a></h2>
 
 <p>The following data file contains statistics on the fraction of direct
-connections between a <a href="about.html#relay">relay</a> and other nodes in
+connections between a <a href="glossary.html#relay">relay</a> and other nodes in
 the network that are used uni- or bidirectionally.  Every 10 seconds, relays
 determine for every direct connection whether they read and wrote less than a
 threshold of 20 KiB.  Connections below this threshold are excluded from the
@@ -401,8 +401,8 @@ fractions for the three directions "read", "write", and "both" sum up to exactly
 <h2>Hidden-service statistics <a href="#hidserv" name="hidserv" class="anchor">#</a></h2>
 
 <p>The following data file contains <a
-href="about.html#hidden-service">hidden-service</a> statistics gathered by a
-small subset of <a href="about.html#relay">relays</a> and extrapolated to
+href="glossary.html#hidden-service">hidden-service</a> statistics gathered by a
+small subset of <a href="glossary.html#relay">relays</a> and extrapolated to
 network totals.  Statistics include the amount of hidden-service traffic and the
 number of hidden-service addresses in the network per day.  For more details on
 the extrapolation algorithm, see <a
@@ -450,10 +450,10 @@ fraction.</li>
 </div>
 
 <p>The following data file contains statistics about agreement
-or disagreement among the <a href="about.html#directory-authority">directory
+or disagreement among the <a href="glossary.html#directory-authority">directory
 authorities</a>.  Once per hour the directory authorities exchange votes with
-their view of the <a href="about.html#relay">relays</a> in the network including
-attributes like <a href="about.html#relay-flag">relay flags</a> or bandwidth
+their view of the <a href="glossary.html#relay">relays</a> in the network including
+attributes like <a href="glossary.html#relay-flag">relay flags</a> or bandwidth
 measurements.  This data file includes counts of relays by number of directory
 authorities assigning them a given attribute.</p>
 
