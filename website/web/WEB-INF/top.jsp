@@ -73,6 +73,7 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
       <ul class="nav navbar-nav navbar-right">
 
         <!-- we have to copy the primary navigation items here for mobile accessibility -->
+        <li class="visible-xs section-header">Metrics</li>
         <li class="visible-xs<c:if test="${'Home'.equals(param.navActive)}"> active</c:if>"><a href="index.html"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a></li>
         <c:forEach var="category" items="${categories}">
         <li class="visible-xs<c:if test="${category[1].equals(param.navActive)}"> active</c:if>"><a href="${category[0]}.html"><i class="fa ${category[3]} fa-fw" aria-hidden="true"></i> ${category[1]}</a></li>
@@ -80,6 +81,7 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
         <!-- /end of primary copy -->
 
         <!-- secondary navigation items -->
+        <li class="visible-xs section-header">More</li>
         <li <c:if test="${'News'.equals(param.navActive)}"> class="active"</c:if>><a href="news.html"><i class="fa fa-newspaper-o fa-fw hidden-sm" aria-hidden="true"></i> News</a></li>
         <li <c:if test="${'Sources'.equals(param.navActive)}"> class="active"</c:if>><a href="sources.html"><i class="fa fa-archive fa-fw hidden-sm" aria-hidden="true"></i> Sources</a></li>
         <li <c:if test="${'Operation'.equals(param.navActive)}"> class="active"</c:if>><a href="operation.html"><i class="fa fa-cogs fa-fw hidden-sm" aria-hidden="true"></i> Operation</a></li>
