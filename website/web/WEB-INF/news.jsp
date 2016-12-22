@@ -13,15 +13,14 @@
     </div>
 
     <div class="container">
-      <h1>News</h1>
+      <h1>News <a href="#news" name="news" class="anchor">#</a></h1>
       <p>We collect reports of events and aggregate them here for your convenience.  The process is usually pretty informal.  Someone tells us of an event, reports it to us, and we aggregate them here.  If you know of any event that may have caused a measurement anomaly, help us add it to this list.</p>
     </div>
     <div class="container">
 
     <c:forEach var="category" items="${news}" varStatus="status">
       <c:if test="${not status.first}"><hr></c:if>
-      <a name="#${category.key[1]}" id="anchor-${category.key[1]}"></a>
-      <h2>${category.key[0]}</h2>
+      <h2>${category.key[0]} <a href="#${category.key[1]}" name="${category.key[1]}" class="anchor">#</a></h2>
       <c:forEach var="entry" items="${category.value}">
       <p>${entry[0]}</p>
       <br>

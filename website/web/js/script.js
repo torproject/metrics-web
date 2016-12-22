@@ -20,7 +20,7 @@ jQuery(function() {
   
   
   // smooth scolling for all anchor links
-  jQuery('a[href^="#"]').on('click',function (e) {
+  jQuery('a[href^="#"]:not(.anchor)').on('click',function (e) {
     e.preventDefault();
     var target = this.hash;
     var $target = $(target.split('#').join('#anchor-'));

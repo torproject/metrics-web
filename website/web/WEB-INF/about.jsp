@@ -14,34 +14,34 @@
 
     <div class="container">
 
-      <h1>About</h1>
+      <h1>About <a href="#about" name="about" class="anchor">#</a></h1>
 
       <p>Tor metrics are updated daily to provide transparency for Tor users, give feedback for developers, and measure evidence of network anomalies.</p>
     </div>
 
     <div class="container">
 
-      <a name="philosophy" id="anchor-philosophy"></a><br>
+      <br>
 
-      <h2>Philosophy</h2>
+      <h2>Philosophy <a href="#philosophy" name="philosophy" class="anchor">#</a></h2>
 
       <p>We only use public, non-sensitive data for metrics. Each metric goes through a rigorous review and discussion process before appearing here. We never publish statistics&mdash;or aggregate statistics&mdash;of sensitive data, such as unencrypted contents of traffic.</p>
 
-      <a name="contributing" id="anchor-contributing"></a><br>
+      <br>
 
-      <h2>Contributing</h2>
+      <h2>Contributing <a href="#contributing" name="contributing" class="anchor">#</a></h2>
 
       <p>Collecting and processing new data won't likely happen without your help! If you really want to see something measured here, we would be happy to work with you.  (Link to Trac wiki page)</p>
 
-      <a name="contact" id="anchor-contact"></a><br>
+      <br>
 
-      <h2>Contact</h2>
+      <h2>Contact <a href="#contact" name="contact" class="anchor">#</a></h2>
 
       <p>If you have any questions, contact us at <a href="mailto:metrics-team@lists.torproject.org">metrics-team@lists.torproject.org</a>.</p>
 
-      <a name="testimonials" id="anchor-testimonials"></a><br>
+      <br>
 
-      <h2>Testimonials</h2>
+      <h2>Testimonials <a href="#testimonials" name="testimonials" class="anchor">#</a></h2>
       <blockquote>
         <p class="mb-0">
           Metrics are a critical part of any security technology. If you don't know how the technology works in practice, you can't find and fix problems. You can't improve the security. You can't make it work better. This isn't glamorous or sexy work, but it's essential. This is especially true for security and privacy, where our preconceived notions of threats and usage are regularly wrong&mdash;and knowing what's really going on is the difference between security and insecurity.<br><br>

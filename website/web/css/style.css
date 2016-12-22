@@ -756,6 +756,20 @@ form input[type=checkbox] {
 }
 
 
+/* Anchor-Links for Headlines */
+.anchor {
+    display:none;
+    text-decoration:none;
+}
+*:hover > .anchor {
+    display:inline;
+    color:#78c040;
+}
+*:hover > .anchor:hover {
+    text-decoration:none;
+    color:#68b030;
+}
+
 
 /* No JavaScript fallbacks */
 

@@ -13,13 +13,12 @@
     </div>
 
     <div class="container">
-      <h1>Sources</h1>
+      <h1>Sources <a href="#sources" name="sources" class="anchor">#</a></h1>
       <p>You're a data person and only trust the statistics that you doctored yourself?  Here's all the data right from the source, doctor.</p>
     </div>
 
     <div class="container tools">
-      <a name="archive" id="anchor-archive"></a>
-      <h2>Network archives</h2>
+      <h2>Network archives <a href="#archive" name="archive" class="anchor">#</a></h2>
       <p>We get our data from the network archives below.</p>
       <div class="row">
 
@@ -43,8 +42,7 @@
     </div>
 
     <div class="container tools">
-      <a name="measurement" id="anchor-measurement"></a>
-      <h2>Measurement tools</h2>
+      <h2>Measurement tools <a href="#measurement" name="measurement" class="anchor">#</a></h2>
       <p>The following tools perform active measurements in the Tor network.  (They don't have pretty logos yet, but they are all uniquely useful!)</p>
       <div class="row">
 
@@ -76,8 +74,7 @@
     </div>
 
     <div class="container tools">
-      <a name="aggregated" id="anchor-aggregated"></a>
-      <h2>Pre-aggregated data</h2>
+      <h2>Pre-aggregated data <a href="#aggregated" name="aggregated" class="anchor">#</a></h2>
       <p>Sometimes the data from the original sources can be hard to process.  If you want to take a little shortcut, try out the following pre-aggregated statistics.</p>
       <div class="row">
 

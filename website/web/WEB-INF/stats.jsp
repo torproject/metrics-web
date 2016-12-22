@@ -14,13 +14,12 @@
     </div>
 
     <div class="container">
-      <h1>Pre-aggregated statistics files used on this website</h1>
+      <h1>Pre-aggregated statistics files used on this website <a href="#stats" name="stats" class="anchor">#</a></h1>
       <p>This page contains specifications and links to pre-aggregated statistics files used on this website.</p>
     </div>
 
 <div class="container">
-<a name="servers" id="anchor-servers"></a>
-<h2>Number of relays and bridges</h2>
+<h2>Number of relays and bridges <a href="#servers" name="servers" class="anchor">#</a></h2>
 
 <p>The following data file contains the number of running <a
 href="about.html#relay">relays</a> and <a href="about.html#bridge">bridges</a>
@@ -86,8 +85,7 @@ only, this column contains the empty string.</li>
 </div>
 
 <div class="container">
-<a name="bandwidth" id="anchor-bandwidth"></a>
-<h2>Bandwidth provided and consumed by relays</h2>
+<h2>Bandwidth provided and consumed by relays <a href="#bandwidth" name="bandwidth" class="anchor">#</a></h2>
 
 <p>The following data file contains statistics on <a
 href="about.html#advertised-bandwidth">advertised</a> and <a
@@ -142,8 +140,7 @@ relays when serving directory data.</li>
 </div>
 
 <div class="container">
-<a name="advbwdist" id="anchor-advbwdist"></a>
-<h2>Advertised bandwidth distribution and n-th fastest relays</h2>
+<h2>Advertised bandwidth distribution and n-th fastest relays <a href="#advbwdist" name="advbwdist" class="anchor">#</a></h2>
 
 <p>The following data file contains statistics on the distribution of <a
 href="about.html#advertised-bandwidth">advertised bandwidth</a> of relays in the
@@ -181,8 +178,7 @@ relays.</li>
 </div>
 
 <div class="container">
-<a name="clients" id="anchor-clients"></a>
-<h2>Estimated number of clients in the Tor network</h2>
+<h2>Estimated number of clients in the Tor network <a href="#clients" name="clients" class="anchor">#</a></h2>
 
 <p>The following data file contains estimates on the number of <a
 href="about.html#client">clients</a> in the network.  These numbers are derived
@@ -246,8 +242,7 @@ should be handled with more care.</li>
 </div>
 
 <div class="container">
-<a name="userstats-combined" id="anchor-userstats-combined"></a>
-<h2>Estimated number of clients by country and transport</h2>
+<h2>Estimated number of clients by country and transport <a href="#userstats-combined" name="userstats-combined" class="anchor">#</a></h2>
 
 <p>The following data file contains additional statistics on the number of <a
 href="about.html#client">clients</a> in the network.  This data file is related
@@ -311,8 +306,7 @@ there are users by either of the two numbers.</li>
 </div>
 
 <div class="container">
-<a name="torperf" id="anchor-torperf"></a>
-<h2>Performance of downloading static files over Tor</h2>
+<h2>Performance of downloading static files over Tor <a href="#torperf" name="torperf" class="anchor">#</a></h2>
 
 <p>The following data file contains aggregate statistics on performance when
 downloading static files of different sizes over Tor.  These statistics are
@@ -362,8 +356,7 @@ over Tor.</li>
 </div>
 
 <div class="container">
-<a name="connbidirect2" id="anchor-connbidirect2"></a>
-<h2>Fraction of connections used uni-/bidirectionally</h2>
+<h2>Fraction of connections used uni-/bidirectionally <a href="#connbidirect2" name="connbidirect2" class="anchor">#</a></h2>
 
 <p>The following data file contains statistics on the fraction of direct
 connections between a <a href="about.html#relay">relay</a> and other nodes in
@@ -405,8 +398,7 @@ fractions for the three directions "read", "write", and "both" sum up to exactly
 </div>
 
 <div class="container">
-<a name="hidserv" id="anchor-hidserv"></a>
-<h2>Hidden-service statistics</h2>
+<h2>Hidden-service statistics <a href="#hidserv" name="hidserv" class="anchor">#</a></h2>
 
 <p>The following data file contains <a
 href="about.html#hidden-service">hidden-service</a> statistics gathered by a
@@ -450,8 +442,7 @@ fraction.</li>
 </div>
 
 <div class="container">
-<a name="disagreement" id="anchor-disagreement"></a>
-<h2>Disagreement among the directory authorities (deprecated)</h2>
+<h2>Disagreement among the directory authorities (deprecated) <a href="#disagreement" name="disagreement" class="anchor">#</a></h2>
 
 <div class="bs-callout bs-callout-warning">
 <h3>Deprecated</h3>
