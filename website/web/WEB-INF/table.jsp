@@ -54,13 +54,11 @@
 
 <form action="${id}.html">
     <p>
-    <label>Start date (yyyy-mm-dd):
-      <input type="text" name="start" size="10" value="${start[0]}">
-    </label>
+    <label for="start">Start date:</label>
+    <input type="text" name="start" size="10" value="${start[0]}" placeholder="yyyy-mm-dd" id="start">
     </p><p>
-    <label>End date (yyyy-mm-dd):
-      <input type="text" name="end" size="10" value="${end[0]}">
-    </label>
+    <label for="end">End date:</label>
+    <input type="text" name="end" size="10" value="${end[0]}" placeholder="yyyy-mm-dd" id="end">
     </p><p>
     <input class="submit" type="submit" value="Update table">
     </p>

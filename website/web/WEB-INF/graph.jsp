@@ -72,54 +72,60 @@
       </p>
     </c:if>
     <c:if test="${fn:length(flag) > 0}">
-      <p>Relay flags:
-      <c:forEach var="row" items="${flag}">
-        <label class="checkbox-label">
-          <input type="checkbox" name="flag" value="${row[0]}"${row[1]}> ${row[0]}
-        </label>
-      </c:forEach>
+      <p>
+        <fieldset>
+          <legend>Relay flags:</legend>
+          <c:forEach var="row" items="${flag}">
+          <p>
+            <input type="checkbox" name="flag" value="${row[0]}" id="flag_${row[0]}"${row[1]}>
+            <label class="checkbox-label" for="flag_${row[0]}">${row[0]}</label>
+          </p>
+          </c:forEach>
+        </fieldset>
       </p>
     </c:if>
     <c:if test="${fn:length(country) > 0}">
       <p>
-        <label>Source: <select name="country">
+        <label for="country">Source:</label>
+        <select name="country" id="country">
         <c:forEach var="row" items="${country}">
           <option value="${row[0]}"${row[1]}>${row[2]}</option>
         </c:forEach>
         </select>
-        </label>
       </p>
     </c:if>
     <c:if test="${fn:length(events) > 0}">
       <p>
-        <label>Show possible censorship events if available (<a
-               href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>)
-          <select name="events">
-          <c:forEach var="row" items="${events}">
-            <option value="${row[0]}"${row[1]}>${row[2]}</option>
-          </c:forEach>
-          </select>
-        </label>
+        <label for="events">Show possible censorship events if available (<a
+               href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>)</label>
+        <select name="events" id="events">
+        <c:forEach var="row" items="${events}">
+          <option value="${row[0]}"${row[1]}>${row[2]}</option>
+        </c:forEach>
+        </select>
       </p>
     </c:if>
     <c:if test="${fn:length(transport) > 0}">
-      <p>Source:
-        <c:forEach var="row" items="${transport}">
-        <label class="checkbox-label">
-          <input type="checkbox" name="transport" value="${row[0]}"${row[1]}> ${row[2]}
-        </label>
-        </c:forEach>
+      <p>
+        <fieldset>
+          <legend>Source:</legend>
+          <c:forEach var="row" items="${transport}">
+          <p>
+            <input type="checkbox" name="transport" value="${row[0]}" id="transport_${row[0]}"${row[1]}>
+            <label class="checkbox-label" for="transport_${row[0]}">${row[2]}</label>
+          </p>
+          </c:forEach>
+        </fieldset>
       </p>
     </c:if>
     <c:if test="${fn:length(version) > 0}">
       <p>
-        <label>Source:
-          <select name="version">
-          <c:forEach var="row" items="${version}">
-            <option value="${row[0]}"${row[1]}>${row[2]}</option>
-          </c:forEach>
-          </select>
-        </label>
+        <label for="version">Source:</label>
+        <select name="version" id="version">
+        <c:forEach var="row" items="${version}">
+          <option value="${row[0]}"${row[1]}>${row[2]}</option>
+        </c:forEach>
+        </select>
       </p>
     </c:if>
     <c:if test="${fn:length(source) > 0}">
