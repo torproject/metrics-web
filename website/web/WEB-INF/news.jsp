@@ -24,6 +24,7 @@
       <h2>${category.key[0]}</h2>
       <c:forEach var="entry" items="${category.value}">
       <p>${entry[0]}</p>
+      <br>
       </c:forEach>
     </c:forEach>
 
