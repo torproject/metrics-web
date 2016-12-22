@@ -48,6 +48,7 @@ public class TableServlet extends MetricServlet {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
+    request.setAttribute("categories", this.categories);
     request.setAttribute("id", requestedId);
     request.setAttribute("title", this.titles.get(requestedId));
     if (this.categoriesById.containsKey(requestedId)) {
