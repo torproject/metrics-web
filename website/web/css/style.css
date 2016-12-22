@@ -707,6 +707,12 @@ ul.nav-tabs {
     margin-top:2em;
     margin-bottom:1em;
 }
+ul.nav-tabs>li {
+    margin-top:10px;
+}
+.nav-tabs>li:not(.active)>a {
+    border-color: #eee #eee #ddd;
+}
 
 /* graphs */
 img.graph {
