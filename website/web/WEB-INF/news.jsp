@@ -14,20 +14,17 @@
 
     <div class="container">
       <h1>News <a href="#news" name="news" class="anchor">#</a></h1>
-      <p>We collect reports of events and aggregate them here for your convenience.  The process is usually pretty informal.  Someone tells us of an event, reports it to us, and we aggregate them here.  If you know of any event that may have caused a measurement anomaly, help us add it to this list.</p>
+      <p>You're a journalist or more generally a person who wants to know what's going on in the Tor network?  We're collecting unusual events in the Tor network together with any insights we have into what we think has happened.</p>
     </div>
-    <div class="container">
 
     <c:forEach var="category" items="${news}" varStatus="status">
-      <c:if test="${not status.first}"><hr></c:if>
+    <div class="container">
       <h2>${category.key[0]} <a href="#${category.key[1]}" name="${category.key[1]}" class="anchor">#</a></h2>
       <c:forEach var="entry" items="${category.value}">
-      <p>${entry[0]}</p>
-      <br>
+      <p>${entry[0]}<br></p>
       </c:forEach>
-    </c:forEach>
-
     </div>
+    </c:forEach>
 
 <jsp:include page="bottom.jsp"/>
 

@@ -14,16 +14,12 @@
 
     <div class="container">
       <h1>Research <a href="#research" name="research" class="anchor">#</a></h1>
-      <p>Tor started out as a research project! We encourage research on all things Tor.</p>
-      <p>Look around the papers section below for some ideas on what others have researched in the past. Contact <a href="mailto:#">[some general email list here, torproject?]</a> if you want to discuss ideas.</p>
-
+      <p>You're a researcher and want to write a paper related to the public, deployed Tor network?  Here you'll find other relevant papers to cite, technical reports to understand all the details, and existing tools to conduct research on the Tor network.</p>
     </div>
 
     <div class="container">
-
-      <h2>Feel free to use our data for your research! <a href="#use" name="use" class="anchor">#</a></h2>
-
-      <p>If you do, please cite <a href="https://metrics.torproject.org/" target="_self">https://metrics.torproject.org/</a> or the following <a href="http://freehaven.net/anonbib/#wecsr10measuring-tor" target="_blank">paper</a>:</p>
+      <h2>Citation <a href="#cite" name="cite" class="anchor">#</a></h2>
+      <p>Feel free to use our data for your research.  If you do, please cite <a href="https://metrics.torproject.org/" target="_self">https://metrics.torproject.org/</a> or the following <a href="http://freehaven.net/anonbib/#wecsr10measuring-tor" target="_blank">paper</a>:</p>
       <p><pre>
 @inproceedings{wecsr10measuring-tor,
   title = {A Case Study on Measuring Statistical Data in the {T}or Anonymity Network},
@@ -36,30 +32,20 @@
   series = {LNCS},
 }</pre></p>
       <p>Thank you for acknowledging this work through a citation.</p>
-
     </div>
 
     <div class="container">
-
-      <h2>Want to collect your own data for research? <a href="#collect" name="collect" class="anchor">#</a></h2>
-      <p>Look at the <a href="sources.html">sources page</a> for services that collect Tor-related data.</p>
-
-    </div>
-
-
-    <div class="container">
-
-      <h2>Research Papers <a href="#research" name="research" class="anchor">#</a></h2>
-      <p>Here are some Tor-related papers. (...) If we're missing yours, let us know!</p>
-
+      <h2>Technical reports <a href="#techreports" name="techreports" class="anchor">#</a></h2>
+      <p>From time to time we're writing <a href="https://research.torproject.org/techreports.html" target="_blank">technical reports</a> with further details on how we collect statistics in the Tor network or how we use them to learn new interesting facts.  Be sure to take a look!</p>
     </div>
 
     <div class="container">
-<ul>
-<li><a href="https://torps.github.io/">TorPS</a> simulates changes to Tor's path selection algorithm using archived data.</li>
-<li><a href="https://shadow.github.io/">Shadow</a> uses archived Tor directory data to generate realistic network topolog
-ies.</li>
-</ul>
+      <h2>Research tools <a href="#tools" name="tools" class="anchor">#</a></h2>
+      <p>The following tools are primarily useful if you want to do research using Tor network data.</p>
+      <ul>
+        <li><a href="https://torps.github.io/" target="_blank">TorPS</a> simulates changes to Tor's path selection algorithm using archived data.</li>
+        <li><a href="https://shadow.github.io/" target="_blank">Shadow</a> uses archived Tor directory data to generate realistic network topologies.</li>
+      </ul>
     </div>
 
 <jsp:include page="bottom.jsp"/>

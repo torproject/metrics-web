@@ -13,26 +13,27 @@
     </div>
 
     <div class="container">
-      <h1>Development</h1>
-<ul>
-<li><a href="https://play.google.com/store/apps/details?id=com.networksaremadeofstring.anonionooid">AnOnionooid</a> is an Android app that helps find and explore Tor relays and bridges.</li>
-<li>Tor's <a href="https://gitweb.torproject.org/tor.git/tree/scripts/maint/updateFallbackDirs.py">fallback directories script</a> generates a list of stable directories.</li>
-<li><a href="https://github.com/duk3luk3/onion-py">OnionPy</a> provides memcached support to cache queried data.</li>
-<li><a href="https://nos-oignons.net/Services/index.en.html">Nos oignons</a> visualizes bandwidth histories of their relays.</li>
-<li><a href="https://metrics.torproject.org/uncharted-data-flow.html">metrics-lib</a> is a Java library to fetch and pars
-e Tor descriptors.</li>
-<li><a href="https://stem.torproject.org/">Stem</a> is a Python library that parses Tor descriptors.</li>
-<li><a href="https://github.com/meejah/txtorcon">Txtorcon</a> is an asynchronous Tor controller library written in Twiste
-d Python.</li>
-<li><a href="https://github.com/NullHypothesis/zoossh">Zoossh</a> is a parser written in Go for Tor-specific data formats
-.</li>
-<li><a href="https://savannah.nongnu.org/projects/koninoo/">koninoo</a> is a simple Java command line interface for query
-ing Onionoo data.</li>
-<li><a href="https://gitweb.torproject.org/user/phw/exitmap.git">Exitmap</a> is a fast and extensible scanner for Tor exi
-t relays.</li>
-<li><a href="https://gitweb.torproject.org/user/phw/sybilhunter.git/">Sybilhunter</a> attempts to detect Sybil attacks on
- the Tor network.</li>
-</ul>
+      <h1>Development <a href="#development" name="development" class="anchor">#</a></h1>
+      <p>You're a developer and want to write a tool that uses Tor network data?  Here we're collecting programming libraries, APIs, and links to other code bases to get inspiration from.</p>
+    </div>
+
+    <div class="container">
+      <h2>Parsing libraries <a href="#libraries" name="libraries" class="anchor">#</a></h2>
+      <p>The following libraries help you with parsing Tor network data from the <a href="https://collector.torproject.org/" target="_blank">CollecTor</a> service.</p>
+      <ul>
+        <li><a href="https://dist.torproject.org/descriptor/" target="_blank">metrics-lib</a> is a Java library to fetch and parse Tor descriptors.</li>
+        <li><a href="https://stem.torproject.org/" target="_blank">Stem</a> is a Python library that parses Tor descriptors.</li>
+        <li><a href="https://github.com/NullHypothesis/zoossh" target="_blank">Zoossh</a> is a parser written in Go for Tor-specific data formats.</li>
+      </ul>
+    </div>
+
+    <div class="container">
+      <h2>Query support <a href="#query" name="query" class="anchor">#</a></h2>
+      <p>The following tools help you with querying Tor network data from the <a href="https://onionoo.torproject.org/" target="_blank">Onionoo</a> service.</p>
+      <ul>
+        <li><a href="https://savannah.nongnu.org/projects/koninoo/" target="_blank">koninoo</a> is a simple Java command line interface for querying Onionoo data.</li>
+        <li><a href="https://github.com/duk3luk3/onion-py" target="_blank">OnionPy</a> provides memcached support to cache queried data.</li>
+      </ul>
     </div>
 
 <jsp:include page="bottom.jsp"/>
