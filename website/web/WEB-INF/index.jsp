@@ -23,7 +23,7 @@
     <div class="row">
       <c:forEach var="category" items="${categories}">
       <div class="col-sm-4">
-        <a href="${category[0]}.html"><i class="fa ${category[3]} fa-fw fa-4x" aria-hidden="true"></i> <h2>${category[1]}</h2> <p>${category[2]}</p></a>
+        <a<c:if test="${fn:length(category[0]) > 0}"> href="${category[0]}.html"</c:if>><i class="fa ${category[3]} fa-fw fa-4x" aria-hidden="true"></i> <h2>${category[1]}</h2> <p>${category[2]}</p></a>
       </div>
       </c:forEach>
     </div>

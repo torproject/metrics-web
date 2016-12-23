@@ -76,7 +76,7 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
         <li class="visible-xs section-header">Metrics</li>
         <li class="visible-xs<c:if test="${'Home'.equals(param.navActive)}"> active</c:if>"><a href="index.html"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a></li>
         <c:forEach var="category" items="${categories}">
-        <li class="visible-xs<c:if test="${category[1].equals(param.navActive)}"> active</c:if>"><a href="${category[0]}.html"><i class="fa ${category[3]} fa-fw" aria-hidden="true"></i> ${category[1]}</a></li>
+        <li class="visible-xs<c:if test="${category[1].equals(param.navActive)}"> active</c:if><c:if test="${fn:length(category[0]) == 0}"> disabled</c:if>"><a<c:if test="${fn:length(category[0]) > 0}"> href="${category[0]}.html"</c:if>><i class="fa ${category[3]} fa-fw" aria-hidden="true"></i> ${category[1]}</a></li>
         </c:forEach>
         <!-- /end of primary copy -->
 
@@ -116,7 +116,7 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
       <ul class="nav navbar-nav">
         <li <c:if test="${'Home'.equals(param.navActive)}"> class="active"</c:if>><a href="index.html"><i class="fa fa-home fa-fw hidden-sm" aria-hidden="true"></i> Home</a></li>
         <c:forEach var="category" items="${categories}">
-        <li <c:if test="${category[1].equals(param.navActive)}"> class="active"</c:if>><a href="${category[0]}.html"><i class="fa ${category[3]} fa-fw hidden-sm" aria-hidden="true"></i> ${category[1]}</a></li>
+        <li class="<c:if test="${category[1].equals(param.navActive)}"> active</c:if><c:if test="${fn:length(category[0]) == 0}"> disabled</c:if>"><a<c:if test="${fn:length(category[0]) > 0}"> href="${category[0]}.html"</c:if>><i class="fa ${category[3]} fa-fw hidden-sm" aria-hidden="true"></i> ${category[1]}</a></li>
         </c:forEach>
       </ul>
     </div><!-- /.navbar-collapse -->
