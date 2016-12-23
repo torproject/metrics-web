@@ -54,7 +54,7 @@
       </p>
     </c:if>
     <c:if test="${fn:length(p) > 0}">
-      <p>Percentiles:
+      <p><b>Percentiles:</b>
       <c:forEach var="row" items="${p}">
         <label class="checkbox-label">
           <input type="checkbox" name="p" value="${row[0]}"${row[1]}> ${row[2]}
@@ -63,7 +63,7 @@
       </p>
     </c:if>
     <c:if test="${fn:length(n) > 0}">
-      <p>n:
+      <p><b>n:</b>
       <c:forEach var="row" items="${n}">
         <label class="checkbox-label">
           <input type="checkbox" name="n" value="${row[0]}"${row[1]}> ${row[0]}
@@ -73,20 +73,16 @@
     </c:if>
     <c:if test="${fn:length(flag) > 0}">
       <p>
-        <fieldset>
-          <legend>Relay flags:</legend>
-          <c:forEach var="row" items="${flag}">
-          <p>
-            <input type="checkbox" name="flag" value="${row[0]}" id="flag_${row[0]}"${row[1]}>
-            <label class="checkbox-label" for="flag_${row[0]}">${row[0]}</label>
-          </p>
-          </c:forEach>
-        </fieldset>
+        <b>Relay flags:</b>
+        <c:forEach var="row" items="${flag}">
+        <input type="checkbox" name="flag" value="${row[0]}" id="flag_${row[0]}"${row[1]}>
+        <label class="checkbox-label" for="flag_${row[0]}">${row[0]}</label>
+        </c:forEach>
       </p>
     </c:if>
     <c:if test="${fn:length(country) > 0}">
       <p>
-        <label for="country">Source:</label>
+        <label for="country"><b>Source:</b></label>
         <select name="country" id="country">
         <c:forEach var="row" items="${country}">
           <option value="${row[0]}"${row[1]}>${row[2]}</option>
@@ -96,8 +92,8 @@
     </c:if>
     <c:if test="${fn:length(events) > 0}">
       <p>
-        <label for="events">Show possible censorship events if available (<a
-               href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>)</label>
+        <label for="events"><b>Show possible censorship events if available (<a
+               href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>):</b></label>
         <select name="events" id="events">
         <c:forEach var="row" items="${events}">
           <option value="${row[0]}"${row[1]}>${row[2]}</option>
@@ -107,20 +103,16 @@
     </c:if>
     <c:if test="${fn:length(transport) > 0}">
       <p>
-        <fieldset>
-          <legend>Source:</legend>
-          <c:forEach var="row" items="${transport}">
-          <p>
-            <input type="checkbox" name="transport" value="${row[0]}" id="transport_${row[0]}"${row[1]}>
-            <label class="checkbox-label" for="transport_${row[0]}">${row[2]}</label>
-          </p>
-          </c:forEach>
-        </fieldset>
+        <b>Source:</b>
+        <c:forEach var="row" items="${transport}">
+        <input type="checkbox" name="transport" value="${row[0]}" id="transport_${row[0]}"${row[1]}>
+        <label class="checkbox-label" for="transport_${row[0]}">${row[2]}</label>
+        </c:forEach>
       </p>
     </c:if>
     <c:if test="${fn:length(version) > 0}">
       <p>
-        <label for="version">Source:</label>
+        <label for="version"><b>Source:</b></label>
         <select name="version" id="version">
         <c:forEach var="row" items="${version}">
           <option value="${row[0]}"${row[1]}>${row[2]}</option>
@@ -129,7 +121,7 @@
       </p>
     </c:if>
     <c:if test="${fn:length(source) > 0}">
-      <p>Source:
+      <p><b>Source:</b>
       <c:forEach var="row" items="${source}">
         <label class="radio-label">
           <input type="radio" name="source" value="${row[0]}"${row[1]}> ${row[0]}
@@ -138,7 +130,7 @@
       </p>
     </c:if>
     <c:if test="${fn:length(filesize) > 0}">
-      <p>File size:
+      <p><b>File size:</b>
       <c:forEach var="row" items="${filesize}">
         <label class="radio-label">
           <input type="radio" name="filesize" value="${row[0]}"${row[1]}> ${row[2]}

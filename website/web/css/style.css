@@ -734,8 +734,14 @@ form input, form select {
     width:100%;
     max-width:200px;
 }
-form input[type=checkbox] {
+form input[type=checkbox], form input[type=radio] {
     width:20px;
+}
+label.checkbox-label, label.radio-label {
+    max-width: initial;
+    width: auto;
+    font-weight: normal;
+    margin-right: 20px;
 }
 
 
