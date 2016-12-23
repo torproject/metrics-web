@@ -1,7 +1,7 @@
 [
   {
     "id": "networksize",
-    "title": "Relays and bridges in the network",
+    "title": "Relays and bridges",
     "type": "Graph",
     "description": "<p>The following graph shows the number of running <a href=\"glossary.html#relay\">relays</a> and <a href=\"glossary.html#bridge\">bridges</a> in the network.</p>",
     "function": "plot_networksize",
@@ -15,9 +15,9 @@
   },
   {
     "id": "relayflags",
-    "title": "Relays with Exit, Fast, Guard, Stable, and HSDir flags",
+    "title": "Relays by relay flag",
     "type": "Graph",
-    "description": "<p>The following graph shows the number of running <a href=\"glossary.html#relay\">relays</a> that have had certain <a href=\"glossary.html#relay-flag\">flags</a> assigned by the <a href=\"glossary.html#directory-authority\">directory authorities</a>.  These flags indicate that a relay should be preferred for either guard (\"Guard\") or exit positions (\"Exit\"), that a relay is suitable for high-bandwidth (\"Fast\") or long-lived circuits (\"Stable\"), or that a relay is considered a hidden service directory (\"HSDir\").</p>",
+    "description": "<p>The following graph shows the number of running <a href=\"glossary.html#relay\">relays</a> that have had certain <a href=\"glossary.html#relay-flag\">flags</a> assigned by the <a href=\"glossary.html#directory-authority\">directory authorities</a>.  These flags indicate that a relay should be preferred for either guard (\"Guard\") or exit positions (\"Exit\"), that a relay is suitable for high-bandwidth (\"Fast\") or long-lived circuits (\"Stable\"), or that a relay is considered a onion service directory (\"HSDir\").</p>",
     "function": "plot_relayflags",
     "parameters": [
       "start",
@@ -58,7 +58,7 @@
   },
   {
     "id": "bandwidth",
-    "title": "Total relay bandwidth in the network",
+    "title": "Total relay bandwidth",
     "type": "Graph",
     "description": "<p>The following graph shows the total <a href=\"glossary.html#advertised-bandwidth\">advertised</a> and <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> of all <a href=\"glossary.html#relay\">relays</a> in the network.</p>",
     "function": "plot_bandwidth",
@@ -72,7 +72,7 @@
   },
   {
     "id": "bwhist-flags",
-    "title": "Relay bandwidth by Exit and/or Guard flags",
+    "title": "Consumed bandwidth by Exit/Guard flag combination",
     "type": "Graph",
     "description": "<p>The following graph shows the <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> reported by relays, subdivided into four distinct subsets by assigned \"Exit\" and/or \"Guard\" <a href=\"glossary.html#relay-flag\">flags</a>.</p>",
     "function": "plot_bwhist_flags",
@@ -86,7 +86,7 @@
   },
   {
     "id": "bandwidth-flags",
-    "title": "Advertised bandwidth and bandwidth history by relay flags",
+    "title": "Advertised and consumed bandwidth by relay flag",
     "type": "Graph",
     "description": "<p>The following graph shows <a href=\"glossary.html#advertised-bandwidth\">advertised</a> and <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> of relays with either \"Exit\" or \"Guard\" <a href=\"glossary.html#relay-flag\">flags</a> assigned by the directory authorities.  These sets are not distinct, because a relay that has both the \"Exit\" and \"Guard\" flags assigned will be included in both sets.</p>",
     "function": "plot_bandwidth_flags",
@@ -100,7 +100,7 @@
   },
   {
     "id": "dirbytes",
-    "title": "Number of bytes spent on answering directory requests",
+    "title": "Bandwidth spent on answering directory requests",
     "type": "Graph",
     "description": "<p>The following graph shows the portion of <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> that <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a> have spent on answering directory requests.  Not all directories report these statistics, so the graph shows an estimation of total consumed bandwidth as it would be observed if all directories reported these statistics.</p>",
     "function": "plot_dirbytes",
@@ -149,7 +149,7 @@
   },
   {
     "id": "userstats-relay-country",
-    "title": "Direct users by country",
+    "title": "Relay users",
     "type": "Graph",
     "description": "<p>The following graph shows the estimated number of directly-connecting <a href=\"glossary.html#client\">clients</a>; that is, it excludes clients connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These estimates are derived from the number of directory requests counted on <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that graphs are available for most countries.  Furthermore, it is possible to display indications of censorship events as obtained from an anomaly-based censorship-detection system (for more details, see this <a href=\"https://research.torproject.org/techreports/detector-2011-09-09.pdf\">technical report</a>).  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_relay_country",
@@ -165,7 +165,7 @@
   },
   {
     "id": "userstats-relay-table",
-    "title": "Top-10 countries by directly connecting users",
+    "title": "Top-10 countries by relay users",
     "type": "Table",
     "description": "<p>The following table shows the top-10 countries by estimated number of directly-connecting <a href=\"glossary.html#client\">clients</a>.  These numbers are derived from directory requests counted on <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "write_userstats_relay",
@@ -293,7 +293,7 @@
   },
   {
     "id": "oxford-anonymous-internet",
-    "title": "Tor users as percentage of larger Internet population",
+    "title": "&ldquo;The anonymous Internet&rdquo;",
     "type": "Link",
     "description": "<p>The Oxford Internet Institute made a cartogram visualization of Tor users as compared to the overall Internet population.  They used the average number of Tor <a href=\"glossary.html#client\">users</a> per country from August 2012 to August 2013 and put it in relation to total Internet users per country.  More details and conclusions can be found on the <a href=\"http://geography.oii.ox.ac.uk/?page=tor\">Information Geographies website at the Oxford Internet Institute</a>.</p><p><a href=\"http://geography.oii.ox.ac.uk/?page=tor\"><img src=\"images/oxford-anonymous-internet.png\" alt=\"The anonymous Internet\"></a></p>"
   },
@@ -347,7 +347,7 @@
     "id": "hidserv-dir-onions-seen",
     "title": "Unique .onion addresses",
     "type": "Graph",
-    "description": "<p>The following graph shows the number of unique .onion addresses in the network per day.  These numbers are extrapolated from aggregated statistics on unique .onion addresses reported by single <a href=\"glossary.html#relay\">relays</a> acting as <a href=\"glossary.html#hidden-service\">hidden-service</a> directories, if at least 1% of relays reported these statistics.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
+    "description": "<p>The following graph shows the number of unique .onion addresses in the network per day.  These numbers are extrapolated from aggregated statistics on unique .onion addresses reported by single <a href=\"glossary.html#relay\">relays</a> acting as <a href=\"glossary.html#onion-service\">onion-service</a> directories, if at least 1% of relays reported these statistics.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
     "function": "plot_hidserv_dir_onions_seen",
     "parameters": [
       "start",
@@ -359,9 +359,9 @@
   },
   {
     "id": "hidserv-rend-relayed-cells",
-    "title": "Hidden-service traffic",
+    "title": "Onion-service traffic",
     "type": "Graph",
-    "description": "<p>The following graph shows the amount of hidden-service traffic in the network per day.  This number is extrapolated from aggregated statistics on hidden-service traffic reported by single <a href=\"glossary.html#relay\">relays</a> acting as rendezvous points for <a href=\"glossary.html#hidden-service\">hidden services</a>, if at least 1% of relays reported these statistics.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
+    "description": "<p>The following graph shows the amount of onion-service traffic in the network per day.  This number is extrapolated from aggregated statistics on onion-service traffic reported by single <a href=\"glossary.html#relay\">relays</a> acting as rendezvous points for <a href=\"glossary.html#onion-service\">onion services</a>, if at least 1% of relays reported these statistics.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
     "function": "plot_hidserv_rend_relayed_cells",
     "parameters": [
       "start",
@@ -373,9 +373,9 @@
   },
   {
     "id": "hidserv-frac-reporting",
-    "title": "Fraction of relays reporting hidden-service statistics",
+    "title": "Fraction of relays reporting onion-service statistics",
     "type": "Graph",
-    "description": "<p>The following graph shows the fraction of <a href=\"glossary.html#relay\">relays</a> that report statistics on <a href=\"glossary.html#hidden-service\">hidden service</a> usage.  If at least 1% of relays report a statistic, it gets extrapolated towards a network total, where higher fractions are produce more accurate results.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
+    "description": "<p>The following graph shows the fraction of <a href=\"glossary.html#relay\">relays</a> that report statistics on <a href=\"glossary.html#onion-service\">onion service</a> usage.  If at least 1% of relays report a statistic, it gets extrapolated towards a network total, where higher fractions are produce more accurate results.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
     "function": "plot_hidserv_frac_reporting",
     "parameters": [
       "start",
@@ -387,7 +387,7 @@
   },
   {
     "id": "uncharted-data-flow",
-    "title": "Data flow in the Tor network",
+    "title": "&ldquo;TorFlow&rdquo;",
     "type": "Link",
     "description": "<p>Uncharted made a visualization of data flow in the Tor network where they place each <a href=\"glossary.html#relay\">relay</a> on a world map and illustrate traffic exchanged between relays as animated dots. More details can be found on the <a href=\"https://torflow.uncharted.software/\">Uncharted website</a>.</p><p><a href=\"https://torflow.uncharted.software/\"><img src=\"images/uncharted-data-flow.png\" alt=\"Data flow in the Tor network\"></a></p>"
   },

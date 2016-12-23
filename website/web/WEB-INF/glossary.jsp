@@ -81,8 +81,8 @@
       information to clients, in order to reduce the load on
       <a href="#directory-authority">directory authorities</a>.</p>
       
-      <a name="hidden-service"></a>
-      <p><b><a href="#hidden-service">hidden service:</a></b> a location-hidden
+      <a name="onion-service"></a>
+      <p><b><a href="#onion-service">onion service:</a></b> a
       service (for example, a website or instant-messaging server) that is only
       accessible via the Tor network.</p>
       
