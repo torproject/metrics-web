@@ -386,18 +386,22 @@ body .topButton {
     border:1px solid #ccc;
     border-radius:5px;
     padding:2em 2em 1em 2em;
+    color:#999;
 }
-.dashboard a:hover {
+.dashboard h2, .dashboard p {
+    color:#999;
+}
+.dashboard a[href], .dashboard a[href]:hover, .dashboard a[href]:focus, .dashboard a[href]:active, .dashboard a[href] h2 {
+    color:#68b030;
+}
+.dashboard a[href]:hover {
     background-color: #F8f8f8;
 }
 /* fixed box height by screen size: */
 @media (min-width: 1200px) { .dashboard a, .dashboard a:hover, .dashboard a:focus, .dashboard a:active { min-height:260px; } }
 @media (min-width: 992px) and (max-width: 1199.99999px) { .dashboard a, .dashboard a:hover, .dashboard a:focus, .dashboard a:active { min-height:290px; } }
 @media (min-width: 768px) and (max-width: 991.99999px) { .dashboard a, .dashboard a:hover, .dashboard a:focus, .dashboard a:active { min-height:280px; } }
-.dashboard h2 {
-    color:#68b030;
-}
-.dashboard p {
+.dashboard a[href] p {
     color:black;
 }
 @media (max-width: 767.99999px) {

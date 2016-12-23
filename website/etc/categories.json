@@ -77,7 +77,7 @@
     "id": "applications",
     "icon": "fa-download",
     "header": "Applications",
-    "summary": "How many Tor applications, like Tor Browser, have been downloaded or updated (coming soon).",
+    "summary": "How many Tor applications, like Tor Browser, have been downloaded or updated.",
     "metrics": []
   }
 ]
