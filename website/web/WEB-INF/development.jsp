@@ -33,6 +33,7 @@
       <ul>
         <li><a href="https://savannah.nongnu.org/projects/koninoo/" target="_blank">koninoo</a> is a simple Java command line interface for querying Onionoo data.</li>
         <li><a href="https://github.com/duk3luk3/onion-py" target="_blank">OnionPy</a> provides memcached support to cache queried data.</li>
+        <li><a href="https://github.com/lukechilds/onionoo-node-client" target="_blank">onionoo-node-client</a> is a Node.js client library for the <a href="https://onionoo.torproject.org/" target="_blank">Onionoo</a> API.</li>
       </ul>
     </div>
 
