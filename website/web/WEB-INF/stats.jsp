@@ -398,13 +398,13 @@ fractions for the three directions "read", "write", and "both" sum up to exactly
 </div>
 
 <div class="container">
-<h2>Hidden-service statistics <a href="#hidserv" name="hidserv" class="anchor">#</a></h2>
+<h2>Onion-service statistics <a href="#hidserv" name="hidserv" class="anchor">#</a></h2>
 
 <p>The following data file contains <a
-href="glossary.html#hidden-service">hidden-service</a> statistics gathered by a
+href="glossary.html#onion-service">onion-service</a> statistics gathered by a
 small subset of <a href="glossary.html#relay">relays</a> and extrapolated to
-network totals.  Statistics include the amount of hidden-service traffic and the
-number of hidden-service addresses in the network per day.  For more details on
+network totals.  Statistics include the amount of onion-service traffic and the
+number of onion-service addresses in the network per day.  For more details on
 the extrapolation algorithm, see <a
 href="https://blog.torproject.org/blog/some-statistics-about-onions">this blog
 post</a> and <a
@@ -419,11 +419,11 @@ technical report</a>.</p>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when relays or bridges have been listed
 as running.</li>
 
-<li><b>type:</b> Type of hidden-service statistic reported by relays and
+<li><b>type:</b> Type of onion-service statistic reported by relays and
 extrapolated to network totals.  Examples include <b>"rend-relayed-cells"</b>
 for the number of cells on rendezvous circuits observed by rendezvous points and
 <b>"dir-onions-seen"</b> for the number of unique .onion addresses observed by
-hidden-service directories.</li>
+onion-service directories.</li>
 
 <li><b>wmean:</b> Weighted mean of extrapolated network totals.</li>
 

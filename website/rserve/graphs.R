@@ -1059,7 +1059,7 @@ plot_hidserv_rend_relayed_cells <- function(start, end, path) {
         breaks = date_breaks$major,
         minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "") +
-    ggtitle("Hidden-service traffic in Mbit/s\n")
+    ggtitle("Onion-service traffic in Mbit/s\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
@@ -1087,9 +1087,9 @@ plot_hidserv_frac_reporting <- function(start, end, path) {
     scale_y_continuous(name = "", labels = percent) +
     scale_colour_hue(name = "",
                      breaks = c("rend-relayed-cells", "dir-onions-seen"),
-                     labels = c("Hidden-service traffic",
+                     labels = c("Onion-service traffic",
                                 "Unique .onion addresses")) +
-    ggtitle(paste("Fraction of relays reporting hidden-service",
+    ggtitle(paste("Fraction of relays reporting onion-service",
                        "statistics")) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
