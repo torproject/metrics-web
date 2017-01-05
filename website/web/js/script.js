@@ -25,9 +25,7 @@ jQuery(function() {
     var target = this.hash;
     var $target = $(target.split('#').join('#anchor-'));
     if ($target.offset() != null) {
-      $('html, body').stop().animate({
-        'scrollTop': ($target.offset().top + $(document).scrollTop())
-      }, 900, 'swing', function () {
+      jQuery('html,body').animate({scrollTop: $target.offset().top},900, function(){
         window.location.hash = target;
       });
     }
