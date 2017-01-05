@@ -768,11 +768,11 @@ label.checkbox-label, label.radio-label {
 
 /* Anchor-Links for Headlines */
 .anchor {
-    display:none;
+    opacity:0;
     text-decoration:none;
 }
 *:hover > .anchor {
-    display:inline;
+    opacity:1;
     color:#78c040;
 }
 *:hover > .anchor:hover {
