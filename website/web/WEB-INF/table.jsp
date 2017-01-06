@@ -64,13 +64,11 @@
     </p>
 </form>
 
-<p>
-
 <c:if test="${fn:length(data) > 0}">
-<h4>Underlying data</h4>
+<p>Download underlying data:</p>
 <ul>
 <c:forEach var="row" items="${data}">
-<li><a href="stats.html#${row}"><code>stats/${row}.csv</code></a></li>
+<li><a href="stats/${row}.csv">CSV</a> (<a href="stats.html#${row}">format</a>)</li>
 </c:forEach>
 </ul>
 </c:if>

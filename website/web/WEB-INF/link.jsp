@@ -36,13 +36,11 @@
             </div>
             <div class="col-md-4">
 
-              <p>
-
               <c:if test="${fn:length(data) > 0}">
-              <h4>Underlying data</h4>
+              <p>Underlying data</p>
               <ul>
               <c:forEach var="row" items="${data}">
-              <li><a href="stats.html#${row}"><code>stats/${row}.csv</code></a></li>
+              <li><a href="stats/${row}.csv">CSV</a> (<a href="stats.html#${row}">format</a>)</li>
               </c:forEach>
               </ul>
               </c:if>
