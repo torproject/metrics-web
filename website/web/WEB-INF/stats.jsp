@@ -7,7 +7,7 @@
 
     <div class="container">
       <ul class="breadcrumb">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="/">Home</a></li>
         <li><a href="sources.html">Sources</a></li>
         <li class="active">Statistics</li>
       </ul>

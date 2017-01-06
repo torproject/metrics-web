@@ -6,7 +6,7 @@
 
     <div class="container">
       <ul class="breadcrumb">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="/">Home</a></li>
         <li class="active">${pageContext.errorData.statusCode}</li>
       </ul>
     </div>
@@ -37,7 +37,7 @@
       </b>
       when processing your request!</p>
 
-      <p>Maybe start over from the <a href="index.html">home page</a>.</p>
+      <p>Maybe start over from the <a href="/">home page</a>.</p>
 
       <p>If this problem persists, please <a href="about.html#contact">let us know</a>!</p>
 
