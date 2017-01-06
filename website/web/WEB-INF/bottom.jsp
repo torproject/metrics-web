@@ -3,7 +3,7 @@
     <div class="container no-gutter">
       <div class="col-xs-6">
         <p>
-           &copy; 2009&ndash;2016 The Tor Project
+           &copy; 2009&ndash;2017 The Tor Project
         </p>
       </div>
       <div class="col-xs-6">
