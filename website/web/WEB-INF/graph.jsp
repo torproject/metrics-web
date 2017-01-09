@@ -75,8 +75,9 @@
       <p>
         <b>Relay flags:</b>
         <c:forEach var="row" items="${flag}">
-        <input type="checkbox" name="flag" value="${row[0]}" id="flag_${row[0]}"${row[1]}>
-        <label class="checkbox-label" for="flag_${row[0]}">${row[0]}</label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="flag" value="${row[0]}"${row[1]}> ${row[0]}
+        </label>
         </c:forEach>
       </p>
     </c:if>
@@ -105,8 +106,9 @@
       <p>
         <b>Source:</b>
         <c:forEach var="row" items="${transport}">
-        <input type="checkbox" name="transport" value="${row[0]}" id="transport_${row[0]}"${row[1]}>
-        <label class="checkbox-label" for="transport_${row[0]}">${row[2]}</label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="transport" value="${row[0]}"${row[1]}> ${row[2]}
+        </label>
         </c:forEach>
       </p>
     </c:if>
