@@ -246,7 +246,7 @@ should be handled with more care.</li>
 
 <p>The following data file contains additional statistics on the number of <a
 href="glossary.html#client">clients</a> in the network.  This data file is related
-to the <a href="clients-data.html">clients-data file</a> that contains estimates
+to the <a href="stats.html#clients">clients-data file</a> that contains estimates
 on the number of clients by country and by transport protocol.  This data file
 enhances these statistics by containing estimates of clients connecting to <a
 href="glossary.html#bridge">bridges</a> by a given country and using a given <a
