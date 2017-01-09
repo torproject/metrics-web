@@ -167,7 +167,7 @@
     "id": "userstats-relay-table",
     "title": "Top-10 countries by relay users",
     "type": "Table",
-    "description": "<p>The following table shows the top-10 countries by estimated number of directly-connecting <a href=\"glossary.html#client\">clients</a>.  These numbers are derived from directory requests counted on <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This table shows the top-10 countries by estimated number of directly-connecting <a href=\"glossary.html#client\">clients</a>.  These numbers are derived from directory requests counted on <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "write_userstats_relay",
     "parameters": [
       "start",
@@ -189,7 +189,7 @@
     "id": "userstats-censorship-events",
     "title": "Top-10 countries by possible censorship events",
     "type": "Table",
-    "description": "<p>The following table shows the top-10 countries by possible censorship events, as obtained from an anomaly-based censorship-detection system (for more details, see this <a href=\"https://research.torproject.org/techreports/detector-2011-09-09.pdf\">technical report</a>).  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This table shows the top-10 countries by possible censorship events, as obtained from an anomaly-based censorship-detection system (for more details, see this <a href=\"https://research.torproject.org/techreports/detector-2011-09-09.pdf\">technical report</a>).  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "write_userstats_censorship_events",
     "parameters": [
       "start",
@@ -228,7 +228,7 @@
     "id": "userstats-bridge-table",
     "title": "Top-10 countries by bridge users",
     "type": "Table",
-    "description": "<p>The following table shows the top-10 countries by estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This table shows the top-10 countries by estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "write_userstats_bridge",
     "parameters": [
       "start",
@@ -395,12 +395,12 @@
     "id": "uptimes",
     "title": "Monthly uptime of relays",
     "type": "Link",
-    "description": "<p>The following image illustrates the uptime of all known <a href=\"glossary.html#relay\">relays</a> in a given month.  Each row of pixels denotes one <a href=\"glossary.html#consensus\">consensus</a> (that is, one hour), and each column denotes one relay.  Each pixel denotes if a given relay was online or offline at a given hour: black means online, white means offline, and red highlights relays with identical uptime patterns.  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\"><img src=\"images/uptimes.jpg\" alt=\"Monthly uptime of relays\"></a></p>"
+    "description": "<p>This image illustrates the uptime of all known <a href=\"glossary.html#relay\">relays</a> in a given month.  Each row of pixels denotes one <a href=\"glossary.html#consensus\">consensus</a> (that is, one hour), and each column denotes one relay.  Each pixel denotes if a given relay was online or offline at a given hour: black means online, white means offline, and red highlights relays with identical uptime patterns.  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\"><img src=\"images/uptimes.jpg\" alt=\"Monthly uptime of relays\"></a></p>"
   },
   {
     "id": "networkchurn",
     "title": "Network churn rate by relay flag",
     "type": "Link",
-    "description": "<p>The following image shows the churn rate of the Tor network by <a href=\"glossary.html#relay-flag\">relay flag</a> in a given month.  The churn rate, a value in the interval <b>[0,1]</b>, captures the rate of <a href=\"glossary.html#relay\">relays</a> joining and leaving the network from one <a href=\"glossary.html#consensus\">consensus</a> to the next (that is, within one hour).  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/churn-values/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/churn-values/\"><img src=\"images/networkchurn.png\" alt=\"Network churn rate by relay flag\"></a></p>"
+    "description": "<p>This image shows the churn rate of the Tor network by <a href=\"glossary.html#relay-flag\">relay flag</a> in a given month.  The churn rate, a value in the interval <b>[0,1]</b>, captures the rate of <a href=\"glossary.html#relay\">relays</a> joining and leaving the network from one <a href=\"glossary.html#consensus\">consensus</a> to the next (that is, within one hour).  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/churn-values/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/churn-values/\"><img src=\"images/networkchurn.png\" alt=\"Network churn rate by relay flag\"></a></p>"
   }
 ]
