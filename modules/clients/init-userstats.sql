@@ -1,4 +1,4 @@
--- Copyright 2013--2016 The Tor Project
+-- Copyright 2013--2017 The Tor Project
 -- See LICENSE for licensing information
 
 -- Use enum types for dimensions that may only change if we write new code
