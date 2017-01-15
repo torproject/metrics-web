@@ -16,6 +16,8 @@
       <include name="slf4j-api-1.7.7.jar"/>
       <include name="logback-core-1.1.2.jar"/>
       <include name="logback-classic-1.1.2.jar"/>
+      <include name="gson-2.2.4.jar"/>
+      <include name="xz-1.5.jar"/>
     </fileset>
   </path>
 
