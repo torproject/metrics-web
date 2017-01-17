@@ -43,7 +43,7 @@ write_userstats_censorship_events <- function(start, end, path) {
                   upturn = ifelse(!is.na(c$upper) &
                                   c$clients > c$upper, 1, 0),
                   downturn = ifelse(!is.na(c$lower) &
-                                    c$clients <= c$lower, 1, 0))
+                                    c$clients < c$lower, 1, 0))
   r <- aggregate(r[, c("upturn", "downturn")],
     by = list(country = r$country), sum)
   r <- r[(r$country %in% names(countrylist)), ]

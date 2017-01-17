@@ -864,7 +864,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
   if (length(na.omit(u$users)) > 0 & events != "off" &
       variable == 'country' & length(value) == 1 && value != "all") {
     upturns <- u[u$users > u$upper, c("date", "users")]
-    downturns <- u[u$users <= u$lower, c("date", "users")]
+    downturns <- u[u$users < u$lower, c("date", "users")]
     if (events == "on") {
       u[!is.na(u$lower) & u$lower < 0, "lower"] <- 0
       plot <- plot +
