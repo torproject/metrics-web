@@ -23,7 +23,6 @@
       <ul>
         <li><a href="https://dist.torproject.org/descriptor/" target="_blank">metrics-lib</a> is a Java library to fetch and parse Tor descriptors.</li>
         <li><a href="https://stem.torproject.org/" target="_blank">Stem</a> is a Python library that parses Tor descriptors.</li>
-        <li><a href="https://github.com/meejah/txtorcon" target="_blank">txtorcon</a> is an asynchronous Tor controller library written in Twisted Python.</li>
         <li><a href="https://github.com/NullHypothesis/zoossh" target="_blank">Zoossh</a> is a parser written in Go for Tor-specific data formats.</li>
       </ul>
     </div>
