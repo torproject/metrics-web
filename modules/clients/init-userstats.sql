@@ -705,8 +705,9 @@ CREATE OR REPLACE VIEW combined AS SELECT
   -- for unknown pluggable transports.
   a.transport,
 
-  -- The IP address version of this estimate, which is always ''.
-  ''::TEXT as version,
+  -- The IP address version of this estimate, which is always NULL
+  -- (unquoted empty string in CSV output).
+  NULL::TEXT as version,
 
   -- Estimated fraction of nodes reporting directory requests, which is
   -- used to extrapolate observed requests to estimated total requests in
