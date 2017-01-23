@@ -26,9 +26,9 @@
       <fileset dir="../modules/clients/src" includes="**/*.java"/>
       <fileset dir="../modules/collectdescs/src" includes="**/*.java"/>
       <fileset dir="../modules/connbidirect/src" includes="**/*.java"/>
-      <fileset dir="../modules/disagreement/src" includes="**/*.java"/>
       <fileset dir="../modules/hidserv/src" includes="**/*.java"/>
       <fileset dir="../modules/legacy/src" includes="**/*.java"/>
+      <fileset dir="../modules/webstats/src" includes="**/*.java"/>
       <classpath>
         <path refid="checkstyle.classpath" />
       </classpath>

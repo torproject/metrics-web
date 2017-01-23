@@ -6,7 +6,9 @@ cp -a modules/advbwdist/stats/advbwdist.csv shared/stats/
 cp -a modules/hidserv/stats/hidserv.csv shared/stats/
 cp -a modules/clients/stats/clients*.csv shared/stats/
 cp -a modules/clients/stats/userstats-combined.csv shared/stats/
+cp -a modules/webstats/stats/webstats.csv shared/stats/
 
 mkdir -p shared/RData
 cp -a modules/clients/RData/*.RData shared/RData/
+cp -a modules/webstats/RData/*.RData shared/RData/
 

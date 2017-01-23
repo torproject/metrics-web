@@ -78,6 +78,9 @@
     "icon": "fa-download",
     "header": "Applications",
     "summary": "How many Tor applications, like Tor Browser, have been downloaded or updated.",
-    "metrics": []
+    "description": "The following application statistics are based on the analysis of requests to <code>torproject.org</code> web servers.",
+    "metrics": [
+      "webstats-tb"
+    ]
   }
 ]

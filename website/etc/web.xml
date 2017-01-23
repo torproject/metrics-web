@@ -46,6 +46,7 @@
     <url-pattern>/hidserv-dir-onions-seen.html</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.html</url-pattern>
     <url-pattern>/hidserv-frac-reporting.html</url-pattern>
+    <url-pattern>/webstats-tb.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -177,6 +178,9 @@
     <url-pattern>/hidserv-frac-reporting.png</url-pattern>
     <url-pattern>/hidserv-frac-reporting.pdf</url-pattern>
     <url-pattern>/hidserv-frac-reporting.svg</url-pattern>
+    <url-pattern>/webstats-tb.png</url-pattern>
+    <url-pattern>/webstats-tb.pdf</url-pattern>
+    <url-pattern>/webstats-tb.svg</url-pattern>
   </servlet-mapping>
 
   <servlet>

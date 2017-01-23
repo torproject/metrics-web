@@ -402,5 +402,19 @@
     "title": "Network churn rate by relay flag",
     "type": "Link",
     "description": "<p>This image shows the churn rate of the Tor network by <a href=\"glossary.html#relay-flag\">relay flag</a> in a given month.  The churn rate, a value in the interval <b>[0,1]</b>, captures the rate of <a href=\"glossary.html#relay\">relays</a> joining and leaving the network from one <a href=\"glossary.html#consensus\">consensus</a> to the next (that is, within one hour).  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/churn-values/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/churn-values/\"><img src=\"images/networkchurn.png\" alt=\"Network churn rate by relay flag\"></a></p>"
+  },
+  {
+    "id": "webstats-tb",
+    "title": "Tor Browser downloads and updates",
+    "type": "Graph",
+    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers by request type.  It is based on data from <a href=\"https://webstats.torproject.org/\" target=\"_blank\"><code>webstats.torproject.org</code></a> which collects logs from <code>torproject.org</code> web servers and provides them as a stripped-down version of Apache's "combined" log format without IP addresses, log times, HTTP parameters, referers, and user agent strings.  <em>Initial downloads</em> and <em>signature downloads</em> are requests made by the user to download a Tor Browser executable or a corresponding signature file from the Tor website.  <em>Update pings</em> and <em>update requests</em> are requests made by Tor Browser to check whether a newer version is available or to download a newer version.</p>",
+    "function": "plot_webstats_tb",
+    "parameters": [
+      "start",
+      "end"
+    ],
+    "data": [
+      "webstats"
+    ]
   }
 ]

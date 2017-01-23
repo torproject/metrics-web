@@ -39,6 +39,12 @@
     </div>
 
     <div class="container">
+      <ul>
+        <li><a href="https://webstats.torproject.org/" target="_blank"><code>webstats.torproject.org</code></a> collects logs from <code>torproject.org</code> web servers and provides them as a stripped-down version of Apache's "combined" log format without IP addresses, log times, HTTP parameters, referers, and user agent strings.</li>
+      </ul>
+    </div>
+
+    <div class="container">
       <h2>Measurement tools <a href="#measurement" name="measurement" class="anchor">#</a></h2>
       <p>The following tools perform active measurements in the Tor network.</p>
       <ul>

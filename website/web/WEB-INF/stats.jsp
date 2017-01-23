@@ -483,8 +483,38 @@ given attribute.</li>
 
 </ul>
 
-    </div>
-  </div>
+</div>
+
+<div class="container">
+<h2>Requests to <code>torproject.org</code> web servers <a href="#webstats" name="webstats" class="anchor">#</a></h2>
+
+<p>The following data file contains aggregate statistics on requests to <code>torproject.org</code> web servers.</p>
+
+<p><b>Download as <a href="stats/webstats.csv">CSV file</a>.</b></p>
+
+<p>The statistics file contains the following columns:</p>
+<ul>
+<li><b>log_date:</b> UTC date (YYYY-MM-DD) when requests to <code>torproject.org</code> web servers have been logged.</li>
+<li><b>request_type:</b> Request type with fixed identifiers as follows:
+<ul>
+<li><b>"tbid":</b> Tor Browser initial downloads: GET requests to all sites with resource strings <code>'%/torbrowser/%.exe'</code>, <code>'%/torbrowser/%.dmg'</code>, and <code>'%/torbrowser/%.tar.xz'</code> and response code 200.</li>
+<li><b>"tbsd":</b> Tor Browser signature downloads: GET requests to all sites with resource strings <code>'%/torbrowser/%.exe.asc'</code>, <code>'%/torbrowser/%.dmg.asc'</code>, and <code>'%/torbrowser/%.tar.xz.asc'</code> and response code 200.</li>
+<li><b>"tbup":</b> Tor Browser update pings: GET requests to all sites with resource strings <code>'%/torbrowser/update_2/%'</code> and response code 200.</li>
+<li><b>"tbur":</b> Tor Browser update requests: GET requests to all sites with resource strings <code>'%/torbrowser/%.mar'</code> and response code 302.</li>
+<li><b>"tmid":</b> Tor Messenger initial downloads: GET requests to all sites with resource strings <code>'%/tormessenger/%.exe'</code>, <code>'%/tormessenger/%.dmg'</code>, and <code>'%/tormessenger/%.tar.xz'</code> and response code 200.</li>
+<li><b>"tmup":</b> Tor Messenger update pings: GET requests to all sites with resource strings <code>'%/tormessenger/update_2/%'</code> and response code 200.</li>
+<li><b>"twhph":</b> Tor website home page hits: GET requests to sites <code>'torproject.org'</code> and <code>'www.torproject.org'</code> with resource strings <code>'/'</code> and <code>'/index%'</code> and response code 200.</li>
+<li><b>"twdph":</b> Tor website download page hits: GET requests to sites <code>'torproject.org'</code> and <code>'www.torproject.org'</code> with resource strings <code>'/download/download%'</code> and <code>'/projects/torbrowser.html%'</code> and response code 200.</li>
+</ul>
+</li>
+<li><b>platform:</b> Platform string, like <b>"w"</b> for Windows, <b>"m"</b> for macOS, or <b>"l"</b> for Linux, <b>"o"</b> for other platforms, and the empty string for all platforms.</li>
+<li><b>channel:</b> Release channel, like <b>"r"</b> for stable releases, <b>"a"</b> for alpha releases, <b>"h"</b> for hardened releases, and the empty string for all channels.</li>
+<li><b>locale:</b> Locale, like <b>"en-US"</b> for English (United States), <b>"de"</b> for German, etc., <b>"??"</b> for unrecognized locales, and the empty string for all locales.</li>
+<li><b>incremental:</b> Incremental update, with <b>"t"</b> for incremental updates, <b>"f"</b> for non-incremental (full) updates, and the empty string for all updates types.</li>
+<li><b>count:</b> Number of request for the given request type, platform, etc.</li>
+</ul>
+
+</div>
 
 <jsp:include page="bottom.jsp"/>
 
