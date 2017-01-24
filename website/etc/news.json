@@ -439,5 +439,20 @@
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2016-December/000260.html\">metrics-team thread</a>",
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-January/000264.html\">thread continues</a>"
     ]
+  },
+  {
+    "start": "2017-01-15",
+    "place": "ae",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Huge increase in relay users (200k+)",
+    "links": [
+      "<a href=\"http://rougmnvswfsmd4dq.onion/userstats-relay-country.html?start=2017-01-15&end=2017-01-21&country=ae&events=off\">graph</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-January/000284.html\">metrics-team thread</a>",
+      "<a href=\"https://www.reddit.com/r/TOR/comments/5pbukk/united_arab_emirates_went_from_10k_tor_users_to/\">reddit thread</a>"
+    ],
+    "unknown": true
   }
 ]
