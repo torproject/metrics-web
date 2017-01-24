@@ -36,7 +36,7 @@
         <li><a href="https://duckduckgo.com/" target="_blank">DuckDuckGo</a> displays Tor node details when including the keywords "tor node" in a search.</li>
         <li><a href="https://oniontip.com/" target="_blank">OnionTip</a> distributes bitcoin donations to relays that can receive them.</li>
         <li><a href="https://onionview.codeplex.com/" target="_blank">OnionView</a> plots the location of active Tor nodes on an interactive map of the world.</li>
-        <li><a href="https://tor-explorer-10kapart2016.azurewebsites.net/" target="_blank">Tor Explorer</a> displays data on each individual Tor node.</li>
+        <li><a href="https://onionite.now.sh/" target="_blank">Onionite</a> is a Progressive Web App to view information on the individual nodes that make up the Tor network.</li>
       </ul>
     </div>
 
