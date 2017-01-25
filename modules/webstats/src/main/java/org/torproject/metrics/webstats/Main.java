@@ -62,7 +62,8 @@ public class Main {
 
   static final Pattern LOG_LINE_PATTERN = Pattern.compile(
       "^0.0.0.[01] - - \\[\\d{2}/\\w{3}/\\d{4}:00:00:00 \\+0000\\] "
-      + "\"(GET|HEAD) ([^ ]+) HTTP[^ ]+\" (\\d+) (-|\\d+) \"-\" \"-\" -$");
+      + "\"(GET|HEAD) ([^ ]{1,2048}) HTTP[^ ]+\" (\\d+) (-|\\d+) \"-\" \"-\" "
+      + "-$");
 
   private static final String LOG_DATE = "log_date";
 

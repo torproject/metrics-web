@@ -4,6 +4,7 @@
 package org.torproject.metrics.webstats;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -88,6 +89,22 @@ public class MainTest {
     assertEquals("HEAD", matcher.group(1));
     assertEquals("/bubbles.html", matcher.group(2));
     assertEquals("200", matcher.group(3));
+  }
+
+  @Test
+  public void testLogLinePatternMaxLength() {
+    int maxLength = 2048;
+    String pre = "0.0.0.0 - - [17/Jan/2017:00:00:00 +0000] \"GET ";
+    String post = " HTTP/1.0\" 200 10532 \"-\" \"-\" -";
+    StringBuilder sb = new StringBuilder();
+    while (sb.length() <= maxLength) {
+      sb.append("/https://www.torproject.org");
+    }
+    String tooLongLogLine = pre + sb.toString() + post;
+    assertFalse(Main.LOG_LINE_PATTERN.matcher(tooLongLogLine).matches());
+    String notTooLongLogLine = pre + sb.toString().substring(0, maxLength)
+        + post;
+    assertTrue(Main.LOG_LINE_PATTERN.matcher(notTooLongLogLine).matches());
   }
 }
 
