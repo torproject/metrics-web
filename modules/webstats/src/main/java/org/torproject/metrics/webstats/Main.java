@@ -26,6 +26,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -365,10 +366,12 @@ public class Main {
     String queryString = "SELECT " + ALL_COLUMNS + " FROM webstats";
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
+        Locale.US);
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         statistics.add(String.format("%s,%s,%s,%s,%s,%s,%d",
-            dateFormat.format(rs.getDate(LOG_DATE)),
+            dateFormat.format(rs.getDate(LOG_DATE, calendar)),
             emptyNull(rs.getString(REQUEST_TYPE)),
             emptyNull(rs.getString(PLATFORM)),
             emptyNull(rs.getString(CHANNEL)),
