@@ -65,7 +65,7 @@ public class NewsServlet extends AnyServlet {
     cal.set(Calendar.DAY_OF_MONTH, 1);
     cutOffDates.put(String.format("%tF", cal),
         new String[] { "This month", "month" });
-    cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) /3 * 3);
+    cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) / 3 * 3);
     cutOffDates.put(String.format("%tF", cal),
         new String[] { "This quarter", "quarter" });
     cal.set(Calendar.MONTH, 0);
@@ -77,8 +77,8 @@ public class NewsServlet extends AnyServlet {
       yearStart = String.format("%tF", cal);
       String year = String.format("%tY", cal);
       cutOffDates.put(yearStart, new String[] { year, year });
-    } while (!this.sortedNews.isEmpty() &&
-        yearStart.compareTo(this.sortedNews.get(0).getStart()) > 0);
+    } while (!this.sortedNews.isEmpty()
+        && yearStart.compareTo(this.sortedNews.get(0).getStart()) > 0);
 
     /* Sort news into categories. */
     Map<String[], List<String[]>> newsByCategory =
