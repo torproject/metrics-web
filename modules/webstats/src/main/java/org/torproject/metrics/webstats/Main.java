@@ -171,9 +171,8 @@ public class Main {
         if (metaData == null) {
           continue;
         }
-        List<String> downloadedLogLines = downloadLogFile(urlString);
-        Map<String, Integer> parsedLogLines = parseLogLines(urlString,
-            downloadedLogLines);
+        Map<String, Integer> parsedLogLines = downloadAndParseLogFile(
+            urlString);
         importLogLines(connection, urlString, metaData, parsedLogLines);
       } catch (IOException | ParseException exc) {
         log.warn("Cannot download or parse log file with URL {}.  Retrying "
@@ -210,37 +209,17 @@ public class Main {
     return new Object[] { server, site, new Long(logDateMillis) };
   }
 
-  static List<String> downloadLogFile(String urlString) throws IOException {
-    List<String> downloadedLogLines = new ArrayList<>();
+  static Map<String, Integer> downloadAndParseLogFile(String urlString)
+      throws IOException {
+    int skippedLines = 0;
+    Map<String, Integer> parsedLogLines = new HashMap<>();
     try (BufferedReader br = new BufferedReader(new InputStreamReader(
         new XZCompressorInputStream(new URL(urlString).openStream())))) {
       String line;
       while ((line = br.readLine()) != null) {
-        downloadedLogLines.add(line);
-      }
-    }
-    return downloadedLogLines;
-  }
-
-  static Map<String, Integer> parseLogLines(String urlString,
-      List<String> logLines) {
-    int skippedLines = 0;
-    Map<String, Integer> parsedLogLines = new HashMap<>();
-    for (String logLine : logLines) {
-      Matcher logLineMatcher = LOG_LINE_PATTERN.matcher(logLine);
-      if (!logLineMatcher.matches()) {
-        skippedLines++;
-        continue;
-      }
-      String method = logLineMatcher.group(1);
-      String resource = logLineMatcher.group(2);
-      int responseCode = Integer.parseInt(logLineMatcher.group(3));
-      String combined = String.format("%s %s %d", method, resource,
-          responseCode);
-      if (!parsedLogLines.containsKey(combined)) {
-        parsedLogLines.put(combined, 1);
-      } else {
-        parsedLogLines.put(combined, parsedLogLines.get(combined) + 1);
+        if (!parseLogLine(line, parsedLogLines)) {
+          skippedLines++;
+        }
       }
     }
     if (skippedLines > 0) {
@@ -248,6 +227,25 @@ public class Main {
           urlString);
     }
     return parsedLogLines;
+  }
+
+  static boolean parseLogLine(String logLine,
+      Map<String, Integer> parsedLogLines) {
+    Matcher logLineMatcher = LOG_LINE_PATTERN.matcher(logLine);
+    if (!logLineMatcher.matches()) {
+      return false;
+    }
+    String method = logLineMatcher.group(1);
+    String resource = logLineMatcher.group(2);
+    int responseCode = Integer.parseInt(logLineMatcher.group(3));
+    String combined = String.format("%s %s %d", method, resource,
+        responseCode);
+    if (!parsedLogLines.containsKey(combined)) {
+      parsedLogLines.put(combined, 1);
+    } else {
+      parsedLogLines.put(combined, parsedLogLines.get(combined) + 1);
+    }
+    return true;
   }
 
   private static void importLogLines(Connection connection, String urlString,
