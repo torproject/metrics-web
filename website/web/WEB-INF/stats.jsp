@@ -442,50 +442,6 @@ fraction.</li>
 </div>
 
 <div class="container">
-<h2>Disagreement among the directory authorities (deprecated) <a href="#disagreement" name="disagreement" class="anchor">#</a></h2>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Deprecated</h3>
-<p>As of September 29, 2016, the linked data file is not updated anymore.  This section and the linked data file will be removed in the future.</p>
-</div>
-
-<p>The following data file contains statistics about agreement
-or disagreement among the <a href="glossary.html#directory-authority">directory
-authorities</a>.  Once per hour the directory authorities exchange votes with
-their view of the <a href="glossary.html#relay">relays</a> in the network including
-attributes like <a href="glossary.html#relay-flag">relay flags</a> or bandwidth
-measurements.  This data file includes counts of relays by number of directory
-authorities assigning them a given attribute.</p>
-
-<p><b>Download as <a href="stats/disagreement.csv">CSV file</a>.</b></p>
-
-<p>The statistics file contains the following columns:</p>
-<ul>
-
-<li><b>validafter:</b> UTC timestamp (YYYY-MM-DD HH:MM:SS) after which votes
-became valid, which may be used as the vote publication time.</li>
-
-<li><b>attribute:</b> Attribute assigned to relays by directory authorities,
-which includes relay flags like <b>"Exit"</b> or <b>"BadExit"</b> as well as
-<b>"Listed"</b> for relays being listed in a vote and <b>"Measured"</b> for
-relays being measured by the bandwidth authorities.</li>
-
-<li><b>votes:</b> Number of votes assigning the attribute to relays.</li>
-
-<li><b>required:</b> Required number of votes for the attribute to be assigned
-to a relay for being included in the consensus.</li>
-
-<li><b>max:</b> Maximum number of possible votes assigning the attribute to
-relays.</li>
-
-<li><b>relays:</b> Number of relays that got the given number of votes for the
-given attribute.</li>
-
-</ul>
-
-</div>
-
-<div class="container">
 <h2>Requests to <code>torproject.org</code> web servers <a href="#webstats" name="webstats" class="anchor">#</a></h2>
 
 <p>The following data file contains aggregate statistics on requests to <code>torproject.org</code> web servers.</p>
