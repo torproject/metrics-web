@@ -418,6 +418,20 @@
     ]
   },
   {
+    "id": "webstats-tb-locale",
+    "title": "Tor Browser downloads by locale",
+    "type": "Graph",
+    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers by request type.  It is based on data from <a href=\"https://webstats.torproject.org/\" target=\"_blank\"><code>webstats.torproject.org</code></a> which collects logs from <code>torproject.org</code> web servers and provides them as a stripped-down version of Apache's \"combined\" log format without IP addresses, log times, HTTP parameters, referers, and user agent strings.  All shown requests are requests made by the user to download a Tor Browser executable from the Tor website, broken down by requested locale.</p>",
+    "function": "plot_webstats_tb_locale",
+    "parameters": [
+      "start",
+      "end"
+    ],
+    "data": [
+      "webstats"
+    ]
+  },
+  {
     "id": "webstats-tm",
     "title": "Tor Messenger downloads and updates",
     "type": "Graph",

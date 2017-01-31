@@ -1126,6 +1126,39 @@ plot_webstats_tb <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
+plot_webstats_tb_locale <- function(start, end, path) {
+  end <- min(end, as.character(Sys.Date() - 2))
+  d <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
+                "webstats.csv", sep = ""), stringsAsFactors = FALSE)
+  d <- d[d$log_date >= start & d$log_date <= end & d$request_type == 'tbid', ]
+  e <- d
+  e <- aggregate(list(count = e$count), by = list(locale = e$locale), FUN = sum)
+  e <- e[order(e$count, decreasing = TRUE), ]
+  e <- e[1:5, ]
+  d <- aggregate(list(count = d$count), by = list(log_date = as.Date(d$log_date),
+    locale = ifelse(d$locale %in% e$locale, d$locale, '(other)')), FUN = sum)
+  date_breaks <- date_breaks(as.numeric(max(d$log_date) - min(d$log_date)))
+  formatter <- function(x, ...) {
+    format(x, ..., scientific = FALSE, big.mark = ' ') }
+  ggplot(d, aes(x = log_date, y = count, colour = locale)) +
+    geom_point() +
+    geom_line() +
+    expand_limits(y = 0) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        labels = date_format(date_breaks$format),
+        breaks = date_breaks$major,
+        minor_breaks = date_breaks$minor) +
+    scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
+    scale_colour_hue(name = "Locale",
+        breaks = c(e$locale, "(other)"),
+        labels = c(e$locale, "Other")) +
+    theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
+          strip.background = element_rect(fill = NA)) +
+    ggtitle("Tor Browser downloads by locale\n")
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+
 plot_webstats_tm <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   load("/srv/metrics.torproject.org/metrics/shared/RData/webstats-tm.RData")
