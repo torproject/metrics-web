@@ -1126,6 +1126,35 @@ plot_webstats_tb <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
+plot_webstats_tb_platform <- function(start, end, path) {
+  end <- min(end, as.character(Sys.Date() - 2))
+  d <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
+                "webstats.csv", sep = ""), stringsAsFactors = FALSE)
+  d <- d[d$log_date >= start & d$log_date <= end & d$request_type == 'tbid', ]
+  d <- aggregate(list(count = d$count), by = list(log_date = as.Date(d$log_date),
+    platform = d$platform), FUN = sum)
+  date_breaks <- date_breaks(as.numeric(max(d$log_date) - min(d$log_date)))
+  formatter <- function(x, ...) {
+    format(x, ..., scientific = FALSE, big.mark = ' ') }
+  ggplot(d, aes(x = log_date, y = count, colour = platform)) +
+    geom_point() +
+    geom_line() +
+    expand_limits(y = 0) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+        "https://metrics.torproject.org/", sep = ""),
+        labels = date_format(date_breaks$format),
+        breaks = date_breaks$major,
+        minor_breaks = date_breaks$minor) +
+    scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
+    scale_colour_hue(name = "Platform",
+        breaks = c("w", "m", "l", "o", ""),
+        labels = c("Windows", "Mac", "Linux", "Other", "Unknown")) +
+    theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
+          strip.background = element_rect(fill = NA)) +
+    ggtitle("Tor Browser downloads by platform\n")
+  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+}
+
 plot_webstats_tb_locale <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   d <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",

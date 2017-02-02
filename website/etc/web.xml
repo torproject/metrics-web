@@ -47,6 +47,7 @@
     <url-pattern>/hidserv-rend-relayed-cells.html</url-pattern>
     <url-pattern>/hidserv-frac-reporting.html</url-pattern>
     <url-pattern>/webstats-tb.html</url-pattern>
+    <url-pattern>/webstats-tb-platform.html</url-pattern>
     <url-pattern>/webstats-tb-locale.html</url-pattern>
     <url-pattern>/webstats-tm.html</url-pattern>
   </servlet-mapping>
@@ -183,6 +184,9 @@
     <url-pattern>/webstats-tb.png</url-pattern>
     <url-pattern>/webstats-tb.pdf</url-pattern>
     <url-pattern>/webstats-tb.svg</url-pattern>
+    <url-pattern>/webstats-tb-platform.png</url-pattern>
+    <url-pattern>/webstats-tb-platform.pdf</url-pattern>
+    <url-pattern>/webstats-tb-platform.svg</url-pattern>
     <url-pattern>/webstats-tb-locale.png</url-pattern>
     <url-pattern>/webstats-tb-locale.pdf</url-pattern>
     <url-pattern>/webstats-tb-locale.svg</url-pattern>
