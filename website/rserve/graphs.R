@@ -269,6 +269,10 @@ date_breaks <- function(days) {
   list(major = major, minor = minor, format = format)
 }
 
+formatter <- function(x, ...) {
+  format(x, ..., scientific = FALSE, big.mark = ' ')
+}
+
 plot_networksize <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   s <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
@@ -850,8 +854,6 @@ plot_userstats <- function(start, end, node, variable, value, events,
              date = seq(from = as.Date(start, "%Y-%m-%d"),
              to = as.Date(end, "%Y-%m-%d"), by="1 day"),
              value = ifelse(value == 'all', '', value))))
-  formatter <- function(x, ...) {
-    format(x, ..., scientific = FALSE, big.mark = ' ') }
   date_breaks <- date_breaks(
     as.numeric(max(u$date) - min(u$date)))
   if (length(value) > 1) {
@@ -934,8 +936,6 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
                    by = list(transport = u$transport), FUN = sum)
     a <- a[order(a$mid, decreasing = TRUE)[1:top], ]
     u <- u[u$transport %in% a$transport, ]
-    formatter <- function(x, ...) {
-      format(x, ..., scientific = FALSE, big.mark = ' ') }
     max_y <- ifelse(length(na.omit(u$high)) == 0, 0,
         max(u$high, na.rm = TRUE))
     title <- paste("Bridge users by transport from ",
@@ -1107,8 +1107,6 @@ plot_webstats_tb <- function(start, end, path) {
       'Signature downloads' = 'tbsd',
       'Update pings' = 'tbup',
       'Update requests' = 'tbur')
-  formatter <- function(x, ...) {
-    format(x, ..., scientific = FALSE, big.mark = ' ') }
   ggplot(d, aes(x = log_date, y = count)) +
     geom_point() +
     geom_line() +
@@ -1134,8 +1132,6 @@ plot_webstats_tb_platform <- function(start, end, path) {
   d <- aggregate(list(count = d$count), by = list(log_date = as.Date(d$log_date),
     platform = d$platform), FUN = sum)
   date_breaks <- date_breaks(as.numeric(max(d$log_date) - min(d$log_date)))
-  formatter <- function(x, ...) {
-    format(x, ..., scientific = FALSE, big.mark = ' ') }
   ggplot(d, aes(x = log_date, y = count, colour = platform)) +
     geom_point() +
     geom_line() +
@@ -1167,8 +1163,6 @@ plot_webstats_tb_locale <- function(start, end, path) {
   d <- aggregate(list(count = d$count), by = list(log_date = as.Date(d$log_date),
     locale = ifelse(d$locale %in% e$locale, d$locale, '(other)')), FUN = sum)
   date_breaks <- date_breaks(as.numeric(max(d$log_date) - min(d$log_date)))
-  formatter <- function(x, ...) {
-    format(x, ..., scientific = FALSE, big.mark = ' ') }
   ggplot(d, aes(x = log_date, y = count, colour = locale)) +
     geom_point() +
     geom_line() +
@@ -1198,8 +1192,6 @@ plot_webstats_tm <- function(start, end, path) {
   levels(d$request_type) <- list(
       'Initial downloads' = 'tmid',
       'Update pings' = 'tmup')
-  formatter <- function(x, ...) {
-    format(x, ..., scientific = FALSE, big.mark = ' ') }
   ggplot(d, aes(x = log_date, y = count)) +
     geom_point() +
     geom_line() +
