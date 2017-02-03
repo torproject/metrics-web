@@ -4,7 +4,7 @@
     "icon": "fa-users",
     "header": "Users",
     "summary": "Where Tor users are from and how they connect to Tor.",
-    "description": "We estimate the number of users by analyzing the requests induced by Tor clients. These papers detail on how we count users and how we count bridge users.",
+    "description": "We estimate the number of users by analyzing the requests induced by clients to relays and bridges.",
     "metrics": [
       "userstats-relay-country",
       "userstats-bridge-country",
