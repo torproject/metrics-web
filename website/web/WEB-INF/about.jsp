@@ -30,6 +30,11 @@
     <div class="container">
       <h2>Contact <a href="#contact" name="contact" class="anchor">#</a></h2>
       <p>If you have any questions or suggestions, contact us at <a href="mailto:metrics-team@lists.torproject.org">metrics-team@lists.torproject.org</a>, which is a <a href="https://lists.torproject.org/cgi-bin/mailman/listinfo/metrics-team" target="_blank">public mailing list</a>.</p>
+
+      <p>Tor Metrics is a project of:</p>
+<pre>The Tor Project, Inc.
+217 1st Ave South #4903
+Seattle, WA 98194 USA</pre>
     </div>
 
     <div class="container">
