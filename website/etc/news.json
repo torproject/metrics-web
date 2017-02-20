@@ -454,5 +454,16 @@
       "<a href=\"https://www.reddit.com/r/TOR/comments/5pbukk/united_arab_emirates_went_from_10k_tor_users_to/\">reddit thread</a>"
     ],
     "unknown": true
+  },
+  {
+    "start": "2017-02-06",
+    "protocols": [
+      "obfs3"
+    ],
+    "description": "Increase in obfs3 users, from 5K to 75K. Other transports not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-transport.html?start=2016-11-17&end=2017-02-15&transport=obfs3&transport=obfs4&transport=meek&transport=%3COR%3E\">graph</a>"
+    ],
+    "unknown": true
   }
 ]
