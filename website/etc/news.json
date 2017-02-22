@@ -449,7 +449,7 @@
     ],
     "description": "Huge increase in relay users (200k+)",
     "links": [
-      "<a href=\"http://rougmnvswfsmd4dq.onion/userstats-relay-country.html?start=2017-01-15&end=2017-01-21&country=ae&events=off\">graph</a>",
+      "<a href=\"http://rougmnvswfsmd4dq.onion/userstats-relay-country.html?start=2016-11-23&end=2017-02-21&country=ae&events=off\">graph</a>",
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-January/000284.html\">metrics-team thread</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/5pbukk/united_arab_emirates_went_from_10k_tor_users_to/\">reddit thread</a>"
     ],
@@ -457,12 +457,14 @@
   },
   {
     "start": "2017-02-06",
+    "place": "ae",
     "protocols": [
       "obfs3"
     ],
-    "description": "Increase in obfs3 users, from 5K to 75K. Other transports not affected.",
+    "description": "Increase in obfs3 users from the UAE, from 5K to 75K. Other transports and countries not affected.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-transport.html?start=2016-11-17&end=2017-02-15&transport=obfs3&transport=obfs4&transport=meek&transport=%3COR%3E\">graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-transport.html?start=2016-11-17&end=2017-02-15&transport=obfs3&transport=obfs4&transport=meek&transport=%3COR%3E\">transport graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-11-23&end=2017-02-21&country=ae\">UAE bridge graph</a>"
     ],
     "unknown": true
   }
