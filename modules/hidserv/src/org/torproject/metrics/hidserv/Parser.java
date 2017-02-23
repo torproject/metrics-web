@@ -96,8 +96,7 @@ public class Parser {
   public void readParseHistory() {
     if (this.parseHistoryFile.exists()
         && this.parseHistoryFile.isFile()) {
-      SortedMap<String, Long> excludedFiles =
-          new TreeMap<String, Long>();
+      SortedMap<String, Long> excludedFiles = new TreeMap<>();
       try {
         BufferedReader br = new BufferedReader(new FileReader(
             this.parseHistoryFile));
@@ -133,8 +132,7 @@ public class Parser {
 
     /* Obtain the list of descriptor files that were either parsed now or
      * that were skipped in this execution from the descriptor reader. */
-    SortedMap<String, Long> excludedAndParsedFiles =
-        new TreeMap<String, Long>();
+    SortedMap<String, Long> excludedAndParsedFiles = new TreeMap<>();
     excludedAndParsedFiles.putAll(
         this.descriptorReader.getExcludedFiles());
     excludedAndParsedFiles.putAll(this.descriptorReader.getParsedFiles());
@@ -164,8 +162,7 @@ public class Parser {
    * <p>To date, these objects are small, and keeping them all in memory
    * is easy.  But if this ever changes, e.g., when more and more
    * statistics are added, this may not scale.</p> */
-  private Set<ReportedHidServStats> reportedHidServStats =
-      new HashSet<ReportedHidServStats>();
+  private Set<ReportedHidServStats> reportedHidServStats = new HashSet<>();
 
   /** Instructs the descriptor reader to parse descriptor files, and
    * handles the resulting parsed descriptors if they are either
@@ -297,14 +294,12 @@ public class Parser {
      * directories, in reverse order, so that we can later determine the
      * fingerprint distance between a directory and the directory
      * preceding it by three positions in the descriptor ring. */
-    SortedSet<String> hsDirs = new TreeSet<String>(
-        Collections.reverseOrder());
+    SortedSet<String> hsDirs = new TreeSet<>(Collections.reverseOrder());
 
     /* Prepare for computing the weights of all relays with the Fast flag
      * for being selected in the middle position. */
     double totalWeightsRendezvousPoint = 0.0;
-    SortedMap<String, Double> weightsRendezvousPoint =
-        new TreeMap<String, Double>();
+    SortedMap<String, Double> weightsRendezvousPoint = new TreeMap<>();
 
     /* Go through all status entries contained in the consensus. */
     for (Map.Entry<String, NetworkStatusEntry> e
@@ -343,8 +338,7 @@ public class Parser {
     /* Store all computed network fractions based on this consensus in a
      * set, which will then be written to disk in a single store
      * operation. */
-    Set<ComputedNetworkFractions> computedNetworkFractions =
-        new HashSet<ComputedNetworkFractions>();
+    Set<ComputedNetworkFractions> computedNetworkFractions = new HashSet<>();
 
     /* Remove all previously added directory fingerprints and re-add them
      * twice, once with a leading "0" and once with a leading "1".  The
@@ -352,7 +346,7 @@ public class Parser {
      * the previous one, even if that would mean traversing the ring
      * start.  For example, the fingerprint preceding "1""00..0000" with
      * the first "1" being added here could be "0""FF..FFFF". */
-    SortedSet<String> hsDirsCopy = new TreeSet<String>(hsDirs);
+    SortedSet<String> hsDirsCopy = new TreeSet<>(hsDirs);
     hsDirs.clear();
     for (String fingerprint : hsDirsCopy) {
       hsDirs.add("0" + fingerprint);

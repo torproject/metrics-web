@@ -70,10 +70,8 @@ public class Aggregator {
      * dates, map values are double[] arrays with the extrapolated network
      * total as first element and the corresponding computed network
      * fraction as second element. */
-    SortedMap<String, List<double[]>> extrapolatedCells =
-        new TreeMap<String, List<double[]>>();
-    SortedMap<String, List<double[]>> extrapolatedOnions =
-        new TreeMap<String, List<double[]>>();
+    SortedMap<String, List<double[]>> extrapolatedCells = new TreeMap<>();
+    SortedMap<String, List<double[]>> extrapolatedOnions = new TreeMap<>();
     for (ExtrapolatedHidServStats extrapolated : extrapolatedStats) {
       String date = DateTimeHelper.format(
           extrapolated.getStatsDateMillis(),

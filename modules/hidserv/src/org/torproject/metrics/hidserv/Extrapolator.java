@@ -90,9 +90,8 @@ public class Extrapolator {
     }
 
     /* Re-arrange reported stats by fingerprint. */
-    SortedMap<String, Set<ReportedHidServStats>>
-        parsedStatsByFingerprint =
-        new TreeMap<String, Set<ReportedHidServStats>>();
+    SortedMap<String, Set<ReportedHidServStats>> parsedStatsByFingerprint =
+        new TreeMap<>();
     for (ReportedHidServStats stat : reportedStats) {
       String fingerprint = stat.getFingerprint();
       if (!parsedStatsByFingerprint.containsKey(fingerprint)) {
@@ -111,9 +110,8 @@ public class Extrapolator {
        * those that still need to be extrapolated.  Also make a list of
        * all dates for which we need to retrieve computed network
        * fractions. */
-      Set<ReportedHidServStats> newReportedStats =
-          new HashSet<ReportedHidServStats>();
-      SortedSet<String> retrieveFractionDates = new TreeSet<String>();
+      Set<ReportedHidServStats> newReportedStats = new HashSet<>();
+      SortedSet<String> retrieveFractionDates = new TreeSet<>();
       for (ReportedHidServStats stats : e.getValue()) {
 
         /* Check whether extrapolated stats already contain an object with
@@ -149,9 +147,9 @@ public class Extrapolator {
        * because we need to count known consensuses even if the relay was
        * not contained in a consensus or had a network fraction of exactly
        * zero.) */
-      SortedSet<Long> knownConsensuses = new TreeSet<Long>();
+      SortedSet<Long> knownConsensuses = new TreeSet<>();
       SortedMap<Long, ComputedNetworkFractions> computedNetworkFractions =
-          new TreeMap<Long, ComputedNetworkFractions>();
+          new TreeMap<>();
       for (String date : retrieveFractionDates) {
         File documentFile = new File(
             this.computedNetworkFractionsDirectory, date);

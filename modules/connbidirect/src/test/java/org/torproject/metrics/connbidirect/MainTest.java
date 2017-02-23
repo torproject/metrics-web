@@ -43,14 +43,14 @@ public class MainTest {
 
   @Test
   public void testParseHistoryOneEntry() {
-    SortedMap<String, Long> parseHistory = new TreeMap<String, Long>();
+    SortedMap<String, Long> parseHistory = new TreeMap<>();
     parseHistory.put(pathA, lastmodA);
     assertParseHistoryCanBeSerializedAndDeserialized(parseHistory);
   }
 
   @Test
   public void testParseHistoryTwoEntries() {
-    SortedMap<String, Long> parseHistory = new TreeMap<String, Long>();
+    SortedMap<String, Long> parseHistory = new TreeMap<>();
     parseHistory.put(pathA, lastmodA);
     parseHistory.put(pathB, lastmodB);
     assertParseHistoryCanBeSerializedAndDeserialized(parseHistory);
@@ -95,16 +95,14 @@ public class MainTest {
 
   @Test
   public void testAggregateStatsOneEntry() {
-    SortedMap<String, Short> aggregateStats =
-        new TreeMap<String, Short>();
+    SortedMap<String, Short> aggregateStats = new TreeMap<>();
     aggregateStats.put("2015-08-18,read,0.25", (short) 42);
     assertAggregateStatsCanBeSerializedAndDeserialized(aggregateStats);
   }
 
   @Test
   public void testAggregateStatsThreeEntries() {
-    SortedMap<String, Short> aggregateStats =
-        new TreeMap<String, Short>();
+    SortedMap<String, Short> aggregateStats = new TreeMap<>();
     aggregateStats.put("2015-08-18,read,0.25", (short) 12);
     aggregateStats.put("2015-08-18,read,0.5", (short) 24);
     aggregateStats.put("2015-08-18,read,0.75", (short) 42);
@@ -138,7 +136,7 @@ public class MainTest {
 
   @Test
   public void testRawStatsOneEntry() {
-    SortedSet<Main.RawStat> rawStats = new TreeSet<Main.RawStat>();
+    SortedSet<Main.RawStat> rawStats = new TreeSet<>();
     rawStats.add(new Main.RawStat(DATE_A, FPR_A, (short) 40, (short) 30,
         (short) 50));
     assertRawStatsCanBeSerializedAndDeserialized(rawStats);
@@ -154,7 +152,7 @@ public class MainTest {
 
   @Test
   public void testMergeRawStatsAddNothing() {
-    SortedSet<Main.RawStat> rawStats = new TreeSet<Main.RawStat>();
+    SortedSet<Main.RawStat> rawStats = new TreeSet<>();
     rawStats.add(new Main.RawStat(DATE_A, FPR_A, (short) 40, (short) 30,
         (short) 50));
     assertRawStatsCanBeMerged(rawStats, new TreeSet<Main.RawStat>(),
@@ -163,10 +161,10 @@ public class MainTest {
 
   @Test
   public void testMergeRawStatsAddSame() {
-    SortedSet<Main.RawStat> rawStats = new TreeSet<Main.RawStat>();
+    SortedSet<Main.RawStat> rawStats = new TreeSet<>();
     rawStats.add(new Main.RawStat(DATE_A, FPR_A, (short) 40, (short) 30,
         (short) 50));
-    SortedSet<Main.RawStat> newRawStats = new TreeSet<Main.RawStat>();
+    SortedSet<Main.RawStat> newRawStats = new TreeSet<>();
     newRawStats.add(new Main.RawStat(DATE_A, FPR_A, (short) 40,
         (short) 30, (short) 50));
     assertRawStatsCanBeMerged(rawStats, newRawStats, false);
@@ -174,10 +172,10 @@ public class MainTest {
 
   @Test
   public void testMergeRawStatsAddOther() {
-    SortedSet<Main.RawStat> rawStats = new TreeSet<Main.RawStat>();
+    SortedSet<Main.RawStat> rawStats = new TreeSet<>();
     rawStats.add(new Main.RawStat(DATE_A, FPR_A, (short) 40, (short) 30,
         (short) 50));
-    SortedSet<Main.RawStat> newRawStats = new TreeSet<Main.RawStat>();
+    SortedSet<Main.RawStat> newRawStats = new TreeSet<>();
     newRawStats.add(new Main.RawStat(DATE_B, FPR_B, (short) 40,
         (short) 30, (short) 50));
     assertRawStatsCanBeMerged(rawStats, newRawStats, false);
@@ -216,8 +214,7 @@ public class MainTest {
   private void assertStatsCanBeAggregated(
       SortedMap<String, Short> expectedAggregateStats,
       SortedSet<Main.RawStat> rawStats) {
-    SortedMap<String, Short> updatedAggregateStats =
-        new TreeMap<String, Short>();
+    SortedMap<String, Short> updatedAggregateStats = new TreeMap<>();
     Main.updateAggregateStats(updatedAggregateStats, rawStats);
     assertEquals("Updated aggregate statistics don't match",
         expectedAggregateStats, updatedAggregateStats);
@@ -231,8 +228,7 @@ public class MainTest {
 
   @Test
   public void testUpdateAggregateStatsSingleRawStat() {
-    SortedMap<String, Short> expectedAggregateStats =
-        new TreeMap<String, Short>();
+    SortedMap<String, Short> expectedAggregateStats = new TreeMap<>();
     expectedAggregateStats.put("2015-08-18,read,0.25", (short) 42);
     expectedAggregateStats.put("2015-08-18,read,0.5", (short) 42);
     expectedAggregateStats.put("2015-08-18,read,0.75", (short) 42);
@@ -242,7 +238,7 @@ public class MainTest {
     expectedAggregateStats.put("2015-08-18,both,0.25", (short) 22);
     expectedAggregateStats.put("2015-08-18,both,0.5", (short) 22);
     expectedAggregateStats.put("2015-08-18,both,0.75", (short) 22);
-    SortedSet<Main.RawStat> rawStats = new TreeSet<Main.RawStat>();
+    SortedSet<Main.RawStat> rawStats = new TreeSet<>();
     rawStats.add(new Main.RawStat(DATE_A, FPR_A, (short) 42, (short) 32,
         (short) 22));
     assertStatsCanBeAggregated(expectedAggregateStats, rawStats);
@@ -250,8 +246,7 @@ public class MainTest {
 
   @Test
   public void testUpdateAggregateStatsTwoRawStat() {
-    SortedMap<String, Short> expectedAggregateStats =
-        new TreeMap<String, Short>();
+    SortedMap<String, Short> expectedAggregateStats = new TreeMap<>();
     expectedAggregateStats.put("2015-08-18,read,0.25", (short) 32);
     expectedAggregateStats.put("2015-08-18,read,0.5", (short) 42);
     expectedAggregateStats.put("2015-08-18,read,0.75", (short) 42);
@@ -261,7 +256,7 @@ public class MainTest {
     expectedAggregateStats.put("2015-08-18,both,0.25", (short) 12);
     expectedAggregateStats.put("2015-08-18,both,0.5", (short) 22);
     expectedAggregateStats.put("2015-08-18,both,0.75", (short) 22);
-    SortedSet<Main.RawStat> rawStats = new TreeSet<Main.RawStat>();
+    SortedSet<Main.RawStat> rawStats = new TreeSet<>();
     rawStats.add(new Main.RawStat(DATE_A, FPR_A, (short) 32, (short) 22,
         (short) 12));
     rawStats.add(new Main.RawStat(DATE_A, FPR_B, (short) 42, (short) 32,

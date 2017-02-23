@@ -23,8 +23,7 @@ public class Configuration {
 
   private boolean importDirectoryArchives = false;
 
-  private List<String> directoryArchivesDirectories =
-      new ArrayList<String>();
+  private List<String> directoryArchivesDirectories = new ArrayList<>();
 
   private boolean keepDirectoryArchiveImportHistory = false;
 

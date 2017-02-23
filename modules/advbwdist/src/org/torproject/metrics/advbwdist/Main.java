@@ -38,8 +38,7 @@ public class Main {
         + "server-descriptors"));
     Iterator<DescriptorFile> descriptorFiles =
         descriptorReader.readDescriptors();
-    Map<String, Long> serverDescriptors =
-        new HashMap<String, Long>();
+    Map<String, Long> serverDescriptors = new HashMap<>();
     while (descriptorFiles.hasNext()) {
       DescriptorFile descriptorFile = descriptorFiles.next();
       for (Descriptor descriptor : descriptorFile.getDescriptors()) {
@@ -87,8 +86,8 @@ public class Main {
             (RelayNetworkStatusConsensus) descriptor;
         String validAfter = dateTimeFormat.format(
             consensus.getValidAfterMillis());
-        List<Long> advertisedBandwidthsAllRelays = new ArrayList<Long>();
-        List<Long> advertisedBandwidthsExitsOnly = new ArrayList<Long>();
+        List<Long> advertisedBandwidthsAllRelays = new ArrayList<>();
+        List<Long> advertisedBandwidthsExitsOnly = new ArrayList<>();
         for (NetworkStatusEntry relay
             : consensus.getStatusEntries().values()) {
           if (!relay.getFlags().contains("Running")) {

@@ -25,8 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class GraphServlet extends MetricServlet {
 
-  private Map<String, String[][]> defaultParameters =
-      new HashMap<String, String[][]>();
+  private Map<String, String[][]> defaultParameters = new HashMap<>();
 
   @Override
   public void init() throws ServletException {
@@ -141,7 +140,7 @@ public class GraphServlet extends MetricServlet {
       Category category = this.categoriesById.get(requestedId);
       request.setAttribute("categoryHeader", category.getHeader());
       request.setAttribute("categoryDescription", category.getDescription());
-      List<String[]> categoryTabs = new ArrayList<String[]>();
+      List<String[]> categoryTabs = new ArrayList<>();
       for (String metricId : category.getMetrics()) {
         categoryTabs.add(new String[] { this.titles.get(metricId), metricId });
       }
@@ -190,7 +189,7 @@ public class GraphServlet extends MetricServlet {
           Set<String> checked = null;
           if (checkedParameters != null
               && checkedParameters.containsKey(parameter)) {
-            checked = new HashSet<String>(Arrays.asList(
+            checked = new HashSet<>(Arrays.asList(
                 checkedParameters.get(parameter)));
           }
           String checkedOrSelected = parameter.equals("country")

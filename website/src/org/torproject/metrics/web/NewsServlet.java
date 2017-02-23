@@ -33,7 +33,7 @@ public class NewsServlet extends AnyServlet {
   @Override
   public void init() throws ServletException {
     super.init();
-    List<News> sortedNews = new ArrayList<News>();
+    List<News> sortedNews = new ArrayList<>();
     for (News news : ContentProvider.getInstance().getNewsList()) {
       if (news.getStart() != null) {
         sortedNews.add(news);
@@ -45,7 +45,7 @@ public class NewsServlet extends AnyServlet {
       }
     });
     this.sortedNews = sortedNews;
-    SortedMap<String, String> countries = new TreeMap<String, String>();
+    SortedMap<String, String> countries = new TreeMap<>();
     for (String[] country : Countries.getInstance().getCountryList()) {
       countries.put(country[0], country[1]);
     }
@@ -57,7 +57,7 @@ public class NewsServlet extends AnyServlet {
       HttpServletResponse response) throws IOException, ServletException {
 
     /* Create categories based on current system time. */
-    Map<String, String[]> cutOffDates = new LinkedHashMap<String, String[]>();
+    Map<String, String[]> cutOffDates = new LinkedHashMap<>();
     Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.US);
     cal.set(Calendar.DAY_OF_WEEK, 1);
     cutOffDates.put(String.format("%tF", cal),
@@ -81,8 +81,7 @@ public class NewsServlet extends AnyServlet {
         && yearStart.compareTo(this.sortedNews.get(0).getStart()) > 0);
 
     /* Sort news into categories. */
-    Map<String[], List<String[]>> newsByCategory =
-        new LinkedHashMap<String[], List<String[]>>();
+    Map<String[], List<String[]>> newsByCategory = new LinkedHashMap<>();
     for (String[] category : cutOffDates.values()) {
       newsByCategory.put(category, new ArrayList<String[]>());
     }

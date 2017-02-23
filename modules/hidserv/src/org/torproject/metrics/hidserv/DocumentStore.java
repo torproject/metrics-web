@@ -50,8 +50,7 @@ public class DocumentStore<T extends Document> {
     retrievedDocuments.addAll(documentsToStore);
 
     /* Serialize documents. */
-    SortedMap<String, SortedSet<String>> formattedDocuments =
-        new TreeMap<String, SortedSet<String>>();
+    SortedMap<String, SortedSet<String>> formattedDocuments = new TreeMap<>();
     for (T retrieveDocument : retrievedDocuments) {
       String[] formattedDocument = retrieveDocument.format();
       if (!formattedDocuments.containsKey(formattedDocument[0])) {
@@ -110,7 +109,7 @@ public class DocumentStore<T extends Document> {
 
     /* Check if the document file exists, and if not, return an empty set.
      * This is not an error case. */
-    Set<T> result = new HashSet<T>();
+    Set<T> result = new HashSet<>();
     if (!documentFile.exists()) {
       return result;
     }

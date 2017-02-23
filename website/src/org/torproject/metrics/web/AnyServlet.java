@@ -14,7 +14,7 @@ public abstract class AnyServlet extends HttpServlet {
 
   @Override
   public void init() throws ServletException {
-    List<String[]> categories = new ArrayList<String[]>();
+    List<String[]> categories = new ArrayList<>();
     for (Category category :
         ContentProvider.getInstance().getCategoriesList()) {
       categories.add(new String[] {

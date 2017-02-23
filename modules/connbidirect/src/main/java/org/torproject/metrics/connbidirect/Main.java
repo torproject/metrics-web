@@ -148,7 +148,7 @@ public class Main {
           + "raw statistics anymore.");
       return;
     }
-    SortedSet<RawStat> newRawStats = new TreeSet<RawStat>();
+    SortedSet<RawStat> newRawStats = new TreeSet<>();
     parseHistory = addRawStatsFromDescriptors(newRawStats,
         descriptorsDirectories, parseHistory);
     if (parseHistory == null) {
@@ -231,8 +231,7 @@ public class Main {
   /* Parse a parse history. */
   static SortedMap<String, Long> parseParseHistory(
       String formattedParseHistory) {
-    SortedMap<String, Long> parsedParseHistory =
-        new TreeMap<String, Long>();
+    SortedMap<String, Long> parsedParseHistory = new TreeMap<>();
     LineNumberReader lnr = new LineNumberReader(new StringReader(
         formattedParseHistory));
     String line = "";
@@ -279,8 +278,7 @@ public class Main {
   /* Parse aggregate connbidirect stats. */
   static SortedMap<String, Short> parseAggregateStats(
       String formattedAggregatedStats) {
-    SortedMap<String, Short> parsedAggregateStats =
-        new TreeMap<String, Short>();
+    SortedMap<String, Short> parsedAggregateStats = new TreeMap<>();
     if (formattedAggregatedStats.length() < 1) {
       return parsedAggregateStats; /* Empty file. */
     }
@@ -328,7 +326,7 @@ public class Main {
 
   /* Parse raw statistics. */
   static SortedSet<RawStat> parseRawStats(String formattedRawStats) {
-    SortedSet<RawStat> parsedRawStats = new TreeSet<RawStat>();
+    SortedSet<RawStat> parsedRawStats = new TreeSet<>();
     LineNumberReader lnr = new LineNumberReader(new StringReader(
         formattedRawStats));
     String line = "";
@@ -422,8 +420,8 @@ public class Main {
   static SortedSet<Long> mergeRawStats(
       SortedSet<RawStat> rawStats, SortedSet<RawStat> newRawStats) {
     rawStats.addAll(newRawStats);
-    SortedSet<Long> discardedRawStats = new TreeSet<Long>();
-    SortedSet<Long> availableRawStats = new TreeSet<Long>();
+    SortedSet<Long> discardedRawStats = new TreeSet<>();
+    SortedSet<Long> availableRawStats = new TreeSet<>();
     for (RawStat rawStat : rawStats) {
       if (rawStat.fingerprint != null) {
         availableRawStats.add(rawStat.dateDays);
@@ -440,8 +438,7 @@ public class Main {
       SortedSet<RawStat> rawStats) {
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    SortedMap<String, List<Short>> fractionsByDateAndDirection =
-        new TreeMap<String, List<Short>>();
+    SortedMap<String, List<Short>> fractionsByDateAndDirection = new TreeMap<>();
     final String[] directions = new String[] { "read", "write", "both" };
     for (RawStat rawStat : rawStats) {
       if (rawStat.fingerprint != null) {

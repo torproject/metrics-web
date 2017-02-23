@@ -102,8 +102,8 @@ public class ConsensusStatsFileHandler {
 
     /* Initialize local data structures to hold intermediate and final
      * results. */
-    this.bridgesPerDay = new TreeMap<String, String>();
-    this.bridgesRaw = new TreeMap<String, String>();
+    this.bridgesPerDay = new TreeMap<>();
+    this.bridgesRaw = new TreeMap<>();
 
     /* Initialize file names for intermediate and final results files. */
     this.bridgeConsensusStatsRawFile = new File(
@@ -251,8 +251,7 @@ public class ConsensusStatsFileHandler {
 
     /* Go through raw observations and put everything into nested maps by day
      * and bridge authority. */
-    Map<String, Map<String, int[]>> bridgesPerDayAndAuthority =
-        new HashMap<String, Map<String, int[]>>();
+    Map<String, Map<String, int[]>> bridgesPerDayAndAuthority = new HashMap<>();
     for (String bridgesRawLine : this.bridgesRaw.values()) {
       String date = bridgesRawLine.substring(0, 10);
       if (!bridgesPerDayAndAuthority.containsKey(date)) {
@@ -322,8 +321,8 @@ public class ConsensusStatsFileHandler {
     /* Add average number of bridges per day to the database. */
     if (connectionUrl != null) {
       try {
-        Map<String, String> insertRows = new HashMap<String, String>();
-        Map<String, String> updateRows = new HashMap<String, String>();
+        Map<String, String> insertRows = new HashMap<>();
+        Map<String, String> updateRows = new HashMap<>();
         insertRows.putAll(this.bridgesPerDay);
         Connection conn = DriverManager.getConnection(connectionUrl);
         conn.setAutoCommit(false);

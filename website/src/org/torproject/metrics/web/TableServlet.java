@@ -55,7 +55,7 @@ public class TableServlet extends MetricServlet {
       Category category = this.categoriesById.get(requestedId);
       request.setAttribute("categoryHeader", category.getHeader());
       request.setAttribute("categoryDescription", category.getDescription());
-      List<String[]> categoryTabs = new ArrayList<String[]>();
+      List<String[]> categoryTabs = new ArrayList<>();
       for (String metricId : category.getMetrics()) {
         categoryTabs.add(new String[] { this.titles.get(metricId), metricId });
       }
@@ -92,11 +92,10 @@ public class TableServlet extends MetricServlet {
     }
     List<Map<String, String>> tableData = objectGenerator
         .generateTable(requestedId, request.getParameterMap(), true);
-    List<List<String>> formattedTableData =
-        new ArrayList<List<String>>();
+    List<List<String>> formattedTableData = new ArrayList<>();
     String[] contents = this.tableCellFormats.get(requestedId);
     for (Map<String, String> row : tableData) {
-      List<String> formattedRow = new ArrayList<String>();
+      List<String> formattedRow = new ArrayList<>();
       StrSubstitutor sub = new StrSubstitutor(row);
       for (String con : contents) {
         formattedRow.add(sub.replace(con));

@@ -18,34 +18,27 @@ public abstract class MetricServlet extends AnyServlet {
 
   protected List<Metric> metrics;
 
-  protected Map<String, Set<String>> idsByType =
-      new HashMap<String, Set<String>>();
+  protected Map<String, Set<String>> idsByType = new HashMap<>();
 
-  protected Map<String, String> descriptions =
-      new HashMap<String, String>();
+  protected Map<String, String> descriptions = new HashMap<>();
 
-  protected Map<String, String> titles = new HashMap<String, String>();
+  protected Map<String, String> titles = new HashMap<>();
 
-  protected Map<String, List<String>> parameters =
-      new HashMap<String, List<String>>();
+  protected Map<String, List<String>> parameters = new HashMap<>();
 
-  protected Map<String, String[]> tableHeaders =
-      new HashMap<String, String[]>();
+  protected Map<String, String[]> tableHeaders = new HashMap<>();
 
-  protected Map<String, String[]> tableCellFormats =
-      new HashMap<String, String[]>();
+  protected Map<String, String[]> tableCellFormats = new HashMap<>();
 
-  protected Map<String, String[]> data =
-      new HashMap<String, String[]>();
+  protected Map<String, String[]> data = new HashMap<>();
 
-  protected Map<String, Category> categoriesById =
-      new HashMap<String, Category>();
+  protected Map<String, Category> categoriesById = new HashMap<>();
 
   @Override
   public void init() throws ServletException {
     super.init();
     this.metrics = ContentProvider.getInstance().getMetricsList();
-    Map<String, String> allTypesAndTitles = new HashMap<String, String>();
+    Map<String, String> allTypesAndTitles = new HashMap<>();
     for (Metric metric : this.metrics) {
       String id = metric.getId();
       String title = metric.getTitle();

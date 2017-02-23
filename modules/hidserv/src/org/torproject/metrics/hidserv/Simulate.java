@@ -130,14 +130,13 @@ public class Simulate {
     double[] fractions = new double[] { 0.01, 0.02, 0.03, 0.04, 0.05, 0.1,
         0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99 };
     for (double fraction : fractions) {
-      SortedSet<Integer> nonReportingRelays = new TreeSet<Integer>();
+      SortedSet<Integer> nonReportingRelays = new TreeSet<>();
       for (int j = 0; j < numberRendPoints; j++) {
         nonReportingRelays.add(j);
       }
-      List<Integer> shuffledRelays = new ArrayList<Integer>(
-          nonReportingRelays);
+      List<Integer> shuffledRelays = new ArrayList<>(nonReportingRelays);
       Collections.shuffle(shuffledRelays);
-      SortedSet<Integer> reportingRelays = new TreeSet<Integer>();
+      SortedSet<Integer> reportingRelays = new TreeSet<>();
       for (int j = 0; j < (int) ((double) numberRendPoints * fraction);
           j++) {
         reportingRelays.add(shuffledRelays.get(j));
@@ -146,7 +145,7 @@ public class Simulate {
       List<double[]> singleRelayExtrapolations;
       double totalReportingProbability;
       do {
-        singleRelayExtrapolations = new ArrayList<double[]>();
+        singleRelayExtrapolations = new ArrayList<>();
         totalReportingProbability = 0.0;
         for (int reportingRelay : reportingRelays) {
           double probability = probRendPoint[reportingRelay];
@@ -160,12 +159,12 @@ public class Simulate {
           totalReportingProbability += probability;
         }
         if (totalReportingProbability < fraction - 0.001) {
-          int addRelay = new ArrayList<Integer>(nonReportingRelays).get(
+          int addRelay = new ArrayList<>(nonReportingRelays).get(
               rnd.nextInt(nonReportingRelays.size()));
           nonReportingRelays.remove(addRelay);
           reportingRelays.add(addRelay);
         } else if (totalReportingProbability > fraction + 0.001) {
-          int removeRelay = new ArrayList<Integer>(reportingRelays).get(
+          int removeRelay = new ArrayList<>(reportingRelays).get(
               rnd.nextInt(reportingRelays.size()));
           reportingRelays.remove(removeRelay);
           nonReportingRelays.add(removeRelay);
@@ -208,20 +207,19 @@ public class Simulate {
 
     /* Generate 3000 HSDirs with "fingerprints" between 0.0 and 1.0. */
     final int numberHsDirs = 3000;
-    SortedSet<Double> hsDirFingerprints = new TreeSet<Double>();
+    SortedSet<Double> hsDirFingerprints = new TreeSet<>();
     for (int i = 0; i < numberHsDirs; i++) {
       hsDirFingerprints.add(rnd.nextDouble());
     }
 
     /* Compute fractions of observed descriptor space. */
     SortedSet<Double> ring =
-        new TreeSet<Double>(Collections.reverseOrder());
+        new TreeSet<>(Collections.reverseOrder());
     for (double fingerprint : hsDirFingerprints) {
       ring.add(fingerprint);
       ring.add(fingerprint - 1.0);
     }
-    SortedMap<Double, Double> hsDirFractions =
-        new TreeMap<Double, Double>();
+    SortedMap<Double, Double> hsDirFractions = new TreeMap<>();
     for (double fingerprint : hsDirFingerprints) {
       double start = fingerprint;
       int positionsToGo = 3;
@@ -238,8 +236,7 @@ public class Simulate {
     final int numberOnions = 40000;
     final int replicas = 4;
     final int storeOnDirs = 3;
-    SortedMap<Double, SortedSet<Integer>> storedDescs =
-        new TreeMap<Double, SortedSet<Integer>>();
+    SortedMap<Double, SortedSet<Integer>> storedDescs = new TreeMap<>();
     for (double fingerprint : hsDirFingerprints) {
       storedDescs.put(fingerprint, new TreeSet<Integer>());
     }
@@ -268,9 +265,8 @@ public class Simulate {
      * to remove noise again. */
     final long binSize = 8L;
     final double b = 8.0 / 0.3;
-    SortedMap<Double, Long> reportedOnions = new TreeMap<Double, Long>();
-    SortedMap<Double, Long> removedNoiseOnions =
-        new TreeMap<Double, Long>();
+    SortedMap<Double, Long> reportedOnions = new TreeMap<>();
+    SortedMap<Double, Long> removedNoiseOnions = new TreeMap<>();
     for (Map.Entry<Double, SortedSet<Integer>> e
         : storedDescs.entrySet()) {
       double fingerprint = e.getKey();
@@ -295,11 +291,11 @@ public class Simulate {
         0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99 };
     for (double fraction : fractions) {
       SortedSet<Double> nonReportingRelays =
-          new TreeSet<Double>(hsDirFractions.keySet());
-      List<Double> shuffledRelays = new ArrayList<Double>(
+          new TreeSet<>(hsDirFractions.keySet());
+      List<Double> shuffledRelays = new ArrayList<>(
           nonReportingRelays);
       Collections.shuffle(shuffledRelays);
-      SortedSet<Double> reportingRelays = new TreeSet<Double>();
+      SortedSet<Double> reportingRelays = new TreeSet<>();
       for (int j = 0; j < (int) ((double) hsDirFractions.size()
           * fraction); j++) {
         reportingRelays.add(shuffledRelays.get(j));
@@ -308,7 +304,7 @@ public class Simulate {
       List<double[]> singleRelayExtrapolations;
       double totalReportingProbability;
       do {
-        singleRelayExtrapolations = new ArrayList<double[]>();
+        singleRelayExtrapolations = new ArrayList<>();
         totalReportingProbability = 0.0;
         for (double reportingRelay : reportingRelays) {
           double probability = hsDirFractions.get(reportingRelay) / 3.0;
@@ -322,13 +318,13 @@ public class Simulate {
         }
         if (totalReportingProbability < fraction - 0.001) {
           double addRelay =
-              new ArrayList<Double>(nonReportingRelays).get(
+              new ArrayList<>(nonReportingRelays).get(
               rnd.nextInt(nonReportingRelays.size()));
           nonReportingRelays.remove(addRelay);
           reportingRelays.add(addRelay);
         } else if (totalReportingProbability > fraction + 0.001) {
           double removeRelay =
-              new ArrayList<Double>(reportingRelays).get(
+              new ArrayList<>(reportingRelays).get(
               rnd.nextInt(reportingRelays.size()));
           reportingRelays.remove(removeRelay);
           nonReportingRelays.add(removeRelay);

@@ -176,7 +176,7 @@ public final class RelayDescriptorDatabaseImporter {
    * Set of fingerprints that we imported for the valid-after time in
    * <code>lastCheckedStatusEntries</code>.
    */
-  private Set<String> insertedStatusEntries = new HashSet<String>();
+  private Set<String> insertedStatusEntries = new HashSet<>();
 
   private boolean importIntoDatabase;
 
@@ -242,7 +242,7 @@ public final class RelayDescriptorDatabaseImporter {
             + "(validafter) VALUES (?)");
         this.psU = conn.prepareStatement("INSERT INTO scheduled_updates "
             + "(date) VALUES (?)");
-        this.scheduledUpdates = new HashSet<Long>();
+        this.scheduledUpdates = new HashSet<>();
         this.importIntoDatabase = true;
       } catch (SQLException e) {
         this.logger.log(Level.WARNING, "Could not connect to database or "
@@ -576,7 +576,7 @@ public final class RelayDescriptorDatabaseImporter {
 
     /* Split history lines by date and rewrite them so that the date
      * comes first. */
-    SortedSet<String> historyLinesByDate = new TreeSet<String>();
+    SortedSet<String> historyLinesByDate = new TreeSet<>();
     for (String bandwidthHistoryString : bandwidthHistoryStrings) {
       String[] parts = bandwidthHistoryString.split(" ");
       if (parts.length != 6) {
@@ -641,7 +641,7 @@ public final class RelayDescriptorDatabaseImporter {
       }
       long currentIntervalEnd = intervalEnd;
       StringBuilder sb = new StringBuilder();
-      SortedSet<String> newHistoryLines = new TreeSet<String>();
+      SortedSet<String> newHistoryLines = new TreeSet<>();
       try {
         for (int i = values.length - 1; i >= -1; i--) {
           if (i == -1 || currentIntervalEnd < dateStart) {
@@ -898,7 +898,7 @@ public final class RelayDescriptorDatabaseImporter {
   }
 
   private void addExtraInfoDescriptor(ExtraInfoDescriptor descriptor) {
-    List<String> bandwidthHistoryLines = new ArrayList<String>();
+    List<String> bandwidthHistoryLines = new ArrayList<>();
     if (descriptor.getWriteHistory() != null) {
       bandwidthHistoryLines.add(descriptor.getWriteHistory().getLine());
     }

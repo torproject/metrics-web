@@ -46,7 +46,7 @@ public class TableParameterChecker {
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    this.availableTables = new HashMap<String, String[]>();
+    this.availableTables = new HashMap<>();
     for (Metric metric : ContentProvider.getInstance().getMetricsList()) {
       if ("Table".equals(metric.getType())) {
         this.availableTables.put(metric.getId(), metric.getParameters());
@@ -70,10 +70,9 @@ public class TableParameterChecker {
 
     /* Find out which other parameters are supported by this table type
      * and parse them if they are given. */
-    Set<String> supportedTableParameters = new HashSet<String>(
+    Set<String> supportedTableParameters = new HashSet<>(
         Arrays.asList(this.availableTables.get(tableType)));
-    Map<String, String[]> recognizedTableParameters =
-        new HashMap<String, String[]>();
+    Map<String, String[]> recognizedTableParameters = new HashMap<>();
 
     /* Parse start and end dates if supported by the table type. If no end
      * date is provided, set it to today. If no start date is provided,

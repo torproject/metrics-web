@@ -42,7 +42,7 @@ public class LinkServlet extends MetricServlet {
       Category category = this.categoriesById.get(requestedId);
       request.setAttribute("categoryHeader", category.getHeader());
       request.setAttribute("categoryDescription", category.getDescription());
-      List<String[]> categoryTabs = new ArrayList<String[]>();
+      List<String[]> categoryTabs = new ArrayList<>();
       for (String metricId : category.getMetrics()) {
         categoryTabs.add(new String[] { this.titles.get(metricId), metricId });
       }

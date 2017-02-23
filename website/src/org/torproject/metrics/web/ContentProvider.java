@@ -39,15 +39,15 @@ public class ContentProvider {
   }
 
   public List<Metric> getMetricsList() {
-    return new ArrayList<Metric>(this.metricsList);
+    return new ArrayList<>(this.metricsList);
   }
 
   public List<Category> getCategoriesList() {
-    return new ArrayList<Category>(this.categoriesList);
+    return new ArrayList<>(this.categoriesList);
   }
 
   public List<News> getNewsList() {
-    return new ArrayList<News>(this.newsList);
+    return new ArrayList<>(this.newsList);
   }
 }
 

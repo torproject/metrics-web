@@ -19,7 +19,7 @@ public class Countries {
   private List<String[]> knownCountries;
 
   private Countries() {
-    this.knownCountries = new ArrayList<String[]>();
+    this.knownCountries = new ArrayList<>();
     this.knownCountries.add("af;Afghanistan".split(";"));
     this.knownCountries.add("ax;Aland Islands".split(";"));
     this.knownCountries.add("al;Albania".split(";"));

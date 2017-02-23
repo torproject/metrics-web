@@ -7,8 +7,8 @@
     <mkdir dir="classes"/>
     <javac destdir="classes"
            srcdir="src"
-           source="1.5"
-           target="1.5"
+           source="1.7"
+           target="1.7"
            debug="true"
            deprecation="true"
            optimize="false"

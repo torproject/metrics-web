@@ -19,7 +19,7 @@ public class Main {
   public static void main(String[] args) {
 
     /* Initialize directories and file paths. */
-    Set<File> inDirectories = new HashSet<File>();
+    Set<File> inDirectories = new HashSet<>();
     inDirectories.add(
         new File("../../shared/in/recent/relay-descriptors/consensuses"));
     inDirectories.add(
@@ -31,11 +31,9 @@ public class Main {
     System.out.println("Initializing parser and reading parse "
         + "history...");
     DocumentStore<ReportedHidServStats> reportedHidServStatsStore =
-        new DocumentStore<ReportedHidServStats>(
-        ReportedHidServStats.class);
+        new DocumentStore<>(ReportedHidServStats.class);
     DocumentStore<ComputedNetworkFractions>
-        computedNetworkFractionsStore =
-        new DocumentStore<ComputedNetworkFractions>(
+        computedNetworkFractionsStore = new DocumentStore<>(
         ComputedNetworkFractions.class);
     Parser parser = new Parser(inDirectories, statusDirectory,
         reportedHidServStatsStore, computedNetworkFractionsStore);
@@ -63,8 +61,7 @@ public class Main {
      * single relays. */
     System.out.println("Extrapolating statistics...");
     DocumentStore<ExtrapolatedHidServStats> extrapolatedHidServStatsStore
-        = new DocumentStore<ExtrapolatedHidServStats>(
-        ExtrapolatedHidServStats.class);
+        = new DocumentStore<>(ExtrapolatedHidServStats.class);
     Extrapolator extrapolator = new Extrapolator(statusDirectory,
         reportedHidServStatsStore, computedNetworkFractionsStore,
         extrapolatedHidServStatsStore);

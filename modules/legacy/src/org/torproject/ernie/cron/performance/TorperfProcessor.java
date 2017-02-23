@@ -40,8 +40,8 @@ public class TorperfProcessor {
     Logger logger = Logger.getLogger(TorperfProcessor.class.getName());
     File rawFile = new File(statsDirectory, "torperf-raw");
     File statsFile = new File(statsDirectory, "torperf.csv");
-    SortedMap<String, String> rawObs = new TreeMap<String, String>();
-    SortedMap<String, String> stats = new TreeMap<String, String>();
+    SortedMap<String, String> rawObs = new TreeMap<>();
+    SortedMap<String, String> stats = new TreeMap<>();
     int addedRawObs = 0;
     SimpleDateFormat formatter =
         new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
@@ -144,12 +144,10 @@ public class TorperfProcessor {
         String tempSourceDate = null;
         Iterator<Map.Entry<String, String>> it =
             rawObs.entrySet().iterator();
-        List<Long> dlTimes = new ArrayList<Long>();
+        List<Long> dlTimes = new ArrayList<>();
         boolean haveWrittenFinalLine = false;
-        SortedMap<String, List<Long>> dlTimesAllSources =
-            new TreeMap<String, List<Long>>();
-        SortedMap<String, long[]> statusesAllSources =
-            new TreeMap<String, long[]>();
+        SortedMap<String, List<Long>> dlTimesAllSources = new TreeMap<>();
+        SortedMap<String, long[]> statusesAllSources = new TreeMap<>();
         long failures = 0;
         long timeouts = 0;
         long requests = 0;
@@ -196,7 +194,7 @@ public class TorperfProcessor {
                 statusesAllSources.put(allDateSizeSource, status);
               }
             }
-            dlTimes = new ArrayList<Long>();
+            dlTimes = new ArrayList<>();
             failures = timeouts = requests = 0;
             if (next == null) {
               haveWrittenFinalLine = true;

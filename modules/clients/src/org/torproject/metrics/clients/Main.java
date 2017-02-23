@@ -297,8 +297,7 @@ public class Main {
       SortedMap<String, Integer> frequencies, long publishedMillis)
       throws IOException {
     double total = 0.0;
-    SortedMap<String, Double> frequenciesCopy =
-        new TreeMap<String, Double>();
+    SortedMap<String, Double> frequenciesCopy = new TreeMap<>();
     if (frequencies != null) {
       for (Map.Entry<String, Integer> e : frequencies.entrySet()) {
         if (e.getValue() < 4.0) {
@@ -399,8 +398,7 @@ public class Main {
     }
   }
 
-  private static Map<String, BufferedWriter> openOutputFiles =
-      new HashMap<String, BufferedWriter>();
+  private static Map<String, BufferedWriter> openOutputFiles = new HashMap<>();
 
   private static void writeOutputLine(String fingerprint, String node,
       String metric, String country, String transport, String version,

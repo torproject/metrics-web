@@ -57,8 +57,8 @@ public class RObjectGenerator implements ServletContextListener {
     this.cachedGraphsDirectory = servletContext.getInitParameter(
         "cachedGraphsDir");
 
-    this.availableGraphs = new LinkedHashMap<String, Metric>();
-    this.availableTables = new LinkedHashMap<String, Metric>();
+    this.availableGraphs = new LinkedHashMap<>();
+    this.availableTables = new LinkedHashMap<>();
     for (Metric metric : ContentProvider.getInstance().getMetricsList()) {
       String type = metric.getType();
       String id = metric.getId();
@@ -216,19 +216,18 @@ public class RObjectGenerator implements ServletContextListener {
     /* Write the table content to a map. */
     List<Map<String, String>> result = null;
     try {
-      result = new ArrayList<Map<String, String>>();
+      result = new ArrayList<>();
       BufferedReader br = new BufferedReader(new InputStreamReader(
           new ByteArrayInputStream(tableBytes)));
       String line = br.readLine();
       if (line != null) {
-        List<String> headers = new ArrayList<String>(Arrays.asList(
-            line.split(",")));
+        List<String> headers = new ArrayList<>(Arrays.asList(line.split(",")));
         while ((line = br.readLine()) != null) {
           String[] parts = line.split(",");
           if (headers.size() != parts.length) {
             return null;
           }
-          Map<String, String> row = new HashMap<String, String>();
+          Map<String, String> row = new HashMap<>();
           for (int i = 0; i < headers.size(); i++) {
             row.put(headers.get(i), parts[i]);
           }
@@ -273,7 +272,7 @@ public class RObjectGenerator implements ServletContextListener {
   }
 
   private Map<String, RObjectGeneratorWorker> objectGeneratorThreads =
-      new HashMap<String, RObjectGeneratorWorker>();
+      new HashMap<>();
 
   private class RObjectGeneratorWorker extends Thread {
 

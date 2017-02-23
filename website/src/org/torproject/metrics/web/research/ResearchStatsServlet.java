@@ -29,7 +29,7 @@ public class ResearchStatsServlet extends HttpServlet {
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     this.statsDir = new File(config.getInitParameter("statsDir"));
-    this.availableStatisticsFiles = new TreeSet<String>();
+    this.availableStatisticsFiles = new TreeSet<>();
     this.availableStatisticsFiles.add("servers");
     this.availableStatisticsFiles.add("bandwidth");
     this.availableStatisticsFiles.add("clients");

@@ -49,13 +49,13 @@ public class GraphParameterChecker {
   public GraphParameterChecker() {
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    this.availableGraphs = new HashMap<String, String[]>();
+    this.availableGraphs = new HashMap<>();
     for (Metric metric : ContentProvider.getInstance().getMetricsList()) {
       if ("Graph".equals(metric.getType())) {
         this.availableGraphs.put(metric.getId(), metric.getParameters());
       }
     }
-    this.knownParameterValues = new HashMap<String, String>();
+    this.knownParameterValues = new HashMap<>();
     this.knownParameterValues.put("flag",
         "Running,Exit,Guard,Fast,Stable,HSDir");
     StringBuilder sb = new StringBuilder("all");
@@ -92,10 +92,9 @@ public class GraphParameterChecker {
 
     /* Find out which other parameters are supported by this graph type
      * and parse them if they are given. */
-    Set<String> supportedGraphParameters = new HashSet<String>(
+    Set<String> supportedGraphParameters = new HashSet<>(
         Arrays.asList(this.availableGraphs.get(graphType)));
-    Map<String, String[]> recognizedGraphParameters =
-        new HashMap<String, String[]>();
+    Map<String, String[]> recognizedGraphParameters = new HashMap<>();
 
     /* Parse start and end dates if supported by the graph type. If no end
      * date is provided, set it to today. If no start date is provided,

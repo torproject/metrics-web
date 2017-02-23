@@ -391,7 +391,7 @@ public class Main {
   static void writeStatistics(Path webstatsPath,
       SortedSet<String> statistics) throws IOException {
     webstatsPath.toFile().getParentFile().mkdirs();
-    List<String> lines = new ArrayList<String>();
+    List<String> lines = new ArrayList<>();
     lines.add(ALL_COLUMNS);
     lines.addAll(statistics);
     log.info("Writing {} lines to {}.", lines.size(),
