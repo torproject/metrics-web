@@ -389,6 +389,18 @@
     "unknown": true
   },
   {
+    "start": "2016-07-21",
+    "place": "br",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Sustained increase in meek users in Brazil. Locals believe that they are not actual users, rather bots or something like that.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2016-01-01&end=2017-02-22&country=br\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
     "start": "2016-08-24",
     "place": "cn",
     "protocols": [
