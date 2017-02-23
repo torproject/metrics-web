@@ -1,23 +1,11 @@
 <project default="run" name="clients" basedir=".">
 
+  <property name="mainclass" value="org.torproject.metrics.clients.Main"/>
+
   <include file="../../shared/build-base.xml" as="basetask"/>
   <target name="clean" depends="basetask.clean"/>
   <target name="compile" depends="basetask.compile"/>
+  <target name="run" depends="basetask.run"/>
 
-  <path id="classpath">
-    <pathelement path="${classes}"/>
-    <path refid="base.classpath" />
-    <fileset dir="${libs}">
-      <include name="commons-codec-1.9.jar"/>
-    </fileset>
-  </path>
-
-  <target name="run" depends="compile">
-    <java fork="true"
-          maxmemory="2g"
-          classname="org.torproject.metrics.clients.Main">
-      <classpath refid="classpath"/>
-    </java>
-  </target>
 </project>
 

@@ -1,8 +1,11 @@
 <project default="run" name="metrics-web" basedir=".">
 
+  <property name="mainclass" value="org.torproject.ernie.cron.Main"/>
+
   <include file="../../shared/build-base.xml" as="basetask"/>
   <target name="clean" depends="basetask.clean"/>
   <target name="compile" depends="basetask.compile"/>
+  <target name="run" depends="initrun,basetask.run"/>
 
   <path id="classpath">
     <pathelement path="${classes}"/>
@@ -12,18 +15,10 @@
     </fileset>
   </path>
 
-  <!-- Prepare build. -->
-  <target name="init" depends="basetask.init" >
+  <!-- Prepare run. -->
+  <target name="initrun" >
     <copy file="config.template" tofile="config"/>
   </target>
 
-  <!-- Prepare data for being displayed on the website. -->
-  <target name="run" depends="compile,init">
-    <java fork="true"
-          maxmemory="2g"
-          classname="org.torproject.ernie.cron.Main">
-      <classpath refid="classpath"/>
-    </java>
-  </target>
 </project>
 

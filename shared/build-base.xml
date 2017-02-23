@@ -24,6 +24,11 @@
     </fileset>
   </path>
 
+  <path id="classpath">
+    <pathelement path="${classes}"/>
+    <path refid="base.classpath" />
+  </path>
+
   <path id="base.testclasspath">
     <pathelement path="${base.testclasses}"/>
     <pathelement path="base.classpath"/>
@@ -87,6 +92,14 @@
                  includes="**/*Test.class"/>
       </batchtest>
     </junit>
+  </target>
+
+  <target name="run" depends="init,compile">
+    <java fork="true"
+          maxmemory="2g"
+          classname="${mainclass}">
+      <classpath refid="classpath"/>
+    </java>
   </target>
 
 </project>

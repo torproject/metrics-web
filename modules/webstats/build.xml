@@ -1,9 +1,12 @@
 <project default="run" name="webstats" basedir=".">
 
+  <property name="mainclass" value="org.torproject.metrics.webstats.Main"/>
+
   <include file="../../shared/build-base.xml" as="basetask"/>
   <target name="clean" depends="basetask.clean"/>
   <target name="compile" depends="basetask.compile"/>
   <target name="test" depends="basetask.test"/>
+  <target name="run" depends="basetask.run"/>
 
   <path id="classpath">
     <pathelement path="${classes}"/>
@@ -13,12 +16,5 @@
     </fileset>
   </path>
 
-  <target name="run" depends="compile">
-    <java fork="true"
-          maxmemory="1g"
-          classname="org.torproject.metrics.webstats.Main">
-      <classpath refid="classpath"/>
-    </java>
-  </target>
 </project>
 

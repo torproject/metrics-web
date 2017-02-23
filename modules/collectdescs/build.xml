@@ -1,19 +1,11 @@
 <project default="run" name="collectdescs" basedir=".">
 
+  <property name="mainclass" value="org.torproject.metrics.collectdescs.Main"/>
+
   <include file="../../shared/build-base.xml" as="basetask"/>
   <target name="clean" depends="basetask.clean"/>
   <target name="compile" depends="basetask.compile"/>
+  <target name="run" depends="basetask.run"/>
 
-  <path id="classpath">
-    <pathelement path="${classes}"/>
-    <path refid="base.classpath" />
-  </path>
-
-  <target name="run" depends="compile">
-    <java fork="true"
-          classname="org.torproject.metrics.collectdescs.Main">
-      <classpath refid="classpath"/>
-    </java>
-  </target>
 </project>
 

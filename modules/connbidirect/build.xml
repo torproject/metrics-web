@@ -1,22 +1,13 @@
 <project default="run" name="connbidirect" basedir=".">
 
+  <property name="mainclass" value="org.torproject.metrics.connbidirect.Main"/>
+
   <include file="../../shared/build-base.xml" as="basetask"/>
   <target name="clean" depends="basetask.clean"/>
   <target name="compile" depends="basetask.compile"/>
   <target name="testcompile" depends="basetask.testcompile"/>
   <target name="test" depends="basetask.test"/>
+  <target name="run" depends="basetask.run"/>
 
-  <path id="classpath">
-    <pathelement path="${classes}"/>
-    <path refid="base.classpath" />
-  </path>
-
-  <target name="run" depends="compile">
-    <java fork="true"
-          maxmemory="2g"
-          classname="org.torproject.metrics.connbidirect.Main">
-      <classpath refid="classpath"/>
-    </java>
-  </target>
 </project>
 
