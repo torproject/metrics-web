@@ -8,7 +8,6 @@
     <pathelement path="${classes}"/>
     <path refid="base.classpath" />
     <fileset dir="${libs}">
-      <include name="commons-codec-1.9.jar"/>
       <include name="postgresql-jdbc3-9.2.jar"/>
     </fileset>
   </path>

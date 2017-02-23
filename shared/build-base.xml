@@ -1,17 +1,18 @@
 <project basedir=".">
 
-  <property name="sources" value="src"/>
+  <property name="sources" value="src/main/java"/>
   <property name="testsources" value="src/test/java"/>
   <property name="libs" value="../../shared/lib"/>
   <property name="generated" value="generated"/>
   <property name="classes" value="${generated}/classes/"/>
   <property name="testclasses" value="${generated}/test-classes/"/>
   <property name="source-and-target-java-version" value="1.7" />
-  <property name="descriptorversion" value="1.5.0" />
+  <property name="descriptorversion" value="1.6.0" />
 
   <path id="base.classpath">
     <pathelement path="${classes}"/>
     <fileset dir="${libs}">
+      <include name="commons-codec-1.9.jar"/>
       <include name="commons-compress-1.9.jar"/>
       <include name="commons-lang-2.6.jar"/>
       <include name="descriptor-${descriptorversion}.jar"/>

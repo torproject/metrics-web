@@ -1,8 +1,5 @@
 <project default="run" name="webstats" basedir=".">
 
-  <property name="sources" value="src/main/java"/>
-  <property name="testsources" value="src/test/java"/>
-
   <include file="../../shared/build-base.xml" as="basetask"/>
   <target name="clean" depends="basetask.clean"/>
   <target name="compile" depends="basetask.compile"/>

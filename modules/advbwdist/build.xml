@@ -7,9 +7,6 @@
   <path id="classpath">
     <pathelement path="${classes}"/>
     <path refid="base.classpath" />
-    <fileset dir="${libs}">
-      <include name="commons-codec-1.9.jar"/>
-    </fileset>
   </path>
 
   <target name="run" depends="compile">
