@@ -377,6 +377,17 @@
     ]
   },
   {
+    "start": "2016-02-10",
+    "protocols": [
+      "<OR>",
+      "exit"
+    ],
+    "description": "Measurement error from bandwidth authority causes decrease in measured bandwidth in Europe.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-February/000963.html\">mailing list post</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "place": "tm",
     "protocols": [
