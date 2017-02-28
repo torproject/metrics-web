@@ -52,7 +52,7 @@
 <script type="text/javascript">
 document.write('<div class="topButton" style="display:none;"><a href="#top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a></div>');
 </script>
-<a name="top" id="anchor-top"></a>
+<a id="top"></a>
 
 <!-- secondary navigation -->
 <nav class="navbar navbar-default navbar-secondary">
