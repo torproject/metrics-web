@@ -843,9 +843,10 @@ public final class RelayDescriptorDatabaseImporter {
           reader.addDirectory(archivesDirectory);
         }
       }
+      File historyFile = new File(statsDirectory,
+          "database-importer-relay-descriptor-history");
       if (keepImportHistory) {
-        reader.setExcludeFiles(new File(statsDirectory,
-            "database-importer-relay-descriptor-history"));
+        reader.setHistoryFile(historyFile);
       }
       Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
       while (descriptorFiles.hasNext()) {
@@ -863,6 +864,9 @@ public final class RelayDescriptorDatabaseImporter {
             }
           }
         }
+      }
+      if (keepImportHistory) {
+        reader.saveHistoryFile(historyFile);
       }
     }
 

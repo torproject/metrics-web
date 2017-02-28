@@ -63,8 +63,8 @@ public class Main {
   private static void parseRelayDescriptors() throws Exception {
     DescriptorReader descriptorReader =
         DescriptorSourceFactory.createDescriptorReader();
-    descriptorReader.setExcludeFiles(new File(
-        "status/relay-descriptors"));
+    File historyFile = new File("status/relay-descriptors");
+    descriptorReader.setHistoryFile(historyFile);
     descriptorReader.addDirectory(new File(
         "../../shared/in/recent/relay-descriptors/consensuses"));
     descriptorReader.addDirectory(new File(
@@ -86,6 +86,7 @@ public class Main {
         }
       }
     }
+    descriptorReader.saveHistoryFile(historyFile);
   }
 
   private static void parseRelayExtraInfoDescriptor(
@@ -206,8 +207,8 @@ public class Main {
   private static void parseBridgeDescriptors() throws Exception {
     DescriptorReader descriptorReader =
         DescriptorSourceFactory.createDescriptorReader();
-    descriptorReader.setExcludeFiles(new File(
-        "status/bridge-descriptors"));
+    File historyFile = new File("status/bridge-descriptors");
+    descriptorReader.setHistoryFile(historyFile);
     descriptorReader.addDirectory(new File(
         "../../shared/in/recent/bridge-descriptors"));
     descriptorReader.addDirectory(new File(
@@ -225,6 +226,7 @@ public class Main {
         }
       }
     }
+    descriptorReader.saveHistoryFile(historyFile);
   }
 
   private static void parseBridgeExtraInfoDescriptor(

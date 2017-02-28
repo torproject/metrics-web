@@ -84,8 +84,8 @@ public class TorperfProcessor {
         DescriptorReader descriptorReader =
             DescriptorSourceFactory.createDescriptorReader();
         descriptorReader.addDirectory(torperfDirectory);
-        descriptorReader.setExcludeFiles(new File(statsDirectory,
-            "torperf-history"));
+        File historyFile = new File(statsDirectory, "torperf-history");
+        descriptorReader.setHistoryFile(historyFile);
         Iterator<DescriptorFile> descriptorFiles =
             descriptorReader.readDescriptors();
         while (descriptorFiles.hasNext()) {
@@ -139,6 +139,7 @@ public class TorperfProcessor {
             }
           }
         }
+        descriptorReader.saveHistoryFile(historyFile);
         logger.fine("Finished importing files in " + torperfDirectory
             + "/.");
       }

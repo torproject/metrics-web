@@ -59,8 +59,8 @@ public class Main {
     descriptorReader = DescriptorSourceFactory.createDescriptorReader();
     descriptorReader.addDirectory(
         new File("../../shared/in/recent/relay-descriptors/consensuses"));
-    descriptorReader.setExcludeFiles(
-        new File("status/parsed-consensuses"));
+    File historyFile = new File("status/parsed-consensuses");
+    descriptorReader.setHistoryFile(historyFile);
     descriptorFiles = descriptorReader.readDescriptors();
     File resultsFile = new File("stats/advbwdist-validafter.csv");
     resultsFile.getParentFile().mkdirs();
@@ -152,6 +152,7 @@ public class Main {
         }
       }
     }
+    descriptorReader.saveHistoryFile(historyFile);
     bw.close();
   }
 }
