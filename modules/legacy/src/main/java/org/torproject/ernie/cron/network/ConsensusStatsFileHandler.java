@@ -257,17 +257,23 @@ public class ConsensusStatsFileHandler {
      * and bridge authority. */
     Map<String, Map<String, int[]>> bridgesPerDayAndAuthority = new HashMap<>();
     for (String bridgesRawLine : this.bridgesRaw.values()) {
+      String[] parts = bridgesRawLine.split(",");
+      int brunning = Integer.parseInt(parts[2]);
+      if (brunning <= 0) {
+        /* Skip this status which contains zero bridges with the Running
+         * flag. */
+        continue;
+      }
       String date = bridgesRawLine.substring(0, 10);
       if (!bridgesPerDayAndAuthority.containsKey(date)) {
         bridgesPerDayAndAuthority.put(date, new TreeMap<String, int[]>());
       }
-      String[] parts = bridgesRawLine.split(",");
       String authority = parts[1];
       if (!bridgesPerDayAndAuthority.get(date).containsKey(authority)) {
         bridgesPerDayAndAuthority.get(date).put(authority, new int[3]);
       }
       int[] bridges = bridgesPerDayAndAuthority.get(date).get(authority);
-      bridges[0] += Integer.parseInt(parts[2]);
+      bridges[0] += brunning;
       bridges[1] += Integer.parseInt(parts[3]);
       bridges[2]++;
     }
