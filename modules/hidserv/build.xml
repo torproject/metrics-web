@@ -1,6 +1,6 @@
 <project default="run" name="hidserv" basedir=".">
 
-  <property name="mainclass" value="org.torproject.hidserv.Main"/>
+  <property name="mainclass" value="org.torproject.metrics.hidserv.Main"/>
 
   <include file="../../shared/build-base.xml" as="basetask"/>
   <target name="clean" depends="basetask.clean"/>
