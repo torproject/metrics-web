@@ -388,6 +388,16 @@
     ]
   },
   {
+    "start": "2017-03-03",
+    "protocols": [
+      "meek"
+    ],
+    "description": "meek-azure is shut down pending migration to a new CDN configuration.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-March/000981.html\">mailing list post</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "place": "tm",
     "protocols": [
