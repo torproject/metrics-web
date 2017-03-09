@@ -508,7 +508,8 @@
     "description": "Increase in obfs3 users from the UAE, from 5K to 75K. Other transports and countries not affected.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-bridge-transport.html?start=2016-11-17&end=2017-02-15&transport=obfs3&transport=obfs4&transport=meek&transport=%3COR%3E\">transport graph</a>",
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-11-23&end=2017-02-21&country=ae\">UAE bridge graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-11-23&end=2017-02-21&country=ae\">UAE bridge graph</a>",
+      "<a href=\"https://trac.torproject.org/projects/tor/ticket/21345\">ticket</a>"
     ],
     "unknown": true
   }
