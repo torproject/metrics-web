@@ -29,12 +29,10 @@
       <h2>Network status <a href="#status" name="status" class="anchor">#</a></h2>
       <p>The following tools let you explore currently running relays and bridges.</p>
       <ul>
-        <li><a href="https://play.google.com/store/apps/details?id=com.networksaremadeofstring.anonionooid" target="_blank">AnOnionooid</a> is an Android app that helps find and explore Tor relays and bridges.</li>
         <li><a href="https://atlas.torproject.org/" target="_blank">Atlas</a> displays data about single relays and bridges in the Tor network.</li>
         <li><a href="https://compass.torproject.org/" target="_blank">Compass</a> groups current relays in different ways to measure Tor's network diversity.</li>
         <li><a href="https://consensus-health.torproject.org/" target="_blank">Consensus Health</a> displays information about the current directory consensus and votes.</li>
         <li><a href="https://duckduckgo.com/" target="_blank">DuckDuckGo</a> displays Tor node details when including the keywords "tor node" in a search.</li>
-        <li><a href="https://oniontip.com/" target="_blank">OnionTip</a> distributes bitcoin donations to relays that can receive them.</li>
         <li><a href="https://onionview.codeplex.com/" target="_blank">OnionView</a> plots the location of active Tor nodes on an interactive map of the world.</li>
         <li><a href="https://onionite.now.sh/" target="_blank">Onionite</a> is a Progressive Web App to view information on the individual nodes that make up the Tor network.</li>
       </ul>
