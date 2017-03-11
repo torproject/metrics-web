@@ -152,7 +152,7 @@
     ],
     "description": "The former bridge authority Tonga shuts down. Bridges that have not updated to tor 0.2.8.7 or 0.2.9.2-alpha (which include all 5 default obfs3 bridges and 3/16 default obfs4 bridges) stop reporting statistics.",
     "links": [
-      "<a href=\"https://trac.torproject.org/projects/tor/ticket/19690#comment:17\">shutdown notice</a>",
+      "<a href=\"https://bugs.torproject.org/19690#comment:17\">shutdown notice</a>",
       "<a href=\"https://blog.torproject.org/blog/new-bridge-authority\">blog post</a>",
       "<a href=\"https://metrics.torproject.org/networksize.html?start=2016-07-01&end=2016-09-23\">loss of reporting bridges</a>"
     ]
@@ -493,7 +493,7 @@
     ],
     "description": "Huge increase in relay users (200k+)",
     "links": [
-      "<a href=\"http://rougmnvswfsmd4dq.onion/userstats-relay-country.html?start=2016-11-23&end=2017-02-21&country=ae&events=off\">graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-11-23&end=2017-02-21&country=ae&events=off\">graph</a>",
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-January/000284.html\">metrics-team thread</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/5pbukk/united_arab_emirates_went_from_10k_tor_users_to/\">reddit thread</a>"
     ],
@@ -507,9 +507,9 @@
     ],
     "description": "Increase in obfs3 users from the UAE, from 5K to 75K. Other transports and countries not affected.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-transport.html?start=2016-11-17&end=2017-02-15&transport=obfs3&transport=obfs4&transport=meek&transport=%3COR%3E\">transport graph</a>",
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-11-23&end=2017-02-21&country=ae\">UAE bridge graph</a>",
-      "<a href=\"https://trac.torproject.org/projects/tor/ticket/21345\">ticket</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-transport.html?start=2017-01-01&end=2017-03-10&transport=obfs3&transport=obfs4&transport=meek&transport=%3COR%3E\">transport graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-11-23&end=2017-03-10&country=ae\">UAE bridge graph</a>",
+      "<a href=\"https://bugs.torproject.org/21345\">ticket</a>"
     ],
     "unknown": true
   }
