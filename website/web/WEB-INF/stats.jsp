@@ -315,8 +315,7 @@ tool, which periodically fetches static files over Tor and records several
 timestamps in the process.  The data file contains daily medians and quartiles
 as well as total numbers of requests, timeouts, and failures.  Raw Torperf
 measurement data are available on the <a
-href="https://collector.torproject.org/formats.html#torperf">CollecTor</a>
-website.</p>
+href="https://collector.torproject.org/#torperf">CollecTor</a> website.</p>
 
 <p><b>Download as <a href="stats/torperf.csv">CSV file</a>.</b></p>
 
