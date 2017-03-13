@@ -21,7 +21,7 @@
       <h2>Parsing libraries <a href="#libraries" name="libraries" class="anchor">#</a></h2>
       <p>The following libraries help you with parsing Tor network data from the <a href="https://collector.torproject.org/" target="_blank">CollecTor</a> service.</p>
       <ul>
-        <li><a href="https://dist.torproject.org/descriptor/" target="_blank">metrics-lib</a> is a Java library to fetch and parse Tor descriptors.</li>
+        <li><a href="metrics-lib.html">metrics-lib</a> is a Java library to fetch and parse Tor descriptors.</li>
         <li><a href="https://stem.torproject.org/" target="_blank">Stem</a> is a Python library that parses Tor descriptors.</li>
         <li><a href="https://github.com/NullHypothesis/zoossh" target="_blank">Zoossh</a> is a parser written in Go for Tor-specific data formats.</li>
       </ul>

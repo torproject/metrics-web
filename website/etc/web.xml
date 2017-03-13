@@ -273,6 +273,17 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>MetricsLibServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.MetricsLibServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MetricsLibServlet</servlet-name>
+    <url-pattern>/metrics-lib.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>ResearchServlet</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.ResearchServlet

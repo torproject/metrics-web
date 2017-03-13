@@ -812,4 +812,42 @@ body.noscript #navbar-toggle-checkbox:checked ~ .collapse {
 
 
 
+/* code highlighting */
 
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted,
+.token.function {
+  color: #c7254e; /* red */
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword,
+.token.inserted {
+  color: #7d4698; /* purple */
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #999; /* light gray */
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #000; /* black */
+}

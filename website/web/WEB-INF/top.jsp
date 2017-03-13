@@ -33,6 +33,10 @@
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <link rel="stylesheet" href="fonts/source-sans-pro.css">
 
+  <!-- Prism -->
+  <link rel="stylesheet" href="css/prism.css">
+  <script src="js/prism.js"></script>
+
   <!-- custom styles and javascript -->
   <link rel="stylesheet" href="css/style.css">
   <script src="js/script.js"></script>
