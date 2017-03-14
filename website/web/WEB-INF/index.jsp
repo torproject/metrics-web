@@ -15,7 +15,7 @@
   <div class="container">
     <h1>Welcome!</h1>
     <p>
-      What would you like to know about the Tor network?
+      What would you like to know about the <a href="https://www.torproject.org/">Tor</a> network?
     </p>
   </div>
 
