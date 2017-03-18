@@ -64,7 +64,8 @@ public class GraphParameterChecker {
     }
     this.knownParameterValues.put("country", sb.toString());
     this.knownParameterValues.put("events", "on,off,points");
-    this.knownParameterValues.put("source", "all,siv,moria,torperf");
+    this.knownParameterValues.put("source", "all,siv,moria,torperf,op-nl,"
+        + "op-us");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
     this.knownParameterValues.put("transport", "obfs2,obfs3,obfs4,"
         + "websocket,fte,meek,scramblesuit,snowflake,<OR>,<??>,!<OR>");

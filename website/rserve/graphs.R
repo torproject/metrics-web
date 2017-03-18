@@ -565,6 +565,10 @@ plot_torperf <- function(start, end, source, filesize, path) {
           ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
   t <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "torperf.csv", sep = ""), stringsAsFactors = FALSE)
+  known_sources <- c("all", unique(t[t$source != "", "source"]))
+  colours <- data.frame(source = known_sources,
+      colour = brewer.pal(length(known_sources), "Paired"),
+      stringsAsFactors = FALSE)
   t <- t[t$date >= start & t$date <= end & t$size == size &
          t$source == ifelse(source == 'all', '', source), ]
   torperf <- data.frame(date = as.Date(t$date, "%Y-%m-%d"),
@@ -576,14 +580,10 @@ plot_torperf <- function(start, end, source, filesize, path) {
     torperf <- rbind(torperf,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         q1 = NA, md = NA, q3 = NA))
-  colours <- data.frame(source = c("all", "siv", "moria", "torperf"),
-      colour = c("#FF8C00", "#0000EE", "#EE0000", "#00CD00"),
-      stringsAsFactors = FALSE)
   colour <- colours[colours$source == source, "colour"]
   filesizes <- data.frame(filesizes = c("5mb", "1mb", "50kb"),
       label = c("5 MiB", "1 MiB", "50 KiB"), stringsAsFactors = FALSE)
   filesizeStr <- filesizes[filesizes$filesize == filesize, "label"]
-  maxY <- max(torperf$q3, na.rm = TRUE)
   date_breaks <- date_breaks(
     as.numeric(max(as.Date(torperf$date, "%Y-%m-%d")) -
     min(as.Date(torperf$date, "%Y-%m-%d"))))
@@ -597,7 +597,8 @@ plot_torperf <- function(start, end, source, filesize, path) {
         labels = date_format(date_breaks$format),
         breaks = date_breaks$major,
         minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0, maxY) / 1e3) +
+    scale_y_continuous(name = "") +
+    expand_limits(y = 0) +
     scale_fill_manual(name = paste("Measured times on",
         ifelse(source == "all", "all sources", source), "per day"),
       breaks = c("line", "ribbon"),
@@ -627,10 +628,6 @@ plot_torperf_failures <- function(start, end, source, filesize, path) {
     torperf <- rbind(torperf,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         timeouts = NA, failures = NA, requests = NA))
-  colours <- data.frame(source = c("all", "siv", "moria", "torperf"),
-      colour = c("#FF8C00", "#0000EE", "#EE0000", "#00CD00"),
-      stringsAsFactors = FALSE)
-  colour <- colours[colours$source == source, "colour"]
   filesizes <- data.frame(filesizes = c("5mb", "1mb", "50kb"),
       label = c("5 MiB", "1 MiB", "50 KiB"), stringsAsFactors = FALSE)
   filesizeStr <- filesizes[filesizes$filesize == filesize, "label"]

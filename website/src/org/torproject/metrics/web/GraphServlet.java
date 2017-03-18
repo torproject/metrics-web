@@ -110,7 +110,9 @@ public class GraphServlet extends MetricServlet {
         { "all", " checked" },
         { "torperf", "" },
         { "moria", "" },
-        { "siv", "" } });
+        { "siv", "" },
+        { "op-nl", "" },
+        { "op-us", "" }});
     this.defaultParameters.put("filesize", new String[][] {
         { "50kb", " checked", "50 KiB" },
         { "1mb", "", "1 MiB" },

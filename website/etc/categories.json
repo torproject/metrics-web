@@ -54,7 +54,7 @@
     "icon": "fa-dashboard",
     "header": "Performance",
     "summary": "How fast and reliable the Tor network is.",
-    "description": "We use <a href=\"https://gitweb.torproject.org/torperf.git\">Torperf</a> to run performance measurements. It works by fetching files of different sizes over Tor and measuring how long that takes.",
+    "description": "We use <a href=\"https://gitweb.torproject.org/torperf.git\">Torperf</a> and <a href=\"https://github.com/robgjansen/onionperf\">OnionPerf</a> to run performance measurements. Both work by fetching files of different sizes over Tor and measuring how long that takes.",
     "metrics": [
       "torperf",
       "torperf-failures",

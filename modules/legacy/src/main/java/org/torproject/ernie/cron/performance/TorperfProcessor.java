@@ -100,6 +100,12 @@ public class TorperfProcessor {
               continue;
             }
             TorperfResult result = (TorperfResult) descriptor;
+            if (null != result.getUnrecognizedKeys()
+                && result.getUnrecognizedKeys().containsKey("ENDPOINTREMOTE")
+                && result.getUnrecognizedKeys().get("ENDPOINTREMOTE")
+                .contains(".onion")) {
+              continue;
+            }
             String source = result.getSource();
             long fileSize = result.getFileSize();
             if (fileSize == 51200) {
@@ -162,12 +168,14 @@ public class TorperfProcessor {
               long q1 = dlTimes.get(dlTimes.size() / 4 - 1);
               long md = dlTimes.get(dlTimes.size() / 2 - 1);
               long q3 = dlTimes.get(dlTimes.size() * 3 / 4 - 1);
-              String[] tempParts = tempSourceDate.split("[-,]", 3);
-              String tempDate = tempParts[2];
-              int tempSize = Integer.parseInt(
-                  tempParts[1].substring(0, tempParts[1].length() - 2))
-                  * 1024 * (tempParts[1].endsWith("mb") ? 1024 : 1);
-              String tempSource = tempParts[0];
+              String[] tempParts = tempSourceDate.split("[,]", 3);
+              String tempDate = tempParts[1];
+              int tempSize = Integer.parseInt(tempParts[0].substring(
+                  tempParts[0].lastIndexOf('-') + 1,
+                  tempParts[0].length() - 2))
+                  * 1024 * (tempParts[0].endsWith("mb") ? 1024 : 1);
+              String tempSource = tempParts[0].substring(0,
+                  tempParts[0].lastIndexOf('-'));
               String tempDateSizeSource = String.format("%s,%d,%s",
                   tempDate, tempSize, tempSource);
               stats.put(tempDateSizeSource,
