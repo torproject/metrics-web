@@ -21,7 +21,7 @@
 <p>Tor Metrics Library is a Java API that facilitates processing Tor network data from the <a href="https://collector.torproject.org/">CollecTor</a> service for statistical analysis and for building services and applications.</p>
 <a class="btn btn-primary btn-lg" style="margin: 10px" href="https://dist.torproject.org/metrics-lib/?C=M;O=D"><i class="fa fa-chevron-right" aria-hidden="true"></i> Download Release</a>
 <a class="btn btn-primary btn-lg" style="margin: 10px" href="https://gitweb.torproject.org/metrics-lib.git/plain/CHANGELOG.md"><i class="fa fa-chevron-right" aria-hidden="true"></i> View Change Log</a>
-<!--<a class="btn btn-primary btn-lg" style="margin: 10px" href="metrics-lib/javadoc/index.html"><i class="fa fa-chevron-right" aria-hidden="true"></i> Browse JavaDocs</a>-->
+<a class="btn btn-primary btn-lg" style="margin: 10px" href="metrics-lib/"><i class="fa fa-chevron-right" aria-hidden="true"></i> Browse JavaDocs</a>
 </div><!-- text-center -->
 </div><!-- jumbotron -->
 
@@ -294,7 +294,7 @@ java -cp .:lib/\*:generated/dist/signed/\* PluggableTransports
 
 <h2 id="nextsteps">Next steps <a href="#nextsteps" class="anchor">#</a></h2>
 
-<p>Want to write more code that uses metrics-lib?  Be sure to read the JavaDocs while developing new services or applications using Tor network data.</p>
+<p>Want to write more code that uses metrics-lib?  Be sure to read the <a href="metrics-lib/">JavaDocs</a> while developing new services or applications using Tor network data.</p>
 
 <p>Ran into a problem, found a bug, or came up with a cool new feature?  Feel free to <a href="https://metrics.torproject.org/about.html#contact">contact us</a>.  Alternatively, take a look at the <a href="https://trac.torproject.org/projects/tor">bug tracker</a> and open a ticket if there's none for your issue yet.</p>
 
