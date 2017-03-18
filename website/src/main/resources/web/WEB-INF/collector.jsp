@@ -1,87 +1,17 @@
-<!DOCTYPE html>
-<html lang="en" style="min-height:100%;">
-  <head>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<jsp:include page="top.jsp">
+  <jsp:param name="pageTitle" value="Sources &ndash; Tor Metrics"/>
+  <jsp:param name="navActive" value="Sources"/>
+</jsp:include>
 
-    <title>CollecTor</title>
-
-    <meta charset="utf-8">
-    <link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon">
-
-    <!-- yes, we're handheld friendly :) -->
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-
-    <!-- icons for mobile devices -->
-    <link rel="apple-touch-icon" href="images/apple-touch-icon-152x152.png">
-    <link rel="shortcut icon" href="images/android-icon.png" sizes="196x196">
-    <meta name="msapplication-square70x70logo" content="images/smalltile.png">
-    <meta name="msapplication-square150x150logo" content="images/mediumtile.png">
-    <meta name="msapplication-wide310x150logo" content="images/widetile.png">
-    <meta name="msapplication-square310x310logo" content="images/largetile.png">
-
-    <!-- jQuery -->
-    <script src="js/jquery-3.1.1.min.js"></script>
-
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.min.js"></script>
-
-    <!-- Fonts -->
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="fonts/source-sans-pro.css">
-
-    <!-- custom styles and javascript -->
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/script.js"></script>
-
-  </head>
-
-<body class="noscript" style="background-image:url(images/ajax-loader.gif);background-repeat:no-repeat;background-position:center center;">
-
-<!-- Using evil inline stylesheets to hide the FOUC for slow connections... -->
-
-<div id="wrapper" style="display:none;">
-
-
-<!-- backToTop-Button and Anchor -->
-<noscript>
-<div class="topButton" style="display:block;"><a href="#top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a></div>
-</noscript>
-<script type="text/javascript">
-document.write('<div class="topButton" style="display:none;"><a href="#top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a></div>');
-</script>
-<a id="top"></a>
-
-
-
-<!-- secondary navigation -->
-<nav class="navbar navbar-default navbar-secondary">
-<div class="container-fluid">
-    <input type="checkbox" id="navbar-toggle-checkbox">
-    <div class="navbar-header">
-      <a class="navbar-brand visible-xs" href="/"><img src="images/collector-wordmark-white.png" width="264" height="50" alt="CollecTor"></a>
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="sources.html">Sources</a></li>
+        <li class="active">CollecTor</li>
+      </ul>
     </div>
-
-  </div>
-</nav>
-<!-- /secondary navigation -->
-
-
-
-<!-- page header for every single page -->
-<div class="page-header hidden-xs">
-  <a href="/"><img src="images/collector-logo.png" width="143" height="117" alt="" id="collector-logo"></a>
-  <a href="/"><img src="images/collector-wordmark-white.png" width="264" height="50" alt="CollecTor" id="collector-wordmark"></a>
-  <div>
-    <p>
-      <i>Your friendly data-collecting<br>
-      service in the Tor network.</i>
-    </p>
-  </div>
-  <div class="clearfix"></div>
-</div>
-<!-- /page header -->
 
     <div class="container">
       <div class="row">
@@ -905,36 +835,4 @@ Index files use the following custom JSON data format that might still be extend
 
 </div>
 
-
-
-  <div class="container-fluid" id="footer">
-
-    <div class="container no-gutter">
-      <div class="col-xs-6">
-        <p>
-           &copy; 2017 The Tor Project
-        </p>
-      </div>
-      <div class="col-xs-6">
-        <p class="pull-right">
-
-           <a href="https://metrics.torproject.org/about.html#contact">Contact</a>
-
-        </p>
-      </div>
-    </div>
-
-    <div class="container small">
-
-        <p>Data on this site is freely available under a <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0 no copyright declaration</a>: To the extent possible under law, the Tor Project has waived all copyright and related or neighboring rights in the data. "Tor" and the "Onion Logo" are <a href="https://www.torproject.org/docs/trademark-faq.html.en">registered trademarks</a> of The Tor Project, Inc.</p>
-
-    </div>
-
-  </div><!-- /footer -->
-
-
-
-</div><!-- /wrapper -->
-
-</body>
-</html>
+<jsp:include page="bottom.jsp"/>
