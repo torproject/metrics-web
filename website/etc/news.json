@@ -394,8 +394,7 @@
     ],
     "description": "meek-azure is shut down pending migration to a new CDN configuration.",
     "links": [
-      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-March/000981.html\">mailing list post</a>",
-      "<a href=\"https://bugs.torproject.org/21342\">ticket</a>"
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-March/000981.html\">mailing list post</a>"
     ]
   },
   {
@@ -405,7 +404,8 @@
     ],
     "description": "Tor Browser 6.5.1 is released, containing the new meek-azure CDN configuration.",
     "links": [
-      "<a href=\"https://blog.torproject.org/blog/tor-browser-651-released\">blog post</a>"
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-651-released\">blog post</a>",
+      "<a href=\"https://bugs.torproject.org/21342\">ticket</a>"
     ]
   },
   {
