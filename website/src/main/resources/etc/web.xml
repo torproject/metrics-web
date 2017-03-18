@@ -284,6 +284,28 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>CollecTorServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.CollecTorServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CollecTorServlet</servlet-name>
+    <url-pattern>/collector.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>OnionooServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.OnionooServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OnionooServlet</servlet-name>
+    <url-pattern>/onionoo.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>ResearchServlet</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.ResearchServlet
