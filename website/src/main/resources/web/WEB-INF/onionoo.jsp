@@ -52,26 +52,6 @@
 <br>
 <a id="protocol"></a>
 
-        <!-- floating anchor box -->
-        <div class="col-md-4 pull-right hidden-xs" style="padding:1.2em 0 0 2em;">
-          <div class="list-group">
-            <h3>Table of contents</h3>
-            <a class="list-group-item" href="#general">General</a>
-            <a class="list-group-item" href="#versions">Protocol versions</a>
-            <a class="list-group-item" href="#methods">Methods</a>
-            <a class="list-group-item" href="#responses">Responses</a>
-            <a class="list-group-item" href="#summary">Summary documents</a>
-            <a class="list-group-item" href="#details">Details documents</a>
-            <a class="list-group-item" href="#history">History objects</a>
-            <a class="list-group-item" href="#bandwidth">Bandwidth documents</a>
-            <a class="list-group-item" href="#weights">Weights documents</a>
-            <a class="list-group-item" href="#clients">Clients documents</a>
-            <a class="list-group-item" href="#uptime">Uptime documents</a>
-            <a class="list-group-item" href="#examples">Example usage</a>
-          </div>
-        </div>
-
-
 <h1>The Tor network status protocol <a href="#protocol" class="anchor">#</a></h1>
 
 <a id="general"></a><br>
