@@ -23,14 +23,15 @@
             <div class="jumbotron">
               <div class="text-center">
                 <h2>
-                  The Tor network status protocol
+                  Onionoo
                 </h2>
                 <p>Onionoo is a web-based protocol to learn about currently running
                 Tor relays and bridges.  Onionoo itself was not designed as a service
                 for human beings&mdash;at least not directly.  Onionoo provides the
                 data for other applications and websites which in turn present Tor
                 network status information to humans. </p>
-                <a class="btn btn-primary btn-lg" style="margin: 10px" href="#protocol"><i class="fa fa-chevron-right" aria-hidden="true"></i> Tell me more!</a>
+                <a class="btn btn-primary btn-lg" style="margin: 10px" href="#versions"><i class="fa fa-chevron-right" aria-hidden="true"></i> View Protocol Versions</a>
+                <a class="btn btn-primary btn-lg" style="margin: 10px" href="#examples"><i class="fa fa-chevron-right" aria-hidden="true"></i> View Examples</a>
 
               </div><!-- text-center -->
 
