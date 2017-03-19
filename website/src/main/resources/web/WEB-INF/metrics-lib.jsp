@@ -18,7 +18,7 @@
 <div class="jumbotron">
 <div class="text-center">
 <h2>Tor Metrics Library</h2>
-<p>Tor Metrics Library is a Java API that facilitates processing Tor network data from the <a href="https://collector.torproject.org/">CollecTor</a> service for statistical analysis and for building services and applications.</p>
+<p>Tor Metrics Library is a Java API that facilitates processing Tor network data from the <a href="collector.html">CollecTor</a> service for statistical analysis and for building services and applications.</p>
 <a class="btn btn-primary btn-lg" style="margin: 10px" href="https://dist.torproject.org/metrics-lib/?C=M;O=D"><i class="fa fa-chevron-right" aria-hidden="true"></i> Download Release</a>
 <a class="btn btn-primary btn-lg" style="margin: 10px" href="https://gitweb.torproject.org/metrics-lib.git/plain/CHANGELOG.md"><i class="fa fa-chevron-right" aria-hidden="true"></i> View Change Log</a>
 <a class="btn btn-primary btn-lg" style="margin: 10px" href="metrics-lib/"><i class="fa fa-chevron-right" aria-hidden="true"></i> Browse JavaDocs</a>
@@ -36,13 +36,13 @@
 
 <h1>metrics-lib</h1>
 
-<p>Welcome to metrics-lib, a Java API that facilitates processing Tor network data from the <a href="https://collector.torproject.org/">CollecTor</a> service for statistical analysis and for building services and applications.</p>
+<p>Welcome to metrics-lib, a Java API that facilitates processing Tor network data from the <a href="collector.html">CollecTor</a> service for statistical analysis and for building services and applications.</p>
 
 <p>In the tutorials below we're explaining the basic steps to get you started with metrics-lib.</p>
 
 <h2 id="prerequisites">Prerequisites and preparation <a href="#prerequisites" class="anchor">#</a></h2>
 
-<p>The following tutorials are written with an audience in mind that knows Java and to a lesser extent how Tor works.  We explain all data used in the tutorials.  More and most up-to-date information about descriptors can be found in the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">Tor directory protocol specification</a> and on the <a href="https://collector.torproject.org/">CollecTor website</a>.</p>
+<p>The following tutorials are written with an audience in mind that knows Java and to a lesser extent how Tor works.  We explain all data used in the tutorials.  More and most up-to-date information about descriptors can be found in the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">Tor directory protocol specification</a> and on the <a href="collector.html">CollecTor page</a>.</p>
 
 <p>All tutorials require you to <a href="https://dist.torproject.org/descriptor/?C=M;O=D">download</a> the latest release of metrics-lib, follow the instructions to <a href="https://gitweb.torproject.org/metrics-lib.git/tree/README.md">verify</a> its signature, extract the tarball locally, and copy the <code>lib/</code> and the <code>generated/</code> directories to your working directory for the tutorials.</p>
 
