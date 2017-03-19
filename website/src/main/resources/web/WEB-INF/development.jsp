@@ -29,11 +29,11 @@
 
     <div class="container">
       <h2>Query support <a href="#query" name="query" class="anchor">#</a></h2>
-      <p>The following tools help you with querying Tor network data from the <a href="https://onionoo.torproject.org/" target="_blank">Onionoo</a> service.</p>
+      <p>The following tools help you with querying Tor network data from the <a href="onionoo.html">Onionoo</a> service.</p>
       <ul>
         <li><a href="https://savannah.nongnu.org/projects/koninoo/" target="_blank">koninoo</a> is a simple Java command line interface for querying Onionoo data.</li>
         <li><a href="https://github.com/duk3luk3/onion-py" target="_blank">OnionPy</a> provides memcached support to cache queried data.</li>
-        <li><a href="https://github.com/lukechilds/onionoo-node-client" target="_blank">onionoo-node-client</a> is a Node.js client library for the <a href="https://onionoo.torproject.org/" target="_blank">Onionoo</a> API.</li>
+        <li><a href="https://github.com/lukechilds/onionoo-node-client" target="_blank">onionoo-node-client</a> is a Node.js client library for the <a href="onionoo.html">Onionoo</a> API.</li>
       </ul>
     </div>
 
