@@ -451,6 +451,10 @@ a[target="_blank"]:before {
     margin-right:3px;
 }
 
+a.btn[target="_blank"]:before {
+    content: "";
+}
+
 
 
 /* news page */

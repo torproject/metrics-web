@@ -3,7 +3,7 @@
     <div class="container no-gutter">
       <div class="col-xs-6">
         <p>
-           &copy; 2009&ndash;2017 <a href="https://www.torproject.org/">The Tor Project</a>
+           &copy; 2009&ndash;2017 <a href="https://www.torproject.org/" target="_blank">The Tor Project</a>
         </p>
       </div>
       <div class="col-xs-6">

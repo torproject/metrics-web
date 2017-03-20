@@ -19,8 +19,8 @@
 <div class="text-center">
 <h2>Tor Metrics Library</h2>
 <p>Tor Metrics Library is a Java API that facilitates processing Tor network data from the <a href="collector.html">CollecTor</a> service for statistical analysis and for building services and applications.</p>
-<a class="btn btn-primary btn-lg" style="margin: 10px" href="https://dist.torproject.org/metrics-lib/?C=M;O=D"><i class="fa fa-chevron-right" aria-hidden="true"></i> Download Release</a>
-<a class="btn btn-primary btn-lg" style="margin: 10px" href="https://gitweb.torproject.org/metrics-lib.git/plain/CHANGELOG.md"><i class="fa fa-chevron-right" aria-hidden="true"></i> View Change Log</a>
+<a class="btn btn-primary btn-lg" style="margin: 10px" href="https://dist.torproject.org/metrics-lib/?C=M;O=D" target="_blank"><i class="fa fa-chevron-right" aria-hidden="true"></i> Download Release</a>
+<a class="btn btn-primary btn-lg" style="margin: 10px" href="https://gitweb.torproject.org/metrics-lib.git/plain/CHANGELOG.md" target="_blank"><i class="fa fa-chevron-right" aria-hidden="true"></i> View Change Log</a>
 <a class="btn btn-primary btn-lg" style="margin: 10px" href="metrics-lib/"><i class="fa fa-chevron-right" aria-hidden="true"></i> Browse JavaDocs</a>
 </div><!-- text-center -->
 </div><!-- jumbotron -->
@@ -42,13 +42,13 @@
 
 <h2 id="prerequisites">Prerequisites and preparation <a href="#prerequisites" class="anchor">#</a></h2>
 
-<p>The following tutorials are written with an audience in mind that knows Java and to a lesser extent how Tor works.  We explain all data used in the tutorials.  More and most up-to-date information about descriptors can be found in the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">Tor directory protocol specification</a> and on the <a href="collector.html">CollecTor page</a>.</p>
+<p>The following tutorials are written with an audience in mind that knows Java and to a lesser extent how Tor works.  We explain all data used in the tutorials.  More and most up-to-date information about descriptors can be found in the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt" target="_blank">Tor directory protocol specification</a> and on the <a href="collector.html">CollecTor page</a>.</p>
 
-<p>All tutorials require you to <a href="https://dist.torproject.org/descriptor/?C=M;O=D">download</a> the latest release of metrics-lib, follow the instructions to <a href="https://gitweb.torproject.org/metrics-lib.git/tree/README.md">verify</a> its signature, extract the tarball locally, and copy the <code>lib/</code> and the <code>generated/</code> directories to your working directory for the tutorials.</p>
+<p>All tutorials require you to <a href="https://dist.torproject.org/descriptor/?C=M;O=D" target="_blank">download</a> the latest release of metrics-lib, follow the instructions to <a href="https://gitweb.torproject.org/metrics-lib.git/tree/README.md" target="_blank">verify</a> its signature, extract the tarball locally, and copy the <code>lib/</code> and the <code>generated/</code> directories to your working directory for the tutorials.</p>
 
 <h2 id="tutorial1">Tutorial 1: Download descriptors from CollecTor <a href="#tutorial1" class="anchor">#</a></h2>
 
-<p>Let's start this tutorial series by doing something really simple.  We'll use metrics-lib to download <a href="https://collector.torproject.org/recent/relay-descriptors/consensuses/">recent consensuses from CollecTor</a> and write them to a local directory.  We're not doing anything with those consensuses yet, though we'll get back to that in a bit.</p>
+<p>Let's start this tutorial series by doing something really simple.  We'll use metrics-lib to download <a href="https://collector.torproject.org/recent/relay-descriptors/consensuses/" target="_blank">recent consensuses from CollecTor</a> and write them to a local directory.  We're not doing anything with those consensuses yet, though we'll get back to that in a bit.</p>
 
 <p>We'll need to tell metrics-lib five pieces of information for this:</p>
 
@@ -296,9 +296,9 @@ java -cp .:lib/\*:generated/dist/signed/\* PluggableTransports
 
 <p>Want to write more code that uses metrics-lib?  Be sure to read the <a href="metrics-lib/">JavaDocs</a> while developing new services or applications using Tor network data.</p>
 
-<p>Ran into a problem, found a bug, or came up with a cool new feature?  Feel free to <a href="https://metrics.torproject.org/about.html#contact">contact us</a>.  Alternatively, take a look at the <a href="https://trac.torproject.org/projects/tor">bug tracker</a> and open a ticket if there's none for your issue yet.</p>
+<p>Ran into a problem, found a bug, or came up with a cool new feature?  Feel free to <a href="about.html#contact">contact us</a>.  Alternatively, take a look at the <a href="https://trac.torproject.org/projects/tor" target="_blank">bug tracker</a> and open a ticket if there's none for your issue yet.</p>
 
-<p>Interested in writing <a href="https://gitweb.torproject.org/metrics-lib.git/">code</a> for metrics-lib?  Please take a look at the Tor Metrics team <a href="https://trac.torproject.org/projects/tor/wiki/org/teams/MetricsTeam/Volunteers">wiki page</a> to find out how to contribute.</p>
+<p>Interested in writing <a href="https://gitweb.torproject.org/metrics-lib.git/" target="_blank">code</a> for metrics-lib?  Please take a look at the Tor Metrics team <a href="https://trac.torproject.org/projects/tor/wiki/org/teams/MetricsTeam/Volunteers" target="_blank">wiki page</a> to find out how to contribute.</p>
 
 <p>Scrolled down just to see where we're hiding the solutions of the three little riddles above?  Here are the diffs:</p>
 

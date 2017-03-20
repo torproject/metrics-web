@@ -682,7 +682,7 @@ Omitted if zero.
 <a id="summary"></a><br>
 <h2>Summary documents <a href="#summary" class="anchor">#</a>
 <span class="request-response">
-<a href="https://onionoo.torproject.org/summary?limit=4">example request</a>
+<a href="https://onionoo.torproject.org/summary?limit=4" target="_blank">example request</a>
 </span>
 </h2>
 
@@ -787,7 +787,7 @@ running in the last bridge network status.
 <a id="details"></a><br>
 <h2>Details documents <a href="#details" class="anchor">#</a>
 <span class="request-response">
-<a href="https://onionoo.torproject.org/details?limit=4">example request</a>
+<a href="https://onionoo.torproject.org/details?limit=4" target="_blank">example request</a>
 </span>
 </h2>
 
@@ -1549,7 +1549,7 @@ graphs.
 <a id="bandwidth"></a><br>
 <h2>Bandwidth documents <a href="#bandwidth" class="anchor">#</a>
 <span class="request-response">
-<a href="https://onionoo.torproject.org/bandwidth?limit=4">example request</a>
+<a href="https://onionoo.torproject.org/bandwidth?limit=4" target="_blank">example request</a>
 </span>
 </h2>
 
@@ -1668,7 +1668,7 @@ The specification of graph history objects is similar to those in the
 <a id="weights"></a><br>
 <h2>Weights documents <a href="#weights" class="anchor">#</a>
 <span class="request-response">
-<a href="https://onionoo.torproject.org/weights?limit=4">example request</a>
+<a href="https://onionoo.torproject.org/weights?limit=4" target="_blank">example request</a>
 </span>
 </h2>
 
@@ -1788,7 +1788,7 @@ The specification of this history object is similar to that in the
 <a id="clients"></a><br>
 <h2>Clients documents <a href="#clients" class="anchor">#</a>
 <span class="request-response">
-<a href="https://onionoo.torproject.org/clients?limit=4">example request</a>
+<a href="https://onionoo.torproject.org/clients?limit=4" target="_blank">example request</a>
 </span>
 </h2>
 
@@ -1909,7 +1909,7 @@ It might be removed in the future without notice.</span>
 <a id="uptime"></a><br>
 <h2>Uptime documents <a href="#uptime" class="anchor">#</a>
 <span class="request-response">
-<a href="https://onionoo.torproject.org/uptime?limit=4">example request</a>
+<a href="https://onionoo.torproject.org/uptime?limit=4" target="_blank">example request</a>
 </span>
 </h2>
 
@@ -2025,7 +2025,7 @@ information.
 
 <p>
 <code>/summary?limit=4</code>
-(<a href="https://onionoo.torproject.org/summary?limit=4">view result</a>)
+(<a href="https://onionoo.torproject.org/summary?limit=4" target="_blank">view result</a>)
 </p>
 
 <p>
@@ -2037,7 +2037,7 @@ new queries to avoid downloading huge responses.
 
 <p>
 <code>/summary?limit=4&search=moria</code>
-(<a href="https://onionoo.torproject.org/summary?limit=4&search=moria">view result</a>)
+(<a href="https://onionoo.torproject.org/summary?limit=4&search=moria" target="_blank">view result</a>)
 </p>
 
 <p>
@@ -2047,7 +2047,7 @@ string "moria" in one of a few searched fields.
 
 <p>
 <code>/details?limit=4&search=moria</code>
-(<a href="https://onionoo.torproject.org/details?limit=4&search=moria">view result</a>)
+(<a href="https://onionoo.torproject.org/details?limit=4&search=moria" target="_blank">view result</a>)
 </p>
 
 <p>
@@ -2057,7 +2057,7 @@ details documents containing, well, more details.
 
 <p>
 <code>/details?limit=4&search=moria&fields=nickname</code>
-(<a href="https://onionoo.torproject.org/details?limit=4&search=moria&fields=nickname">view result</a>)
+(<a href="https://onionoo.torproject.org/details?limit=4&search=moria&fields=nickname" target="_blank">view result</a>)
 </p>
 
 <p>
@@ -2068,7 +2068,7 @@ This parameter is only implemented for details documents.
 
 <p>
 <code>/details?limit=4&search=moria&fields=nickname&order=-consensus_weight</code>
-(<a href="https://onionoo.torproject.org/details?limit=4&search=moria&fields=nickname&order=-consensus_weight">view result</a>)
+(<a href="https://onionoo.torproject.org/details?limit=4&search=moria&fields=nickname&order=-consensus_weight" target="_blank">view result</a>)
 </p>
 
 <p>

@@ -39,7 +39,7 @@
       authority:</a></b> a
       special-purpose <a href="#relay">relay</a> that maintains a list of
       bridges as input for external bridge distribution mechanisms (for example,
-      <a href="https://bridges.torproject.org/">BridgeDB</a>).</p>
+      <a href="https://bridges.torproject.org/" target="_blank">BridgeDB</a>).</p>
       
       <p id="circuit"><b><a href="#circuit">circuit:</a></b> a path through the
       Tor network
@@ -103,7 +103,7 @@
       example, "Fast", "Stable"), or roles (for example, "Authority", "HSDir"),
       as assigned by the <a href="#directory-authority">directory
       authorities</a> and further defined in the
-      <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">directory
+      <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt" target="_blank">directory
       protocol specification</a>.</p>
 
     </div>

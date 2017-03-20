@@ -32,8 +32,8 @@
               network, or if you're developing an application that uses
               Tor network data, this is your place to start.
               </p>
-<a class="btn btn-primary btn-lg" style="margin: 10px" href="https://collector.torproject.org/recent/"><i class="fa fa-chevron-right" aria-hidden="true"></i> Browse Recent Descriptors</a>
-<a class="btn btn-primary btn-lg" style="margin: 10px" href="https://collector.torproject.org/archive/"><i class="fa fa-chevron-right" aria-hidden="true"></i> Browse Archived Descriptors</a>
+<a class="btn btn-primary btn-lg" style="margin: 10px" href="https://collector.torproject.org/recent/" target="_blank"><i class="fa fa-chevron-right" aria-hidden="true"></i> Browse Recent Descriptors</a>
+<a class="btn btn-primary btn-lg" style="margin: 10px" href="https://collector.torproject.org/archive/" target="_blank"><i class="fa fa-chevron-right" aria-hidden="true"></i> Browse Archived Descriptors</a>
               </div><!-- text-center -->
 
 
@@ -65,53 +65,53 @@
 <tr>
   <td><a href="#type-server-descriptor">Relay Server Descriptors</a></td>
   <td><code>@type server-descriptor 1.0</code></td>
-  <td><a href="https://collector.torproject.org/recent/relay-descriptors/server-descriptors/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/relay-descriptors/server-descriptors/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/relay-descriptors/server-descriptors/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/relay-descriptors/server-descriptors/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-extra-info">Relay Extra-info Descriptors</a></td>
   <td><code>@type extra-info 1.0</code></td>
-  <td><a href="https://collector.torproject.org/recent/relay-descriptors/extra-infos/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/relay-descriptors/extra-infos/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/relay-descriptors/extra-infos/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/relay-descriptors/extra-infos/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-network-status-consensus-3">Network Status Consensuses</a></td>
   <td><code>@type network-status-consensus-3 1.0</code></td>
-  <td><a href="https://collector.torproject.org/recent/relay-descriptors/consensuses/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/relay-descriptors/consensuses/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-network-status-vote-3">Network Status Votes</a></td>
   <td><code>@type network-status-vote-3 1.0</code></td>
-  <td><a href="https://collector.torproject.org/recent/relay-descriptors/votes/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/relay-descriptors/votes/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/relay-descriptors/votes/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/relay-descriptors/votes/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-dir-key-certificate-3">Directory Key Certificates</a></td>
   <td><code>@type dir-key-certificate-3 1.0</code></td>
-  <td><a href="https://collector.torproject.org/archive/relay-descriptors/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/archive/relay-descriptors/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-network-status-microdesc-consensus-3">Microdescriptor Consensuses</a></td>
   <td><code>@type network-status-microdesc-consensus-3 1.0</code></td>
-  <td><a href="https://collector.torproject.org/recent/relay-descriptors/microdescs/consensus-microdesc/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/relay-descriptors/microdescs/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/relay-descriptors/microdescs/consensus-microdesc/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/relay-descriptors/microdescs/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-microdescriptor">Microdescriptors</a></td>
   <td><code>@type microdescriptor 1.0</code></td>
-  <td><a href="https://collector.torproject.org/recent/relay-descriptors/microdescs/micro/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/relay-descriptors/microdescs/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/relay-descriptors/microdescs/micro/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/relay-descriptors/microdescs/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-network-status-2">Version 2 Network Statuses</a></td>
   <td><code>@type network-status-2 1.0</code></td>
-  <td><a href="https://collector.torproject.org/archive/relay-descriptors/statuses/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/archive/relay-descriptors/statuses/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-directory">Version 1 Directories</a></td>
   <td><code>@type directory 1.0</code></td>
-  <td><a href="https://collector.torproject.org/archive/relay-descriptors/tor/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/archive/relay-descriptors/tor/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
   <td colspan="3"><b><a href="#bridge-descriptors">Tor Bridge Descriptors</a></b></td>
@@ -119,20 +119,20 @@
 <tr>
   <td><a href="#type-bridge-network-status">Bridge Network Statuses</a></td>
   <td><code>@type bridge-network-status 1.1</code></td>
-  <td><a href="https://collector.torproject.org/recent/bridge-descriptors/statuses/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/bridge-descriptors/statuses/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/bridge-descriptors/statuses/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/bridge-descriptors/statuses/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-bridge-server-descriptor">Bridge Server Descriptors</a></td>
   <td><code>@type bridge-server-descriptor 1.2</code></td>
-  <td><a href="https://collector.torproject.org/recent/bridge-descriptors/server-descriptors/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/bridge-descriptors/server-descriptors/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/bridge-descriptors/server-descriptors/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/bridge-descriptors/server-descriptors/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-bridge-extra-info">Bridge Extra-info Descriptors</a></td>
   <td><code>@type bridge-extra-info 1.3</code></td>
-  <td><a href="https://collector.torproject.org/recent/bridge-descriptors/extra-infos/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/bridge-descriptors/extra-infos/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/bridge-descriptors/extra-infos/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/bridge-descriptors/extra-infos/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
   <td colspan="3"><b><a href="#tor-hidden-service-descriptors">Tor Hidden Service Descriptors</a></b></td>
@@ -148,7 +148,7 @@
 <tr>
   <td><a href="#type-bridge-pool-assignment">Bridge Pool Assignments</a></td>
   <td><code>@type bridge-pool-assignment 1.0</code></td>
-  <td><a href="https://collector.torproject.org/archive/bridge-pool-assignments/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/archive/bridge-pool-assignments/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
   <td colspan="3"><b><a href="#exit-lists">TorDNSEL's Exit Lists</a></b></td>
@@ -156,8 +156,8 @@
 <tr>
   <td><a href="#type-tordnsel">Exit Lists</a></td>
   <td><code>@type tordnsel 1.0</code></td>
-  <td><a href="https://collector.torproject.org/recent/exit-lists/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/exit-lists/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/exit-lists/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/exit-lists/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
   <td colspan="3"><b><a href="#torperf">Torperf's Performance Data</a></b></td>
@@ -165,8 +165,8 @@
 <tr>
   <td><a href="#type-torperf">Torperf Measurement Results</a></td>
   <td><code>@type torperf 1.0</code></td>
-  <td><a href="https://collector.torproject.org/recent/torperf/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-      <a href="https://collector.torproject.org/archive/torperf/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="https://collector.torproject.org/recent/torperf/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="https://collector.torproject.org/archive/torperf/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 </tbody>
 </table>
@@ -204,17 +204,17 @@ number.
 Relays and directory authorities publish relay descriptors, so that
 clients can select relays for their paths through the Tor network.
 All these relay descriptors are specified in the
-<a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">Tor
+<a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt" target="_blank">Tor
 directory protocol, version 3</a> specification document (or in the
 earlier protocol
-<a href="https://gitweb.torproject.org/torspec.git/tree/attic/dir-spec-v2.txt">version 2</a> or
-<a href="https://gitweb.torproject.org/torspec.git/tree/attic/dir-spec-v1.txt">version 1</a>).
+<a href="https://gitweb.torproject.org/torspec.git/tree/attic/dir-spec-v2.txt" target="_blank">version 2</a> or
+<a href="https://gitweb.torproject.org/torspec.git/tree/attic/dir-spec-v1.txt" target="_blank">version 1</a>).
 </p>
 
 <h3 id="type-server-descriptor" class="hover">Relay Server Descriptors
 <small><code>@type server-descriptor 1.0</code></small>
-<a href="https://collector.torproject.org/recent/relay-descriptors/server-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/relay-descriptors/server-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/relay-descriptors/server-descriptors/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/relay-descriptors/server-descriptors/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-server-descriptor" class="anchor">#</a>
 </h3>
 
@@ -231,8 +231,8 @@ file.
 
 <h3 id="type-extra-info" class="hover">Relay Extra-info Descriptors
 <small><code>@type extra-info 1.0</code></small>
-<a href="https://collector.torproject.org/recent/relay-descriptors/extra-infos/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/relay-descriptors/extra-infos/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/relay-descriptors/extra-infos/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/relay-descriptors/extra-infos/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-extra-info" class="anchor">#</a>
 </h3>
 
@@ -249,8 +249,8 @@ file.
 
 <h3 id="type-network-status-consensus-3" class="hover">Network Status Consensuses
 <small><code>@type network-status-consensus-3 1.0</code></small>
-<a href="https://collector.torproject.org/recent/relay-descriptors/consensuses/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/relay-descriptors/consensuses/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/relay-descriptors/consensuses/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-network-status-consensus-3" class="anchor">#</a>
 </h3>
 
@@ -265,8 +265,8 @@ flags, heuristics used for relay selection, etc.
 
 <h3 id="type-network-status-vote-3" class="hover">Network Status Votes
 <small><code>@type network-status-vote-3 1.0</code></small>
-<a href="https://collector.torproject.org/recent/relay-descriptors/votes/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/relay-descriptors/votes/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/relay-descriptors/votes/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/relay-descriptors/votes/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-network-status-vote-3" class="anchor">#</a>
 </h3>
 
@@ -278,7 +278,7 @@ Vote documents are by far the largest documents provided here.
 
 <h3 id="type-dir-key-certificate-3" class="hover">Directory Key Certificates
 <small><code>@type dir-key-certificate-3 1.0</code></small>
-<a href="https://collector.torproject.org/archive/relay-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/archive/relay-descriptors/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-dir-key-certificate-3" class="anchor">#</a>
 </h3>
 
@@ -291,8 +291,8 @@ available in a single descriptor archive tarball.
 
 <h3 id="type-network-status-microdesc-consensus-3" class="hover">Microdescriptor Consensuses
 <small><code>@type network-status-microdesc-consensus-3 1.0</code></small>
-<a href="https://collector.torproject.org/recent/relay-descriptors/microdescs/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/relay-descriptors/microdescs/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/relay-descriptors/microdescs/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/relay-descriptors/microdescs/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-network-status-microdesc-consensus-3" class="anchor">#</a>
 </h3>
 
@@ -309,8 +309,8 @@ together.
 
 <h3 id="type-microdescriptor" class="hover">Microdescriptors
 <small><code>@type microdescriptor 1.0</code></small>
-<a href="https://collector.torproject.org/recent/relay-descriptors/microdescs/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/relay-descriptors/microdescs/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/relay-descriptors/microdescs/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/relay-descriptors/microdescs/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-microdescriptor" class="anchor">#</a>
 </h3>
 
@@ -328,7 +328,7 @@ file.
 
 <h3 id="type-network-status-2" class="hover">Version 2 Network Statuses
 <small><code>@type network-status-2 1.0</code></small>
-<a href="https://collector.torproject.org/archive/relay-descriptors/statuses/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/archive/relay-descriptors/statuses/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-network-status-2" class="anchor">#</a>
 </h3>
 
@@ -343,7 +343,7 @@ We stopped archiving version 2 network statuses in 2012.
 
 <h3 id="type-directory" class="hover">Version 1 Directories
 <small><code>@type directory 1.0</code></small>
-<a href="https://collector.torproject.org/archive/relay-descriptors/tor/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/archive/relay-descriptors/tor/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-directory" class="anchor">#</a>
 </h3>
 
@@ -451,8 +451,8 @@ descriptor including all signatures.</li>
 
 <h3 id="type-bridge-network-status" class="hover">Bridge Network Statuses
 <small><code>@type bridge-network-status 1.1</code></small>
-<a href="https://collector.torproject.org/recent/bridge-descriptors/statuses/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/bridge-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/bridge-descriptors/statuses/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/bridge-descriptors/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-bridge-network-status" class="anchor">#</a>
 </h3>
 
@@ -472,8 +472,8 @@ ports.</li>
 
 <h3 id="type-bridge-server-descriptor" class="hover">Bridge Server descriptors
 <small><code>@type bridge-server-descriptor 1.2</code></small>
-<a href="https://collector.torproject.org/recent/bridge-descriptors/server-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/bridge-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/bridge-descriptors/server-descriptors/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/bridge-descriptors/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-bridge-server-descriptor" class="anchor">#</a>
 </h3>
 
@@ -506,8 +506,8 @@ ports.</li>
 
 <h3 id="type-bridge-extra-info" class="hover">Bridge Extra-info Descriptors
 <small><code>@type bridge-extra-info 1.3</code></small>
-<a href="https://collector.torproject.org/recent/bridge-descriptors/extra-infos/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/bridge-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/bridge-descriptors/extra-infos/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/bridge-descriptors/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-bridge-extra-info" class="anchor">#</a>
 </h3>
 
@@ -589,7 +589,7 @@ statistical analysis.
 
 <h3 id="type-bridge-pool-assignment" class="hover">Bridge Pool Assignments
 <small><code>@type bridge-pool-assignment 1.0</code></small>
-<a href="https://collector.torproject.org/archive/bridge-pool-assignments/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/archive/bridge-pool-assignments/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-bridge-pool-assignment" class="anchor">#</a>
 </h3>
 
@@ -641,15 +641,15 @@ archived.
 
 <p>
 The exit list service
-<a href="https://www.torproject.org/tordnsel/dist/">TorDNSEL</a>
+<a href="https://www.torproject.org/tordnsel/dist/" target="_blank">TorDNSEL</a>
 publishes exit lists containing the IP addresses of relays that it found
 when exiting through them.
 </p>
 
 <h3 id="type-tordnsel" class="hover">Exit Lists
 <small><code>@type tordnsel 1.0</code></small>
-<a href="https://collector.torproject.org/recent/exit-lists/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/exit-lists/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/exit-lists/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/exit-lists/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-tordnsel" class="anchor">#</a>
 </h3>
 
@@ -692,8 +692,8 @@ over the Tor network and notes how long substeps take.
 
 <h3 id="type-torperf" class="hover">Torperf Measurement Results
 <small><code>@type torperf 1.0</code></small>
-<a href="https://collector.torproject.org/recent/torperf/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="https://collector.torproject.org/archive/torperf/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="https://collector.torproject.org/recent/torperf/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="https://collector.torproject.org/archive/torperf/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-torperf" class="anchor">#</a>
 </h3>
 
@@ -801,7 +801,7 @@ wget --recursive \                     # turn on recursive retrieving
 <h2 id="index-json" class="hover">Custom downloaders using provided <code>index.json</code>
 <a href="#index-json" class="anchor">#</a></h2>
 
-<p>Another automated way to download descriptors is to develop a tool that uses the provided <a href="https://collector.torproject.org/index/index.json"><code>index.json</code></a> file or one of its compressed versions <a href="https://collector.torproject.org/index/index.json.gz"><code>index.json.gz</code></a>, <a href="https://collector.torproject.org/index/index.json.bz2"><code>index.json.bz2</code></a>, or <a href="https://collector.torproject.org/index/index.json.xz"><code>index.json.xz</code></a>.
+<p>Another automated way to download descriptors is to develop a tool that uses the provided <a href="https://collector.torproject.org/index/index.json" target="_blank"><code>index.json</code></a> file or one of its compressed versions <a href="https://collector.torproject.org/index/index.json.gz" target="_blank"><code>index.json.gz</code></a>, <a href="https://collector.torproject.org/index/index.json.bz2" target="_blank"><code>index.json.bz2</code></a>, or <a href="https://collector.torproject.org/index/index.json.xz" target="_blank"><code>index.json.xz</code></a>.
 These files contain a machine-readable representation of all descriptor files available on this site.
 Index files use the following custom JSON data format that might still be extended at a later time:</p>
 <ul>
