@@ -852,3 +852,55 @@ body.noscript #navbar-toggle-checkbox:checked ~ .collapse {
 .style .token.string {
   color: #000; /* black */
 }
+
+
+/* Onionoo-specific Styles */
+
+.onionoo a .fa.fa-chevron-right {
+    font-size:70%;
+}
+.onionoo .required-true {
+}
+.onionoo .required-false {
+    color: #aaa;
+}
+.onionoo .properties {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding:0;
+}
+.onionoo .request-response {
+    float:right;
+    font-size:60%;
+}
+.onionoo .properties li {
+    padding: 15px;
+    overflow:hidden;
+    border-top:1px solid #ddd;
+}
+.onionoo .properties li:nth-child(odd) {
+    background: #f8f8f8;
+}
+.onionoo h4, .onionoo .h4 { font-size: 16px; }
+
+/* method table */
+@media only screen and (max-width: 767.99999px) {
+  .onionoo .responsive-table td:before {
+    width: 25% !important;
+  }
+  .onionoo .responsive-table td {
+    padding-left: 30% !important;
+  }
+}
+.onionoo th.method { width:10%; }
+.onionoo th.url { width:40%; }
+.onionoo th.description { width:50%; }
+.onionoo span.red {
+    color:#d9534f;
+}
+.onionoo span.blue {
+    color:#337ab7;
+}
