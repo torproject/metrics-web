@@ -801,7 +801,7 @@ wget --recursive \                     # turn on recursive retrieving
 <h2 id="index-json" class="hover">Custom downloaders using provided <code>index.json</code>
 <a href="#index-json" class="anchor">#</a></h2>
 
-<p>Another automated way to download descriptors is to develop a tool that uses the provided <a href="index/index.json"><code>index.json</code></a> file or one of its compressed versions <a href="index/index.json.gz"><code>index.json.gz</code></a>, <a href="index/index.json.bz2"><code>index.json.bz2</code></a>, or <a href="index/index.json.xz"><code>index.json.xz</code></a>.
+<p>Another automated way to download descriptors is to develop a tool that uses the provided <a href="https://collector.torproject.org/index/index.json"><code>index.json</code></a> file or one of its compressed versions <a href="https://collector.torproject.org/index/index.json.gz"><code>index.json.gz</code></a>, <a href="https://collector.torproject.org/index/index.json.bz2"><code>index.json.bz2</code></a>, or <a href="https://collector.torproject.org/index/index.json.xz"><code>index.json.xz</code></a>.
 These files contain a machine-readable representation of all descriptor files available on this site.
 Index files use the following custom JSON data format that might still be extended at a later time:</p>
 <ul>
