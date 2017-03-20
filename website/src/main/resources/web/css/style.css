@@ -120,6 +120,7 @@ body {
 
 /* primary button color */
 .btn-primary {
+    color: #fff !important;
     background-color: #8d56A8;
     border-color: #7d4698;
 }
