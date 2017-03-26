@@ -409,6 +409,16 @@
     ]
   },
   {
+    "start": "2017-03-22",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Orbot 15.4.0 beta-2 multi is released, containing the new meek-azure CDN configuration.",
+    "links": [
+      "<a href=\"https://lists.mayfirst.org/pipermail/guardian-dev/2017-March/005220.html\">mailing list post</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "place": "tm",
     "protocols": [
