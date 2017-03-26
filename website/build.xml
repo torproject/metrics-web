@@ -2,63 +2,72 @@
 
   <property name="libs" value="../shared/lib"/>
 
-  <!-- Compile all servlets. -->
-  <target name="compile">
-    <mkdir dir="classes"/>
-    <javac destdir="classes"
-           srcdir="src"
-           source="1.7"
-           target="1.7"
-           debug="true"
-           deprecation="true"
-           optimize="false"
-           failonerror="true"
-           includeantruntime="false">
-      <classpath>
-        <fileset dir="${libs}">
-          <include name="commons-codec-1.9.jar"/>
-          <include name="commons-lang-2.6.jar"/>
-          <include name="postgresql-jdbc3-9.2.jar"/>
-          <include name="servlet-api-3.0.jar"/>
-          <include name="gson-2.2.4.jar"/>
-          <include name="REngine.jar"/>
-          <include name="Rserve.jar"/>
-        </fileset>
-      </classpath>
-    </javac>
+  <include file="../shared/build-base.xml" as="basetask"/>
+  <target name="clean" depends="basetask.clean"/>
+  <target name="compile" depends="basetask.compile"/>
+
+  <patternset id="compile.libs" >
+    <include name="postgresql-jdbc3-9.2.jar"/>
+    <include name="REngine.jar"/>
+    <include name="Rserve.jar"/>
+  </patternset>
+
+  <patternset id="war.libs" >
+    <patternset refid="compile.libs" />
+    <include name="jstl1.1-1.1.2.jar"/>
+    <include name="standard-1.1.2.jar"/>
+    <include name="commons-codec-1.9.jar"/>
+    <include name="commons-lang-2.6.jar"/>
+    <include name="gson-2.2.4.jar"/>
+  </patternset>
+
+  <path id="classpath">
+    <pathelement path="${classes}"/>
+    <path refid="base.classpath" />
+    <fileset dir="${libs}">
+      <patternset refid="compile.libs" />
+      <include name="servlet-api-3.0.jar"/>
+    </fileset>
+  </path>
+
+  <target name="submoduleupdate" >
+    <exec executable="git" failonerror="false">
+      <arg value="submodule" />
+      <arg value="update" />
+      <arg value="--remote" />
+      <arg value="--merge" />
+    </exec>
   </target>
 
   <!-- Create a .war file for deployment. -->
   <target name="war"
-          depends="compile">
+          depends="submoduleupdate,compile">
+    <exec executable="src/main/resources/web-prepare.sh" >
+      <arg value="${basedir}/../submods" />
+    </exec>
     <war destfile="metrics.war"
-         webxml="etc/web.xml">
-      <fileset dir="web"/>
+         webxml="${resources}/etc/web.xml">
+      <fileset dir="${resources}/web"/>
       <lib dir="${libs}">
-          <include name="jstl1.1-1.1.2.jar"/>
-          <include name="REngine.jar"/>
-          <include name="Rserve.jar"/>
-          <include name="standard-1.1.2.jar"/>
-          <include name="commons-codec-1.9.jar"/>
-          <include name="commons-lang-2.6.jar"/>
-          <include name="postgresql-jdbc3-9.2.jar"/>
-          <include name="gson-2.2.4.jar"/>
+        <patternset refid="war.libs" />
       </lib>
-      <classes dir="classes"/>
-      <zipfileset dir="etc"
+      <classes dir="${classes}"/>
+      <zipfileset dir="${resources}/etc"
                   prefix="WEB-INF/classes"
                   includes="logging.properties"/>
-      <zipfileset dir="etc"
+      <zipfileset dir="${resources}/etc"
                   prefix="WEB-INF/classes"
                   includes="metrics.json"/>
-      <zipfileset dir="etc"
+      <zipfileset dir="${resources}/etc"
                   prefix="WEB-INF/classes"
                   includes="categories.json"/>
-      <zipfileset dir="etc"
+      <zipfileset dir="${resources}/etc"
                   prefix="WEB-INF/classes"
                   includes="news.json"/>
-      <metainf dir="etc"
+      <metainf dir="${resources}/etc"
                includes="context.xml"/>
+      <zipfileset dir="${basedir}/../submods/metrics-lib/generated/javadoc"
+                  prefix="metrics-lib" />
     </war>
   </target>
 </project>

@@ -1,6 +1,7 @@
 <project basedir=".">
 
   <property name="sources" value="src/main/java"/>
+  <property name="resources" value="src/main/resources"/>
   <property name="testsources" value="src/test/java"/>
   <property name="libs" value="../../shared/lib"/>
   <property name="generated" value="generated"/>
