@@ -419,6 +419,17 @@
     ]
   },
   {
+    "start": "2017-04-14",
+    "protocols": [
+      "<OR>"
+    ],
+    "description": "Directory authority maatuska's bwscanner stops operating, leading to a drop in traffic on some relays.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-consensus-health/2017-April/007845.html\">tor-consensus-health post</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-April/012215.html\">tor-dev thread</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "place": "tm",
     "protocols": [
