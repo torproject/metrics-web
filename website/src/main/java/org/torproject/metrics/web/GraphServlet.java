@@ -114,6 +114,9 @@ public class GraphServlet extends MetricServlet {
         { "op-hk", "" },
         { "op-nl", "" },
         { "op-us", "" }});
+    this.defaultParameters.put("server", new String[][] {
+        { "public", " checked" },
+        { "onion", "" }});
     this.defaultParameters.put("filesize", new String[][] {
         { "50kb", " checked", "50 KiB" },
         { "1mb", "", "1 MiB" },
@@ -184,6 +187,7 @@ public class GraphServlet extends MetricServlet {
             || parameter.equals("transport")
             || parameter.equals("version")
             || parameter.equals("source")
+            || parameter.equals("server")
             || parameter.equals("filesize")) {
           String[][] defaultParameters =
               this.defaultParameters.get(parameter);

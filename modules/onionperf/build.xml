@@ -1,0 +1,19 @@
+<project default="run" name="onionperf" basedir=".">
+
+  <property name="mainclass" value="org.torproject.metrics.onionperf.Main"/>
+
+  <include file="../../shared/build-base.xml" as="basetask"/>
+  <target name="clean" depends="basetask.clean"/>
+  <target name="compile" depends="basetask.compile"/>
+  <target name="run" depends="basetask.run"/>
+
+  <path id="classpath">
+    <pathelement path="${classes}"/>
+    <path refid="base.classpath" />
+    <fileset dir="${libs}">
+      <include name="postgresql-jdbc3-9.2.jar"/>
+    </fileset>
+  </path>
+
+</project>
+

@@ -559,18 +559,19 @@ plot_relayflags <- function(start, end, flags, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_torperf <- function(start, end, source, filesize, path) {
+plot_torperf <- function(start, end, source, server, filesize, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  size <- ifelse(filesize == '50kb', 50 * 1024,
+  filesizeVal <- ifelse(filesize == '50kb', 50 * 1024,
           ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
   t <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
-                "torperf.csv", sep = ""), stringsAsFactors = FALSE)
+                "onionperf.csv", sep = ""), stringsAsFactors = FALSE)
   known_sources <- c("all", unique(t[t$source != "", "source"]))
   colours <- data.frame(source = known_sources,
       colour = brewer.pal(length(known_sources), "Paired"),
       stringsAsFactors = FALSE)
-  t <- t[t$date >= start & t$date <= end & t$size == size &
-         t$source == ifelse(source == 'all', '', source), ]
+  t <- t[t$date >= start & t$date <= end & t$filesize == filesizeVal &
+         t$source == ifelse(source == 'all', '', source) &
+         t$server == server, ]
   torperf <- data.frame(date = as.Date(t$date, "%Y-%m-%d"),
                         q1 = t$q1, md = t$md, q3 = t$q3)
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
@@ -605,19 +606,20 @@ plot_torperf <- function(start, end, source, filesize, path) {
       labels = c("Median", "1st to 3rd quartile"),
       values = paste(colour, c("", "66"), sep = "")) +
     ggtitle(paste("Time in seconds to complete", filesizeStr,
-        "request")) +
+        "request to", server, "server")) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }
 
-plot_torperf_failures <- function(start, end, source, filesize, path) {
+plot_torperf_failures <- function(start, end, source, server, filesize, path) {
   end <- min(end, as.character(Sys.Date() - 2))
-  size <- ifelse(filesize == '50kb', 50 * 1024,
+  filesizeVal <- ifelse(filesize == '50kb', 50 * 1024,
           ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
   t <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
-                "torperf.csv", sep = ""), stringsAsFactors = FALSE)
-  t <- t[t$date >= start & t$date <= end & t$size == size &
-         t$source == ifelse(source == 'all', '', source), ]
+                "onionperf.csv", sep = ""), stringsAsFactors = FALSE)
+  t <- t[t$date >= start & t$date <= end & t$filesize == filesizeVal &
+         t$source == ifelse(source == 'all', '', source) &
+         t$server == server, ]
   torperf <- data.frame(date = as.Date(t$date, "%Y-%m-%d"),
                         timeouts = t$timeouts, failures = t$failures,
                         requests = t$requests)
@@ -656,7 +658,7 @@ plot_torperf_failures <- function(start, end, source, filesize, path) {
         h.start = 45, breaks = c("timeouts", "failures"),
         labels = c("Timeouts", "Failures")) +
     ggtitle(paste("Timeouts and failures of", filesizeStr,
-        "requests")) +
+        "requests to", server, "server")) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
 }

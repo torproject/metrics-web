@@ -131,6 +131,15 @@
       </c:forEach>
       </p>
     </c:if>
+    <c:if test="${fn:length(server) > 0}">
+      <p><b>Server (beta):</b>
+      <c:forEach var="row" items="${server}">
+        <label class="radio-label">
+          <input type="radio" name="server" value="${row[0]}"${row[1]}> ${row[0]}
+        </label>
+      </c:forEach>
+      </p>
+    </c:if>
     <c:if test="${fn:length(filesize) > 0}">
       <p><b>File size:</b>
       <c:forEach var="row" items="${filesize}">
