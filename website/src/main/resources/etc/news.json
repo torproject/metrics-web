@@ -430,6 +430,16 @@
     ]
   },
   {
+    "start": "2017-05-06",
+    "protocols": [
+      "snowflake"
+    ],
+    "description": "Set <code>AssumeReachable 1</code> on the Snowflake bridge <a href=\"https://atlas.torproject.org/#details/2B280B23E1107BB62ABFC40DDCC8824814F80A72\">2B280B23E1107BB62ABFC40DDCC8824814F80A72</a> in an attempt to make it start publishing statistics.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-May/012243.html\">mailing list post</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "place": "tm",
     "protocols": [
