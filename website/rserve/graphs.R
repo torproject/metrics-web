@@ -564,7 +564,7 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
   filesizeVal <- ifelse(filesize == '50kb', 50 * 1024,
           ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
   t <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
-                "onionperf.csv", sep = ""), stringsAsFactors = FALSE)
+                "torperf-1.1.csv", sep = ""), stringsAsFactors = FALSE)
   known_sources <- c("all", unique(t[t$source != "", "source"]))
   colours <- data.frame(source = known_sources,
       colour = brewer.pal(length(known_sources), "Paired"),
@@ -616,7 +616,7 @@ plot_torperf_failures <- function(start, end, source, server, filesize, path) {
   filesizeVal <- ifelse(filesize == '50kb', 50 * 1024,
           ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
   t <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
-                "onionperf.csv", sep = ""), stringsAsFactors = FALSE)
+                "torperf-1.1.csv", sep = ""), stringsAsFactors = FALSE)
   t <- t[t$date >= start & t$date <= end & t$filesize == filesizeVal &
          t$source == ifelse(source == 'all', '', source) &
          t$server == server, ]

@@ -46,7 +46,7 @@ public class Main {
     Connection connection = connectToDatabase(dbUrlString);
     importOnionPerfFiles(connection);
     SortedSet<String> statistics = queryOnionPerf(connection);
-    writeStatistics(Paths.get("stats", "onionperf.csv"), statistics);
+    writeStatistics(Paths.get("stats", "torperf-1.1.csv"), statistics);
     disconnectFromDatabase(connection);
     log.info("Terminated onionperf module.");
   }

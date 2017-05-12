@@ -306,7 +306,12 @@ there are users by either of the two numbers.</li>
 </div>
 
 <div class="container">
-<h2>Performance of downloading static files over Tor <a href="#torperf" name="torperf" class="anchor">#</a></h2>
+<h2>Performance of downloading static files over Tor (deprecated) <a href="#torperf" name="torperf" class="anchor">#</a></h2>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Deprecated</h3>
+<p>As of May 12, 2017, the linked data file has been replaced by <a href="#torperf-1.1">this data file</a>.  Starting on June 1, 2017, the linked data file will not be updated anymore.  This section and the linked data file will be removed in the future.</p>
+</div>
 
 <p>The following data file contains aggregate statistics on performance when
 downloading static files of different sizes over Tor.  These statistics are
@@ -355,12 +360,7 @@ over Tor.</li>
 </div>
 
 <div class="container">
-<h2>Performance of downloading static files over Tor <a href="#onionperf" name="onionperf" class="anchor">#</a></h2>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Beta</h3>
-<p>As of May 1, 2017, this data file is still under development.  If it becomes stable, it will replace <a href="#torperf">this data file</a>.  But until that is the case, it may change or disappear without prior notice.</p>
-</div>
+<h2>Performance of downloading static files over Tor <a href="#torperf-1.1" name="torperf-1.1" class="anchor">#</a></h2>
 
 <p>The following data file contains aggregate statistics on performance when
 downloading static files of different sizes over Tor.  These statistics are
@@ -372,7 +372,7 @@ as well as total numbers of requests, timeouts, and failures.  Raw Onionperf and
 Torperf measurement data is available on the <a
 href="https://collector.torproject.org/#torperf">CollecTor</a> website.</p>
 
-<p><b>Download as <a href="stats/onionperf.csv">CSV file</a>.</b></p>
+<p><b>Download as <a href="stats/torperf-1.1.csv">CSV file</a>.</b></p>
 
 <p>The statistics file contains the following columns:</p>
 <ul>

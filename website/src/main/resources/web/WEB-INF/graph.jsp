@@ -132,7 +132,7 @@
       </p>
     </c:if>
     <c:if test="${fn:length(server) > 0}">
-      <p><b>Server (beta):</b>
+      <p><b>Server:</b>
       <c:forEach var="row" items="${server}">
         <label class="radio-label">
           <input type="radio" name="server" value="${row[0]}"${row[1]}> ${row[0]}
