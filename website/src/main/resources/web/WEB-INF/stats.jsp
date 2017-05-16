@@ -512,10 +512,10 @@ fraction.</li>
 <ul>
 <li><b>"tbid":</b> Tor Browser initial downloads: GET requests to all sites with resource strings <code>'%/torbrowser/%.exe'</code>, <code>'%/torbrowser/%.dmg'</code>, and <code>'%/torbrowser/%.tar.xz'</code> and response code 200.</li>
 <li><b>"tbsd":</b> Tor Browser signature downloads: GET requests to all sites with resource strings <code>'%/torbrowser/%.exe.asc'</code>, <code>'%/torbrowser/%.dmg.asc'</code>, and <code>'%/torbrowser/%.tar.xz.asc'</code> and response code 200.</li>
-<li><b>"tbup":</b> Tor Browser update pings: GET requests to all sites with resource strings <code>'%/torbrowser/update_2/%'</code> and response code 200.</li>
+<li><b>"tbup":</b> Tor Browser update pings: GET requests to all sites with resource strings <code>'%/torbrowser/update\__/%'</code> and response code 200.</li>
 <li><b>"tbur":</b> Tor Browser update requests: GET requests to all sites with resource strings <code>'%/torbrowser/%.mar'</code> and response code 302.</li>
 <li><b>"tmid":</b> Tor Messenger initial downloads: GET requests to all sites with resource strings <code>'%/tormessenger/%.exe'</code>, <code>'%/tormessenger/%.dmg'</code>, and <code>'%/tormessenger/%.tar.xz'</code> and response code 200.</li>
-<li><b>"tmup":</b> Tor Messenger update pings: GET requests to all sites with resource strings <code>'%/tormessenger/update_2/%'</code> and response code 200.</li>
+<li><b>"tmup":</b> Tor Messenger update pings: GET requests to all sites with resource strings <code>'%/tormessenger/update\__/%'</code> and response code 200.</li>
 <li><b>"twhph":</b> Tor website home page hits: GET requests to sites <code>'torproject.org'</code> and <code>'www.torproject.org'</code> with resource strings <code>'/'</code> and <code>'/index%'</code> and response code 200.</li>
 <li><b>"twdph":</b> Tor website download page hits: GET requests to sites <code>'torproject.org'</code> and <code>'www.torproject.org'</code> with resource strings <code>'/download/download%'</code> and <code>'/projects/torbrowser.html%'</code> and response code 200.</li>
 </ul>

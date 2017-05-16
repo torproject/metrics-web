@@ -66,7 +66,7 @@ CREATE OR REPLACE VIEW webstats AS
     NULL::BOOLEAN AS incremental,
     SUM(count) AS count
   FROM files NATURAL JOIN requests NATURAL JOIN resources
-  WHERE resource_string LIKE '%/torbrowser/update_2/%'
+  WHERE resource_string LIKE '%/torbrowser/update\__/%'
   AND resource_string NOT LIKE '%.xml'
   AND response_code = 200
   AND method = 'GET'
@@ -122,7 +122,7 @@ CREATE OR REPLACE VIEW webstats AS
     NULL::BOOLEAN AS incremental,
     SUM(count) AS count
   FROM files NATURAL JOIN requests NATURAL JOIN resources
-  WHERE resource_string LIKE '%/tormessenger/update_2/%'
+  WHERE resource_string LIKE '%/tormessenger/update\__/%'
   AND resource_string NOT LIKE '%.xml'
   AND resource_string NOT LIKE '%/'
   AND resource_string NOT LIKE '%/?'
