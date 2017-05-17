@@ -46,7 +46,7 @@ public class Main {
           continue;
         }
         ServerDescriptor serverDescriptor = (ServerDescriptor) descriptor;
-        String digest = serverDescriptor.getServerDescriptorDigest();
+        String digest = serverDescriptor.getDigestSha1Hex();
         long advertisedBandwidth = Math.min(Math.min(
             serverDescriptor.getBandwidthRate(),
             serverDescriptor.getBandwidthBurst()),

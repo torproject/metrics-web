@@ -892,13 +892,13 @@ public final class RelayDescriptorDatabaseImporter {
 
   private void addServerDescriptor(ServerDescriptor descriptor) {
     this.addServerDescriptorContents(
-        descriptor.getServerDescriptorDigest(), descriptor.getNickname(),
+        descriptor.getDigestSha1Hex(), descriptor.getNickname(),
         descriptor.getAddress(), descriptor.getOrPort(),
         descriptor.getDirPort(), descriptor.getFingerprint(),
         descriptor.getBandwidthRate(), descriptor.getBandwidthBurst(),
         descriptor.getBandwidthObserved(), descriptor.getPlatform(),
         descriptor.getPublishedMillis(), descriptor.getUptime(),
-        descriptor.getExtraInfoDigest());
+        descriptor.getExtraInfoDigestSha1Hex());
   }
 
   private void addExtraInfoDescriptor(ExtraInfoDescriptor descriptor) {
@@ -917,7 +917,7 @@ public final class RelayDescriptorDatabaseImporter {
       bandwidthHistoryLines.add(
           descriptor.getDirreqReadHistory().getLine());
     }
-    this.addExtraInfoDescriptorContents(descriptor.getExtraInfoDigest(),
+    this.addExtraInfoDescriptorContents(descriptor.getDigestSha1Hex(),
         descriptor.getNickname(),
         descriptor.getFingerprint().toLowerCase(),
         descriptor.getPublishedMillis(), bandwidthHistoryLines);
