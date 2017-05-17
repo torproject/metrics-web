@@ -166,16 +166,16 @@ public class Main {
         } else {
           psMeasurementsInsert.setInt(31, tr.getUsedBy());
         }
-        String[] unrecognizedKeys = new String[] { "ENDPOINTLOCAL",
-            "ENDPOINTPROXY", "ENDPOINTREMOTE", "HOSTNAMELOCAL",
-            "HOSTNAMEREMOTE", "SOURCEADDRESS" };
-        for (int i = 32, j = 0; j < unrecognizedKeys.length; i++, j++) {
-          if (null == tr.getUnrecognizedKeys()
-              || !tr.getUnrecognizedKeys().containsKey(unrecognizedKeys[j])) {
+        String[] onionPerfStrings = new String[] {
+            tr.getEndpointLocal(), tr.getEndpointProxy(),
+            tr.getEndpointRemote(), tr.getHostnameLocal(),
+            tr.getHostnameRemote(), tr.getSourceAddress() };
+        for (int i = 32, j = 0; j < onionPerfStrings.length; i++, j++) {
+          if (null == onionPerfStrings[j]) {
             psMeasurementsInsert.setNull(i, Types.VARCHAR);
           } else {
-            psMeasurementsInsert.setString(i, truncateString(
-                tr.getUnrecognizedKeys().get(unrecognizedKeys[j]), 64));
+            psMeasurementsInsert.setString(i,
+                truncateString(onionPerfStrings[j], 64));
           }
         }
         psMeasurementsInsert.execute();
