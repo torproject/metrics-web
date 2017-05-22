@@ -415,7 +415,8 @@
     ],
     "description": "Orbot 15.4.0 beta-2 multi is released, containing the new meek-azure CDN configuration.",
     "links": [
-      "<a href=\"https://lists.mayfirst.org/pipermail/guardian-dev/2017-March/005220.html\">mailing list post</a>"
+      "<a href=\"https://lists.mayfirst.org/pipermail/guardian-dev/2017-March/005220.html\">mailing list post</a>",
+      "<a href=\"https://github.com/n8fr8/orbot/commit/6496cb11d61e0e42c48569c9eae303e0cd625e85\">commit</a>"
     ]
   },
   {
@@ -437,6 +438,17 @@
     "description": "Set <code>AssumeReachable 1</code> on the Snowflake bridge <a href=\"https://atlas.torproject.org/#details/2B280B23E1107BB62ABFC40DDCC8824814F80A72\">2B280B23E1107BB62ABFC40DDCC8824814F80A72</a> in an attempt to make it start publishing statistics.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-May/012243.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-05-16",
+    "place": "ua",
+    "description": "Ukraine blocks Russian-operated web services. Relay and bridge users increase over 5 &times;.",
+    "links": [
+      "<a href=\"https://www.rt.com/business/388502-ukraine-bans-vk-yandex/\">news article</a>",
+      "<a href=\"https://www.reddit.com/r/TOR/comments/6c9ig1\">reddit post</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-01&end=2017-05-21&country=ua&events=on\">relay graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-05-01&end=2017-05-21&country=ua\">bridge graph</a>"
     ]
   },
   {
