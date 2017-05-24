@@ -443,7 +443,7 @@
   {
     "start": "2017-05-16",
     "place": "ua",
-    "description": "Ukraine blocks Russian-operated web services. Relay and bridge users increase over 5 &times;.",
+    "description": "Ukraine blocks Russian-operated web services. Relay and bridge users increase over 5&times;.",
     "links": [
       "<a href=\"https://www.rt.com/business/388502-ukraine-bans-vk-yandex/\">news article</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/6c9ig1\">reddit post</a>",
@@ -457,7 +457,7 @@
     "protocols": [
       "<OR>"
     ],
-    "description": "Large drop in direct users in Turkmenistan",
+    "description": "Large drop in direct users in Turkmenistan.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2015-11-01&end=2016-04-01&country=tm&events=off\">graph</a>"
     ],
@@ -465,13 +465,14 @@
   },
   {
     "start": "2016-07-21",
+    "end": "2017-03-03",
     "place": "br",
     "protocols": [
       "meek"
     ],
-    "description": "Sustained increase in meek users in Brazil. Locals believe that they are not actual users, rather bots or something like that.",
+    "description": "Sustained increase in meek users in Brazil. Locals believe that they are not actual users, rather bots or something like that. End date coincides with shutdown of meek-azure before migration.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2016-01-01&end=2017-02-22&country=br\">graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2016-06-01&end=2017-04-01&country=br\">graph</a>"
     ],
     "unknown": true
   },
@@ -481,7 +482,7 @@
     "protocols": [
       "<OR>"
     ],
-    "description": "Large decrease in users in China",
+    "description": "Large decrease in users in China.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-07-30&end=2016-10-28&country=cn&events=off\">relay</a>",
       "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-07-30&end=2016-10-28&country=cn\">bridge</a>"
@@ -493,7 +494,8 @@
     "end": "2016-10-25",
     "place": "il",
     "protocols": [
-      "<OR>"
+      "<OR>",
+      "relay"
     ],
     "description": "Direct users fluctuate wildly in Israel. Bridge users not affected.",
     "links": [
@@ -534,7 +536,7 @@
       "<OR>",
       "relay"
     ],
-    "description": "Huge increase in relay users (200k+)",
+    "description": "Huge increase in relay users (200k+).",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-11-23&end=2017-02-21&country=ae&events=off\">graph</a>",
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-January/000284.html\">metrics-team thread</a>",
@@ -553,6 +555,77 @@
       "<a href=\"https://metrics.torproject.org/userstats-bridge-transport.html?start=2017-01-01&end=2017-03-10&transport=obfs3&transport=obfs4&transport=meek&transport=%3COR%3E\">transport graph</a>",
       "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-11-23&end=2017-03-10&country=ae\">UAE bridge graph</a>",
       "<a href=\"https://bugs.torproject.org/21345\">ticket</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-04-05",
+    "end": "2017-04-13",
+    "place": "il",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Sudden increase of direct users in Israel. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-02-22&end=2017-05-23&country=il&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-04-17",
+    "end": "2017-04-23",
+    "place": "il",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Another sudden increase of direct users in Israel. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-02-22&end=2017-05-23&country=il&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-04-23",
+    "place": "tw",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Direct users fluctuate widely in Taiwan after a 3&times; sudden increase.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2017-May/043206.html\">tor-talk post</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-02-22&end=2017-05-24&country=tw&events=on\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-05-09",
+    "end": "2017-05-12",
+    "place": "mo",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Sudden temporary peak of 3k direct users in Macau.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2017-May/043206.html\">tor-talk post</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-02-22&end=2017-05-12&country=mo&events=on\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-05-10",
+    "place": "eg",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Drop in direct users from Egypt.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2017-May/043206.html\">tor-talk post</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?graph=userstats-relay-country&country=eg&events=on\">graph</a>"
     ],
     "unknown": true
   }
