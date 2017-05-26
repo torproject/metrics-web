@@ -443,12 +443,24 @@
   {
     "start": "2017-05-16",
     "place": "ua",
-    "description": "Ukraine blocks Russian-operated web services. Relay and bridge users increase over 5&times;.",
+    "description": "Ukraine blocks Russian-operated web services. Relay and bridge users increase over 5&times;. May be partly attributable to the <a href=\"https://freeu.online/\">FreeU Browser</a>, a browser produced and advertised by Mail.ru that includes a tor client.",
     "links": [
+      "<a href=\"https://bugs.torproject.org/22369\">ticket</a>",
       "<a href=\"https://www.rt.com/business/388502-ukraine-bans-vk-yandex/\">news article</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/6c9ig1\">reddit post</a>",
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-01&end=2017-05-21&country=ua&events=on\">relay graph</a>",
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-05-01&end=2017-05-21&country=ua\">bridge graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-05-01&end=2017-05-21&country=ua\">bridge graph</a>",
+      "<a href=\"https://tjournal.ru/44669-vkontakte-predlozhila-ukraincam-peredelannii-brauzer-amigo-s-tor-dlya-obhoda-blokirovok\">news article on FreeU</a>"
+    ]
+  },
+  {
+    "start": "2017-05-25",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Set <code>AssumeReachable 1</code> on the default obfs4 bridges <a href=\"https://atlas.torproject.org/#details/C8CBDB2464FC9804A69531437BCF2BE31FDD2EE4\">cymrubridge31</a> and <a href=\"https://atlas.torproject.org/#details/0BAC39417268B96B9F514E7F63FA6FBA1A788955\">cymrubridge33</a> in an attempt to make them publish statistics.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-May/012283.html\">mailing list post</a>"
     ]
   },
   {
