@@ -107,7 +107,8 @@
     "start": "2016-06-01",
     "place": "kz",
     "protocols": [
-      "<OR>"
+      "<OR>",
+      "obfs4"
     ],
     "description": "Kazakhstan blocks vanilla Tor TLS. Users mostly switch to obfs4.",
     "links": [
