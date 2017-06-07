@@ -8,7 +8,7 @@
   <property name="classes" value="${generated}/classes/"/>
   <property name="testclasses" value="${generated}/test-classes/"/>
   <property name="source-and-target-java-version" value="1.7" />
-  <property name="descriptorversion" value="1.7.0" />
+  <property name="descriptorversion" value="1.8.0" />
 
   <path id="base.classpath">
     <pathelement path="${classes}"/>
