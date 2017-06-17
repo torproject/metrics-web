@@ -4,7 +4,6 @@
 package org.torproject.ernie.cron;
 
 import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
 import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.ExtraInfoDescriptor;
@@ -836,33 +835,22 @@ public final class RelayDescriptorDatabaseImporter {
     if (!this.archivesDirectories.isEmpty()) {
       DescriptorReader reader =
           DescriptorSourceFactory.createDescriptorReader();
-      reader.setMaxDescriptorFilesInQueue(10);
-      for (String archivesPath : this.archivesDirectories) {
-        File archivesDirectory = new File(archivesPath);
-        if (archivesDirectory.exists()) {
-          reader.addDirectory(archivesDirectory);
-        }
-      }
+      reader.setMaxDescriptorsInQueue(10);
       File historyFile = new File(statsDirectory,
           "database-importer-relay-descriptor-history");
       if (keepImportHistory) {
         reader.setHistoryFile(historyFile);
       }
-      Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
-      while (descriptorFiles.hasNext()) {
-        DescriptorFile descriptorFile = descriptorFiles.next();
-        if (descriptorFile.getDescriptors() != null) {
-          for (Descriptor descriptor : descriptorFile.getDescriptors()) {
-            if (descriptor instanceof RelayNetworkStatusConsensus) {
-              this.addRelayNetworkStatusConsensus(
-                  (RelayNetworkStatusConsensus) descriptor);
-            } else if (descriptor instanceof ServerDescriptor) {
-              this.addServerDescriptor((ServerDescriptor) descriptor);
-            } else if (descriptor instanceof ExtraInfoDescriptor) {
-              this.addExtraInfoDescriptor(
-                  (ExtraInfoDescriptor) descriptor);
-            }
-          }
+      for (Descriptor descriptor : reader.readDescriptors(
+          this.archivesDirectories.toArray(
+          new File[this.archivesDirectories.size()]))) {
+        if (descriptor instanceof RelayNetworkStatusConsensus) {
+          this.addRelayNetworkStatusConsensus(
+              (RelayNetworkStatusConsensus) descriptor);
+        } else if (descriptor instanceof ServerDescriptor) {
+          this.addServerDescriptor((ServerDescriptor) descriptor);
+        } else if (descriptor instanceof ExtraInfoDescriptor) {
+          this.addExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
         }
       }
       if (keepImportHistory) {

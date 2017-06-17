@@ -4,7 +4,6 @@
 package org.torproject.metrics.hidserv;
 
 import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
 import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.ExtraInfoDescriptor;
@@ -21,7 +20,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -42,6 +40,9 @@ public class Parser {
    * consensuses. */
   private DescriptorReader descriptorReader;
 
+  /** Input directories containing descriptors to parse. */
+  private File[] inDirectories;
+
   /** Document file containing previously parsed reported hidden-service
    * statistics. */
   private File reportedHidServStatsFile;
@@ -61,7 +62,7 @@ public class Parser {
 
   /** Initializes a new parser object using the given directories and
    * document stores. */
-  public Parser(Set<File> inDirectories, File statusDirectory,
+  public Parser(File[] inDirectories, File statusDirectory,
       DocumentStore<ReportedHidServStats> reportedHidServStatsStore,
       DocumentStore<ComputedNetworkFractions>
       computedNetworkFractionsStore) {
@@ -73,10 +74,8 @@ public class Parser {
      * rather small extra-info descriptors. */
     this.descriptorReader =
         DescriptorSourceFactory.createDescriptorReader();
-    for (File inDirectory : inDirectories) {
-      this.descriptorReader.addDirectory(inDirectory);
-    }
-    this.descriptorReader.setMaxDescriptorFilesInQueue(5);
+    this.inDirectories = inDirectories;
+    this.descriptorReader.setMaxDescriptorsInQueue(5);
 
     /* Create File instances for the files and directories in the provided
      * status directory. */
@@ -168,18 +167,14 @@ public class Parser {
    * handles the resulting parsed descriptors if they are either
    * extra-info descriptors or consensuses. */
   public boolean parseDescriptors() {
-    Iterator<DescriptorFile> descriptorFiles =
-        this.descriptorReader.readDescriptors();
-    while (descriptorFiles.hasNext()) {
-      DescriptorFile descriptorFile = descriptorFiles.next();
-      for (Descriptor descriptor : descriptorFile.getDescriptors()) {
-        if (descriptor instanceof ExtraInfoDescriptor) {
-          this.parseExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
-        } else if (descriptor instanceof RelayNetworkStatusConsensus) {
-          if (!this.parseRelayNetworkStatusConsensus(
-              (RelayNetworkStatusConsensus) descriptor)) {
-            return false;
-          }
+    for (Descriptor descriptor : descriptorReader.readDescriptors(
+        this.inDirectories)) {
+      if (descriptor instanceof ExtraInfoDescriptor) {
+        this.parseExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
+      } else if (descriptor instanceof RelayNetworkStatusConsensus) {
+        if (!this.parseRelayNetworkStatusConsensus(
+            (RelayNetworkStatusConsensus) descriptor)) {
+          return false;
         }
       }
     }

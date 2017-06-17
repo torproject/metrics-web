@@ -4,7 +4,6 @@
 package org.torproject.metrics.connbidirect;
 
 import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
 import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.ExtraInfoDescriptor;
@@ -21,7 +20,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -358,23 +356,16 @@ public class Main {
       SortedMap<String, Long> parseHistory) {
     DescriptorReader descriptorReader =
         DescriptorSourceFactory.createDescriptorReader();
-    for (File descriptorsDirectory : descriptorsDirectories) {
-      descriptorReader.addDirectory(descriptorsDirectory);
-    }
     descriptorReader.setExcludedFiles(parseHistory);
-    Iterator<DescriptorFile> descriptorFiles =
-        descriptorReader.readDescriptors();
-    while (descriptorFiles.hasNext()) {
-      DescriptorFile descriptorFile = descriptorFiles.next();
-      for (Descriptor descriptor : descriptorFile.getDescriptors()) {
-        if (!(descriptor instanceof ExtraInfoDescriptor)) {
-          continue;
-        }
-        RawStat rawStat = parseRawStatFromDescriptor(
-            (ExtraInfoDescriptor) descriptor);
-        if (rawStat != null) {
-          rawStats.add(rawStat);
-        }
+    for (Descriptor descriptor : descriptorReader.readDescriptors(
+        descriptorsDirectories)) {
+      if (!(descriptor instanceof ExtraInfoDescriptor)) {
+        continue;
+      }
+      RawStat rawStat = parseRawStatFromDescriptor(
+          (ExtraInfoDescriptor) descriptor);
+      if (rawStat != null) {
+        rawStats.add(rawStat);
       }
     }
     parseHistory.clear();

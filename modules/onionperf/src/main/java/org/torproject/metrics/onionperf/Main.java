@@ -1,7 +1,6 @@
 package org.torproject.metrics.onionperf;
 
 import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
 import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.TorperfResult;
@@ -79,118 +78,114 @@ public class Main {
         + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
         + "?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
-    DescriptorReader dr = DescriptorSourceFactory.createDescriptorReader();
-    dr.addDirectory(new File("../../shared/in/archive/torperf"));
-    dr.addDirectory(new File("../../shared/in/recent/torperf"));
-    Iterator<DescriptorFile> dfs = dr.readDescriptors();
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-    while (dfs.hasNext()) {
-      DescriptorFile df = dfs.next();
-      for (Descriptor d : df.getDescriptors()) {
-        if (!(d instanceof TorperfResult)) {
-          continue;
+    DescriptorReader dr = DescriptorSourceFactory.createDescriptorReader();
+    for (Descriptor d : dr.readDescriptors(
+        new File("../../shared/in/archive/torperf"),
+        new File("../../shared/in/recent/torperf"))) {
+      if (!(d instanceof TorperfResult)) {
+        continue;
+      }
+      TorperfResult tr = (TorperfResult) d;
+      int measurementId = -1;
+      String truncatedSource = truncateString(tr.getSource(), 32);
+      psMeasurementsSelect.clearParameters();
+      psMeasurementsSelect.setString(1, truncatedSource);
+      psMeasurementsSelect.setInt(2, tr.getFileSize());
+      psMeasurementsSelect.setTimestamp(3,
+          new Timestamp(tr.getStartMillis()), calendar);
+      try (ResultSet rs = psMeasurementsSelect.executeQuery()) {
+        if (rs.next()) {
+          measurementId = rs.getInt(1);
         }
-        TorperfResult tr = (TorperfResult) d;
-        int measurementId = -1;
-        String truncatedSource = truncateString(tr.getSource(), 32);
-        psMeasurementsSelect.clearParameters();
-        psMeasurementsSelect.setString(1, truncatedSource);
-        psMeasurementsSelect.setInt(2, tr.getFileSize());
-        psMeasurementsSelect.setTimestamp(3,
+      }
+      if (measurementId < 0) {
+        psMeasurementsInsert.clearParameters();
+        psMeasurementsInsert.setString(1, truncatedSource);
+        psMeasurementsInsert.setInt(2, tr.getFileSize());
+        psMeasurementsInsert.setTimestamp(3,
             new Timestamp(tr.getStartMillis()), calendar);
-        try (ResultSet rs = psMeasurementsSelect.executeQuery()) {
+        long[] timestamps = new long[] { tr.getSocketMillis(),
+            tr.getConnectMillis(), tr.getNegotiateMillis(),
+            tr.getRequestMillis(), tr.getResponseMillis(),
+            tr.getDataRequestMillis(), tr.getDataResponseMillis(),
+            tr.getDataCompleteMillis() };
+        for (int i = 4, j = 0; j < timestamps.length; i++, j++) {
+          if (timestamps[j] == 0L) {
+            psMeasurementsInsert.setNull(i, Types.INTEGER);
+          } else {
+            psMeasurementsInsert.setInt(i,
+                (int) (timestamps[j] - tr.getStartMillis()));
+          }
+        }
+        psMeasurementsInsert.setInt(12, tr.getWriteBytes());
+        psMeasurementsInsert.setInt(13, tr.getReadBytes());
+        if (null == tr.didTimeout()) {
+          psMeasurementsInsert.setNull(14, Types.BOOLEAN);
+        } else {
+          psMeasurementsInsert.setBoolean(14, tr.didTimeout());
+        }
+        for (int i = 15, p = 0; i <= 25 && p <= 100; i++, p += 10) {
+          if (null == tr.getDataPercentiles()
+              || !tr.getDataPercentiles().containsKey(p)) {
+            psMeasurementsInsert.setNull(i, Types.INTEGER);
+          } else {
+            psMeasurementsInsert.setInt(i,
+                (int) (tr.getDataPercentiles().get(p) - tr.getStartMillis()));
+          }
+        }
+        if (tr.getLaunchMillis() < 0L) {
+          psMeasurementsInsert.setNull(26, Types.TIMESTAMP);
+        } else {
+          psMeasurementsInsert.setTimestamp(26,
+              new Timestamp(tr.getLaunchMillis()), calendar);
+        }
+        if (tr.getUsedAtMillis() < 0L) {
+          psMeasurementsInsert.setNull(27, Types.TIMESTAMP);
+        } else {
+          psMeasurementsInsert.setTimestamp(27,
+              new Timestamp(tr.getUsedAtMillis()), calendar);
+        }
+        if (tr.getTimeout() < 0L) {
+          psMeasurementsInsert.setNull(28, Types.INTEGER);
+        } else {
+          psMeasurementsInsert.setInt(28, (int) tr.getTimeout());
+        }
+        if (tr.getQuantile() < 0.0) {
+          psMeasurementsInsert.setNull(29, Types.REAL);
+        } else {
+          psMeasurementsInsert.setDouble(29, tr.getQuantile());
+        }
+        if (tr.getCircId() < 0L) {
+          psMeasurementsInsert.setNull(30, Types.INTEGER);
+        } else {
+          psMeasurementsInsert.setInt(30, tr.getCircId());
+        }
+        if (tr.getUsedBy() < 0L) {
+          psMeasurementsInsert.setNull(31, Types.INTEGER);
+        } else {
+          psMeasurementsInsert.setInt(31, tr.getUsedBy());
+        }
+        String[] unrecognizedKeys = new String[] { "ENDPOINTLOCAL",
+            "ENDPOINTPROXY", "ENDPOINTREMOTE", "HOSTNAMELOCAL",
+            "HOSTNAMEREMOTE", "SOURCEADDRESS" };
+        for (int i = 32, j = 0; j < unrecognizedKeys.length; i++, j++) {
+          if (null == tr.getUnrecognizedKeys()
+              || !tr.getUnrecognizedKeys().containsKey(unrecognizedKeys[j])) {
+            psMeasurementsInsert.setNull(i, Types.VARCHAR);
+          } else {
+            psMeasurementsInsert.setString(i, truncateString(
+                tr.getUnrecognizedKeys().get(unrecognizedKeys[j]), 64));
+          }
+        }
+        psMeasurementsInsert.execute();
+        try (ResultSet rs = psMeasurementsInsert.getGeneratedKeys()) {
           if (rs.next()) {
             measurementId = rs.getInt(1);
           }
         }
-        if (measurementId < 0) {
-          psMeasurementsInsert.clearParameters();
-          psMeasurementsInsert.setString(1, truncatedSource);
-          psMeasurementsInsert.setInt(2, tr.getFileSize());
-          psMeasurementsInsert.setTimestamp(3,
-              new Timestamp(tr.getStartMillis()), calendar);
-          long[] timestamps = new long[] { tr.getSocketMillis(),
-              tr.getConnectMillis(), tr.getNegotiateMillis(),
-              tr.getRequestMillis(), tr.getResponseMillis(),
-              tr.getDataRequestMillis(), tr.getDataResponseMillis(),
-              tr.getDataCompleteMillis() };
-          for (int i = 4, j = 0; j < timestamps.length; i++, j++) {
-            if (timestamps[j] == 0L) {
-              psMeasurementsInsert.setNull(i, Types.INTEGER);
-            } else {
-              psMeasurementsInsert.setInt(i,
-                  (int) (timestamps[j] - tr.getStartMillis()));
-            }
-          }
-          psMeasurementsInsert.setInt(12, tr.getWriteBytes());
-          psMeasurementsInsert.setInt(13, tr.getReadBytes());
-          if (null == tr.didTimeout()) {
-            psMeasurementsInsert.setNull(14, Types.BOOLEAN);
-          } else {
-            psMeasurementsInsert.setBoolean(14, tr.didTimeout());
-          }
-          for (int i = 15, p = 0; i <= 25 && p <= 100; i++, p += 10) {
-            if (null == tr.getDataPercentiles()
-                || !tr.getDataPercentiles().containsKey(p)) {
-              psMeasurementsInsert.setNull(i, Types.INTEGER);
-            } else {
-              psMeasurementsInsert.setInt(i,
-                  (int) (tr.getDataPercentiles().get(p) - tr.getStartMillis()));
-            }
-          }
-          if (tr.getLaunchMillis() < 0L) {
-            psMeasurementsInsert.setNull(26, Types.TIMESTAMP);
-          } else {
-            psMeasurementsInsert.setTimestamp(26,
-                new Timestamp(tr.getLaunchMillis()), calendar);
-          }
-          if (tr.getUsedAtMillis() < 0L) {
-            psMeasurementsInsert.setNull(27, Types.TIMESTAMP);
-          } else {
-            psMeasurementsInsert.setTimestamp(27,
-                new Timestamp(tr.getUsedAtMillis()), calendar);
-          }
-          if (tr.getTimeout() < 0L) {
-            psMeasurementsInsert.setNull(28, Types.INTEGER);
-          } else {
-            psMeasurementsInsert.setInt(28, (int) tr.getTimeout());
-          }
-          if (tr.getQuantile() < 0.0) {
-            psMeasurementsInsert.setNull(29, Types.REAL);
-          } else {
-            psMeasurementsInsert.setDouble(29, tr.getQuantile());
-          }
-          if (tr.getCircId() < 0L) {
-            psMeasurementsInsert.setNull(30, Types.INTEGER);
-          } else {
-            psMeasurementsInsert.setInt(30, tr.getCircId());
-          }
-          if (tr.getUsedBy() < 0L) {
-            psMeasurementsInsert.setNull(31, Types.INTEGER);
-          } else {
-            psMeasurementsInsert.setInt(31, tr.getUsedBy());
-          }
-          String[] unrecognizedKeys = new String[] { "ENDPOINTLOCAL",
-              "ENDPOINTPROXY", "ENDPOINTREMOTE", "HOSTNAMELOCAL",
-              "HOSTNAMEREMOTE", "SOURCEADDRESS" };
-          for (int i = 32, j = 0; j < unrecognizedKeys.length; i++, j++) {
-            if (null == tr.getUnrecognizedKeys()
-                || !tr.getUnrecognizedKeys().containsKey(unrecognizedKeys[j])) {
-              psMeasurementsInsert.setNull(i, Types.VARCHAR);
-            } else {
-              psMeasurementsInsert.setString(i, truncateString(
-                  tr.getUnrecognizedKeys().get(unrecognizedKeys[j]), 64));
-            }
-          }
-          psMeasurementsInsert.execute();
-          try (ResultSet rs = psMeasurementsInsert.getGeneratedKeys()) {
-            if (rs.next()) {
-              measurementId = rs.getInt(1);
-            }
-          }
-        }
-        /* Could use measurementId to insert path. */
       }
+      /* Could use measurementId to insert path. */
       connection.commit();
     }
   }

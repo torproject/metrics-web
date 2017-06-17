@@ -19,11 +19,9 @@ public class Main {
   public static void main(String[] args) {
 
     /* Initialize directories and file paths. */
-    Set<File> inDirectories = new HashSet<>();
-    inDirectories.add(
-        new File("../../shared/in/recent/relay-descriptors/consensuses"));
-    inDirectories.add(
-        new File("../../shared/in/recent/relay-descriptors/extra-infos"));
+    File[] inDirectories = new File[] {
+        new File("../../shared/in/recent/relay-descriptors/consensuses"),
+        new File("../../shared/in/recent/relay-descriptors/extra-infos") };
     File statusDirectory = new File("status");
 
     /* Initialize parser and read parse history to avoid parsing

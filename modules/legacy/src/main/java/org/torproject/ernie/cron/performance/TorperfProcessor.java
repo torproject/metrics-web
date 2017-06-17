@@ -4,10 +4,10 @@
 package org.torproject.ernie.cron.performance;
 
 import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
 import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.TorperfResult;
+import org.torproject.descriptor.UnparseableDescriptor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -83,60 +83,55 @@ public class TorperfProcessor {
         logger.fine("Importing files in " + torperfDirectory + "/...");
         DescriptorReader descriptorReader =
             DescriptorSourceFactory.createDescriptorReader();
-        descriptorReader.addDirectory(torperfDirectory);
         File historyFile = new File(statsDirectory, "torperf-history");
         descriptorReader.setHistoryFile(historyFile);
-        Iterator<DescriptorFile> descriptorFiles =
-            descriptorReader.readDescriptors();
-        while (descriptorFiles.hasNext()) {
-          DescriptorFile descriptorFile = descriptorFiles.next();
-          if (descriptorFile.getException() != null) {
-            logger.log(Level.FINE, "Error parsing file.",
-                descriptorFile.getException());
+        for (Descriptor descriptor : descriptorReader.readDescriptors(
+            torperfDirectory)) {
+          if (descriptor instanceof UnparseableDescriptor) {
+            logger.log(Level.FINE, "Error parsing descriptor.",
+                ((UnparseableDescriptor) descriptor)
+                .getDescriptorParseException());
+            continue;
+          } else if (!(descriptor instanceof TorperfResult)) {
             continue;
           }
-          for (Descriptor descriptor : descriptorFile.getDescriptors()) {
-            if (!(descriptor instanceof TorperfResult)) {
-              continue;
-            }
-            TorperfResult result = (TorperfResult) descriptor;
-            if (null != result.getUnrecognizedKeys()
-                && result.getUnrecognizedKeys().containsKey("ENDPOINTREMOTE")
-                && result.getUnrecognizedKeys().get("ENDPOINTREMOTE")
-                .contains(".onion")) {
-              continue;
-            }
-            String source = result.getSource();
-            long fileSize = result.getFileSize();
-            if (fileSize == 51200) {
-              source += "-50kb";
-            } else if (fileSize == 1048576) {
-              source += "-1mb";
-            } else if (fileSize == 5242880) {
-              source += "-5mb";
-            } else {
-              logger.fine("Unexpected file size '" + fileSize
-                  + "'.  Skipping.");
-              continue;
-            }
-            String dateTime = formatter.format(result.getStartMillis());
-            long completeMillis = result.getDataCompleteMillis()
-                - result.getStartMillis();
-            String key = source + "," + dateTime;
-            String value = key;
-            if ((result.didTimeout() == null
-                && result.getDataCompleteMillis() < 1)
-                || (result.didTimeout() != null && result.didTimeout())) {
-              value += ",-2"; // -2 for timeout
-            } else if (result.getReadBytes() < fileSize) {
-              value += ",-1"; // -1 for failure
-            } else {
-              value += "," + completeMillis;
-            }
-            if (!rawObs.containsKey(key)) {
-              rawObs.put(key, value);
-              addedRawObs++;
-            }
+          TorperfResult result = (TorperfResult) descriptor;
+          if (null != result.getUnrecognizedKeys()
+              && result.getUnrecognizedKeys().containsKey("ENDPOINTREMOTE")
+              && result.getUnrecognizedKeys().get("ENDPOINTREMOTE")
+              .contains(".onion")) {
+            continue;
+          }
+          String source = result.getSource();
+          long fileSize = result.getFileSize();
+          if (fileSize == 51200) {
+            source += "-50kb";
+          } else if (fileSize == 1048576) {
+            source += "-1mb";
+          } else if (fileSize == 5242880) {
+            source += "-5mb";
+          } else {
+            logger.fine("Unexpected file size '" + fileSize
+                + "'.  Skipping.");
+            continue;
+          }
+          String dateTime = formatter.format(result.getStartMillis());
+          long completeMillis = result.getDataCompleteMillis()
+              - result.getStartMillis();
+          String key = source + "," + dateTime;
+          String value = key;
+          if ((result.didTimeout() == null
+              && result.getDataCompleteMillis() < 1)
+              || (result.didTimeout() != null && result.didTimeout())) {
+            value += ",-2"; // -2 for timeout
+          } else if (result.getReadBytes() < fileSize) {
+            value += ",-1"; // -1 for failure
+          } else {
+            value += "," + completeMillis;
+          }
+          if (!rawObs.containsKey(key)) {
+            rawObs.put(key, value);
+            addedRawObs++;
           }
         }
         descriptorReader.saveHistoryFile(historyFile);

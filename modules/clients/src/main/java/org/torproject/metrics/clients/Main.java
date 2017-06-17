@@ -6,7 +6,6 @@ package org.torproject.metrics.clients;
 import org.torproject.descriptor.BandwidthHistory;
 import org.torproject.descriptor.BridgeNetworkStatus;
 import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
 import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.ExtraInfoDescriptor;
@@ -19,7 +18,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TimeZone;
@@ -65,25 +63,16 @@ public class Main {
         DescriptorSourceFactory.createDescriptorReader();
     File historyFile = new File("status/relay-descriptors");
     descriptorReader.setHistoryFile(historyFile);
-    descriptorReader.addDirectory(new File(
-        "../../shared/in/recent/relay-descriptors/consensuses"));
-    descriptorReader.addDirectory(new File(
-        "../../shared/in/recent/relay-descriptors/extra-infos"));
-    descriptorReader.addDirectory(new File(
-        "../../shared/in/archive/relay-descriptors/consensuses"));
-    descriptorReader.addDirectory(new File(
-        "../../shared/in/archive/relay-descriptors/extra-infos"));
-    Iterator<DescriptorFile> descriptorFiles =
-        descriptorReader.readDescriptors();
-    while (descriptorFiles.hasNext()) {
-      DescriptorFile descriptorFile = descriptorFiles.next();
-      for (Descriptor descriptor : descriptorFile.getDescriptors()) {
-        if (descriptor instanceof ExtraInfoDescriptor) {
-          parseRelayExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
-        } else if (descriptor instanceof RelayNetworkStatusConsensus) {
-          parseRelayNetworkStatusConsensus(
-              (RelayNetworkStatusConsensus) descriptor);
-        }
+    for (Descriptor descriptor : descriptorReader.readDescriptors(
+        new File("../../shared/in/recent/relay-descriptors/consensuses"),
+        new File("../../shared/in/recent/relay-descriptors/extra-infos"),
+        new File("../../shared/in/archive/relay-descriptors/consensuses"),
+        new File("../../shared/in/archive/relay-descriptors/extra-infos"))) {
+      if (descriptor instanceof ExtraInfoDescriptor) {
+        parseRelayExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
+      } else if (descriptor instanceof RelayNetworkStatusConsensus) {
+        parseRelayNetworkStatusConsensus(
+            (RelayNetworkStatusConsensus) descriptor);
       }
     }
     descriptorReader.saveHistoryFile(historyFile);
@@ -209,21 +198,14 @@ public class Main {
         DescriptorSourceFactory.createDescriptorReader();
     File historyFile = new File("status/bridge-descriptors");
     descriptorReader.setHistoryFile(historyFile);
-    descriptorReader.addDirectory(new File(
-        "../../shared/in/recent/bridge-descriptors"));
-    descriptorReader.addDirectory(new File(
-        "../../shared/in/archive/bridge-descriptors"));
-    Iterator<DescriptorFile> descriptorFiles =
-        descriptorReader.readDescriptors();
-    while (descriptorFiles.hasNext()) {
-      DescriptorFile descriptorFile = descriptorFiles.next();
-      for (Descriptor descriptor : descriptorFile.getDescriptors()) {
-        if (descriptor instanceof ExtraInfoDescriptor) {
-          parseBridgeExtraInfoDescriptor(
-              (ExtraInfoDescriptor) descriptor);
-        } else if (descriptor instanceof BridgeNetworkStatus) {
-          parseBridgeNetworkStatus((BridgeNetworkStatus) descriptor);
-        }
+    for (Descriptor descriptor : descriptorReader.readDescriptors(
+        new File("../../shared/in/recent/bridge-descriptors"),
+        new File("../../shared/in/archive/bridge-descriptors"))) {
+      if (descriptor instanceof ExtraInfoDescriptor) {
+        parseBridgeExtraInfoDescriptor(
+            (ExtraInfoDescriptor) descriptor);
+      } else if (descriptor instanceof BridgeNetworkStatus) {
+        parseBridgeNetworkStatus((BridgeNetworkStatus) descriptor);
       }
     }
     descriptorReader.saveHistoryFile(historyFile);

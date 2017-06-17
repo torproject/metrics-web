@@ -5,7 +5,6 @@ package org.torproject.ernie.cron.network;
 
 import org.torproject.descriptor.BridgeNetworkStatus;
 import org.torproject.descriptor.Descriptor;
-import org.torproject.descriptor.DescriptorFile;
 import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.NetworkStatusEntry;
@@ -191,36 +190,29 @@ public class ConsensusStatsFileHandler {
       logger.fine("Importing files in directory " + bridgesDir + "/...");
       DescriptorReader reader =
           DescriptorSourceFactory.createDescriptorReader();
-      reader.addDirectory(bridgesDir);
       File historyFile = new File(statsDirectory,
           "consensus-stats-bridge-descriptor-history");
       if (keepImportHistory) {
         reader.setHistoryFile(historyFile);
       }
-      Iterator<DescriptorFile> descriptorFiles = reader.readDescriptors();
-      while (descriptorFiles.hasNext()) {
-        DescriptorFile descriptorFile = descriptorFiles.next();
-        if (descriptorFile.getDescriptors() != null) {
+      for (Descriptor descriptor : reader.readDescriptors(bridgesDir)) {
+        if (descriptor instanceof BridgeNetworkStatus) {
+          String descriptorFileName = descriptor.getDescriptorFile().getName();
           String authority = null;
-          if (descriptorFile.getFileName().contains(
+          if (descriptorFileName.contains(
               "4A0CCD2DDC7995083D73F5D667100C8A5831F16D")) {
             authority = "Tonga";
-          } else if (descriptorFile.getFileName().contains(
+          } else if (descriptorFileName.contains(
               "1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1")) {
             authority = "Bifroest";
           }
-          for (Descriptor descriptor : descriptorFile.getDescriptors()) {
-            if (descriptor instanceof BridgeNetworkStatus) {
-              if (authority == null) {
-                this.logger.warning("Did not recognize the bridge authority "
-                    + "that generated " + descriptorFile.getFileName()
-                    + ".  Skipping.");
-                continue;
-              }
-              this.addBridgeNetworkStatus(
-                  (BridgeNetworkStatus) descriptor, authority);
-            }
+          if (authority == null) {
+            this.logger.warning("Did not recognize the bridge authority "
+                + "that generated " + descriptorFileName + ".  Skipping.");
+            continue;
           }
+          this.addBridgeNetworkStatus(
+              (BridgeNetworkStatus) descriptor, authority);
         }
       }
       if (keepImportHistory) {
