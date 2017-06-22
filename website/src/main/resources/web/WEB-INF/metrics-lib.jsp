@@ -17,8 +17,8 @@
 
 <div class="jumbotron">
 <div class="text-center">
-<h2>metrics-lib</h2>
-<p>metrics-lib is a Java API that facilitates processing Tor network data from the <a href="https://collector.torproject.org/">CollecTor</a> service for statistical analysis and for building services and applications.</p>
+<h2>Tor Metrics Library</h2>
+<p>Tor Metrics Library is a Java API that facilitates processing Tor network data from the <a href="https://collector.torproject.org/">CollecTor</a> service for statistical analysis and for building services and applications.</p>
 <a class="btn btn-primary btn-lg" style="margin: 10px" href="https://dist.torproject.org/descriptor/?C=M;O=D"><i class="fa fa-chevron-right" aria-hidden="true"></i> Download Release</a>
 <a class="btn btn-primary btn-lg" style="margin: 10px" href="https://gitweb.torproject.org/metrics-lib.git/plain/CHANGELOG.md"><i class="fa fa-chevron-right" aria-hidden="true"></i> View Change Log</a>
 <!--<a class="btn btn-primary btn-lg" style="margin: 10px" href="metrics-lib/javadoc/index.html"><i class="fa fa-chevron-right" aria-hidden="true"></i> Browse JavaDocs</a>-->
