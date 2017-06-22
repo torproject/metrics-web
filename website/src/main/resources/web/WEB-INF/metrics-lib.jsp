@@ -188,14 +188,15 @@ java -cp .:lib/\*:generated/dist/signed/\* ConsensusWeightByVersion
 <p>There will be some log statements, and the final output should now contain lines like the following:</p>
 
 <pre>
-0.2.4 -&gt;  4.2%
+0.2.4 -&gt;  3.2%
 0.2.5 -&gt;  9.4%
-0.2.6 -&gt;  6.2%
-0.2.7 -&gt;  8.3%
-0.2.8 -&gt; 15.0%
-0.2.9 -&gt; 46.7%
-0.3.0 -&gt;  9.4%
-0.3.1 -&gt;  0.8%
+0.2.6 -&gt;  3.2%
+0.2.7 -&gt;  7.3%
+0.2.8 -&gt;  6.4%
+0.2.9 -&gt; 48.2%
+0.3.0 -&gt; 20.8%
+0.3.1 -&gt;  1.2%
+0.3.2 -&gt;  0.3%
 </pre>
 
 <p>These are the numbers we were looking for.  Now you should know what to do to extract interesting data from consensuses.  Want to give that another try and filter relays with the <code>Exit</code> flag to learn about exit capacity by Tor version?  Hint: You'll want to check for <code>entry.getFlags().contains("Exit")</code>.  Of course, you could as well continue with the next tutorial below.  (Or you could scroll down to the bottom of this page to see the diff.)</p>
@@ -278,15 +279,15 @@ java -cp .:lib/\*:generated/dist/signed/\* PluggableTransports
 <p>The output should contain lines like the following:</p>
 
 <pre>
-                 fte -> 11.7%
+                 fte ->  2.3%
                 meek ->  0.2%
-               obfs2 ->  0.8%
-               obfs3 -> 35.7%
+               obfs2 ->  0.7%
+               obfs3 -> 20.8%
      obfs3_websocket ->  0.0%
-               obfs4 -> 72.8%
-        scramblesuit -> 29.6%
-           snowflake ->  0.0%
-           websocket ->  0.8%
+               obfs4 -> 77.0%
+        scramblesuit -> 17.3%
+           snowflake ->  0.1%
+           websocket ->  0.7%
 </pre>
 
 <p>As above, we'll leave it up to you to further expand this code.  For example, how does the result change if you count transport <i>combinations</i> rather than transports?  Hint: you won't need anything else from metrics-lib, but you'll need to add some code to order transport names and write them to a string.  (And if you'd rather look up the solution, scroll down a bit to see the diff.)</p>
@@ -301,9 +302,9 @@ java -cp .:lib/\*:generated/dist/signed/\* PluggableTransports
 
 <p>Scrolled down just to see where we're hiding the solutions of the three little riddles above?  Here are the diffs:</p>
 
-<pre><code class="language-diff">diff -Nur src/DownloadConsensuses.java src/DownloadConsensuses.java
---- src/DownloadConsensuses.java        2017-03-07 17:48:35.000000000 +0100
-+++ src/DownloadConsensuses.java        2017-03-10 23:02:51.000000000 +0100
+<pre><code class="language-diff">diff -Nur DownloadConsensuses.java DownloadConsensuses.java
+--- DownloadConsensuses.java        2017-03-07 17:48:35.000000000 +0100
++++ DownloadConsensuses.java        2017-03-10 23:02:51.000000000 +0100
 @@ -11,7 +11,7 @@
          // Download from Tor's main CollecTor instance,
          "https://collector.torproject.org",
@@ -315,9 +316,9 @@ java -cp .:lib/\*:generated/dist/signed/\* PluggableTransports
          // write to the local directory called descriptors/,
 </code></pre>
 
-<pre><code class="language-diff">diff -Nur src/ConsensusWeightByVersion.java src/ConsensusWeightByVersion.java
---- src/ConsensusWeightByVersion.java   2017-03-10 23:00:40.000000000 +0100
-+++ src/ConsensusWeightByVersion.java   2017-03-10 23:03:18.000000000 +0100
+<pre><code class="language-diff">diff -Nur ConsensusWeightByVersion.java ConsensusWeightByVersion.java
+--- ConsensusWeightByVersion.java   2017-03-10 23:00:40.000000000 +0100
++++ ConsensusWeightByVersion.java   2017-03-10 23:03:18.000000000 +0100
 @@ -25,6 +25,9 @@
        }
        RelayNetworkStatusConsensus consensus = (RelayNetworkStatusConsensus) descriptor;
@@ -330,9 +331,9 @@ java -cp .:lib/\*:generated/dist/signed/\* PluggableTransports
            // We're only interested in a.b.c type versions for this example.
 </code></pre>
 
-<pre><code class="language-diff">diff -Nur src/PluggableTransports.java src/PluggableTransports.java
---- src/PluggableTransports.java        2017-03-10 23:01:43.000000000 +0100
-+++ src/PluggableTransports.java        2017-03-10 23:03:43.000000000 +0100
+<pre><code class="language-diff">diff -Nur PluggableTransports.java PluggableTransports.java
+--- PluggableTransports.java        2017-03-10 23:01:43.000000000 +0100
++++ PluggableTransports.java        2017-03-10 23:03:43.000000000 +0100
 @@ -20,12 +22,11 @@
        BridgeExtraInfoDescriptor extraInfo = (BridgeExtraInfoDescriptor) descriptor;
        String fingerprint = extraInfo.getFingerprint();
