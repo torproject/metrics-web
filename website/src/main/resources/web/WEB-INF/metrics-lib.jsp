@@ -140,35 +140,26 @@ public class ConsensusWeightByVersion {
 
     // Read descriptors from disk.
     DescriptorReader descriptorReader = DescriptorSourceFactory.createDescriptorReader();
-
-    // Add the directory with descriptors to the descriptor reader.
-    descriptorReader.addDirectory(new File("descriptors/recent/relay-descriptors/consensuses"));
-    Iterator&lt;DescriptorFile&gt; descriptorFiles = descriptorReader.readDescriptors();
-    while (descriptorFiles.hasNext()) { // Iterate over all descriptor files found.
-      DescriptorFile descriptorFile = descriptorFiles.next();
-
-      // Now, iterate over the descriptors contained in the file.
-      for (Descriptor descriptor : descriptorFile.getDescriptors()) {
-        if (!(descriptor instanceof RelayNetworkStatusConsensus)) {
-          // We're only interested in consensuses.
+    for (Descriptor descriptor : descriptorReader.readDescriptors(new File("descriptors/recent/relay-descriptors/consensuses"))) {
+      if (!(descriptor instanceof RelayNetworkStatusConsensus)) {
+        // We're only interested in consensuses.
+        continue;
+      }
+      RelayNetworkStatusConsensus consensus = (RelayNetworkStatusConsensus) descriptor;
+      for (NetworkStatusEntry entry : consensus.getStatusEntries().values()) {
+        String version = entry.getVersion();
+        if (!version.startsWith("Tor ") || version.length() &lt; 9) {
+          // We're only interested in a.b.c type versions for this example.
           continue;
         }
-        RelayNetworkStatusConsensus consensus = (RelayNetworkStatusConsensus) descriptor;
-        for (NetworkStatusEntry entry : consensus.getStatusEntries().values()) {
-          String version = entry.getVersion();
-          if (!version.startsWith("Tor ") || version.length() &lt; 9) {
-            // We're only interested in a.b.c type versions for this example.
-            continue;
-          }
-          // Remove the 'Tor ' prefix and anything starting at the patch level.
-          version = version.substring(4, 9);
-          long bandwidth = entry.getBandwidth();
-          totalBandwidth += bandwidth;
-          if (bandwidthByVersion.containsKey(version)) {
-            bandwidthByVersion.put(version, bandwidth + bandwidthByVersion.get(version));
-          } else {
-            bandwidthByVersion.put(version, bandwidth);
-          }
+        // Remove the 'Tor ' prefix and anything starting at the patch level.
+        version = version.substring(4, 9);
+        long bandwidth = entry.getBandwidth();
+        totalBandwidth += bandwidth;
+        if (bandwidthByVersion.containsKey(version)) {
+          bandwidthByVersion.put(version, bandwidth + bandwidthByVersion.get(version));
+        } else {
+          bandwidthByVersion.put(version, bandwidth);
         }
       }
     }
@@ -246,23 +237,18 @@ public class PluggableTransports {
     SortedMap&lt;String, Integer&gt; countedTransports = new TreeMap&lt;&gt;();
 
     DescriptorReader descriptorReader = DescriptorSourceFactory.createDescriptorReader();
-    descriptorReader.addDirectory(new File("descriptors/recent/bridge-descriptors/extra-infos"));
-    Iterator&lt;DescriptorFile&gt; descriptorFiles = descriptorReader.readDescriptors();
-    while (descriptorFiles.hasNext()) {
-      DescriptorFile descriptorFile = descriptorFiles.next();
-      for (Descriptor descriptor : descriptorFile.getDescriptors()) {
-        if (!(descriptor instanceof BridgeExtraInfoDescriptor)) {
-          continue;
-        }
-        BridgeExtraInfoDescriptor extraInfo = (BridgeExtraInfoDescriptor) descriptor;
-        String fingerprint = extraInfo.getFingerprint();
-        if (observedFingerprints.add(fingerprint)) {
-          for (String transport : extraInfo.getTransports()) {
-            if (countedTransports.containsKey(transport)) {
-              countedTransports.put(transport, 1 + countedTransports.get(transport));
-            } else {
-              countedTransports.put(transport, 1);
-            }
+    for (Descriptor descriptor : descriptorReader.readDescriptors(new File("descriptors/recent/bridge-descriptors/extra-infos"))) {
+      if (!(descriptor instanceof BridgeExtraInfoDescriptor)) {
+        continue;
+      }
+      BridgeExtraInfoDescriptor extraInfo = (BridgeExtraInfoDescriptor) descriptor;
+      String fingerprint = extraInfo.getFingerprint();
+      if (observedFingerprints.add(fingerprint)) {
+        for (String transport : extraInfo.getTransports()) {
+          if (countedTransports.containsKey(transport)) {
+            countedTransports.put(transport, 1 + countedTransports.get(transport));
+          } else {
+            countedTransports.put(transport, 1);
           }
         }
       }
@@ -332,39 +318,39 @@ java -cp .:lib/\*:generated/dist/signed/\* PluggableTransports
 <pre><code class="language-diff">diff -Nur src/ConsensusWeightByVersion.java src/ConsensusWeightByVersion.java
 --- src/ConsensusWeightByVersion.java   2017-03-10 23:00:40.000000000 +0100
 +++ src/ConsensusWeightByVersion.java   2017-03-10 23:03:18.000000000 +0100
-@@ -31,6 +31,9 @@
-         }
-         RelayNetworkStatusConsensus consensus = (RelayNetworkStatusConsensus) descriptor;
-         for (NetworkStatusEntry entry : consensus.getStatusEntries().values()) {
-+          if (!entry.getFlags().contains("Exit")) {
-+            continue;
-+          }
-           String version = entry.getVersion();
-           if (!version.startsWith("Tor ") || version.length() < 9) {
-             // We're only interested in a.b.c type versions for this example.
+@@ -25,6 +25,9 @@
+       }
+       RelayNetworkStatusConsensus consensus = (RelayNetworkStatusConsensus) descriptor;
+       for (NetworkStatusEntry entry : consensus.getStatusEntries().values()) {
++        if (!entry.getFlags().contains("Exit")) {
++          continue;
++        }
+         String version = entry.getVersion();
+         if (!version.startsWith("Tor ") || version.length() &lt; 9) {
+           // We're only interested in a.b.c type versions for this example.
 </code></pre>
 
 <pre><code class="language-diff">diff -Nur src/PluggableTransports.java src/PluggableTransports.java
 --- src/PluggableTransports.java        2017-03-10 23:01:43.000000000 +0100
 +++ src/PluggableTransports.java        2017-03-10 23:03:43.000000000 +0100
-@@ -24,12 +24,11 @@
-         BridgeExtraInfoDescriptor extraInfo = (BridgeExtraInfoDescriptor) descriptor;
-         String fingerprint = extraInfo.getFingerprint();
-         if (observedFingerprints.add(fingerprint)) {
--          for (String transport : extraInfo.getTransports()) {
--            if (countedTransports.containsKey(transport)) {
--              countedTransports.put(transport, 1 + countedTransports.get(transport));
--            } else {
--              countedTransports.put(transport, 1);
--            }
-+          String transports = new TreeSet&lt;&gt;(extraInfo.getTransports()).toString();
-+          if (countedTransports.containsKey(transports)) {
-+            countedTransports.put(transports, 1 + countedTransports.get(transports));
-+          } else {
-+            countedTransports.put(transports, 1);
-           }
+@@ -20,12 +22,11 @@
+       BridgeExtraInfoDescriptor extraInfo = (BridgeExtraInfoDescriptor) descriptor;
+       String fingerprint = extraInfo.getFingerprint();
+       if (observedFingerprints.add(fingerprint)) {
+-        for (String transport : extraInfo.getTransports()) {
+-          if (countedTransports.containsKey(transport)) {
+-            countedTransports.put(transport, 1 + countedTransports.get(transport));
+-          } else {
+-            countedTransports.put(transport, 1);
+-          }
++        String transports = new TreeSet&lt;&gt;(extraInfo.getTransports()).toString();
++        if (countedTransports.containsKey(transports)) {
++          countedTransports.put(transports, 1 + countedTransports.get(transports));
++        } else {
++          countedTransports.put(transports, 1);
          }
        }
+     }
 </code></pre>
 
 </div> <!-- col -->
