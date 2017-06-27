@@ -279,15 +279,15 @@ java -cp .:lib/\*:generated/dist/signed/\* PluggableTransports
 <p>The output should contain lines like the following:</p>
 
 <pre>
-                 fte ->  2.3%
-                meek ->  0.2%
-               obfs2 ->  0.7%
-               obfs3 -> 20.8%
-     obfs3_websocket ->  0.0%
-               obfs4 -> 77.0%
-        scramblesuit -> 17.3%
-           snowflake ->  0.1%
-           websocket ->  0.7%
+                 fte -&gt;  2.3%
+                meek -&gt;  0.2%
+               obfs2 -&gt;  0.7%
+               obfs3 -&gt; 20.8%
+     obfs3_websocket -&gt;  0.0%
+               obfs4 -&gt; 77.0%
+        scramblesuit -&gt; 17.3%
+           snowflake -&gt;  0.1%
+           websocket -&gt;  0.7%
 </pre>
 
 <p>As above, we'll leave it up to you to further expand this code.  For example, how does the result change if you count transport <i>combinations</i> rather than transports?  Hint: you won't need anything else from metrics-lib, but you'll need to add some code to order transport names and write them to a string.  (And if you'd rather look up the solution, scroll down a bit to see the diff.)</p>
