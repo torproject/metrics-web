@@ -23,7 +23,7 @@ public class Configuration {
 
   private boolean importDirectoryArchives = false;
 
-  private List<String> directoryArchivesDirectories = new ArrayList<>();
+  private List<File> directoryArchivesDirectories = new ArrayList<>();
 
   private boolean keepDirectoryArchiveImportHistory = false;
 
@@ -75,7 +75,7 @@ public class Configuration {
           this.importDirectoryArchives = Integer.parseInt(
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("DirectoryArchivesDirectory")) {
-          this.directoryArchivesDirectories.add(line.split(" ")[1]);
+          this.directoryArchivesDirectories.add(new File(line.split(" ")[1]));
         } else if (line.startsWith("KeepDirectoryArchiveImportHistory")) {
           this.keepDirectoryArchiveImportHistory = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -140,12 +140,12 @@ public class Configuration {
   }
 
   /** Returns directories containing archived descriptors. */
-  public List<String> getDirectoryArchivesDirectories() {
+  public List<File> getDirectoryArchivesDirectories() {
     if (this.directoryArchivesDirectories.isEmpty()) {
       String prefix = "../../shared/in/recent/relay-descriptors/";
-      return Arrays.asList(
-          (prefix + "consensuses/," + prefix + "server-descriptors/,"
-          + prefix + "extra-infos/").split(","));
+      return Arrays.asList(new File(prefix + "consensuses/"),
+          new File(prefix + "server-descriptors/"),
+          new File(prefix + "extra-infos/"));
     } else {
       return this.directoryArchivesDirectories;
     }

@@ -181,7 +181,7 @@ public final class RelayDescriptorDatabaseImporter {
 
   private boolean writeRawImportFiles;
 
-  private List<String> archivesDirectories;
+  private List<File> archivesDirectories;
 
   private File statsDirectory;
 
@@ -192,7 +192,7 @@ public final class RelayDescriptorDatabaseImporter {
    * preparing statements.
    */
   public RelayDescriptorDatabaseImporter(String connectionUrl,
-      String rawFilesDirectory, List<String> archivesDirectories,
+      String rawFilesDirectory, List<File> archivesDirectories,
       File statsDirectory, boolean keepImportHistory) {
 
     if (archivesDirectories == null || statsDirectory == null) {
