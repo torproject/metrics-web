@@ -44,11 +44,6 @@ public class Configuration {
 
   private boolean writeBridgeStats = false;
 
-  private String exoneraTorDatabaseJdbc = "jdbc:postgresql:"
-      + "//localhost/exonerator?user=metrics&password=password";
-
-  private String exoneraTorImportDirectory = "exonerator-import/";
-
   /** Initializes this configuration class. */
   public Configuration() {
 
@@ -96,10 +91,6 @@ public class Configuration {
         } else if (line.startsWith("WriteBridgeStats")) {
           this.writeBridgeStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
-        } else if (line.startsWith("ExoneraTorDatabaseJdbc")) {
-          this.exoneraTorDatabaseJdbc = line.split(" ")[1];
-        } else if (line.startsWith("ExoneraTorImportDirectory")) {
-          this.exoneraTorImportDirectory = line.split(" ")[1];
         } else {
           logger.severe("Configuration file contains unrecognized "
               + "configuration key in line '" + line + "'! Exiting!");
@@ -176,14 +167,6 @@ public class Configuration {
 
   public boolean getWriteBridgeStats() {
     return this.writeBridgeStats;
-  }
-
-  public String getExoneraTorDatabaseJdbc() {
-    return this.exoneraTorDatabaseJdbc;
-  }
-
-  public String getExoneraTorImportDirectory() {
-    return this.exoneraTorImportDirectory;
   }
 }
 
