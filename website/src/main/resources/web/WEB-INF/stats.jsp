@@ -310,7 +310,7 @@ there are users by either of the two numbers.</li>
 
 <div class="bs-callout bs-callout-warning">
 <h3>Deprecated</h3>
-<p>As of May 12, 2017, the linked data file has been replaced by <a href="#torperf-1.1">this data file</a>.  Starting on June 1, 2017, the linked data file will not be updated anymore.  This section and the linked data file will be removed in the future.</p>
+<p>As of May 12, 2017, the linked data file has been replaced by <a href="#torperf-1.1">this data file</a>.  As of June 30, 2017, the linked data file is not updated anymore.  This section and the linked data file will be removed in the future.</p>
 </div>
 
 <p>The following data file contains aggregate statistics on performance when

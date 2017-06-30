@@ -44,10 +44,6 @@ public class Configuration {
 
   private boolean writeBridgeStats = false;
 
-  private boolean importWriteTorperfStats = false;
-
-  private String torperfDirectory = "in/torperf/";
-
   private String exoneraTorDatabaseJdbc = "jdbc:postgresql:"
       + "//localhost/exonerator?user=metrics&password=password";
 
@@ -100,11 +96,6 @@ public class Configuration {
         } else if (line.startsWith("WriteBridgeStats")) {
           this.writeBridgeStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
-        } else if (line.startsWith("ImportWriteTorperfStats")) {
-          this.importWriteTorperfStats = Integer.parseInt(
-              line.split(" ")[1]) != 0;
-        } else if (line.startsWith("TorperfDirectory")) {
-          this.torperfDirectory = line.split(" ")[1];
         } else if (line.startsWith("ExoneraTorDatabaseJdbc")) {
           this.exoneraTorDatabaseJdbc = line.split(" ")[1];
         } else if (line.startsWith("ExoneraTorImportDirectory")) {
@@ -185,14 +176,6 @@ public class Configuration {
 
   public boolean getWriteBridgeStats() {
     return this.writeBridgeStats;
-  }
-
-  public boolean getImportWriteTorperfStats() {
-    return this.importWriteTorperfStats;
-  }
-
-  public String getTorperfDirectory() {
-    return this.torperfDirectory;
   }
 
   public String getExoneraTorDatabaseJdbc() {

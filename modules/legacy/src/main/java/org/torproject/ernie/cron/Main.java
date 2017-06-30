@@ -4,7 +4,6 @@
 package org.torproject.ernie.cron;
 
 import org.torproject.ernie.cron.network.ConsensusStatsFileHandler;
-import org.torproject.ernie.cron.performance.TorperfProcessor;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -73,12 +72,6 @@ public class Main {
       }
       csfh.writeFiles();
       csfh = null;
-    }
-
-    // Import and process torperf stats
-    if (config.getImportWriteTorperfStats()) {
-      new TorperfProcessor(new File(config.getTorperfDirectory()),
-          statsDirectory);
     }
 
     // Remove lock file

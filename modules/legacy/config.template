@@ -41,9 +41,3 @@
 ## Write bridge stats to disk
 #WriteBridgeStats 0
 #
-## Import torperf data, if available, and write stats to disk
-#ImportWriteTorperfStats 0
-#
-## Relative path to directory to import torperf results from
-#TorperfDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/torperf/
-#
