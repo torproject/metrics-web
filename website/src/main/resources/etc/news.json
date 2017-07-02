@@ -1,5 +1,39 @@
 [
   {
+    "start": "2011-01-25",
+    "protocols": [
+      "<OR>"
+    ],
+    "description": "Release of tor 0.2.2.22-alpha. Changes the TLS Diffie–Hellman parameter to match that used by Apache mod_ssl, to evade blocking in Iran.",
+    "links": [
+      "<a href=\"https://trac.torproject.org/projects/tor/wiki/doc/OONI/censorshipwiki/CensorshipCircumvention/TorChanges#a0.2.2.22-alpha\">censorshipwiki entry</a>",
+      "<a href=\"https://trac.torproject.org/projects/tor/wiki/org/projects/Tor/TLSHistory#Stage2:Tor0.2.0.20through0.2.3.6\">tor TLSHistory</a>"
+    ]
+  },
+  {
+    "start": "2011-09-13",
+    "protocols": [
+      "<OR>"
+    ],
+    "description": "Release of tor 0.2.3.4-alpha. Changes the expiration time of TLS certificates, to evade blocking in Iran.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/4014\">ticket</a>",
+      "<a href=\"https://trac.torproject.org/projects/tor/wiki/doc/OONI/censorshipwiki/CensorshipCircumvention/TorChanges#a0.2.3.4-alpha\">censorshipwiki entry</a>"
+    ]
+  },
+  {
+    "start": "2012-03-01",
+    "end": "2013-08-19",
+    "place": "kz",
+    "protocols": [
+      "<OR>"
+    ],
+    "description": "Kazakhstan blocks Tor TLS by ClientHello and ServerHello fingerprints.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/6140 ticket] [https://gitweb.torproject.org/censorship-timeline.git/tree/patches/kazakhstan/notes.txt?id=3b09a1571c67f53dc81533c81f99cfadfd550d26\">tor patches</a>"
+    ]
+  },
+  {
     "start": "2012-05-15",
     "end": "2012-12-15",
     "place": "et",
@@ -10,7 +44,20 @@
     "links": [
       "<a href=\"https://bugs.torproject.org/6045\">ticket</a>",
       "<a href=\"https://blog.torproject.org/blog/ethiopia-introduces-deep-packet-inspection\">blog post 1</a>",
-      "<a href=\"https://blog.torproject.org/blog/update-censorship-ethiopia\">blog post 2</a>"
+      "<a href=\"https://blog.torproject.org/blog/update-censorship-ethiopia\">blog post 2</a>",
+      "<a href=\"https://gitweb.torproject.org/censorship-timeline.git/tree/binaries/ethiopia?id=3b09a1571c67f53dc81533c81f99cfadfd550d26\">sample packets</a>",
+      "<a href=\"https://gitweb.torproject.org/censorship-timeline.git/tree/patches/ethiopia?id=3b09a1571c67f53dc81533c81f99cfadfd550d26\">tor patches</a>"
+    ]
+  },
+  {
+    "start": "2012-06-15",
+    "protocols": [
+      "<OR>"
+    ],
+    "description": "Release of tor 0.2.3.17-beta. Changes the TLS ciphersuite list to match that of Firefox 8, to evade blocking by China.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/4744\">ticket</a>",
+      "<a href=\"https://trac.torproject.org/projects/tor/wiki/doc/OONI/censorshipwiki/CensorshipCircumvention/TorChanges#a0.2.3.17-beta\">censorshipwiki entry</a>"
     ]
   },
   {
@@ -71,10 +118,10 @@
     "protocols": [
       "fte"
     ],
-    "description": "Tor Browser 6.0a5 and 6.0a5-hardened released, which lack the fte pluggable transport on Mac.",
+    "description": "Tor Browser 6.0a5 and 6.0a5-hardened released, which lacks the fte pluggable transport on Mac.",
     "links": [
       "<a href=\"https://blog.torproject.org/blog/tor-browser-60a5-released\">6.0a5 blog post</a>",
-      "<a href=\"https://blog.torproject.org/blog/tor-browser-60a5-hardened-released\">6.0a5 blog post</a>",
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-60a5-hardened-released\">6.0a5-hardened blog post</a>",
       "<a href=\"https://bugs.torproject.org/18495\">ticket</a>"
     ]
   },
@@ -341,6 +388,17 @@
     "links": []
   },
   {
+    "start": "2016-11-30",
+    "end": "2016-12-02",
+    "place": "gm",
+    "description": "Internet shutdown in Gambia.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-11-14&end=2016-12-14&country=gm\">relay graph</a>",
+      "<a href=\"https://ooni.torproject.org/post/gambia-internet-shutdown/\">OONI report</a>",
+      "<a href=\"https://blog.cloudflare.com/will-autocrats-ever-learn-the-internet-blackout-in-gambia/\">Cloudflare blog post</a>"
+    ]
+  },
+  {
     "start": "2016-12-01",
     "place": "by",
     "protocols": [
@@ -401,12 +459,14 @@
   {
     "start": "2017-03-07",
     "protocols": [
-      "meek"
+      "meek",
+      "scramblesuit"
     ],
-    "description": "Tor Browser 6.5.1 is released, containing the new meek-azure CDN configuration.",
+    "description": "Tor Browser 6.5.1 is released, containing the new meek-azure CDN configuration, and removing the last remaining scramblesuit bridge.",
     "links": [
       "<a href=\"https://blog.torproject.org/blog/tor-browser-651-released\">blog post</a>",
-      "<a href=\"https://bugs.torproject.org/21342\">ticket</a>"
+      "<a href=\"https://bugs.torproject.org/21342\">meek ticket</a>",
+      "<a href=\"https://bugs.torproject.org/21536\">scramblesuit ticket</a>"
     ]
   },
   {
@@ -455,6 +515,21 @@
     ]
   },
   {
+    "start": "2017-05-22",
+    "description": "Unusually slow OnionPerf measurements.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-June/000383.html\">metrics-team thread</a>"
+    ]
+  },
+  {
+    "start": "2017-05-23",
+    "end": "2017-06-13",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Default obfs4 bridge LeifEricson rejects connections due to a broken firewall forwarding rule. This didn't affect the bridges \"real\" obfs4 port, but it did affect the port at that time configured in Tor Browser."
+  },
+  {
     "start": "2017-05-25",
     "protocols": [
       "obfs4"
@@ -462,6 +537,50 @@
     "description": "Set <code>AssumeReachable 1</code> on the default obfs4 bridges <a href=\"https://atlas.torproject.org/#details/C8CBDB2464FC9804A69531437BCF2BE31FDD2EE4\">cymrubridge31</a> and <a href=\"https://atlas.torproject.org/#details/0BAC39417268B96B9F514E7F63FA6FBA1A788955\">cymrubridge33</a> in an attempt to make them publish statistics.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-May/012283.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-06-12",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Increased the file descriptor limit on default obfs4 bridges ndnop3 and ndnop5 from 4096 to 32768. They had been failing bootstrap attempts from a test location in the U.S. about 40% of the time.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/20348#comment:193\">graph showing failed connections</a>"
+    ]
+  },
+  {
+    "start": "2017-06-18",
+    "end": "2017-06-23",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-June/001211.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-06-19",
+    "end": "2017-06-23",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-June/001211.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-06-20",
+    "end": "2017-06-20",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Outage of meek-azure bridge.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-June/001209.html\">start</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-June/001209.html\">end</a>"
     ]
   },
   {
@@ -520,10 +639,22 @@
     "start": "2016-11-20",
     "place": "sa",
     "protocols": [
-      "<OR>",
-      "relay"
+      "<OR>"
     ],
-    "description": "Decrease in direct users in Saudi Arabia.",
+    "description": "Decrease in direct users and increase in bridge users in Saudi Arabia.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/20785\">ticket</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2016-11-20",
+    "end": "2016-12-22",
+    "place": "sa",
+    "protocols": [
+      "bridge"
+    ],
+    "description": "Decrease in direct users and increase in bridge users in Saudi Arabia. The increase in bridge users lasts only about one month while the number of direct users remains down.",
     "links": [
       "<a href=\"https://bugs.torproject.org/20785\">ticket</a>"
     ],
@@ -540,7 +671,8 @@
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2016-December/000260.html\">metrics-team thread</a>",
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-January/000264.html\">thread continues</a>"
-    ]
+    ],
+    "unknown": true
   },
   {
     "start": "2017-01-15",
@@ -638,7 +770,7 @@
     "description": "Drop in direct users from Egypt.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2017-May/043206.html\">tor-talk post</a>",
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?graph=userstats-relay-country&country=eg&events=on\">graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-03-15&end=2017-06-13&country=eg&events=on\">graph</a>"
     ],
     "unknown": true
   }
