@@ -160,11 +160,11 @@
       <a href="https://collector.torproject.org/archive/exit-lists/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#torperf">Torperf's Performance Data</a></b></td>
+  <td colspan="3"><b><a href="#torperf">Torperf's and OnionPerf's Performance Data</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-torperf">Torperf Measurement Results</a></td>
-  <td><code>@type torperf 1.0</code></td>
+  <td><code>@type torperf 1.1</code></td>
   <td><a href="https://collector.torproject.org/recent/torperf/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="https://collector.torproject.org/archive/torperf/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
@@ -679,38 +679,38 @@ ExitAddress 91.102.152.227 2010-12-28 10:35:30
 </pre>
 
 <br>
-<h2 id="torperf" class="hover">Torperf's Performance Data
+<h2 id="torperf" class="hover">Torperf's and OnionPerf's Performance Data
 <a href="#torperf" class="anchor">#</a>
 </h2>
 
 <p>
-The performance measurement service Torperf publishes performance data
+The performance measurement services Torperf and OnionPerf publish performance data
 from making simple HTTP requests over the Tor network.
-Torperf uses a trivial SOCKS client to download files of various sizes
+Torperf/OnionPerf use a SOCKS client to download files of various sizes
 over the Tor network and notes how long substeps take.
 </p>
 
-<h3 id="type-torperf" class="hover">Torperf Measurement Results
-<small><code>@type torperf 1.0</code></small>
+<h3 id="type-torperf" class="hover">Torperf and OnionPerf Measurement Results
+<small><code>@type torperf 1.1</code></small>
 <a href="https://collector.torproject.org/recent/torperf/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
 <a href="https://collector.torproject.org/archive/torperf/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-torperf" class="anchor">#</a>
 </h3>
 
 <p>
-A Torperf results file contains a single line per Torperf run with
+A Torperf or OnionPerf results file contains a single line per Torperf/OnionPerf run with
 <code>key=value</code> pairs.
-Such a result line is sufficient to learn about 1) the Tor and Torperf
+Such a result line is sufficient to learn about 1) the Tor and Torperf/OnionPerf
 configuration, 2) measurement results, and 3) additional information that
 might help explain the results.
-Known keys are explained below.
+Known keys in <code>@type torperf 1.0</code> are explained below.
 </p>
 <ul>
 <li>Configuration
 <ul>
 <li><code>SOURCE:</code> Configured name of the data source; required.</li>
 <li><code>FILESIZE:</code> Configured file size in bytes; required.</li>
-<li>Other meta data describing the Tor or Torperf configuration, e.g.,
+<li>Other meta data describing the Tor or Torperf/OnionPerf configuration, e.g.,
 GUARD for a custom guard choice; optional.</li>
 </ul></li>
 <li>Measurement results
@@ -759,14 +759,15 @@ measurement; optional.</li>
 </ul></li>
 </ul>
 
-<p>
-Recently published Torperf measurement result files accumulate
-all new Torperf measurements of a given day, which means that
-they may change throughout the day.
-This is different from some of the other recently published files provided here
-which do not change once they are
-written.
-</p>
+<p>OnionPerf adds a few more keys in <code>@type torperf 1.1</code>:</p>
+<ul>
+<li><code>ENDPOINTLOCAL:</code> Hostname, IP address, and port that the TGen client used to connect to the local tor SOCKS port, formatted as <code>hostname:ip:port</code>, which may be <code>"NULL:0.0.0.0:0"</code> if TGen was not able to find this information; optional.</li>
+<li><code>ENDPOINTPROXY:</code> Hostname, IP address, and port that the TGen client used to connect to the SOCKS proxy server that tor runs, formatted as <code>hostname:ip:port</code>, which may be <code>"NULL:0.0.0.0:0"</code> if TGen was not able to find this information; optional.</li>
+<li><code>ENDPOINTREMOTE:</code> Hostname, IP address, and port that the TGen client used to connect to the remote server, formatted as <code>hostname:ip:port</code>, which may be <code>"NULL:0.0.0.0:0"</code> if TGen was not able to find this information; optional.</li>
+<li><code>HOSTNAMELOCAL:</code> Client machine hostname, which may be <code>"(NULL)"</code> if the TGen client was not able to find this information; optional.</li>
+<li><code>HOSTNAMEREMOTE:</code> Server machine hostname, which may be <code>"(NULL)"</code> if the TGen server was not able to find this information; optional.</li>
+<li><code>SOURCEADDRESS:</code> Public IP address of the OnionPerf host obtained by connecting to well-known servers and finding the IP address in the result, which may be <code>"unknown"</code> if OnionPerf was not able to find this information; optional.</li>
+</ul>
 
     </div>
 
