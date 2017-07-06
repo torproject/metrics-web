@@ -118,7 +118,7 @@
 </tr>
 <tr>
   <td><a href="#type-bridge-network-status">Bridge Network Statuses</a></td>
-  <td><code>@type bridge-network-status 1.1</code></td>
+  <td><code>@type bridge-network-status 1.2</code></td>
   <td><a href="https://collector.torproject.org/recent/bridge-descriptors/statuses/" target="_blank" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="https://collector.torproject.org/archive/bridge-descriptors/statuses/" target="_blank" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
@@ -450,7 +450,7 @@ descriptor including all signatures.</li>
 </ol>
 
 <h3 id="type-bridge-network-status" class="hover">Bridge Network Statuses
-<small><code>@type bridge-network-status 1.1</code></small>
+<small><code>@type bridge-network-status 1.2</code></small>
 <a href="https://collector.torproject.org/recent/bridge-descriptors/statuses/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
 <a href="https://collector.torproject.org/archive/bridge-descriptors/" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-bridge-network-status" class="anchor">#</a>
