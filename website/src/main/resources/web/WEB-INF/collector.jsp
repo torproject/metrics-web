@@ -458,7 +458,8 @@ descriptor including all signatures.</li>
 
 <p>
 Sanitized bridge network statuses are similar to version 2 relay network
-statuses, but with only a <code>published</code> line in the header and
+statuses, but with only a <code>published</code> line and a
+<code>fingerprint</code> line in the header, and
 without any lines in the footer.
 The format has changed over time to accomodate changes to the sanitizing
 process, with earlier versions being:
@@ -468,6 +469,9 @@ process, with earlier versions being:
 <li><code>@type bridge-network-status 1.0</code> was the first version.</li>
 <li><code>@type bridge-network-status 1.1</code> introduced sanitized TCP
 ports.</li>
+<li><code>@type bridge-network-status 1.2</code> introduced the
+<code>fingerprint</code> line, containing the fingerprint of the bridge
+authority which produced the document, to the header.</li>
 </ul>
 
 <h3 id="type-bridge-server-descriptor" class="hover">Bridge Server descriptors
