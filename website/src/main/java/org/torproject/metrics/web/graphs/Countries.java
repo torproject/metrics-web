@@ -179,7 +179,6 @@ public class Countries {
     this.knownCountries.add("ms;Montserrat".split(";"));
     this.knownCountries.add("ma;Morocco".split(";"));
     this.knownCountries.add("mz;Mozambique".split(";"));
-    this.knownCountries.add("mm;Burma".split(";"));
     this.knownCountries.add("na;Namibia".split(";"));
     this.knownCountries.add("nr;Nauru".split(";"));
     this.knownCountries.add("np;Nepal".split(";"));
