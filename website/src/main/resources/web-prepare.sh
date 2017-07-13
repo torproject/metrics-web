@@ -5,7 +5,7 @@
 
 cd $1
 
-for x in  metrics-lib collector onionoo ; do
+for x in  metrics-lib ; do
     cd $1/$x
     src/main/resources/bootstrap-development.sh
     if  ! [ -d lib ] ; then

@@ -1,9 +1,3 @@
-[submodule "submods/onionoo"]
-	path = submods/onionoo
-	url = https://git.torproject.org/onionoo.git
 [submodule "submods/metrics-lib"]
 	path = submods/metrics-lib
 	url = https://git.torproject.org/metrics-lib.git
-[submodule "submods/collector"]
-	path = submods/collector
-	url = https://git.torproject.org/collector.git
