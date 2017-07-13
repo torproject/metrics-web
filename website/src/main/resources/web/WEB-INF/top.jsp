@@ -23,7 +23,7 @@
   <meta name="msapplication-square310x310logo" content="images/largetile.png">
 
   <!-- jQuery -->
-  <script src="js/jquery-3.1.1.min.js"></script>
+  <script src="js/jquery-3.2.1.min.js"></script>
 
   <!-- Bootstrap -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
