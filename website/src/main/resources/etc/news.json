@@ -584,6 +584,56 @@
     ]
   },
   {
+    "start": "2017-07-02",
+    "description": "deb.torproject.org upgrades from tor 0.2.9 to tor 0.3.0",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/versions.html?start=2017-05-01&end=2017-07-15\">relay versions graph</a>",
+      "<a href=\"https://twitter.com/nusenu_/status/884128686764687361\">tweet</a>"
+    ]
+  },
+  {
+    "start": "2017-06-26",
+    "end": "2017-07-03",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-06-26",
+    "end": "2017-07-02",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-07-04",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-07-04",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "place": "tm",
     "protocols": [
