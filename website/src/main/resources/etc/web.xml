@@ -284,6 +284,17 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>DataSourceServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.DataSourceServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DataSourceServlet</servlet-name>
+    <url-pattern>/bridge-descriptors.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>CollecTorServlet</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.CollecTorServlet

@@ -1,0 +1,700 @@
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- Make this a private "Internet Draft". -->
+<?rfc private="sanitized-bridge-descriptors"?>
+<!-- Use compact format without horizontal rules between sections. -->
+<?rfc compact="yes"?>
+<!-- Remove authorship information. -->
+<?rfc authorship="no"?>
+<!-- Remove index. -->
+<?rfc-ext include-index="no" ?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+  <!ENTITY nbsp "&#160;">
+  <!ENTITY thinsp "&#8202;">
+  <!ENTITY nbhy "&#8209;">
+  <!ENTITY ndash "&#8211;">
+  <!ENTITY mdash "&#8212;">
+]>
+<rfc xmlns:x="http://purl.org/net/xml2rfc/ext">
+  <front>
+    <title>Tor bridge descriptors</title>
+  </front>
+  <middle>
+    <section title="Purpose of this document">
+      <t>Bridges and the bridge authority publish bridge descriptors that are
+      used by censored clients to connect to the network.
+      We aim for publishing all network directory data for informational and
+      statistical purposes.
+      We cannot, however, make bridge descriptors publicly available in the same
+      way as we publish relay descriptors, because that would defeat the purpose
+      of making bridges hard to enumerate for censors.
+      We therefore sanitize bridge descriptors by removing all potentially
+      identifying information and then publish sanitized versions.</t>
+      <t>The purpose of this document is to specify the document format of
+      sanitized bridge descriptors.
+      These descriptors are based on original, non-sanitized bridge descriptors
+      after sanitizing any parts that would make it easier to enumerate
+      bridges.
+      Unless stated otherwise, the
+      <eref target="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt#n193">
+      document meta-format</eref> of the Tor directory protocol, version 3
+      is used.</t>
+    </section>
+    <section title="Sanitizing potentially sensitive descriptor items">
+      <t>The following sanitizing steps are applied to original, non-sanitized
+      bridge descriptors.</t>
+      <section anchor="type-annotation" title="Prefix with @type annotation">
+        <t>"@type" SP DescriptorType SP Version
+        <list>
+          <t>DescriptorType is a fixed string that identifies the sanitized
+          bridge descriptor type.
+          Known strings are listed in the sections below.</t>
+          <t>Version is set by the sanitizer to indicate changes in the
+          sanitizing process.
+          The version string consist of a major version number for
+          backward-incompatible changes and a minor version number for
+          backward-compatible changes.</t>
+        </list>
+        </t>
+      </section>
+      <section anchor="fingerprint" title="Replace RSA fingerprints">
+        <t>HashedFingerprint = SHA1(Fingerprint)
+        <list>
+          <t>Fingerprint is the decoded binary representation of the SHA-1
+          hash of an ASN.1 encoded RSA public key.</t>
+          <t>The (non-sanitized) Fingerprint of a bridge could, in theory, be
+          used quite easily to uniquely identify the bridge.
+          However, clients can request a bridge's current descriptor by
+          sending its Fingerprint to the bridge authority.
+          This is a feature to make bridges on dynamic IP addresses more
+          useful, but it would also allow for trivial enumeration of bridges.
+          Therefore, the original Fingerprint (and anything that could be used
+          to derive it) is removed from descriptors and replaced with
+          something else that can be used to uniquely identify the bridge.
+          The approach taken here is to replace the Fingerprint with its SHA-1
+          hash.</t>
+        </list>
+        </t>
+      </section>
+      <section anchor="master-key-ed25519" title="Replace ed25519 master keys">
+        <t>HashedMasterKeyEd25519 = SHA256(MasterKeyEd25519)
+        <list>
+          <t>MasterKeyEd25519 is the decoded binary representation of an
+          ed25519 master key.</t>
+          <t>Similar to (non-sanitized) <xref target="fingerprint">RSA
+          fingerprints</xref>, ed25519 master keys could be used to uniquely
+          identify bridges and to request a current descriptor from the
+          bridge authority.
+          That is why they are replaced with their SHA-256 hashes.
+          In cases where a descriptor only contains an ed25519 certificate and
+          no ed25519 master key, the (non-sanitized) master key is first
+          extracted from the certificate before sanitizing it.</t>
+        </list>
+        </t>
+      </section>
+      <section anchor="crypto"
+               title="Remove public keys, certificates, and signatures">
+        <t>[Removed.]
+        <list>
+          <t>Some of the public keys and certificates could be used to derive
+          key fingerprints, hence they need to be replaced or removed.
+          However, replacing them seemed unnecessary and overly complex with
+          respect to keeping state on the sanitizing host.
+          That is why most public keys, certificates, and signatures are
+          simply removed in the sanitizing process.</t>
+        </list>
+        </t>
+      </section>
+      <section anchor="ipv4-address" title="Replace IPv4 addresses">
+        <t>SanitizedIpv4Address = "10." | KeyedHash</t>
+        <t>KeyedHash = SHA256(Ipv4Address | Fingerprint | Secret)[:3]
+        <list>
+          <t>Address is the 4-byte long binary representation of the
+          (non-sanitized) IPv4 address.</t>
+          <t>Fingerprint is the 20-byte long binary representation of the
+          (non-sanitized) long-term identity fingerprint.</t>
+          <t>Secret is a 31-byte long secure random string that changes once
+          per month for all descriptors and statuses published in that
+          month.</t>
+          <t>The [:3] operator picks the first three bytes from the left of the
+          result and encodes it as three dot-separated decimal numbers.
+          </t>
+          <t>Sanitizing IPv4 addresses is obviously required to prevent
+          enumeration of bridges.
+          The approach taken is here is to replace IPv4 addresses with
+          syntactical valid addresses in the private IPv4 address space 10/8
+          based on a keyed hash function that produces the same sanitized
+          address for a given bridge, IPv4 address, and month.</t>
+        </list>
+        </t>
+      </section>
+      <section anchor="ipv6-address" title="Replace IPv6 addresses">
+        <t>SanitizedIpv6Address = "[fd9f:2e19:3bcf::" | KeyedHash | "]"</t>
+        <t>KeyedHash = SHA256(Ipv6Address | Fingerprint | Secret)[:3]
+        <list>
+          <t>Address is the 16-byte long binary representation of the
+          (non-sanitized) IPv6 address.</t>
+          <t>Fingerprint is the 20-byte long binary representation of the
+          (non-sanitized) long-term identity fingerprint.</t>
+          <t>Secret is a 19-byte long secure random string that changes once
+          per month for all descriptors and statuses published in that
+          month.</t>
+          <t>The [:3] operator picks the first three bytes from the left of the
+          result and encodes it as two lower-case hexadecimal numbers, a
+          colon, and another four lower-case hexadecimal numbers.
+          </t>
+          <t>Similar to <xref target="ipv4-address">IPv4 addresses</xref>,
+          IPv6 addresses are replaced with syntactical valid addresses in the
+          address range [fd9f:2e19:3bcf::/116] based on a keyed hash function
+          that produces the same sanitized address for a given bridge, IPv6
+          address, and month.</t>
+        </list>
+        </t>
+      </section>
+      <section anchor="tcp-port" title="Replace TCP ports">
+        <t>SanitizedPort = KeyedHash / 2^2 + 2^15 + 2^14</t>
+        <t>KeyedHash = SHA256(Port | Fingerprint | Secret)[:2]
+        <list>
+          <t>Port is the 2-byte long binary representation of the TCP
+          port.</t>
+          <t>Fingerprint is the 20-byte long binary representation of the
+          bridge's long-term identity fingerprint.</t>
+          <t>Secret is a 33-byte long secure random string that changes once
+          per month for all descriptors and statuses published in that
+          month.</t>
+          <t>The [:2] operator means that we pick the first two bytes from the
+          left of the result, and the /, ^, and + operators are all integer
+          operators.
+          </t>
+          <t>TCP ports that are 0 in the original are left unchanged.</t>
+          <t>It may be less obvious that TCP ports need to be sanitized, but an
+          unusual TCP port used by a high-value bridge might still stand out and
+          provide yet another way to locate and block the bridge.
+          Therefore, each non-zero TCP port is replaced with a port number in
+          the range from 49152 to 65535, which is reserved for private services,
+          based on a keyed hash function that produces the same sanitized port
+          for a given bridge, TCP port, and month.</t>
+        </list>
+        </t>
+      </section>
+      <section anchor="contact" title="Remove contact information">
+        <t>SanitizedContact = "somebody"
+        <list>
+          <t>If there is contact information in a descriptor, it is replaced by
+          the constant string "somebody".
+          (Note that this sanitizing step is subject to change and maybe be
+          changed in a future version towards retaining the original contact
+          information.)</t>
+        </list>
+        </t>
+      </section>
+      <section anchor="transport"
+               title="Remove extraneous transport information">
+        <t>[Removed.]
+        <list>
+          <t>Bridges may provide transports in addition to the OR protocol and
+          include information about these transports for the bridge
+          distribution service.
+          In that case, any IP addresses, TCP ports, or additional arguments
+          are removed, only leaving in the supported transport names.</t>
+        </list>
+        </t>
+      </section>
+      <section anchor="replaced-digest"
+               title="Replace digests in referencing descriptors">
+        <t>SanitizedSha1Digest = SHA1(Sha1Digest)</t>
+        <t>SanitizedSha256Digest = SHA256(Sha256Digest)
+        <list>
+          <t>Sha1Digest is the 20-byte long binary representation of a
+          descriptor's SHA-1 digest.</t>
+          <t>Sha256Digest is the 32-byte long binary representation of a
+          descriptor's SHA-256 digest.</t>
+          <t>Some descriptors reference other descriptors by their digest.
+          However, these digests are also somewhat sensitive, because it
+          shouldn't be possible to reconstruct the original descriptor with
+          help of these digests.
+          That is why digests in referencing descriptors are replaced with
+          either the hex-encoded SHA-1 hash or the base64-encoded SHA-256 hash
+          of the original digest, depending on which hash algorithm was used
+          to generate the original digest.
+          The resulting digest string in a referencing descriptor can then be
+          matched to an <xref target="appended-digest">appended digest</xref>
+          in a referenced descriptor.</t>
+        </list>
+        </t>
+      </section>
+      <section anchor="appended-digest"
+               title="Append digests to referenced descriptors">
+        <t>SanitizedSha1Digest = SHA1(Sha1Digest)</t>
+        <t>SanitizedSha256Digest = SHA256(Sha256Digest)
+        <list>
+          <t>Sha1Digest is the 20-byte long binary representation of a
+          descriptor's SHA-1 digest.</t>
+          <t>Sha256Digest is the 32-byte long binary representation of a
+          descriptor's SHA-256 digest.</t>
+          <t>As stated <xref target="replaced-digest">above</xref>, some
+          descriptors are referenced by others by their digest.
+          But in contrast to non-sanitized descriptors, it's neither possible
+          to compute the digest of a sanitized descriptor nor is it desirable
+          to include the original digest.
+          The reason is that it shouldn't be possible to reconstruct the
+          original descriptor with help of the original digest.
+          That is why descriptors that are typically referenced from others
+          may contain additional lines with the hex-encoded SHA-1 hash or the
+          base64-encoded SHA-256 hash of the original digest, depending on
+          which hash algorithm would have been used to generate the original
+          digest.
+          The resulting digest string can then be matched to a 
+          <xref target="replaced-digest">sanitized digest</xref> in a
+          referencing descriptor.</t>
+        </list>
+        </t>
+      </section>
+    </section>
+    <section title="Server descriptor document format">
+      <t>The document format of sanitized bridge server descriptors resembles
+      the document format of (non-sanitized) server descriptors as much as
+      possible.
+      Also refer to the
+      <eref target="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">
+      Tor directory protocol, version 3 specification</eref>, as the following
+      sections only specify items that differ from their non-sanitized counterparts.</t>
+      <section title="Annotations">
+        <t>The bridge authority may prefix descriptors with one or more
+        annotation lines containing metadata, and the sanitizer may add
+        annotation lines with metadata about the sanitizing process.</t>
+        <t>"@purpose" SP Purpose NL
+        <list>
+          <t>[Removed.]</t>
+        </list>
+        </t>
+        <t>"@type" SP "bridge-server-descriptor" SP Version
+        <list>
+          <t>[Exactly once.]</t>
+          <t>Version can be one of the following numbers:
+          <list style="symbols">
+            <t>"1.0" was the first version.
+            There was supposed to be a newer version indicating added
+            "ntor-onion-key" lines, but due to a mistake only the version
+            number of sanitized bridge extra-info descriptors was raised.
+            As a result, there may be sanitized bridge server descriptors
+            with version 1.0 with and without those lines.</t>
+            <t>"1.1" added "master-key-ed25519" and "router-digest-sha256"
+            lines to server descriptors published by bridges using an
+            ed25519 master key.</t>
+            <t>"1.2" introduced sanitized TCP ports.</t>
+          </list>
+          </t>
+        </list>
+        </t>
+      </section>
+      <section title="Descriptor body">
+        <t>The body of a sanitized bridge server descriptor contains several
+        sanitized items as specified in the following:</t>
+        <t>"router" SP Nickname SP SanitizedAddress SP SanitizedORPort SP
+        SOCKSPort SP SanitizedDirPort NL
+        <list>
+          <t>[At start, exactly once.]</t>
+          <t>Nickname is the bridge's original, unchanged nickname.</t>
+          <t>SanitizedAddress is the bridge's
+          <xref target="ipv4-address">sanitized IP address</xref>.</t>
+          <t>SanitizedORPort is the bridge's
+          <xref target="tcp-port">sanitized OR port</xref> (since version 1.2)
+          or the original OR port (until version 1.1).</t>
+          <t>SOCKSPort is deprecated and always 0, as in the original,
+          non-sanitized server descriptor.</t>
+          <t>SanitizedDirPort is the bridge's
+          <xref target="tcp-port">sanitized directory port</xref> (since
+          version 1.2) or the original directory port (until version 1.1).</t>
+        </list>
+        </t>
+        <t>"or-address" SP SanitizedAddress ":" SanitizedPort NL
+        <list>
+          <t>[Any number.]</t>
+          <t>SanitizedAddress is either an additional
+          <xref target="ipv4-address">sanitized IPv4 address</xref> or
+          <xref target="ipv6-address">sanitized IPv6 address</xref>.</t>
+          <t>SanitizedPort is an additional
+          <xref target="tcp-port">sanitized OR port</xref> (since version 1.2)
+          or original OR port (until version 1.1).</t>
+        </list>
+        </t>
+        <t>"identity-ed25519" NL CertificateBlock NL
+        <list>
+          <t>[Removed.]</t>
+        </list>
+        </t>
+        <t>"master-key-ed25519" SP SanitizedMasterKey NL
+        <list>
+          <t>[At most once.]</t>
+          <t>SanitizedMasterKey is the bridge's
+          <xref target="master-key-ed25519">sanitized ed25519 master
+          key</xref>.
+          (Introduced in version 1.1, not present in earlier versions.)</t>
+        </list>
+        </t>
+        <t>"fingerprint" SP SanitizedFingerprint NL
+        <list>
+          <t>[At most once.]</t>
+          <t>SanitizedFingerprint is the bridge's
+          <xref target="fingerprint">sanitized fingerprint</xref>, formatted
+          with a single SP after every 4 characters.</t>
+        </list>
+        </t>
+        <t>"contact" SP SanitizedContact NL
+        <list>
+          <t>[At most once.]</t>
+          <t>SanitizedContact is the bridge's <xref target="contact">sanitized
+          contact information</xref>.</t>
+        </list>
+        </t>
+        <t>"reject" SP ExitPattern NL
+        <list>
+          <t>[Any number.]</t>
+          <t>ExitPattern contains the bridge's
+          <xref target="ipv4-address">sanitized IPv4 address</xref>, if the
+          original line contained the bridge's primary IP address, and is
+          otherwise unchanged.
+          (Note that "accept" lines are exempt from this sanitizing step,
+          which doesn't really make sense and which might change in the
+          future.)</t>
+        </list>
+        </t>
+        <t>"extra-info-digest" SP SanitizedSha1Digest [SP
+        SanitizedSha256Digest] NL
+        <list>
+          <t>[At most once.]</t>
+          <t>SanitizedSha1Digest is the
+          <xref target="replaced-digest">sanitized SHA-1 digest</xref> of the
+          corresponding extra-info descriptor.</t>
+          <t>SanitizedSha256Digest is the
+          <xref target="replaced-digest">sanitized SHA-256 digest</xref> of
+          corresponding extra-info descriptor and is only included if the
+          original line contained a SHA-256 digest.</t>
+        </list>
+        </t>
+        <t>"family" (SP Name)* NL
+        <list>
+          <t>[At most once.]</t>
+          <t>Name is either the <xref target="fingerprint">sanitized
+          fingerprint</xref> or unchanged nickname of another relay or bridge
+          that is purportedly in the same family as this bridge.</t>
+        </list>
+        </t>
+        <t>"onion-key" NL PublicKeyBlock NL
+        <list>
+          <t>[Removed.]</t>
+          <t>The bridge's medium-term RSA key is removed together with most other
+          <xref target="crypto">public keys, certificates, and
+          signatures</xref>.</t>
+        </list>
+        </t>
+        <t>"signing-key" NL PublicKeyBlock NL
+        <list>
+          <t>[Removed.]</t>
+          <t>The bridge's long-term RSA key is removed together with most other
+          <xref target="crypto">public keys, certificates, and
+          signatures</xref>.</t>
+        </list>
+        </t>
+        <t>"onion-key-crosscert" NL SignatureBlock NL
+        <list>
+          <t>[Removed.]</t>
+          <t>This cross signature created with the onion-key is removed together
+          with most other <xref target="crypto">public keys, certificates, and
+          signatures</xref>.</t>
+        </list>
+        </t>
+        <t>"ntor-onion-key-crosscert" SP PublicKey NL
+        <list>
+          <t>[Removed.]</t>
+          <t>This cross signature created with the ntor-onion-key is removed
+          together with most other <xref target="crypto">public keys,
+          certificates, and signatures</xref>.</t>
+        </list>
+        </t>
+        <t>"ntor-onion-key" SP NtorOnionKey NL
+        <list>
+          <t>[At most once.]</t>
+          <t>The curve25519 public key used for the ntor circuit extended
+          handshake is included without modification in most sanitized
+          descriptors.
+          This key was originally missing in version 1.0, and there was
+          supposed to be a newer version indicating added "ntor-onion-key"
+          lines.
+          But due to a mistake only the version number of sanitized bridge
+          extra-info descriptors was raised.
+          As a result, there are sanitized bridge server descriptors with
+          version 1.0 with and without this line.
+          All subsequent versions contain this line</t>
+        </list>
+        </t>
+        <t>"router-sig-ed25519" SP Signature NL
+        <list>
+          <t>[Removed.]</t>
+          <t>The ed25519 signature is removed together with most other
+          <xref target="crypto">public keys, certificates, and
+          signatures</xref>.</t>
+        </list>
+        </t>
+        <t>"router-signature" NL SignatureBlock NL
+        <list>
+          <t>[Removed.]</t>
+          <t>The RSA signature is removed together with most other
+          <xref target="crypto">public keys, certificates, and
+          signatures</xref>.</t>
+        </list>
+        </t>
+        <t>"router-digest-sha256" SP SanitizedSha256Digest NL
+        <list>
+          <t>[At most once.]</t>
+          <t>SanitizedSha256Digest is the
+          <xref target="appended-digest">sanitized SHA-256 digest</xref> of
+          this descriptor and is only included if the original descriptor
+          contained an ed25519 signature of the descriptor's SHA-256 digest.
+          (Introduced in version 1.1, not present in earlier versions.)</t>
+        </list>
+        </t>
+        <t>"router-digest" SP SanitizedSha1Digest NL
+        <list>
+          <t>[At end, exactly once.]</t>
+          <t>SanitizedSha1Digest is the
+          <xref target="appended-digest">sanitized SHA-1 digest</xref> of
+          this descriptor.</t>
+        </list>
+        </t>
+      </section>
+    </section>
+    <section title="Extra-info descriptor document format">
+      <t>The document format of sanitized extra-info descriptors follows the
+      same approach as sanitized server descriptors by changing as few items as
+      possible in their original, non-sanitized counterpart.
+      The original format is specified in the
+      <eref target="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">Tor
+      directory protocol, version 3</eref>.
+      Only the changes to that specification are listed below.</t>
+      <section title="Annotations">
+        <t>"@type" SP "bridge-extra-info" SP Version
+        <list>
+          <t>[Exactly once.]</t>
+          <t>Version can be one of the following numbers:
+          <list style="symbols">
+            <t>"1.0" was the first version.</t>
+            <t>"1.1" added sanitized "transport" lines.</t>
+            <t>"1.2" was supposed to indicate added "ntor-onion-key" lines,
+            but those changes only affected bridge server descriptors, not
+            extra-info descriptors.
+            So, nothing has changed as compared to version 1.1.</t>
+            <t>"1.3" added "master-key-ed25519" and "router-digest-sha256"
+            lines to extra-info descriptors published by bridges using an
+            ed25519 master key.</t>
+          </list>
+          </t>
+        </list>
+        </t>
+      </section>
+      <section title="Descriptor body">
+        <t>Several items in the extra-info descriptor body are changed or
+        removed as compared to original, non-sanitized descriptors:</t>
+        <t>"extra-info" SP Nickname SP SanitizedFingerprint NL
+        <list>
+          <t>[At start, exactly once.]</t>
+          <t>Nickname is the bridge's original, unchanged nickname.</t>
+          <t>SanitizedFingerprint is the bridge's
+          <xref target="fingerprint">sanitized fingerprint</xref>.</t>
+        </list>
+        </t>
+        <t>"transport" SP TransportName NL
+        <list>
+          <t>[Any number.]</t>
+          <t>TransportName is the transport name as found in the original
+          line.</t>
+          <t>Any further details about this
+          <xref target="transport">transport</xref>, including any IP
+          addresses, TCP ports, or additional arguments are removed, only
+          leaving in the supported transport names.
+          (Introduced in version 1.1, not present in earlier versions.)</t>
+        </list>
+        </t>
+        <t>"transport-info SP TransportInfo NL
+        <list>
+          <t>[Removed.]</t>
+          <t>Any lines containing <xref target="transport">extraneous transport
+          information</xref> are removed.
+          (Note that these lines are not even specified for original,
+          non-sanitized descriptors.)</t>
+        </list>
+        </t>
+        <t>"identity-ed25519" NL CertificateBlock NL
+        <list>
+          <t>[Removed.]</t>
+          <t>The RSA signature is removed together with most other
+          <xref target="crypto">public keys, certificates, and
+          signatures</xref>.</t>
+        </list>
+        </t>
+        <t>"master-key-ed25519" SP SanitizedMasterKey NL
+        <list>
+          <t>[At most once.]</t>
+          <t>SanitizedMasterKey is the bridge's
+          <xref target="master-key-ed25519">sanitized ed25519 master
+          key</xref>.
+          (Introduced in version 1.3, not present in earlier versions.)</t>
+        </list>
+        </t>
+        <t>"router-sig-ed25519" SP Signature NL
+        <list>
+          <t>[Removed.]</t>
+          <t>The ed25519 signature is removed together with most other
+          <xref target="crypto">public keys, certificates, and
+          signatures</xref>.</t>
+        </list>
+        </t>
+        <t>"router-signature" NL SignatureBlock NL
+        <list>
+          <t>[Removed.]</t>
+          <t>The RSA signature is removed together with most other
+          <xref target="crypto">public keys, certificates, and
+          signatures</xref>.</t>
+        </list>
+        </t>
+        <t>"router-digest-sha256" SP SanitizedSha256Digest NL
+        <list>
+          <t>[At most once.]</t>
+          <t>SanitizedSha256Digest is the
+          <xref target="appended-digest">sanitized SHA-256 digest</xref> of
+          this descriptor and is only included if the original descriptor
+          contained an ed25519 signature of the descriptor's SHA-256 digest.
+          (Introduced in version 1.3, not present in earlier versions.)</t>
+        </list>
+        </t>
+        <t>"router-digest" SP SanitizedSha1Digest NL
+        <list>
+          <t>[At end, exactly once.]</t>
+          <t>SanitizedSha1Digest is the
+          <xref target="appended-digest">sanitized SHA-1 digest</xref> of
+          this descriptor.</t>
+        </list>
+        </t>
+      </section>
+    </section>
+    <section title="Network status document format">
+      <t>The document format of bridge network statuses is loosely based on the
+      network status format specified in the
+      <eref target="https://gitweb.torproject.org/torspec.git/tree/attic/dir-spec-v2.txt">Tor
+      directory protocol, version 2</eref>.
+      However, the preamble of bridge network statuses contains far fewer items
+      than that of (relay) network statuses, and the ones that are similar
+      differ in some of the details.
+      That's why all preamble lines that exist in sanitized bridge network
+      statuses are specified below, not just the ones that differ.</t>
+      <section title="Annotations">
+        <t>Sanitized bridge network statuses start with one or more
+        annotations:</t>
+        <t>"@type" SP "bridge-network-status" SP Version NL
+        <list>
+          <t>[Exactly once.]</t>
+          <t>Version can be one of the following numbers:
+          <list style="symbols">
+            <t>"1.0" was the first version.</t>
+            <t>"1.1" introduced sanitized TCP ports.</t>
+            <t>"1.2" introduced the "fingerprint" line, containing the
+            fingerprint of the bridge authority which produced the document,
+            to the header.</t>
+          </list>
+          </t>
+        </list>
+        </t>
+      </section>
+      <section title="Preamble">
+        <t>The preamble contains zero or more of the following items in no
+        predefined order:</t>
+        <t>"published" SP Publication NL
+        <list>
+          <t>[Exactly once.]</t>
+          <t>Publication is the publication time for this document, which is
+          left unchanged in the sanitizing process.</t>
+        </list>
+        </t>
+        <t>"flag-thresholds" SP Thresholds NL
+        <list>
+          <t>[At most once.]</t>
+          <t>Thresholds are internal performance thresholds that the bridge
+          directory authority had at the moment it was forming a status, which
+          are left unchanged in the sanitizing process.
+          This item was first introduced in
+          <eref target="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">Tor
+          directory protocol, version 3</eref>.</t>
+        </list>
+        </t>
+        <t>"fingerprint" SP Fingerprint NL;
+        <list>
+          <t>[At most once.]</t>
+          <t>Fingerprint is the (non-sanitized) SHA-1 hash of the bridge
+          authority's long-term signing key, encoded as 40 upper-case
+          hexadecimal characters, which is either added or left unchanged in
+          the sanitizing process.
+          (Introduced in version 1.2, not present in earlier versions.)</t>
+        </list>
+        </t>
+      </section>
+      <section title="Router entries">
+        <t>For each bridge, there is one router entry containing one or more
+        items.
+        Similar to the preamble specification, the following specification
+        lists all lines known in sanitized bridge network statuses, including
+        those that are left unchanged in the sanitizing process.</t>
+        <t>"r" SP Nickname SP SanitizedFingerprint SP SanitizedSha1Digest SP
+        Publication SP SanitizedAddress SP SanitizedORPort SP SanitizedDirPort
+        NL
+        <list>
+          <t>[At start, exactly once.]</t>
+          <t>Nickname is the bridge's original, unchanged nickname.</t>
+          <t>SanitizedFingerprint is the bridge's
+          <xref target="fingerprint">sanitized fingerprint</xref>.</t>
+          <t>SanitizedSha1Digest is the
+          <xref target="replaced-digest">sanitized SHA-1 digest</xref> of
+          the corresponding server descriptor.</t>
+          <t>Publication is the publication time for the corresponding
+          server descriptor, which is left unchanged in the sanitizing
+          process.</t>
+          <t>SanitizedAddress is the bridge's
+          <xref target="ipv4-address">sanitized IP address</xref>.</t>
+          <t>SanitizedORPort is the bridge's
+          <xref target="tcp-port">sanitized OR port</xref> (since version 1.1)
+          or the original OR port (until version 1.0).</t>
+          <t>SanitizedDirPort is the bridge's
+          <xref target="tcp-port">sanitized directory port</xref> (since
+          version 1.1) or the original directory port (until version 1.0).</t>
+        </list>
+        </t>
+        <t>"a" SP SanitizedAddress ":" SanitizedPort NL
+        <list>
+          <t>[Any number.]</t>
+          <t>SanitizedAddress is either an additional
+          <xref target="ipv4-address">sanitized IPv4 address</xref> or
+          <xref target="ipv6-address">sanitized IPv6 address</xref>.</t>
+          <t>SanitizedPort is an additional <xref target="tcp-port">sanitized
+          OR port</xref>.</t>
+        </list>
+        </t>
+        <t>"s" ... NL
+        <list>
+          <t>[Unchanged.]</t>
+        </list>
+        </t>
+        <t>"w" ... NL
+        <list>
+          <t>[Unchanged.]</t>
+          </list>
+        </t>
+        <t>"p" ... NL
+          <list>
+            <t>[Unchanged.]</t>
+          </list>
+        </t>
+      </section>
+    </section>
+  </middle>
+  <back/>
+</rfc>
+
