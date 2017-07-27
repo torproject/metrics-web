@@ -273,6 +273,8 @@ formatter <- function(x, ...) {
   format(x, ..., scientific = FALSE, big.mark = ' ')
 }
 
+theme_update(plot.title = element_text(hjust = 0.5))
+
 plot_networksize <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   s <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
@@ -298,8 +300,8 @@ plot_networksize <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0, max(networksize$value,
         na.rm = TRUE))) +
     scale_colour_hue("", breaks = c("relays", "bridges"),
@@ -335,8 +337,8 @@ plot_relaycountries <- function(start, end, country, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0, max(s$relays,
         na.rm = TRUE)), formatter = formatter) +
     ggtitle(title)
@@ -371,8 +373,8 @@ plot_versions <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "",
       limits = c(0, max(versions$relays, na.rm = TRUE))) +
     scale_colour_manual(name = "Tor version",
@@ -400,8 +402,8 @@ plot_platforms <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "",
       limits = c(0, max(platforms$value, na.rm = TRUE))) +
     scale_colour_manual(name = "Platform",
@@ -430,8 +432,8 @@ plot_bandwidth <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "Bandwidth (Gbit/s)",
         limits = c(0, max(bandwidth$value, na.rm = TRUE) * 8 / 1e9)) +
     scale_colour_hue(name = "", h.start = 90,
@@ -477,8 +479,8 @@ plot_bwhist_flags <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name="Bandwidth (Gbit/s)",
         limits = c(0, max(bw$value, na.rm = TRUE) * 8 / 1e9)) +
     scale_colour_manual(name = "",
@@ -506,8 +508,8 @@ plot_dirbytes <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name="Bandwidth (Gbit/s)",
         limits = c(0, max(dir$value, na.rm = TRUE) * 8 / 1e9)) +
     scale_colour_hue(name = "",
@@ -548,8 +550,8 @@ plot_relayflags <- function(start, end, flags, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor, limits = as.Date(c(start, end))) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor, limits = as.Date(c(start, end))) +
     scale_y_continuous(name = "", limits = c(0, max(networksize$value,
         na.rm = TRUE))) +
     scale_colour_manual(name = "Relay flags", values = c("#E69F00",
@@ -596,8 +598,8 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "") +
     expand_limits(y = 0) +
     scale_fill_manual(name = paste("Measured times on",
@@ -650,8 +652,8 @@ plot_torperf_failures <- function(start, end, source, server, filesize, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "", labels = percent) +
     scale_colour_hue(name = paste("Problems encountered on",
         ifelse(source == "all", "all sources", source)),
@@ -684,8 +686,8 @@ plot_connbidirect <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "", labels = percent) +
     scale_colour_hue(name = "Medians and interquartile ranges",
                      breaks = c("both", "write", "read"),
@@ -753,8 +755,8 @@ plot_bandwidth_flags <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name="Bandwidth (Gbit/s)",
         limits = c(0, max(bandwidth$value, na.rm = TRUE) * 8 / 1e9)) +
     scale_colour_manual(name = "",
@@ -883,8 +885,8 @@ plot_userstats <- function(start, end, node, variable, value, events,
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "", labels = formatter) +
     expand_limits(y = 0) +
     ggtitle(title)
@@ -948,8 +950,8 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "", limits = c(0, max_y),
         labels = formatter) +
     scale_colour_hue(paste("Top-", top, " transports", sep = "")) +
@@ -979,8 +981,8 @@ plot_advbwdist_perc <- function(start, end, p, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "Advertised bandwidth in Gbit/s\n",
         limits = c(0, max(t$advbw, na.rm = TRUE))) +
     scale_colour_hue(name = "Percentile",
@@ -1007,8 +1009,8 @@ plot_advbwdist_relay <- function(start, end, n, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "Advertised bandwidth in Gbit/s\n",
         limits = c(0, max(t$advbw, na.rm = TRUE))) +
     scale_colour_hue(name = "n", breaks = levels(t$relay)) +
@@ -1031,8 +1033,8 @@ plot_hidserv_dir_onions_seen <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "") +
     ggtitle("Unique .onion addresses\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
@@ -1055,8 +1057,8 @@ plot_hidserv_rend_relayed_cells <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "") +
     ggtitle("Onion-service traffic in Mbit/s\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 72)
@@ -1081,8 +1083,8 @@ plot_hidserv_frac_reporting <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "", labels = percent) +
     scale_colour_hue(name = "",
                      breaks = c("rend-relayed-cells", "dir-onions-seen"),
@@ -1114,8 +1116,8 @@ plot_webstats_tb <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
@@ -1138,8 +1140,8 @@ plot_webstats_tb_platform <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
     scale_colour_hue(name = "Platform",
         breaks = c("w", "m", "l", "o", ""),
@@ -1169,8 +1171,8 @@ plot_webstats_tb_locale <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
     scale_colour_hue(name = "Locale",
         breaks = c(e$locale, "(other)"),
@@ -1199,8 +1201,8 @@ plot_webstats_tm <- function(start, end, path) {
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
-        breaks = date_breaks$major,
-        minor_breaks = date_breaks$minor) +
+        date_breaks = date_breaks$major,
+        date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
