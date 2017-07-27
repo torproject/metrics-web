@@ -16,9 +16,9 @@
     <patternset refid="compile.libs" />
     <include name="jstl1.1-1.1.2.jar"/>
     <include name="standard-1.1.2.jar"/>
-    <include name="commons-codec-1.9.jar"/>
+    <include name="commons-codec-1.10.jar"/>
     <include name="commons-lang-2.6.jar"/>
-    <include name="gson-2.2.4.jar"/>
+    <include name="gson-2.4.jar"/>
   </patternset>
 
   <path id="classpath">
@@ -26,7 +26,7 @@
     <path refid="base.classpath" />
     <fileset dir="${libs}">
       <patternset refid="compile.libs" />
-      <include name="servlet-api-3.0.jar"/>
+      <include name="servlet-api-3.1.jar"/>
     </fileset>
   </path>
 
