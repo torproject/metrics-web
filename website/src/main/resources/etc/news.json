@@ -512,13 +512,6 @@
     ]
   },
   {
-    "start": "2017-05-22",
-    "description": "Unusually slow OnionPerf measurements.",
-    "links": [
-      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-June/000383.html\">metrics-team thread</a>"
-    ]
-  },
-  {
     "start": "2017-05-23",
     "end": "2017-06-13",
     "protocols": [
@@ -534,6 +527,19 @@
     "description": "Set <code>AssumeReachable 1</code> on the default obfs4 bridges <a href=\"https://atlas.torproject.org/#details/C8CBDB2464FC9804A69531437BCF2BE31FDD2EE4\">cymrubridge31</a> and <a href=\"https://atlas.torproject.org/#details/0BAC39417268B96B9F514E7F63FA6FBA1A788955\">cymrubridge33</a> in an attempt to make them publish statistics.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-May/012283.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-06-07",
+    "protocols": [
+      "obfs4",
+      "ipv6"
+    ],
+    "description": "Tor Browser 7.0 released. Adds an IPv6 address for default obfs4 bridge Lisbeth. Adds new default obfs4 bridges <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a> and <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-70-released\">blog post</a>",
+      "<a href=\"https://bugs.torproject.org/22429\">IPv6 ticket</a>",
+      "<a href=\"https://trac.torproject.org/projects/tor/ticket/22468\">frosty and dragon ticket</a>"
     ]
   },
   {
@@ -581,14 +587,6 @@
     ]
   },
   {
-    "start": "2017-07-02",
-    "description": "deb.torproject.org upgrades from tor 0.2.9 to tor 0.3.0",
-    "links": [
-      "<a href=\"https://metrics.torproject.org/versions.html?start=2017-05-01&end=2017-07-15\">relay versions graph</a>",
-      "<a href=\"https://twitter.com/nusenu_/status/884128686764687361\">tweet</a>"
-    ]
-  },
-  {
     "start": "2017-06-26",
     "end": "2017-07-03",
     "protocols": [
@@ -611,7 +609,16 @@
     ]
   },
   {
+    "start": "2017-07-02",
+    "description": "deb.torproject.org upgrades from tor 0.2.9 to tor 0.3.0",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/versions.html?start=2017-05-01&end=2017-07-15\">relay versions graph</a>",
+      "<a href=\"https://twitter.com/nusenu_/status/884128686764687361\">tweet</a>"
+    ]
+  },
+  {
     "start": "2017-07-04",
+    "end": "2017-07-21",
     "protocols": [
       "obfs4"
     ],
@@ -622,6 +629,7 @@
   },
   {
     "start": "2017-07-04",
+    "end": "2017-07-21",
     "protocols": [
       "obfs4"
     ],
@@ -652,6 +660,16 @@
     "description": "Sustained increase in meek users in Brazil. Locals believe that they are not actual users, rather bots or something like that. End date coincides with shutdown of meek-azure before migration.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2016-06-01&end=2017-04-01&country=br\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2016-08-18",
+    "place": "ml",
+    "description": "Sudden increase of direct and bridge users in Mali.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-01-01&end=2017-07-27&country=ml&events=off\">relay graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-01-01&end=2017-07-27&country=ml&events=off\">bridge graph</a>"
     ],
     "unknown": true
   },
@@ -751,6 +769,32 @@
     "unknown": true
   },
   {
+    "start": "2017-02-09",
+    "end": "2017-08-01",
+    "place": "in",
+    "protocols": [
+      "obfs3"
+    ],
+    "description": "Gradual but large increase of obfs3 users in India, followed by slow decay. Relay users and other transports seemingly not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2016-11-01&end=2017-07-27&country=in\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-02-09",
+    "end": "2017-03-21",
+    "place": "jo",
+    "protocols": [
+      "obfs3"
+    ],
+    "description": "Abrupt increase and decrease in obfs3 users in Jordan. Relay users and other transports seemingly not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2016-11-01&end=2017-07-27&country=jo\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
     "start": "2017-04-05",
     "end": "2017-04-13",
     "place": "il",
@@ -818,6 +862,16 @@
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2017-May/043206.html\">tor-talk post</a>",
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-03-15&end=2017-06-13&country=eg&events=on\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-06-14",
+    "place": "ml",
+    "description": "Sudden increase of direct and bridge users in Mali.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-07-27&country=ml&events=off\">relay graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-01-01&end=2017-07-27&country=ml&events=off\">bridge graph</a>"
     ],
     "unknown": true
   }
