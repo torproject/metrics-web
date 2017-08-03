@@ -30,7 +30,8 @@
     ],
     "description": "Kazakhstan blocks Tor TLS by ClientHello and ServerHello fingerprints.",
     "links": [
-      "<a href=\"https://bugs.torproject.org/6140 ticket] [https://gitweb.torproject.org/censorship-timeline.git/tree/patches/kazakhstan/notes.txt?id=3b09a1571c67f53dc81533c81f99cfadfd550d26\">tor patches</a>"
+      "<a href=\"https://bugs.torproject.org/6140\">ticket</a>",
+      "<a href=\"https://gitweb.torproject.org/censorship-timeline.git/tree/patches/kazakhstan/notes.txt?id=3b09a1571c67f53dc81533c81f99cfadfd550d26\">tor patches</a>"
     ]
   },
   {
@@ -67,7 +68,7 @@
       "<OR>",
       "relay"
     ],
-    "description": "Relay users increase globally from about 800K to over 5M, when computers in the [https://en.wikipedia.org/wiki/Mevade_Botnet Mevade/Sefnit botnetbegan using Tor to communicate. The user count decreased in the following months through efforts to clean up the botnet. Sometime in 2014-04, the botnet switched from using Tor to using SSH.",
+    "description": "Relay users increase globally from about 800K to over 5M, when computers in the <a href=\"https://en.wikipedia.org/wiki/Mevade_Botnet\">Mevade/Sefnit botnet</a> began using Tor to communicate. The user count decreased in the following months through efforts to clean up the botnet. Sometime in 2014-04, the botnet switched from using Tor to using SSH.",
     "links": [
       "<a href=\"https://blog.torproject.org/blog/how-to-handle-millions-new-tor-clients\">blog post</a>",
       "<a href=\"https://research.torproject.org/techreports/botnet-tr-2013-11-20.pdf\">tech report</a>",
@@ -251,24 +252,21 @@
     "protocols": [
       "obfs3"
     ],
-    "description": "Default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\" target=\"_blank\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>) upgrade and begin reporting statistics to the new bridge authority Bifroest.",
-    "links": []
+    "description": "Default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>) upgrade and begin reporting statistics to the new bridge authority Bifroest."
   },
   {
     "start": "2016-09-24",
     "protocols": [
       "obfs3"
     ],
-    "description": "Default obfs3 bridge LeifEricson upgrades and begins reporting statistics to the new bridge authority Bifroest. This is the last obfs3 bridge that hadn't upgraded.",
-    "links": []
+    "description": "Default obfs3 bridge LeifEricson upgrades and begins reporting statistics to the new bridge authority Bifroest. This is the last obfs3 bridge that hadn't upgraded."
   },
   {
     "start": "2016-09-24",
     "protocols": [
       "obfs4"
     ],
-    "description": "Default obfs4 bridge LeifEricson upgrades and begins reporting statistics to the new bridge authority Bifroest. This is the last obfs4 bridge that hadn't upgraded.",
-    "links": []
+    "description": "Default obfs4 bridge LeifEricson upgrades and begins reporting statistics to the new bridge authority Bifroest. This is the last obfs4 bridge that hadn't upgraded."
   },
   {
     "start": "2016-10-02",
@@ -373,7 +371,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9C805C955CB124D188C0D44F271E9BE57DE2109\" target=\"_blank\">Lisbeth</a> turns on timing obfuscation (<code>iat-mode=1</code>).",
+    "description": "Default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9C805C955CB124D188C0D44F271E9BE57DE2109\">Lisbeth</a> turns on timing obfuscation (<code>iat-mode=1</code>).",
     "links": [
       "<a href=\"https://bugs.torproject.org/20837\">ticket</a>"
     ]
@@ -384,8 +382,7 @@
     "protocols": [
       "obfs3"
     ],
-    "description": "Outage of default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\" target=\"_blank\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>). (Start date not known for sure, though it must have been after 2016-09-23; discussed in non-archived tor-team email.)",
-    "links": []
+    "description": "Outage of default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>). (Start date not known for sure, though it must have been after 2016-09-23; discussed in non-archived tor-team email.)"
   },
   {
     "start": "2016-11-30",
@@ -504,7 +501,7 @@
   {
     "start": "2017-05-16",
     "place": "ua",
-    "description": "Ukraine blocks Russian-operated web services. Relay and bridge users increase over 5&times;. May be partly attributable to the <a href=\"https://freeu.online/\">FreeU Browser</a>, a browser produced and advertised by Mail.ru that includes a tor client.",
+    "description": "Ukraine blocks Russian-operated web services. Relay and bridge users increase over 5&times;. May be partly attributable to the <a href=\"https://freeu.online/\">FreeU Browser</a> , a browser produced and advertised by Mail.ru that includes a tor client.",
     "links": [
       "<a href=\"https://bugs.torproject.org/22369\">ticket</a>",
       "<a href=\"https://www.rt.com/business/388502-ukraine-bans-vk-yandex/\">news article</a>",
@@ -597,7 +594,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>",
+    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
     ]
@@ -608,7 +605,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>",
+    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
     ]
@@ -618,7 +615,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>",
+    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
     ]
@@ -733,7 +730,7 @@
     ],
     "description": "Huge increase in relay users (200k+).",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-11-23&end=2017-02-21&country=ae&events=off\">graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-03-10&country=ae&events=off\">graph</a>",
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-January/000284.html\">metrics-team thread</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/5pbukk/united_arab_emirates_went_from_10k_tor_users_to/\">reddit thread</a>"
     ],
