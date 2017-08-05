@@ -366,88 +366,9 @@ descriptors, because that would defeat the purpose of making bridges hard
 to enumerate for censors.
 We therefore sanitize bridge descriptors by removing all potentially
 identifying information and publish sanitized versions here.
-The sanitizing steps are as follows:
+The sanitizing steps are specified in detail on a separate
+<a href="bridge-descriptors.html">page</a>.
 </p>
-
-<ol>
-<li><b>Replace bridge identities with their digests:</b> Clients
-can request a bridge's current descriptor by sending its identity string
-to the bridge authority.
-This is a feature to make bridges on dynamic IP addresses useful.
-Therefore, the original identities (and anything that could be used to
-derive them) need to be removed from the descriptors.
-The bridge's RSA-based identity fingerprint is replaced with its SHA-1
-hash value, and the bridge's optional base64-encoded Ed25519 master key is
-replaced with its SHA-256 digest.
-The idea is to have a consistent replacement that remains stable over
-months or even years (without keeping a secret for a keyed hash
-function).</li>
-<li><b>Remove most cryptographic keys and signatures:</b> It would be
-straightforward to learn about the bridge identity from the bridge's
-public key.
-Replacing keys by newly generated ones seemed to be unnecessary (and would
-involve keeping a state over months/years), so that most cryptographic
-keys and signatures have simply been removed.</li>
-<li><b>Replace IP address with IP address hash:</b> Of course, IP
-addresses need to be sanitized, too.
-<ul><li>IPv4 addresses are replaced with <code>10.x.x.x</code> with
-<code>x.x.x</code> being the 3 byte output of
-<code>H(IP address | bridge identity | secret)[:3]</code>.
-The input <code>IP address</code> is the 4-byte long binary representation of
-the bridge's current IP address.
-The <code>bridge identity</code> is the 20-byte long binary representation of
-the bridge's long-term identity fingerprint.
-The <code>secret</code> is a 31-byte long secure random string that changes
-once per month for all descriptors and statuses published in that month.
-<code>H()</code> is SHA-256.
-The <code>[:3]</code> operator means that we pick the 3 most significant bytes
-of the result.</li>
-<li>IPv6 addresses are replaced with <code>[fd9f:2e19:3bcf::xx:xxxx]</code>
-with <code>xx:xxxx</code> being the hex-formatted 3 byte output of a similar
-hash function as described for IPv4 addresses.
-The only differences are that the input <code>IP address</code> is 16 bytes
-long and the <code>secret</code> is only 19 bytes long.</li></ul></li>
-<li><b>Replace TCP port with TCP port hash:</b> It may be less obvious
-that TCP ports need to be sanitized, but an unusual TCP port used by a
-high-value bridge might still stand out and provide yet another way to
-locate and block the bridge.
-Therefore, each non-zero TCP port is replaced with a number in the range
-from 49152 to 65535 that is the result of
-<code>H(port | bridge identity | secret)[:2] / 2^2 + 2^15 + 2^14</code>
-written as decimal number.
-The input <code>port</code> is the 2-byte long binary representation of the
-TCP port.
-The <code>bridge identity</code> is the 20-byte long binary representation of
-the bridge's long-term identity fingerprint.
-The <code>secret</code> is a 33-byte long secure random string that changes
-once per month for all descriptors and statuses published in that month.
-<code>H()</code> is SHA-256.
-The <code>[:2]</code> operator means that we pick the 2 most significant bytes
-of the result.
-The subsequent integer division and additions make sure that sanitized
-ports are in the range from 49152 to 65535 which is reserved for private
-services.
-All operations assume inputs to be in network byte order.
-TCP ports that are 0 in the original descriptor are left unchanged.</li>
-<li><b>Replace contact information:</b> If there is contact information in
-a descriptor, the contact line is changed to
-<code>somebody</code>.</li>
-<li><b>Remove pluggable transport addresses and arguments:</b> Bridges may
-provide transports in addition to the onion-routing protocol and include
-information about these transports in their extra-info descriptors for
-BridgeDB.
-In that case, any IP addresses, TCP ports, or additional arguments are
-removed, only leaving in the supported transport names.</li>
-<li><b>Append descriptor digests:</b> Descriptors are often referenced by
-their digest, but that is not possible anymore once their content has
-changed.
-As a workaround, sanitized descriptors contain a new line
-<code>router-digest</code> with the hex representation of the SHA-1 of the
-original descriptor digest excluding RSA signature and&mdash;if the bridge
-uses an Ed25519 identity&mdash;a new line <code>router-digest-sha256</code>
-with the base64-encoded SHA-256 of the SHA-256 digest of the original
-descriptor including all signatures.</li>
-</ol>
 
 <h3 id="type-bridge-network-status" class="hover">Bridge Network Statuses
 <small><code>@type bridge-network-status 1.2</code></small>

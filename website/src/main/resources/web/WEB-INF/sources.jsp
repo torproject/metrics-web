@@ -41,5 +41,16 @@
       </ul>
     </div>
 
+    <div class="container">
+      <h2>Specifications <a href="#specifications" name="specifications" class="anchor">#</a></h2>
+      <p>The following specification documents are available for Tor network data.</p>
+      <ul>
+        <li><a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt" target="_blank">Tor directory protocol, version 3</a></li>
+        <li><a href="https://gitweb.torproject.org/torspec.git/tree/attic/dir-spec-v2.txt" target="_blank">Tor directory protocol, version 2</a></li>
+        <li><a href="https://gitweb.torproject.org/torspec.git/tree/attic/dir-spec-v1.txt" target="_blank">Tor directory protocol, version 1</a></li>
+        <li><a href="bridge-descriptors.html">Tor bridge descriptors</a></li>
+      </ul>
+    </div>
+
 <jsp:include page="bottom.jsp"/>
 
