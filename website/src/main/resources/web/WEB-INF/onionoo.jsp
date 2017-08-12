@@ -600,14 +600,13 @@ Indicates how recent the relay objects in this document are.
 </li>
 
 <li>
-<b>relays_skipped <span class="label label-primary">new</span></b>
+<b>relays_skipped</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
 <p>
 Number of skipped relays as requested by a positive "offset" parameter
 value.
 Omitted if zero.
-<span class="blue">Added on January 27, 2017.</span>
 </p>
 </li>
 
@@ -621,14 +620,13 @@ Array of relay objects as specified below.
 </li>
 
 <li>
-<b>relays_truncated <span class="label label-primary">new</span></b>
+<b>relays_truncated</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
 <p>
 Number of truncated relays as requested by a positive "limit"
 parameter value.
 Omitted if zero.
-<span class="blue">Added on January 27, 2017.</span>
 </p>
 </li>
 
@@ -644,14 +642,13 @@ Indicates how recent the bridge objects in this document are.
 </li>
 
 <li>
-<b>bridge_skipped <span class="label label-primary">new</span></b>
+<b>bridges_skipped</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
 <p>
 Number of skipped bridges as requested by a positive "offset"
 parameter value.
 Omitted if zero.
-<span class="blue">Added on January 27, 2017.</span>
 </p>
 </li>
 
@@ -665,14 +662,13 @@ Array of bridge objects as specified below.
 </li>
 
 <li>
-<b>bridges_truncated <span class="label label-primary">new</span></b>
+<b>bridges_truncated</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
 <p>
 Number of truncated bridges as requested by a positive "limit"
 parameter value.
 Omitted if zero.
-<span class="blue">Added on January 27, 2017.</span>
 </p>
 </li>
 
