@@ -331,7 +331,7 @@ Parameter values are case-insensitive.
 <p>
 Return only (1) relays with the parameter value matching (part of a)
 nickname, (possibly $-prefixed) beginning of a hex-encoded fingerprint,
-any 4 hex characters of a space-separated fingerprint, beginning of a
+any 4 hex character block of a space-separated fingerprint, beginning of a
 base64-encoded fingerprint without trailing equal signs, or beginning of
 an IP address (possibly enclosed in square brackets in case of IPv6),
 (2) bridges with (part of a) nickname or (possibly
@@ -352,6 +352,8 @@ Qualified search terms have the form "key:value" (without double quotes)
 with "key" being one of the parameters listed here except for "search",
 "fingerprint", "order", "limit", "offset", and "fields", and "value" being
 the string that will internally be passed to that parameter.
+If a qualified search term for a given "key" is specified more than once,
+only the first "value" is considered.
 </p>
 </li>
 
