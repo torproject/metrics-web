@@ -874,5 +874,17 @@
       "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-01-01&end=2017-07-27&country=ml&events=off\">bridge graph</a>"
     ],
     "unknown": true
+  },
+  {
+    "start": "2017-08-02",
+    "place": "lt",
+    "protocols": [
+      "<OR>"
+    ],
+    "description": "Increase of direct users in Lithuania, from 2k to 70k. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-08-12&country=lt&events=off\">graph</a>"
+    ],
+    "unknown": true
   }
 ]
