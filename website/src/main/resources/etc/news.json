@@ -433,6 +433,16 @@
     ]
   },
   {
+    "start": "2017-01-24",
+    "protocols": [
+      "snowflake"
+    ],
+    "description": "Tor Browser 7.0a1 released, including Snowflake for GNU/Linux only.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-70a1-released\">blog post</a>"
+    ]
+  },
+  {
     "start": "2017-02-10",
     "protocols": [
       "<OR>",
@@ -639,6 +649,16 @@
     ]
   },
   {
+    "start": "2017-08-08",
+    "protocols": [
+      "snowflake"
+    ],
+    "description": "Tor Browser 7.5a4 released, including Snowflake for macOS.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-75a4-released\">blog post</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "place": "tm",
     "protocols": [
@@ -756,14 +776,15 @@
   },
   {
     "start": "2017-02-06",
+    "end": "2017-08-01",
     "place": "ae",
     "protocols": [
       "obfs3"
     ],
-    "description": "Increase in obfs3 users from the UAE, from 5K to 75K. Other transports and countries not affected.",
+    "description": "Increase in obfs3 users from the UAE, from 5K to 100K. Other transports not affected.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-transport.html?start=2017-01-01&end=2017-03-10&transport=obfs3&transport=obfs4&transport=meek&transport=%3COR%3E\">transport graph</a>",
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-11-23&end=2017-03-10&country=ae\">UAE bridge graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-transport.html?start=2017-01-01&end=2017-08-01&transport=obfs3&transport=obfs4&transport=meek&transport=%3COR%3E\">transport graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-01-01&end=2017-08-01&country=ae\">UAE bridge graph</a>",
       "<a href=\"https://bugs.torproject.org/21345\">ticket</a>"
     ],
     "unknown": true
@@ -866,6 +887,19 @@
     "unknown": true
   },
   {
+    "start": "2017-06-13",
+    "place": "ch",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Increase in obfs4 users in Switzerland, from 200 to 400.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-01-01&end=2017-08-14&country=ch\">bridge graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2017-01-01&end=2017-08-14&country=ch\">transport graph</a>"
+    ],
+    "unknown": true
+  },
+  {
     "start": "2017-06-14",
     "place": "ml",
     "description": "Sudden increase of direct and bridge users in Mali.",
@@ -876,14 +910,81 @@
     "unknown": true
   },
   {
+    "start": "2017-07-15",
+    "end": "2017-07-22",
+    "place": "sc",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Increase of relay users in the Seychelles, from 400 to 6000. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-08-14&country=sc&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-07-31",
+    "place": "nl",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Increase of relay users in the Netherlands, from 50k to 100k.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-08-14&country=nl&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-07-31",
+    "place": "ro",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Increase of relay users in Romania, from 10k to 40k. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-08-14&country=ro&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
     "start": "2017-08-02",
     "place": "lt",
     "protocols": [
-      "<OR>"
+      "<OR>",
+      "relay"
     ],
-    "description": "Increase of direct users in Lithuania, from 2k to 70k. Bridge users not affected.",
+    "description": "Increase of relay users in Lithuania, from 2k to 70k. Bridge users not affected.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-08-12&country=lt&events=off\">graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-08-12&country=lt&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-08-06",
+    "place": "sc",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Further increase of relay users in the Seychelles, from 5k to 100k. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-08-14&country=sc&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-08-07",
+    "place": "at",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Fluctuations of relay users in Austria. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-08-14&country=at&events=off\">relay graph</a>"
     ],
     "unknown": true
   }
