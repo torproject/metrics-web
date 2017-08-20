@@ -303,6 +303,7 @@
   <servlet-mapping>
     <servlet-name>CollecTorServlet</servlet-name>
     <url-pattern>/collector.html</url-pattern>
+    <url-pattern>/collector/*</url-pattern>
   </servlet-mapping>
 
   <servlet>

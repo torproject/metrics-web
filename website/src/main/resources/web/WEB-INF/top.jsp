@@ -7,7 +7,7 @@
   <title>${param.pageTitle}</title>
 
   <meta charset="utf-8">
-  <link href="images/favicon.ico" type="image/x-icon" rel="shortcut icon">
+  <link href="/images/favicon.ico" type="image/x-icon" rel="shortcut icon">
 
   <!-- yes, we are handheld friendly :) -->
   <meta name="HandheldFriendly" content="True">
@@ -15,31 +15,31 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
 
   <!-- icons for mobile devices -->
-  <link rel="apple-touch-icon" href="images/apple-touch-icon-152x152.png">
-  <link rel="shortcut icon" href="images/android-icon.png" sizes="196x196">
-  <meta name="msapplication-square70x70logo" content="images/smalltile.png">
-  <meta name="msapplication-square150x150logo" content="images/mediumtile.png">
-  <meta name="msapplication-wide310x150logo" content="images/widetile.png">
-  <meta name="msapplication-square310x310logo" content="images/largetile.png">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon-152x152.png">
+  <link rel="shortcut icon" href="/images/android-icon.png" sizes="196x196">
+  <meta name="msapplication-square70x70logo" content="/images/smalltile.png">
+  <meta name="msapplication-square150x150logo" content="/images/mediumtile.png">
+  <meta name="msapplication-wide310x150logo" content="/images/widetile.png">
+  <meta name="msapplication-square310x310logo" content="/images/largetile.png">
 
   <!-- jQuery -->
-  <script src="js/jquery-3.2.1.min.js"></script>
+  <script src="/js/jquery-3.2.1.min.js"></script>
 
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <script src="/js/bootstrap.min.js"></script>
 
   <!-- Fonts -->
-  <link rel="stylesheet" href="css/font-awesome.min.css">
-  <link rel="stylesheet" href="fonts/source-sans-pro.css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/fonts/source-sans-pro.css">
 
   <!-- Prism -->
-  <link rel="stylesheet" href="css/prism.css">
-  <script src="js/prism.js"></script>
+  <link rel="stylesheet" href="/css/prism.css">
+  <script src="/js/prism.js"></script>
 
   <!-- custom styles and javascript -->
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/script.js"></script>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/script.js"></script>
 
 </head>
 
@@ -69,7 +69,7 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </label>
-      <a class="navbar-brand visible-xs" href="/"><img src="images/tor-metrics-white.png" width="232" height="50" alt="Tor Metrics"></a>
+      <a class="navbar-brand visible-xs" href="/"><img src="/images/tor-metrics-white.png" width="232" height="50" alt="Tor Metrics"></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -80,18 +80,18 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
         <li class="visible-xs section-header">Metrics</li>
         <li class="visible-xs<c:if test="${'Home'.equals(param.navActive)}"> active</c:if>"><a href="/"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a></li>
         <c:forEach var="category" items="${categories}">
-        <li class="visible-xs<c:if test="${category[1].equals(param.navActive)}"> active</c:if><c:if test="${fn:length(category[0]) == 0}"> disabled</c:if>"><a<c:if test="${fn:length(category[0]) > 0}"> href="${category[0]}.html"</c:if>><i class="fa ${category[3]} fa-fw" aria-hidden="true"></i> ${category[1]}</a></li>
+        <li class="visible-xs<c:if test="${category[1].equals(param.navActive)}"> active</c:if><c:if test="${fn:length(category[0]) == 0}"> disabled</c:if>"><a<c:if test="${fn:length(category[0]) > 0}"> href="/${category[0]}.html"</c:if>><i class="fa ${category[3]} fa-fw" aria-hidden="true"></i> ${category[1]}</a></li>
         </c:forEach>
         <!-- /end of primary copy -->
 
         <!-- secondary navigation items -->
         <li class="visible-xs section-header">More</li>
-        <li <c:if test="${'News'.equals(param.navActive)}"> class="active"</c:if>><a href="news.html"><i class="fa fa-newspaper-o fa-fw hidden-sm" aria-hidden="true"></i> News</a></li>
-        <li <c:if test="${'Sources'.equals(param.navActive)}"> class="active"</c:if>><a href="sources.html"><i class="fa fa-archive fa-fw hidden-sm" aria-hidden="true"></i> Sources</a></li>
-        <li <c:if test="${'Operation'.equals(param.navActive)}"> class="active"</c:if>><a href="operation.html"><i class="fa fa-cogs fa-fw hidden-sm" aria-hidden="true"></i> Operation</a></li>
-        <li <c:if test="${'Development'.equals(param.navActive)}"> class="active"</c:if>><a href="development.html"><i class="fa fa-code fa-fw hidden-sm" aria-hidden="true"></i> Development</a></li>
-        <li <c:if test="${'Research'.equals(param.navActive)}"> class="active"</c:if>><a href="research.html"><i class="fa fa-university fa-fw hidden-sm" aria-hidden="true"></i> Research</a></li>
-        <li <c:if test="${'About'.equals(param.navActive)}"> class="active"</c:if>><a href="about.html"><i class="fa fa-lightbulb-o fa-fw hidden-sm" aria-hidden="true"></i> About</a></li>
+        <li <c:if test="${'News'.equals(param.navActive)}"> class="active"</c:if>><a href="/news.html"><i class="fa fa-newspaper-o fa-fw hidden-sm" aria-hidden="true"></i> News</a></li>
+        <li <c:if test="${'Sources'.equals(param.navActive)}"> class="active"</c:if>><a href="/sources.html"><i class="fa fa-archive fa-fw hidden-sm" aria-hidden="true"></i> Sources</a></li>
+        <li <c:if test="${'Operation'.equals(param.navActive)}"> class="active"</c:if>><a href="/operation.html"><i class="fa fa-cogs fa-fw hidden-sm" aria-hidden="true"></i> Operation</a></li>
+        <li <c:if test="${'Development'.equals(param.navActive)}"> class="active"</c:if>><a href="/development.html"><i class="fa fa-code fa-fw hidden-sm" aria-hidden="true"></i> Development</a></li>
+        <li <c:if test="${'Research'.equals(param.navActive)}"> class="active"</c:if>><a href="/research.html"><i class="fa fa-university fa-fw hidden-sm" aria-hidden="true"></i> Research</a></li>
+        <li <c:if test="${'About'.equals(param.navActive)}"> class="active"</c:if>><a href="/about.html"><i class="fa fa-lightbulb-o fa-fw hidden-sm" aria-hidden="true"></i> About</a></li>
         <!-- /secondary navigation items -->
 
       </ul>
@@ -102,7 +102,7 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
 
 <!-- page header for every single page -->
 <div class="page-header hidden-xs">
-  <a href="/"><img src="images/tor-metrics-white@2x.png" width="232" height="50" alt="Tor Metrics" id="metrics-wordmark"></a>
+  <a href="/"><img src="/images/tor-metrics-white@2x.png" width="232" height="50" alt="Tor Metrics" id="metrics-wordmark"></a>
   <div>
     <p>
       <i>&ldquo;Tor metrics are the ammunition that lets Tor and other security advocates argue for a more private and secure Internet from a position of data, rather than just dogma or perspective.&rdquo;<br><small>&mdash; Bruce Schneier (June 1, 2016)</small></i>
@@ -119,7 +119,7 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
       <ul class="nav navbar-nav">
         <li <c:if test="${'Home'.equals(param.navActive)}"> class="active"</c:if>><a href="/"><i class="fa fa-home fa-fw hidden-sm" aria-hidden="true"></i> Home</a></li>
         <c:forEach var="category" items="${categories}">
-        <li class="<c:if test="${category[1].equals(param.navActive)}"> active</c:if><c:if test="${fn:length(category[0]) == 0}"> disabled</c:if>"><a<c:if test="${fn:length(category[0]) > 0}"> href="${category[0]}.html"</c:if>><i class="fa ${category[3]} fa-fw hidden-sm" aria-hidden="true"></i> ${category[1]}</a></li>
+        <li class="<c:if test="${category[1].equals(param.navActive)}"> active</c:if><c:if test="${fn:length(category[0]) == 0}"> disabled</c:if>"><a<c:if test="${fn:length(category[0]) > 0}"> href="/${category[0]}.html"</c:if>><i class="fa ${category[3]} fa-fw hidden-sm" aria-hidden="true"></i> ${category[1]}</a></li>
         </c:forEach>
       </ul>
     </div><!-- /.navbar-collapse -->

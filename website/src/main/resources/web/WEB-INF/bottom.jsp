@@ -9,7 +9,7 @@
       <div class="col-xs-6">
         <p class="pull-right">
 
-           <a href="about.html#contact">Contact</a>
+           <a href="/about.html#contact">Contact</a>
 
         </p>
       </div>
