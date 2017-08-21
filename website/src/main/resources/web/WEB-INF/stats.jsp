@@ -315,8 +315,8 @@ its predecessor <a href="https://gitweb.torproject.org/torperf.git">Torperf</a>,
 which both periodically fetch static files over Tor and record several
 timestamps in the process.  The data file contains daily medians and quartiles
 as well as total numbers of requests, timeouts, and failures.  Raw Onionperf and
-Torperf measurement data is available on the <a
-href="https://collector.torproject.org/#torperf">CollecTor</a> website.</p>
+Torperf measurement data is specified and available for download on the <a
+href="/collector.html#torperf">CollecTor</a> page.</p>
 
 <p><b>Download as <a href="stats/torperf-1.1.csv">CSV file</a>.</b></p>
 
