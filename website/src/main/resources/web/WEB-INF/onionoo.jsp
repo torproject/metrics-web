@@ -227,6 +227,8 @@ added response meta data fields "relays_skipped", "relays_truncated",
 <li><strong>4.0</strong>: Extended search parameter to not require
 leading or enclosing square brackets around IPv6 addresses anymore on
 February 28, 2017.</li>
+<li><strong>4.1</strong>: Removed bridge clients objects' beta fields
+"countries", "transports", and "versions" on August 30, 2017.</li>
 </ul>
 
 
@@ -1836,69 +1838,7 @@ time period and higher data resolution.
 The unit is number of clients.
 Contained graph history objects may contain null values if the bridge did
 not report client statistics for at least 50% of a given time period.
-Each graph history object contains the following additional key-value
-pairs:
 </p>
-
-<ul class="properties">
-
-<li>
-<b>countries <span class="label label-danger">beta</span></b>
-<code class="typeof">object</code>
-<span class="required-false">optional</span>
-<p>
-Object containing fractions of clients by country in the considered time
-period.
-Keys are two-letter lower-case country codes as found in a GeoIP database.
-Values are numbers between 0 and 1 standing for the fraction of clients by
-country.
-A country is only included if at least 1% of clients came from this
-country.
-Omitted if the bridge did not report client statistics by country.
-<span class="red"><strong>BETA:</strong> This field breaks compatibility
-with the history objects contained in other documents pretty badly.
-It might be removed in the future without notice.</span>
-</p>
-</li>
-
-<li>
-<b>transports <span class="label label-danger">beta</span></b>
-<code class="typeof">object</code>
-<span class="required-false">optional</span>
-<p>
-Object containing fractions of clients by transport in the considered time
-period.
-Keys are transport names, or <strong>"&lt;OR&gt;"</strong> for the default
-onion-routing transport protocol.
-Values are numbers between 0 and 1 standing for the fraction of clients by
-transport.
-Omitted if the bridge did not report client statistics by transport.
-<span class="red"><strong>BETA:</strong> This field breaks compatibility
-with the history objects contained in other documents pretty badly.
-It might be removed in the future without notice.</span>
-</p>
-</li>
-
-<li>
-<b>versions <span class="label label-danger">beta</span></b>
-<code class="typeof">object</code>
-<span class="required-false">optional</span>
-<p>
-Object containing fractions of clients by IP version in the considered
-time period.
-Keys are either <strong>"v4"</strong> for IPv4 or <strong>"v6"</strong>
-for IPv6.
-Values are numbers between 0 and 1 standing for the fraction of clients by
-version.
-Omitted if the bridge did not report client statistics by IP version.
-<span class="red"><strong>BETA:</strong> This field breaks compatibility
-with the history objects contained in other documents pretty badly.
-It might be removed in the future without notice.</span>
-</p>
-</li>
-
-</ul>
-
 </li>
 
 </ul>
