@@ -303,6 +303,7 @@
   <servlet-mapping>
     <servlet-name>DataSourceServlet</servlet-name>
     <url-pattern>/bridge-descriptors.html</url-pattern>
+    <url-pattern>/web-server-logs.html</url-pattern>
   </servlet-mapping>
 
   <servlet>

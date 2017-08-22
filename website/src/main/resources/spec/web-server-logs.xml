@@ -1,0 +1,205 @@
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- Make this a private "Internet Draft". -->
+<?rfc private="web-server-logs"?>
+<!-- Use compact format without horizontal rules between sections. -->
+<?rfc compact="yes"?>
+<!-- Remove authorship information. -->
+<?rfc authorship="no"?>
+<!-- Remove index. -->
+<?rfc-ext include-index="no" ?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+  <!ENTITY nbsp "&#160;">
+  <!ENTITY thinsp "&#8202;">
+  <!ENTITY nbhy "&#8209;">
+  <!ENTITY ndash "&#8211;">
+  <!ENTITY mdash "&#8212;">
+]>
+<rfc xmlns:x="http://purl.org/net/xml2rfc/ext">
+  <front>
+    <title>Tor web server logs</title>
+  </front>
+  <middle>
+    <section title="Purpose of this document">
+      <t>BETA: As of November 8, 2017, this document is still under
+      discussion and subject to change without prior notice. Feel free
+      to <eref target="/about.html#contact">contact us</eref> for questions or
+      concerns regarding this document.</t>
+      <t>Tor's web servers, like most web servers, keep request logs for
+      maintenance and informational purposes.</t>
+      <t>However, unlike most other web servers, Tor's web servers use a
+      privacy-aware log format that avoids logging too sensitive data about
+      their users.</t>
+      <t>Also unlike most other web server logs, Tor's logs are neither archived
+      nor analyzed before performing a number of post-processing steps to further
+      reduce any privacy-sensitive parts.</t>
+      <t>This document describes 1) meta-data contained in log file names
+      written by Tor's web servers, 2) the privacy-aware log format used in
+      these files, and 3) subsequent sanitizing steps that are applied before
+      archiving and analyzing these log files.</t>
+      <t>As a basis for our current implementation this document also
+      describes the naming conventions for the input log files, which is
+      just a description of the current state and subject to change.</t>
+      <t>As a convention for this document, all format strings conform to the
+      format strings used by
+      <eref
+target="http://httpd.apache.org/docs/current/mod/mod_log_config.html">Apache's
+mod_log_config module</eref>.</t>
+    </section>
+    <section title="Log file metadata">
+      <t>Log files have meta-data that is not part of the file's contents,
+      in particular, the names of the virtual and physical hosts.</t>
+      <t>All access log files written by Tor's web servers follow the naming
+      convention &lt;virtual-host&gt;-access.log-YYYYMMDD, where
+      "YYYYMMDD" is the date of the rotation and finalization of the log file,
+      which is not used in the further sanitizing process.
+      The "access.log" part serves as a marker for web server access
+      logs.</t>
+      <t>The virtual hostname can be inferred from the input log's name,
+      whereas the physical hostname needs to be provided by other means.
+      Currently, log files are made available to the santizer in a
+      separate directory per physical web server host.
+      Log files are typically gz-compressed,
+      which is indicated by appending ".gz" to log file names, but this is
+      subject to change.
+      Files with unknown compression type are discarded (currently ".xz",
+      ".gz", and ".bz2" are recognized).
+      Overall, the sanitizer expects log files to use the following path
+      format:
+      <list>
+        <t>&lt;physical-host&gt;/&lt;virtual-host&gt;-access.log-YYYYMMDD[.gz]</t>
+      </list>
+      </t>
+      <t>As first safeguard against publishing log files that are too
+      sensitive, we discard all files not matching the naming convention for
+      access logs. This is to prevent, for example, error logs from slipping
+      through.</t>
+    </section>
+    <section title="Privacy-aware log format">
+      <t>Tor's Apache web servers are configured to write log files that extend
+      Apache's Combined Log Format with a couple tweaks towards privacy. For
+      example, the following Apache configuration lines were in use at the time
+      of writing (subject to change):
+      <list>
+        <t>LogFormat "0.0.0.0 - %u %{[%d/%b/%Y:00:00:00 %z]}t \"%r\" %>s %b \"%{Referer}i\" \"-\" %{Age}o" privacy</t>
+        <t>LogFormat "0.0.0.1 - %u %{[%d/%b/%Y:00:00:00 %z]}t \"%r\" %>s %b \"%{Referer}i\" \"-\" %{Age}o" privacyssl</t>
+        <t>LogFormat "0.0.0.2 - %u %{[%d/%b/%Y:00:00:00 %z]}t \"%r\" %>s %b \"%{Referer}i\" \"-\" %{Age}o" privacyhs</t>
+      </list>
+      </t>
+      <t>The main difference to Apache's Common Log Format is that request IP
+      addresses are removed and the field is instead used to encode whether the
+      request came in via http:// (0.0.0.0), via https:// (0.0.0.1), or via the
+      site's onion service (0.0.0.2).</t>
+      <t>Tor's web servers are configured to use UTC as timezone, which is also
+      highly recommended when rewriting request times to "00:00:00" in order for
+      the subsequent sanitizing steps to work correctly. Alternatively, if the
+      system timezone is not set to UTC, web servers should keep request times
+      unchanged and let them be handled by the subsequent sanitizing steps.</t>
+      <t>Tor's web servers are configured to rotate logs at least once per day,
+      which does not necessarily happen at 00:00:00 UTC. As a result, log files
+      may contain requests from up to two UTC days and several log files may
+      contain requests that have been started on the same UTC day.</t>
+    </section>
+    <section title="Sanitizing steps">
+      <t>The request logs written by Tor's web servers still contain too many
+      details that we are uncomfortable publishing. Therefore, we apply a couple
+      of sanitizing steps on these log files before making them public and
+      analyzing them ourselves. Some of these steps could as well be made
+      directly by Apache, but others can only be made with a delay.</t>
+      <section title="Discarding non-matching lines">
+        <t>Log files are expected to contain exactly one request per line. We
+        process these files line by line and discard any lines not matching the
+        following criteria:
+        <list>
+          <t>Lines begin with Apache's Common Log Format ("%h %l %u %t \"%r\"
+          %&gt;s %b") or a compatible format like one of Tor's privacy formats.
+          It is acceptable if lines start with a format that is compatible to
+          the Common Log Format and continue with additional fields. Those
+          additional fields will later be discarded, but the line will not be
+          discarded because of them.</t>
+          <t>The request protocol is HTTP.</t>
+          <t>The request method is either GET or HEAD.</t>
+          <t>The final status of the request is neither 400 ("Bad Request") nor
+          404 ("Not Found").</t>
+        </list>
+        </t>
+        <t>Any lines not meeting all these criteria will be discarded, and
+        processing continues with the next line.</t>
+        <t>In addition, log lines are treated differently according to the
+        date they contain:
+        <list>
+        <t>During an import process the sanitizer takes all log line dates into
+        account and determines the reference interval as stretching from
+        the oldest date to the youngest date encountered.
+        Depending on the reference interval log lines are not yet processed, if
+        their date is on the edges of the reference interval, i.e., the date is
+        not at least a day younger than the older endpoint or the date is only
+        LIMIT days older than the younger endpoint, where LIMIT is initially set
+        to two, but this might change if necessary.</t>
+        <t>If the younger endpoint of the reference interval coincides with the
+        current system date,  the day before is used as the new younger
+        reference interval endpoint, which ensures that the sanitizer won't
+        publish logs prematurely, i.e., before there is a chance that they are
+        complete.  Thus, processing of log lines carrying such date is
+        postponed.</t>
+        <t>All log lines with dates for which the sanitizer already published
+        a log file are discarded in order to avoid altering published logs.</t>
+        </list>
+        </t>
+      </section>
+      <section title="Rewriting matching lines">
+        <t>All matching lines, which are already checked to match Apache's
+        Common Log Format ("%h %l %u %t \"%r\" %&gt;s %b"), are rewritten
+        following these rules:
+        <list>
+          <t>%h: If the remote hostname starts with "0.0.0.", it is kept
+          unchanged, otherwise it's rewritten to "0.0.0.0".</t>
+          <t>%l: The remote logname, if present, is rewritten to "-".</t>
+          <t>%u: The remote user, if present, is rewritten to "-".</t>
+          <t>%t: The time the request was received is converted to UTC, unless
+          the time is already given in UTC, and time and time zone components
+          are rewritten to "00:00:00 +0000". Date components are kept
+          unchanged.</t>
+          <t>%r: If the first line of request contains a query string, that
+          query string is removed from "?" to the end of the request string.
+          Otherwise the first line of request is kept unchanged.</t>
+          <t>%&gt;s: The final status is kept unchanged.</t>
+          <t>%b: The size of response in bytes is kept unchanged.</t>
+        </list>
+        </t>
+        <t>Any columns exceeding Apache's Common Log Format are discarded.</t>
+        <t>The result is still supposed to be fully compatible with the Common
+        Log Format and can be processed by any tools being capable of processing
+        that format.</t>
+      </section>
+      <section title="Re-assembling log files">
+        <t>Rewritten log lines are re-assembled into sanitized log files based
+        on physical host, virtual host, and request start date.</t>
+        <t>The naming convention for sanitized log files is:
+        <list>
+          <t>&lt;virtual-host&gt;_&lt;physical-host&gt;_access.log_YYYYMMDD[.xz]</t>
+        </list>
+        The underscore is a separator symbol between the various parts of
+        the filename.
+        </t>
+        <t>Sanitized log files may additionally be sorted into directories by
+        virtual host and date as in:
+        <list>
+          <t>&lt;virtual-host&gt;/YYYY/MM/&lt;virtual-host&gt;_&lt;physical-host&gt;_access.log_YYYYMMDD[.xz]</t>
+        </list>
+        The virtual hostnames, like 'metrics.torproject.org' or
+        'dist.torproject.org', are more familiar to the public and were therefore
+        chosen to be the first naming component.
+        </t>
+        <t>As last and certainly not least important sanitizing step, all
+        rewritten log lines are sorted alphabetically, so that request order
+        cannot be inferred from sanitized log files.</t>
+        <t>Sanitized log files are typically compressed before publication. In
+        particular the sorting step allows for highly efficient compression
+        rates. We typically use XZ for compression, which is indicated by
+        appending ".xz" to log file names, but this is subject to change.</t>
+      </section>
+    </section>
+  </middle>
+  <back/>
+</rfc>
+

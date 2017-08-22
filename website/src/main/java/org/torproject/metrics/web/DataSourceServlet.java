@@ -22,6 +22,8 @@ public class DataSourceServlet extends AnyServlet {
     super.init();
     this.specFiles.put("/bridge-descriptors.html",
         new String[] { "/bridge-descriptors.jsp", "Tor Bridge Descriptors" });
+    this.specFiles.put("/web-server-logs.html",
+        new String[] { "/web-server-logs.jsp", "Tor Web Server Logs" });
   }
 
   @Override

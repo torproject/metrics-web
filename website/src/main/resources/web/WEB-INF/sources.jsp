@@ -49,6 +49,7 @@
         <li><a href="https://gitweb.torproject.org/torspec.git/tree/attic/dir-spec-v2.txt" target="_blank">Tor directory protocol, version 2</a></li>
         <li><a href="https://gitweb.torproject.org/torspec.git/tree/attic/dir-spec-v1.txt" target="_blank">Tor directory protocol, version 1</a></li>
         <li><a href="bridge-descriptors.html">Tor bridge descriptors</a></li>
+        <li><a href="web-server-logs.html">Tor web server logs</a></li>
       </ul>
     </div>
 
