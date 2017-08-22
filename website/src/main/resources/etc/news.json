@@ -169,7 +169,7 @@
     "protocols": [
       "<OR>"
     ],
-    "description": "Coup attempt in Turkey. A paper (§ 4.1) reports a decline in Tor users.",
+    "description": "Coup attempt in Turkey. A paper (&sect; 4.1) reports a decline in Tor users.",
     "links": [
       "<a href=\"https://www.usenix.org/conference/foci17/workshop-program/presentation/tanash\">paper</a>",
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-04-01&end=2016-09-01&country=tr\">relay graph</a>"
