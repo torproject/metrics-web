@@ -78,7 +78,8 @@ public class NewsServlet extends AnyServlet {
       String year = String.format("%tY", cal);
       cutOffDates.put(yearStart, new String[] { year, year });
     } while (!this.sortedNews.isEmpty()
-        && yearStart.compareTo(this.sortedNews.get(0).getStart()) > 0);
+        && yearStart.compareTo(this.sortedNews.get(this.sortedNews.size() - 1)
+        .getStart()) > 0);
 
     /* Sort news into categories. */
     Map<String[], List<String[]>> newsByCategory = new LinkedHashMap<>();
