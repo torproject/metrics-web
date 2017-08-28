@@ -99,6 +99,243 @@
     ]
   },
   {
+    "start": "2014-02-15",
+    "protocols": [
+      "meek",
+      "flashproxy"
+    ],
+    "description": "Began running meek-server on bridge already hosting websocket-server for flash proxy."
+  },
+  {
+    "start": "2014-05-08",
+    "protocols": [
+      "meek",
+      "flashproxy"
+    ],
+    "description": "Reinstalled the bridge running meek and flash proxy."
+  },
+  {
+    "start": "2014-07-28",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Set up meek-amazon CDN configuration."
+  },
+  {
+    "start": "2014-08-29",
+    "end": "2014-09-01",
+    "protocols": [
+      "fte"
+    ],
+    "description": "Decrease in fte users, perhaps caused by an outage of one of the default Tor Browser bridges.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2014-September/007494.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2014-09-15",
+    "protocols": [
+      "meek",
+      "flashproxy"
+    ],
+    "description": "Split the bridge running meek and flashproxy into separate processes in order to avoid spurious correlation in user counts.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2014-September/007486.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2014-09-16",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Switched meek-amazon to HTTPS.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/13174\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2014-09-29",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Changed the bridge backing meek-amazon."
+  },
+  {
+    "start": "2014-10-14",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Enabled PublishServerDescriptor on the meek-amazon bridge. Between 2014-09-29 and 2014-10-14, meek-amazon users were not being counted.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2014-October/007611.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2014-10-15",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Tor Browser 4.0 released, adding support for meek.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-40-released\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2014-10-25",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Changed the bridge backing meek-google."
+  },
+  {
+    "start": "2014-10-25",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Changed the meek-google App Engine instance to the F2 class, from F1."
+  },
+  {
+    "start": "2014-10-27",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Changed the meek-google App Engine instance back to the F1 class, from F2."
+  },
+  {
+    "start": "2014-10-31",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Changed the meek-google App Engine instance to the F2 class again, from F1."
+  },
+  {
+    "start": "2014-11-08",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Changed the meek-google App Engine instance back to the F1 class, from F2."
+  },
+  {
+    "start": "2014-11-15",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Moved the meek-google bridge to better hardware."
+  },
+  {
+    "start": "2015-02-28",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Altered performance settings on the meek-google App Engine instance in an effort to reduce instance hours. Set max idle instances to 4 and min pending latency to 500 ms."
+  },
+  {
+    "start": "2015-04-08",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Implemented persistent connections for meek-azure, increasing performance.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2015-April/008637.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2015-04-15",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Tor Weekly News covers the meek-azure performance improvement.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tor-weekly-news-%E2%80%94-april-15th-2015\">covers the meek-azure blog post</a>"
+    ]
+  },
+  {
+    "start": "2015-05-22",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Rate-limited the meek-google bridge to 1.5 MB/s."
+  },
+  {
+    "start": "2015-06-02",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Further rate-limited meek-google to 1.1 MB/s, from 1.5 MB/s."
+  },
+  {
+    "start": "2015-06-08",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Rate-limited the meek-amazon bridge to 1.1 MB/s."
+  },
+  {
+    "start": "2015-07-20",
+    "end": "2015-08-14",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Outage of meek-azure.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2015-July/038487.html\">mailing list post about start</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2015-August/038780.html\">mailing list post about end</a>"
+    ]
+  },
+  {
+    "start": "2015-07-22",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Published a workaround for the meek-azure outage that started 2017-07-20.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2015-July/038496.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2015-09-23",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Upgraded meek-azure bridge from KVM to Xen.",
+    "links": [
+      "<a href=\"https://blog.linode.com/2015/06/16/linode-turns-12-heres-some-kvm/\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2015-09-30",
+    "end": "2015-10-09",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Outage of meek-amazon caused by an expired certificate.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2015-October/039231.html\">mailing list post about start</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2015-October/039234.html\">mailing list post about end</a>"
+    ]
+  },
+  {
+    "start": "2015-10-02",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Rate-limited the meek-azure bridge to 1.1 MB/s. (Azure grant expired.)"
+  },
+  {
+    "start": "2015-10-30",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Altered the performance settings on the meek-google App Engine instance. Set max idle instances to 2 and min pending latency to 1000 ms. This used to be configured through the web interface but is now configured in an application file, which at some point caused the settings from 2015-02-28 to be lost."
+  },
+  {
+    "start": "2015-10-30",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Further rate-limited the meek-azure bridge to 0.8 MB/s, from 1.1 MB/s."
+  },
+  {
     "start": "2015-11-18",
     "end": "2015-12-10",
     "place": "bd",
@@ -115,6 +352,95 @@
     ]
   },
   {
+    "start": "2015-12-14",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Enabled client IP statistics on the meek-azure bridge.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/13171#comment:7\">comment</a>"
+    ]
+  },
+  {
+    "start": "2015-12-20",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Enabled client IP statistics on the meek-google bridge.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/13171#comment:10\">comment</a>"
+    ]
+  },
+  {
+    "start": "2015-12-25",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Established an unthrottled bridge <a href=\"https://atlas.torproject.org/#details/C20658946DD706A7A2181159A1A04CD838570D04\">C20658946DD706A7A2181159A1A04CD838570D04</a> for people who set up their own meek CDN configuration."
+  },
+  {
+    "start": "2016-01-11",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Enabled client IP statistics on the meek-amazon bridge.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/13171#comment:13\">comment</a>"
+    ]
+  },
+  {
+    "start": "2016-01-14",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Increased rate limit of the meek-azure bridge to 3 MB/s, from 0.8 MB/s."
+  },
+  {
+    "start": "2016-01-15",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Increased rate limit of the meek-google bridge to 3 MB/s, from 1.1 MB/s."
+  },
+  {
+    "start": "2016-01-16",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Increased rate limit of the meek-amazon bridge to 3 MB/s, from 1.1 MB/s."
+  },
+  {
+    "start": "2016-01-29",
+    "end": "2016-02-02",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Temporary blocking of an Azure edge server in China.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2016-February/040199.html\">mailing list post about start</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2016-February/040199.html\">mailing list post about end</a>"
+    ]
+  },
+  {
+    "start": "2016-03-27",
+    "end": "2016-03-27",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Outage of meek-azure bridge, caused by an expired TLS certificate."
+  },
+  {
+    "start": "2016-03-27",
+    "end": "2016-03-31",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Temporarily ran an experimental branch for IPv6 counting on the meek-azure bridge.",
+    "links": [
+      "<a href=\"https://gitweb.torproject.org/karsten/tor.git/log/?h=task-18460-2&id=b79d859\">task-18460-2 branch</a>"
+    ]
+  },
+  {
     "start": "2016-04-28",
     "protocols": [
       "fte"
@@ -123,17 +449,6 @@
     "links": [
       "<a href=\"https://blog.torproject.org/blog/tor-browser-60a5-released\">6.0a5 blog post</a>",
       "<a href=\"https://blog.torproject.org/blog/tor-browser-60a5-hardened-released\">6.0a5-hardened blog post</a>",
-      "<a href=\"https://bugs.torproject.org/18495\">ticket</a>"
-    ]
-  },
-  {
-    "start": "2016-05-30",
-    "protocols": [
-      "fte"
-    ],
-    "description": "Tor Browser 6.0 released, which lacks the fte pluggable transport on Mac.",
-    "links": [
-      "<a href=\"https://blog.torproject.org/blog/tor-browser-60-released\">6.0 blog post</a>",
       "<a href=\"https://bugs.torproject.org/18495\">ticket</a>"
     ]
   },
@@ -149,6 +464,27 @@
       "<a href=\"https://blog.torproject.org/blog/tracking-impact-whatsapp-blockage-tor\">blog post</a>",
       "<a href=\"https://ooni.torproject.org/post/brazil-whatsapp-block/\">OONI report</a>",
       "<a href=\"http://bloqueios.info/en/casos/block-for-non-compliance-with-judicial-requests-for-user-data-3/\">bloqueios report</a>"
+    ]
+  },
+  {
+    "start": "2016-05-13",
+    "protocols": [
+      "meek"
+    ],
+    "description": "meek-google's App Engine instance is suspended and meek-google stops working.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2016-June/041057.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2016-05-30",
+    "protocols": [
+      "fte"
+    ],
+    "description": "Tor Browser 6.0 released, which lacks the fte pluggable transport on Mac.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/blog/tor-browser-60-released\">6.0 blog post</a>",
+      "<a href=\"https://bugs.torproject.org/18495\">ticket</a>"
     ]
   },
   {
@@ -174,6 +510,13 @@
       "<a href=\"https://www.usenix.org/conference/foci17/workshop-program/presentation/tanash\">paper</a>",
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-04-01&end=2016-09-01&country=tr\">relay graph</a>"
     ]
+  },
+  {
+    "start": "2016-08-18",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Changed the meek-amazon CDN price class from \"All\" to \"Use Only US, Canada and Europe.\""
   },
   {
     "start": "2016-08-20",
@@ -267,6 +610,14 @@
     "description": "Default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>) upgrade and begin reporting statistics to the new bridge authority Bifroest."
   },
   {
+    "start": "2016-09-23",
+    "end": "2016-11-28",
+    "protocols": [
+      "obfs3"
+    ],
+    "description": "Outage of default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>). (Start date not known for sure, though it must have been after 2016-09-23; discussed in non-archived tor-team email.)"
+  },
+  {
     "start": "2016-09-24",
     "protocols": [
       "obfs3"
@@ -279,6 +630,13 @@
       "obfs4"
     ],
     "description": "Default obfs4 bridge LeifEricson upgrades and begins reporting statistics to the new bridge authority Bifroest. This is the last obfs4 bridge that hadn't upgraded."
+  },
+  {
+    "start": "2016-09-28",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Rate limit on the meek-amazon bridge returns to 3.0 MB/s, having been set to about 1.0 MB/s for some time, cause uncertain."
   },
   {
     "start": "2016-10-02",
@@ -339,6 +697,20 @@
     ]
   },
   {
+    "start": "2016-10-28",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Decreased the rate limit on the meek-amazon bridge to 1.0 MB/s, from 3.0 MB/s."
+  },
+  {
+    "start": "2016-10-30",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Increased the rate limit on the meek-amazon bridge to 3.0 MB/s, from 1.0 MB/s."
+  },
+  {
     "start": "2016-11-03",
     "place": "tr",
     "description": "Turkey blocks Facebook, Twitter, YouTube, WhatsApp",
@@ -389,12 +761,11 @@
     ]
   },
   {
-    "start": "2016-09-23",
-    "end": "2016-11-28",
+    "start": "2016-11-22",
     "protocols": [
-      "obfs3"
+      "meek"
     ],
-    "description": "Outage of default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>). (Start date not known for sure, though it must have been after 2016-09-23; discussed in non-archived tor-team email.)"
+    "description": "Decreased the rate limit on the meek-amazon bridge to 2.0 MB/s, from 3.0 MB/s."
   },
   {
     "start": "2016-11-30",
@@ -445,6 +816,13 @@
     ]
   },
   {
+    "start": "2017-01-09",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Decreased the rate limit on the meek-azure bridge to 2.0 MB/s, from 3.0 MB/s."
+  },
+  {
     "start": "2017-01-24",
     "protocols": [
       "snowflake"
@@ -470,7 +848,27 @@
     "protocols": [
       "meek"
     ],
-    "description": "meek-azure is shut down pending migration to a new CDN configuration.",
+    "description": "Stopped the meek-azure CDN endpoint az668014.vo.msecnd.net.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-March/000981.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-03-03",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Stopped the meek-azure CDN endpoint az786092.vo.msecnd.net.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-March/000981.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-03-03",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Stopped the (unused) meek-azure CDN endpoint meek-reflect.azureedge.net.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-March/000981.html\">mailing list post</a>"
     ]
@@ -509,6 +907,13 @@
       "<a href=\"https://lists.torproject.org/pipermail/tor-consensus-health/2017-April/007845.html\">tor-consensus-health post</a>",
       "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-April/012215.html\">tor-dev thread</a>"
     ]
+  },
+  {
+    "start": "2017-04-30",
+    "protocols": [
+      "meek"
+    ],
+    "description": "The meek-amazon bridge upgrades to meek-server 0.27."
   },
   {
     "start": "2017-05-06",
@@ -658,6 +1063,19 @@
     "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2017-07-29",
+    "end": "2017-08-17",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Outage of meek-amazon bridge, caused by an expired certificate.",
+    "links": [
+      "<a href=\"https://atlas.torproject.org/#details/F4AD82B2032EDEF6C02C5A529C42CFAFE516564D\">Atlas</a>",
+      "<a href=\"https://crt.sh/?id=130970041\">expired certificate</a>",
+      "<a href=\"https://crt.sh/?id=192217077\">new certificate</a>"
     ]
   },
   {
