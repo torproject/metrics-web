@@ -62,10 +62,15 @@ public class RObjectGenerator implements ServletContextListener {
     for (Metric metric : ContentProvider.getInstance().getMetricsList()) {
       String type = metric.getType();
       String id = metric.getId();
-      if ("Graph".equals(type)) {
-        this.availableGraphs.put(id, metric);
-      } else if ("Table".equals(type)) {
-        this.availableTables.put(id, metric);
+      switch (type) {
+        case "Graph":
+          this.availableGraphs.put(id, metric);
+          break;
+        case "Table":
+          this.availableTables.put(id, metric);
+          break;
+        default:
+          /* Just skip any other types. */
       }
     }
 

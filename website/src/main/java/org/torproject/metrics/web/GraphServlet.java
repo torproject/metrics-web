@@ -166,58 +166,53 @@ public class GraphServlet extends MetricServlet {
           request.getParameterMap());
       StringBuilder urlBuilder = new StringBuilder();
       for (String parameter : this.parameters.get(requestedId)) {
-        if (parameter.equals("start") || parameter.equals("end")) {
-          String[] requestParameter;
-          if (checkedParameters != null
-              && checkedParameters.containsKey(parameter)) {
-            requestParameter = checkedParameters.get(parameter);
-          } else {
-            requestParameter = new String[] {
-                dateFormat.format(parameter.equals("start")
-                ? defaultStartDate : defaultEndDate) };
-          }
-          urlBuilder.append(String.format("&amp;%s=%s", parameter,
-              requestParameter[0]));
-          request.setAttribute(parameter, requestParameter);
-        } else if (parameter.equals("p")
-            || parameter.equals("n")
-            || parameter.equals("flag")
-            || parameter.equals("country")
-            || parameter.equals("events")
-            || parameter.equals("transport")
-            || parameter.equals("version")
-            || parameter.equals("source")
-            || parameter.equals("server")
-            || parameter.equals("filesize")) {
-          String[][] defaultParameters =
-              this.defaultParameters.get(parameter);
-          String[][] requestParameters =
-              new String[defaultParameters.length][];
-          Set<String> checked = null;
-          if (checkedParameters != null
-              && checkedParameters.containsKey(parameter)) {
-            checked = new HashSet<>(Arrays.asList(
-                checkedParameters.get(parameter)));
-          }
-          String checkedOrSelected = parameter.equals("country")
-              || parameter.equals("events") || parameter.equals("version")
-              ? " selected" : " checked";
-          for (int i = 0; i < defaultParameters.length; i++) {
-            requestParameters[i] =
-                new String[defaultParameters[i].length];
-            System.arraycopy(defaultParameters[i], 0,
-                requestParameters[i], 0, defaultParameters[i].length);
-            if (checked != null) {
-              if (checked.contains(requestParameters[i][0])) {
-                requestParameters[i][1] = checkedOrSelected;
-                urlBuilder.append(String.format("&amp;%s=%s", parameter,
-                    requestParameters[i][0]));
-              } else {
-                requestParameters[i][1] = "";
+        switch (parameter) {
+          case "start":
+          case "end":
+            String[] requestParameter;
+            if (checkedParameters != null
+                && checkedParameters.containsKey(parameter)) {
+              requestParameter = checkedParameters.get(parameter);
+            } else {
+              requestParameter = new String[] {
+                  dateFormat.format(parameter.equals("start")
+                  ? defaultStartDate : defaultEndDate) };
+            }
+            urlBuilder.append(String.format("&amp;%s=%s", parameter,
+                requestParameter[0]));
+            request.setAttribute(parameter, requestParameter);
+            break;
+          default:
+            String[][] defaultParameters =
+                this.defaultParameters.get(parameter);
+            String[][] requestParameters =
+                new String[defaultParameters.length][];
+            Set<String> checked = null;
+            if (checkedParameters != null
+                && checkedParameters.containsKey(parameter)) {
+              checked = new HashSet<>(Arrays.asList(
+                  checkedParameters.get(parameter)));
+            }
+            String checkedOrSelected = parameter.equals("country")
+                || parameter.equals("events") || parameter.equals("version")
+                ? " selected" : " checked";
+            for (int i = 0; i < defaultParameters.length; i++) {
+              requestParameters[i] =
+                  new String[defaultParameters[i].length];
+              System.arraycopy(defaultParameters[i], 0,
+                  requestParameters[i], 0, defaultParameters[i].length);
+              if (checked != null) {
+                if (checked.contains(requestParameters[i][0])) {
+                  requestParameters[i][1] = checkedOrSelected;
+                  urlBuilder.append(String.format("&amp;%s=%s", parameter,
+                      requestParameters[i][0]));
+                } else {
+                  requestParameters[i][1] = "";
+                }
               }
             }
-          }
-          request.setAttribute(parameter, requestParameters);
+            request.setAttribute(parameter, requestParameters);
+            break;
         }
       }
       if (urlBuilder.length() > 5) {

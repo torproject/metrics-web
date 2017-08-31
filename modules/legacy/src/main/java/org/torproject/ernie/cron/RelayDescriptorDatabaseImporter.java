@@ -747,18 +747,25 @@ public final class RelayDescriptorDatabaseImporter {
       int offset = (int) (lastIntervalTime / (15L * 60L * 1000L))
           - longValues.length + 1;
       String type = parts[2];
-      if (type.equals("read-history")) {
-        readArray = longValues;
-        readOffset = offset;
-      } else if (type.equals("write-history")) {
-        writtenArray = longValues;
-        writtenOffset = offset;
-      } else if (type.equals("dirreq-read-history")) {
-        dirreadArray = longValues;
-        dirreadOffset = offset;
-      } else if (type.equals("dirreq-write-history")) {
-        dirwrittenArray = longValues;
-        dirwrittenOffset = offset;
+      switch (type) {
+        case "read-history":
+          readArray = longValues;
+          readOffset = offset;
+          break;
+        case "write-history":
+          writtenArray = longValues;
+          writtenOffset = offset;
+          break;
+        case "dirreq-read-history":
+          dirreadArray = longValues;
+          dirreadOffset = offset;
+          break;
+        case "dirreq-write-history":
+          dirwrittenArray = longValues;
+          dirwrittenOffset = offset;
+          break;
+        default:
+          /* Ignore any other types. */
       }
       lastDate = currentDate;
     }

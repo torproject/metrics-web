@@ -296,12 +296,18 @@ public class Main {
      * greater than 4, put in a default that we'll attribute all responses
      * to. */
     if (total == 0) {
-      if (category.equals("country")) {
-        frequenciesCopy.put("??", 4.0);
-      } else if (category.equals("transport")) {
-        frequenciesCopy.put("<OR>", 4.0);
-      } else if (category.equals("version")) {
-        frequenciesCopy.put("v4", 4.0);
+      switch (category) {
+        case "country":
+          frequenciesCopy.put("??", 4.0);
+          break;
+        case "transport":
+          frequenciesCopy.put("<OR>", 4.0);
+          break;
+        case "version":
+          frequenciesCopy.put("v4", 4.0);
+          break;
+        default:
+          /* Ignore any other categories. */
       }
       total = 4.0;
     }
@@ -309,15 +315,21 @@ public class Main {
       double intervalFraction = ((double) (toMillis - fromMillis))
           / ((double) dirreqStatsIntervalLengthMillis);
       double val = resp * intervalFraction * e.getValue() / total;
-      if (category.equals("country")) {
-        writeOutputLine(fingerprint, "bridge", "responses", e.getKey(),
-            "", "", fromMillis, toMillis, val, publishedMillis);
-      } else if (category.equals("transport")) {
-        writeOutputLine(fingerprint, "bridge", "responses", "",
-            e.getKey(), "", fromMillis, toMillis, val, publishedMillis);
-      } else if (category.equals("version")) {
-        writeOutputLine(fingerprint, "bridge", "responses", "", "",
-            e.getKey(), fromMillis, toMillis, val, publishedMillis);
+      switch (category) {
+        case "country":
+          writeOutputLine(fingerprint, "bridge", "responses", e.getKey(),
+              "", "", fromMillis, toMillis, val, publishedMillis);
+          break;
+        case "transport":
+          writeOutputLine(fingerprint, "bridge", "responses", "",
+              e.getKey(), "", fromMillis, toMillis, val, publishedMillis);
+          break;
+        case "version":
+          writeOutputLine(fingerprint, "bridge", "responses", "", "",
+              e.getKey(), fromMillis, toMillis, val, publishedMillis);
+          break;
+        default:
+          /* Ignore any other categories. */
       }
     }
   }

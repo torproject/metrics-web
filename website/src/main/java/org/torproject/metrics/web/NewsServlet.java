@@ -103,18 +103,23 @@ public class NewsServlet extends AnyServlet {
       }
       if (news.getProtocols() != null) {
         for (String protocol : news.getProtocols()) {
-          if (protocol.equals("relay")) {
-            sb.append(" <span class=\"label label-success\">"
-                + "Relays</span>");
-          } else if (protocol.equals("bridge")) {
-            sb.append(" <span class=\"label label-primary\">"
-                + "Bridges</span>");
-          } else if (protocol.equals("<OR>")) {
-            sb.append(" <span class=\"label label-info\">"
-                + "&lt;OR&gt;</span>");
-          } else {
-            sb.append(" <span class=\"label label-info\">"
-                + protocol + "</span>");
+          switch (protocol) {
+            case "relay":
+              sb.append(" <span class=\"label label-success\">"
+                  + "Relays</span>");
+              break;
+            case "bridge":
+              sb.append(" <span class=\"label label-primary\">"
+                  + "Bridges</span>");
+              break;
+            case "<OR>":
+              sb.append(" <span class=\"label label-info\">"
+                  + "&lt;OR&gt;</span>");
+              break;
+            default:
+              sb.append(" <span class=\"label label-info\">"
+                  + protocol + "</span>");
+              break;
           }
         }
       }
