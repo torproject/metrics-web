@@ -227,8 +227,9 @@ added response meta data fields "relays_skipped", "relays_truncated",
 <li><strong>4.0</strong>: Extended search parameter to not require
 leading or enclosing square brackets around IPv6 addresses anymore on
 February 28, 2017.</li>
-<li><strong>4.1</strong>: Removed bridge clients objects' beta fields
-"countries", "transports", and "versions" on August 30, 2017.</li>
+<li><strong>4.1</strong>: Added "version" parameter and removed bridge
+clients objects' beta fields "countries", "transports", and "versions"
+on August 30, 2017.</li>
 </ul>
 
 
@@ -473,6 +474,16 @@ The provided relay fingerprint must consist of 40 hex characters where
 case does not matter, and it must not be hashed using SHA-1.
 Bridges are not contained in the result, regardless of whether they define
 a family.
+</p>
+</li>
+
+<li>
+<b>version <span class="label label-primary">new</span></b>
+<p>
+Return only relays running a Tor version that starts with the
+parameter value <i>without</i> leading <code>"Tor"</code>.
+Searchers are case-insensitive.
+<span class="blue">Added on August 30, 2017.</span>
 </p>
 </li>
 
