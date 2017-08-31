@@ -159,12 +159,7 @@ public class DocumentStore<T extends Document> {
           documentFile.getAbsolutePath());
       e.printStackTrace();
       return null;
-    } catch (InstantiationException e) {
-      System.err.printf("Unable to read %s.  Cannot instantiate document "
-          + "object.%n", documentFile.getAbsolutePath());
-      e.printStackTrace();
-      return null;
-    } catch (IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       System.err.printf("Unable to read %s.  Cannot instantiate document "
           + "object.%n", documentFile.getAbsolutePath());
       e.printStackTrace();

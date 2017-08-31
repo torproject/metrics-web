@@ -17,7 +17,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -386,13 +386,7 @@ public final class RelayDescriptorDatabaseImporter {
             + (ports != null ? ports : "\\N") + "\t");
         this.statusentryOut.write(PGbytea.toPGString(rawDescriptor)
             .replaceAll("\\\\", "\\\\\\\\") + "\n");
-      } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not write network status "
-            + "consensus entry to raw database import file.  We won't "
-            + "make any further attempts to write raw import files in "
-            + "this execution.", e);
-        this.writeRawImportFiles = false;
-      } catch (IOException e) {
+      } catch (SQLException | IOException e) {
         this.logger.log(Level.WARNING, "Could not write network status "
             + "consensus entry to raw database import file.  We won't "
             + "make any further attempts to write raw import files in "
@@ -435,7 +429,7 @@ public final class RelayDescriptorDatabaseImporter {
            * differently when creating a new String with a given encoding.
            * That's what the regexp below is for. */
           this.psD.setString(10, new String(platform.getBytes(),
-              "US-ASCII").replaceAll("[^\\p{ASCII}]",""));
+              StandardCharsets.US_ASCII).replaceAll("[^\\p{ASCII}]",""));
           this.psD.setTimestamp(11, new Timestamp(published), cal);
           this.psD.setLong(12, uptime);
           this.psD.setString(13, extraInfoDigest);
@@ -445,8 +439,6 @@ public final class RelayDescriptorDatabaseImporter {
             this.conn.commit();
           }
         }
-      } catch (UnsupportedEncodingException e) {
-        // US-ASCII is supported for sure
       } catch (SQLException e) {
         this.logger.log(Level.WARNING, "Could not add server "
             + "descriptor.  We won't make any further SQL requests in "
@@ -470,13 +462,11 @@ public final class RelayDescriptorDatabaseImporter {
             + "\t" + relayIdentifier + "\t" + bandwidthAvg + "\t"
             + bandwidthBurst + "\t" + bandwidthObserved + "\t"
             + (platform != null && platform.length() > 0
-            ? new String(platform.getBytes(), "US-ASCII") : "\\N")
-            + "\t" + this.dateTimeFormat.format(published) + "\t"
+            ? new String(platform.getBytes(), StandardCharsets.US_ASCII)
+            : "\\N") + "\t" + this.dateTimeFormat.format(published) + "\t"
             + (uptime >= 0 ? uptime : "\\N") + "\t"
             + (extraInfoDigest != null ? extraInfoDigest : "\\N")
             + "\n");
-      } catch (UnsupportedEncodingException e) {
-        // US-ASCII is supported for sure
       } catch (IOException e) {
         this.logger.log(Level.WARNING, "Could not write server "
             + "descriptor to raw database import file.  We won't make "
@@ -708,12 +698,7 @@ public final class RelayDescriptorDatabaseImporter {
             if (rhsCount % autoCommitCount == 0)  {
               this.csH.executeBatch();
             }
-          } catch (SQLException e) {
-            this.logger.log(Level.WARNING, "Could not insert bandwidth "
-                + "history line into database.  We won't make any "
-                + "further SQL requests in this execution.", e);
-            this.importIntoDatabase = false;
-          } catch (ParseException e) {
+          } catch (SQLException | ParseException e) {
             this.logger.log(Level.WARNING, "Could not insert bandwidth "
                 + "history line into database.  We won't make any "
                 + "further SQL requests in this execution.", e);
