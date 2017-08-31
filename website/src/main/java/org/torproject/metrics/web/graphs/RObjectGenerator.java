@@ -214,11 +214,9 @@ public class RObjectGenerator implements ServletContextListener {
         tableFilename, checkCache).getBytes();
 
     /* Write the table content to a map. */
-    List<Map<String, String>> result = null;
-    try {
-      result = new ArrayList<>();
-      BufferedReader br = new BufferedReader(new InputStreamReader(
-          new ByteArrayInputStream(tableBytes)));
+    List<Map<String, String>> result = new ArrayList<>();
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(
+        new ByteArrayInputStream(tableBytes)))) {
       String line = br.readLine();
       if (line != null) {
         List<String> headers = new ArrayList<>(Arrays.asList(line.split(",")));
@@ -321,10 +319,9 @@ public class RObjectGenerator implements ServletContextListener {
 
       /* Read the R object from disk and write it to a byte array. */
       long lastModified = this.objectFile.lastModified();
-      try {
-        BufferedInputStream bis = new BufferedInputStream(
-            new FileInputStream(this.objectFile), 1024);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      try (BufferedInputStream bis = new BufferedInputStream(
+          new FileInputStream(this.objectFile), 1024);
+          ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
         byte[] buffer = new byte[1024];
         int length;
         while ((length = bis.read(buffer)) > 0) {

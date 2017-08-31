@@ -120,11 +120,10 @@ public class ConsensusStatsFileHandler {
 
     /* Read in number of running bridges per bridge status. */
     if (this.bridgeConsensusStatsRawFile.exists()) {
-      try {
-        this.logger.fine("Reading file "
-            + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
-        BufferedReader br = new BufferedReader(new FileReader(
-            this.bridgeConsensusStatsRawFile));
+      this.logger.fine("Reading file "
+          + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
+      try (BufferedReader br = new BufferedReader(new FileReader(
+          this.bridgeConsensusStatsRawFile))) {
         String line = null;
         while ((line = br.readLine()) != null) {
           if (line.startsWith("date")) {
@@ -151,7 +150,6 @@ public class ConsensusStatsFileHandler {
           } /* No more cases as we already checked the range above. */
           this.bridgesRaw.put(key, value);
         }
-        br.close();
         this.logger.fine("Finished reading file "
             + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
       } catch (IOException e) {
@@ -299,19 +297,17 @@ public class ConsensusStatsFileHandler {
     }
 
     /* Write raw numbers of running bridges to disk. */
-    try {
-      this.logger.fine("Writing file "
-          + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
-      this.bridgeConsensusStatsRawFile.getParentFile().mkdirs();
-      BufferedWriter bw = new BufferedWriter(
-          new FileWriter(this.bridgeConsensusStatsRawFile));
+    this.logger.fine("Writing file "
+        + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
+    this.bridgeConsensusStatsRawFile.getParentFile().mkdirs();
+    try (BufferedWriter bw = new BufferedWriter(
+        new FileWriter(this.bridgeConsensusStatsRawFile))) {
       bw.append("datetime,authority,brunning,brunningec2");
       bw.newLine();
       for (String line : this.bridgesRaw.values()) {
         bw.append(line);
         bw.newLine();
       }
-      bw.close();
       this.logger.fine("Finished writing file "
           + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
     } catch (IOException e) {

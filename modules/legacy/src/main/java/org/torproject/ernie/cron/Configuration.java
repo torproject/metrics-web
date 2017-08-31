@@ -57,8 +57,7 @@ public class Configuration {
       return;
     }
     String line = null;
-    try {
-      BufferedReader br = new BufferedReader(new FileReader(configFile));
+    try (BufferedReader br = new BufferedReader(new FileReader(configFile))) {
       while ((line = br.readLine()) != null) {
         if (line.startsWith("#") || line.length() < 1) {
           continue;
@@ -97,7 +96,6 @@ public class Configuration {
           System.exit(1);
         }
       }
-      br.close();
     } catch (ArrayIndexOutOfBoundsException e) {
       logger.severe("Configuration file contains configuration key "
           + "without value in line '" + line + "'. Exiting!");

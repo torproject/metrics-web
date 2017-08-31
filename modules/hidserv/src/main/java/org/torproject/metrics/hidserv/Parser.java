@@ -96,9 +96,8 @@ public class Parser {
     if (this.parseHistoryFile.exists()
         && this.parseHistoryFile.isFile()) {
       SortedMap<String, Long> excludedFiles = new TreeMap<>();
-      try {
-        BufferedReader br = new BufferedReader(new FileReader(
-            this.parseHistoryFile));
+      try (BufferedReader br = new BufferedReader(new FileReader(
+          this.parseHistoryFile))) {
         String line;
         while ((line = br.readLine()) != null) {
           try {
@@ -111,7 +110,6 @@ public class Parser {
                 + "Skipping line.%n", line);
           }
         }
-        br.close();
       } catch (IOException e) {
         System.err.printf("Could not read history file '%s'.  Not "
             + "excluding descriptors in this execution.",
@@ -135,10 +133,9 @@ public class Parser {
     excludedAndParsedFiles.putAll(
         this.descriptorReader.getExcludedFiles());
     excludedAndParsedFiles.putAll(this.descriptorReader.getParsedFiles());
-    try {
-      this.parseHistoryFile.getParentFile().mkdirs();
-      BufferedWriter bw = new BufferedWriter(new FileWriter(
-          this.parseHistoryFile));
+    this.parseHistoryFile.getParentFile().mkdirs();
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(
+        this.parseHistoryFile))) {
       for (Map.Entry<String, Long> e
           : excludedAndParsedFiles.entrySet()) {
         /* Each line starts with the last-modified time of the descriptor
@@ -148,7 +145,6 @@ public class Parser {
         bw.write(String.valueOf(lastModifiedMillis) + " " + absolutePath
             + "\n");
       }
-      bw.close();
     } catch (IOException e) {
       System.err.printf("Could not write history file '%s'.  Not "
           + "excluding descriptors in next execution.",

@@ -74,10 +74,9 @@ public class DocumentStore<T extends Document> {
 
     /* Write to a new temporary file, then move it into place, possibly
      * overwriting an existing file. */
-    try {
-      documentTempFile.getParentFile().mkdirs();
-      BufferedWriter bw = new BufferedWriter(new FileWriter(
-          documentTempFile));
+    documentTempFile.getParentFile().mkdirs();
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(
+        documentTempFile))) {
       for (Map.Entry<String, SortedSet<String>> e
           : formattedDocuments.entrySet()) {
         bw.write(e.getKey() + "\n");
@@ -85,7 +84,6 @@ public class DocumentStore<T extends Document> {
           bw.write(" " + s + "\n");
         }
       }
-      bw.close();
       documentFile.delete();
       documentTempFile.renameTo(documentFile);
     } catch (IOException e) {
@@ -116,9 +114,8 @@ public class DocumentStore<T extends Document> {
 
     /* Parse the document file line by line and de-serialize contained
      * documents. */
-    try {
-      LineNumberReader lnr = new LineNumberReader(new BufferedReader(
-          new FileReader(documentFile)));
+    try (LineNumberReader lnr = new LineNumberReader(new BufferedReader(
+        new FileReader(documentFile)))) {
       String line;
       String formattedString0 = null;
       while ((line = lnr.readLine()) != null) {
@@ -128,7 +125,6 @@ public class DocumentStore<T extends Document> {
           System.err.printf("First line in %s must not start with a "
               + "space.  Not retrieving any previously stored "
               + "documents.%n", documentFile.getAbsolutePath());
-          lnr.close();
           return null;
         } else if (prefix.length() > formattedString0.length()
             && !(formattedString0 + line.substring(1))
@@ -146,13 +142,11 @@ public class DocumentStore<T extends Document> {
             System.err.printf("Unable to read line %d from %s.  Not "
                 + "retrieving any previously stored documents.%n",
                 lnr.getLineNumber(), documentFile.getAbsolutePath());
-            lnr.close();
             return null;
           }
           result.add(document);
         }
       }
-      lnr.close();
     } catch (IOException e) {
       System.err.printf("Unable to read %s.  Not retrieving any "
           + "previously stored documents.%n",

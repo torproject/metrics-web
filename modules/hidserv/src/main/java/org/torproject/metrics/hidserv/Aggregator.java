@@ -184,12 +184,10 @@ public class Aggregator {
     }
 
     /* Write all aggregated results to the output file. */
-    try {
-      this.hidservStatsCsvFile.getParentFile().mkdirs();
-      BufferedWriter bw = new BufferedWriter(new FileWriter(
-          this.hidservStatsCsvFile));
+    this.hidservStatsCsvFile.getParentFile().mkdirs();
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(
+        this.hidservStatsCsvFile))) {
       bw.write(sb.toString());
-      bw.close();
     } catch (IOException e) {
       System.err.printf("Unable to write results to %s.  Ignoring.");
     }

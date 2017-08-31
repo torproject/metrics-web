@@ -102,18 +102,15 @@ public class ResearchStatsServlet extends HttpServlet {
         statsFile.length()));
     response.setHeader("Content-Disposition",
         "inline; filename=\"" + statsFile.getName() + "\"");
-    try {
-      BufferedInputStream bis = new BufferedInputStream(
-          new FileInputStream(statsFile), 8192);
-      BufferedOutputStream bos = new BufferedOutputStream(
-          response.getOutputStream());
+    try (BufferedInputStream bis = new BufferedInputStream(
+        new FileInputStream(statsFile), 8192);
+        BufferedOutputStream bos = new BufferedOutputStream(
+        response.getOutputStream())) {
       byte[] buffer = new byte[8192];
       int length;
       while ((length = bis.read(buffer)) > 0) {
         bos.write(buffer, 0, length);
       }
-      bos.close();
-      bis.close();
     } catch (IOException e) {
       return false;
     }
