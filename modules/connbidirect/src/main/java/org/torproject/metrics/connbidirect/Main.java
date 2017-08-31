@@ -195,7 +195,7 @@ public class Main {
       BufferedReader br = new BufferedReader(new FileReader(file));
       String line;
       while ((line = br.readLine()) != null) {
-        sb.append(line + "\n");
+        sb.append(line).append("\n");
       }
       br.close();
     }
@@ -221,7 +221,7 @@ public class Main {
   static String formatParseHistory(SortedMap<String, Long> parseHistory) {
     StringBuilder sb = new StringBuilder();
     for (Map.Entry<String, Long> e : parseHistory.entrySet()) {
-      sb.append(e.getKey() + "," + e.getValue() + "\n");
+      sb.append(e.getKey()).append(",").append(e.getValue()).append("\n");
     }
     return sb.toString();
   }
@@ -268,7 +268,7 @@ public class Main {
     StringBuilder sb = new StringBuilder();
     sb.append(AGGREGATE_STATS_HEADER + "\n");
     for (Map.Entry<String, Short> e : aggregateStats.entrySet()) {
-      sb.append(e.getKey() + "," + e.getValue() + "\n");
+      sb.append(e.getKey()).append(",").append(e.getValue()).append("\n");
     }
     return sb.toString();
   }
@@ -317,7 +317,7 @@ public class Main {
   static String formatRawStats(SortedSet<RawStat> rawStats) {
     StringBuilder sb = new StringBuilder();
     for (RawStat rawStat : rawStats) {
-      sb.append(rawStat.toString() + "\n");
+      sb.append(rawStat.toString()).append("\n");
     }
     return sb.toString();
   }
@@ -442,7 +442,7 @@ public class Main {
           if (!fractionsByDateAndDirection.containsKey(
               dateAndDirection)) {
             fractionsByDateAndDirection.put(dateAndDirection,
-                new ArrayList<Short>());
+                new ArrayList<>());
           }
           fractionsByDateAndDirection.get(dateAndDirection).add(
               fractions[i]);

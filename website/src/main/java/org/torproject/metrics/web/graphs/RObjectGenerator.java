@@ -135,21 +135,21 @@ public class RObjectGenerator implements ServletContextListener {
       String parameterName = parameter.getKey();
       String[] parameterValues = parameter.getValue();
       for (String param : parameterValues) {
-        imageFilenameBuilder.append("-" + param);
+        imageFilenameBuilder.append("-").append(param);
       }
       if (parameterValues.length < 2) {
-        queryBuilder.append(parameterName + " = '" + parameterValues[0]
-            + "', ");
+        queryBuilder.append(parameterName).append(" = '")
+            .append(parameterValues[0]).append("', ");
       } else {
-        queryBuilder.append(parameterName + " = c(");
+        queryBuilder.append(parameterName).append(" = c(");
         for (int i = 0; i < parameterValues.length - 1; i++) {
-          queryBuilder.append("'" + parameterValues[i] + "', ");
+          queryBuilder.append("'").append(parameterValues[i]).append("', ");
         }
-        queryBuilder.append("'" + parameterValues[
-            parameterValues.length - 1] + "'), ");
+        queryBuilder.append("'").append(parameterValues[
+            parameterValues.length - 1]).append("'), ");
       }
     }
-    imageFilenameBuilder.append("." + fileType);
+    imageFilenameBuilder.append(".").append(fileType);
     String imageFilename = imageFilenameBuilder.toString();
     queryBuilder.append("path = '%s')");
     String query = queryBuilder.toString();
@@ -249,7 +249,7 @@ public class RObjectGenerator implements ServletContextListener {
    * already running worker thread to finish and get its result. */
   private RObject generateObject(String query, File objectFile,
       String fileName, boolean checkCache) {
-    RObjectGeneratorWorker worker = null;
+    RObjectGeneratorWorker worker;
     synchronized (this.objectGeneratorThreads) {
       if (this.objectGeneratorThreads.containsKey(query)) {
         worker = this.objectGeneratorThreads.get(query);

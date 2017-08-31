@@ -24,7 +24,6 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TimeZone;
@@ -124,7 +123,7 @@ public class ConsensusStatsFileHandler {
           + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
       try (BufferedReader br = new BufferedReader(new FileReader(
           this.bridgeConsensusStatsRawFile))) {
-        String line = null;
+        String line;
         while ((line = br.readLine()) != null) {
           if (line.startsWith("date")) {
             /* Skip headers. */
@@ -256,7 +255,7 @@ public class ConsensusStatsFileHandler {
       }
       String date = bridgesRawLine.substring(0, 10);
       if (!bridgesPerDayAndAuthority.containsKey(date)) {
-        bridgesPerDayAndAuthority.put(date, new TreeMap<String, int[]>());
+        bridgesPerDayAndAuthority.put(date, new TreeMap<>());
       }
       String authority = parts[1];
       if (!bridgesPerDayAndAuthority.get(date).containsKey(authority)) {
@@ -392,8 +391,8 @@ public class ConsensusStatsFileHandler {
     if (this.bridgesRaw.isEmpty()) {
       dumpStats.append("\nNo bridge status known yet.");
     } else {
-      dumpStats.append("\nLast known bridge status was published "
-          + this.bridgesRaw.lastKey() + ".");
+      dumpStats.append("\nLast known bridge status was published ")
+          .append(this.bridgesRaw.lastKey()).append(".");
       try {
         if (now - 6L * 60L * 60L * 1000L > dateTimeFormat.parse(
             this.bridgesRaw.lastKey()).getTime()) {

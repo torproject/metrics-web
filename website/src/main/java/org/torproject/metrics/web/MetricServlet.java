@@ -3,7 +3,6 @@
 
 package org.torproject.metrics.web;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,14 +37,12 @@ public abstract class MetricServlet extends AnyServlet {
   public void init() throws ServletException {
     super.init();
     this.metrics = ContentProvider.getInstance().getMetricsList();
-    Map<String, String> allTypesAndTitles = new HashMap<>();
     for (Metric metric : this.metrics) {
       String id = metric.getId();
       String title = metric.getTitle();
       String type = metric.getType();
-      allTypesAndTitles.put(id, String.format("%s: %s", type, title));
       if (!this.idsByType.containsKey(type)) {
-        this.idsByType.put(type, new HashSet<String>());
+        this.idsByType.put(type, new HashSet<>());
       }
       this.idsByType.get(type).add(id);
       this.titles.put(id, title);

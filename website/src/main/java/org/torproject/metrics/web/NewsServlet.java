@@ -84,18 +84,18 @@ public class NewsServlet extends AnyServlet {
     /* Sort news into categories. */
     Map<String[], List<String[]>> newsByCategory = new LinkedHashMap<>();
     for (String[] category : cutOffDates.values()) {
-      newsByCategory.put(category, new ArrayList<String[]>());
+      newsByCategory.put(category, new ArrayList<>());
     }
     for (News news : this.sortedNews) {
       StringBuilder sb = new StringBuilder();
-      sb.append("<h3 class=\"media-heading\">" + news.getStart());
+      sb.append("<h3 class=\"media-heading\">").append(news.getStart());
       if (news.getEnd() != null) {
-        sb.append(" to " + news.getEnd());
+        sb.append(" to ").append(news.getEnd());
       }
       if (news.getPlace() != null) {
         if (this.countries.containsKey(news.getPlace())) {
-          sb.append(" <span class=\"label label-warning\">"
-              + this.countries.get(news.getPlace()) + "</span>");
+          sb.append(" <span class=\"label label-warning\">")
+              .append(this.countries.get(news.getPlace())).append("</span>");
         } else {
           sb.append(" <span class=\"label label-warning\">"
               + "Unknown country</span>");
@@ -117,8 +117,8 @@ public class NewsServlet extends AnyServlet {
                   + "&lt;OR&gt;</span>");
               break;
             default:
-              sb.append(" <span class=\"label label-info\">"
-                  + protocol + "</span>");
+              sb.append(" <span class=\"label label-info\">").append(protocol)
+                  .append("</span>");
               break;
           }
         }
@@ -127,7 +127,7 @@ public class NewsServlet extends AnyServlet {
         sb.append(" <span class=\"label label-default\">"
             + "Unknown</span>");
       }
-      sb.append("</h3><p>" + news.getDescription() + "</p>");
+      sb.append("</h3><p>").append(news.getDescription()).append("</p>");
       if (news.getLinks() != null && news.getLinks().length > 0) {
         int written = 0;
         sb.append("<p class=\"links\">");

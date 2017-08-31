@@ -50,10 +50,10 @@ public class Main {
           config.getDirectoryArchivesDirectories(),
           statsDirectory,
           config.getKeepDirectoryArchiveImportHistory()) : null;
-      if (rddi != null) {
+      if (null != rddi) {
         rddi.importRelayDescriptors();
+        rddi.closeConnection();
       }
-      rddi.closeConnection();
     }
 
     // Prepare consensus stats file handler (used for stats on running
@@ -71,7 +71,6 @@ public class Main {
         csfh.importSanitizedBridges();
       }
       csfh.writeFiles();
-      csfh = null;
     }
 
     // Remove lock file

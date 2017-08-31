@@ -238,7 +238,7 @@ public class Simulate {
     final int storeOnDirs = 3;
     SortedMap<Double, SortedSet<Integer>> storedDescs = new TreeMap<>();
     for (double fingerprint : hsDirFingerprints) {
-      storedDescs.put(fingerprint, new TreeSet<Integer>());
+      storedDescs.put(fingerprint, new TreeSet<>());
     }
     for (int i = 0; i < numberOnions; i++) {
       for (int j = 0; j < replicas; j++) {
@@ -334,7 +334,7 @@ public class Simulate {
       Collections.sort(singleRelayExtrapolations,
           new Comparator<double[]>() {
             public int compare(double[] first, double[] second) {
-              return first[0] < second[0] ? -1 : first[0] > second[0] ? 1 : 0;
+              return Double.compare(first[0], second[0]);
             }
           }
       );

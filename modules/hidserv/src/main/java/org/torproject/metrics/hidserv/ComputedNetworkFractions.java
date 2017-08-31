@@ -116,11 +116,6 @@ public class ComputedNetworkFractions implements Document {
     return new String[] { first, second };
   }
 
-  /** Instantiates an empty fractions object that will be initialized more
-   * by the parse method. */
-  ComputedNetworkFractions() {
-  }
-
   private static Map<String, Long> previouslyParsedDates =
       Collections.synchronizedMap(new HashMap<String, Long>());
 
@@ -131,7 +126,7 @@ public class ComputedNetworkFractions implements Document {
   public boolean parse(String[] formattedStrings) {
     if (formattedStrings.length != 2) {
       System.err.printf("Invalid number of formatted strings.  "
-          + "Skipping.%n", formattedStrings.length);
+          + "Skipping.%n");
       return false;
     }
     String[] firstParts = formattedStrings[0].split(",", 2);

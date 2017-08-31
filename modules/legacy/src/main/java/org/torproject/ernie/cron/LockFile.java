@@ -37,7 +37,8 @@ public class LockFile {
         }
       }
       BufferedWriter bw = new BufferedWriter(new FileWriter("lock"));
-      bw.append("" + System.currentTimeMillis() + "\n");
+      bw.append("").append(String.valueOf(System.currentTimeMillis()))
+          .append("\n");
       bw.close();
       this.logger.fine("Acquired lock.");
       return true;

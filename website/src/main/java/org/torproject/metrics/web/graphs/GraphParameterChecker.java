@@ -60,7 +60,7 @@ public class GraphParameterChecker {
         "Running,Exit,Guard,Fast,Stable,HSDir");
     StringBuilder sb = new StringBuilder("all");
     for (String[] country : Countries.getInstance().getCountryList()) {
-      sb.append("," + country[0]);
+      sb.append(",").append(country[0]);
     }
     this.knownParameterValues.put("country", sb.toString());
     this.knownParameterValues.put("events", "on,off,points");

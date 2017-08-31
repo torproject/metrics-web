@@ -78,7 +78,7 @@ public class Aggregator {
           DateTimeHelper.ISO_DATE_FORMAT);
       if (extrapolated.getFractionRendRelayedCells() > 0.0) {
         if (!extrapolatedCells.containsKey(date)) {
-          extrapolatedCells.put(date, new ArrayList<double[]>());
+          extrapolatedCells.put(date, new ArrayList<>());
         }
         extrapolatedCells.get(date).add(new double[] {
             extrapolated.getExtrapolatedRendRelayedCells(),
@@ -120,9 +120,7 @@ public class Aggregator {
         Collections.sort(weightedValues,
             new Comparator<double[]>() {
               public int compare(double[] first, double[] second) {
-                return first[0] < second[0] ? -1
-                    : first[0] > second[0] ? 1
-                    : 0;
+                return Double.compare(first[0], second[0]);
               }
             }
         );
@@ -189,7 +187,8 @@ public class Aggregator {
         this.hidservStatsCsvFile))) {
       bw.write(sb.toString());
     } catch (IOException e) {
-      System.err.printf("Unable to write results to %s.  Ignoring.");
+      System.err.printf("Unable to write results to %s.  Ignoring.",
+          this.extrapolatedHidServStatsFile.getAbsolutePath());
     }
   }
 }

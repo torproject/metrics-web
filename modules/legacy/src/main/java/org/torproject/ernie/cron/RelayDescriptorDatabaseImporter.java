@@ -30,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -265,7 +264,7 @@ public final class RelayDescriptorDatabaseImporter {
     if (!this.importIntoDatabase) {
       return;
     }
-    long dateMillis = 0L;
+    long dateMillis;
     try {
       dateMillis = this.dateTimeFormat.parse(
           this.dateTimeFormat.format(timestamp).substring(0, 10)
@@ -500,7 +499,7 @@ public final class RelayDescriptorDatabaseImporter {
         StringBuilder sb = new StringBuilder("[" + offset + ":"
             + (offset + array.length - 1) + "]={");
         for (int i = 0; i < array.length; i++) {
-          sb.append((i > 0 ? "," : "") + array[i]);
+          sb.append(i > 0 ? "," : "").append(array[i]);
         }
         sb.append('}');
         this.stringValue = sb.toString();
@@ -573,7 +572,7 @@ public final class RelayDescriptorDatabaseImporter {
             + "number of elements. Ignoring this line.");
         continue;
       }
-      long intervalLength = 0L;
+      long intervalLength;
       try {
         intervalLength = Long.parseLong(parts[3].substring(1));
       } catch (NumberFormatException e) {

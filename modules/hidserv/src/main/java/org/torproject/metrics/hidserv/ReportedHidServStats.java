@@ -97,19 +97,13 @@ public class ReportedHidServStats implements Document {
     return new String[] { first, second };
   }
 
-  /* Instantiate an empty stats object that will be initialized more by
-   * the parse method. */
-  ReportedHidServStats() {
-  }
-
   /* Initialize this stats object using the two provided strings that have
    * been produced by the format method earlier.  Return whether this
    * operation was successful. */
   @Override
   public boolean parse(String[] formattedStrings) {
     if (formattedStrings.length != 2) {
-      System.err.printf("Invalid number of formatted strings.  "
-          + "Skipping.%n", formattedStrings.length);
+      System.err.printf("Invalid number of formatted strings.  Skipping.%n");
       return false;
     }
     String[] secondParts = formattedStrings[1].split(",", 4);

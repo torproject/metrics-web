@@ -4,8 +4,6 @@
 package org.torproject.metrics.hidserv;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
 /** Main class for updating extrapolated network totals of hidden-service
  * statistics.  The main method of this class can be executed as often as

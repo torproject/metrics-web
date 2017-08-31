@@ -29,8 +29,7 @@ public class MainTest {
 
   @Test
   public void testParseHistoryEmpty() {
-    assertParseHistoryCanBeSerializedAndDeserialized(
-        new TreeMap<String, Long>());
+    assertParseHistoryCanBeSerializedAndDeserialized(new TreeMap<>());
   }
 
   private final String pathA = "a";
@@ -89,8 +88,7 @@ public class MainTest {
 
   @Test
   public void testAggregateStatsEmpty() {
-    assertAggregateStatsCanBeSerializedAndDeserialized(
-        new TreeMap<String, Short>());
+    assertAggregateStatsCanBeSerializedAndDeserialized(new TreeMap<>());
   }
 
   @Test
@@ -120,8 +118,7 @@ public class MainTest {
 
   @Test
   public void testRawStatsEmpty() {
-    assertRawStatsCanBeSerializedAndDeserialized(
-        new TreeSet<Main.RawStat>());
+    assertRawStatsCanBeSerializedAndDeserialized(new TreeSet<>());
   }
 
   private static final long DATE_A = 16665; /* 2015-08-18 */
@@ -155,8 +152,7 @@ public class MainTest {
     SortedSet<Main.RawStat> rawStats = new TreeSet<>();
     rawStats.add(new Main.RawStat(DATE_A, FPR_A, (short) 40, (short) 30,
         (short) 50));
-    assertRawStatsCanBeMerged(rawStats, new TreeSet<Main.RawStat>(),
-        false);
+    assertRawStatsCanBeMerged(rawStats, new TreeSet<>(), false);
   }
 
   @Test
@@ -222,8 +218,7 @@ public class MainTest {
 
   @Test
   public void testUpdateAggregateStatsEmpty() {
-    assertStatsCanBeAggregated(new TreeMap<String, Short>(),
-        new TreeSet<Main.RawStat>());
+    assertStatsCanBeAggregated(new TreeMap<>(), new TreeSet<>());
   }
 
   @Test

@@ -268,7 +268,7 @@ public class Parser {
     /* More precisely, make sure that it contains Wmx weights, and then
      * parse them. */
     SortedSet<String> expectedWeightKeys =
-        new TreeSet<String>(Arrays.asList("Wmg,Wmm,Wme,Wmd".split(",")));
+        new TreeSet<>(Arrays.asList("Wmg,Wmm,Wme,Wmd".split(",")));
     expectedWeightKeys.removeAll(bandwidthWeights.keySet());
     if (!expectedWeightKeys.isEmpty()) {
       System.err.printf("Consensus with valid-after time %s doesn't "

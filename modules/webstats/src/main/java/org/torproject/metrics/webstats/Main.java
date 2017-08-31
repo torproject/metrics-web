@@ -208,7 +208,7 @@ public class Main {
     String site = logFileUrlMatcher.group(2);
     long logDateMillis = logDateFormat.parse(logFileUrlMatcher.group(3))
         .getTime();
-    return new Object[] { server, site, new Long(logDateMillis) };
+    return new Object[] { server, site, logDateMillis };
   }
 
   static Map<String, Integer> downloadAndParseLogFile(String urlString)

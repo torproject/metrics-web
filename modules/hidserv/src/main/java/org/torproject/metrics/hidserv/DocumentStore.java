@@ -54,8 +54,7 @@ public class DocumentStore<T extends Document> {
     for (T retrieveDocument : retrievedDocuments) {
       String[] formattedDocument = retrieveDocument.format();
       if (!formattedDocuments.containsKey(formattedDocument[0])) {
-        formattedDocuments.put(formattedDocument[0],
-            new TreeSet<String>());
+        formattedDocuments.put(formattedDocument[0], new TreeSet<>());
       }
       formattedDocuments.get(formattedDocument[0]).add(
           formattedDocument[1]);
