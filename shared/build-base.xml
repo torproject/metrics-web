@@ -7,7 +7,7 @@
   <property name="generated" value="generated"/>
   <property name="classes" value="${generated}/classes/"/>
   <property name="testclasses" value="${generated}/test-classes/"/>
-  <property name="source-and-target-java-version" value="1.7" />
+  <property name="source-and-target-java-version" value="1.8" />
   <property name="metricslibversion" value="2.0.0" />
 
   <path id="base.classpath">
