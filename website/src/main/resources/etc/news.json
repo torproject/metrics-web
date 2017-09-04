@@ -1089,6 +1089,18 @@
     ]
   },
   {
+    "start": "2017-08-14",
+    "end": "2017-08-15",
+    "protocols": [
+      "bridge"
+    ],
+    "description": "Outage of the bridge authority <a href=\"https://atlas.torproject.org/#details/1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1\">Bifroest</a>.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-August/000441.html\">mailing list post</a>",
+      "<a href=\"https://metrics.torproject.org/networksize.html?start=2017-07-01&end=2017-08-27\">graph</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "place": "tm",
     "protocols": [
@@ -1415,6 +1427,45 @@
     "description": "Fluctuations of relay users in Austria. Bridge users not affected.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-08-14&country=at&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-08-15",
+    "place": "hk",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Triple increase in direct Tor users in Hong Kong. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-08-30&country=hk&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-08-22",
+    "place": "eg",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "More than 8x sudden increase in direct Tor users in Egypt. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-08-30&country=eg&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-08-22",
+    "place": "tr",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Massive sudden increase of relay users in Turkey. Bridge users not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-08-30&country=tr&events=off\">relay graph</a>"
     ],
     "unknown": true
   }
