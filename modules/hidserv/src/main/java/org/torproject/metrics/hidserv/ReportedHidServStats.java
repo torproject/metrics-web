@@ -97,6 +97,12 @@ public class ReportedHidServStats implements Document {
     return new String[] { first, second };
   }
 
+  /** Instantiate an empty stats object that will be initialized more by
+   * the parse method.
+   *
+   * <p>Invoked by {@link DocumentStore#retrieve} via reflection.</p> */
+  ReportedHidServStats() {}
+
   /* Initialize this stats object using the two provided strings that have
    * been produced by the format method earlier.  Return whether this
    * operation was successful. */

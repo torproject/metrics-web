@@ -119,6 +119,12 @@ public class ComputedNetworkFractions implements Document {
   private static Map<String, Long> previouslyParsedDates =
       Collections.synchronizedMap(new HashMap<String, Long>());
 
+  /** Instantiates an empty fractions object that will be initialized more
+   * by the parse method.
+   *
+   * <p>Invoked by {@link DocumentStore#retrieve} via reflection.</p> */
+  ComputedNetworkFractions() {}
+
   /** Initializes this fractions object using the two provided strings
    * that have been produced by the format method earlier and returns
    * whether this operation was successful. */
