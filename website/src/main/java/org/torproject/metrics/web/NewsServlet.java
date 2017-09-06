@@ -92,11 +92,17 @@ public class NewsServlet extends AnyServlet {
       if (news.getEnd() != null) {
         sb.append(" to ").append(news.getEnd());
       }
-      if (news.getPlace() != null) {
-        if (this.countries.containsKey(news.getPlace())) {
-          sb.append(" <span class=\"label label-warning\">")
-              .append(this.countries.get(news.getPlace())).append("</span>");
-        } else {
+      if (news.getPlaces() != null) {
+        boolean appendUnknownCountry = false;
+        for (String place : news.getPlaces()) {
+          if (this.countries.containsKey(place)) {
+            sb.append(" <span class=\"label label-warning\">")
+                .append(this.countries.get(place)).append("</span>");
+          } else {
+            appendUnknownCountry = true;
+          }
+        }
+        if (appendUnknownCountry) {
           sb.append(" <span class=\"label label-warning\">"
               + "Unknown country</span>");
         }

@@ -9,7 +9,7 @@ public class News {
 
   private String end;
 
-  private String place;
+  private String[] places;
 
   private String[] protocols;
 
@@ -27,8 +27,8 @@ public class News {
     return this.end;
   }
 
-  String getPlace() {
-    return this.place;
+  String[] getPlaces() {
+    return this.places;
   }
 
   String[] getProtocols() {

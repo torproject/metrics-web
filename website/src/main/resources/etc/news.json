@@ -24,7 +24,9 @@
   {
     "start": "2012-03-01",
     "end": "2013-08-19",
-    "place": "kz",
+    "places": [
+      "kz"
+    ],
     "protocols": [
       "<OR>"
     ],
@@ -37,7 +39,9 @@
   {
     "start": "2012-05-15",
     "end": "2012-12-15",
-    "place": "et",
+    "places": [
+      "et"
+    ],
     "protocols": [
       "<OR>"
     ],
@@ -338,7 +342,9 @@
   {
     "start": "2015-11-18",
     "end": "2015-12-10",
-    "place": "bd",
+    "places": [
+      "bd"
+    ],
     "protocols": [
       "<OR>",
       "obfs3",
@@ -455,7 +461,9 @@
   {
     "start": "2016-05-02",
     "end": "2016-05-03",
-    "place": "br",
+    "places": [
+      "br"
+    ],
     "protocols": [
       "<OR>"
     ],
@@ -489,7 +497,9 @@
   },
   {
     "start": "2016-06-01",
-    "place": "kz",
+    "places": [
+      "kz"
+    ],
     "protocols": [
       "<OR>",
       "obfs4"
@@ -501,7 +511,9 @@
   },
   {
     "start": "2016-07-15",
-    "place": "tr",
+    "places": [
+      "tr"
+    ],
     "protocols": [
       "<OR>"
     ],
@@ -520,7 +532,9 @@
   },
   {
     "start": "2016-08-20",
-    "place": "ir",
+    "places": [
+      "ir"
+    ],
     "protocols": [
       "<OR>"
     ],
@@ -563,7 +577,9 @@
   },
   {
     "start": "2016-09-04",
-    "place": "ir",
+    "places": [
+      "ir"
+    ],
     "protocols": [
       "<OR>"
     ],
@@ -641,7 +657,9 @@
   {
     "start": "2016-10-02",
     "end": "2016-10-03",
-    "place": "eg",
+    "places": [
+      "eg"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -653,7 +671,9 @@
   },
   {
     "start": "2016-10-08",
-    "place": "et",
+    "places": [
+      "et"
+    ],
     "description": "Ethiopia declares a state of emergency and implements network blocks.",
     "links": [
       "<a href=\"https://ooni.torproject.org/post/ethiopia-report/#internet-shutdown\">OONI report</a>"
@@ -662,7 +682,9 @@
   {
     "start": "2016-10-08",
     "end": "2016-10-09",
-    "place": "tr",
+    "places": [
+      "tr"
+    ],
     "description": "Turkey blocks storage services including Dropbox, Google Drive, OneDrive, and GitHub. Most (all?) of the blocks were rescinded the next day.",
     "links": [
       "<a href=\"https://turkeyblocks.org/2016/10/08/google-drive-dropbox-blocked-in-turkey/\">blocking article</a>",
@@ -686,7 +708,9 @@
   },
   {
     "start": "2016-10-25",
-    "place": "eg",
+    "places": [
+      "eg"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -712,7 +736,9 @@
   },
   {
     "start": "2016-11-03",
-    "place": "tr",
+    "places": [
+      "tr"
+    ],
     "description": "Turkey blocks Facebook, Twitter, YouTube, WhatsApp",
     "links": [
       "<a href=\"https://turkeyblocks.org/2016/11/04/social-media-shutdown-turkey/\">article</a>"
@@ -720,7 +746,9 @@
   },
   {
     "start": "2016-11-04",
-    "place": "tr",
+    "places": [
+      "tr"
+    ],
     "description": "Turkey orders a block on VPN services and Tor",
     "links": [
       "<a href=\"http://turk-internet.com/portal/yazigoster.php?yaziid=54465\">Turkish article</a>",
@@ -770,7 +798,9 @@
   {
     "start": "2016-11-30",
     "end": "2016-12-02",
-    "place": "gm",
+    "places": [
+      "gm"
+    ],
     "description": "Internet shutdown in Gambia.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-11-14&end=2016-12-14&country=gm\">relay graph</a>",
@@ -780,7 +810,9 @@
   },
   {
     "start": "2016-12-01",
-    "place": "by",
+    "places": [
+      "by"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -794,7 +826,9 @@
   },
   {
     "start": "2016-12-12",
-    "place": "tr",
+    "places": [
+      "tr"
+    ],
     "protocols": [
       "<OR>"
     ],
@@ -807,7 +841,9 @@
   },
   {
     "start": "2016-12-15",
-    "place": "cd",
+    "places": [
+      "cd"
+    ],
     "description": "The Democratic Republic of the Congo orders a block of social media services.",
     "links": [
       "<a href=\"http://wlrn.org/post/congo-block-social-media-sites-ahead-protests-against-president\">article</a>",
@@ -927,7 +963,9 @@
   },
   {
     "start": "2017-05-16",
-    "place": "ua",
+    "places": [
+      "ua"
+    ],
     "description": "Ukraine blocks Russian-operated web services. Relay and bridge users increase over 5&times;. May be partly attributable to the <a href=\"https://freeu.online/\">FreeU Browser</a> , a browser produced and advertised by Mail.ru that includes a tor client.",
     "links": [
       "<a href=\"https://bugs.torproject.org/22369\">ticket</a>",
@@ -1102,7 +1140,9 @@
   },
   {
     "start": "2016-02-24",
-    "place": "tm",
+    "places": [
+      "tm"
+    ],
     "protocols": [
       "<OR>"
     ],
@@ -1115,7 +1155,9 @@
   {
     "start": "2016-07-21",
     "end": "2017-03-03",
-    "place": "br",
+    "places": [
+      "br"
+    ],
     "protocols": [
       "meek"
     ],
@@ -1127,7 +1169,9 @@
   },
   {
     "start": "2016-08-18",
-    "place": "ml",
+    "places": [
+      "ml"
+    ],
     "description": "Sudden increase of direct and bridge users in Mali.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-01-01&end=2017-07-27&country=ml&events=off\">relay graph</a>",
@@ -1137,7 +1181,9 @@
   },
   {
     "start": "2016-08-24",
-    "place": "cn",
+    "places": [
+      "cn"
+    ],
     "protocols": [
       "<OR>"
     ],
@@ -1151,7 +1197,9 @@
   {
     "start": "2016-10-09",
     "end": "2016-10-25",
-    "place": "il",
+    "places": [
+      "il"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1164,7 +1212,9 @@
   },
   {
     "start": "2016-11-20",
-    "place": "sa",
+    "places": [
+      "sa"
+    ],
     "protocols": [
       "<OR>"
     ],
@@ -1177,7 +1227,9 @@
   {
     "start": "2016-11-20",
     "end": "2016-12-22",
-    "place": "sa",
+    "places": [
+      "sa"
+    ],
     "protocols": [
       "bridge"
     ],
@@ -1203,7 +1255,9 @@
   },
   {
     "start": "2017-01-15",
-    "place": "ae",
+    "places": [
+      "ae"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1219,7 +1273,9 @@
   {
     "start": "2017-02-06",
     "end": "2017-08-01",
-    "place": "ae",
+    "places": [
+      "ae"
+    ],
     "protocols": [
       "obfs3"
     ],
@@ -1234,7 +1290,9 @@
   {
     "start": "2017-02-09",
     "end": "2017-08-01",
-    "place": "in",
+    "places": [
+      "in"
+    ],
     "protocols": [
       "obfs3"
     ],
@@ -1247,7 +1305,9 @@
   {
     "start": "2017-02-09",
     "end": "2017-03-21",
-    "place": "jo",
+    "places": [
+      "jo"
+    ],
     "protocols": [
       "obfs3"
     ],
@@ -1260,7 +1320,9 @@
   {
     "start": "2017-04-05",
     "end": "2017-04-13",
-    "place": "il",
+    "places": [
+      "il"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1274,7 +1336,9 @@
   {
     "start": "2017-04-17",
     "end": "2017-04-23",
-    "place": "il",
+    "places": [
+      "il"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1287,7 +1351,9 @@
   },
   {
     "start": "2017-04-23",
-    "place": "tw",
+    "places": [
+      "tw"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1302,7 +1368,9 @@
   {
     "start": "2017-05-09",
     "end": "2017-05-12",
-    "place": "mo",
+    "places": [
+      "mo"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1316,7 +1384,9 @@
   },
   {
     "start": "2017-05-10",
-    "place": "eg",
+    "places": [
+      "eg"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1330,7 +1400,9 @@
   },
   {
     "start": "2017-06-13",
-    "place": "ch",
+    "places": [
+      "ch"
+    ],
     "protocols": [
       "obfs4"
     ],
@@ -1343,7 +1415,9 @@
   },
   {
     "start": "2017-06-14",
-    "place": "ml",
+    "places": [
+      "ml"
+    ],
     "description": "Sudden increase of direct and bridge users in Mali.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-07-27&country=ml&events=off\">relay graph</a>",
@@ -1354,7 +1428,9 @@
   {
     "start": "2017-07-15",
     "end": "2017-07-22",
-    "place": "sc",
+    "places": [
+      "sc"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1367,7 +1443,9 @@
   },
   {
     "start": "2017-07-31",
-    "place": "nl",
+    "places": [
+      "nl"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1380,7 +1458,9 @@
   },
   {
     "start": "2017-07-31",
-    "place": "ro",
+    "places": [
+      "ro"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1393,7 +1473,9 @@
   },
   {
     "start": "2017-08-02",
-    "place": "lt",
+    "places": [
+      "lt"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1406,7 +1488,9 @@
   },
   {
     "start": "2017-08-06",
-    "place": "sc",
+    "places": [
+      "sc"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1419,7 +1503,9 @@
   },
   {
     "start": "2017-08-07",
-    "place": "at",
+    "places": [
+      "at"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1432,7 +1518,9 @@
   },
   {
     "start": "2017-08-15",
-    "place": "hk",
+    "places": [
+      "hk"
+    ],
     "protocols": [
       "<OR>",
       "relay"
@@ -1444,28 +1532,19 @@
     "unknown": true
   },
   {
-    "start": "2017-08-22",
-    "place": "eg",
+    "start": "2017-08-27",
+    "end": "2017-08-29",
+    "places": [
+      "eg",
+      "tr"
+    ],
     "protocols": [
       "<OR>",
       "relay"
     ],
-    "description": "More than 8x sudden increase in direct Tor users in Egypt. Bridge users not affected.",
+    "description": "Short-lived, simultaneous spike in direct users in Egypt and Turkey. Bridge users not affected.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-08-30&country=eg&events=off\">relay graph</a>"
-    ],
-    "unknown": true
-  },
-  {
-    "start": "2017-08-22",
-    "place": "tr",
-    "protocols": [
-      "<OR>",
-      "relay"
-    ],
-    "description": "Massive sudden increase of relay users in Turkey. Bridge users not affected.",
-    "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-08-30&country=tr&events=off\">relay graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-07-01&end=2017-09-15&country=eg&events=off\">relay graph</a>"
     ],
     "unknown": true
   }
