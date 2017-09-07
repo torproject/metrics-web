@@ -1139,6 +1139,17 @@
     ]
   },
   {
+    "start": "2017-09-01",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "A flood of new obfs4 bridges nicknamed \"Machiavelli\".",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/networksize.html?start=2017-07-01&end=2017-09-15\">graph of number of bridges</a>",
+      "<a href=\"https://twitter.com/nusenu_/status/905580044503969792\">tweet</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "places": [
       "tm"
