@@ -428,6 +428,17 @@
     ]
   },
   {
+    "start": "2016-02-17",
+    "end": "2016-02-21",
+    "places": [
+      "ug"
+    ],
+    "description": "Social media blackout in Uganda during presidential election.",
+    "links": [
+      "<a href=\"https://freedomhouse.org/report/freedom-net/2016/uganda#a2-limits\">Freedom House report</a>"
+    ]
+  },
+  {
     "start": "2016-03-27",
     "end": "2016-03-27",
     "protocols": [
@@ -472,6 +483,19 @@
       "<a href=\"https://blog.torproject.org/blog/tracking-impact-whatsapp-blockage-tor\">blog post</a>",
       "<a href=\"https://ooni.torproject.org/post/brazil-whatsapp-block/\">OONI report</a>",
       "<a href=\"http://bloqueios.info/en/casos/block-for-non-compliance-with-judicial-requests-for-user-data-3/\">bloqueios report</a>"
+    ]
+  },
+  {
+    "start": "2016-05-11",
+    "end": "2016-05-13",
+    "places": [
+      "ug"
+    ],
+    "description": "Social media blackout in Uganda following presidential inauguration.",
+    "links": [
+      "<a href=\"https://advox.globalvoices.org/2016/05/17/ugandans-are-finally-back-on-social-media-after-days-long-blackout/\">advox article</a>",
+      "<a href=\"https://ooni.torproject.org/post/uganda-social-media-blocked/\">OONI report</a>",
+      "<a href=\"https://freedomhouse.org/report/freedom-net/2016/uganda#a2-limits\">Freedom House report</a>"
     ]
   },
   {
