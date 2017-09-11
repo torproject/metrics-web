@@ -1167,9 +1167,10 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "A flood of new obfs4 bridges nicknamed \"Machiavelli\".",
+    "description": "A flood of over 4,000 obfs4 bridges nicknamed \"Machiavelli\".",
     "links": [
       "<a href=\"https://metrics.torproject.org/networksize.html?start=2017-07-01&end=2017-09-15\">graph of number of bridges</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-relays/2017-September/012925.html\">tor-relays post</a>",
       "<a href=\"https://twitter.com/nusenu_/status/905580044503969792\">tweet</a>"
     ]
   },
