@@ -69,7 +69,7 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </label>
-      <a class="navbar-brand visible-xs" href="/"><img src="images/metrics-wordmark-white.png" width="384" height="50" alt="Tor Metrics"></a>
+      <a class="navbar-brand visible-xs" href="/"><img src="images/tor-metrics-white.png" width="232" height="50" alt="Tor Metrics"></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -102,8 +102,7 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
 
 <!-- page header for every single page -->
 <div class="page-header hidden-xs">
-  <a href="/"><img src="images/metrics-logo.png" width="102" height="133" alt="" id="metrics-logo"></a>
-  <a href="/"><img src="images/metrics-wordmark-white.png" width="384" height="50" alt="Tor Metrics" id="metrics-wordmark"></a>
+  <a href="/"><img src="images/tor-metrics-white@2x.png" width="232" height="50" alt="Tor Metrics" id="metrics-wordmark"></a>
   <div>
     <p>
       <i>&ldquo;Tor metrics are the ammunition that lets Tor and other security advocates argue for a more private and secure Internet from a position of data, rather than just dogma or perspective.&rdquo;<br><small>&mdash; Bruce Schneier (June 1, 2016)</small></i>

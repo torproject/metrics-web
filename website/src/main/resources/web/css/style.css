@@ -33,10 +33,6 @@ body #wrapper {
     max-width:40%;
     height:auto;
 }
-.page-header img#metrics-wordmark {
-    position:relative;
-    top:-3px;
-}
 .page-header div {
     text-align:right;
     position:absolute;
@@ -67,7 +63,7 @@ body #wrapper {
         display:none;
     }
 }
-@media (max-height:800px) {
+@media (max-height:799.99999px) {
     /* make page header smaller on e.g. 10 inch notebooks etc. */
     .page-header {
         padding: 0em 2.0em 2.0em 2.0em;
@@ -87,6 +83,11 @@ body #wrapper {
     }
     .navbar-secondary .navbar-nav>li>a {
         margin-bottom: 0px !important;
+    }
+}
+@media (min-height:800px) and (min-width: 768px) {
+    .page-header {
+        padding-top:70px;
     }
 }
 @media (max-height:800px) and (max-width: 1199.99999px) {
@@ -238,15 +239,6 @@ blockquote:before {
 
 
 /* logo size */
-.navbar-header {
-    background-image: url(../images/metrics-logo.png);
-    background-position:left center;
-    background-repeat:no-repeat;
-    background-size:contain;
-}
-.navbar-brand {
-    padding-left:50px;
-}
 .navbar-brand img {
     height:20px;
     width:auto;
