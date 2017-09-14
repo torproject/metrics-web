@@ -1580,7 +1580,8 @@
     ],
     "description": "Short-lived, simultaneous spike in direct users in Egypt and Turkey. Bridge users not affected.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-07-01&end=2017-09-15&country=eg&events=off\">relay graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-07-01&end=2017-09-15&country=eg&events=off\">eg graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-07-01&end=2017-09-15&country=tr&events=off\">tr graph</a>"
     ],
     "unknown": true
   }
