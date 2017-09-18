@@ -39,6 +39,35 @@
       document meta-format</eref> of the Tor directory protocol, version 3
       is used.</t>
     </section>
+    <section title="Changes">
+      <t>Sanitization has changed several times over the years.
+      The following list contains all major changes that resulted in raising the
+      "@type" annotation of a descriptor:
+        <list>
+          <t>May 30, 2012: "@type" annotations were first added to sanitized
+          descriptors to indicate descriptor type and version: "@type
+          bridge-server-descriptor 1.0", "@type bridge-extra-info 1.0", and
+          "@type bridge-network-status 1.0".</t>
+          <t>June 29, 2012: "@type bridge-extra-info 1.1" added sanitized
+          "transport" lines.</t>
+          <t>February 1, 2013: "@type bridge-extra-info 1.2" was supposed to
+          indicate added "ntor-onion-key" lines, but those changes only affected
+          bridge server descriptors, not extra-info descriptors. So, nothing has
+          changed as compared to "@type bridge-extra-info 1.1", and there may be
+          "@type bridge-server-descriptor 1.0" descriptors with and without
+          those lines.</t>
+          <t>June 19, 2015: "@type bridge-server-descriptor 1.1" and "@type
+          bridge-extra-info 1.3" added "master-key-ed25519" and
+          "router-digest-sha256" lines to descriptors published by bridges using
+          an ed25519 master key.</t>
+          <t>September 18, 2016: "@type bridge-server-descriptor 1.2" and "@type
+          bridge-network-status 1.1" introduced sanitized TCP ports.</t>
+          <t>July 10, 2017: "@type bridge-network-status 1.2" introduced the
+          "fingerprint" line, containing the fingerprint of the bridge authority
+          which produced the document, to the header. </t>
+        </list>
+      </t>
+    </section>
     <section title="Sanitizing potentially sensitive descriptor items">
       <t>The following sanitizing steps are applied to original, non-sanitized
       bridge descriptors.</t>
