@@ -1175,6 +1175,13 @@
     ]
   },
   {
+    "start": "2017-09-14",
+    "protocols": [
+      "bridge"
+    ],
+    "description": "Outage of the bridge authority <a href=\"https://atlas.torproject.org/#details/1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1\">Bifroest</a>."
+  },
+  {
     "start": "2016-02-24",
     "places": [
       "tm"
@@ -1479,6 +1486,18 @@
   },
   {
     "start": "2017-07-31",
+    "end": "2017-08-28",
+    "description": "Directory authorities using 2&times; bandwidth.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-August/012389.html\">mailing list post for start</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-September/012445.html\">mailing list post for end</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-September/012446.html\">post suggesting link to nl, ro, lt, sc increases</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-07-31",
+    "end": "2017-08-28",
     "places": [
       "nl"
     ],
@@ -1488,7 +1507,8 @@
     ],
     "description": "Increase of relay users in the Netherlands, from 50k to 100k.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-08-14&country=nl&events=off\">relay graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-09-15&country=nl&events=off\">relay graph</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-September/012446.html\">post suggesting link to 2× dirauth bandwidth</a>"
     ],
     "unknown": true
   },
@@ -1503,7 +1523,8 @@
     ],
     "description": "Increase of relay users in Romania, from 10k to 40k. Bridge users not affected.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-08-14&country=ro&events=off\">relay graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-09-15&country=ro&events=off\">relay graph</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-September/012446.html\">post suggesting link to 2× dirauth bandwidth</a>"
     ],
     "unknown": true
   },
@@ -1518,7 +1539,8 @@
     ],
     "description": "Increase of relay users in Lithuania, from 2k to 70k. Bridge users not affected.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-08-12&country=lt&events=off\">relay graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-09-15&country=lt&events=off\">relay graph</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-September/012446.html\">post suggesting link to 2× dirauth bandwidth</a>"
     ],
     "unknown": true
   },
@@ -1533,7 +1555,8 @@
     ],
     "description": "Further increase of relay users in the Seychelles, from 5k to 100k. Bridge users not affected.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-08-14&country=sc&events=off\">relay graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-09-15&country=sc&events=off\">relay graph</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-September/012446.html\">post suggesting link to 2× dirauth bandwidth</a>"
     ],
     "unknown": true
   },
