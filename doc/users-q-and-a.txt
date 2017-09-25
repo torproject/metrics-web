@@ -74,7 +74,7 @@ A: We do have descriptor archives from before that time, but those
 descriptors didn't contain all the data we use to estimate user numbers.
 Please find the following tarball for more details:
 
-  https://metrics.torproject.org/data/old-user-number-estimates.tar.gz
+  https://archive.org/details/tor_metrics_old_user_number_estimates_2008_2013
 
 Q: Why do you believe the current approach to estimate user numbers is
 more accurate?

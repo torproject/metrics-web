@@ -3,4 +3,5 @@
  * Major changes
    - This is the initial release after almost eight years of
      development.
+   - Update link to old user number estimates.
 
