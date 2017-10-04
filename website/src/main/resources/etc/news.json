@@ -103,6 +103,16 @@
     ]
   },
   {
+    "start": "2014-01-31",
+    "protocols": [
+      "meek"
+    ],
+    "description": "First public announcement of meek.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2014-January/006159.html\">mailing list post</a>"
+    ]
+  },
+  {
     "start": "2014-02-15",
     "protocols": [
       "meek",
@@ -124,6 +134,33 @@
       "meek"
     ],
     "description": "Set up meek-amazon CDN configuration."
+  },
+  {
+    "start": "2014-08-12",
+    "description": "Tor Browser 3.6.4 released.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-364-and-40-alpha-1-are-released\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2014-08-12",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Tor Browser 4.0-alpha-1 released. This is the first release to have meek built in.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-364-and-40-alpha-1-are-released\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2014-08-15",
+    "protocols": [
+      "meek"
+    ],
+    "description": "'How to use the “meek” pluggable transport' blog post is published.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/how-use-meek-pluggable-transport\">blog post</a>"
+    ]
   },
   {
     "start": "2014-08-29",
@@ -179,7 +216,7 @@
     "protocols": [
       "meek"
     ],
-    "description": "Tor Browser 4.0 released, adding support for meek.",
+    "description": "Tor Browser 4.0 released. This is the first stable release with meek built in.",
     "links": [
       "<a href=\"https://blog.torproject.org/blog/tor-browser-40-released\">blog post</a>"
     ]
@@ -291,9 +328,21 @@
     "protocols": [
       "meek"
     ],
-    "description": "Published a workaround for the meek-azure outage that started 2017-07-20.",
+    "description": "Published a workaround for the meek-azure outage that started 2015-07-20.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2015-July/038496.html\">mailing list post</a>"
+    ]
+  },
+  {
+    "start": "2015-08-11",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Tor Browser 5.0 and 5.5a1 released. They have an updated configuration to work around the meek-azure outage that started 2015-07-20.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-50-released\">blog post</a>",
+      "<a href=\"https://blog.torproject.org/tor-browser-55a1-released\">blog post</a>",
+      "<a href=\"https://bugs.torproject.org/16634\">ticket</a>"
     ]
   },
   {
@@ -312,10 +361,21 @@
     "protocols": [
       "meek"
     ],
-    "description": "Outage of meek-amazon caused by an expired certificate.",
+    "description": "Outage of meek-amazon caused by an expired certificate. As a result of being rebooted, the bridge also changes its fingerprint from 4EE0CC769EB4B15A872F742EDE27D298A59DCADE to 6DDD1DB8526282837C50E9AB5D14AB50150CD624.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2015-October/039231.html\">mailing list post about start</a>",
-      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2015-October/039234.html\">mailing list post about end</a>"
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2015-October/039234.html\">mailing list post about end</a>",
+      "<a href=\"https://bugs.torproject.org/17473\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2015-10-09",
+    "protocols": [
+      "meek"
+    ],
+    "description": "The fingerprint of the meek-amazon bridge changes, as a result of begin rebooted. Released Tor Browsers with the former fingerprint are unable to connect. The fingerprint changed from 4EE0CC769EB4B15A872F742EDE27D298A59DCADE to 6DDD1DB8526282837C50E9AB5D14AB50150CD624, then again to B9E7141C594AF25699E0079C1F0146F409495296. The new fingerprint shipped with Tor Browser 5.0.4 and 5.5a4 on 2015-11-04.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/17473\">ticket</a>"
     ]
   },
   {
@@ -338,6 +398,18 @@
       "meek"
     ],
     "description": "Further rate-limited the meek-azure bridge to 0.8 MB/s, from 1.1 MB/s."
+  },
+  {
+    "start": "2015-11-04",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Tor Browser 5.0.4 and 5.5a4 released, containing a fixed fingerprint for meek-amazon.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-504-released\">5.0.4 blog post</a>",
+      "<a href=\"https://blog.torproject.org/tor-browser-55a4-released\">5.5a4 blog post</a>",
+      "<a href=\"https://bugs.torproject.org/17473\">ticket</a>"
+    ]
   },
   {
     "start": "2015-11-18",
@@ -423,8 +495,7 @@
     ],
     "description": "Temporary blocking of an Azure edge server in China.",
     "links": [
-      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2016-February/040199.html\">mailing list post about start</a>",
-      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2016-February/040199.html\">mailing list post about end</a>"
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2016-February/040199.html\">mailing list post</a>"
     ]
   },
   {
@@ -883,6 +954,16 @@
     "description": "Decreased the rate limit on the meek-azure bridge to 2.0 MB/s, from 3.0 MB/s."
   },
   {
+    "start": "2017-01-22",
+    "protocols": [
+      "meek"
+    ],
+    "description": "1.0-beta release of GAEuploader, a tool that automates the setting up of meek.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-January/011812.html\">mailing list post</a>"
+    ]
+  },
+  {
     "start": "2017-01-24",
     "protocols": [
       "snowflake"
@@ -1164,18 +1245,21 @@
   },
   {
     "start": "2017-09-01",
+    "end": "2017-09-20",
     "protocols": [
       "obfs4"
     ],
     "description": "A flood of over 4,000 obfs4 bridges nicknamed \"Machiavelli\".",
     "links": [
-      "<a href=\"https://metrics.torproject.org/networksize.html?start=2017-07-01&end=2017-09-15\">graph of number of bridges</a>",
+      "<a href=\"https://metrics.torproject.org/networksize.html?start=2017-08-01&end=2017-09-30\">graph of number of bridges</a>",
       "<a href=\"https://lists.torproject.org/pipermail/tor-relays/2017-September/012925.html\">tor-relays post</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-September/000450.html\">metrics-team thread</a>",
       "<a href=\"https://twitter.com/nusenu_/status/905580044503969792\">tweet</a>"
     ]
   },
   {
     "start": "2017-09-14",
+    "end": "2017-09-16",
     "protocols": [
       "bridge"
     ],
@@ -1204,7 +1288,7 @@
     "protocols": [
       "meek"
     ],
-    "description": "Sustained increase in meek users in Brazil. Locals believe that they are not actual users, rather bots or something like that. End date coincides with shutdown of meek-azure before migration.",
+    "description": "Sustained increase in meek users in Brazil. Locals believe that they are not actual users, rather bots or something like that. End date coincides with shutdown of meek-azure before migration. Would pick up again 2017-06-07.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2016-06-01&end=2017-04-01&country=br\">graph</a>"
     ],
@@ -1442,6 +1526,20 @@
     "unknown": true
   },
   {
+    "start": "2017-06-07",
+    "places": [
+      "br"
+    ],
+    "protocols": [
+      "meek"
+    ],
+    "description": "Sustained increase of meek users in Brazil, similar to the one that took place between 2016-07-21 and 2017-03-03.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2016-06-01&end=2017-10-01&country=br\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
     "start": "2017-06-13",
     "places": [
       "ch"
@@ -1561,7 +1659,8 @@
     "unknown": true
   },
   {
-    "start": "2017-08-07",
+    "start": "2017-07-31",
+    "end": "2017-08-17",
     "places": [
       "at"
     ],
@@ -1571,7 +1670,7 @@
     ],
     "description": "Fluctuations of relay users in Austria. Bridge users not affected.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-08-14&country=at&events=off\">relay graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-05-16&end=2017-09-15&country=at&events=off\">relay graph</a>"
     ],
     "unknown": true
   },
@@ -1587,6 +1686,18 @@
     "description": "Triple increase in direct Tor users in Hong Kong. Bridge users not affected.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-08-30&country=hk&events=off\">relay graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-08-14",
+    "protocols": [
+      "obfs4",
+      "ipv6"
+    ],
+    "description": "Jump in IPv6 users of the <a href=\"https://atlas.torproject.org/#details/D9C805C955CB124D188C0D44F271E9BE57DE2109\">Lisbeth</a> default obfs4 bridge.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/22429#comment:7\">comment</a>"
     ],
     "unknown": true
   },
