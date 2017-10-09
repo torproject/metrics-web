@@ -4,7 +4,7 @@
     "protocols": [
       "<OR>"
     ],
-    "description": "Release of tor 0.2.2.22-alpha. Changes the TLS Diffie–Hellman parameter to match that used by Apache mod_ssl, to evade blocking in Iran.",
+    "description": "Release of tor 0.2.2.22-alpha. Changes the TLS Diffie&ndash;Hellman parameter to match that used by Apache mod_ssl, to evade blocking in Iran.",
     "links": [
       "<a href=\"https://trac.torproject.org/projects/tor/wiki/doc/OONI/censorshipwiki/CensorshipCircumvention/TorChanges#a0.2.2.22-alpha\">censorshipwiki entry</a>",
       "<a href=\"https://trac.torproject.org/projects/tor/wiki/org/projects/Tor/TLSHistory#Stage2:Tor0.2.0.20through0.2.3.6\">tor TLSHistory</a>"
@@ -1271,7 +1271,7 @@
     "places": [
       "cn"
     ],
-    "description": "Guo Wengui speaks at the National Press Club, 09:00–11:00 eastern time. Reports of disruption of VPNs, Tor, Psiphon, Lantern, Shadowsocks in China.",
+    "description": "Guo Wengui speaks at the National Press Club, 09:00&ndash;11:00 eastern time. Reports of disruption of VPNs, Tor, Psiphon, Lantern, Shadowsocks in China.",
     "links": [
       "<a href=\"https://www.msn.com/en-sg/money/markets/exiled-chinese-billionaire-blasts-kleptocracy-running-china-warns-of-spy-infiltration-in-us/ar-AAsXLvL\">article on conference</a>",
       "<a href=\"https://twitter.com/szshu/status/916289656169275392\">tweet</a>",
