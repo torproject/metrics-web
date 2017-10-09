@@ -734,6 +734,7 @@ Index files use the following custom JSON data format that might still be extend
 <li>Index object: At the document root there is always an index object with the following fields:
 <ul>
 <li><code>"index_created"</code>: Timestamp when this index was created using pattern <code>"YYYY-MM-DD HH:MM"</code> in the UTC timezone.</li>
+<li><code>"build_revision"</code>: Git revision of the CollecTor instance's software used to create this file, which will be omitted if unknown.</li>
 <li><code>"path"</code>: Base URL of this index file and all included resources.</li>
 <li><code>"files"</code>: List of file objects of files available from the document root, which will be omitted if empty.
 <li><code>"directories"</code>: List of directory objects of directories available from the document root, which will be omitted if empty.</li>

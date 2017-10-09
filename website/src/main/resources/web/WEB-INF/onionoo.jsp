@@ -230,6 +230,8 @@ February 28, 2017.</li>
 <li><strong>4.1</strong>: Added "version" parameter and removed bridge
 clients objects' beta fields "countries", "transports", and "versions"
 on August 30, 2017.</li>
+<li><strong>4.2</strong>: Added "build_revision" field to response header
+on October 10, 2017.</li>
 </ul>
 
 
@@ -600,6 +602,17 @@ Onionoo protocol version string.
 UTC date (YYYY-MM-DD) when the next major protocol version is scheduled to
 be deployed.
 Omitted if no major protocol changes are planned.
+</p>
+</li>
+
+<li>
+<b>build_revision <span class="label label-primary">new</span></b>
+<code class="typeof">string</code>
+<span class="required-false">optional</span>
+<p>
+Git revision of the Onionoo instance's software used to write this
+response, which will be omitted if unknown.
+<span class="blue">Added on October 10, 2017.</span>
 </p>
 </li>
 
