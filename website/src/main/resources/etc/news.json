@@ -1266,6 +1266,20 @@
     "description": "Outage of the bridge authority <a href=\"https://atlas.torproject.org/#details/1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1\">Bifroest</a>."
   },
   {
+    "start": "2017-10-05",
+    "end": "2017-10-05",
+    "places": [
+      "cn"
+    ],
+    "description": "Guo Wengui speaks at the National Press Club, 09:00–11:00 eastern time. Reports of disruption of VPNs, Tor, Psiphon, Lantern, Shadowsocks in China.",
+    "links": [
+      "<a href=\"https://www.msn.com/en-sg/money/markets/exiled-chinese-billionaire-blasts-kleptocracy-running-china-warns-of-spy-infiltration-in-us/ar-AAsXLvL\">article on conference</a>",
+      "<a href=\"https://twitter.com/szshu/status/916289656169275392\">tweet</a>",
+      "<a href=\"https://twitter.com/paulwang_xz/status/916633633548525568\">tweet</a>",
+      "<a href=\"https://twitter.com/iuui/status/916583990085033985\">tweet</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "places": [
       "tm"
@@ -1716,6 +1730,14 @@
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-07-01&end=2017-09-15&country=eg&events=off\">eg graph</a>",
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-07-01&end=2017-09-15&country=tr&events=off\">tr graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-09-15",
+    "description": "timeouts on the tor network increased, download speed improved",
+    "links": [
+      "<a href=\"https://twitter.com/nusenu_/status/916453594517434368\">tweet</a>"
     ],
     "unknown": true
   }
