@@ -1232,6 +1232,16 @@
     ]
   },
   {
+    "start": "2017-08-10",
+    "end": "2017-08-11",
+    "description": "Outage of the op-hk OnionPerf instance. Reported timeouts on the tor network increased, download speed improved.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/torperf.html?start=2017-07-01&end=2017-10-09&source=all&server=public&filesize=50kb\">torperf graph</a>",
+      "<a href=\"https://metrics.torproject.org/torperf-failures.html?start=2017-07-11&end=2017-10-09&source=all&server=public&filesize=50kb\">torperf-failures graph</a>",
+      "<a href=\"https://metrics.torproject.org/torperf.html?start=2017-07-01&end=2017-10-09&source=op-hk&server=public&filesize=50kb\">op-hk graph</a>"
+    ]
+  },
+  {
     "start": "2017-08-14",
     "end": "2017-08-15",
     "protocols": [
@@ -1277,6 +1287,16 @@
       "<a href=\"https://twitter.com/szshu/status/916289656169275392\">tweet</a>",
       "<a href=\"https://twitter.com/paulwang_xz/status/916633633548525568\">tweet</a>",
       "<a href=\"https://twitter.com/iuui/status/916583990085033985\">tweet</a>"
+    ]
+  },
+  {
+    "start": "2017-09-15",
+    "description": "Outage of the op-hk OnionPerf instance. Reported timeouts on the tor network increased, download speed improved.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-October/000476.html\">mailing list post</a>",
+      "<a href=\"https://metrics.torproject.org/torperf.html?start=2017-07-01&end=2017-10-09&source=all&server=public&filesize=50kb\">torperf graph</a>",
+      "<a href=\"https://metrics.torproject.org/torperf-failures.html?start=2017-07-11&end=2017-10-09&source=all&server=public&filesize=50kb\">torperf-failures graph</a>",
+      "<a href=\"https://metrics.torproject.org/torperf.html?start=2017-07-01&end=2017-10-09&source=op-hk&server=public&filesize=50kb\">op-hk graph</a>"
     ]
   },
   {
@@ -1730,14 +1750,6 @@
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-07-01&end=2017-09-15&country=eg&events=off\">eg graph</a>",
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-07-01&end=2017-09-15&country=tr&events=off\">tr graph</a>"
-    ],
-    "unknown": true
-  },
-  {
-    "start": "2017-09-15",
-    "description": "timeouts on the tor network increased, download speed improved",
-    "links": [
-      "<a href=\"https://twitter.com/nusenu_/status/916453594517434368\">tweet</a>"
     ],
     "unknown": true
   }
