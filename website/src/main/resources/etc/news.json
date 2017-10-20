@@ -1310,6 +1310,28 @@
     ]
   },
   {
+    "start": "2017-10-18",
+    "end": "2017-10-24",
+    "places": [
+      "cn"
+    ],
+    "description": "19th National Congress of the Communist Party of China.",
+    "links": [
+      "<a href=\"https://en.wikipedia.org/wiki/19th_National_Congress_of_the_Communist_Party_of_China\">wikipedia</a>"
+    ]
+  },
+  {
+    "start": "2017-11-01",
+    "places": [
+      "ru"
+    ],
+    "description": "Ban on VPNs and anonymizers takes effect in Russia.",
+    "links": [
+      "<a href=\"https://www.reuters.com/article/us-russia-internet/putin-bans-vpns-to-stop-russians-accessing-prohibited-websites-idUSKBN1AF0QI\">news article</a>",
+      "<a href=\"http://publication.pravo.gov.ru/Document/View/0001201707300002\">law</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "places": [
       "tm"
