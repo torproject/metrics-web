@@ -262,6 +262,17 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>ServicesServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.ServicesServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServicesServlet</servlet-name>
+    <url-pattern>/services.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>DevelopmentServlet</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.DevelopmentServlet
