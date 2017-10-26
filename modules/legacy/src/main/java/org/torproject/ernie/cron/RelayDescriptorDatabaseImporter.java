@@ -25,6 +25,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -402,7 +403,7 @@ public final class RelayDescriptorDatabaseImporter {
       String nickname, String address, int orPort, int dirPort,
       String relayIdentifier, long bandwidthAvg, long bandwidthBurst,
       long bandwidthObserved, String platform, long published,
-      long uptime, String extraInfoDigest) {
+      Long uptime, String extraInfoDigest) {
     if (this.importIntoDatabase) {
       try {
         this.addDateToScheduledUpdates(published);
@@ -430,7 +431,11 @@ public final class RelayDescriptorDatabaseImporter {
           this.psD.setString(10, new String(platform.getBytes(),
               StandardCharsets.US_ASCII).replaceAll("[^\\p{ASCII}]",""));
           this.psD.setTimestamp(11, new Timestamp(published), cal);
-          this.psD.setLong(12, uptime);
+          if (null != uptime) {
+            this.psD.setLong(12, uptime);
+          } else {
+            this.psD.setNull(12, Types.BIGINT);
+          }
           this.psD.setString(13, extraInfoDigest);
           this.psD.executeUpdate();
           rdsCount++;
