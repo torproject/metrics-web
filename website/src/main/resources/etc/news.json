@@ -22,6 +22,39 @@
     ]
   },
   {
+    "start": "2012-02-08",
+    "places": [
+      "ir"
+    ],
+    "protocols": [
+      "<OR>"
+    ],
+    "description": "Iran partially blocks Tor.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/iran-partially-blocks-encrypted-network-traffic\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2012-02-11",
+    "protocols": [
+      "obfs2"
+    ],
+    "description": "First release of the \"Tor Obfsproxy Browser Bundle\", containing two obfs2 bridges.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/obfsproxy-next-step-censorship-arms-race\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2012-02-13",
+    "protocols": [
+      "obfs2"
+    ],
+    "description": "Second release of the \"Tor Obfsproxy Browser Bundle\", containing 14 obfs2 bridges.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/obfsproxy-next-step-censorship-arms-race\">blog post</a>"
+    ]
+  },
+  {
     "start": "2012-03-01",
     "end": "2013-08-19",
     "places": [
@@ -66,6 +99,54 @@
     ]
   },
   {
+    "start": "2013-01-13",
+    "protocols": [
+      "flashproxy",
+      "obfs2",
+      "obfs3"
+    ],
+    "description": "Release of the pluggable transports browser bundle 2.4.7-alpha-1, containing flash proxy, obfs2, and obfs3 built in and enabled by default.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/combined-flash-proxy-pyobfsproxy-browser-bundles\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2013-03-19",
+    "protocols": [
+      "flashproxy",
+      "obfs2",
+      "obfs3"
+    ],
+    "description": "Release of the pluggable transports browser bundle 0.2.4.11-alpha-2.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/new-pluggable-transports-bundles-02411-alpha-flashproxy-obfsproxy\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2013-06-02",
+    "protocols": [
+      "flashproxy",
+      "obfs2",
+      "obfs3"
+    ],
+    "description": "Release of the pluggable transports browser bundle 2.4.12-alpha-2-pt1.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/pluggable-transports-bundles-2412-alpha-2-pt1-firefox-1706esr\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2013-08-10",
+    "protocols": [
+      "flashproxy",
+      "obfs2",
+      "obfs3"
+    ],
+    "description": "Release of the pluggable transports browser bundle 2.4.15-beta-2-pt1.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/pluggable-transports-bundles-2415-beta-2-pt1-firefox-1708esr\">blog post</a>"
+    ]
+  },
+  {
     "start": "2013-08-19",
     "end": "2014-04-28",
     "protocols": [
@@ -78,6 +159,18 @@
       "<a href=\"https://research.torproject.org/techreports/botnet-tr-2013-11-20.pdf\">tech report</a>",
       "<a href=\"https://blog.fox-it.com/2013/09/05/large-botnet-cause-of-recent-tor-network-overload/\">analysis</a>",
       "<a href=\"https://www.facebook.com/notes/protect-the-graph/sefnit-is-back/1448087102098103\">switch to SSH</a>"
+    ]
+  },
+  {
+    "start": "2013-09-23",
+    "protocols": [
+      "flashproxy",
+      "obfs2",
+      "obfs3"
+    ],
+    "description": "Release of the pluggable transports browser bundle 2.4.17-beta-2-pt3.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/pluggable-transports-bundles-2417-beta-2-pt3-firefox-1709esr\">blog post</a>"
     ]
   },
   {
@@ -103,6 +196,42 @@
     ]
   },
   {
+    "start": "2013-11-04",
+    "protocols": [
+      "flashproxy",
+      "obfs2",
+      "obfs3"
+    ],
+    "description": "Release of the pluggable transports browser bundle 2.4.17-rc-1-pt1.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/pluggable-transports-bundles-2417-rc-1-pt1-firefox-17010esr\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2013-11-11",
+    "protocols": [
+      "flashproxy",
+      "obfs2",
+      "obfs3"
+    ],
+    "description": "Release of the pluggable transports browser bundle 2.4.17-rc-1-pt2.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/pluggable-transports-bundles-2417-rc-1-pt2-firefox-17010esr\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2013-12-04",
+    "protocols": [
+      "flashproxy",
+      "obfs2",
+      "obfs3"
+    ],
+    "description": "Release of the pluggable transports browser bundle 2.4.18-rc-1-pt1 and 2.4.18-rc-2-pt1.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/pluggable-transports-bundles-2418-rc-1-pt1-and-2418-rc-2-pt1-firefox-17011esr\">blog post</a>"
+    ]
+  },
+  {
     "start": "2014-01-31",
     "protocols": [
       "meek"
@@ -119,6 +248,40 @@
       "flashproxy"
     ],
     "description": "Began running meek-server on bridge already hosting websocket-server for flash proxy."
+  },
+  {
+    "start": "2014-03-18",
+    "protocols": [
+      "flashproxy",
+      "fte",
+      "obfs2",
+      "obfs3"
+    ],
+    "description": "Release of Tor Browser 3.6-beta-1, the first release with integrated pluggable transports.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-36-beta-1-released\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2014-04-11",
+    "description": "Release of Tor Browser 3.6-beta-2.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-36-beta-2-released\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2014-04-29",
+    "protocols": [
+      "flashproxy",
+      "fte",
+      "obfs2",
+      "obfs3"
+    ],
+    "description": "Release of Tor Browser 3.6, the first stable release with integrated pluggable transports.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-36-released\">blog post</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-transport.html?start=2014-03-17&end=2014-06-15&transport=obfs2&transport=obfs3&transport=websocket&transport=%3COR%3E\">transport graph</a>"
+    ]
   },
   {
     "start": "2014-05-08",
@@ -145,9 +308,10 @@
   {
     "start": "2014-08-12",
     "protocols": [
-      "meek"
+      "meek",
+      "scramblesuit"
     ],
-    "description": "Tor Browser 4.0-alpha-1 released. This is the first release to have meek built in.",
+    "description": "Tor Browser 4.0-alpha-1 released. This is the first release to have meek and ScrambleSuit built in.",
     "links": [
       "<a href=\"https://blog.torproject.org/tor-browser-364-and-40-alpha-1-are-released\">blog post</a>"
     ]
@@ -214,9 +378,10 @@
   {
     "start": "2014-10-15",
     "protocols": [
-      "meek"
+      "meek",
+      "scramblesuit"
     ],
-    "description": "Tor Browser 4.0 released. This is the first stable release with meek built in.",
+    "description": "Tor Browser 4.0 released. This is the first stable release with meek and ScrambleSuit built in.",
     "links": [
       "<a href=\"https://blog.torproject.org/blog/tor-browser-40-released\">blog post</a>"
     ]
@@ -257,6 +422,16 @@
     "description": "Changed the meek-google App Engine instance back to the F1 class, from F2."
   },
   {
+    "start": "2014-11-17",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Release of Tor Browser 4.5-alpha-1, first alpha release with obfs4. (Tor Browser changelog says 2014-11-14.)",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-45-alpha-1-released\">blog post</a>"
+    ]
+  },
+  {
     "start": "2014-11-15",
     "protocols": [
       "meek"
@@ -288,6 +463,16 @@
     "description": "Tor Weekly News covers the meek-azure performance improvement.",
     "links": [
       "<a href=\"https://blog.torproject.org/blog/tor-weekly-news-%E2%80%94-april-15th-2015\">covers the meek-azure blog post</a>"
+    ]
+  },
+  {
+    "start": "2015-04-27",
+    "protocols": [
+      "obfs4"
+    ],
+    "description": "Release of Tor Browser 4.5, the first stable release with obfs4.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-45-released\">blog post</a>"
     ]
   },
   {
