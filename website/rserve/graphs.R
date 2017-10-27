@@ -273,7 +273,8 @@ formatter <- function(x, ...) {
   format(x, ..., scientific = FALSE, big.mark = ' ')
 }
 
-theme_update(plot.title = element_text(hjust = 0.5))
+theme_update(plot.title = element_text(hjust = 0.5),
+  plot.margin = margin(5.5, 11, 5.5, 5.5))
 
 plot_networksize <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
