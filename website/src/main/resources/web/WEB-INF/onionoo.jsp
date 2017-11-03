@@ -66,7 +66,8 @@ Onionoo clients and their developers should follow a few rules:
 
 <br>
 
-<h3>Compression</h3>
+<a id="compression"></a>
+<h3>Compression <a href="#compression" class="anchor">#</a></h3>
 <p>
 Clients should include an <strong>"Accept-Encoding:
 gzip"</strong> header in their requests and handle gzip-compressed
@@ -77,7 +78,8 @@ server.
 
 <br>
 
-<h3>Caching</h3>
+<a id="caching"></a>
+<h3>Caching <a href="#caching" class="anchor">#</a></h3>
 <p>Clients should make use of the <strong>"Last-Modified"</strong>
 header of responses and include that timestamp in a
 <strong>"If-Modified-Since"</strong> header of subsequent requests.
@@ -90,7 +92,8 @@ header of responses and include that timestamp in a
 <div class="clearfix"></div>
 
 
-<h3>Response codes</h3>
+<a id="codes"></a>
+<h3>Response codes <a href="#codes" class="anchor">#</a></h3>
 <p>
 Clients should handle response codes by
 distinguishing between client and server errors, and if there's a problem,
@@ -101,14 +104,18 @@ The following response codes are used:
 <ul class="properties">
 
 <li>
+<a id="codes_200"></a>
 <b>200 OK</b>
+<a href="#codes_200" class="anchor">#</a>
 <p>
 The request was processed successfully.
 </p>
 </li>
 
 <li>
+<a id="codes_304"></a>
 <b>304 Not Modified</b>
+<a href="#codes_304" class="anchor">#</a>
 <p>
 Server data has not changed since the
 <strong>"If-Modified-Since"</strong> header included in the request.
@@ -116,7 +123,9 @@ Server data has not changed since the
 </li>
 
 <li>
+<a id="codes_400"></a>
 <b>400 Bad Request</b>
+<a href="#codes_400" class="anchor">#</a>
 <p>
 The request for a known resource could not be processed because of bad
 syntax.
@@ -125,7 +134,9 @@ This is most likely a client problem.
 </li>
 
 <li>
+<a id="codes_404"></a>
 <b>404 Not Available</b>
+<a href="#codes_404" class="anchor">#</a>
 <p>
 The request could not be processed because the requested resource could
 not be found.
@@ -134,7 +145,9 @@ This is most likely a client problem.
 </li>
 
 <li>
+<a id="codes_500"></a>
 <b>500 Internal Server Error</b>
+<a href="#codes_500" class="anchor">#</a>
 <p>
 There is an unspecific problem with
 the server which the service operator may not yet be aware of.
@@ -144,7 +157,9 @@ file one.
 </li>
 
 <li>
+<a id="codes_503"></a>
 <b>503 Service Unavailable</b>
+<a href="#codes_503" class="anchor">#</a>
 <p>
 The server is temporarily down for
 maintenance, or there is a temporary problem with the server that the
@@ -193,45 +208,77 @@ major protocol version before the provided date.</p>
 scheduled to be deployed in the next months:</p>
 
 <ul>
-<li><strong>1.0</strong>: First assigned version number on August 31,
-2014.</li>
-<li><strong>1.1</strong>: Added optional "next_major_version_scheduled"
-field on September 16, 2014.</li>
-<li><strong>1.2</strong>: Added qualified search terms to "search"
-parameter on October 17, 2014.</li>
-<li><strong>2.0</strong>: Extended search parameter to base64-encoded
-fingerprints on November 15, 2014.</li>
-<li><strong>2.1</strong>: Removed optional "advertised_bandwidth_fraction"
+<li><a id="versions_1_0"></a><strong>1.0</strong>:
+First assigned version number on August 31,
+2014.
+<a href="#versions_1_0" class="anchor">#</a></li>
+<li><a id="versions_1_1"></a><strong>1.1</strong>:
+Added optional "next_major_version_scheduled"
+field on September 16, 2014.
+<a href="#versions_1_1" class="anchor">#</a></li>
+<li><a id="versions_1_2"></a><strong>1.2</strong>:
+Added qualified search terms to "search"
+parameter on October 17, 2014.
+<a href="#versions_1_2" class="anchor">#</a></li>
+<li><a id="versions_2_0"></a><strong>2.0</strong>:
+Extended search parameter to base64-encoded
+fingerprints on November 15, 2014.
+<a href="#versions_2_0" class="anchor">#</a></li>
+<li><a id="versions_2_1"></a><strong>2.1</strong>:
+Removed optional "advertised_bandwidth_fraction"
 field from details documents and optional "advertised_bandwidth" and
 "advertised_bandwidth_fraction" fields from weights documents on November
-16, 2014.</li>
-<li><strong>2.2</strong>: Removed optional "pool_assignment" field and
+16, 2014.
+<a href="#versions_2_1" class="anchor">#</a></li>
+<li><a id="versions_2_2"></a><strong>2.2</strong>:
+Removed optional "pool_assignment" field and
 added "transports" field to bridge details documents on December 8,
-2014.</li>
-<li><strong>2.3</strong>: Added optional "flags" field to uptime
-documents on March 22, 2015.</li>
-<li><strong>2.4</strong>: Added optional "effective_family" field to
-details documents on July 3, 2015.</li>
-<li><strong>2.5</strong>: Added optional "measured" field to details
-documents on August 13, 2015.</li>
-<li><strong>2.6</strong>: Added optional "alleged_family" and
+2014.
+<a href="#versions_2_2" class="anchor">#</a></li>
+<li><a id="versions_2_3"></a><strong>2.3</strong>:
+Added optional "flags" field to uptime
+documents on March 22, 2015.
+<a href="#versions_2_3" class="anchor">#</a></li>
+<li><a id="versions_2_4"></a><strong>2.4</strong>:
+Added optional "effective_family" field to
+details documents on July 3, 2015.
+<a href="#versions_2_4" class="anchor">#</a></li>
+<li><a id="versions_2_5"></a><strong>2.5</strong>:
+Added optional "measured" field to details
+documents on August 13, 2015.
+<a href="#versions_2_5" class="anchor">#</a></li>
+<li><a id="versions_2_6"></a><strong>2.6</strong>:
+Added optional "alleged_family" and
 "indirect_family" fields and deprecated optional "family" field in details
-documents on August 25, 2015.</li>
-<li><strong>3.0</strong>: Extended search parameter to match any 4 hex
-characters of a space-separated fingerprint on November 15, 2015.</li>
-<li><strong>3.1</strong>: Removed optional "family" field on January 18,
-2016.</li>
-<li><strong>3.2</strong>: Extended order parameter to "first_seen" and
+documents on August 25, 2015.
+<a href="#versions_2_6" class="anchor">#</a></li>
+<li><a id="versions_3_0"></a><strong>3.0</strong>:
+Extended search parameter to match any 4 hex
+characters of a space-separated fingerprint on November 15, 2015.
+<a href="#versions_3_0" class="anchor">#</a></li>
+<li><a id="versions_3_1"></a><strong>3.1</strong>:
+Removed optional "family" field on January 18,
+2016.
+<a href="#versions_3_1" class="anchor">#</a></li>
+<li><a id="versions_3_2"></a><strong>3.2</strong>:
+Extended order parameter to "first_seen" and
 added response meta data fields "relays_skipped", "relays_truncated",
-"bridges_skipped", and "bridges_truncated" on January 27, 2017.</li>
-<li><strong>4.0</strong>: Extended search parameter to not require
+"bridges_skipped", and "bridges_truncated" on January 27, 2017.
+<a href="#versions_3_2" class="anchor">#</a></li>
+<li><a id="versions_4_0"></a><strong>4.0</strong>:
+Extended search parameter to not require
 leading or enclosing square brackets around IPv6 addresses anymore on
-February 28, 2017.</li>
-<li><strong>4.1</strong>: Added "version" parameter and removed bridge
+February 28, 2017.
+<a href="#versions_4_0" class="anchor">#</a></li>
+<li><a id="versions_4_1"></a><strong>4.1</strong>:
+Added "version" parameter and removed bridge
 clients objects' beta fields "countries", "transports", and "versions"
-on August 30, 2017.</li>
-<li><strong>4.2</strong>: Added "build_revision" field to response header
-on October 10, 2017.</li>
+on August 30, 2017.
+<a href="#versions_4_1" class="anchor">#</a></li>
+<li><a id="versions_4_2"></a><strong>4.2</strong>:
+Added "build_revision" field to response header
+on October 10, 2017.
+<a href="#versions_4_2" class="anchor">#</a></li>
 </ul>
 
 
@@ -293,7 +340,8 @@ the past week.
 
 
 
-<h3>Parameters</h3>
+<a id="parameters"></a>
+<h3>Parameters <a href="#parameters" class="anchor">#</a></h3>
 <p>
 Each of the methods can be parameterized to select only a subset of relay
 and/or bridge documents that are currently running or that have been
@@ -311,7 +359,9 @@ parameter value is considered.
 <ul class="properties">
 
 <li>
+<a id="parameters_type"></a>
 <b>type</b>
+<a href="#parameters_type" class="anchor">#</a>
 <p>
 Return only relay (parameter value
 <strong>relay</strong>) or only bridge documents (parameter value
@@ -321,7 +371,9 @@ Parameter values are case-insensitive.
 </li>
 
 <li>
+<a id="parameters_running"></a>
 <b>running</b>
+<a href="#parameters_running" class="anchor">#</a>
 <p>
 Return only running (parameter value
 <strong>true</strong>) or only non-running relays and/or bridges
@@ -332,7 +384,9 @@ Parameter values are case-insensitive.
 </li>
 
 <li>
+<a id="parameters_search"></a>
 <b>search</b>
+<a href="#parameters_search" class="anchor">#</a>
 <p>
 Return only (1) relays with the parameter value matching (part of a)
 nickname, (possibly $-prefixed) beginning of a hex-encoded fingerprint,
@@ -363,7 +417,9 @@ only the first "value" is considered.
 </li>
 
 <li>
+<a id="parameters_lookup"></a>
 <b>lookup</b>
+<a href="#parameters_lookup" class="anchor">#</a>
 <p>
 Return only the relay with the parameter
 value matching the fingerprint or the bridge with the parameter value
@@ -378,7 +434,9 @@ Lookups are case-insensitive.
 </li>
 
 <li>
+<a id="parameters_fingerprint"></a>
 <b>fingerprint</b>
+<a href="#parameters_fingerprint" class="anchor">#</a>
 <p>
 Return only the relay with the parameter value matching the fingerprint
 or the bridge with the parameter value matching the hashed fingerprint.
@@ -393,7 +451,9 @@ whether they have been running in the past week.
 </li>
 
 <li>
+<a id="parameters_country"></a>
 <b>country</b>
+<a href="#parameters_country" class="anchor">#</a>
 <p>
 Return only relays which are located in the
 given country as identified by a two-letter country code.
@@ -402,7 +462,9 @@ Filtering by country code is case-insensitive.
 </li>
 
 <li>
+<a id="parameters_as"></a>
 <b>as</b>
+<a href="#parameters_as" class="anchor">#</a>
 <p>
 Return only relays which are located in the
 given autonomous system (AS) as identified by the AS number (with or
@@ -412,7 +474,9 @@ Filtering by AS number is case-insensitive.
 </li>
 
 <li>
+<a id="parameters_flag"></a>
 <b>flag</b>
+<a href="#parameters_flag" class="anchor">#</a>
 <p>
 Return only relays which have the
 given relay flag assigned by the directory authorities.
@@ -423,7 +487,9 @@ Filtering by flag is case-insensitive.
 </li>
 
 <li>
+<a id="parameters_first_seen_days"></a>
 <b>first_seen_days</b>
+<a href="#parameters_first_seen_days" class="anchor">#</a>
 <p>
 Return only relays or bridges which
 have first been seen during the given range of days ago.
@@ -435,7 +501,9 @@ Accepted short forms are "x", "x-", and "-y" which are interpreted as
 </li>
 
 <li>
+<a id="parameters_last_seen_days"></a>
 <b>last_seen_days</b>
+<a href="#parameters_last_seen_days" class="anchor">#</a>
 <p>
 Return only relays or bridges which
 have last been seen during the given range of days ago.
@@ -450,7 +518,9 @@ an empty result set.
 </li>
 
 <li>
+<a id="parameters_contact"></a>
 <b>contact</b>
+<a href="#parameters_contact" class="anchor">#</a>
 <p>
 Return only relays with the parameter value
 matching (part of) the contact line.
@@ -464,7 +534,9 @@ Comparisons are case-insensitive.
 </li>
 
 <li>
+<a id="parameters_family"></a>
 <b>family</b>
+<a href="#parameters_family" class="anchor">#</a>
 <p>
 Return only the relay whose fingerprint matches the parameter value and
 all relays that this relay has listed in its family by fingerprint and
@@ -480,7 +552,9 @@ a family.
 </li>
 
 <li>
+<a id="parameters_version"></a>
 <b>version <span class="label label-primary">new</span></b>
+<a href="#parameters_version" class="anchor">#</a>
 <p>
 Return only relays running a Tor version that starts with the
 parameter value <i>without</i> leading <code>"Tor"</code>.
@@ -499,7 +573,9 @@ of contained fields.
 <ul class="properties">
 
 <li>
+<a id="parameters_fields"></a>
 <b>fields</b>
+<a href="#parameters_fields" class="anchor">#</a>
 <p>
 Comma-separated list of fields that will be
 included in the result.
@@ -524,7 +600,9 @@ parameter value is considered.
 <ul class="properties">
 
 <li>
+<a id="parameters_order"></a>
 <b>order</b>
+<a href="#parameters_order" class="anchor">#</a>
 <p>
 Re-order results by a comma-separated list
 of fields in ascending or descending order.
@@ -547,7 +625,9 @@ undefined.
 </li>
 
 <li>
+<a id="parameters_offset"></a>
 <b>offset</b>
+<a href="#parameters_offset" class="anchor">#</a>
 <p>
 Skip the given number of relays and/or
 bridges.
@@ -559,7 +639,9 @@ result.
 </li>
 
 <li>
+<a id="parameters_limit"></a>
 <b>limit</b>
+<a href="#parameters_limit" class="anchor">#</a>
 <p>
 Limit result to the given number of
 relays and/or bridges.
@@ -586,18 +668,22 @@ Responses contain the following fields:</p>
 <ul class="properties">
 
 <li>
+<a id="responses_version"></a>
 <b>version</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#responses_version" class="anchor">#</a>
 <p>
 Onionoo protocol version string.
 </p>
 </li>
 
 <li>
+<a id="responses_next_major_version_scheduled"></a>
 <b>next_major_version_scheduled</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#responses_next_major_version_scheduled" class="anchor">#</a>
 <p>
 UTC date (YYYY-MM-DD) when the next major protocol version is scheduled to
 be deployed.
@@ -606,9 +692,11 @@ Omitted if no major protocol changes are planned.
 </li>
 
 <li>
+<a id="responses_build_revision"></a>
 <b>build_revision <span class="label label-primary">new</span></b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#responses_build_revision" class="anchor">#</a>
 <p>
 Git revision of the Onionoo instance's software used to write this
 response, which will be omitted if unknown.
@@ -617,9 +705,11 @@ response, which will be omitted if unknown.
 </li>
 
 <li>
+<a id="responses_relays_published"></a>
 <b>relays_published</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#responses_relays_published" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD hh:mm:ss) when the last known relay network
 status consensus started being valid.
@@ -628,9 +718,11 @@ Indicates how recent the relay objects in this document are.
 </li>
 
 <li>
+<a id="responses_relays_skipped"></a>
 <b>relays_skipped</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#responses_relays_skipped" class="anchor">#</a>
 <p>
 Number of skipped relays as requested by a positive "offset" parameter
 value.
@@ -639,18 +731,22 @@ Omitted if zero.
 </li>
 
 <li>
+<a id="responses_relays"></a>
 <b>relays</b>
 <code class="typeof">array of objects</code>
 <span class="required-true">required</span>
+<a href="#responses_relays" class="anchor">#</a>
 <p>
 Array of relay objects as specified below.
 </p>
 </li>
 
 <li>
+<a id="responses_relays_truncated"></a>
 <b>relays_truncated</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#responses_relays_truncated" class="anchor">#</a>
 <p>
 Number of truncated relays as requested by a positive "limit"
 parameter value.
@@ -659,9 +755,11 @@ Omitted if zero.
 </li>
 
 <li>
+<a id="responses_bridges_published"></a>
 <b>bridges_published</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#responses_bridges_published" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD hh:mm:ss) when
 the last known bridge network status was published.
@@ -670,9 +768,11 @@ Indicates how recent the bridge objects in this document are.
 </li>
 
 <li>
+<a id="responses_bridges_skipped"></a>
 <b>bridges_skipped</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#responses_bridges_skipped" class="anchor">#</a>
 <p>
 Number of skipped bridges as requested by a positive "offset"
 parameter value.
@@ -681,18 +781,22 @@ Omitted if zero.
 </li>
 
 <li>
+<a id="responses_bridges"></a>
 <b>bridges</b>
 <code class="typeof">array of objects</code>
 <span class="required-true">required</span>
+<a href="#responses_bridges" class="anchor">#</a>
 <p>
 Array of bridge objects as specified below.
 </p>
 </li>
 
 <li>
+<a id="responses_bridges_truncated"></a>
 <b>bridges_truncated</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#responses_bridges_truncated" class="anchor">#</a>
 <p>
 Number of truncated bridges as requested by a positive "limit"
 parameter value.
@@ -714,7 +818,9 @@ Omitted if zero.
 fingerprints, IP addresses, and running information as well as bridges
 with hashed fingerprints and running information.</p>
 
-<h3>Relay summary objects</h3>
+<a id="summary_relay"></a>
+<h3>Relay summary objects
+<a href="#summary_relay" class="anchor">#</a></h3>
 
 <p>
 Relay summary objects contain the following key-value pairs:
@@ -723,9 +829,11 @@ Relay summary objects contain the following key-value pairs:
 <ul class="properties">
 
 <li>
+<a id="summary_relay_n"></a>
 <b>n</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#summary_relay_n" class="anchor">#</a>
 <p>
 Relay nickname consisting of 1&ndash;19 alphanumerical characters.
 Omitted if the relay nickname is <strong>"Unnamed"</strong>.
@@ -733,18 +841,22 @@ Omitted if the relay nickname is <strong>"Unnamed"</strong>.
 </li>
 
 <li>
+<a id="summary_relay_f"></a>
 <b>f</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#summary_relay_f" class="anchor">#</a>
 <p>
 Relay fingerprint consisting of 40 upper-case hexadecimal characters.
 </p>
 </li>
 
 <li>
+<a id="summary_relay_a"></a>
 <b>a</b>
 <code class="typeof">array of strings</code>
 <span class="required-true">required</span>
+<a href="#summary_relay_a" class="anchor">#</a>
 <p>
 Array of IPv4 or IPv6 addresses where the relay accepts
 onion-routing connections or which the relay used to exit to the Internet
@@ -756,9 +868,11 @@ IPv6 hex characters are all lower-case.
 </li>
 
 <li>
+<a id="summary_relay_r"></a>
 <b>r</b>
 <code class="typeof">boolean</code>
 <span class="required-true">required</span>
+<a href="#summary_relay_r" class="anchor">#</a>
 <p>
 Boolean field saying whether this relay was listed as
 running in the last relay network status consensus.
@@ -767,7 +881,9 @@ running in the last relay network status consensus.
 
 </ul>
 
-<h3>Bridge summary objects</h3>
+<a id="summary_bridge"></a>
+<h3>Bridge summary objects
+<a href="#summary_bridge" class="anchor">#</a></h3>
 
 <p>
 Bridge summary objects contain the following key-value pairs:
@@ -776,9 +892,11 @@ Bridge summary objects contain the following key-value pairs:
 <ul class="properties">
 
 <li>
+<a id="summary_bridge_n"></a>
 <b>n</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#summary_bridge_n" class="anchor">#</a>
 <p>
 Bridge nickname consisting of 1&ndash;19 alphanumerical characters.
 Omitted if the bridge nickname is <strong>"Unnamed"</strong>.
@@ -786,9 +904,11 @@ Omitted if the bridge nickname is <strong>"Unnamed"</strong>.
 </li>
 
 <li>
+<a id="summary_bridge_h"></a>
 <b>h</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#summary_bridge_h" class="anchor">#</a>
 <p>
 SHA-1 hash of the bridge fingerprint consisting of 40
 upper-case hexadecimal characters.
@@ -796,9 +916,11 @@ upper-case hexadecimal characters.
 </li>
 
 <li>
+<a id="summary_bridge_r"></a>
 <b>r</b>
 <code class="typeof">boolean</code>
 <span class="required-true">required</span>
+<a href="#summary_bridge_r" class="anchor">#</a>
 <p>
 Boolean field saying whether this bridge was listed as
 running in the last bridge network status.
@@ -824,7 +946,9 @@ which may lead to contradictions between fields based on different sources
 in rare edge cases.
 </p>
 
-<h3>Relay details objects</h3>
+<a id="details_relay"></a>
+<h3>Relay details objects
+<a href="#details_relay" class="anchor">#</a></h3>
 
 <p>
 Relay details objects contain the following key-value pairs:
@@ -833,9 +957,11 @@ Relay details objects contain the following key-value pairs:
 <ul class="properties">
 
 <li>
+<a id="details_relay_nickname"></a>
 <b>nickname</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_nickname" class="anchor">#</a>
 <p>
 Relay nickname consisting of 1&ndash;19 alphanumerical characters.
 Omitted if the relay nickname is <strong>"Unnamed"</strong>.
@@ -843,9 +969,11 @@ Omitted if the relay nickname is <strong>"Unnamed"</strong>.
 </li>
 
 <li>
+<a id="details_relay_fingerprint"></a>
 <b>fingerprint</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#details_relay_fingerprint" class="anchor">#</a>
 <p>
 Relay fingerprint consisting of 40 upper-case
 hexadecimal characters.
@@ -853,9 +981,11 @@ hexadecimal characters.
 </li>
 
 <li>
+<a id="details_relay_or_addresses"></a>
 <b>or_addresses</b>
 <code class="typeof">array of strings</code>
 <span class="required-true">required</span>
+<a href="#details_relay_or_addresses" class="anchor">#</a>
 <p>
 Array of IPv4 or IPv6 addresses and TCP ports
 or port lists where the relay accepts onion-routing connections.
@@ -866,9 +996,11 @@ IPv6 hex characters are all lower-case.
 </li>
 
 <li>
+<a id="details_relay_exit_addresses"></a>
 <b>exit_addresses</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_exit_addresses" class="anchor">#</a>
 <p>
 Array of IPv4 or IPv6 addresses that the
 relay used to exit to the Internet in the past 24 hours.
@@ -880,9 +1012,11 @@ Omitted if array is empty.
 </li>
 
 <li>
+<a id="details_relay_dir_address"></a>
 <b>dir_address</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_dir_address" class="anchor">#</a>
 <p>
 IPv4 address and TCP port where the relay
 accepts directory connections.
@@ -891,9 +1025,11 @@ Omitted if the relay does not accept directory connections.
 </li>
 
 <li>
+<a id="details_relay_last_seen"></a>
 <b>last_seen</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#details_relay_last_seen" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD hh:mm:ss) when this
 relay was last seen in a network status consensus.
@@ -901,9 +1037,11 @@ relay was last seen in a network status consensus.
 </li>
 
 <li>
+<a id="details_relay_last_changed_address_or_port"></a>
 <b>last_changed_address_or_port</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#details_relay_last_changed_address_or_port" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD
 hh:mm:ss) when this relay last stopped announcing an IPv4 or IPv6 address
@@ -915,9 +1053,11 @@ suitable fallback directory.
 </li>
 
 <li>
+<a id="details_relay_first_seen"></a>
 <b>first_seen</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#details_relay_first_seen" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD hh:mm:ss) when this
 relay was first seen in a network status consensus.
@@ -925,9 +1065,11 @@ relay was first seen in a network status consensus.
 </li>
 
 <li>
+<a id="details_relay_running"></a>
 <b>running</b>
 <code class="typeof">boolean</code>
 <span class="required-true">required</span>
+<a href="#details_relay_running" class="anchor">#</a>
 <p>
 Boolean field saying whether this relay was listed as
 running in the last relay network status consensus.
@@ -935,9 +1077,11 @@ running in the last relay network status consensus.
 </li>
 
 <li>
+<a id="details_relay_hibernating"></a>
 <b>hibernating</b>
 <code class="typeof">boolean</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_hibernating" class="anchor">#</a>
 <p>
 Boolean field saying whether this relay indicated that it is hibernating
 in its last known server descriptor.
@@ -950,9 +1094,11 @@ available about the hibernation status of the relay.
 </li>
 
 <li>
+<a id="details_relay_flags"></a>
 <b>flags</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_flags" class="anchor">#</a>
 <p>
 Array of relay flags that the directory authorities
 assigned to this relay.
@@ -961,9 +1107,11 @@ May be omitted if empty.
 </li>
 
 <li>
+<a id="details_relay_country"></a>
 <b>country</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_country" class="anchor">#</a>
 <p>
 Two-letter lower-case country code as found in a
 GeoIP database by resolving the relay's first onion-routing IP address.
@@ -973,9 +1121,11 @@ database.
 </li>
 
 <li>
+<a id="details_relay_country_name"></a>
 <b>country_name</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_country_name" class="anchor">#</a>
 <p>
 Country name as found in a GeoIP database by
 resolving the relay's first onion-routing IP address.
@@ -985,9 +1135,11 @@ database, or if the GeoIP database did not contain a country name.
 </li>
 
 <li>
+<a id="details_relay_region_name"></a>
 <b>region_name</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_region_name" class="anchor">#</a>
 <p>
 Region name as found in a GeoIP database by
 resolving the relay's first onion-routing IP address.
@@ -997,9 +1149,11 @@ database, or if the GeoIP database did not contain a region name.
 </li>
 
 <li>
+<a id="details_relay_city_name"></a>
 <b>city_name</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_city_name" class="anchor">#</a>
 <p>
 City name as found in a
 GeoIP database by resolving the relay's first onion-routing IP address.
@@ -1009,9 +1163,11 @@ database, or if the GeoIP database did not contain a city name.
 </li>
 
 <li>
+<a id="details_relay_latitude"></a>
 <b>latitude</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_latitude" class="anchor">#</a>
 <p>
 Latitude as found in a GeoIP database by resolving
 the relay's first onion-routing IP address.
@@ -1021,9 +1177,11 @@ database.
 </li>
 
 <li>
+<a id="details_relay_longitude"></a>
 <b>longitude</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_longitude" class="anchor">#</a>
 <p>
 Longitude as found in a GeoIP database by
 resolving the relay's first onion-routing IP address.
@@ -1033,9 +1191,11 @@ database.
 </li>
 
 <li>
+<a id="details_relay_as_number"></a>
 <b>as_number</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_as_number" class="anchor">#</a>
 <p>
 AS number as found in an AS database by
 resolving the relay's first onion-routing IP address.
@@ -1046,9 +1206,11 @@ database.
 </li>
 
 <li>
+<a id="details_relay_as_name"></a>
 <b>as_name</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_as_name" class="anchor">#</a>
 <p>
 AS name as found in an AS database by resolving the
 relay's first onion-routing IP address.
@@ -1058,9 +1220,11 @@ database.
 </li>
 
 <li>
+<a id="details_relay_consensus_weight"></a>
 <b>consensus_weight</b>
 <code class="typeof">number</code>
 <span class="required-true">required</span>
+<a href="#details_relay_consensus_weight" class="anchor">#</a>
 <p>
 Weight assigned to this relay by the
 directory authorities that clients use in their path selection algorithm.
@@ -1070,9 +1234,11 @@ change in the future.
 </li>
 
 <li>
+<a id="details_relay_host_name"></a>
 <b>host_name</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_host_name" class="anchor">#</a>
 <p>
 Host name as found in a reverse DNS lookup of the
 relay IP address.
@@ -1084,9 +1250,11 @@ was successful yet.
 </li>
 
 <li>
+<a id="details_relay_last_restarted"></a>
 <b>last_restarted</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_last_restarted" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD hh:mm:ss) when the
 relay was last (re-)started.
@@ -1096,9 +1264,11 @@ found.
 </li>
 
 <li>
+<a id="details_relay_bandwidth_rate"></a>
 <b>bandwidth_rate</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_bandwidth_rate" class="anchor">#</a>
 <p>
 Average bandwidth
 in bytes per second that this relay is willing to sustain over long
@@ -1109,9 +1279,11 @@ found.
 </li>
 
 <li>
+<a id="details_relay_bandwidth_burst"></a>
 <b>bandwidth_burst</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_bandwidth_burst" class="anchor">#</a>
 <p>
 Bandwidth in bytes
 per second that this relay is willing to sustain in very short intervals.
@@ -1121,9 +1293,11 @@ found.
 </li>
 
 <li>
+<a id="details_relay_observed_bandwidth"></a>
 <b>observed_bandwidth</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_observed_bandwidth" class="anchor">#</a>
 <p>
 Bandwidth
 estimate in bytes per second of the capacity this relay can handle.
@@ -1136,9 +1310,11 @@ found.
 </li>
 
 <li>
+<a id="details_relay_advertised_bandwidth"></a>
 <b>advertised_bandwidth</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_advertised_bandwidth" class="anchor">#</a>
 <p>
 Bandwidth in bytes per second that this
 relay is willing and capable to provide.
@@ -1150,9 +1326,11 @@ found.
 </li>
 
 <li>
+<a id="details_relay_exit_policy"></a>
 <b>exit_policy</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_exit_policy" class="anchor">#</a>
 <p>
 Array of exit-policy lines.
 Missing if router descriptor containing this information cannot be
@@ -1164,9 +1342,11 @@ directory authorities summarized the previous exit policy.
 </li>
 
 <li>
+<a id="details_relay_exit_policy_summary"></a>
 <b>exit_policy_summary</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_exit_policy_summary" class="anchor">#</a>
 <p>
 Summary
 version of the relay's exit policy containing a dictionary with either an
@@ -1181,9 +1361,11 @@ directory authorities summarized the previous exit policy.
 </li>
 
 <li>
+<a id="details_relay_exit_policy_v6_summary"></a>
 <b>exit_policy_v6_summary</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_exit_policy_v6_summary" class="anchor">#</a>
 <p>
 Summary version of the relay's IPv6 exit policy containing a dictionary
 with either an "accept" or a "reject" element.
@@ -1198,9 +1380,11 @@ directory authorities summarized the previous exit policy.
 </li>
 
 <li>
+<a id="details_relay_contact"></a>
 <b>contact</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_contact" class="anchor">#</a>
 <p>
 Contact address of the relay operator.
 Omitted if empty or if descriptor containing this information cannot be
@@ -1209,9 +1393,11 @@ found.
 </li>
 
 <li>
+<a id="details_relay_platform"></a>
 <b>platform</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_platform" class="anchor">#</a>
 <p>
 Platform string containing operating system and Tor
 version details.
@@ -1221,9 +1407,11 @@ found.
 </li>
 
 <li>
+<a id="details_relay_recommended_version"></a>
 <b>recommended_version</b>
 <code class="typeof">boolean</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_recommended_version" class="anchor">#</a>
 <p>
 Boolean field saying whether the Tor software version of this relay is
 recommended by the directory authorities or not.
@@ -1233,9 +1421,11 @@ the relay did not report which version it runs.
 </li>
 
 <li>
+<a id="details_relay_effective_family"></a>
 <b>effective_family</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_effective_family" class="anchor">#</a>
 <p>
 Array of $-prefixed fingerprints of relays that are in an effective,
 mutual family relationship with this relay.
@@ -1247,9 +1437,11 @@ found.
 </li>
 
 <li>
+<a id="details_relay_alleged_family"></a>
 <b>alleged_family</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_alleged_family" class="anchor">#</a>
 <p>
 Array of $-prefixed fingerprints of relays that are not in an effective,
 mutual family relationship with this relay.
@@ -1261,9 +1453,11 @@ found.
 </li>
 
 <li>
+<a id="details_relay_indirect_family"></a>
 <b>indirect_family</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_indirect_family" class="anchor">#</a>
 <p>
 Array of $-prefixed fingerprints of relays that are not in an effective,
 mutual family relationship with this relay but that can be reached by
@@ -1274,9 +1468,11 @@ found.
 </li>
 
 <li>
+<a id="details_relay_consensus_weight_fraction"></a>
 <b>consensus_weight_fraction</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_consensus_weight_fraction" class="anchor">#</a>
 <p>
 Fraction of this relay's consensus weight compared to the sum of all
 consensus weights in the network.
@@ -1287,9 +1483,11 @@ Omitted if the relay is not running.
 </li>
 
 <li>
+<a id="details_relay_guard_probability"></a>
 <b>guard_probability</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_guard_probability" class="anchor">#</a>
 <p>
 Probability of this relay to be selected for the guard position.
 This probability is calculated based on consensus weights, relay flags,
@@ -1302,9 +1500,11 @@ bandwidth weights.
 </li>
 
 <li>
+<a id="details_relay_middle_probability"></a>
 <b>middle_probability</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_middle_probability" class="anchor">#</a>
 <p>
 Probability of this relay to be selected for the middle position.
 This probability is calculated based on consensus weights, relay flags,
@@ -1317,9 +1517,11 @@ bandwidth weights.
 </li>
 
 <li>
+<a id="details_relay_exit_probability"></a>
 <b>exit_probability</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_exit_probability" class="anchor">#</a>
 <p>
 Probability of this relay to be selected for the exit position.
 This probability is calculated based on consensus weights, relay flags,
@@ -1332,9 +1534,11 @@ bandwidth weights.
 </li>
 
 <li>
+<a id="details_relay_measured"></a>
 <b>measured</b>
 <code class="typeof">boolean</code>
 <span class="required-false">optional</span>
+<a href="#details_relay_measured" class="anchor">#</a>
 <p>
 Boolean field saying whether the consensus weight of this relay is based
 on a threshold of 3 or more measurements by Tor bandwidth authorities.
@@ -1345,7 +1549,9 @@ contain measurement information.
 
 </ul>
 
-<h3>Bridge details objects</h3>
+<a id="details_bridge"></a>
+<h3>Bridge details objects
+<a href="#details_bridge" class="anchor">#</a></h3>
 
 <p>
 Bridge details objects contain the following key-value pairs:
@@ -1354,9 +1560,11 @@ Bridge details objects contain the following key-value pairs:
 <ul class="properties">
 
 <li>
+<a id="details_bridge_nickname"></a>
 <b>nickname</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_bridge_nickname" class="anchor">#</a>
 <p>
 Bridge nickname consisting of 1&ndash;19
 alphanumerical characters.
@@ -1365,9 +1573,11 @@ Omitted if the bridge nickname is <strong>"Unnamed"</strong>.
 </li>
 
 <li>
+<a id="details_bridge_hashed_fingerprint"></a>
 <b>hashed_fingerprint</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#details_bridge_hashed_fingerprint" class="anchor">#</a>
 <p>
 SHA-1 hash of the bridge fingerprint
 consisting of 40 upper-case hexadecimal characters.
@@ -1375,9 +1585,11 @@ consisting of 40 upper-case hexadecimal characters.
 </li>
 
 <li>
+<a id="details_bridge_or_addresses"></a>
 <b>or_addresses</b>
 <code class="typeof">array of strings</code>
 <span class="required-true">required</span>
+<a href="#details_bridge_or_addresses" class="anchor">#</a>
 <p>
 Array of sanitized IPv4 or IPv6 addresses and
 TCP ports or port lists where the bridge accepts onion-routing
@@ -1398,9 +1610,11 @@ TCP ports are not sanitized.
 </li>
 
 <li>
+<a id="details_bridge_last_seen"></a>
 <b>last_seen</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#details_bridge_last_seen" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD hh:mm:ss) when this
 bridge was last seen in a bridge network status.
@@ -1408,9 +1622,11 @@ bridge was last seen in a bridge network status.
 </li>
 
 <li>
+<a id="details_bridge_first_seen"></a>
 <b>first_seen</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#details_bridge_first_seen" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD hh:mm:ss) when this
 bridge was first seen in a bridge network status.
@@ -1418,9 +1634,11 @@ bridge was first seen in a bridge network status.
 </li>
 
 <li>
+<a id="details_bridge_running"></a>
 <b>running</b>
 <code class="typeof">boolean</code>
 <span class="required-true">required</span>
+<a href="#details_bridge_running" class="anchor">#</a>
 <p>
 Boolean field saying whether this bridge was listed
 as running in the last bridge network status.
@@ -1428,9 +1646,11 @@ as running in the last bridge network status.
 </li>
 
 <li>
+<a id="details_bridge_flags"></a>
 <b>flags</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
+<a href="#details_bridge_flags" class="anchor">#</a>
 <p>
 Array of relay flags that the bridge authority
 assigned to this bridge.
@@ -1439,9 +1659,11 @@ May be omitted if empty.
 </li>
 
 <li>
+<a id="details_bridge_last_restarted"></a>
 <b>last_restarted</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_bridge_last_restarted" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD hh:mm:ss) when the
 bridge was last (re-)started.
@@ -1451,9 +1673,11 @@ found.
 </li>
 
 <li>
+<a id="details_bridge_advertised_bandwidth"></a>
 <b>advertised_bandwidth</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#details_bridge_advertised_bandwidth" class="anchor">#</a>
 <p>
 Bandwidth in bytes per second that this
 bridge is willing and capable to provide.
@@ -1465,9 +1689,11 @@ found.
 </li>
 
 <li>
+<a id="details_bridge_platform"></a>
 <b>platform</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
+<a href="#details_bridge_platform" class="anchor">#</a>
 <p>
 Platform string containing operating system and Tor
 version details.
@@ -1477,9 +1703,11 @@ information cannot be found.
 </li>
 
 <li>
+<a id="details_bridge_transports"></a>
 <b>transports</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
+<a href="#details_bridge_transports" class="anchor">#</a>
 <p>
 Array of (pluggable) transport names supported by this bridge.
 </p>
@@ -1496,7 +1724,9 @@ History objects are no documents by themselves, but are contained in
 subsequent documents.
 <p>
 
-<h3>Graph history objects</h3>
+<a id="history_graph"></a>
+<h3>Graph history objects
+<a href="#history_graph" class="anchor">#</a></h3>
 
 <p>
 Graph history objects contain the following fields:
@@ -1505,9 +1735,11 @@ Graph history objects contain the following fields:
 <ul class="properties">
 
 <li>
+<a id="history_graph_first"></a>
 <b>first</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#history_graph_first" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD hh:mm:ss) of the first data point, or more
 specifically the interval midpoint of the first interval.
@@ -1515,9 +1747,11 @@ specifically the interval midpoint of the first interval.
 </li>
 
 <li>
+<a id="history_graph_last"></a>
 <b>last</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#history_graph_last" class="anchor">#</a>
 <p>
 UTC timestamp (YYYY-MM-DD hh:mm:ss) of the last data point, or more
 specifically the interval midpoint of the last interval.
@@ -1525,18 +1759,22 @@ specifically the interval midpoint of the last interval.
 </li>
 
 <li>
+<a id="history_graph_interval"></a>
 <b>interval</b>
 <code class="typeof">number</code>
 <span class="required-true">required</span>
+<a href="#history_graph_interval" class="anchor">#</a>
 <p>
 Time interval between two data points in seconds.
 </p>
 </li>
 
 <li>
+<a id="history_graph_factor"></a>
 <b>factor</b>
 <code class="typeof">number</code>
 <span class="required-true">required</span>
+<a href="#history_graph_factor" class="anchor">#</a>
 <p>
 Factor by which subsequent data values need to be multiplied to obtain
 original values.
@@ -1546,9 +1784,11 @@ detail for very different data scales.
 </li>
 
 <li>
+<a id="history_graph_count"></a>
 <b>count</b>
 <code class="typeof">number</code>
 <span class="required-false">optional</span>
+<a href="#history_graph_count" class="anchor">#</a>
 <p>
 Number of provided data points, included mostly for debugging purposes.
 Can also be derived from the number of elements in the subsequent array.
@@ -1556,9 +1796,11 @@ Can also be derived from the number of elements in the subsequent array.
 </li>
 
 <li>
+<a id="history_graph_values"></a>
 <b>values</b>
 <code class="typeof">array of numbers</code>
 <span class="required-true">required</span>
+<a href="#history_graph_values" class="anchor">#</a>
 <p>
 Array of normalized values between 0 and 999.
 May contain null values.
@@ -1585,7 +1827,9 @@ new server descriptor, which may take up to 18 hours during normal
 operation.
 </p>
 
-<h3>Relay bandwidth objects</h3>
+<a id="bandwidth_relay"></a>
+<h3>Relay bandwidth objects
+<a href="#bandwidth_relay" class="anchor">#</a></h3>
 
 <p>
 Relay bandwidth objects contain the following key-value pairs:
@@ -1594,9 +1838,11 @@ Relay bandwidth objects contain the following key-value pairs:
 <ul class="properties">
 
 <li>
+<a id="bandwidth_relay_fingerprint"></a>
 <b>fingerprint</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#bandwidth_relay_fingerprint" class="anchor">#</a>
 <p>
 Relay fingerprint consisting of 40 upper-case
 hexadecimal characters.
@@ -1604,9 +1850,11 @@ hexadecimal characters.
 </li>
 
 <li>
+<a id="bandwidth_relay_write_history"></a>
 <b>write_history</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#bandwidth_relay_write_history" class="anchor">#</a>
 <p>
 Object containing graph history objects with written bytes for different
 time periods.
@@ -1631,9 +1879,11 @@ time period.
 </li>
 
 <li>
+<a id="bandwidth_relay_read_history"></a>
 <b>read_history</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#bandwidth_relay_read_history" class="anchor">#</a>
 <p>
 Object containing graph history objects with read bytes for different time
 periods.
@@ -1644,7 +1894,9 @@ The specification of graph history objects is similar to those in the
 
 </ul>
 
-<h3>Bridge bandwidth objects</h3>
+<a id="bandwidth_bridge"></a>
+<h3>Bridge bandwidth objects
+<a href="#bandwidth_bridge" class="anchor">#</a></h3>
 
 <p>
 Bridge bandwidth objects contain the following key-value pairs:
@@ -1653,9 +1905,11 @@ Bridge bandwidth objects contain the following key-value pairs:
 <ul class="properties">
 
 <li>
+<a id="bandwidth_bridge_fingerprint"></a>
 <b>fingerprint</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#bandwidth_bridge_fingerprint" class="anchor">#</a>
 <p>
 SHA-1 hash of the bridge fingerprint consisting
 of 40 upper-case hexadecimal characters.
@@ -1663,9 +1917,11 @@ of 40 upper-case hexadecimal characters.
 </li>
 
 <li>
+<a id="bandwidth_bridge_write_history"></a>
 <b>write_history</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#bandwidth_bridge_write_history" class="anchor">#</a>
 <p>
 Object containing graph history objects with written bytes for different
 time periods.
@@ -1675,9 +1931,11 @@ The specification of graph history objects is similar to those in the
 </li>
 
 <li>
+<a id="bandwidth_bridge_read_history"></a>
 <b>read_history</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#bandwidth_bridge_read_history" class="anchor">#</a>
 <p>
 Object containing graph history objects with read bytes for different time
 periods.
@@ -1703,7 +1961,9 @@ Weights documents contain different time intervals and are available for
 relays only.
 </p>
 
-<h3>Relay weights objects</h3>
+<a id="weights_relay"></a>
+<h3>Relay weights objects
+<a href="#weights_relay" class="anchor">#</a></h3>
 
 <p>
 Relay weights objects contain the following key-value pairs:
@@ -1712,9 +1972,11 @@ Relay weights objects contain the following key-value pairs:
 <ul class="properties">
 
 <li>
+<a id="weights_relay_fingerprint"></a>
 <b>fingerprint</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#weights_relay_fingerprint" class="anchor">#</a>
 <p>
 Relay fingerprint consisting of 40 upper-case
 hexadecimal characters.
@@ -1722,9 +1984,11 @@ hexadecimal characters.
 </li>
 
 <li>
+<a id="weights_relay_consensus_weight_fraction"></a>
 <b>consensus_weight_fraction</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#weights_relay_consensus_weight_fraction" class="anchor">#</a>
 <p>
 History object containing the
 fraction of this relay's consensus weight compared to the sum of all
@@ -1748,9 +2012,11 @@ running less than 20% of a given time period.
 </li>
 
 <li>
+<a id="weights_relay_guard_probability"></a>
 <b>guard_probability</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#weights_relay_guard_probability" class="anchor">#</a>
 <p>
 History object containing the probability
 of this relay to be selected for the guard position.
@@ -1764,9 +2030,11 @@ The specification of this history object is similar to that in the
 </li>
 
 <li>
+<a id="weights_relay_middle_probability"></a>
 <b>middle_probability</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#weights_relay_middle_probability" class="anchor">#</a>
 <p>
 History object containing the probability
 of this relay to be selected for the middle position.
@@ -1780,9 +2048,11 @@ The specification of this history object is similar to that in the
 </li>
 
 <li>
+<a id="weights_relay_exit_probability"></a>
 <b>exit_probability</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#weights_relay_exit_probability" class="anchor">#</a>
 <p>
 History object containing the probability
 of this relay to be selected for the exit position.
@@ -1796,9 +2066,11 @@ The specification of this history object is similar to that in the
 </li>
 
 <li>
+<a id="weights_relay_consensus_weight"></a>
 <b>consensus_weight</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#weights_relay_consensus_weight" class="anchor">#</a>
 <p>
 History object containing the absolute consensus weight of this relay.
 The specification of this history object is similar to that in the
@@ -1824,7 +2096,9 @@ Clients documents contain different time intervals and are available for
 bridges only.
 </p>
 
-<h3>Bridge clients objects</h3>
+<a id="clients_bridge"></a>
+<h3>Bridge clients objects
+<a href="#clients_bridge" class="anchor">#</a></h3>
 
 <p>
 Bridge clients objects contain the following key-value pairs:
@@ -1833,9 +2107,11 @@ Bridge clients objects contain the following key-value pairs:
 <ul class="properties">
 
 <li>
+<a id="clients_bridge_fingerprint"></a>
 <b>fingerprint</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#clients_bridge_fingerprint" class="anchor">#</a>
 <p>
 SHA-1 hash of the bridge fingerprint consisting
 of 40 upper-case hexadecimal characters.
@@ -1843,9 +2119,11 @@ of 40 upper-case hexadecimal characters.
 </li>
 
 <li>
+<a id="clients_bridge_average_clients"></a>
 <b>average_clients</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#clients_bridge_average_clients" class="anchor">#</a>
 <p>
 Object containing graph history objects with the average number of clients
 connecting to this bridge.
@@ -1881,7 +2159,9 @@ Uptime documents contain different time intervals and are available for
 relays and bridges.
 </p>
 
-<h3>Relay uptime objects</h3>
+<a id="uptime_relay"></a>
+<h3>Relay uptime objects
+<a href="#uptime_relay" class="anchor">#</a></h3>
 
 <p>
 Relay uptime objects contain the following key-value pairs:
@@ -1890,9 +2170,11 @@ Relay uptime objects contain the following key-value pairs:
 <ul class="properties">
 
 <li>
+<a id="uptime_relay_fingerprint"></a>
 <b>fingerprint</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#uptime_relay_fingerprint" class="anchor">#</a>
 <p>
 Relay fingerprint consisting of 40 upper-case
 hexadecimal characters.
@@ -1900,9 +2182,11 @@ hexadecimal characters.
 </li>
 
 <li>
+<a id="uptime_relay_uptime"></a>
 <b>uptime</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#uptime_relay_uptime" class="anchor">#</a>
 <p>
 Object containing graph history objects with the fractional uptime of this
 relay.
@@ -1923,9 +2207,11 @@ of network statuses have been processed for a given time period.
 </li>
 
 <li>
+<a id="uptime_relay_flags"></a>
 <b>flags</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#uptime_relay_flags" class="anchor">#</a>
 <p>
 Object containing fractional times of this relay having relay flags
 assigned.
@@ -1940,7 +2226,9 @@ for that flag.
 
 </ul>
 
-<h3>Bridge uptime objects</h3>
+<a id="uptime_bridge"></a>
+<h3>Bridge uptime objects
+<a href="#uptime_bridge" class="anchor">#</a></h3>
 
 <p>
 Bridge uptime objects contain the following key-value pairs:
@@ -1949,9 +2237,11 @@ Bridge uptime objects contain the following key-value pairs:
 <ul class="properties">
 
 <li>
+<a id="uptime_bridge_fingerprint"></a>
 <b>fingerprint</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
+<a href="#uptime_bridge_fingerprint" class="anchor">#</a>
 <p>
 SHA-1 hash of the bridge fingerprint consisting
 of 40 upper-case hexadecimal characters.
@@ -1959,9 +2249,11 @@ of 40 upper-case hexadecimal characters.
 </li>
 
 <li>
+<a id="uptime_bridge_uptime"></a>
 <b>uptime</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
+<a href="#uptime_bridge_uptime" class="anchor">#</a>
 <p>
 Object containing uptime history objects for different time periods.
 The specification of uptime history objects is similar to those in the
