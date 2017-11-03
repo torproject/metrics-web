@@ -553,13 +553,12 @@ a family.
 
 <li>
 <a id="parameters_version"></a>
-<b>version <span class="label label-primary">new</span></b>
+<b>version</b>
 <a href="#parameters_version" class="anchor">#</a>
 <p>
 Return only relays running a Tor version that starts with the
 parameter value <i>without</i> leading <code>"Tor"</code>.
 Searchers are case-insensitive.
-<span class="blue">Added on August 30, 2017.</span>
 </p>
 </li>
 
