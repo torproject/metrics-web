@@ -308,7 +308,7 @@ plot_networksize <- function(start, end, path) {
     scale_colour_hue("", breaks = c("relays", "bridges"),
         labels = c("Relays", "Bridges")) +
     ggtitle("Number of relays\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_relaycountries <- function(start, end, country, path) {
@@ -343,7 +343,7 @@ plot_relaycountries <- function(start, end, country, path) {
     scale_y_continuous(name = "", limits = c(0, max(s$relays,
         na.rm = TRUE)), formatter = formatter) +
     ggtitle(title)
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_versions <- function(start, end, path) {
@@ -382,7 +382,7 @@ plot_versions <- function(start, end, path) {
       values = colours[colours$breaks %in% visible_versions, 2],
       breaks = visible_versions) +
     ggtitle("Relay versions\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_platforms <- function(start, end, path) {
@@ -411,7 +411,7 @@ plot_platforms <- function(start, end, path) {
       breaks = c("Linux", "Darwin", "BSD", "Windows", "Other"),
       values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#333333")) +
     ggtitle("Relay platforms\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_bandwidth <- function(start, end, path) {
@@ -442,7 +442,7 @@ plot_bandwidth <- function(start, end, path) {
         labels = c("Advertised bandwidth", "Bandwidth history")) +
     ggtitle("Total relay bandwidth") +
     theme(legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_bwhist_flags <- function(start, end, path) {
@@ -488,7 +488,7 @@ plot_bwhist_flags <- function(start, end, path) {
         values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2")) +
     ggtitle("Bandwidth history by relay flags") +
     theme(legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_dirbytes <- function(start, end, path) {
@@ -518,7 +518,7 @@ plot_dirbytes <- function(start, end, path) {
         labels = c("Written dir bytes", "Read dir bytes")) +
     ggtitle("Number of bytes spent on answering directory requests") +
     theme(legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_relayflags <- function(start, end, flags, path) {
@@ -559,7 +559,7 @@ plot_relayflags <- function(start, end, flags, path) {
         "#56B4E9", "#009E73", "#EE6A50", "#000000", "#0072B2"),
         breaks = flags, labels = flags) +
     ggtitle("Number of relays with relay flags assigned\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_torperf <- function(start, end, source, server, filesize, path) {
@@ -611,7 +611,7 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
     ggtitle(paste("Time in seconds to complete", filesizeStr,
         "request to", server, "server")) +
     theme(legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_torperf_failures <- function(start, end, source, server, filesize, path) {
@@ -663,7 +663,7 @@ plot_torperf_failures <- function(start, end, source, server, filesize, path) {
     ggtitle(paste("Timeouts and failures of", filesizeStr,
         "requests to", server, "server")) +
     theme(legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_connbidirect <- function(start, end, path) {
@@ -700,7 +700,7 @@ plot_connbidirect <- function(start, end, path) {
                    "Mostly reading")) +
     ggtitle("Fraction of connections used uni-/bidirectionally\n") +
     theme(legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_bandwidth_flags <- function(start, end, path) {
@@ -765,7 +765,7 @@ plot_bandwidth_flags <- function(start, end, path) {
     ggtitle(paste("Advertised bandwidth and bandwidth history by",
         "relay flags")) +
     theme(legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_userstats <- function(start, end, node, variable, value, events,
@@ -901,7 +901,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
                      ifelse(value == 'websocket', 'Flash proxy/websocket',
                      value))))))
   }
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_userstats_relay_country <- function(start, end, country, events,
@@ -959,7 +959,7 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
     scale_fill_hue(paste("Top-", top, " transports", sep = "")) +
     ggtitle(title) +
     theme(legend.position = "top")
-    ggsave(filename = path, width = 8, height = 5, dpi = 72)
+    ggsave(filename = path, width = 8, height = 5, dpi = 150)
   }
 }
 
@@ -989,7 +989,7 @@ plot_advbwdist_perc <- function(start, end, p, path) {
     scale_colour_hue(name = "Percentile",
         breaks = rev(levels(t$percentile))) +
     ggtitle("Advertised bandwidth distribution\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_advbwdist_relay <- function(start, end, n, path) {
@@ -1016,7 +1016,7 @@ plot_advbwdist_relay <- function(start, end, n, path) {
         limits = c(0, max(t$advbw, na.rm = TRUE))) +
     scale_colour_hue(name = "n", breaks = levels(t$relay)) +
     ggtitle("Advertised bandwidth of n-th fastest relays\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_hidserv_dir_onions_seen <- function(start, end, path) {
@@ -1038,7 +1038,7 @@ plot_hidserv_dir_onions_seen <- function(start, end, path) {
         date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "") +
     ggtitle("Unique .onion addresses\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_hidserv_rend_relayed_cells <- function(start, end, path) {
@@ -1062,7 +1062,7 @@ plot_hidserv_rend_relayed_cells <- function(start, end, path) {
         date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "") +
     ggtitle("Onion-service traffic in Mbit/s\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_hidserv_frac_reporting <- function(start, end, path) {
@@ -1094,7 +1094,7 @@ plot_hidserv_frac_reporting <- function(start, end, path) {
     ggtitle(paste("Fraction of relays reporting onion-service",
                        "statistics")) +
     theme(legend.position = "top")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_webstats_tb <- function(start, end, path) {
@@ -1123,7 +1123,7 @@ plot_webstats_tb <- function(start, end, path) {
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
     ggtitle("Tor Browser downloads and updates\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_webstats_tb_platform <- function(start, end, path) {
@@ -1150,7 +1150,7 @@ plot_webstats_tb_platform <- function(start, end, path) {
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
     ggtitle("Tor Browser downloads by platform\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_webstats_tb_locale <- function(start, end, path) {
@@ -1181,7 +1181,7 @@ plot_webstats_tb_locale <- function(start, end, path) {
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
     ggtitle("Tor Browser downloads by locale\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
 plot_webstats_tm <- function(start, end, path) {
@@ -1208,6 +1208,6 @@ plot_webstats_tm <- function(start, end, path) {
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
     ggtitle("Tor Messenger downloads and updates\n")
-  ggsave(filename = path, width = 8, height = 5, dpi = 72)
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 

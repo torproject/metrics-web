@@ -33,7 +33,7 @@
           <div class="row">
             <div class="col-md-8">
 
-              <img src="${id}.png${parameters}" width="576" height="360" alt="${title} graph">
+              <img src="${id}.png${parameters}" width="600" height="375" alt="${title} graph">
 
               ${description}
 
@@ -155,8 +155,8 @@
 </form>
 
 <p>Download graph as
-<a href="${id}.pdf${parameters}">PDF</a> or
-<a href="${id}.svg${parameters}">SVG</a>.</p>
+<a href="${id}.png${parameters}">PNG</a> or
+<a href="${id}.pdf${parameters}">PDF</a>.</p>
 
 <c:if test="${fn:length(data) > 0}">
 <p>Download underlying data:</p>

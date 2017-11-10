@@ -117,82 +117,56 @@
     <servlet-name>GraphImage</servlet-name>
     <url-pattern>/networksize.png</url-pattern>
     <url-pattern>/networksize.pdf</url-pattern>
-    <url-pattern>/networksize.svg</url-pattern>
     <url-pattern>/relaycountries.png</url-pattern>
     <url-pattern>/relaycountries.pdf</url-pattern>
-    <url-pattern>/relaycountries.svg</url-pattern>
     <url-pattern>/relayflags.png</url-pattern>
     <url-pattern>/relayflags.pdf</url-pattern>
-    <url-pattern>/relayflags.svg</url-pattern>
     <url-pattern>/versions.png</url-pattern>
     <url-pattern>/versions.pdf</url-pattern>
-    <url-pattern>/versions.svg</url-pattern>
     <url-pattern>/platforms.png</url-pattern>
     <url-pattern>/platforms.pdf</url-pattern>
-    <url-pattern>/platforms.svg</url-pattern>
     <url-pattern>/bandwidth.png</url-pattern>
     <url-pattern>/bandwidth.pdf</url-pattern>
-    <url-pattern>/bandwidth.svg</url-pattern>
     <url-pattern>/bwhist-flags.png</url-pattern>
     <url-pattern>/bwhist-flags.pdf</url-pattern>
-    <url-pattern>/bwhist-flags.svg</url-pattern>
     <url-pattern>/bandwidth-flags.png</url-pattern>
     <url-pattern>/bandwidth-flags.pdf</url-pattern>
-    <url-pattern>/bandwidth-flags.svg</url-pattern>
     <url-pattern>/dirbytes.png</url-pattern>
     <url-pattern>/dirbytes.pdf</url-pattern>
-    <url-pattern>/dirbytes.svg</url-pattern>
     <url-pattern>/torperf.png</url-pattern>
     <url-pattern>/torperf.pdf</url-pattern>
-    <url-pattern>/torperf.svg</url-pattern>
     <url-pattern>/torperf-failures.png</url-pattern>
     <url-pattern>/torperf-failures.pdf</url-pattern>
-    <url-pattern>/torperf-failures.svg</url-pattern>
     <url-pattern>/connbidirect.png</url-pattern>
     <url-pattern>/connbidirect.pdf</url-pattern>
-    <url-pattern>/connbidirect.svg</url-pattern>
     <url-pattern>/userstats-relay-country.png</url-pattern>
     <url-pattern>/userstats-relay-country.pdf</url-pattern>
-    <url-pattern>/userstats-relay-country.svg</url-pattern>
     <url-pattern>/userstats-bridge-country.png</url-pattern>
     <url-pattern>/userstats-bridge-country.pdf</url-pattern>
-    <url-pattern>/userstats-bridge-country.svg</url-pattern>
     <url-pattern>/userstats-bridge-transport.png</url-pattern>
     <url-pattern>/userstats-bridge-transport.pdf</url-pattern>
-    <url-pattern>/userstats-bridge-transport.svg</url-pattern>
     <url-pattern>/userstats-bridge-combined.png</url-pattern>
     <url-pattern>/userstats-bridge-combined.pdf</url-pattern>
-    <url-pattern>/userstats-bridge-combined.svg</url-pattern>
     <url-pattern>/userstats-bridge-version.png</url-pattern>
     <url-pattern>/userstats-bridge-version.pdf</url-pattern>
-    <url-pattern>/userstats-bridge-version.svg</url-pattern>
     <url-pattern>/advbwdist-perc.png</url-pattern>
     <url-pattern>/advbwdist-perc.pdf</url-pattern>
-    <url-pattern>/advbwdist-perc.svg</url-pattern>
     <url-pattern>/advbwdist-relay.png</url-pattern>
     <url-pattern>/advbwdist-relay.pdf</url-pattern>
-    <url-pattern>/advbwdist-relay.svg</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.png</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.pdf</url-pattern>
-    <url-pattern>/hidserv-dir-onions-seen.svg</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.png</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.pdf</url-pattern>
-    <url-pattern>/hidserv-rend-relayed-cells.svg</url-pattern>
     <url-pattern>/hidserv-frac-reporting.png</url-pattern>
     <url-pattern>/hidserv-frac-reporting.pdf</url-pattern>
-    <url-pattern>/hidserv-frac-reporting.svg</url-pattern>
     <url-pattern>/webstats-tb.png</url-pattern>
     <url-pattern>/webstats-tb.pdf</url-pattern>
-    <url-pattern>/webstats-tb.svg</url-pattern>
     <url-pattern>/webstats-tb-platform.png</url-pattern>
     <url-pattern>/webstats-tb-platform.pdf</url-pattern>
-    <url-pattern>/webstats-tb-platform.svg</url-pattern>
     <url-pattern>/webstats-tb-locale.png</url-pattern>
     <url-pattern>/webstats-tb-locale.pdf</url-pattern>
-    <url-pattern>/webstats-tb-locale.svg</url-pattern>
     <url-pattern>/webstats-tm.png</url-pattern>
     <url-pattern>/webstats-tm.pdf</url-pattern>
-    <url-pattern>/webstats-tm.svg</url-pattern>
   </servlet-mapping>
 
   <servlet>
