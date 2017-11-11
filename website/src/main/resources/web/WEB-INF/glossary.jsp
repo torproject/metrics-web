@@ -43,9 +43,9 @@
       
       <p id="circuit"><b><a href="#circuit">circuit:</a></b> a path through the
       Tor network
-      built by <a href="#client">clients</a> consisting of at most one
-      <a href="#bridge">bridge</a> and at least one
-      <a href="#relay">relay</a>.</p>
+      built by <a href="#client">clients</a> starting with a
+      <a href="#bridge">bridge</a> or <a href="#relay">relay</a> and optionally
+      continued by additional relays to hide the source of the circuit.</p>
       
       <p id="client"><b><a href="#client">client:</a></b> a node in the Tor
       network,
