@@ -20,7 +20,7 @@
   </front>
   <middle>
     <section title="Purpose of this document">
-      <t>BETA: As of November 8, 2017, this document is still under
+      <t>BETA: As of November 14, 2017, this document is still under
       discussion and subject to change without prior notice. Feel free
       to <eref target="/about.html#contact">contact us</eref> for questions or
       concerns regarding this document.</t>
@@ -174,6 +174,12 @@ mod_log_config module</eref>.</t>
       <section title="Re-assembling log files">
         <t>Rewritten log lines are re-assembled into sanitized log files based
         on physical host, virtual host, and request start date.</t>
+        <t>All rewritten log lines are sorted alphabetically, so that request
+        order cannot be inferred from sanitized log files.</t>
+        <t>Many of the sanitized log lines will now be identical.
+        But in order to not remove too much useful information we keep the
+        identical log lines and thus enable typical web log analyzers to
+        operate on the sanitized log files. </t>
         <t>The naming convention for sanitized log files is:
         <list>
           <t>&lt;virtual-host&gt;_&lt;physical-host&gt;_access.log_YYYYMMDD[.xz]</t>
@@ -190,12 +196,9 @@ mod_log_config module</eref>.</t>
         'dist.torproject.org', are more familiar to the public and were therefore
         chosen to be the first naming component.
         </t>
-        <t>As last and certainly not least important sanitizing step, all
-        rewritten log lines are sorted alphabetically, so that request order
-        cannot be inferred from sanitized log files.</t>
-        <t>Sanitized log files are typically compressed before publication. In
-        particular the sorting step allows for highly efficient compression
-        rates. We typically use XZ for compression, which is indicated by
+        <t>Sanitized log files are typically compressed before publication.
+        The sorting step also allows for highly efficient compression rates.
+        We typically use XZ for compression, which is indicated by
         appending ".xz" to log file names, but this is subject to change.</t>
       </section>
     </section>

@@ -22,7 +22,7 @@
 "#rfc.section.1">1.</a>&nbsp;<a href=
 "#n-purpose-of-this-document">Purpose of this document</a></h2>
 <div id="rfc.section.1.p.1">
-<p>BETA: As of November 8, 2017, this document is still under
+<p>BETA: As of November 14, 2017, this document is still under
 discussion and subject to change without prior notice. Feel free to
 <a href="/about.html#contact">contact us</a> for questions or
 concerns regarding this document.</p>
@@ -254,6 +254,16 @@ of processing that format.</p>
 based on physical host, virtual host, and request start date.</p>
 </div>
 <div id="rfc.section.4.3.p.2">
+<p>All rewritten log lines are sorted alphabetically, so that
+request order cannot be inferred from sanitized log files.</p>
+</div>
+<div id="rfc.section.4.3.p.3">
+<p>Many of the sanitized log lines will now be identical. But in
+order to not remove too much useful information we keep the
+identical log lines and thus enable typical web log analyzers to
+operate on the sanitized log files.</p>
+</div>
+<div id="rfc.section.4.3.p.4">
 <p>The naming convention for sanitized log files is:</p>
 <ul class="empty">
 <li>
@@ -262,7 +272,7 @@ based on physical host, virtual host, and request start date.</p>
 <p>The underscore is a separator symbol between the various parts
 of the filename.</p>
 </div>
-<div id="rfc.section.4.3.p.3">
+<div id="rfc.section.4.3.p.5">
 <p>Sanitized log files may additionally be sorted into directories
 by virtual host and date as in:</p>
 <ul class="empty">
@@ -273,17 +283,12 @@ by virtual host and date as in:</p>
 'dist.torproject.org', are more familiar to the public and were
 therefore chosen to be the first naming component.</p>
 </div>
-<div id="rfc.section.4.3.p.4">
-<p>As last and certainly not least important sanitizing step, all
-rewritten log lines are sorted alphabetically, so that request
-order cannot be inferred from sanitized log files.</p>
-</div>
-<div id="rfc.section.4.3.p.5">
+<div id="rfc.section.4.3.p.6">
 <p>Sanitized log files are typically compressed before publication.
-In particular the sorting step allows for highly efficient
-compression rates. We typically use XZ for compression, which is
-indicated by appending ".xz" to log file names, but this is subject
-to change.</p>
+The sorting step also allows for highly efficient compression
+rates. We typically use XZ for compression, which is indicated by
+appending ".xz" to log file names, but this is subject to
+change.</p>
 </div>
 </section>
 </div> <!-- container -->
