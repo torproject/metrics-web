@@ -29,7 +29,7 @@
       <h2>Network status <a href="#status" name="status" class="anchor">#</a></h2>
       <p>The following tools let you explore currently running relays and bridges.</p>
       <ul>
-        <li><a href="https://atlas.torproject.org/" target="_blank">Atlas</a> displays data about single relays and bridges in the Tor network.</li>
+        <li><a href="https://atlas.torproject.org/">Relay Search</a> displays data about single relays and bridges in the Tor Network.</li>
         <li><a href="https://compass.torproject.org/" target="_blank">Compass</a> groups current relays in different ways to measure Tor's network diversity.</li>
         <li><a href="https://consensus-health.torproject.org/" target="_blank">Consensus Health</a> displays information about the current directory consensus and votes.</li>
         <li><a href="https://duckduckgo.com/" target="_blank">DuckDuckGo</a> displays Tor node details when including the keywords "tor node" in a search.</li>
