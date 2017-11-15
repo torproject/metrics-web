@@ -1240,11 +1240,11 @@ change in the future.
 <a href="#details_relay_host_name" class="anchor">#</a>
 <p>
 Host name as found in a reverse DNS lookup of the
-relay IP address.
+relay's primary IP address.
 This field is updated at most once in 12 hours, unless the relay IP
 address changes.
-Omitted if the relay IP address was not looked up or if no lookup request
-was successful yet.
+Omitted if the relay IP address was not looked up, if no lookup request
+was successful yet, or if no A record was found matching the PTR record.
 </p>
 </li>
 
