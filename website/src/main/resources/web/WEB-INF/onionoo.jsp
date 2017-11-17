@@ -396,7 +396,7 @@ Parameter values are case-insensitive.
 
 <li>
 <a id="parameters_search"></a>
-<b>search</b>
+<b>search <span class="label label-primary">updated</span></b>
 <a href="#parameters_search" class="anchor">#</a>
 <p>
 Return only (1) relays with the parameter value matching (part of a)
@@ -425,7 +425,7 @@ with "key" being one of the parameters listed here except for "search",
 the string that will internally be passed to that parameter.
 If a qualified search term for a given "key" is specified more than once,
 only the first "value" is considered.
-<span class="label label-primary">Added support for quoting qualified
+<span class="blue">Added support for quoting qualified
 search terms on November 17, 2017.</span>
 </p>
 </li>
@@ -578,7 +578,7 @@ Searchers are case-insensitive.
 
 <li>
 <a id="parameters_host_name"></a>
-<b>host_name</b>
+<b>host_name <span class="label label-primary">new</span></b>
 <a href="#parameters_host_name" class="anchor">#</a>
 <p>
 Return only relays with a domain name <i>ending</i> in the given (partial)
@@ -587,7 +587,7 @@ Searches for subdomains of a specific domain should ideally be prefixed
 with a period, for example: ".csail.mit.edu".
 Non-ASCII host name characters must be encoded as punycode.
 Filtering by host name is case-insensitive.
-<span class="label label-primary">Added on November 17, 2017.</span>
+<span class="blue">Added on November 17, 2017.</span>
 </p>
 </li>
 
@@ -1450,7 +1450,7 @@ the relay did not report which version it runs.
 
 <li>
 <a id="details_relay_effective_family"></a>
-<b>effective_family</b>
+<b>effective_family <span class="label label-primary">updated</span></b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_effective_family" class="anchor">#</a>
@@ -1461,7 +1461,7 @@ These relays are part of this relay's family and they consider this relay
 to be part of their family.
 Omitted if empty or if descriptor containing this information cannot be
 found.
-<span class="label label-warning">Protocol version 5.0 is going to
+<span class="blue">Protocol version 5.0 is going to
 remove the $ prefix from fingerprints, to be deployed after December 17,
 2017.</span>
 </p>
@@ -1469,7 +1469,7 @@ remove the $ prefix from fingerprints, to be deployed after December 17,
 
 <li>
 <a id="details_relay_alleged_family"></a>
-<b>alleged_family</b>
+<b>alleged_family <span class="label label-primary">updated</span></b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_alleged_family" class="anchor">#</a>
@@ -1480,7 +1480,7 @@ These relays are part of this relay's family but they don't consider this
 relay to be part of their family.
 Omitted if empty or if descriptor containing this information cannot be
 found.
-<span class="label label-warning">Protocol version 5.0 is going to
+<span class="blue">Protocol version 5.0 is going to
 remove the $ prefix from fingerprints, to be deployed after December 17,
 2017.</span>
 </p>
@@ -1488,7 +1488,7 @@ remove the $ prefix from fingerprints, to be deployed after December 17,
 
 <li>
 <a id="details_relay_indirect_family"></a>
-<b>indirect_family</b>
+<b>indirect_family <span class="label label-primary">updated</span></b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_indirect_family" class="anchor">#</a>
@@ -1498,7 +1498,7 @@ mutual family relationship with this relay but that can be reached by
 following effective, mutual family relationships starting at this relay.
 Omitted if empty or if descriptor containing this information cannot be
 found.
-<span class="label label-warning">Protocol version 5.0 is going to
+<span class="blue">Protocol version 5.0 is going to
 remove the $ prefix from fingerprints, to be deployed after December 17,
 2017.</span>
 </p>
@@ -1586,7 +1586,7 @@ contain measurement information.
 
 <li>
 <a id="details_relay_unreachable_or_addresses"></a>
-<b>unreachable_or_addresses</b>
+<b>unreachable_or_addresses <span class="label label-primary">new</span></b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_unreachable_or_addresses" class="anchor">#</a>
@@ -1599,7 +1599,7 @@ whereas relays with an unreachable primary address are excluded entirely.
 Addresses are in arbitrary order.
 IPv6 hex characters are all lower-case.
 Omitted if empty.
-<span class="label label-primary">Added on November 17, 2017.</span>
+<span class="blue">Added on November 17, 2017.</span>
 </p>
 </li>
 
