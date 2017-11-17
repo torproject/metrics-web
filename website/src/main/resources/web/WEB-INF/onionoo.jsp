@@ -280,8 +280,7 @@ Added "build_revision" field to response header
 on October 10, 2017.
 <a href="#versions_4_2" class="anchor">#</a></li>
 <li><a id="versions_4_3"></a><strong>4.3</strong>:
-Added support for quoting qualified search terms in the "search"
-parameter, a new "host_name" parameter to filter by host name, and a new
+Added a new "host_name" parameter to filter by host name and a new
 "unreachable_or_addresses" field with declared but unreachable OR
 addresses on November 17, 2017.
 <a href="#versions_4_3" class="anchor">#</a></li>
@@ -396,7 +395,7 @@ Parameter values are case-insensitive.
 
 <li>
 <a id="parameters_search"></a>
-<b>search <span class="label label-primary">updated</span></b>
+<b>search</b>
 <a href="#parameters_search" class="anchor">#</a>
 <p>
 Return only (1) relays with the parameter value matching (part of a)
@@ -418,15 +417,12 @@ of all relays and bridges matching all search terms will be returned.
 Complete hex-encoded fingerprints should always be hashed using SHA-1,
 regardless of searching for a relay or a bridge, in order to not
 accidentally leak non-hashed bridge fingerprints in the URL.
-Qualified search terms have the form 'key:value' (without single quotes)
-or 'key:"value"' (without single quotes, using \" to escape double quotes)
+Qualified search terms have the form "key:value" (without double quotes)
 with "key" being one of the parameters listed here except for "search",
 "fingerprint", "order", "limit", "offset", and "fields", and "value" being
 the string that will internally be passed to that parameter.
 If a qualified search term for a given "key" is specified more than once,
 only the first "value" is considered.
-<span class="blue">Added support for quoting qualified
-search terms on November 17, 2017.</span>
 </p>
 </li>
 
