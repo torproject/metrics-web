@@ -279,6 +279,17 @@ on August 30, 2017.
 Added "build_revision" field to response header
 on October 10, 2017.
 <a href="#versions_4_2" class="anchor">#</a></li>
+<li><a id="versions_4_3"></a><strong>4.3</strong>:
+Added support for quoting qualified search terms in the "search"
+parameter, a new "host_name" parameter to filter by host name, and a new
+"unreachable_or_addresses" field with declared but unreachable OR
+addresses on November 17, 2017.
+<a href="#versions_4_3" class="anchor">#</a></li>
+<li><a id="versions_5_0"></a><strong>5.0</strong>
+(scheduled, but not deployed yet!): Remove $ from fingerprints in
+"effective_family", "alleged_family", and "indirect_family" fields, to
+be deployed after December 17, 2017.
+<a href="#versions_5_0" class="anchor">#</a></li>
 </ul>
 
 
@@ -407,12 +418,15 @@ of all relays and bridges matching all search terms will be returned.
 Complete hex-encoded fingerprints should always be hashed using SHA-1,
 regardless of searching for a relay or a bridge, in order to not
 accidentally leak non-hashed bridge fingerprints in the URL.
-Qualified search terms have the form "key:value" (without double quotes)
+Qualified search terms have the form 'key:value' (without single quotes)
+or 'key:"value"' (without single quotes, using \" to escape double quotes)
 with "key" being one of the parameters listed here except for "search",
 "fingerprint", "order", "limit", "offset", and "fields", and "value" being
 the string that will internally be passed to that parameter.
 If a qualified search term for a given "key" is specified more than once,
 only the first "value" is considered.
+<span class="label label-primary">Added support for quoting qualified
+search terms on November 17, 2017.</span>
 </p>
 </li>
 
@@ -559,6 +573,21 @@ a family.
 Return only relays running a Tor version that starts with the
 parameter value <i>without</i> leading <code>"Tor"</code>.
 Searchers are case-insensitive.
+</p>
+</li>
+
+<li>
+<a id="parameters_host_name"></a>
+<b>host_name</b>
+<a href="#parameters_host_name" class="anchor">#</a>
+<p>
+Return only relays with a domain name <i>ending</i> in the given (partial)
+host name.
+Searches for subdomains of a specific domain should ideally be prefixed
+with a period, for example: ".csail.mit.edu".
+Non-ASCII host name characters must be encoded as punycode.
+Filtering by host name is case-insensitive.
+<span class="label label-primary">Added on November 17, 2017.</span>
 </p>
 </li>
 
@@ -1432,6 +1461,9 @@ These relays are part of this relay's family and they consider this relay
 to be part of their family.
 Omitted if empty or if descriptor containing this information cannot be
 found.
+<span class="label label-warning">Protocol version 5.0 is going to
+remove the $ prefix from fingerprints, to be deployed after December 17,
+2017.</span>
 </p>
 </li>
 
@@ -1448,6 +1480,9 @@ These relays are part of this relay's family but they don't consider this
 relay to be part of their family.
 Omitted if empty or if descriptor containing this information cannot be
 found.
+<span class="label label-warning">Protocol version 5.0 is going to
+remove the $ prefix from fingerprints, to be deployed after December 17,
+2017.</span>
 </p>
 </li>
 
@@ -1463,6 +1498,9 @@ mutual family relationship with this relay but that can be reached by
 following effective, mutual family relationships starting at this relay.
 Omitted if empty or if descriptor containing this information cannot be
 found.
+<span class="label label-warning">Protocol version 5.0 is going to
+remove the $ prefix from fingerprints, to be deployed after December 17,
+2017.</span>
 </p>
 </li>
 
@@ -1543,6 +1581,25 @@ Boolean field saying whether the consensus weight of this relay is based
 on a threshold of 3 or more measurements by Tor bandwidth authorities.
 Omitted if the network status consensus containing this relay does not
 contain measurement information.
+</p>
+</li>
+
+<li>
+<a id="details_relay_unreachable_or_addresses"></a>
+<b>unreachable_or_addresses</b>
+<code class="typeof">array of strings</code>
+<span class="required-false">optional</span>
+<a href="#details_relay_unreachable_or_addresses" class="anchor">#</a>
+<p>
+Array of IPv4 or IPv6 addresses and TCP ports or port lists where the
+relay claims in its descriptor to accept onion-routing connections but
+that the directory authorities failed to confirm as reachable.
+Contains only additional addresses of a relay that are found unreachable,
+whereas relays with an unreachable primary address are excluded entirely.
+Addresses are in arbitrary order.
+IPv6 hex characters are all lower-case.
+Omitted if empty.
+<span class="label label-primary">Added on November 17, 2017.</span>
 </p>
 </li>
 
