@@ -284,6 +284,13 @@ Added a new "host_name" parameter to filter by host name and a new
 "unreachable_or_addresses" field with declared but unreachable OR
 addresses on November 17, 2017.
 <a href="#versions_4_3" class="anchor">#</a></li>
+<li><a id="versions_4_4"></a><strong>4.4</strong>:
+Extended the "version" parameter to bridges, added a
+"recommended_version" parameter for relays and bridges, added a
+"version" field to relay and bridge details documents, and added a
+"recommended_version" field to bridge details documents on November
+28, 2017.
+<a href="#versions_4_4" class="anchor">#</a></li>
 <li><a id="versions_5_0"></a><strong>5.0</strong>
 (scheduled, but not deployed yet!): Remove $ from fingerprints in
 "effective_family", "alleged_family", and "indirect_family" fields, to
@@ -563,12 +570,13 @@ a family.
 
 <li>
 <a id="parameters_version"></a>
-<b>version</b>
+<b>version <span class="label label-primary">updated</span></b>
 <a href="#parameters_version" class="anchor">#</a>
 <p>
-Return only relays running a Tor version that starts with the
+Return only relays or bridges running a Tor version that starts with the
 parameter value <i>without</i> leading <code>"Tor"</code>.
 Searches are case-insensitive.
+<span class="blue">Extended to bridges on November 28, 2017.</span>
 </p>
 </li>
 
@@ -584,6 +592,21 @@ with a period, for example: ".csail.mit.edu".
 Non-ASCII host name characters must be encoded as punycode.
 Filtering by host name is case-insensitive.
 <span class="blue">Added on November 17, 2017.</span>
+</p>
+</li>
+
+<li>
+<a id="parameters_recommended_version"></a>
+<b>recommended_version <span class="label label-primary">new</span></b>
+<a href="#parameters_recommended_version" class="anchor">#</a>
+<p>
+Return only relays and bridges running a Tor software version that is
+recommended (parameter value <strong>true</strong>) or not recommended by
+the directory authorities (parameter value <strong>false</strong>).
+Relays and bridges are not contained in either result, if the version they
+are running is not known.
+Parameter values are case-insensitive.
+<span class="blue">Added on November 28, 2017.</span>
 </p>
 </li>
 
@@ -1431,6 +1454,22 @@ found.
 </li>
 
 <li>
+<a id="details_relay_version"></a>
+<b>version <span class="label label-primary">new</span></b>
+<code class="typeof">string</code>
+<span class="required-false">optional</span>
+<a href="#details_relay_version" class="anchor">#</a>
+<p>
+Tor software version <i>without</i> leading <code>"Tor"</code> as reported
+by the directory authorities in the "v" line of the consensus.
+Omitted if either the directory authorities or the relay did not report
+which version the relay runs or if the relay runs an alternative Tor
+implementation.
+<span class="blue">Added on November 28, 2017.</span>
+</p>
+</li>
+
+<li>
 <a id="details_relay_recommended_version"></a>
 <b>recommended_version</b>
 <code class="typeof">boolean</code>
@@ -1759,6 +1798,37 @@ Platform string containing operating system and Tor
 version details.
 Omitted if not provided by the bridge or if descriptor containing this
 information cannot be found.
+</p>
+</li>
+
+<li>
+<a id="details_bridge_version"></a>
+<b>version <span class="label label-primary">new</span></b>
+<code class="typeof">string</code>
+<span class="required-false">optional</span>
+<a href="#details_bridge_version" class="anchor">#</a>
+<p>
+Tor software version <i>without</i> leading <code>"Tor"</code> as reported
+by the bridge in the "platform" line of its server descriptor.
+Omitted if not provided by the bridge, if the descriptor containing this
+information cannot be found, or if the bridge runs an alternative Tor
+implementation.
+<span class="blue">Added on November 28, 2017.</span>
+</p>
+</li>
+
+<li>
+<a id="details_bridge_recommended_version"></a>
+<b>recommended_version <span class="label label-primary">new</span></b>
+<code class="typeof">boolean</code>
+<span class="required-false">optional</span>
+<a href="#details_bridge_recommended_version" class="anchor">#</a>
+<p>
+Boolean field saying whether the Tor software version of this bridge is
+recommended by the directory authorities or not.
+Omitted if either the directory authorities did not recommend versions, or
+the bridge did not report which version it runs.
+<span class="blue">Added on November 28, 2017.</span>
 </p>
 </li>
 
