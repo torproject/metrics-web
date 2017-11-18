@@ -568,7 +568,7 @@ a family.
 <p>
 Return only relays running a Tor version that starts with the
 parameter value <i>without</i> leading <code>"Tor"</code>.
-Searchers are case-insensitive.
+Searches are case-insensitive.
 </p>
 </li>
 
