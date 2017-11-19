@@ -22,7 +22,7 @@
     "icon": "fa-server",
     "header": "Servers",
     "summary": "How many relays and bridges are online and what we know about them.",
-    "description": "Country and ISP diversity are approximated by resolving IP addresses to a country code an an autonomous system. We process the capabilities and properties relays and bridges reported to directory authorities.",
+    "description": "Country and ISP diversity are approximated by resolving IP addresses to a country code and an autonomous system. We process the capabilities and properties relays and bridges reported to directory authorities.",
     "metrics": [
       "networksize",
       "relayflags",
