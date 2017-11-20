@@ -3233,6 +3233,21 @@
     "unknown": true
   },
   {
+    "start": "2017-08-23",
+    "places": [
+      "kr"
+    ],
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Increase of users in South Korea, relay only.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-12-01&country=kr\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
     "start": "2017-09-02",
     "end": "2017-09-21",
     "protocols": [
