@@ -1590,8 +1590,16 @@ contain measurement information.
 Array of IPv4 or IPv6 addresses and TCP ports or port lists where the
 relay claims in its descriptor to accept onion-routing connections but
 that the directory authorities failed to confirm as reachable.
-Contains only additional addresses of a relay that are found unreachable,
-whereas relays with an unreachable primary address are excluded entirely.
+Contains only additional addresses of a relay that are found unreachable
+and only as long as a minority of directory authorities performs
+reachability tests on these additional addresses.
+Relays with an unreachable primary address are not included in the
+network status consensus and excluded entirely.
+Likewise, relays with unreachable additional addresses tested by a
+majority of directory authorities are not included in the network status
+consensus and excluded here, too.
+If at any point network status votes will be added to the processing,
+relays with unreachable addresses will be included here.
 Addresses are in arbitrary order.
 IPv6 hex characters are all lower-case.
 Omitted if empty.
