@@ -215,8 +215,12 @@ public class RObjectGenerator implements ServletContextListener {
     /* See if we need to generate this table. */
     File tableFile = new File(this.cachedGraphsDirectory + "/"
         + tableFilename);
-    byte[] tableBytes = this.generateObject(query, tableFile,
-        tableFilename, checkCache).getBytes();
+    RObject tableObject = this.generateObject(query, tableFile,
+        tableFilename, checkCache);
+    if (null == tableObject) {
+      return null;
+    }
+    byte[] tableBytes = tableObject.getBytes();
 
     /* Write the table content to a map. */
     List<Map<String, String>> result = new ArrayList<>();
