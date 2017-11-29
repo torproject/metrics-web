@@ -219,6 +219,66 @@ public class GraphServlet extends MetricServlet {
         String url = "?" + urlBuilder.toString().substring(5);
         request.setAttribute("parameters", url);
       }
+      if (this.includeRelatedEvents.contains(requestedId)) {
+        request.setAttribute("includeRelatedEvents", true);
+        String startParameter = dateFormat.format(defaultStartDate);
+        String endParameter = dateFormat.format(defaultEndDate);
+        String countryParameter = "all";
+        String eventsParameter = "off";
+        if (null != checkedParameters) {
+          for (Map.Entry<String, String[]> checkedParameter
+              : checkedParameters.entrySet()) {
+            switch (checkedParameter.getKey()) {
+              case "start":
+                startParameter = checkedParameter.getValue()[0];
+                break;
+              case "end":
+                endParameter = checkedParameter.getValue()[0];
+                break;
+              case "country":
+                countryParameter = checkedParameter.getValue()[0];
+                break;
+              case "events":
+                eventsParameter = checkedParameter.getValue()[0];
+                break;
+            }
+          }
+        }
+        if (!"off".equals(eventsParameter)) {
+          request.setAttribute("displayEventsNotice", true);
+        }
+        List<String> relatedEvents = new ArrayList<>();
+        for (News event : this.sortedEvents) {
+          if (null == event.getStart()) {
+            /* Skip event without start date. */
+            continue;
+          }
+          if (event.getStart().compareTo(endParameter) > 0) {
+            /* Skip event starting after displayed time period. */
+            continue;
+          }
+          if (null != event.getEnd()
+              && event.getEnd().compareTo(startParameter) < 0) {
+            /* Skip multi-day event ending before displayed time period. */
+            continue;
+          }
+          if (null == event.getEnd()
+              && event.getStart().compareTo(startParameter) < 0) {
+            /* Skip single-day event happening before displayed time period. */
+            continue;
+          }
+          if (!"all".equals(countryParameter) && null != event.getPlaces()
+              && !event.getPlaces().contains(countryParameter)) {
+            /* Skip country-specific event for another country than the
+             * displayed one. */
+            continue;
+          }
+          /* We could filter by transport or version here, but that's a
+           * non-trivial task. */
+          relatedEvents.add(event.formatAsTableRow());
+        }
+        request.setAttribute("relatedEvents", relatedEvents);
+      }
     }
     request.getRequestDispatcher("WEB-INF/graph.jsp").forward(request,
         response);

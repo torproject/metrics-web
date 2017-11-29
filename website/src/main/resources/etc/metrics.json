@@ -161,7 +161,8 @@
     ],
     "data": [
       "clients"
-    ]
+    ],
+    "include_related_events": true
   },
   {
     "id": "userstats-relay-table",
@@ -222,7 +223,8 @@
     ],
     "data": [
       "clients"
-    ]
+    ],
+    "include_related_events": true
   },
   {
     "id": "userstats-bridge-table",
@@ -259,7 +261,8 @@
     ],
     "data": [
       "clients"
-    ]
+    ],
+    "include_related_events": true
   },
   {
     "id": "userstats-bridge-combined",
@@ -274,7 +277,8 @@
     ],
     "data": [
       "userstats-combined"
-    ]
+    ],
+    "include_related_events": true
   },
   {
     "id": "userstats-bridge-version",
@@ -289,7 +293,8 @@
     ],
     "data": [
       "clients"
-    ]
+    ],
+    "include_related_events": true
   },
   {
     "id": "oxford-anonymous-internet",

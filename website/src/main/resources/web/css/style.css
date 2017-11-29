@@ -475,23 +475,15 @@ a.btn[target="_blank"]:before {
 
 
 
-/* research download tables */
-td, th {
-    padding-left:0 !important;
+/* related events table */
+.events a.link { padding-right:1em; }
+.events th.dates { width:20%; }
+.events th.tags { width:20%; }
+.events th.description { width:60%; }
+.events td span.dates {
+    color: #7d4698;
+    font-weight: bold;
 }
-td a {
-    padding-right:1em;
-}
-th.title { width:34%; }
-th.author { width:34%; }
-th.date { width:16%; }
-th.download { width:16%; }
-
-
-/* tools table */
-th.title-tools { width:15%; }
-th.description { width:70%; }
-th.link { width:15%; }
 
 
 

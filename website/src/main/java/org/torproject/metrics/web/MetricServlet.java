@@ -3,7 +3,9 @@
 
 package org.torproject.metrics.web;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +35,10 @@ public abstract class MetricServlet extends AnyServlet {
 
   protected Map<String, Category> categoriesById = new HashMap<>();
 
+  protected Set<String> includeRelatedEvents = new HashSet<>();
+
+  protected List<News> sortedEvents = new ArrayList<>();
+
   @Override
   public void init() throws ServletException {
     super.init();
@@ -59,6 +65,9 @@ public abstract class MetricServlet extends AnyServlet {
       if (metric.getData() != null) {
         this.data.put(id, metric.getData());
       }
+      if (metric.getIncludeRelatedEvents()) {
+        this.includeRelatedEvents.add(id);
+      }
     }
     for (Category category :
         ContentProvider.getInstance().getCategoriesList()) {
@@ -66,6 +75,9 @@ public abstract class MetricServlet extends AnyServlet {
         this.categoriesById.put(id, category);
       }
     }
+    this.sortedEvents.addAll(ContentProvider.getInstance().getNewsList());
+    Collections.sort(this.sortedEvents,
+        (o1, o2) -> o2.getStart().compareTo(o1.getStart()));
   }
 }
 

@@ -3,6 +3,9 @@
 
 package org.torproject.metrics.web;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 @SuppressWarnings("checkstyle:membername")
 public class Metric {
 
@@ -27,6 +30,10 @@ public class Metric {
   private String data_file;
 
   private String[] data_column_spec;
+
+  @Expose
+  @SerializedName("include_related_events")
+  private boolean includeRelatedEvents = false;
 
   public String getId() {
     return this.id;
@@ -70,6 +77,10 @@ public class Metric {
 
   public String[] getData() {
     return this.data;
+  }
+
+  public boolean getIncludeRelatedEvents() {
+    return this.includeRelatedEvents;
   }
 }
 

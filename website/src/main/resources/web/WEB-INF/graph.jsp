@@ -169,6 +169,47 @@
 
             </div><!-- col-md-4 -->
           </div><!-- row -->
+
+          <c:if test="${includeRelatedEvents}">
+          <div class="row">
+            <div class="col-md-12">
+              <h2>Related events</h2>
+              <p>The following events have been manually collected on
+              <a href="https://trac.torproject.org/projects/tor/wiki/doc/MetricsTimeline" target="_blank">this wiki page</a>
+              and might be related to the displayed graph.</p>
+              <c:if test="${displayEventsNotice}">
+              <div class="alert alert-danger">
+                <p>The manually collected events in this table do not
+                necessarily match the automatically generated possible
+                censorship events shown in the graph.</p>
+              </div>
+              </c:if>
+              <table class="table events">
+                <thead>
+                  <tr>
+                    <th class="dates">Dates</th>
+                    <th class="tags">Places/Protocols</th>
+                    <th class="description">Description and Links</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <c:choose>
+                  <c:when test="${empty relatedEvents}">
+                  <tr><td colspan="3">No events are known that might
+                  be related to the displayed graph.</td></tr>
+                  </c:when>
+                  <c:otherwise>
+                  <c:forEach var="relatedEvent" items="${relatedEvents}">
+                  ${relatedEvent}
+                  </c:forEach>
+                  </c:otherwise>
+                  </c:choose>
+                </tbody>
+              </table>
+            </div><!-- col-md-12 -->
+          </div><!-- row -->
+          </c:if>
+
         </div><!-- tab-pane -->
       </div><!-- tab-content -->
     </div><!-- container -->
