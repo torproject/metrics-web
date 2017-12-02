@@ -30,10 +30,10 @@
       <p>The following tools let you explore currently running relays and bridges.</p>
       <ul>
         <li><a href="https://atlas.torproject.org/">Relay Search</a> displays data about single relays and bridges in the Tor Network.</li>
-        <li><a href="https://compass.torproject.org/" target="_blank">Compass</a> groups current relays in different ways to measure Tor's network diversity.</li>
         <li><a href="https://consensus-health.torproject.org/" target="_blank">Consensus Health</a> displays information about the current directory consensus and votes.</li>
+        <li><a href="https://tormap.void.gr/" target="_blank">Tor Map</a> displays an interactive map of Tor relays and provides KML files for relay locations.</li>
+        <li><a href="https://nusenu.github.io/OrNetStats/" target="_blank">OrNetStats</a> displays statistics for monitoring diversity in the Tor network.</li>
         <li><a href="https://duckduckgo.com/" target="_blank">DuckDuckGo</a> displays Tor node details when including the keywords "tor node" in a search.</li>
-        <li><a href="https://onionview.codeplex.com/" target="_blank">OnionView</a> plots the location of active Tor nodes on an interactive map of the world.</li>
         <li><a href="https://onionite.now.sh/" target="_blank">Onionite</a> is a Progressive Web App to view information on the individual nodes that make up the Tor network.</li>
       </ul>
     </div>
