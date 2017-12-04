@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<web-app version="2.4"
-  xmlns="http://java.sun.com/xml/ns/j2ee"
+<web-app version="3.1"
+  xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
-  http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" >
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+  http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  metadata-complete="false" >
 
   <servlet>
     <servlet-name>Index</servlet-name>
@@ -327,6 +328,37 @@
   <servlet-mapping>
     <servlet-name>ErrorServlet</servlet-name>
     <url-pattern>/error.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Default</servlet-name>
+    <servlet-class>
+      org.eclipse.jetty.servlet.DefaultServlet
+    </servlet-class>
+    <init-param>
+      <param-name>aliases</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>acceptRanges</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>dirAllowed</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>welcomeServlets</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>redirectWelcome</param-name>
+      <param-value>false</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Default</servlet-name>
+    <url-pattern>/</url-pattern>
   </servlet-mapping>
 
   <error-page>

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN"
+  "http://www.eclipse.org/jetty/configure.dtd">
+
+<Configure id="server" class="org.eclipse.jetty.server.Server" >
+  <Set name="dumpAfterStart">false</Set>
+
+  <New class="org.eclipse.jetty.util.thread.QueuedThreadPool">
+    <Set name="minThreads">25</Set>
+    <Set name="maxThreads">250</Set>
+    <Set name="detailedDump">false</Set>
+  </New>
+
+  <New id="webAppContext" class="org.eclipse.jetty.webapp.WebAppContext">
+    <Set name="logUrlOnStart">true</Set>
+    <Set name="war">
+      <SystemProperty name="java.class.path" />
+    </Set>
+    <Call name="setAttribute" >
+      <Arg>org.apache.tomcat.JarScanner</Arg>
+      <Arg>
+        <New class="org.apache.tomcat.util.scan.StandardJarScanner" />
+      </Arg>
+    </Call>
+  </New>
+
+  <Call class="org.eclipse.jetty.webapp.Configuration$ClassList" name="setServerDefault">
+    <Arg><Ref refid="server" /></Arg>
+    <Call name="addBefore">
+      <Arg name="beforeClass">org.eclipse.jetty.webapp.JettyWebXmlConfiguration</Arg>
+      <Arg>
+        <Array type="String">
+          <Item>org.eclipse.jetty.annotations.AnnotationConfiguration</Item>
+        </Array>
+      </Arg>
+    </Call>
+    <Call name="addAfter">
+      <Arg name="afterClass">org.eclipse.jetty.webapp.FragmentConfiguration</Arg>
+      <Arg>
+        <Array type="String">
+          <Item>org.eclipse.jetty.plus.webapp.EnvConfiguration</Item>
+          <Item>org.eclipse.jetty.plus.webapp.PlusConfiguration</Item>
+        </Array>
+      </Arg>
+    </Call>
+  </Call>
+
+  <Call name="addConnector">
+    <Arg>
+      <New class="org.eclipse.jetty.server.ServerConnector">
+        <Arg>
+          <Ref id="server"/>
+        </Arg>
+        <Set name="port">
+          <SystemProperty name="web.jetty.port" default="8080" />
+        </Set>
+        <Set name="host">127.0.0.1</Set>
+      </New>
+    </Arg>
+  </Call>
+
+  <Set name="handler">
+    <!-- maybe add more handlers (statistics, logging, etc.) later -->
+    <New class="org.eclipse.jetty.server.handler.ContextHandlerCollection">
+      <Call name="addHandler">
+        <Arg>
+          <Ref id="webAppContext"/>
+        </Arg>
+      </Call>
+    </New>
+  </Set>
+
+</Configure>
+
