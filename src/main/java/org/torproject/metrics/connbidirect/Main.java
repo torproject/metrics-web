@@ -429,7 +429,8 @@ public class Main {
       SortedSet<RawStat> rawStats) {
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    SortedMap<String, List<Short>> fractionsByDateAndDirection = new TreeMap<>();
+    SortedMap<String, List<Short>> fractionsByDateAndDirection
+        = new TreeMap<>();
     final String[] directions = new String[] { "read", "write", "both" };
     for (RawStat rawStat : rawStats) {
       if (rawStat.fingerprint != null) {

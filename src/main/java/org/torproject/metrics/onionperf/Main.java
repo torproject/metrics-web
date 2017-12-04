@@ -233,7 +233,8 @@ public class Main {
       SortedSet<String> statistics) throws IOException {
     webstatsPath.toFile().getParentFile().mkdirs();
     List<String> lines = new ArrayList<>();
-    lines.add("date,filesize,source,server,q1,md,q3,timeouts,failures,requests");
+    lines
+        .add("date,filesize,source,server,q1,md,q3,timeouts,failures,requests");
     lines.addAll(statistics);
     log.info("Writing {} lines to {}.", lines.size(),
         webstatsPath.toFile().getAbsolutePath());

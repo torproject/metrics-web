@@ -3,16 +3,10 @@
 
 package org.torproject.metrics.web;
 
-import org.torproject.descriptor.index.DirectoryNode;
-import org.torproject.descriptor.index.FileNode;
 import org.torproject.descriptor.index.IndexNode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
