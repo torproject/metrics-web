@@ -81,6 +81,19 @@
   <property name="modulebase" value="${prepare.deployment}/modules" />
 
   <!-- Operational tasks. -->
+  <target name="run-web-prepare" depends="init" >
+    <mkdir dir="${prepare.deployment}/modules" />
+    <antcall target="collectdescs" />
+    <antcall target="connbidirect" />
+    <antcall target="onionperf" />
+    <antcall target="legacy" />
+    <antcall target="advbwdist" />
+    <antcall target="hidserv" />
+    <antcall target="clients" />
+    <antcall target="webstats" />
+    <antcall target="make-data-available" />
+  </target>
+
   <target name="collectdescs" >
     <property name="module.name" value="collectdescs" />
     <antcall target="run-java" />
@@ -235,6 +248,25 @@
       <arg value="--RS-conf" />
       <arg value="Rserv.conf" />
     </exec>
+  </target>
+
+  <target name="make-data-available" >
+    <property name="statsdir" value="${metrics-web.deployment.base}/shared/stats/" />
+    <mkdir dir="${statsdir}" />
+    <property name="rdatadir" value="${metrics-web.deployment.base}/shared/RData" />
+    <mkdir dir="${rdatadir}" />
+    <copy todir="${statsdir}" >
+      <fileset dir="${modulebase}/onionperf/stats" includes="*.csv" />
+      <fileset dir="${modulebase}/connbidirect/stats" includes="connbidirect2.csv" />
+      <fileset dir="${modulebase}/advbwdist/stats" includes="advbwdist.csv" />
+      <fileset dir="${modulebase}/legacy/stats" includes="*.csv" />
+      <fileset dir="${modulebase}/hidserv/stats" includes="hidserv.csv" />
+      <fileset dir="${modulebase}/clients/stats"
+               includes="clients*.csv userstats-combined.csv" />
+      <fileset dir="${modulebase}/webstats/stats" includes="webstats.csv" />
+      <fileset dir="${modulebase}/clients/RData" includes="*.RData" />
+      <fileset dir="${modulebase}/webstats/RData" includes="*.RData" />
+    </copy>
   </target>
 
   <!-- Support tasks for operation -->
