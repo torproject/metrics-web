@@ -155,6 +155,64 @@
     <antcall target="run-java" />
   </target>
 
+  <target name="clients" >
+    <property name="module.name" value="clients" />
+    <property name="localmoddir" value="${modulebase}/${module.name}" />
+
+    <property name="rdatadir" value="${localmoddir}/RData" />
+    <mkdir dir="${rdatadir}" />
+    <property name="statsdir"
+              value="${localmoddir}/stats" />
+    <mkdir dir="${statsdir}" />
+
+    <antcall target="run-java" />
+    <apply executable="psql" failonerror="true" >
+      <arg value="--dbname=userstats"/>
+      <arg value="-f"/>
+      <fileset dir="${localmoddir}/out"
+               includes="*.sql" />
+    </apply>
+
+    <exec executable="psql"
+          dir="${localmoddir}"
+          failonerror="true" >
+      <arg value="-c COPY (SELECT * FROM estimated) TO STDOUT WITH CSV HEADER;" />
+      <arg value="--dbname=userstats"/>
+      <arg value="--output=userstats.csv" />
+    </exec>
+
+    <exec executable="psql"
+          dir="${localmoddir}"
+          failonerror="true" >
+      <arg value="-c COPY (SELECT * FROM combined) TO STDOUT WITH CSV HEADER;" />
+      <arg value="--dbname=userstats"/>
+      <arg value="--output=userstats-combined.csv" />
+    </exec>
+
+    <antcall target="run-R" >
+      <param name="module.Rscript" value="userstats-detector.R" />
+    </antcall>
+
+    <exec executable="python"
+          dir="${localmoddir}"
+          failonerror="true" >
+      <arg value="${pysources}/${module.name}/detector.py" />
+      <arg value="userstats-detector.csv" />
+      <arg value="userstats-ranges.csv" />
+    </exec>
+
+    <antcall target="run-R" >
+      <param name="module.Rscript" value="merge-clients.R" />
+    </antcall>
+
+    <copy file="clients.csv" todir="${statsdir}" />
+    <copy file="userstats-combined.csv" todir="${statsdir}" />
+
+    <antcall target="run-R" >
+      <param name="module.Rscript" value="split-clients.R" />
+    </antcall>
+  </target>
+
   <target name="webstats" >
     <property name="module.name" value="webstats" />
     <property name="rdatadir" value="${modulebase}/${module.name}/RData" />
