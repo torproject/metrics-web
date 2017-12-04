@@ -1,16 +1,23 @@
-# Eclipse files
-/.classpath
-/.project
+# hidden files
+.*
 
-# Generated web archive
-/website/metrics.war
+# Generated stuff
+/generated/
+/stats/
+/lib/
+LOGBASE_IS_UNDEFINED/
+cobertura.ser
+*.csv
+*.RData
+*.pyc
+*.log
 
-# Compiled class files
-*.class
-
-# Possibly modified config file
-/website/etc/context.xml
+# library folder
+/lib/
 
 # Copied and possibly modified config file
-/website/etc/config
+config
+
+# other
+*~
 
