@@ -96,6 +96,14 @@
     <antcall target="run-java" />
   </target>
 
+  <target name="advbwdist">
+    <property name="module.name" value="advbwdist" />
+    <antcall target="run-java" />
+    <antcall target="run-R" >
+      <param name="module.Rscript" value="aggregate.R" />
+    </antcall>
+  </target>
+
   <target name="hidserv" >
     <property name="module.name" value="hidserv" />
     <antcall target="run-java" />
@@ -136,6 +144,19 @@
       </classpath>
       <jvmarg value="-DLOGBASE=../logs"/>
     </java>
+  </target>
+
+  <target name="run-R" >
+    <echo message="Running R module ${module.name}, script ${module.Rscript} ... " />
+    <property name="Rscript"
+              value="${Rsources}/${module.name}/${module.Rscript}" />
+    <exec executable="R"
+          dir="${modulebase}/${module.name}"
+          failonerror="true" >
+      <arg value="--slave"/>
+      <arg value="-f"/>
+      <arg value="${Rscript}" />
+    </exec>
   </target>
 
   <!-- The following line adds the common targets and properties
