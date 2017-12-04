@@ -151,7 +151,7 @@
     "id": "userstats-relay-country",
     "title": "Relay users",
     "type": "Graph",
-    "description": "<p>This graph shows the estimated number of directly-connecting <a href=\"glossary.html#client\">clients</a>; that is, it excludes clients connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These estimates are derived from the number of directory requests counted on <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that graphs are available for most countries.  Furthermore, it is possible to display indications of censorship events as obtained from an anomaly-based censorship-detection system (for more details, see this <a href=\"https://research.torproject.org/techreports/detector-2011-09-09.pdf\">technical report</a>).  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This graph shows the estimated number of directly-connecting <a href=\"glossary.html#client\">clients</a>; that is, it excludes clients connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These estimates are derived from the number of directory requests counted on <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that graphs are available for most countries.  Furthermore, it is possible to display indications of censorship events as obtained from an anomaly-based censorship-detection system (for more details, see this <a href=\"https://research.torproject.org/techreports/detector-2011-09-09.pdf\">technical report</a>).  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/src/main/resources/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_relay_country",
     "parameters": [
       "start",
@@ -168,7 +168,7 @@
     "id": "userstats-relay-table",
     "title": "Top-10 countries by relay users",
     "type": "Table",
-    "description": "<p>This table shows the top-10 countries by estimated number of directly-connecting <a href=\"glossary.html#client\">clients</a>.  These numbers are derived from directory requests counted on <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This table shows the top-10 countries by estimated number of directly-connecting <a href=\"glossary.html#client\">clients</a>.  These numbers are derived from directory requests counted on <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">mirrors</a>.  Relays resolve client IP addresses to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/src/main/resources/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "write_userstats_relay",
     "parameters": [
       "start",
@@ -190,7 +190,7 @@
     "id": "userstats-censorship-events",
     "title": "Top-10 countries by possible censorship events",
     "type": "Table",
-    "description": "<p>This table shows the top-10 countries by possible censorship events, as obtained from an anomaly-based censorship-detection system (for more details, see this <a href=\"https://research.torproject.org/techreports/detector-2011-09-09.pdf\">technical report</a>).  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This table shows the top-10 countries by possible censorship events, as obtained from an anomaly-based censorship-detection system (for more details, see this <a href=\"https://research.torproject.org/techreports/detector-2011-09-09.pdf\">technical report</a>).  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/src/main/resources/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "write_userstats_censorship_events",
     "parameters": [
       "start",
@@ -214,7 +214,7 @@
     "id": "userstats-bridge-country",
     "title": "Bridge users by country",
     "type": "Graph",
-    "description": "<p>This graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, so that graphs are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, so that graphs are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/src/main/resources/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_bridge_country",
     "parameters": [
       "start",
@@ -230,7 +230,7 @@
     "id": "userstats-bridge-table",
     "title": "Top-10 countries by bridge users",
     "type": "Table",
-    "description": "<p>This table shows the top-10 countries by estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This table shows the top-10 countries by estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, so that numbers are available for most countries.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/src/main/resources/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "write_userstats_bridge",
     "parameters": [
       "start",
@@ -252,7 +252,7 @@
     "id": "userstats-bridge-transport",
     "title": "Bridge users by transport",
     "type": "Graph",
-    "description": "<p>This graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges distinguish connecting clients by transport protocol, which may include <a href=\"glossary.html#pluggable-transport\">pluggable transports</a>, so that graphs are available for different transports.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges distinguish connecting clients by transport protocol, which may include <a href=\"glossary.html#pluggable-transport\">pluggable transports</a>, so that graphs are available for different transports.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/src/main/resources/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_bridge_transport",
     "parameters": [
       "start",
@@ -268,7 +268,7 @@
     "id": "userstats-bridge-combined",
     "title": "Bridge users by country and transport",
     "type": "Graph",
-    "description": "<p>This graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, and they distinguish connecting clients by transport protocol, which may include <a href=\"glossary.html#pluggable-transport\">pluggable transports</a>.  Even though bridges don't report a combination of clients by country and transport, it's possible to derive and graph lower and upper bounds from existing usage statistics.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges resolve client IP addresses of incoming directory requests to country codes, and they distinguish connecting clients by transport protocol, which may include <a href=\"glossary.html#pluggable-transport\">pluggable transports</a>.  Even though bridges don't report a combination of clients by country and transport, it's possible to derive and graph lower and upper bounds from existing usage statistics.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/src/main/resources/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_bridge_combined",
     "parameters": [
       "start",
@@ -284,7 +284,7 @@
     "id": "userstats-bridge-version",
     "title": "Bridge users by IP version",
     "type": "Graph",
-    "description": "<p>This graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges distinguish connecting clients by IP version, so that graphs are available for both IP versions 4 and 6.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
+    "description": "<p>This graph shows the estimated number of <a href=\"glossary.html#client\">clients</a> connecting via <a href=\"glossary.html#bridge\">bridges</a>.  These numbers are derived from directory requests counted on bridges.  Bridges distinguish connecting clients by IP version, so that graphs are available for both IP versions 4 and 6.  For further details see these <a href=\"https://gitweb.torproject.org/metrics-web.git/tree/src/main/resources/doc/users-q-and-a.txt\">questions and answers about user statistics</a>.</p>",
     "function": "plot_userstats_bridge_version",
     "parameters": [
       "start",
