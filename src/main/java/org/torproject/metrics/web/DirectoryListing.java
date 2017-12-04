@@ -10,6 +10,7 @@ import org.torproject.descriptor.index.IndexNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -84,7 +85,8 @@ public class DirectoryListing extends HashMap<String, List<String[]>>
     }
     int exp = (int) (Math.log(bytes) / Math.log(1024));
     char pre = "KMGTPE".charAt(exp - 1);
-    return String.format("%.1f %siB", bytes / Math.pow(1024, exp), pre);
+    return String
+        .format(Locale.US, "%.1f %siB", bytes / Math.pow(1024, exp), pre);
   }
 }
 
