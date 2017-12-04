@@ -91,6 +91,11 @@
     <antcall target="run-java" />
   </target>
 
+  <target name="onionperf" >
+    <property name="module.name" value="onionperf" />
+    <antcall target="run-java" />
+  </target>
+
   <target name="run-rserver">
     <exec executable="R"
           dir="${Rsources}/rserver"
