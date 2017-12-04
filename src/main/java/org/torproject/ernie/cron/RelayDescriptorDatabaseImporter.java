@@ -386,7 +386,7 @@ public final class RelayDescriptorDatabaseImporter {
             + (ports != null ? ports : "\\N") + "\t");
         this.statusentryOut.write(PGbytea.toPGString(rawDescriptor)
             .replaceAll("\\\\", "\\\\\\\\") + "\n");
-      } catch (SQLException | IOException e) {
+      } catch (IOException e) {
         this.logger.log(Level.WARNING, "Could not write network status "
             + "consensus entry to raw database import file.  We won't "
             + "make any further attempts to write raw import files in "
