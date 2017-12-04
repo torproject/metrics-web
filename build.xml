@@ -322,8 +322,8 @@
       <param name="module.Rscript" value="merge-clients.R" />
     </antcall>
 
-    <copy file="clients.csv" todir="${statsdir}" />
-    <copy file="userstats-combined.csv" todir="${statsdir}" />
+    <copy file="${localmoddir}/clients.csv" todir="${statsdir}" />
+    <copy file="${localmoddir}/userstats-combined.csv" todir="${statsdir}" />
 
     <antcall target="run-R" >
       <param name="module.Rscript" value="split-clients.R" />
@@ -350,7 +350,7 @@
       <arg value="--no-save" />
       <arg value="--quiet" />
       <arg value="--RS-conf" />
-      <arg value="Rserv.conf" />
+      <arg value="${Rsources}/Rserv.conf" />
     </exec>
   </target>
 
@@ -397,6 +397,7 @@
       <jvmarg value="-Duser.language=us" />
       <jvmarg value="-Duser.region=US" />
     </java>
+    <echo message="Java module ${module.name} finished. " />
   </target>
 
   <target name="run-R" >
@@ -410,6 +411,7 @@
       <arg value="-f"/>
       <arg value="${Rscript}" />
     </exec>
+    <echo message="R module ${module.name}, script ${module.Rscript} finished. " />
   </target>
 
   <!-- The following line adds the common targets and properties
