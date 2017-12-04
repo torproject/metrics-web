@@ -74,6 +74,20 @@
     </exec>
   </target>
 
+  <!-- Operational tasks. -->
+  <target name="run-rserver">
+    <exec executable="R"
+          dir="${Rsources}/rserver"
+          failonerror="true" >
+      <arg value="CMD"/>
+      <arg value="Rserve" />
+      <arg value="--no-save" />
+      <arg value="--quiet" />
+      <arg value="--RS-conf" />
+      <arg value="Rserv.conf" />
+    </exec>
+  </target>
+
   <!-- The following line adds the common targets and properties
        for Metrics' Java Projects.
   -->
