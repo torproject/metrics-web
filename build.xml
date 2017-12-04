@@ -64,6 +64,16 @@
     <patternset refid="library" />
   </patternset>
 
+  <target name="generate-ml-javadoc" depends="submoduleupdate" >
+    <mkdir dir="${basedir}/src/submods/metrics-lib/lib" />
+    <exec executable="ant"
+          dir="${basedir}/src/submods/metrics-lib"
+          failonerror="true" >
+      <arg value="clean" />
+      <arg value="docs" />
+    </exec>
+  </target>
+
   <!-- The following line adds the common targets and properties
        for Metrics' Java Projects.
   -->
