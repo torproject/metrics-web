@@ -394,6 +394,8 @@
         <pathelement location="${resources}"/>
       </classpath>
       <jvmarg value="-DLOGBASE=../logs"/>
+      <jvmarg value="-Duser.language=us" />
+      <jvmarg value="-Duser.region=US" />
     </java>
   </target>
 
