@@ -7,7 +7,7 @@ body {
     background-image:none !important;
 }
 body #wrapper {
-    display:initial !important;
+    display:block !important;
 }
 
 
