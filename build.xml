@@ -96,6 +96,11 @@
     <antcall target="run-java" />
   </target>
 
+  <target name="hidserv" >
+    <property name="module.name" value="hidserv" />
+    <antcall target="run-java" />
+  </target>
+
   <target name="run-rserver">
     <exec executable="R"
           dir="${Rsources}/rserver"
