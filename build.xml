@@ -91,6 +91,83 @@
     <patternset refid="web" />
   </patternset>
 
+  <!-- Create a .war file for deployment. -->
+  <target name="war"
+          depends="submoduleupdate,compile">
+    <echo message="Removing problematic service definitions from"/>
+    <echo message="${libs}/jetty9-apache-jsp${jetty.version}.jar and using "/>
+    <echo message="${libs}/jetty9-apache-jsp${jetty.version}-tweaked.jar below." />
+    <delete file="${libs}/jetty9-apache-jsp${jetty.version}-tweaked.jar"
+            quiet="true" />
+
+    <jar destfile="${libs}/jetty9-apache-jsp${jetty.version}-tweaked.jar">
+      <zipfileset src="${libs}/jetty9-apache-jsp${jetty.version}.jar" >
+        <exclude name="**/javax.servlet.ServletContainerInitializer"/>
+      </zipfileset>
+    </jar>
+
+    <antcall target="generate-ml-javadoc" />
+
+    <war destfile="${dist}/${warfile}"
+         duplicate="fail"
+         webxml="${resources}/web.xml"
+	       basedir="${classes}">
+      <restrict>
+        <not>
+          <and>
+            <name name="META-INF/*" />
+            <not>
+              <name name="META-INF/services/*" />
+            </not>
+          </and>
+        </not>
+        <archives>
+          <zips>
+            <fileset dir="${libs}">
+              <patternset refid="common" />
+              <patternset refid="web" />
+              <patternset refid="webruntime" />
+            </fileset>
+          </zips>
+        </archives>
+      </restrict>
+      <exclude name="**/Test*.class" />
+      <zipfileset dir="${resources}"
+                  prefix=""
+                  includes="logback.xml" />
+      <zipfileset dir="${resources}/web"
+                  prefix=""
+                  includes="css/* images/* js/* fonts/**" />
+      <zipfileset dir="${resources}/web/jsps"
+                  prefix="WEB-INF"
+                  includes="*.jsp"/>
+      <zipfileset dir="${resources}"
+                  includes="*.properties" />
+      <fileset dir="${resources}" includes="jetty.xml" />
+
+      <zipfileset dir="${resources}/web/json"
+                  prefix="WEB-INF/json"
+                  includes="metrics.json categories.json news.json"/>
+
+      <zipfileset dir="${basedir}/src/submods/metrics-lib/generated/javadoc"
+                  prefix="metrics-lib" />
+      <zipfileset dir="${libs}" prefix="WEB-INF/lib" >
+        <include name="taglibs-standard-impl-1.2.5.jar"/>
+      </zipfileset>
+
+      <metainf dir="${resources}"
+               includes="context.xml"/>
+      <manifest>
+        <attribute name="Implemented-By" value="The Tor Project" />
+        <attribute name="Implementation-Title" value="TorMetricsWeb Server"/>
+        <attribute name="Implementation-Version"
+                   value="${release.version}-${git.revision}"/>
+        <attribute name="Main-Class"
+                   value="org.torproject.metrics.web.ServerMain" />
+      </manifest>
+    </war>
+  </target>
+
   <target name="generate-ml-javadoc" depends="submoduleupdate" >
     <mkdir dir="${basedir}/src/submods/metrics-lib/lib" />
     <exec executable="ant"
