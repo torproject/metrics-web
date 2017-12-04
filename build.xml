@@ -86,6 +86,11 @@
     <antcall target="run-java" />
   </target>
 
+  <target name="connbidirect" >
+    <property name="module.name" value="connbidirect" />
+    <antcall target="run-java" />
+  </target>
+
   <target name="run-rserver">
     <exec executable="R"
           dir="${Rsources}/rserver"
@@ -103,7 +108,7 @@
   <target name="run-java">
     <echo message="Running java module ${module.name} ... " />
     <available file="${dist}/${jarfile}" property="have.jar"/>
-    <fail unless="have.jar" message="Please run 'ant jar'."/>
+    <fail unless="have.jar" message="Please run 'ant jar' first."/>
     <condition property="mainclass"
                value="${module.main}"
                else="org.torproject.metrics.${module.name}.Main" >
