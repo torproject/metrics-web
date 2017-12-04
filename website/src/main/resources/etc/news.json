@@ -329,9 +329,21 @@
     "protocols": [
       "obfs2"
     ],
-    "description": "First release of the \"Tor Obfsproxy Browser Bundle\", containing two obfs2 bridges.",
+    "description": "First release of \"Tor Obfsproxy Browser Bundle\", containing 2 obfs2 bridges. Version number unknown; no bundle containing 2 bridges exists at https://archive.torproject.org/tor-package-archive/obfsproxy/.",
     "links": [
       "<a href=\"https://blog.torproject.org/obfsproxy-next-step-censorship-arms-race\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2012-02-11",
+    "protocols": [
+      "obfs2"
+    ],
+    "description": "Release of \"Tor Obfsproxy Browser Bundle\" 2.3.10, containing 14 obfs2 bridges.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/obfsproxy-next-step-censorship-arms-race\">blog post</a>",
+      "<a href=\"https://archive.torproject.org/tor-package-archive/obfsproxy/\">package archive</a>",
+      "<a href=\"https://gitweb.torproject.org/project/web/webwml.git/diff/projects/en/obfsproxy.wml?id2=8e52e5e4f8b9cb7b7cb65602446cfec0e0d17ff0&id=d83582eeefe41ffb0125e47d4bde8b3c7f629511\">commits</a>"
     ]
   },
   {
@@ -339,9 +351,33 @@
     "protocols": [
       "obfs2"
     ],
-    "description": "Second release of the \"Tor Obfsproxy Browser Bundle\", containing 14 obfs2 bridges.",
+    "description": "Release of \"Tor Obfsproxy Browser Bundle\" 2.3.12, containing 13 obfs2 bridges (removed 128.30.30.25:51420 relative to version 2.3.10).",
     "links": [
-      "<a href=\"https://blog.torproject.org/obfsproxy-next-step-censorship-arms-race\">blog post</a>"
+      "<a href=\"https://blog.torproject.org/obfsproxy-next-step-censorship-arms-race\">blog post</a>",
+      "<a href=\"https://archive.torproject.org/tor-package-archive/obfsproxy/\">package archive</a>",
+      "<a href=\"https://gitweb.torproject.org/project/web/webwml.git/diff/projects/en/obfsproxy.wml?id2=d83582eeefe41ffb0125e47d4bde8b3c7f629511&id=34941f5f8d7f3452b494e384b556a21fe763ad33\">commits</a>"
+    ]
+  },
+  {
+    "start": "2012-02-18",
+    "protocols": [
+      "obfs2"
+    ],
+    "description": "Release of \"Tor Obfsproxy Browser Bundle\" 2.3.12-2, for Windows and Mac OS X only.",
+    "links": [
+      "<a href=\"https://archive.torproject.org/tor-package-archive/obfsproxy/\">package archive</a>",
+      "<a href=\"https://gitweb.torproject.org/project/web/webwml.git/commit/projects/en/obfsproxy.wml?id=b3ba7c694b8dcd21ab738d753d5dac05e7157ba6\">commit</a>"
+    ]
+  },
+  {
+    "start": "2012-02-22",
+    "protocols": [
+      "obfs2"
+    ],
+    "description": "Release of \"Tor Obfsproxy Browser Bundle\" 2.3.12-3, for Windows and Linux only.",
+    "links": [
+      "<a href=\"https://archive.torproject.org/tor-package-archive/obfsproxy/\">package archive</a>",
+      "<a href=\"https://gitweb.torproject.org/project/web/webwml.git/diff/projects/en/obfsproxy.wml?id2=ab4e421afab1a3ff2a6fb1a8cbe33cd63a24ceda&id=b3ba7c694b8dcd21ab738d753d5dac05e7157ba6\">commits</a>"
     ]
   },
   {
@@ -397,6 +433,17 @@
     "description": "geoip database updated to \"April 3 2012 Maxmind GeoLite Country\" (<code>geoip-db-digest A27BE984989AB31C50D0861C7106B17A7EEC3756</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=b395b59353ea4b1b3221e220b47420b93aadcd0b\">commit</a>"
+    ]
+  },
+  {
+    "start": "2012-04-12",
+    "protocols": [
+      "obfs2"
+    ],
+    "description": "Release of \"Tor Obfsproxy Browser Bundle\" 2.3.12-4.",
+    "links": [
+      "<a href=\"https://archive.torproject.org/tor-package-archive/obfsproxy/\">package archive</a>",
+      "<a href=\"https://gitweb.torproject.org/project/web/webwml.git/commit/projects/en/obfsproxy.wml?id=69f23bb361501c4cff1faeeeddb213f6c96b841a\">commit</a>"
     ]
   },
   {
@@ -859,6 +906,17 @@
     "description": "geoip6 database updated to \"July 10 2014 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 45893A1BDDABACCEB346DE4644A155450FD28B0E</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=6345dfa1fe6651f0ce447c78028b30c3d5a1b6d0\">commit</a>"
+    ]
+  },
+  {
+    "start": "2014-07-27",
+    "end": "2014-09-23",
+    "places": [
+      "ir"
+    ],
+    "description": "Iran blocks Tor directory authorities.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/12727\">ticket</a>"
     ]
   },
   {
@@ -2771,13 +2829,15 @@
   },
   {
     "start": "2017-11-25",
+    "end": "2017-11-27",
     "places": [
       "pk"
     ],
     "description": "Social media block in Pakistan.",
     "links": [
       "<a href=\"https://dailytimes.com.pk/147132/social-media-goes-down-in-pakistan/\">article</a>",
-      "<a href=\"https://digitalrightsfoundation.pk/press-release-drf-and-netblocks-find-blanket-and-nation-wide-ban-on-social-media-in-pakistan-and-demand-it-to-be-lifted-immediately/\">NetBlocks data</a>"
+      "<a href=\"https://digitalrightsfoundation.pk/press-release-drf-and-netblocks-find-blanket-and-nation-wide-ban-on-social-media-in-pakistan-and-demand-it-to-be-lifted-immediately/\">NetBlocks data</a>",
+      "<a href=\"https://ooni.torproject.org/post/how-pakistan-blocked-social-media/\">OONI/Bytes For All report</a>"
     ]
   },
   {
@@ -3226,6 +3286,21 @@
     "unknown": true
   },
   {
+    "start": "2017-08-23",
+    "places": [
+      "kr"
+    ],
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Increase of users in South Korea, relay only.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-12-01&country=kr\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
     "start": "2017-08-27",
     "end": "2017-08-29",
     "places": [
@@ -3240,21 +3315,6 @@
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-07-01&end=2017-09-15&country=eg&events=off\">eg graph</a>",
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-07-01&end=2017-09-15&country=tr&events=off\">tr graph</a>"
-    ],
-    "unknown": true
-  },
-  {
-    "start": "2017-08-23",
-    "places": [
-      "kr"
-    ],
-    "protocols": [
-      "<OR>",
-      "relay"
-    ],
-    "description": "Increase of users in South Korea, relay only.",
-    "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-12-01&country=kr\">graph</a>"
     ],
     "unknown": true
   },
