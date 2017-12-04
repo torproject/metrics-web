@@ -96,6 +96,52 @@
     <antcall target="run-java" />
   </target>
 
+  <!-- Provides legacy.config file from template. -->
+  <target name="legacy-create-config" >
+    <copy file="${resources}/legacy.config.template"
+          tofile="${basedir}/legacy.config"/>
+  </target>
+
+  <!-- Expects legacy.config file in the base directory. -->
+  <target name="legacy" >
+    <property name="module.name" value="legacy" />
+    <property name="localmoddir" value="${modulebase}/${module.name}" />
+    <property name="statsdir"
+              value="${localmoddir}/stats" />
+    <mkdir dir="${statsdir}" />
+
+    <copy file="${basedir}/legacy.config"
+          tofile="${localmoddir}/config"/>
+
+    <antcall target="run-java">
+      <param name="module.main"
+             value="org.torproject.ernie.cron.Main" />
+    </antcall>
+
+    <exec executable="psql"
+          dir="${localmoddir}"
+          failonerror="true" >
+      <arg value="--dbname=tordir"/>
+      <arg value="-c SELECT * FROM refresh_all();" />
+    </exec>
+
+    <exec executable="psql"
+          dir="${localmoddir}"
+          failonerror="true" >
+      <arg value="-c COPY (SELECT * FROM stats_servers) TO STDOUT WITH CSV HEADER;" />
+      <arg value="--dbname=tordir"/>
+      <arg value="--output=${statsdir}/servers.csv" />
+    </exec>
+
+    <exec executable="psql"
+          dir="${localmoddir}"
+          failonerror="true" >
+      <arg value="-c COPY (SELECT * FROM stats_bandwidth) TO STDOUT WITH CSV HEADER;" />
+      <arg value="--dbname=tordir"/>
+      <arg value="--output=${statsdir}/bandwidth.csv" />
+    </exec>
+  </target>
+
   <target name="advbwdist">
     <property name="module.name" value="advbwdist" />
     <antcall target="run-java" />
