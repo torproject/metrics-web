@@ -109,6 +109,17 @@
     <antcall target="run-java" />
   </target>
 
+  <target name="webstats" >
+    <property name="module.name" value="webstats" />
+    <property name="rdatadir" value="${modulebase}/${module.name}/RData" />
+    <mkdir dir="${rdatadir}" />
+
+    <antcall target="run-java" />
+    <antcall target="run-R" >
+      <param name="module.Rscript" value="write-RData.R" />
+    </antcall>
+  </target>
+
   <target name="run-rserver">
     <exec executable="R"
           dir="${Rsources}/rserver"
