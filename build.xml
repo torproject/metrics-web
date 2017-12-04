@@ -74,7 +74,18 @@
     </exec>
   </target>
 
+  <!-- This can be adapted to point at the actual deployment path. -->
+  <property name="prepare.deployment" value="${basedir}/generated" />
+
+  <!-- Don't alter the following. -->
+  <property name="modulebase" value="${prepare.deployment}/modules" />
+
   <!-- Operational tasks. -->
+  <target name="collectdescs" >
+    <property name="module.name" value="collectdescs" />
+    <antcall target="run-java" />
+  </target>
+
   <target name="run-rserver">
     <exec executable="R"
           dir="${Rsources}/rserver"
@@ -86,6 +97,30 @@
       <arg value="--RS-conf" />
       <arg value="Rserv.conf" />
     </exec>
+  </target>
+
+  <!-- Support tasks for operation -->
+  <target name="run-java">
+    <echo message="Running java module ${module.name} ... " />
+    <available file="${dist}/${jarfile}" property="have.jar"/>
+    <fail unless="have.jar" message="Please run 'ant jar'."/>
+    <condition property="mainclass"
+               value="${module.main}"
+               else="org.torproject.metrics.${module.name}.Main" >
+      <isset property="module.main"/>
+    </condition>
+    <property name="workingdir" value="${modulebase}/${module.name}" />
+    <mkdir dir="${workingdir}" />
+    <java dir="${workingdir}"
+          fork="true"
+          maxmemory="2g"
+          classname="${mainclass}">
+      <classpath>
+        <pathelement location="${dist}/${jarfile}"/>
+        <pathelement location="${resources}"/>
+      </classpath>
+      <jvmarg value="-DLOGBASE=../logs"/>
+    </java>
   </target>
 
   <!-- The following line adds the common targets and properties
