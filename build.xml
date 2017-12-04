@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE project [
+       <!ENTITY base SYSTEM "src/build/java/base.xml">
+]>
+
+<project default="usage" name="metrics-web" basedir=".">
+
+  <property name="javadoc-title" value="MetricsWeb API Documentation"/>
+  <property name="implementation-title" value="metrics-web" />
+  <property name="release.version" value="1.0.0-dev" />
+  <property name="metricslibversion" value="2.1.1" />
+  <property name="jetty.version" value="-9.2.21.v20170120" />
+  <property name="warfile"
+            value="metrics-web-${release.version}.war"/>
+
+  <property name="name" value="metrics-web"/>
+
+  <property name="project-main-class"
+            value="org.torproject.TBD" />
+  <property name="additional2sign" value="${warfile}" />
+  <property name="tardepends" value="war" />
+
+  <property name="Rsources" value="${basedir}/src/main/R" />
+  <property name="pysources" value="${basedir}/src/main/python" />
+
+  <!-- Deployment base folder.
+       Be aware that this is also set in R scripts and web.xml, currently! -->
+  <property name="metrics-web.deployment.base"
+            value="/srv/metrics.torproject.org/metrics" />
+
+  <!-- The coverage needs to be improved! -->
+  <target name="coverage-check">
+    <cobertura-check totallinerate="0" totalbranchrate="0" >
+      <!-- example regexes
+      <regex pattern="org.torproject.abc.xyz.*"
+             branchrate="87" linerate="73"/>
+      -->
+    </cobertura-check>
+  </target>
+
+  <patternset id="common" >
+    <include name="commons-codec-1.10.jar"/>
+    <include name="commons-lang3-3.5.jar"/>
+    <include name="commons-lang-2.6.jar"/>
+    <include name="gson-2.4.jar" />
+    <include name="logback-core-1.1.9.jar" />
+    <include name="logback-classic-1.1.9.jar" />
+    <include name="postgresql-9.4.1212.jar"/>
+    <include name="REngine.jar"/>
+    <include name="Rserve.jar"/>
+    <include name="slf4j-api-1.7.22.jar"/>
+  </patternset>
+
+  <patternset id="library" >
+    <patternset refid="common" />
+    <include name="metrics-lib-${metricslibversion}.jar"/>
+    <include name="commons-compress-1.13.jar"/>
+    <include name="servlet-api-3.1.jar"/>
+    <include name="xz-1.6.jar"/>
+  </patternset>
+
+  <patternset id="runtime" >
+    <patternset refid="library" />
+  </patternset>
+
+  <!-- The following line adds the common targets and properties
+       for Metrics' Java Projects.
+  -->
+  &base;
+
+</project>
+
