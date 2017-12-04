@@ -28,14 +28,15 @@ public class ContentProvider {
   private ContentProvider() {
     Gson gson = new GsonBuilder().create();
     this.metricsList = Arrays.asList(gson.fromJson(new InputStreamReader(
-        this.getClass().getClassLoader().getResourceAsStream("metrics.json")),
+        this.getClass().getClassLoader()
+            .getResourceAsStream("WEB-INF/json/metrics.json")),
         Metric[].class));
     this.categoriesList = Arrays.asList(gson.fromJson(new InputStreamReader(
         this.getClass().getClassLoader().getResourceAsStream(
-        "categories.json")), Category[].class));
+        "WEB-INF/json/categories.json")), Category[].class));
     this.newsList = Arrays.asList(gson.fromJson(new InputStreamReader(
         this.getClass().getClassLoader().getResourceAsStream(
-        "news.json")), News[].class));
+        "WEB-INF/json/news.json")), News[].class));
   }
 
   public List<Metric> getMetricsList() {
