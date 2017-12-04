@@ -60,8 +60,35 @@
     <include name="xz-1.6.jar"/>
   </patternset>
 
+  <patternset id="web" >
+    <include name="jetty9-annotations${jetty.version}.jar"/>
+    <include name="jetty9-server${jetty.version}.jar"/>
+    <include name="jetty9-servlet${jetty.version}.jar"/>
+    <include name="jetty9-util${jetty.version}.jar"/>
+    <include name="jetty9-http${jetty.version}.jar"/>
+    <include name="jetty9-io${jetty.version}.jar"/>
+    <include name="jetty9-xml${jetty.version}.jar"/>
+    <include name="jetty9-webapp${jetty.version}.jar"/>
+    <include name="jetty9-continuation${jetty.version}.jar"/>
+    <include name="jetty9-security${jetty.version}.jar"/>
+  </patternset>
+
+  <patternset id="webruntime" >
+    <include name="asm-5.2.jar" />
+    <include name="asm-commons-5.2.jar" />
+    <include name="jetty9-plus${jetty.version}.jar"/>
+    <include name="jetty9-jndi${jetty.version}.jar"/>
+    <include name="jetty9-apache-jsp${jetty.version}-tweaked.jar" />
+    <include name="taglibs-standard-spec-1.2.5.jar"/>
+    <include name="tomcat8-embed-jasper-8.5.14.jar" />
+    <include name="tomcat8-embed-el-8.5.14.jar" />
+    <include name="tomcat8-embed-core-8.5.14.jar" />
+    <include name="eclipse-ecj-3.11.1.jar" />
+  </patternset>
+
   <patternset id="runtime" >
     <patternset refid="library" />
+    <patternset refid="web" />
   </patternset>
 
   <target name="generate-ml-javadoc" depends="submoduleupdate" >
