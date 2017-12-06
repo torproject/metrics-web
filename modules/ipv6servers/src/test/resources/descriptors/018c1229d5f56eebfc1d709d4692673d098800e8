@@ -1,0 +1,54 @@
+@type server-descriptor 1.0
+router HCTOR003 192.30.34.248 9001 0 0
+identity-ed25519
+-----BEGIN ED25519 CERT-----
+AQQABmkCAfbbsyUlm3tvNXIKsdl7FWjCBS27EqU24hlQc4V76pKFAQAgBAC8UP2n
+QP9JHK+trzTtoDAsENdJt5yvp/nIyhQY/TcsY7WQ4w/yJlTJeC5ysSaEmbsgyBiI
+YWEeG3o20mXfIzoX9idsUk1MBDb2+eCpc9JWTkk0zuo80xLyjP7uGLBqKAU=
+-----END ED25519 CERT-----
+master-key-ed25519 vFD9p0D/SRyvra807aAwLBDXSbecr6f5yMoUGP03LGM
+or-address [2604:180::40f1:f45c]:9001
+platform Tor 0.2.9.8 on Linux
+proto Cons=1-2 Desc=1-2 DirCache=1 HSDir=1 HSIntro=3 HSRend=1-2 Link=1-4 LinkAuth=1 Microdesc=1-2 Relay=1-2
+published 2017-12-01 01:55:47
+fingerprint CF00 0B63 C68D 4FAA 3067 7342 267B D75F 1699 A3C7
+uptime 2264147
+bandwidth 1073741824 1073741824 0
+extra-info-digest A03FF6707C62350ED5AD650010D70DE324FB6A5F xzHCpCEQM4cp9mrDmnkxT7ws1kdv0jZt2HtdyWGRtXw
+onion-key
+-----BEGIN RSA PUBLIC KEY-----
+MIGJAoGBAOiURbkUxwrtqfb+Ykp1rSodLlJHPzGy3+BX5Myve4tqZg2LvynN4o4y
+OPEGNUs3mdHBYZmXpt5ZgGQd3uNb21dvVLX9RrW9uslVmEhJbfNbPxjs1gdhnJya
+64Bcju57PRCr97IG+7mBtyd+6iwmVy3JRKDhXE84raAhAvt4JW2bAgMBAAE=
+-----END RSA PUBLIC KEY-----
+signing-key
+-----BEGIN RSA PUBLIC KEY-----
+MIGJAoGBAPPPj2Rt36C1tiSnZtpKKgxwBxgw9QwwVdtKESDVXXnEwamwQYkSwcPB
+xG0RmXRVoXvKva7+e3N4DkeE+DVrZ4GwkKRKbRhtfmp+TH4+TskI+7WAKuKJdCLP
+fD5P+9RUF7OcShVYzjzuXnha6nNQbHAny8wL2EJxEcc1Yq0H1smfAgMBAAE=
+-----END RSA PUBLIC KEY-----
+onion-key-crosscert
+-----BEGIN CROSSCERT-----
+0UiDaVEDGQx71DnKbFc6HxYsVfitgaPJT+0bjBcqnOh8v+jfTUua4npDpi9RkL0W
+5xy0jN1N8j0JTrXjDDPQTF2akgu+iWCoWom4jzmy3HXj+a4jyPaWKVI4Qhz+znYW
+Ts8joaiNImQ94+59DVvxbT2aqHv6OqH/H0Aa93Q1bhQ=
+-----END CROSSCERT-----
+ntor-onion-key-crosscert 1
+-----BEGIN ED25519 CERT-----
+AQoABmliAbxQ/adA/0kcr62vNO2gMCwQ10m3nK+n+cjKFBj9NyxjAB8b32quZYIR
+D5R7Mw6t4Jvu22eBQtbfXbeUneZ9gPsgnw7EEr6dzwbhMY9t4PRBInsRiU2o4C0c
+E/cOR9EKVgE=
+-----END ED25519 CERT-----
+family $CF000B63C68D4FAA30677342267BD75F1699A3C7 $CF879F5ACD419C915170BB1978CFFA1DF6E7ACFF
+hibernating 1
+hidden-service-dir
+contact PGP 0x9958256C Daniel Hagan <daniel.hagan@hagan-consulting.com>
+ntor-onion-key VKuzSIox0yRwcJWUmHrXIq8H7NiyGIBDmmRZA1v4ghk=
+reject *:*
+router-sig-ed25519 lS8zFzXia00h9YnFucF/zAOI/SsCNQwaKy/psMQheKR1nJ+SLSwHTmBtTDb7xWxyKQuikrML/obZ1CfPIkleAw
+router-signature
+-----BEGIN SIGNATURE-----
+yUcGXmxpsHsiD9O1AHElOaUBpCuhcfSC6GrmYcKhfCDpFyH1vOZMrdUE9doQ91By
+uc3zNwRiaivmlFjOj2jh0PYwO8UIMQUAbQThas1yVZx1Jv/qYc9yTE1W4pPnLdxj
+sHN+fVzYKbGrYo9kUrAuU9GnfLIQv5/9pUd8Nq7+/a4=
+-----END SIGNATURE-----

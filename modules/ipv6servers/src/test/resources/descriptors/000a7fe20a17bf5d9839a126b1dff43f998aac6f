@@ -1,0 +1,16 @@
+@type bridge-server-descriptor 1.2
+router Unnamed 10.141.52.121 63839 0 0
+master-key-ed25519 OFHu6w2KsTtvbqDlAuA1pHOW4v9EodQI7F39qLLVyho
+platform Tor 0.3.1.8 on Linux
+proto Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-4 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+published 2017-12-01 17:03:25
+fingerprint 47EE 975E 1C8F 63A4 DD3D 8851 4ECC C4F7 65C7 C208
+uptime 1950945
+bandwidth 1073741824 1073741824 428846
+extra-info-digest EEA5CD46F1FA4A12E239CF35217AF17F4AFC7529 c4lqRmT0oC/GZz7Rq9HKZaaTMT9wotA4ZU1AYWjFjXM
+hidden-service-dir
+ntor-onion-key lBsrbMYEECHW0v0o/gTpNbyORbhTSz+oyz/uD/dAIic=
+reject *:*
+tunnelled-dir-server
+router-digest-sha256 PruciDU6rrAgwoedoaGpvDTKWidF0ZNhqdcEX7KjrjI
+router-digest 000A7FE20A17BF5D9839A126B1DFF43F998AAC6F

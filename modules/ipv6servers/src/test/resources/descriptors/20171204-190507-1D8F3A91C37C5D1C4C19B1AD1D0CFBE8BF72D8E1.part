@@ -1,0 +1,12 @@
+@type bridge-network-status 1.2
+published 2017-12-04 19:05:07
+flag-thresholds stable-uptime=1105427 stable-mtbf=4042454 fast-speed=53000 guard-wfu=98.000% guard-tk=691200 guard-bw-inc-exits=512000 guard-bw-exc-exits=512000 enough-mtbf=1 ignoring-advertised-bws=0
+fingerprint 1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1
+r Unnamed ACzV/+Qobny0/Tk7Jodk8cP+ME4 AbLK37zA6+UPOVhjZlrDdtJfCO0 2017-12-04 16:28:59 10.239.66.98 56676 0
+s Fast HSDir Running Stable V2Dir Valid
+w Bandwidth=63
+p reject 1-65535
+r Unnamed ADXqKmHijTlfCArKIkRTlJDnCVA tSDkh5Xc+Mh6tTPCYO6fivU/Apk 2017-12-04 18:01:53 10.237.141.119 51916 0
+s V2Dir Valid
+w Bandwidth=18
+p reject 1-65535

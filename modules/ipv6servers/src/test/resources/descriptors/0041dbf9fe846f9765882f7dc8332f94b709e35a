@@ -1,0 +1,19 @@
+@type bridge-server-descriptor 1.2
+router cielarko 10.34.119.160 58783 0 0
+or-address [fd9f:2e19:3bcf::61:e1da]:58783
+master-key-ed25519 YFV9cJzNYy6HPbMjrXW1d1QKdPJyy1CeEtpjj5K7dg8
+platform Tor 0.3.2.5-alpha on Linux
+proto Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-4 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+published 2017-12-01 06:05:21
+fingerprint 9691 9EB7 B966 9F21 855E 85E7 263D 9006 68BA 414A
+uptime 66360
+bandwidth 1073741824 1073741824 272174
+extra-info-digest 31B5A95ECB1EC795C82D6D1BBE51D5B1B0186F22 8e6RyL4f/JFlvOUSCa+a0+SDPIzOEhaDHAL+0Lt1PZQ
+hidden-service-dir
+contact somebody
+bridge-distribution-request any
+ntor-onion-key ntj1wQU/1yrbiUMHDugRqzo+LmOUgGUwOTVoaYF8nWo=
+reject *:*
+tunnelled-dir-server
+router-digest-sha256 PEuRjE6moK4BLQpxJFjNoSyjkqubGWEwg5bXiGhgoMc
+router-digest 0041DBF9FE846F9765882F7DC8332F94B709E35A

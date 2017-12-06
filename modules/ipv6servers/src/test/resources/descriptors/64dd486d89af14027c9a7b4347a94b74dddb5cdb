@@ -1,0 +1,18 @@
+@type bridge-server-descriptor 1.2
+router EnigmaDMZ 10.111.225.186 52121 0 0
+master-key-ed25519 IpgU7WgO6uxWT8BtEuNhKtH+S+aOOyttZa5kWqVSya8
+platform Tor 0.2.9.12 on Linux
+proto Cons=1-2 Desc=1-2 DirCache=1 HSDir=1 HSIntro=3 HSRend=1-2 Link=1-4 LinkAuth=1 Microdesc=1-2 Relay=1-2
+published 2017-12-01 11:16:37
+fingerprint 835C E613 1471 0B08 B680 970C AABC 864A 0C00 04B4
+uptime 10918
+bandwidth 10240000 12288000 58783
+extra-info-digest 27FBC6A032A4BF21EF96B8753C67DC8E4B7E456B eshsUBj7pvOpQlYUQgjQt5emrtnqtJUZi8E6JZ4gsvg
+hidden-service-dir
+contact somebody
+ntor-onion-key EOsXa08KZ2cpg8LzsBw531ymC0ixg6pjuwaGLYV6WgI=
+reject *:*
+ipv6-policy accept 1-65535
+tunnelled-dir-server
+router-digest-sha256 /P9VVoa64l5C0G5o0dYbTa975H1Uk9xizCdUgXTVk5A
+router-digest 64DD486D89AF14027C9A7B4347A94B74DDDB5CDB
