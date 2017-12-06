@@ -295,7 +295,7 @@
     "id": "oxford-anonymous-internet",
     "title": "&ldquo;The anonymous Internet&rdquo;",
     "type": "Link",
-    "description": "<p>The Oxford Internet Institute made a cartogram visualization of Tor users as compared to the overall Internet population.  They used the average number of Tor <a href=\"glossary.html#client\">users</a> per country from August 2012 to August 2013 and put it in relation to total Internet users per country.  More details and conclusions can be found on the <a href=\"http://geography.oii.ox.ac.uk/?page=tor\">Information Geographies website at the Oxford Internet Institute</a>.</p><p><a href=\"http://geography.oii.ox.ac.uk/?page=tor\"><img src=\"images/oxford-anonymous-internet.png\" alt=\"The anonymous Internet\"></a></p>"
+    "description": "<p>The Oxford Internet Institute made a cartogram visualization of Tor users as compared to the overall Internet population.  They used the average number of Tor <a href=\"glossary.html#client\">users</a> per country from August 2012 to August 2013 and put it in relation to total Internet users per country.  More details and conclusions can be found on the <a href=\"http://geography.oii.ox.ac.uk/?page=tor\" target=\"_blank\">Information Geographies website at the Oxford Internet Institute</a>.</p><p><a href=\"http://geography.oii.ox.ac.uk/?page=tor\"><img src=\"images/oxford-anonymous-internet.png\" alt=\"The anonymous Internet\"></a></p>"
   },
   {
     "id": "torperf",
@@ -391,19 +391,19 @@
     "id": "uncharted-data-flow",
     "title": "&ldquo;TorFlow&rdquo;",
     "type": "Link",
-    "description": "<p>Uncharted made a visualization of data flow in the Tor network where they place each <a href=\"glossary.html#relay\">relay</a> on a world map and illustrate traffic exchanged between relays as animated dots. More details can be found on the <a href=\"https://torflow.uncharted.software/\">Uncharted website</a>.</p><p><a href=\"https://torflow.uncharted.software/\"><img src=\"images/uncharted-data-flow.png\" alt=\"Data flow in the Tor network\"></a></p>"
+    "description": "<p>Uncharted made a visualization of data flow in the Tor network where they place each <a href=\"glossary.html#relay\">relay</a> on a world map and illustrate traffic exchanged between relays as animated dots. More details can be found on the <a href=\"https://torflow.uncharted.software/\" target=\"_blank\">Uncharted website</a>.</p><p><a href=\"https://torflow.uncharted.software/\"><img src=\"images/uncharted-data-flow.png\" alt=\"Data flow in the Tor network\"></a></p>"
   },
   {
     "id": "uptimes",
     "title": "Monthly uptime of relays",
     "type": "Link",
-    "description": "<p>This image illustrates the uptime of all known <a href=\"glossary.html#relay\">relays</a> in a given month.  Each row of pixels denotes one <a href=\"glossary.html#consensus\">consensus</a> (that is, one hour), and each column denotes one relay.  Each pixel denotes if a given relay was online or offline at a given hour: black means online, white means offline, and red highlights relays with identical uptime patterns.  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\"><img src=\"images/uptimes.jpg\" alt=\"Monthly uptime of relays\"></a></p>"
+    "description": "<p>This image illustrates the uptime of all known <a href=\"glossary.html#relay\">relays</a> in a given month.  Each row of pixels denotes one <a href=\"glossary.html#consensus\">consensus</a> (that is, one hour), and each column denotes one relay.  Each pixel denotes if a given relay was online or offline at a given hour: black means online, white means offline, and red highlights relays with identical uptime patterns.  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\" target=\"_blank\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/uptime-visualisation/\"><img src=\"images/uptimes.jpg\" alt=\"Monthly uptime of relays\"></a></p>"
   },
   {
     "id": "networkchurn",
     "title": "Network churn rate by relay flag",
     "type": "Link",
-    "description": "<p>This image shows the churn rate of the Tor network by <a href=\"glossary.html#relay-flag\">relay flag</a> in a given month.  The churn rate, a value in the interval <b>[0,1]</b>, captures the rate of <a href=\"glossary.html#relay\">relays</a> joining and leaving the network from one <a href=\"glossary.html#consensus\">consensus</a> to the next (that is, within one hour).  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/churn-values/\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/churn-values/\"><img src=\"images/networkchurn.png\" alt=\"Network churn rate by relay flag\"></a></p>"
+    "description": "<p>This image shows the churn rate of the Tor network by <a href=\"glossary.html#relay-flag\">relay flag</a> in a given month.  The churn rate, a value in the interval <b>[0,1]</b>, captures the rate of <a href=\"glossary.html#relay\">relays</a> joining and leaving the network from one <a href=\"glossary.html#consensus\">consensus</a> to the next (that is, within one hour).  The complete image gallery can be found on <a href=\"https://nymity.ch/sybilhunting/churn-values/\" target=\"_blank\">Philipp Winter's homepage</a>.</p><p><a href=\"https://nymity.ch/sybilhunting/churn-values/\"><img src=\"images/networkchurn.png\" alt=\"Network churn rate by relay flag\"></a></p>"
   },
   {
     "id": "webstats-tb",
