@@ -1211,3 +1211,121 @@ plot_webstats_tm <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
+plot_relays_ipv6 <- function(start, end, path) {
+  all_relay_data <- read.csv(
+    "/srv/metrics.torproject.org/metrics/shared/stats/ipv6servers.csv",
+    colClasses = c("valid_after_date" = "Date")) %>%
+    filter(server == "relay")
+  start_date <- max(as.Date(start), min(all_relay_data$valid_after_date))
+  end_date <- min(as.Date(end), max(all_relay_data$valid_after_date),
+    Sys.Date() - 2)
+  date_breaks <- date_breaks(as.numeric(end_date - start_date))
+  all_relay_data %>%
+    filter(valid_after_date >= start_date, valid_after_date <= end_date) %>%
+    group_by(valid_after_date) %>%
+    summarize(total = sum(server_count_sum_avg),
+      announced = sum(server_count_sum_avg[announced_ipv6 == 't']),
+      reachable = sum(server_count_sum_avg[reachable_ipv6_relay == 't']),
+      exiting = sum(server_count_sum_avg[exiting_ipv6_relay == 't'])) %>%
+    merge(data.frame(valid_after_date = seq(start_date, end_date,
+      by = "1 day")), all = TRUE) %>%
+    gather(total, announced, reachable, exiting, key = "category",
+      value = "count") %>%
+    ggplot(aes(x = valid_after_date, y = count, colour = category)) +
+    geom_line(size = 1) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+      "https://metrics.torproject.org/", sep = ""),
+      labels = date_format(date_breaks$format),
+      date_breaks = date_breaks$major,
+      date_minor_breaks = date_breaks$minor) +
+    scale_y_continuous(name = "") +
+    scale_colour_hue(name = "", h.start = 90,
+      breaks = c("total", "announced", "reachable", "exiting"),
+      labels = c("Total (IPv4) OR", "IPv6 announced OR", "IPv6 reachable OR",
+        "IPv6 exititing")) +
+    expand_limits(y = 0) +
+    ggtitle("Relays by IP version") +
+    theme(legend.position = "top")
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
+}
+
+plot_bridges_ipv6 <- function(start, end, path) {
+  all_bridge_data <- read.csv(
+    "/srv/metrics.torproject.org/metrics/shared/stats/ipv6servers.csv",
+    colClasses = c("valid_after_date" = "Date")) %>%
+    filter(server == "bridge")
+  start_date <- max(as.Date(start), min(all_bridge_data$valid_after_date))
+  end_date <- min(as.Date(end), max(all_bridge_data$valid_after_date),
+    Sys.Date() - 2)
+  date_breaks <- date_breaks(as.numeric(end_date - start_date))
+  all_bridge_data %>%
+    filter(valid_after_date >= start_date, valid_after_date <= end_date) %>%
+    group_by(valid_after_date) %>%
+    summarize(total = sum(server_count_sum_avg),
+      announced = sum(server_count_sum_avg[announced_ipv6 == 't'])) %>%
+    merge(data.frame(valid_after_date = seq(start_date, end_date,
+      by = "1 day")), all = TRUE) %>%
+    gather(total, announced, key = "category", value = "count") %>%
+    ggplot(aes(x = valid_after_date, y = count, colour = category)) +
+    geom_line(size = 1) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+      "https://metrics.torproject.org/", sep = ""),
+      labels = date_format(date_breaks$format),
+      date_breaks = date_breaks$major,
+      date_minor_breaks = date_breaks$minor) +
+    scale_y_continuous(name = "") +
+    scale_colour_hue(name = "", h.start = 90,
+      breaks = c("total", "announced"),
+      labels = c("Total (IPv4) OR", "IPv6 announced OR")) +
+    expand_limits(y = 0) +
+    ggtitle("Bridges by IP version") +
+    theme(legend.position = "top")
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
+}
+
+plot_advbw_ipv6 <- function(start, end, path) {
+  all_relay_data <- read.csv(
+    "/srv/metrics.torproject.org/metrics/shared/stats/ipv6servers.csv",
+    colClasses = c("valid_after_date" = "Date")) %>%
+    filter(server == "relay")
+  start_date <- max(as.Date(start), min(all_relay_data$valid_after_date))
+  end_date <- min(as.Date(end), max(all_relay_data$valid_after_date),
+    Sys.Date() - 2)
+  date_breaks <- date_breaks(as.numeric(end_date - start_date))
+  all_relay_data %>%
+    filter(valid_after_date >= start_date, valid_after_date <= end_date) %>%
+    group_by(valid_after_date) %>%
+    summarize(total = sum(advertised_bandwidth_bytes_sum_avg),
+      total_guard = sum(advertised_bandwidth_bytes_sum_avg[guard_relay != 'f']),
+      total_exit = sum(advertised_bandwidth_bytes_sum_avg[exit_relay != 'f']),
+      reachable_guard = sum(advertised_bandwidth_bytes_sum_avg[
+        reachable_ipv6_relay != 'f' & guard_relay != 'f']),
+      reachable_exit = sum(advertised_bandwidth_bytes_sum_avg[
+        reachable_ipv6_relay != 'f' & exit_relay != 'f']),
+      exiting = sum(advertised_bandwidth_bytes_sum_avg[
+        exiting_ipv6_relay != 'f'])) %>%
+    merge(data.frame(valid_after_date = seq(start_date, end_date,
+      by = "1 day")), all = TRUE) %>%
+    gather(total, total_guard, total_exit, reachable_guard, reachable_exit,
+      exiting, key = "category", value = "count") %>%
+    ggplot(aes(x = valid_after_date, y = (count * 8) / 1e9,
+      colour = category)) +
+    geom_line(size = 1) +
+    scale_x_date(name = paste("\nThe Tor Project - ",
+      "https://metrics.torproject.org/", sep = ""),
+      labels = date_format(date_breaks$format),
+      date_breaks = date_breaks$major,
+      date_minor_breaks = date_breaks$minor) +
+    scale_y_continuous(name = "Bandwidth (Gbit/s)") +
+    scale_colour_hue(name = "", h.start = 90,
+      breaks = c("total", "total_guard", "total_exit", "reachable_guard",
+        "reachable_exit", "exiting"),
+      labels = c("Total (IPv4) OR", "Guard total (IPv4)", "Exit total (IPv4)",
+        "Reachable guard IPv6 OR", "Reachable exit IPv6 OR", "IPv6 exiting")) +
+    expand_limits(y = 0) +
+    ggtitle("Advertised bandwidth by IP version") +
+    theme(legend.position = "top") +
+    guides(colour = guide_legend(nrow = 2, byrow = TRUE))
+  ggsave(filename = path, width = 8, height = 5, dpi = 150)
+}
+

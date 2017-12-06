@@ -51,6 +51,9 @@
     <url-pattern>/webstats-tb-platform.html</url-pattern>
     <url-pattern>/webstats-tb-locale.html</url-pattern>
     <url-pattern>/webstats-tm.html</url-pattern>
+    <url-pattern>/relays-ipv6.html</url-pattern>
+    <url-pattern>/bridges-ipv6.html</url-pattern>
+    <url-pattern>/advbw-ipv6.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -168,6 +171,12 @@
     <url-pattern>/webstats-tb-locale.pdf</url-pattern>
     <url-pattern>/webstats-tm.png</url-pattern>
     <url-pattern>/webstats-tm.pdf</url-pattern>
+    <url-pattern>/relays-ipv6.pdf</url-pattern>
+    <url-pattern>/relays-ipv6.png</url-pattern>
+    <url-pattern>/bridges-ipv6.pdf</url-pattern>
+    <url-pattern>/bridges-ipv6.png</url-pattern>
+    <url-pattern>/advbw-ipv6.pdf</url-pattern>
+    <url-pattern>/advbw-ipv6.png</url-pattern>
   </servlet-mapping>
 
   <servlet>

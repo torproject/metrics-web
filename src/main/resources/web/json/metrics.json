@@ -30,7 +30,7 @@
   },
   {
     "id": "versions",
-    "title": "Relays by version",
+    "title": "Relays by tor version",
     "type": "Graph",
     "description": "<p>This graph shows the number of running <a href=\"glossary.html#relay\">relays</a> by tor software version.  Relays report their tor software version when they announce themselves in the network.  More details on when these versions were declared stable or unstable can be found on the <a href=\"https://www.torproject.org/download/download.html\">download page</a> and in the <a href=\"https://gitweb.torproject.org/tor.git/tree/ChangeLog\">changes file</a>.</p>",
     "function": "plot_versions",
@@ -54,6 +54,34 @@
     ],
     "data": [
       "servers"
+    ]
+  },
+  {
+    "id": "relays-ipv6",
+    "title": "Relays by IP version",
+    "type": "Graph",
+    "description": "<p>This graph shows the number of <a href=\"glossary.html#relay\">relays</a> supporting IPv6 as compared to all relays. A relay can support IPv6 by announcing an IPv6 address and port for the OR protocol, which may then be confirmed as reachable by the <a href=\"glossary.html#directory-authority\">directory authorities</a>, and by permitting exiting to IPv6 targets. These sets are not distinct, because relays can have various combinations of announced/confirmed OR ports and exit policies.</p>",
+    "function": "plot_relays_ipv6",
+    "parameters": [
+      "start",
+      "end"
+    ],
+    "data": [
+      "ipv6servers"
+    ]
+  },
+  {
+    "id": "bridges-ipv6",
+    "title": "Bridges by IP version",
+    "type": "Graph",
+    "description": "<p>This graph shows the number of <a href=\"glossary.html#bridge\">bridges</a> supporting IPv6 as compared to all bridges. A bridge can support IPv6 by announcing an IPv6 address and port for the OR protocol.</p>",
+    "function": "plot_bridges_ipv6",
+    "parameters": [
+      "start",
+      "end"
+    ],
+    "data": [
+      "ipv6servers"
     ]
   },
   {
@@ -110,6 +138,20 @@
     ],
     "data": [
       "bandwidth"
+    ]
+  },
+  {
+    "id": "advbw-ipv6",
+    "title": "Advertised bandwidth by IP version",
+    "type": "Graph",
+    "description": "<p>This graph shows total <a href=\"glossary.html#advertised-bandwidth\">advertised bandwidth</a> by relays supporting IPv6 as compared to all relays. A relay can support IPv6 by announcing an IPv6 address and port for the OR protocol, which may then be confirmed as reachable by the <a href=\"glossary.html#directory-authority\">directory authorities</a>, and by permitting exiting to IPv6 targets. In some cases, relay sets are broken down by whether relays got the \"Guard\" and/or \"Exit\" <a href=\"glossary.html#relay-flag\">relay flags</a> indicating their special qualification for the first or last position in a <a href=\"glossary.html#circuit\">circuit</a>. These sets are not distinct, because relays can have various combinations of announced/confirmed OR ports, exit policies, and relay flags.</p>",
+    "function": "plot_advbw_ipv6",
+    "parameters": [
+      "start",
+      "end"
+    ],
+    "data": [
+      "ipv6servers"
     ]
   },
   {

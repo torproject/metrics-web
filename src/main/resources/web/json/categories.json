@@ -28,6 +28,8 @@
       "relayflags",
       "versions",
       "platforms",
+      "relays-ipv6",
+      "bridges-ipv6",
       "uptimes",
       "networkchurn",
       "bubbles"
@@ -42,6 +44,7 @@
     "metrics": [
       "bandwidth",
       "bandwidth-flags",
+      "advbw-ipv6",
       "advbwdist-perc",
       "advbwdist-relay",
       "bwhist-flags",
