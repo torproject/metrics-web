@@ -3361,5 +3361,21 @@
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-October/000502.html\">metrics-team thread</a>"
     ],
     "unknown": true
+  },
+  {
+    "start": "2017-10-30",
+    "end": "2017-11-06",
+    "places": [
+      "zm"
+    ],
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Short-lived tripling of relay users in Zambia.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-08-01&end=2017-12-15&country=zm&events=off\">graph</a>"
+    ],
+    "unknown": true
   }
 ]
