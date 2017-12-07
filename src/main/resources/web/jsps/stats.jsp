@@ -140,6 +140,74 @@ relays when serving directory data.</li>
 </div>
 
 <div class="container">
+<h2>Relays and bridges supporting IPv6 <a href="#ipv6servers" name="ipv6servers" class="anchor">#</a></h2>
+
+<p>The following data file contains statistics on <a href="glossary.html#relay">relays</a> and <a href="glossary.html#bridge">bridges</a> supporting IPv6.
+A relay can support IPv6 by announcing an IPv6 address and port for the OR protocol, which may then be confirmed as reachable by the <a href="glossary.html#directory-authority">directory authorities</a>.
+It can further permit exiting to IPv6 targets.
+A bridge can support IPv6 by announcing an IPv6 address and port for the OR protocol.
+The <a href="glossary.html#bridge-authority">bridge authority</a> may test
+reachability of IPv6 OR addresses similar to directory authorities, however it
+does not explicitly list reachable IPv6 OR addresses of bridges.
+Some of the statistics are available for subsets of relays that got the "Guard" and/or "Exit" <a href="glossary.html#relay-flag">relay flags</a>.
+The data file contains daily (mean) averages of relay or server numbers and advertised bandwidth numbers.</p>
+
+<p><b>Download as <a href="stats/ipv6servers.csv">CSV file</a>.</b></p>
+
+<p>The statistics file contains the following columns:</p>
+<ul>
+
+<li><b>valid_after_date:</b> UTC date (YYYY-MM-DD) when relays or bridges have
+been listed as running.</li>
+
+<li><b>server:</b> Server type, which can be either <b>"relay"</b> or
+<b>"bridge"</b>.</li>
+
+<li><b>guard_relay:</b> Whether relays included in this line have the
+<b>"Guard"</b> relay flag (<b>"t"</b>) or not (<b>"f"</b>).
+If this column contains the empty string, all running relays are included,
+regardless of assigned relay flags.
+Always the empty string for bridges.</li>
+
+<li><b>exit_relay:</b> Whether relays included in this line have the
+<b>"Exit"</b> relay flag (<b>"t"</b>) or not (<b>"f"</b>).
+If this column contains the empty string, all running relays are included,
+regardless of assigned relay flags.
+Always the empty string for bridges.</li>
+
+<li><b>announced_ipv6:</b> Whether relays or bridges have announced an IPv6
+address in their server descriptor (<b>"t"</b>) or not (<b>"f"</b>).
+If this column contains the empty string, all running relays or bridges are
+included, regardless of whether they have announced an IPv6 address.</li>
+
+<li><b>exiting_ipv6_relay:</b> Whether relays have announced an IPv6 exit policy
+other than <b>"reject 1-65535"</b> in their server descriptor (<b>"t"</b>) or
+not (<b>"f"</b>).
+If this column contains the empty string, all running relays are included,
+regardless of IPv6 exit policy.
+Always the empty string for bridges.</li>
+
+<li><b>reachable_ipv6_relay:</b> Whether enough directory authorities have
+confirmed reachability of an IPv6 OR address announced by a relay, by including
+an "a" line in the consensus (<b>"t"</b>) or not (<b>"f"</b>).
+If this column contains the empty string, all running relays are included,
+regardless of whether their IPv6 address was found reachable.
+Always the empty string for bridges.</li>
+
+<li><b>server_count_sum_avg:</b> Number of relays or bridges matching the
+criteria in the previous columns, computed as the mean value over all statuses
+published on the given date.</li>
+
+<li><b>advertised_bandwidth_bytes_sum_avg:</b> Total advertised bandwidth of all
+relays matching the previous criteria, computed as the mean value over all
+statuses published on the given date.
+Always the empty string for bridges.</li>
+
+</ul>
+
+</div>
+
+<div class="container">
 <h2>Advertised bandwidth distribution and n-th fastest relays <a href="#advbwdist" name="advbwdist" class="anchor">#</a></h2>
 
 <p>The following data file contains statistics on the distribution of <a

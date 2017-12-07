@@ -31,6 +31,7 @@ public class ResearchStatsServlet extends HttpServlet {
     this.statsDir = new File(config.getInitParameter("statsDir"));
     this.availableStatisticsFiles = new TreeSet<>();
     this.availableStatisticsFiles.add("servers");
+    this.availableStatisticsFiles.add("ipv6servers");
     this.availableStatisticsFiles.add("bandwidth");
     this.availableStatisticsFiles.add("clients");
     this.availableStatisticsFiles.add("userstats-combined");
