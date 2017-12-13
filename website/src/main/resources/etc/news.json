@@ -1127,6 +1127,16 @@
     ]
   },
   {
+    "start": "2015-02-14",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Release of Orbot v15-alpha-3, first release with meek.",
+    "links": [
+      "<a href=\"https://lists.mayfirst.org/pipermail/guardian-dev/2015-February/004243.html\">mailing list post</a>"
+    ]
+  },
+  {
     "start": "2015-02-28",
     "protocols": [
       "meek"
@@ -1170,7 +1180,18 @@
     ],
     "description": "Tor Weekly News covers the meek-azure performance improvement.",
     "links": [
-      "<a href=\"https://blog.torproject.org/blog/tor-weekly-news-%E2%80%94-april-15th-2015\">covers the meek-azure blog post</a>"
+      "<a href=\"https://blog.torproject.org/blog/tor-weekly-news-%E2%80%94-april-15th-2015\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2015-04-19",
+    "protocols": [
+      "meek",
+      "obfs4"
+    ],
+    "description": "Release of Orbot v15 alpha 5, first release with obfs4.",
+    "links": [
+      "<a href=\"https://lists.mayfirst.org/pipermail/guardian-dev/2015-March/004283.html\">mailing list post</a>"
     ]
   },
   {
@@ -1523,6 +1544,9 @@
   {
     "start": "2016-01-29",
     "end": "2016-02-02",
+    "places": [
+      "cn"
+    ],
     "protocols": [
       "meek"
     ],
@@ -2838,6 +2862,17 @@
       "<a href=\"https://dailytimes.com.pk/147132/social-media-goes-down-in-pakistan/\">article</a>",
       "<a href=\"https://digitalrightsfoundation.pk/press-release-drf-and-netblocks-find-blanket-and-nation-wide-ban-on-social-media-in-pakistan-and-demand-it-to-be-lifted-immediately/\">NetBlocks data</a>",
       "<a href=\"https://ooni.torproject.org/post/how-pakistan-blocked-social-media/\">OONI/Bytes For All report</a>"
+    ]
+  },
+  {
+    "start": "2017-12-05",
+    "end": "2017-12-15",
+    "places": [
+      "zw"
+    ],
+    "description": "Internet outage in Zimbabwe.",
+    "links": [
+      "<a href=\"https://www.techzim.co.zw/2017/12/zimbabwe-internet-outage-here-what-happened/\">article</a>"
     ]
   },
   {
