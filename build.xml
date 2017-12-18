@@ -178,8 +178,9 @@
     </exec>
   </target>
 
-  <!-- This can be adapted to point at the actual deployment path. -->
-  <property name="prepare.deployment" value="${basedir}/generated" />
+  <!-- This can be adapted to point at the actual work directory. -->
+  <property name="prepare.deployment"
+            value="/srv/metrics.torproject.org/metrics/work" />
 
   <!-- Don't alter the following. -->
   <property name="modulebase" value="${prepare.deployment}/modules" />
