@@ -241,6 +241,7 @@ public class GraphServlet extends MetricServlet {
               case "events":
                 eventsParameter = checkedParameter.getValue()[0];
                 break;
+              default: // don't care about other parameters
             }
           }
         }
