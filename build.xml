@@ -388,7 +388,7 @@
     <mkdir dir="${workingdir}" />
     <java dir="${workingdir}"
           fork="true"
-          maxmemory="2g"
+          maxmemory="4g"
           classname="${mainclass}">
       <classpath>
         <pathelement location="${dist}/${jarfile}"/>
