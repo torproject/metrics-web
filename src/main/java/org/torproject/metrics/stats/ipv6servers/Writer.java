@@ -26,7 +26,7 @@ class Writer {
       }
     }
     List<String> formattedOutputLines = new ArrayList<>();
-    formattedOutputLines.add(OutputLine.getColumnHeaders(","));
+    formattedOutputLines.add(OutputLine.columnHeadersDelimitedBy(","));
     for (OutputLine line : outputLines) {
       formattedOutputLines.add(line.toString());
     }

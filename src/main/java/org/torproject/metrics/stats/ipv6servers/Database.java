@@ -181,7 +181,7 @@ class Database implements AutoCloseable {
     Statement st = this.connection.createStatement();
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
         Locale.US);
-    String queryString = "SELECT " + OutputLine.getColumnHeaders(", ")
+    String queryString = "SELECT " + OutputLine.columnHeadersDelimitedBy(", ")
         + " FROM ipv6servers";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {

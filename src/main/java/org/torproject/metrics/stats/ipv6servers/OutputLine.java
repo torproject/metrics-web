@@ -4,8 +4,8 @@
 package org.torproject.metrics.stats.ipv6servers;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /** Data object holding all parts of an output line. */
 class OutputLine {
@@ -19,12 +19,9 @@ class OutputLine {
   }
 
   /** Column headers joined together with the given delimiter. */
-  static String getColumnHeaders(String delimiter) {
-    List<String> columnHeaders = new ArrayList<>();
-    for (Column column : Column.values()) {
-      columnHeaders.add(column.toString());
-    }
-    return String.join(delimiter, columnHeaders).toLowerCase();
+  static String columnHeadersDelimitedBy(String delimiter) {
+    return Arrays.stream(Column.values()).map(c -> c.toString())
+        .collect(Collectors.joining(delimiter));
   }
 
   /** Date. */
