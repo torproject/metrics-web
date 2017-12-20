@@ -25,6 +25,9 @@ class Parser {
     Ipv6ServerDescriptor parsedDescriptor = new Ipv6ServerDescriptor();
     parsedDescriptor.digest = serverDescriptor.getDigestSha1Hex();
     for (String orAddress : serverDescriptor.getOrAddresses()) {
+      /* Check whether the additional OR address is an IPv6 address containing
+       * at least two colons as opposed to an IPv4 address and TCP port
+       * containing only one colon as separator. */
       if (StringUtils.countMatches(orAddress, ":") >= 2) {
         parsedDescriptor.announced = true;
         break;
@@ -47,14 +50,12 @@ class Parser {
     return parsedDescriptor;
   }
 
-  /** Parse a relay network status. */
   Ipv6NetworkStatus parseRelayNetworkStatusConsensus(
       RelayNetworkStatusConsensus consensus) throws Exception {
     return this.parseStatus(true, consensus.getValidAfterMillis(),
         consensus.getStatusEntries().values());
   }
 
-  /** Parse a bridge network status. */
   Ipv6NetworkStatus parseBridgeNetworkStatus(BridgeNetworkStatus status)
       throws Exception {
     return this.parseStatus(false, status.getPublishedMillis(),
@@ -85,6 +86,9 @@ class Parser {
             && !entry.getFlags().contains("BadExit");
         parsedEntry.reachable = false;
         for (String orAddress : entry.getOrAddresses()) {
+          /* Check whether the additional OR address is an IPv6 address
+           * containing at least two colons as opposed to an IPv4 address and
+           * TCP port containing only one colon as separator. */
           if (StringUtils.countMatches(orAddress, ":") >= 2) {
             parsedEntry.reachable = true;
             break;
