@@ -32,22 +32,22 @@ public class ParsedServerDescriptorTest {
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][] {
         { "Relay server descriptor without or-address or ipv6-policy line.",
-            "descriptors/0018ab4f2f28af683d52f06407edbf7ce1bd3b7d",
+            "ipv6servers/0018ab4f2f28af683d52f06407edbf7ce1bd3b7d",
             819200, false, false },
         { "Relay server descriptor with or-address and ipv6-policy line.",
-            "descriptors/01003df74972ce952ebfa390f468ef63c50efa25",
+            "ipv6servers/01003df74972ce952ebfa390f468ef63c50efa25",
             6576128, true, true },
         { "Relay server descriptor with or-address line only.",
-            "descriptors/018c1229d5f56eebfc1d709d4692673d098800e8",
+            "ipv6servers/018c1229d5f56eebfc1d709d4692673d098800e8",
             0, true, false },
         { "Bridge server descriptor without or-address or ipv6-policy line.",
-            "descriptors/000a7fe20a17bf5d9839a126b1dff43f998aac6f",
+            "ipv6servers/000a7fe20a17bf5d9839a126b1dff43f998aac6f",
             0, false, false },
         { "Bridge server descriptor with or-address line.",
-            "descriptors/0041dbf9fe846f9765882f7dc8332f94b709e35a",
+            "ipv6servers/0041dbf9fe846f9765882f7dc8332f94b709e35a",
             0, true, false },
         { "Bridge server descriptor with (ignored) ipv6-policy accept line.",
-            "descriptors/64dd486d89af14027c9a7b4347a94b74dddb5cdb",
+            "ipv6servers/64dd486d89af14027c9a7b4347a94b74dddb5cdb",
             0, false, false }
     });
   }

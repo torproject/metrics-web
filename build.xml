@@ -195,6 +195,7 @@
     <antcall target="advbwdist" />
     <antcall target="hidserv" />
     <antcall target="clients" />
+    <antcall target="ipv6servers" />
     <antcall target="webstats" />
     <antcall target="make-data-available" />
   </target>
@@ -328,6 +329,14 @@
 
     <antcall target="run-R" >
       <param name="module.Rscript" value="split-clients.R" />
+    </antcall>
+  </target>
+
+  <target name="ipv6servers" >
+    <property name="module.name" value="ipv6servers" />
+    <antcall target="run-java" >
+      <param name="module.main"
+             value="org.torproject.metrics.stats.ipv6servers.Main" />
     </antcall>
   </target>
 

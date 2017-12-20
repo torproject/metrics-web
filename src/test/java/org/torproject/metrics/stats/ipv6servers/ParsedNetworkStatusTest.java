@@ -33,8 +33,8 @@ public class ParsedNetworkStatusTest {
   /** Provide test data. */
   @Parameters
   public static Collection<Object[]> data() {
-    String relayFileName = "descriptors/2017-12-04-20-00-00-consensus.part";
-    String bridgeFileName = "descriptors/"
+    String relayFileName = "ipv6servers/2017-12-04-20-00-00-consensus.part";
+    String bridgeFileName = "ipv6servers/"
         + "20171204-190507-1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1.part";
     return Arrays.asList(new Object[][] {
         { "Relay status without Guard or Exit flag and without IPv6 address. ",
