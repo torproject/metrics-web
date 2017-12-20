@@ -91,6 +91,46 @@
     <patternset refid="web" />
   </patternset>
 
+  <!-- Tasks for database testing. -->
+  <target name="test-all-dbs"
+          depends="init"
+          description="Run all available database pgTAP tests." >
+    <antcall target="test-db">
+      <param name="db2test" value="ipv6servers" />
+    </antcall>
+    <antcall target="test-db">
+      <param name="db2test" value="userstats" />
+    </antcall>
+  </target>
+
+  <target name="test-db" description="A helper task for task test-all-dbs." >
+    <property name="dbtestlog" value="${basedir}/${generated}/${db2test}-sql-test.txt" />
+    <exec executable="psql"
+          dir="${generated}"
+          failonerror="false" >
+      <arg value="--output=${dbtestlog}" />
+      <arg value="--log-file=${basedir}/${generated}/all-dbs-test.log" />
+      <arg value="--quiet" />
+      <arg value="--file=${basedir}/src/test/sql/${db2test}/test-${db2test}.sql" />
+      <arg value="--dbname=${db2test}"/>
+    </exec>
+    <exec executable="grep" outputproperty="dbtestresult"
+          dir="${generated}"
+          failonerror="false" >
+      <arg value="failed" />
+      <arg value="${dbtestlog}" />
+    </exec>
+    <fail message="${dbtestresult} see ${dbtestlog} for details." >
+      <condition>
+        <not>
+          <length string="${dbtestresult}"
+                  length="0" />
+        </not>
+      </condition>
+    </fail>
+    <echo message="Tests for ${db2test} passed." />
+  </target>
+
   <!-- Create a .war file for deployment. -->
   <target name="war"
           depends="submoduleupdate,compile">
