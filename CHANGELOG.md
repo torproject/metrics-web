@@ -1,3 +1,12 @@
+# Changes in version 1.0.3 - 2017-12-20
+
+ * Major changes
+   - Use an embedded Jetty.
+   - Use metrics-base as build environment.
+   - Add metrics timeline events underneath graphs.
+   - Replace broken SVGs with higher-resolution PNGs.
+
+
 # Changes in version 1.0.2 - 2017-10-04
 
  * Minor changes
