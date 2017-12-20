@@ -369,6 +369,8 @@
       <fileset dir="${modulebase}/clients/stats"
                includes="clients*.csv userstats-combined.csv" />
       <fileset dir="${modulebase}/webstats/stats" includes="webstats.csv" />
+    </copy>
+    <copy todir="${rdatadir}" >
       <fileset dir="${modulebase}/clients/RData" includes="*.RData" />
       <fileset dir="${modulebase}/webstats/RData" includes="*.RData" />
     </copy>
