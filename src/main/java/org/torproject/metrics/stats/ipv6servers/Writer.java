@@ -20,8 +20,7 @@ class Writer {
       throws IOException {
     File parentFile = filePath.toFile().getParentFile();
     if (null != parentFile && !parentFile.exists()) {
-      boolean madeDirs = parentFile.mkdirs();
-      if (!madeDirs) {
+      if (!parentFile.mkdirs()) {
         throw new IOException("Unable to create parent directory of output "
             + "file. Not writing this file.");
       }
