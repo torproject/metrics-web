@@ -35,72 +35,65 @@ public class Main {
     File historyFile = new File(Configuration.history);
     reader.setHistoryFile(historyFile);
     Parser parser = new Parser();
-    Database database = new Database(Configuration.database);
-    try {
-      for (Descriptor descriptor : reader.readDescriptors(
-          new File(Configuration.descriptors
-              + "recent/relay-descriptors/consensuses"),
-          new File(Configuration.descriptors
-              + "recent/relay-descriptors/server-descriptors"),
-          new File(Configuration.descriptors
-              + "recent/bridge-descriptors/statuses"),
-          new File(Configuration.descriptors
-              + "recent/bridge-descriptors/server-descriptors"),
-          new File(Configuration.descriptors
-              + "archive/relay-descriptors/consensuses"),
-          new File(Configuration.descriptors
-              + "archive/relay-descriptors/server-descriptors"),
-          new File(Configuration.descriptors
-              + "archive/bridge-descriptors/statuses"),
-          new File(Configuration.descriptors
-              + "archive/bridge-descriptors/server-descriptors"))) {
-        if (descriptor instanceof ServerDescriptor) {
-          database.insertServerDescriptor(parser.parseServerDescriptor(
-              (ServerDescriptor) descriptor));
-        } else if (descriptor instanceof RelayNetworkStatusConsensus) {
-          database.insertStatus(parser.parseRelayNetworkStatusConsensus(
-              (RelayNetworkStatusConsensus) descriptor));
-        } else if (descriptor instanceof BridgeNetworkStatus) {
-          database.insertStatus(parser.parseBridgeNetworkStatus(
-              (BridgeNetworkStatus) descriptor));
-        } else {
-          log.debug("Skipping unknown descriptor of type {}.",
-              descriptor.getClass());
+    try (Database database = new Database(Configuration.database)) {
+      try {
+        for (Descriptor descriptor : reader.readDescriptors(
+            new File(Configuration.descriptors
+                + "recent/relay-descriptors/consensuses"),
+            new File(Configuration.descriptors
+                + "recent/relay-descriptors/server-descriptors"),
+            new File(Configuration.descriptors
+                + "recent/bridge-descriptors/statuses"),
+            new File(Configuration.descriptors
+                + "recent/bridge-descriptors/server-descriptors"),
+            new File(Configuration.descriptors
+                + "archive/relay-descriptors/consensuses"),
+            new File(Configuration.descriptors
+                + "archive/relay-descriptors/server-descriptors"),
+            new File(Configuration.descriptors
+                + "archive/bridge-descriptors/statuses"),
+            new File(Configuration.descriptors
+                + "archive/bridge-descriptors/server-descriptors"))) {
+          if (descriptor instanceof ServerDescriptor) {
+            database.insertServerDescriptor(parser.parseServerDescriptor(
+                (ServerDescriptor) descriptor));
+          } else if (descriptor instanceof RelayNetworkStatusConsensus) {
+            database.insertStatus(parser.parseRelayNetworkStatusConsensus(
+                (RelayNetworkStatusConsensus) descriptor));
+          } else if (descriptor instanceof BridgeNetworkStatus) {
+            database.insertStatus(parser.parseBridgeNetworkStatus(
+                (BridgeNetworkStatus) descriptor));
+          } else {
+            log.debug("Skipping unknown descriptor of type {}.",
+                descriptor.getClass());
+          }
         }
+
+        log.info("Aggregating database entries.");
+        database.aggregate();
+
+        log.info("Committing all updated parts in the database.");
+        database.commit();
+      } catch (SQLException sqle) {
+        log.error("Cannot recover from SQL exception while inserting or "
+            + "aggregating data. Rolling back and exiting.", sqle);
+        database.rollback();
+        return;
+      }
+      reader.saveHistoryFile(historyFile);
+
+      log.info("Querying aggregated statistics from the database.");
+      Iterable<OutputLine> output = database.queryServersIpv6();
+      log.info("Writing aggregated statistics to {}.", Configuration.output);
+      if (null != output) {
+        new Writer().write(Paths.get(Configuration.output), output);
       }
 
-      log.info("Aggregating database entries.");
-      database.aggregate();
-
-      log.info("Committing all updated parts in the database.");
-      database.commit();
-    } catch (SQLException sqle) {
-      log.error("Cannot recover from SQL exception while inserting or "
-          + "aggregating data. Rolling back and exiting.", sqle);
-      database.rollback();
-      database.disconnect();
-      return;
-    }
-    reader.saveHistoryFile(historyFile);
-
-    log.info("Querying aggregated statistics from the database.");
-    Iterable<OutputLine> output;
-    try {
-      output = database.queryServersIpv6();
+      log.info("Terminating ipv6servers module.");
     } catch (SQLException sqle) {
       log.error("Cannot recover from SQL exception while querying. Not writing "
           + "output file.", sqle);
-      return;
-    } finally {
-      database.disconnect();
     }
-
-    log.info("Writing aggregated statistics to {}.", Configuration.output);
-    if (null != output) {
-      new Writer().write(Paths.get(Configuration.output), output);
-    }
-
-    log.info("Terminating ipv6servers module.");
   }
 }
 

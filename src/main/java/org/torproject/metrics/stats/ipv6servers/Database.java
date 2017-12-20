@@ -20,7 +20,7 @@ import java.util.TimeZone;
 
 /** Database wrapper to connect to the database, insert data, run the stored
  * procedure for aggregating data, and query aggregated data as output. */
-class Database {
+class Database implements AutoCloseable {
 
   /** Database connection string. */
   private String jdbcString;
@@ -210,8 +210,8 @@ class Database {
     return statistics;
   }
 
-  /** Disconnect from the database. */
-  void disconnect() throws SQLException {
+  /** Release database connection. */
+  public void close() throws SQLException {
     this.connection.close();
   }
 }
