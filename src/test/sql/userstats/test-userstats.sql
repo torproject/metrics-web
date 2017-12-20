@@ -1,3 +1,10 @@
+-- Copyright 2013--2017 The Tor Project
+-- See LICENSE for licensing information
+
+-- Hint: You'll need pgTAP in order to run these tests!
+
+CREATE EXTENSION IF NOT EXISTS pgtap;
+
 BEGIN;
 SET search_path TO tap, public;
 SELECT plan(152);
