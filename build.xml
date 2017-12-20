@@ -342,6 +342,14 @@
     </antcall>
   </target>
 
+  <!--
+      The run-rserver target documents a working option of
+      configuring an R server for running metrics-web.
+      It is not necessary for development to use this task
+      and it is not used for metrics.torproject.org in this way.
+      Eventually, this task will become obsolete when R is also
+      controlled from Java code.
+  -->
   <target name="run-rserver">
     <exec executable="R"
           dir="${Rsources}/rserver"
