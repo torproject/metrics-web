@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 /** Main class of the ipv6servers module that imports relevant parts from server
  * descriptors and network statuses into a database, and exports aggregate
@@ -23,6 +24,16 @@ import java.sql.SQLException;
 public class Main {
 
   private static Logger log = LoggerFactory.getLogger(Main.class);
+
+  private static String[][] paths =  {
+    {"recent", "relay-descriptors", "consensuses"},
+    {"recent", "relay-descriptors", "server-descriptors"},
+    {"recent", "bridge-descriptors", "statuses"},
+    {"recent", "bridge-descriptors", "server-descriptors"},
+    {"archive", "relay-descriptors", "consensuses"},
+    {"archive", "relay-descriptors", "server-descriptors"},
+    {"archive", "bridge-descriptors", "statuses"},
+    {"archive", "bridge-descriptors", "server-descriptors"}};
 
   /** Run the module. */
   public static void main(String[] args) throws Exception {
@@ -38,22 +49,9 @@ public class Main {
     try (Database database = new Database(Configuration.database)) {
       try {
         for (Descriptor descriptor : reader.readDescriptors(
-            new File(Configuration.descriptors
-                + "recent/relay-descriptors/consensuses"),
-            new File(Configuration.descriptors
-                + "recent/relay-descriptors/server-descriptors"),
-            new File(Configuration.descriptors
-                + "recent/bridge-descriptors/statuses"),
-            new File(Configuration.descriptors
-                + "recent/bridge-descriptors/server-descriptors"),
-            new File(Configuration.descriptors
-                + "archive/relay-descriptors/consensuses"),
-            new File(Configuration.descriptors
-                + "archive/relay-descriptors/server-descriptors"),
-            new File(Configuration.descriptors
-                + "archive/bridge-descriptors/statuses"),
-            new File(Configuration.descriptors
-                + "archive/bridge-descriptors/server-descriptors"))) {
+            Arrays.stream(paths).map((String[] path)
+                -> Paths.get(Configuration.descriptors, path).toFile())
+            .toArray(File[]::new))) {
           if (descriptor instanceof ServerDescriptor) {
             database.insertServerDescriptor(parser.parseServerDescriptor(
                 (ServerDescriptor) descriptor));
