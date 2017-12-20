@@ -20,9 +20,9 @@ import java.time.ZoneId;
 class Parser {
 
   /** Parse a (relay or bridge) server descriptor. */
-  ParsedServerDescriptor parseServerDescriptor(
+  Ipv6ServerDescriptor parseServerDescriptor(
       ServerDescriptor serverDescriptor) {
-    ParsedServerDescriptor parsedDescriptor = new ParsedServerDescriptor();
+    Ipv6ServerDescriptor parsedDescriptor = new Ipv6ServerDescriptor();
     parsedDescriptor.digest = serverDescriptor.getDigestSha1Hex();
     for (String orAddress : serverDescriptor.getOrAddresses()) {
       if (StringUtils.countMatches(orAddress, ":") >= 2) {
@@ -48,22 +48,22 @@ class Parser {
   }
 
   /** Parse a relay network status. */
-  ParsedNetworkStatus parseRelayNetworkStatusConsensus(
+  Ipv6NetworkStatus parseRelayNetworkStatusConsensus(
       RelayNetworkStatusConsensus consensus) throws Exception {
     return this.parseStatus(true, consensus.getValidAfterMillis(),
         consensus.getStatusEntries().values());
   }
 
   /** Parse a bridge network status. */
-  ParsedNetworkStatus parseBridgeNetworkStatus(BridgeNetworkStatus status)
+  Ipv6NetworkStatus parseBridgeNetworkStatus(BridgeNetworkStatus status)
       throws Exception {
     return this.parseStatus(false, status.getPublishedMillis(),
         status.getStatusEntries().values());
   }
 
-  private ParsedNetworkStatus parseStatus(boolean isRelay, long timestampMillis,
+  private Ipv6NetworkStatus parseStatus(boolean isRelay, long timestampMillis,
       Iterable<NetworkStatusEntry> entries) {
-    ParsedNetworkStatus parsedStatus = new ParsedNetworkStatus();
+    Ipv6NetworkStatus parsedStatus = new Ipv6NetworkStatus();
     parsedStatus.isRelay = isRelay;
     parsedStatus.timestamp = Instant.ofEpochMilli(timestampMillis)
         .atZone(ZoneId.of("UTC")).toLocalDateTime();
@@ -77,7 +77,7 @@ class Parser {
       if (!entry.getFlags().contains("Running")) {
         continue;
       }
-      ParsedNetworkStatus.Entry parsedEntry = new ParsedNetworkStatus.Entry();
+      Ipv6NetworkStatus.Entry parsedEntry = new Ipv6NetworkStatus.Entry();
       parsedEntry.digest = entry.getDescriptor().toLowerCase();
       if (isRelay) {
         parsedEntry.guard = entry.getFlags().contains("Guard");

@@ -9,7 +9,7 @@ import java.util.List;
 
 /** Data object holding all relevant parts parsed from a (relay or bridge)
  * network status. */
-class ParsedNetworkStatus {
+class Ipv6NetworkStatus {
 
   /** Whether this is a relay network status as opposed to a bridge network
    * status. */

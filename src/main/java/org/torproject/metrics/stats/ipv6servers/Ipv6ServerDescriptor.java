@@ -5,7 +5,7 @@ package org.torproject.metrics.stats.ipv6servers;
 
 /** Data object holding all relevant parts parsed from a (relay or bridge)
  * server descriptor. */
-class ParsedServerDescriptor {
+class Ipv6ServerDescriptor {
 
   /** Hex-encoded SHA-1 server descriptor digest. */
   String digest;

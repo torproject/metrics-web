@@ -84,10 +84,10 @@ class Database implements AutoCloseable {
 
   /** Insert a server descriptor into the server_descriptors table. */
   void insertServerDescriptor(
-      ParsedServerDescriptor parsedServerDescriptor) throws SQLException {
+      Ipv6ServerDescriptor serverDescriptor) throws SQLException {
     this.psServerDescriptorsSelect.clearParameters();
     this.psServerDescriptorsSelect.setString(1,
-        parsedServerDescriptor.digest);
+        serverDescriptor.digest);
     try (ResultSet rs = psServerDescriptorsSelect.executeQuery()) {
       if (rs.next()) {
         if (rs.getBoolean(1)) {
@@ -97,28 +97,25 @@ class Database implements AutoCloseable {
       }
     }
     this.psServerDescriptorsInsert.clearParameters();
-    this.psServerDescriptorsInsert.setString(1,
-        parsedServerDescriptor.digest);
+    this.psServerDescriptorsInsert.setString(1, serverDescriptor.digest);
     this.psServerDescriptorsInsert.setInt(2,
-        parsedServerDescriptor.advertisedBandwidth);
-    this.psServerDescriptorsInsert.setBoolean(3,
-        parsedServerDescriptor.announced);
-    this.psServerDescriptorsInsert.setBoolean(4,
-        parsedServerDescriptor.exiting);
+        serverDescriptor.advertisedBandwidth);
+    this.psServerDescriptorsInsert.setBoolean(3, serverDescriptor.announced);
+    this.psServerDescriptorsInsert.setBoolean(4, serverDescriptor.exiting);
     this.psServerDescriptorsInsert.execute();
   }
 
   /** Insert a status and all contained entries into the statuses and
    * status_entries table. */
-  void insertStatus(ParsedNetworkStatus parsedNetworkStatus)
+  void insertStatus(Ipv6NetworkStatus networkStatus)
       throws SQLException {
     this.psStatusesSelect.clearParameters();
     this.psStatusesSelect.setString(1,
-        parsedNetworkStatus.isRelay ? "relay" : "bridge");
+        networkStatus.isRelay ? "relay" : "bridge");
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
         Locale.US);
     this.psStatusesSelect.setTimestamp(2,
-        Timestamp.from(ZonedDateTime.of(parsedNetworkStatus.timestamp,
+        Timestamp.from(ZonedDateTime.of(networkStatus.timestamp,
         ZoneId.of("UTC")).toInstant()), calendar);
     try (ResultSet rs = this.psStatusesSelect.executeQuery()) {
       if (rs.next()) {
@@ -131,11 +128,11 @@ class Database implements AutoCloseable {
     int statusId = -1;
     this.psStatusesInsert.clearParameters();
     this.psStatusesInsert.setString(1,
-        parsedNetworkStatus.isRelay ? "relay" : "bridge");
+        networkStatus.isRelay ? "relay" : "bridge");
     this.psStatusesInsert.setTimestamp(2,
-        Timestamp.from(ZonedDateTime.of(parsedNetworkStatus.timestamp,
+        Timestamp.from(ZonedDateTime.of(networkStatus.timestamp,
         ZoneId.of("UTC")).toInstant()), calendar);
-    this.psStatusesInsert.setInt(3, parsedNetworkStatus.running);
+    this.psStatusesInsert.setInt(3, networkStatus.running);
     this.psStatusesInsert.execute();
     try (ResultSet rs = this.psStatusesInsert.getGeneratedKeys()) {
       if (rs.next()) {
@@ -146,7 +143,7 @@ class Database implements AutoCloseable {
       throw new SQLException("Could not retrieve auto-generated key for new "
           + "statuses entry.");
     }
-    for (ParsedNetworkStatus.Entry entry : parsedNetworkStatus.entries) {
+    for (Ipv6NetworkStatus.Entry entry : networkStatus.entries) {
       this.psStatusEntriesInsert.clearParameters();
       this.psStatusEntriesInsert.setInt(1, statusId);
       this.psStatusEntriesInsert.setString(2, entry.digest);

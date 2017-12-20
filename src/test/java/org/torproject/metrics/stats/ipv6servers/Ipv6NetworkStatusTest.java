@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class ParsedNetworkStatusTest {
+public class Ipv6NetworkStatusTest {
 
   /** Provide test data. */
   @Parameters
@@ -102,7 +102,7 @@ public class ParsedNetworkStatusTest {
     for (Descriptor descriptor
         : DescriptorSourceFactory.createDescriptorParser().parseDescriptors(
         sb.toString().getBytes(), new File(this.fileName), this.fileName)) {
-      ParsedNetworkStatus parsedNetworkStatus;
+      Ipv6NetworkStatus parsedNetworkStatus;
       if (descriptor instanceof RelayNetworkStatusConsensus) {
         parsedNetworkStatus = new Parser().parseRelayNetworkStatusConsensus(
             (RelayNetworkStatusConsensus) descriptor);
@@ -119,7 +119,7 @@ public class ParsedNetworkStatusTest {
       assertEquals(this.description, this.running, parsedNetworkStatus.running);
       if (null != this.digest) {
         boolean foundEntry = false;
-        for (ParsedNetworkStatus.Entry parsedEntry
+        for (Ipv6NetworkStatus.Entry parsedEntry
             : parsedNetworkStatus.entries) {
           if (this.digest.equals(parsedEntry.digest)) {
             assertEquals(this.description, this.guard, parsedEntry.guard);

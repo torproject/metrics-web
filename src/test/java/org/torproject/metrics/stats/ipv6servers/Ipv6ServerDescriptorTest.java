@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class ParsedServerDescriptorTest {
+public class Ipv6ServerDescriptorTest {
 
   /** Provide test data. */
   @Parameters
@@ -83,7 +83,7 @@ public class ParsedServerDescriptorTest {
         : DescriptorSourceFactory.createDescriptorParser().parseDescriptors(
         sb.toString().getBytes(), new File(this.fileName), this.fileName)) {
       assertTrue(this.description, descriptor instanceof ServerDescriptor);
-      ParsedServerDescriptor parsedServerDescriptor
+      Ipv6ServerDescriptor parsedServerDescriptor
           = new Parser().parseServerDescriptor((ServerDescriptor) descriptor);
       assertEquals(this.description, this.advertisedBandwidth,
           parsedServerDescriptor.advertisedBandwidth);
