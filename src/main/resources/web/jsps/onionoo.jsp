@@ -292,9 +292,8 @@ Extended the "version" parameter to bridges, added a
 28, 2017.
 <a href="#versions_4_4" class="anchor">#</a></li>
 <li><a id="versions_5_0"></a><strong>5.0</strong>
-(scheduled, but not deployed yet!): Remove $ from fingerprints in
-"effective_family", "alleged_family", and "indirect_family" fields, to
-be deployed after December 17, 2017.
+Removed the $ from fingerprints in fields "effective_family", "alleged_family",
+and "indirect_family" on December 20, 2017.
 <a href="#versions_5_0" class="anchor">#</a></li>
 </ul>
 
@@ -1496,8 +1495,7 @@ These relays are part of this relay's family and they consider this relay
 to be part of their family.
 Omitted if empty or if descriptor containing this information cannot be
 found.
-<span class="blue">Protocol version 5.0 is going to
-remove the $ prefix from fingerprints, to be deployed after December 17,
+<span class="blue">Removed the $ prefix from fingerprintson December 20,
 2017.</span>
 </p>
 </li>
@@ -1515,8 +1513,7 @@ These relays are part of this relay's family but they don't consider this
 relay to be part of their family.
 Omitted if empty or if descriptor containing this information cannot be
 found.
-<span class="blue">Protocol version 5.0 is going to
-remove the $ prefix from fingerprints, to be deployed after December 17,
+<span class="blue">Removed the $ prefix from fingerprintson December 20,
 2017.</span>
 </p>
 </li>
@@ -1533,8 +1530,7 @@ mutual family relationship with this relay but that can be reached by
 following effective, mutual family relationships starting at this relay.
 Omitted if empty or if descriptor containing this information cannot be
 found.
-<span class="blue">Protocol version 5.0 is going to
-remove the $ prefix from fingerprints, to be deployed after December 17,
+<span class="blue">Removed the $ prefix from fingerprintson December 20,
 2017.</span>
 </p>
 </li>
