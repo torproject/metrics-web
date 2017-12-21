@@ -82,77 +82,14 @@ public class NewsServlet extends AnyServlet {
         .getStart()) > 0);
 
     /* Sort news into categories. */
-    Map<String[], List<String[]>> newsByCategory = new LinkedHashMap<>();
+    Map<String[], List<String>> newsByCategory = new LinkedHashMap<>();
     for (String[] category : cutOffDates.values()) {
       newsByCategory.put(category, new ArrayList<>());
     }
     for (News news : this.sortedNews) {
-      StringBuilder sb = new StringBuilder();
-      sb.append("<h3 class=\"media-heading\">").append(news.getStart());
-      if (news.getEnd() != null) {
-        sb.append(" to ").append(news.getEnd());
-      }
-      if (news.getPlaces() != null) {
-        boolean appendUnknownCountry = false;
-        for (String place : news.getPlaces()) {
-          if (this.countries.containsKey(place)) {
-            sb.append(" <span class=\"label label-warning\">")
-                .append(this.countries.get(place)).append("</span>");
-          } else {
-            appendUnknownCountry = true;
-          }
-        }
-        if (appendUnknownCountry) {
-          sb.append(" <span class=\"label label-warning\">"
-              + "Unknown country</span>");
-        }
-      }
-      if (news.getProtocols() != null) {
-        for (String protocol : news.getProtocols()) {
-          switch (protocol) {
-            case "relay":
-              sb.append(" <span class=\"label label-success\">"
-                  + "Relays</span>");
-              break;
-            case "bridge":
-              sb.append(" <span class=\"label label-primary\">"
-                  + "Bridges</span>");
-              break;
-            case "<OR>":
-              sb.append(" <span class=\"label label-info\">"
-                  + "&lt;OR&gt;</span>");
-              break;
-            default:
-              sb.append(" <span class=\"label label-info\">").append(protocol)
-                  .append("</span>");
-              break;
-          }
-        }
-      }
-      if (news.isUnknown()) {
-        sb.append(" <span class=\"label label-default\">"
-            + "Unknown</span>");
-      }
-      sb.append("</h3><p>").append(news.getDescription()).append("</p>");
-      if (news.getLinks() != null && news.getLinks().length > 0) {
-        int written = 0;
-        sb.append("<p class=\"links\">");
-        for (String link : news.getLinks()) {
-          if (written++ > 0) {
-            sb.append(" ");
-          }
-          if (link.startsWith("https://metrics.torproject.org/")) {
-            sb.append(link);
-          } else {
-            sb.append(link.replaceFirst(">", " target=\"_blank\">"));
-          }
-        }
-        sb.append("</p>");
-      }
-      String[] formattedNews = new String[] { sb.toString() };
       for (Map.Entry<String, String[]> category : cutOffDates.entrySet()) {
         if (news.getStart().compareTo(category.getKey()) >= 0) {
-          newsByCategory.get(category.getValue()).add(formattedNews);
+          newsByCategory.get(category.getValue()).add(news.formatAsTableRow());
           break;
         }
       }

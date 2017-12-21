@@ -20,9 +20,20 @@
     <c:forEach var="category" items="${news}" varStatus="status">
     <div class="container">
       <h2>${category.key[0]} <a href="#${category.key[1]}" name="${category.key[1]}" class="anchor">#</a></h2>
-      <c:forEach var="entry" items="${category.value}">
-      <p>${entry[0]}<br></p>
-      </c:forEach>
+      <table class="table events">
+        <thead>
+          <tr>
+            <th class="dates">Dates</th>
+            <th class="tags">Places/Protocols</th>
+            <th class="description">Description and Links</th>
+          </tr>
+        </thead>
+        <tbody>
+          <c:forEach var="entry" items="${category.value}">
+          ${entry}
+          </c:forEach>
+        </tbody>
+      </table>
     </div>
     </c:forEach>
 
