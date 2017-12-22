@@ -385,6 +385,7 @@
       <fileset dir="${modulebase}/hidserv/stats" includes="hidserv.csv" />
       <fileset dir="${modulebase}/clients/stats"
                includes="clients*.csv userstats-combined.csv" />
+      <fileset dir="${modulebase}/ipv6servers/stats" includes="ipv6servers.csv" />
       <fileset dir="${modulebase}/webstats/stats" includes="webstats.csv" />
     </copy>
     <copy todir="${rdatadir}" >
