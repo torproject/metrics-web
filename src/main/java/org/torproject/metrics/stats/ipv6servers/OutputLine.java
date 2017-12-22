@@ -20,7 +20,7 @@ class OutputLine {
 
   /** Column headers joined together with the given delimiter. */
   static String columnHeadersDelimitedBy(String delimiter) {
-    return Arrays.stream(Column.values()).map(c -> c.toString())
+    return Arrays.stream(Column.values()).map(c -> c.toString().toLowerCase())
         .collect(Collectors.joining(delimiter));
   }
 
