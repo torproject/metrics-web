@@ -40,11 +40,11 @@ public class CollectorDirectoryProvider implements Runnable {
       long waitingSinceMillis = System.currentTimeMillis();
       do {
         try {
-          this.wait(200L);
+          Thread.sleep(200L);
         } catch (InterruptedException e) {
           /* Ignore. */
         }
-      } while (null == index.get()
+      } while (null == this.index.get()
           && System.currentTimeMillis() < waitingSinceMillis + 10000L);
     }
     return this.index.get();
