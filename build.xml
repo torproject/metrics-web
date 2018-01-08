@@ -76,9 +76,11 @@
   <patternset id="webruntime" >
     <include name="asm-5.2.jar" />
     <include name="asm-commons-5.2.jar" />
+    <include name="commons-compress-1.13.jar"/>
     <include name="jetty9-plus${jetty.version}.jar"/>
     <include name="jetty9-jndi${jetty.version}.jar"/>
     <include name="jetty9-apache-jsp${jetty.version}-tweaked.jar" />
+    <include name="metrics-lib-${metricslibversion}.jar"/>
     <include name="taglibs-standard-spec-1.2.5.jar"/>
     <include name="tomcat8-embed-jasper-8.5.14.jar" />
     <include name="tomcat8-embed-el-8.5.14.jar" />
