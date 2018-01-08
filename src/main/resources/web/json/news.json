@@ -2876,6 +2876,37 @@
     ]
   },
   {
+    "start": "2017-12-04",
+    "description": "DDoS attack uses a bug in the KIST scheduler to crash relays by running them out of memory.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-relays/2017-December/013669.html\">tor-relays thread</a>",
+      "<a href=\"https://metrics.torproject.org/relayflags.html?start=2017-11-01&end=2018-01-31&flag=Running&flag=Exit&flag=Fast&flag=Guard&flag=Stable&flag=HSDir\">relay graph</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-December/001604.html\">summary post</a>",
+      "<a href=\"https://bugs.torproject.org/24665\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2017-12-21",
+    "description": "Release of tor 0.3.2.8-rc, intended to fix the bug that was enabling an ongoing DDoS on relays.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2017-December/043844.html\">announcement</a>",
+      "<a href=\"https://bugs.torproject.org/24665\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2017-12-28",
+    "places": [
+      "ir"
+    ],
+    "description": "Protests in Iran, blocking of various services including Tor.",
+    "links": [
+      "<a href=\"https://ooni.torproject.org/post/2018-iran-protests/\">OONI report</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-11-01&end=2018-01-20&country=ir\">relay graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-11-01&end=2018-01-20&country=ir\">bridge graph</a>",
+      "<a href=\"https://twitter.com/nusenu_/status/948914485045145601\">tweet</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "places": [
       "tm"
@@ -2906,13 +2937,14 @@
   },
   {
     "start": "2016-08-18",
+    "end": "2016-08-29",
     "places": [
       "ml"
     ],
     "description": "Sudden increase of direct and bridge users in Mali.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-01-01&end=2017-07-27&country=ml&events=off\">relay graph</a>",
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-01-01&end=2017-07-27&country=ml&events=off\">bridge graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2016-03-01&end=2016-10-01&country=ml&events=off\">relay graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2016-03-01&end=2016-10-01&country=ml&events=off\">bridge graph</a>"
     ],
     "unknown": true
   },
@@ -3166,13 +3198,14 @@
   },
   {
     "start": "2017-06-14",
+    "end": "2017-07-06",
     "places": [
       "ml"
     ],
     "description": "Sudden increase of direct and bridge users in Mali.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-07-27&country=ml&events=off\">relay graph</a>",
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-01-01&end=2017-07-27&country=ml&events=off\">bridge graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-03-01&end=2017-09-01&country=ml&events=off\">relay graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-03-01&end=2017-09-01&country=ml&events=off\">bridge graph</a>"
     ],
     "unknown": true
   },
@@ -3367,6 +3400,7 @@
   },
   {
     "start": "2017-09-26",
+    "end": "2017-10-22",
     "places": [
       "de"
     ],
@@ -3374,7 +3408,7 @@
       "<OR>",
       "relay"
     ],
-    "description": "Steady increase of users in Germany, from 180k to over 500k.",
+    "description": "Steady increase of relay users in Germany, from 180k to around 500k. It could increase further starting 2017-12-10.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-08-15&end=2017-12-01&country=de&events=off\">de graph</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/7b53kq/direct_users_from_germany_go_from_200k_to_500k_in/\">reddit thread</a>"
@@ -3383,6 +3417,7 @@
   },
   {
     "start": "2017-10-07",
+    "end": "2017-12-20",
     "places": [
       "ro"
     ],
@@ -3390,9 +3425,9 @@
       "<OR>",
       "relay"
     ],
-    "description": "Steady increase of relay users in Romania.",
+    "description": "Surge of relay users in Romania, from 10k to around 90k, which later subsided.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-08-09&end=2017-12-01&country=ro&events=off\">graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-08-09&end=2018-01-15&country=ro&events=off\">graph</a>",
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-October/000502.html\">metrics-team thread</a>"
     ],
     "unknown": true
@@ -3410,6 +3445,22 @@
     "description": "Short-lived tripling of relay users in Zambia.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-08-01&end=2017-12-15&country=zm&events=off\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-12-10",
+    "places": [
+      "de"
+    ],
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Further increase of relay users in Germany, from 500k to over 1M.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-11-01&end=2018-01-15&country=de&events=off\">graph</a>",
+      "<a href=\"https://www.reddit.com/r/TOR/comments/7ldrox/tor_usage_in_germany_what_happend/\">reddit thread</a>"
     ],
     "unknown": true
   }
