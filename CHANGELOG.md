@@ -1,3 +1,9 @@
+# Changes in version ????
+
+ * Minor changes
+   - Avoid sending an error after a (partial) response.
+
+
 # Changes in version 1.0.3 - 2017-12-20
 
  * Major changes

@@ -56,24 +56,14 @@ public class ResearchStatsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
-    String requestUri = request.getRequestURI();
-    if (requestUri.equals("/metrics/stats/")) {
-      this.writeDirectoryListing(request, response);
+    File statsFile = this.determineStatsFile(request);
+    if (statsFile == null) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+    } else if (!statsFile.exists()) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     } else {
-      File statsFile = this.determineStatsFile(request);
-      if (statsFile == null) {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        return;
-      } else if (!this.writeStatsFile(statsFile, response)) {
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      }
+      this.writeStatsFile(statsFile, response);
     }
-  }
-
-  private void writeDirectoryListing(HttpServletRequest request,
-      HttpServletResponse response) throws IOException, ServletException {
-    response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-    response.setHeader("Location", "/?type=dt&level=ad");
   }
 
   private File determineStatsFile(HttpServletRequest request) {
@@ -93,11 +83,8 @@ public class ResearchStatsServlet extends HttpServlet {
     }
   }
 
-  private boolean writeStatsFile(File statsFile,
+  private void writeStatsFile(File statsFile,
       HttpServletResponse response) throws IOException, ServletException {
-    if (!statsFile.exists()) {
-      return false;
-    }
     response.setContentType("text/csv");
     response.setHeader("Content-Length", String.valueOf(
         statsFile.length()));
@@ -112,10 +99,7 @@ public class ResearchStatsServlet extends HttpServlet {
       while ((length = bis.read(buffer)) > 0) {
         bos.write(buffer, 0, length);
       }
-    } catch (IOException e) {
-      return false;
     }
-    return true;
   }
 }
 
