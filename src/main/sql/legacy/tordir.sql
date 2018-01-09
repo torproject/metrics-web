@@ -1,4 +1,4 @@
--- Copyright 2010, 2017 The Tor Project
+-- Copyright 2010, 2018 The Tor Project
 -- See LICENSE for licensing information
 
 CREATE LANGUAGE plpgsql;
