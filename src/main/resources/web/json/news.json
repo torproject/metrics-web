@@ -303,6 +303,7 @@
   },
   {
     "start": "2012-02-08",
+    "ongoing": true,
     "places": [
       "ir"
     ],
@@ -1290,19 +1291,10 @@
   {
     "start": "2015-07-29",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"July 8 2015 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 6882B8663F74C23E26E3C2274C24CAB2E82D67A2</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=7004d67430857f8b279bbfe789eb127c954f69eb\">commit</a>"
-    ]
-  },
-  {
-    "start": "2015-07-29",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"July 8 2015 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest F063BD5247EB9829E6B9E586393D7036656DAF44</code>).",
+    "description": "geoip and geoip6 databases updated to \"July 8 2015 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 6882B8663F74C23E26E3C2274C24CAB2E82D67A2</code>, <code>geoip6-db-digest F063BD5247EB9829E6B9E586393D7036656DAF44</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=7004d67430857f8b279bbfe789eb127c954f69eb\">commit</a>"
     ]
@@ -1332,19 +1324,10 @@
   {
     "start": "2015-09-24",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"September 3 2015 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 022B9BADD23D743E51F165FB4C87E78E59F0BCB8</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=8b3e0b772991b5611f06596865b6a61dd394237f\">commit</a>"
-    ]
-  },
-  {
-    "start": "2015-09-24",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"September 3 2015 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest DE13219FCF0F27999D1F91174CF80291B1746C95</code>).",
+    "description": "geoip and geoip6 databases updated to \"September 3 2015 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 022B9BADD23D743E51F165FB4C87E78E59F0BCB8</code>, <code>geoip6-db-digest DE13219FCF0F27999D1F91174CF80291B1746C95</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=8b3e0b772991b5611f06596865b6a61dd394237f\">commit</a>"
     ]
@@ -1382,19 +1365,10 @@
   {
     "start": "2015-10-09",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"October 9 2015 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 5BF366AD4A0572D82A1A0F6628AF8EF7725E3AB9</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=62b02a1941c6c51efe36f804ddd10f62a3606d41\">commit</a>"
-    ]
-  },
-  {
-    "start": "2015-10-09",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"October 9 2015 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 212DE17D5A368DCAFA19B95F168BFFA101145A93</code>).",
+    "description": "geoip and geoip6 databases updated to \"October 9 2015 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 5BF366AD4A0572D82A1A0F6628AF8EF7725E3AB9</code>, <code>geoip6-db-digest 212DE17D5A368DCAFA19B95F168BFFA101145A93</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=62b02a1941c6c51efe36f804ddd10f62a3606d41\">commit</a>"
     ]
@@ -1446,19 +1420,10 @@
   {
     "start": "2015-12-05",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"December 1 2015 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 6346E26E2BC96F8511588CE2695E9B0339A75D32</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=dbb919cf9400738987bbb91166b7b30c4cf770e9\">commit</a>"
-    ]
-  },
-  {
-    "start": "2015-12-05",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"December 1 2015 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 43CCB43DBC653D8CC16396A882C5F116A6004F0C</code>).",
+    "description": "geoip and geoip6 databases updated to \"December 1 2015 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 6346E26E2BC96F8511588CE2695E9B0339A75D32</code>, <code>geoip6-db-digest 43CCB43DBC653D8CC16396A882C5F116A6004F0C</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=dbb919cf9400738987bbb91166b7b30c4cf770e9\">commit</a>"
     ]
@@ -1493,19 +1458,10 @@
   {
     "start": "2016-01-07",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"January 5 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 44FC92E4D3F8C9A3A49EE9A594790C52E684298A</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=1496056c121d02193433d98173213e52eb3e90a7\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-01-07",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"January 5 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest BB261912C96611967FE5C1AE2700C965DBB8D61C</code>).",
+    "description": "geoip and geoip6 databases updated to \"January 5 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 44FC92E4D3F8C9A3A49EE9A594790C52E684298A</code>, <code>geoip6-db-digest BB261912C96611967FE5C1AE2700C965DBB8D61C</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=1496056c121d02193433d98173213e52eb3e90a7\">commit</a>"
     ]
@@ -1558,19 +1514,10 @@
   {
     "start": "2016-02-04",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"February 2 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 9E16EDBB826B958A7B8B84674EA98B78C13F1177</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=d5ac79e056bdb740adecf45ef3b50d1c16cf394f\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-02-04",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"February 2 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest DF9538534517275080F8335DDEE4B879A3314ED4</code>).",
+    "description": "geoip and geoip6 databases updated to \"February 2 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 9E16EDBB826B958A7B8B84674EA98B78C13F1177</code>, <code>geoip6-db-digest DF9538534517275080F8335DDEE4B879A3314ED4</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=d5ac79e056bdb740adecf45ef3b50d1c16cf394f\">commit</a>"
     ]
@@ -1589,19 +1536,10 @@
   {
     "start": "2016-03-04",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"March 3 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest A34F49E5A871FA4D243C46C04B67BB3CAAFE6F74</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=8e2640b15ab72630e0f391a51f927c042346b503\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-03-04",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"March 3 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 9C8C4F7C7612849C88206726FCDA8CB85B8D27F3</code>).",
+    "description": "geoip and geoip6 databases updated to \"March 3 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest A34F49E5A871FA4D243C46C04B67BB3CAAFE6F74</code>, <code>geoip6-db-digest 9C8C4F7C7612849C88206726FCDA8CB85B8D27F3</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=8e2640b15ab72630e0f391a51f927c042346b503\">commit</a>"
     ]
@@ -1628,19 +1566,10 @@
   {
     "start": "2016-04-07",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"April 5 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest F9DFB82B6F1A480F07F4B87992CBFB7A48CB8DA2</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=97c6e717b9f3f198163c6d5b4bde86e7f3da28d0\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-04-07",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"April 5 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 769B499E6AE9FE0C2366141B931A3DB1B5489114</code>).",
+    "description": "geoip and geoip6 databases updated to \"April 5 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest F9DFB82B6F1A480F07F4B87992CBFB7A48CB8DA2</code>, <code>geoip6-db-digest 769B499E6AE9FE0C2366141B931A3DB1B5489114</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=97c6e717b9f3f198163c6d5b4bde86e7f3da28d0\">commit</a>"
     ]
@@ -1676,19 +1605,10 @@
   {
     "start": "2016-05-09",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"May 4 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 76631C314A048A59A1D801515CC7FD55CE719499</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=3c2d4611ce52024364bc729a97749651ac239e80\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-05-09",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"May 4 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest C9392F0337A7509F1187890925CF7006F884ECBA</code>).",
+    "description": "geoip and geoip6 databases updated to \"May 4 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 76631C314A048A59A1D801515CC7FD55CE719499</code>, <code>geoip6-db-digest C9392F0337A7509F1187890925CF7006F884ECBA</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=3c2d4611ce52024364bc729a97749651ac239e80\">commit</a>"
     ]
@@ -1744,19 +1664,10 @@
   {
     "start": "2016-06-12",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"June 7 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest DA31976A9C7D48C2C16EA70BCE9006772A0F4A34</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=c14c662758e95e85aa251c959c4d03c7598783d8\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-06-12",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"June 7 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest FF1DD08CA9EB6528E1A6389E7154BD9586F24370</code>).",
+    "description": "geoip and geoip6 databases updated to \"June 7 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest DA31976A9C7D48C2C16EA70BCE9006772A0F4A34</code>, <code>geoip6-db-digest FF1DD08CA9EB6528E1A6389E7154BD9586F24370</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=c14c662758e95e85aa251c959c4d03c7598783d8\">commit</a>"
     ]
@@ -1778,19 +1689,10 @@
   {
     "start": "2016-07-18",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"July 6 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 19FC902B6A860BA7E4BADCB5404482995F7E0763</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=79939c6f11edbd5bec21594b1f4337d8cfa2a843\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-07-18",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"July 6 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 7E717154718F2065240B90F8132F305AF78C9A9D</code>).",
+    "description": "geoip and geoip6 databases updated to \"July 6 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 19FC902B6A860BA7E4BADCB5404482995F7E0763</code>, <code>geoip6-db-digest 7E717154718F2065240B90F8132F305AF78C9A9D</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=79939c6f11edbd5bec21594b1f4337d8cfa2a843\">commit</a>"
     ]
@@ -1798,19 +1700,10 @@
   {
     "start": "2016-08-12",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"August 2 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 9DD185BEC4F482DDD20A0221B3DD3F40175F0123</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=1410947351a0e498c2a4c568db3a55b44fd9aa6e\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-08-12",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"August 2 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest B1C1B6BDC9627E3D87530A2C70578AC69C20C5C6</code>).",
+    "description": "geoip and geoip6 databases updated to \"August 2 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 9DD185BEC4F482DDD20A0221B3DD3F40175F0123</code>, <code>geoip6-db-digest B1C1B6BDC9627E3D87530A2C70578AC69C20C5C6</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=1410947351a0e498c2a4c568db3a55b44fd9aa6e\">commit</a>"
     ]
@@ -1883,19 +1776,10 @@
   {
     "start": "2016-09-07",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"September 6 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 72F8AD2CD7C97D173AD53276366EAD32B13E0A50</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=56f95ba94dfeaacee63047b1613129de3d01be87\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-09-07",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"September 6 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest B6427DEAD2291FBF8311A2233AF4960BF4009713</code>).",
+    "description": "geoip and geoip6 databases updated to \"September 6 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 72F8AD2CD7C97D173AD53276366EAD32B13E0A50</code>, <code>geoip6-db-digest B6427DEAD2291FBF8311A2233AF4960BF4009713</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=56f95ba94dfeaacee63047b1613129de3d01be87\">commit</a>"
     ]
@@ -1984,19 +1868,10 @@
   {
     "start": "2016-10-05",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"October 4 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest C14DF5AE94101562DEACDD296278B0EFA3EA26E5</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=1b4984f196848cd404456fd1251e0352b9abf05e\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-10-05",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"October 4 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest A88A828020A558D37F97CF683D4521270F0511A2</code>).",
+    "description": "geoip and geoip6 databases updated to \"October 4 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest C14DF5AE94101562DEACDD296278B0EFA3EA26E5</code>, <code>geoip6-db-digest A88A828020A558D37F97CF683D4521270F0511A2</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=1b4984f196848cd404456fd1251e0352b9abf05e\">commit</a>"
     ]
@@ -2040,6 +1915,7 @@
   },
   {
     "start": "2016-10-25",
+    "ongoing": true,
     "places": [
       "eg"
     ],
@@ -2068,10 +1944,11 @@
   },
   {
     "start": "2016-11-03",
+    "ongoing": true,
     "places": [
       "tr"
     ],
-    "description": "Turkey blocks Facebook, Twitter, YouTube, WhatsApp",
+    "description": "Turkey blocks Facebook, Twitter, YouTube, WhatsApp.",
     "links": [
       "<a href=\"https://turkeyblocks.org/2016/11/04/social-media-shutdown-turkey/\">article</a>"
     ]
@@ -2081,7 +1958,7 @@
     "places": [
       "tr"
     ],
-    "description": "Turkey orders a block on VPN services and Tor",
+    "description": "Turkey orders a block on VPN services and Tor.",
     "links": [
       "<a href=\"http://turk-internet.com/portal/yazigoster.php?yaziid=54465\">Turkish article</a>",
       "<a href=\"https://motherboard.vice.com/read/turkey-doubles-down-on-censorship-with-block-on-vpns-tor\">English article</a>",
@@ -2091,19 +1968,10 @@
   {
     "start": "2016-11-07",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"November 3 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 363C038D0BE61D6E0A63C43DE8EA70771ED7BEA5</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=ea597832e25e776a45375d18a973e079ca32d424\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-11-07",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"November 3 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 6110A2B794AFF0180FD096A4759434CABD289C40</code>).",
+    "description": "geoip and geoip6 databases updated to \"November 3 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 363C038D0BE61D6E0A63C43DE8EA70771ED7BEA5</code>, <code>geoip6-db-digest 6110A2B794AFF0180FD096A4759434CABD289C40</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=ea597832e25e776a45375d18a973e079ca32d424\">commit</a>"
     ]
@@ -2179,19 +2047,10 @@
   {
     "start": "2016-12-09",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"December 7 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 1317BB3525E85E01FB34A89E04CE549AC23D07BD</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=9db47e792160766de49b76bff71afdc4f743df88\">commit</a>"
-    ]
-  },
-  {
-    "start": "2016-12-09",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"December 7 2016 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 865048C69BEC02B37268BFBAD66D9729B21CFCF5</code>).",
+    "description": "geoip and geoip6 databases updated to \"December 7 2016 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 1317BB3525E85E01FB34A89E04CE549AC23D07BD</code>, <code>geoip6-db-digest 865048C69BEC02B37268BFBAD66D9729B21CFCF5</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=9db47e792160766de49b76bff71afdc4f743df88\">commit</a>"
     ]
@@ -2213,6 +2072,7 @@
   },
   {
     "start": "2016-12-15",
+    "ongoing": true,
     "places": [
       "cd"
     ],
@@ -2226,19 +2086,10 @@
   {
     "start": "2017-01-04",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"January 4 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 672C29A4FA9BF81DE97CFE128741445E2BDE8097</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=3833f67dd2dc35dbcfe1d5659c885f0b5f54125b\">commit</a>"
-    ]
-  },
-  {
-    "start": "2017-01-04",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"January 4 2017 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 81F380639A8E1000539204949A363FD3BFAFBA74</code>).",
+    "description": "geoip and geoip6 databases updated to \"January 4 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 672C29A4FA9BF81DE97CFE128741445E2BDE8097</code>, <code>geoip6-db-digest 81F380639A8E1000539204949A363FD3BFAFBA74</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=3833f67dd2dc35dbcfe1d5659c885f0b5f54125b\">commit</a>"
     ]
@@ -2272,6 +2123,7 @@
   },
   {
     "start": "2017-02-10",
+    "ongoing": true,
     "protocols": [
       "<OR>",
       "exit"
@@ -2284,19 +2136,10 @@
   {
     "start": "2017-02-12",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"February 8 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest C0C6099CE335916862978F77756C0B42521A74B2</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=f6016058b42aa1c4528fd8c7c2da3d13eddd63dc\">commit</a>"
-    ]
-  },
-  {
-    "start": "2017-02-12",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"February 8 2017 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest A54B14B9D47584E010F763D3EAE23C4726F4A8D5</code>).",
+    "description": "geoip and geoip6 databases updated to \"February 8 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest C0C6099CE335916862978F77756C0B42521A74B2</code>, <code>geoip6-db-digest A54B14B9D47584E010F763D3EAE23C4726F4A8D5</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=f6016058b42aa1c4528fd8c7c2da3d13eddd63dc\">commit</a>"
     ]
@@ -2347,19 +2190,10 @@
   {
     "start": "2017-03-08",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"March 7 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 63921843E3AAA632088D189D877F836A373CD40D</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=4488c319dde4c986da01a4635edaabeb1bc574a4\">commit</a>"
-    ]
-  },
-  {
-    "start": "2017-03-08",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"March 7 2017 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 2B93B9C6679BB09E1746F212A6DCDC6E710F5F52</code>).",
+    "description": "geoip and geoip6 databases updated to \"March 7 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 63921843E3AAA632088D189D877F836A373CD40D</code>, <code>geoip6-db-digest 2B93B9C6679BB09E1746F212A6DCDC6E710F5F52</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=4488c319dde4c986da01a4635edaabeb1bc574a4\">commit</a>"
     ]
@@ -2378,32 +2212,26 @@
   {
     "start": "2017-04-06",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"April 4 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 0F3D4A456E5078CC9E49398ADCB04C40EA49B793</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=9d7933296c187061ce121012cdd7964321e06db2\">commit</a>"
-    ]
-  },
-  {
-    "start": "2017-04-06",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"April 4 2017 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 04F41F05FA167EF6EEE3FE953404AB0BCCD33008</code>).",
+    "description": "geoip and geoip6 databases updated to \"April 4 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 0F3D4A456E5078CC9E49398ADCB04C40EA49B793</code>, <code>geoip6-db-digest 04F41F05FA167EF6EEE3FE953404AB0BCCD33008</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=9d7933296c187061ce121012cdd7964321e06db2\">commit</a>"
     ]
   },
   {
     "start": "2017-04-14",
+    "end": "2017-08-20",
     "protocols": [
       "<OR>"
     ],
     "description": "Directory authority maatuska's bwscanner stops operating, leading to a drop in traffic on some relays.",
     "links": [
-      "<a href=\"https://lists.torproject.org/pipermail/tor-consensus-health/2017-April/007845.html\">tor-consensus-health post</a>",
-      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-April/012215.html\">tor-dev thread</a>"
+      "<a href=\"https://lists.torproject.org/pipermail/tor-consensus-health/2017-April/007845.html\">tor-consensus-health post about start</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-consensus-health/2017-August/008106.html\">tor-consensus-health post about end</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-April/012215.html\">tor-dev thread</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-consensus-health/2017-May/007908.html\">analysis</a>"
     ]
   },
   {
@@ -2426,19 +2254,10 @@
   {
     "start": "2017-05-08",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"May 2 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest B2E5105287668771E34A66F90B34982D419727EF</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=5207e41ffeb99089adbb56376c0759b97a556801\">commit</a>"
-    ]
-  },
-  {
-    "start": "2017-05-08",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"May 2 2017 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 8DA8AC3C8158CBFDF7DB53BBF73338246872371A</code>).",
+    "description": "geoip and geoip6 databases updated to \"May 2 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest B2E5105287668771E34A66F90B34982D419727EF</code>, <code>geoip6-db-digest 8DA8AC3C8158CBFDF7DB53BBF73338246872371A</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=5207e41ffeb99089adbb56376c0759b97a556801\">commit</a>"
     ]
@@ -2486,25 +2305,16 @@
     "links": [
       "<a href=\"https://blog.torproject.org/blog/tor-browser-70-released\">blog post</a>",
       "<a href=\"https://bugs.torproject.org/22429\">IPv6 ticket</a>",
-      "<a href=\"https://trac.torproject.org/projects/tor/ticket/22468\">frosty and dragon ticket</a>"
+      "<a href=\"https://bugs.torproject.org/22468\">frosty and dragon ticket</a>"
     ]
   },
   {
     "start": "2017-06-09",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"June 8 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest AFD609025B66305AD9FA8E0B15AF4F2BC82271F1</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=104e8fa751c1bef051ac47e39da9bbbc6d158800\">commit</a>"
-    ]
-  },
-  {
-    "start": "2017-06-09",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"June 8 2017 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest A69FD14ACE46EE695F589ACE0EB7B915285B51B4</code>).",
+    "description": "geoip and geoip6 databases updated to \"June 8 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest AFD609025B66305AD9FA8E0B15AF4F2BC82271F1</code>, <code>geoip6-db-digest A69FD14ACE46EE695F589ACE0EB7B915285B51B4</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=104e8fa751c1bef051ac47e39da9bbbc6d158800\">commit</a>"
     ]
@@ -2608,19 +2418,10 @@
   {
     "start": "2017-07-07",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"July 4 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 3D04F191098640F2E03B4D5F7800088D14B7EC30</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=b6acfa491e7fdb6e3d71665a55617727816155fd\">commit</a>"
-    ]
-  },
-  {
-    "start": "2017-07-07",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"July 4 2017 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest A3649B9E909C59942FB3D8F874AB4BEA36E8BEC1</code>).",
+    "description": "geoip and geoip6 databases updated to \"July 4 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 3D04F191098640F2E03B4D5F7800088D14B7EC30</code>, <code>geoip6-db-digest A3649B9E909C59942FB3D8F874AB4BEA36E8BEC1</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=b6acfa491e7fdb6e3d71665a55617727816155fd\">commit</a>"
     ]
@@ -2641,21 +2442,25 @@
   {
     "start": "2017-08-03",
     "protocols": [
-      "ipv4"
+      "ipv4",
+      "ipv6"
     ],
-    "description": "geoip database updated to \"August 3 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 75AABD32582AC554AF252DDC7BBBABE7C6F28B28</code>).",
+    "description": "geoip and geoip6 databases updated to \"August 3 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 75AABD32582AC554AF252DDC7BBBABE7C6F28B28</code>, <code>geoip6-db-digest A52EFFEF8CF6F3CAA8EBD34961361544E959FAE1</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=1280de42a41ccf7ae398cc86529c880455e9c5d1\">commit</a>"
     ]
   },
   {
-    "start": "2017-08-03",
-    "protocols": [
-      "ipv6"
+    "start": "2017-08-07",
+    "ongoing": true,
+    "places": [
+      "cd"
     ],
-    "description": "geoip6 database updated to \"August 3 2017 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest A52EFFEF8CF6F3CAA8EBD34961361544E959FAE1</code>).",
+    "description": "The Democratic Republic of the Congo orders a block of social media services.",
     "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=1280de42a41ccf7ae398cc86529c880455e9c5d1\">commit</a>"
+      "<a href=\"https://www.amnesty.org/en/latest/news/2017/08/drc-block-on-social-media-images-an-appalling-attack-on-freedom-of-expression/\">article</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-10-01&country=cd\">relay graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-06-01&end=2017-10-01&country=cd\">bridge graph</a>"
     ]
   },
   {
@@ -2718,19 +2523,10 @@
   {
     "start": "2017-09-07",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"September 6 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 0CE9EA8882EDED265451C36B49AE7BBB06A11C16</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=09618ffe38bc6cd91755c6c1aedb86dc099dfdf8\">commit</a>"
-    ]
-  },
-  {
-    "start": "2017-09-07",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"September 6 2017 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest C4573496EBD1CC335843067107DA49E482568FF6</code>).",
+    "description": "geoip and geoip6 databases updated to \"September 6 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 0CE9EA8882EDED265451C36B49AE7BBB06A11C16</code>, <code>geoip6-db-digest C4573496EBD1CC335843067107DA49E482568FF6</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=09618ffe38bc6cd91755c6c1aedb86dc099dfdf8\">commit</a>"
     ]
@@ -2745,6 +2541,7 @@
   },
   {
     "start": "2017-09-15",
+    "end": "2017-10-12",
     "description": "Outage of the op-hk OnionPerf instance. Reported timeouts on the tor network increased, download speed improved.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-October/000476.html\">mailing list post</a>",
@@ -2767,19 +2564,10 @@
   {
     "start": "2017-10-05",
     "protocols": [
-      "ipv4"
-    ],
-    "description": "geoip database updated to \"October 4 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 3A59213E5CFEE380F544B72DC1105366C6BD1CDE</code>).",
-    "links": [
-      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=b9d9b16b7685c79e6440e5f8a1d4bd01a8cefb2c\">commit</a>"
-    ]
-  },
-  {
-    "start": "2017-10-05",
-    "protocols": [
+      "ipv4",
       "ipv6"
     ],
-    "description": "geoip6 database updated to \"October 4 2017 Maxmind GeoLite2 Country\" (<code>geoip6-db-digest 1B8C975E5C62CF0FB5B4E598AE27B7189952BB09</code>).",
+    "description": "geoip and geoip6 databases updated to \"October 4 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 3A59213E5CFEE380F544B72DC1105366C6BD1CDE</code>, <code>geoip6-db-digest 1B8C975E5C62CF0FB5B4E598AE27B7189952BB09</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=b9d9b16b7685c79e6440e5f8a1d4bd01a8cefb2c\">commit</a>"
     ]
@@ -2841,6 +2629,25 @@
     ]
   },
   {
+    "start": "2017-11-10",
+    "protocols": [
+      "ipv4",
+      "ipv6"
+    ],
+    "description": "geoip and geoip6 databases updated to \"November 6 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest E3C910F3B2A6C916C7BE33A943091EF57048B72C</code>, <code>geoip6-db-digest E8BD5B2E6554C27F718F1222667C09680D75F799</code>).",
+    "links": [
+      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=6f8c32b7deb9f0cec6d1553aba71969c9fb6064f\">commit</a>"
+    ]
+  },
+  {
+    "start": "2017-11-11",
+    "end": "2017-11-12",
+    "description": "Outage of the op-hk OnionPerf instance.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/torperf.html?start=2017-10-01&end=2017-12-01&source=op-hk&server=public&filesize=50kb\">op-hk graph</a>"
+    ]
+  },
+  {
     "start": "2017-11-15",
     "end": "2017-11-15",
     "protocols": [
@@ -2865,6 +2672,17 @@
     ]
   },
   {
+    "start": "2017-12-04",
+    "ongoing": true,
+    "description": "DDoS attack uses a bug in the KIST scheduler to crash relays by running them out of memory.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-relays/2017-December/013669.html\">tor-relays thread</a>",
+      "<a href=\"https://metrics.torproject.org/relayflags.html?start=2017-11-01&end=2018-01-31&flag=Running&flag=Exit&flag=Fast&flag=Guard&flag=Stable&flag=HSDir\">relay graph</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-December/001604.html\">summary post</a>",
+      "<a href=\"https://bugs.torproject.org/24665\">ticket</a>"
+    ]
+  },
+  {
     "start": "2017-12-05",
     "end": "2017-12-15",
     "places": [
@@ -2876,13 +2694,14 @@
     ]
   },
   {
-    "start": "2017-12-04",
-    "description": "DDoS attack uses a bug in the KIST scheduler to crash relays by running them out of memory.",
+    "start": "2017-12-20",
+    "protocols": [
+      "ipv4",
+      "ipv6"
+    ],
+    "description": "geoip and geoip6 databases updated to \"December 6 2017 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 1D486694A710145631B295CC39ECC5682F75858C</code>, <code>geoip6-db-digest F33231CAC761A71F7C19273DB1E11CEE01E2D982</code>).",
     "links": [
-      "<a href=\"https://lists.torproject.org/pipermail/tor-relays/2017-December/013669.html\">tor-relays thread</a>",
-      "<a href=\"https://metrics.torproject.org/relayflags.html?start=2017-11-01&end=2018-01-31&flag=Running&flag=Exit&flag=Fast&flag=Guard&flag=Stable&flag=HSDir\">relay graph</a>",
-      "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-December/001604.html\">summary post</a>",
-      "<a href=\"https://bugs.torproject.org/24665\">ticket</a>"
+      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=428f8a375b8846edd1a056ce66f00fe08117a4ba\">commit</a>"
     ]
   },
   {
@@ -2895,6 +2714,7 @@
   },
   {
     "start": "2017-12-28",
+    "ongoing": true,
     "places": [
       "ir"
     ],
@@ -2904,6 +2724,25 @@
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-11-01&end=2018-01-20&country=ir\">relay graph</a>",
       "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-11-01&end=2018-01-20&country=ir\">bridge graph</a>",
       "<a href=\"https://twitter.com/nusenu_/status/948914485045145601\">tweet</a>"
+    ]
+  },
+  {
+    "start": "2018-01-05",
+    "ongoing": true,
+    "description": "Outage of the op-hk OnionPerf instance.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/torperf.html?start=2017-12-01&end=2017-02-01&source=op-hk&server=public&filesize=50kb\">op-hk graph</a>"
+    ]
+  },
+  {
+    "start": "2018-01-08",
+    "protocols": [
+      "ipv4",
+      "ipv6"
+    ],
+    "description": "geoip and geoip6 databases updated to \"January 5 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest ACE2AF82816B9D3F58FC9C79A41B4506D6DAD713</code>, <code>geoip6-db-digest 387B3F555F1E054F0F9971C726F49848C5B5CF8B</code>).",
+    "links": [
+      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=8efbeb09826030302481619dab83e83f35fdc26e\">commit</a>"
     ]
   },
   {
@@ -3024,6 +2863,7 @@
   },
   {
     "start": "2017-01-15",
+    "end": "2017-03-01",
     "places": [
       "ae"
     ],
@@ -3031,9 +2871,9 @@
       "<OR>",
       "relay"
     ],
-    "description": "Huge increase in relay users (200k+).",
+    "description": "Huge increase in relay users (400k+).",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-03-10&country=ae&events=off\">graph</a>",
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-06-01&country=ae&events=off\">graph</a>",
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-January/000284.html\">metrics-team thread</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/5pbukk/united_arab_emirates_went_from_10k_tor_users_to/\">reddit thread</a>"
     ],
@@ -3087,6 +2927,22 @@
     "unknown": true
   },
   {
+    "start": "2017-03-01",
+    "end": "2017-07-01",
+    "places": [
+      "ae"
+    ],
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Another increase in relay users, with a slower rate of growth than the previous one.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-09-01&country=ae&events=off\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
     "start": "2017-04-05",
     "end": "2017-04-13",
     "places": [
@@ -3127,7 +2983,7 @@
       "<OR>",
       "relay"
     ],
-    "description": "Direct users fluctuate widely in Taiwan after a 3&times; sudden increase.",
+    "description": "Relay users triple and begin to fluctuate in Taiwan.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2017-May/043206.html\">tor-talk post</a>",
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-02-22&end=2017-05-24&country=tw&events=on\">graph</a>"
@@ -3169,6 +3025,7 @@
   },
   {
     "start": "2017-06-07",
+    "end": "2017-12-14",
     "places": [
       "br"
     ],
@@ -3177,7 +3034,7 @@
     ],
     "description": "Sustained increase of meek users in Brazil, similar to the one that took place between 2016-07-21 and 2017-03-03.",
     "links": [
-      "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2016-06-01&end=2017-10-01&country=br\">graph</a>"
+      "<a href=\"https://metrics.torproject.org/userstats-bridge-combined.html?start=2016-06-01&end=2018-01-15&country=br\">graph</a>"
     ],
     "unknown": true
   },
@@ -3206,6 +3063,37 @@
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-03-01&end=2017-09-01&country=ml&events=off\">relay graph</a>",
       "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-03-01&end=2017-09-01&country=ml&events=off\">bridge graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-07-01",
+    "places": [
+      "ae"
+    ],
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Sudden drop in relay users.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-09-01&country=ae&events=off\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-07-01",
+    "end": "2017-08-30",
+    "places": [
+      "ae"
+    ],
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Slow increase in relay users.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-11-01&country=ae&events=off\">graph</a>"
     ],
     "unknown": true
   },
@@ -3387,6 +3275,21 @@
     "unknown": true
   },
   {
+    "start": "2017-09-01",
+    "places": [
+      "ae"
+    ],
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Relay users remain volatile but flatten their rate of growth.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2018-02-01&country=ae&events=off\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
     "start": "2017-09-02",
     "end": "2017-09-21",
     "protocols": [
@@ -3450,6 +3353,7 @@
   },
   {
     "start": "2017-12-10",
+    "ongoing": true,
     "places": [
       "de"
     ],

@@ -15,6 +15,8 @@ public class News {
 
   private String end;
 
+  private boolean ongoing;
+
   private List<String> places;
 
   private String[] protocols;
@@ -31,6 +33,10 @@ public class News {
 
   String getEnd() {
     return this.end;
+  }
+
+  boolean getOngoing() {
+    return this.ongoing;
   }
 
   List<String> getPlaces() {
@@ -68,6 +74,9 @@ public class News {
     if (null == this.start) {
       /* Invalid event without start date. */
       sb.append("N/A");
+    } else if (this.ongoing) {
+      /* Ongoing event. */
+      sb.append(this.start).append(" to present");
     } else if (null == this.end || this.start.equals(this.end)) {
       /* Single-day event. */
       sb.append(this.start);
