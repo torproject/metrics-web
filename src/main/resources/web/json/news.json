@@ -2683,6 +2683,14 @@
     ]
   },
   {
+    "start": "2017-12-12",
+    "end": "2018-01-18",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Outage of the <a href=\"https://atlas.torproject.org/#details/C20658946DD706A7A2181159A1A04CD838570D04\">meek.bamsoftware.com</a> (unthrottled for public use), <a href=\"https://atlas.torproject.org/#details/AA033EEB61601B2B7312D89B62AAA23DC3ED8A34\">meek.bamsoftware.com:7443</a> (former meek-azure, now unused), and <a href=\"https://atlas.torproject.org/#details/D36B0328969EC57AB3085A4470882D99A09C0492\">gaeuploader.meek.bamsoftware.com</a> (used by <a href=\"https://github.com/katherinelitor/GAEuploader\">GAEuploader</a>) bridges."
+  },
+  {
     "start": "2017-12-05",
     "end": "2017-12-15",
     "places": [
@@ -2743,6 +2751,13 @@
     "description": "geoip and geoip6 databases updated to \"January 5 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest ACE2AF82816B9D3F58FC9C79A41B4506D6DAD713</code>, <code>geoip6-db-digest 387B3F555F1E054F0F9971C726F49848C5B5CF8B</code>).",
     "links": [
       "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=8efbeb09826030302481619dab83e83f35fdc26e\">commit</a>"
+    ]
+  },
+  {
+    "start": "2018-01-16",
+    "description": "Tor 0.3.2.9 reaches deb.torproject.org.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/versions.html?start=2017-12-01&end=2018-03-01\">relay versions graph</a>"
     ]
   },
   {
