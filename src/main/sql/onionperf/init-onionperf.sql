@@ -67,8 +67,7 @@ SELECT DATE(start) AS date,
     AS timeouts,
   COUNT(CASE WHEN NOT didtimeout AND datacomplete >= 1
     AND readbytes < filesize THEN 1 ELSE NULL END) AS failures,
-  COUNT(CASE WHEN NOT didtimeout AND datacomplete >= 1
-    AND readbytes >= filesize then 1 else null end) AS requests
+  COUNT(*) AS requests
 FROM measurements
 GROUP BY date, filesize, source, server
 UNION
@@ -82,8 +81,7 @@ SELECT DATE(start) AS date,
     AS timeouts,
   COUNT(CASE WHEN NOT didtimeout AND datacomplete >= 1
     AND readbytes < filesize THEN 1 ELSE NULL END) AS failures,
-  COUNT(CASE WHEN NOT didtimeout AND datacomplete >= 1
-    AND readbytes >= filesize then 1 else null end) AS requests
+  COUNT(*) AS requests
 FROM measurements
 GROUP BY date, filesize, 3, server) sub
 ORDER BY date, filesize, source, server;
