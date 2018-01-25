@@ -1243,7 +1243,7 @@ plot_relays_ipv6 <- function(start, end, path) {
     scale_colour_hue(name = "", h.start = 90,
       breaks = c("total", "announced", "reachable", "exiting"),
       labels = c("Total (IPv4) OR", "IPv6 announced OR", "IPv6 reachable OR",
-        "IPv6 exititing")) +
+        "IPv6 exiting")) +
     expand_limits(y = 0) +
     ggtitle("Relays by IP version") +
     theme(legend.position = "top")
