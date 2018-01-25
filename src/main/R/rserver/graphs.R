@@ -409,6 +409,7 @@ plot_platforms <- function(start, end, path) {
       limits = c(0, max(platforms$value, na.rm = TRUE))) +
     scale_colour_manual(name = "Platform",
       breaks = c("Linux", "Darwin", "BSD", "Windows", "Other"),
+      labels = c("Linux", "macOS", "BSD", "Windows", "Other"),
       values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#333333")) +
     ggtitle("Relay platforms\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
@@ -1146,7 +1147,7 @@ plot_webstats_tb_platform <- function(start, end, path) {
     scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
     scale_colour_hue(name = "Platform",
         breaks = c("w", "m", "l", "o", ""),
-        labels = c("Windows", "Mac", "Linux", "Other", "Unknown")) +
+        labels = c("Windows", "macOS", "Linux", "Other", "Unknown")) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
     ggtitle("Tor Browser downloads by platform\n")

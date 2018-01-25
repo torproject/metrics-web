@@ -60,7 +60,7 @@ software version they run.  There are no statistics on the number of bridges by
 Tor software version.</li>
 
 <li><b>platform:</b> Operating system as reported by the relay.  Examples are
-<b>"Linux"</b>, <b>"Darwin"</b> (Mac OS X), <b>"BSD"</b>, <b>"Windows"</b>, and
+<b>"Linux"</b>, <b>"Darwin"</b> (macOS), <b>"BSD"</b>, <b>"Windows"</b>, and
 <b>"Other"</b>.  If this column contains the empty string, all running relays
 are included, regardless of the operating system they run on.  There are no
 statistics on the number of bridges by operating system.</li>

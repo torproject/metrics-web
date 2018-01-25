@@ -470,7 +470,7 @@
     "id": "webstats-tb-platform",
     "title": "Tor Browser downloads by platform",
     "type": "Graph",
-    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers to download a Tor Browser executable, broken down by platform (Windows, Mac, Linux) of the requested executable.  Note that this graph does <em>not</em> show the platform used to download Tor Browser but the platform that it was downloaded for.</p>",
+    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers to download a Tor Browser executable, broken down by platform (Windows, macOS, Linux) of the requested executable.  Note that this graph does <em>not</em> show the platform used to download Tor Browser but the platform that it was downloaded for.</p>",
     "function": "plot_webstats_tb_platform",
     "parameters": [
       "start",
