@@ -1491,7 +1491,7 @@ the relay did not report which version it runs.
 <span class="required-false">optional</span>
 <a href="#details_relay_effective_family" class="anchor">#</a>
 <p>
-Array of $-prefixed fingerprints of relays that are in an effective,
+Array of fingerprints of relays that are in an effective,
 mutual family relationship with this relay.
 These relays are part of this relay's family and they consider this relay
 to be part of their family.
@@ -1509,7 +1509,7 @@ found.
 <span class="required-false">optional</span>
 <a href="#details_relay_alleged_family" class="anchor">#</a>
 <p>
-Array of $-prefixed fingerprints of relays that are not in an effective,
+Array of fingerprints of relays that are not in an effective,
 mutual family relationship with this relay.
 These relays are part of this relay's family but they don't consider this
 relay to be part of their family.
@@ -1527,7 +1527,7 @@ found.
 <span class="required-false">optional</span>
 <a href="#details_relay_indirect_family" class="anchor">#</a>
 <p>
-Array of $-prefixed fingerprints of relays that are not in an effective,
+Array of fingerprints of relays that are not in an effective,
 mutual family relationship with this relay but that can be reached by
 following effective, mutual family relationships starting at this relay.
 Omitted if empty or if descriptor containing this information cannot be
