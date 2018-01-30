@@ -3,9 +3,6 @@
 
 package org.torproject.metrics.web;
 
-import org.torproject.metrics.web.graphs.Countries;
-import org.torproject.metrics.web.graphs.GraphParameterChecker;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

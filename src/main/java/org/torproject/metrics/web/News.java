@@ -3,8 +3,6 @@
 
 package org.torproject.metrics.web;
 
-import org.torproject.metrics.web.graphs.Countries;
-
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;

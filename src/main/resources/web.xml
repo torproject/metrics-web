@@ -86,7 +86,7 @@
   <servlet>
     <servlet-name>Bubbles</servlet-name>
     <servlet-class>
-      org.torproject.metrics.web.graphs.BubblesServlet
+      org.torproject.metrics.web.BubblesServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -97,7 +97,7 @@
   <servlet>
     <servlet-name>ResearchStats</servlet-name>
     <servlet-class>
-      org.torproject.metrics.web.research.ResearchStatsServlet
+      org.torproject.metrics.web.ResearchStatsServlet
     </servlet-class>
     <init-param>
       <param-name>statsDir</param-name>
@@ -114,7 +114,7 @@
   <servlet>
     <servlet-name>GraphImage</servlet-name>
     <servlet-class>
-      org.torproject.metrics.web.graphs.GraphImageServlet
+      org.torproject.metrics.web.GraphImageServlet
     </servlet-class>
   </servlet>
   <servlet-mapping>
@@ -408,7 +408,7 @@
 
   <listener>
     <listener-class>
-      org.torproject.metrics.web.graphs.RObjectGenerator
+      org.torproject.metrics.web.RObjectGenerator
     </listener-class>
   </listener>
 

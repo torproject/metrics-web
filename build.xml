@@ -265,7 +265,7 @@
 
   <!-- Expects legacy.config file in the base directory. -->
   <target name="legacy" >
-    <property name="module.name" value="legacy" />
+    <property name="module.name" value="servers" />
     <property name="localmoddir" value="${modulebase}/${module.name}" />
     <property name="statsdir"
               value="${localmoddir}/stats" />
@@ -274,10 +274,7 @@
     <copy file="${basedir}/legacy.config"
           tofile="${localmoddir}/config"/>
 
-    <antcall target="run-java">
-      <param name="module.main"
-             value="org.torproject.ernie.cron.Main" />
-    </antcall>
+    <antcall target="run-java" />
 
     <exec executable="psql"
           dir="${localmoddir}"
@@ -443,7 +440,7 @@
     <fail unless="have.jar" message="Please run 'ant jar' first."/>
     <condition property="mainclass"
                value="${module.main}"
-               else="org.torproject.metrics.${module.name}.Main" >
+               else="org.torproject.metrics.stats.${module.name}.Main" >
       <isset property="module.main"/>
     </condition>
     <property name="workingdir" value="${modulebase}/${module.name}" />

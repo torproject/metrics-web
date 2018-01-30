@@ -3,9 +3,6 @@
 
 package org.torproject.metrics.web;
 
-import org.torproject.metrics.web.graphs.RObjectGenerator;
-import org.torproject.metrics.web.graphs.TableParameterChecker;
-
 import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.io.IOException;

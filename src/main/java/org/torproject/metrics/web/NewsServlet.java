@@ -3,8 +3,6 @@
 
 package org.torproject.metrics.web;
 
-import org.torproject.metrics.web.graphs.Countries;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
