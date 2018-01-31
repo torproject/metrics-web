@@ -420,7 +420,7 @@
       <fileset dir="${modulebase}/onionperf/stats" includes="*.csv" />
       <fileset dir="${modulebase}/connbidirect/stats" includes="connbidirect2.csv" />
       <fileset dir="${modulebase}/advbwdist/stats" includes="advbwdist.csv" />
-      <fileset dir="${modulebase}/legacy/stats" includes="*.csv" />
+      <fileset dir="${modulebase}/servers/stats" includes="*.csv" />
       <fileset dir="${modulebase}/hidserv/stats" includes="hidserv.csv" />
       <fileset dir="${modulebase}/clients/stats"
                includes="clients*.csv userstats-combined.csv" />
