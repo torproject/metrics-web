@@ -24,6 +24,8 @@
   <property name="Rsources" value="${basedir}/src/main/R" />
   <property name="pysources" value="${basedir}/src/main/python" />
 
+  <property name="specdir" value="${basedir}/generated/spec" />
+
   <!-- Deployment base folder.
        Be aware that this is also set in R scripts and web.xml, currently! -->
   <property name="metrics-web.deployment.base"
@@ -149,6 +151,7 @@
     </jar>
 
     <antcall target="generate-ml-javadoc" />
+    <antcall target="generate-specs" />
 
     <war destfile="${dist}/${warfile}"
          duplicate="fail"
@@ -181,6 +184,9 @@
                   prefix=""
                   includes="css/* images/* js/* fonts/** rs/**" />
       <zipfileset dir="${resources}/web/jsps"
+                  prefix="WEB-INF"
+                  includes="*.jsp"/>
+      <zipfileset dir="${specdir}"
                   prefix="WEB-INF"
                   includes="*.jsp"/>
       <zipfileset dir="${resources}"
@@ -247,6 +253,49 @@
       </classpath>
     </java>
     <echo message="Java module UpdateNews finished. " />
+  </target>
+
+  <target name="generate-specs" depends="init" >
+    <mkdir dir="${specdir}" />
+    <antcall target="xml2jsp">
+      <param name="specfile" value="bridge-descriptors"/>
+    </antcall>
+    <antcall target="xml2jsp">
+      <param name="specfile" value="web-server-logs"/>
+    </antcall>
+  </target>
+
+  <target name="xml2jsp" >
+    <echo message="Generating ${specfile} specification jsp ... " />
+    <exec executable="saxon-xslt"
+          dir="${specdir}"
+          logError="true"
+          output="${specdir}/${specfile}.tmp"
+          failonerror="true" >
+      <arg value="${basedir}/${resources}/spec/${specfile}.xml" />
+      <arg value="${basedir}/${resources}/spec/rfc2629.xslt" />
+      <arg value="xml2rfc-topblock=no" />
+    </exec>
+    <exec executable="tidy"
+          dir="${specdir}"
+          logError="true"
+          output="${specdir}/${specfile}.tmp2"
+          failonerror="true" >
+      <arg value="-quiet" />
+      <arg value="${specdir}/${specfile}.tmp" />
+    </exec>
+    <exec executable="awk"
+          dir="${specdir}"
+          logError="true"
+          output="${specdir}/${specfile}.jsp"
+          failonerror="true" >
+      <arg value="-f" />
+      <arg value="${basedir}/${resources}/spec/convert.awk" />
+      <arg value="${specdir}/${specfile}.tmp2" />
+    </exec>
+    <echo message="Done." />
+    <delete file="${specdir}/${specfile}.tmp" quiet="true" />
+    <delete file="${specdir}/${specfile}.tmp2" quiet="true" />
   </target>
 
   <!-- This can be adapted to point at the actual work directory. -->
