@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -222,7 +223,7 @@ public class RObjectGenerator implements ServletContextListener {
     /* Write the table content to a map. */
     List<Map<String, String>> result = new ArrayList<>();
     try (BufferedReader br = new BufferedReader(new InputStreamReader(
-        new ByteArrayInputStream(tableBytes)))) {
+        new ByteArrayInputStream(tableBytes), StandardCharsets.UTF_8))) {
       String line = br.readLine();
       if (line != null) {
         List<String> headers = new ArrayList<>(Arrays.asList(line.split(",")));
