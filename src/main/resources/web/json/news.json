@@ -2886,11 +2886,12 @@
       "<OR>",
       "relay"
     ],
-    "description": "Huge increase in relay users (400k+).",
+    "description": "Huge increase in relay users (400k+). An anonymous contributor suggests that it may be a botnet, based on the large number of hosts with an open SMB port in the UAE.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-06-01&country=ae&events=off\">graph</a>",
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-January/000284.html\">metrics-team thread</a>",
-      "<a href=\"https://www.reddit.com/r/TOR/comments/5pbukk/united_arab_emirates_went_from_10k_tor_users_to/\">reddit thread</a>"
+      "<a href=\"https://www.reddit.com/r/TOR/comments/5pbukk/united_arab_emirates_went_from_10k_tor_users_to/\">reddit thread</a>",
+      "<a href=\"https://trac.torproject.org/projects/tor/ticket/25137#comment:10\">comment about botnet</a>"
     ],
     "unknown": true
   },
