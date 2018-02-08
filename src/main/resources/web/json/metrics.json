@@ -348,7 +348,7 @@
     "id": "torperf",
     "title": "Time to download files over Tor",
     "type": "Graph",
-    "description": "<p>This graph shows overall performance when downloading static files of different sizes over Tor.  The graph shows the range of measurements from first to third quartile, and highlights the median.  The slowest and fastest quarter of measurements are omitted from the graph.</p>",
+    "description": "<p>This graph shows overall performance when downloading static files of different sizes over Tor, either from a server on the public internet or from a version 2 onion server.  The graph shows the range of measurements from first to third quartile, and highlights the median.  The slowest and fastest quarter of measurements are omitted from the graph.</p>",
     "function": "plot_torperf",
     "parameters": [
       "start",
@@ -365,7 +365,7 @@
     "id": "torperf-failures",
     "title": "Timeouts and failures of downloading files over Tor",
     "type": "Graph",
-    "description": "<p>This graph shows the fraction of timeouts and failures when downloading static files of different sizes over Tor.  A timeout occurs when a download does not complete within the scheduled time, in which case it is aborted in order not to overlap with the next scheduled download.  A failure occurs when the download completes, but the response is smaller than expected.</p>",
+    "description": "<p>This graph shows the fraction of timeouts and failures when downloading static files of different sizes over Tor, either from a server on the public internet or from a version 2 onion server.  A timeout occurs when a download does not complete within the scheduled time, in which case it is aborted in order not to overlap with the next scheduled download.  A failure occurs when the download completes, but the response is smaller than expected.</p>",
     "function": "plot_torperf_failures",
     "parameters": [
       "start",

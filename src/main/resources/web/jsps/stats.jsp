@@ -401,8 +401,8 @@ measurements.  If this column contains the empty string, all measurements are
 included, regardless of which service performed them.</li>
 
 <li><b>server:</b> Either <b>"public"</b> if the request was made to a server on
-the public internet, or <b>"onion"</b> if the request was made to an onion
-server.</li>
+the public internet, or <b>"onion"</b> if the request was made to a version 2
+onion server.</li>
 
 <li><b>q1:</b> First quartile of time until receiving the last byte in
 milliseconds.</li>
