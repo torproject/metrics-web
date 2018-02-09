@@ -303,8 +303,7 @@ plot_networksize <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0, max(networksize$value,
-        na.rm = TRUE))) +
+    scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_hue("", breaks = c("relays", "bridges"),
         labels = c("Relays", "Bridges")) +
     ggtitle("Number of relays\n")
@@ -341,8 +340,7 @@ plot_versions <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "",
-      limits = c(0, max(versions$relays, na.rm = TRUE))) +
+    scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_manual(name = "Tor version",
       values = colours[colours$breaks %in% visible_versions, 2],
       breaks = visible_versions) +
@@ -370,8 +368,7 @@ plot_platforms <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "",
-      limits = c(0, max(platforms$value, na.rm = TRUE))) +
+    scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_manual(name = "Platform",
       breaks = c("Linux", "Darwin", "BSD", "Windows", "Other"),
       labels = c("Linux", "macOS", "BSD", "Windows", "Other"),
@@ -401,8 +398,7 @@ plot_bandwidth <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "Bandwidth (Gbit/s)",
-        limits = c(0, max(bandwidth$value, na.rm = TRUE) * 8 / 1e9)) +
+    scale_y_continuous(name = "Bandwidth (Gbit/s)", limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
         breaks = c("bwadv", "bwhist"),
         labels = c("Advertised bandwidth", "Bandwidth history")) +
@@ -448,8 +444,7 @@ plot_bwhist_flags <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name="Bandwidth (Gbit/s)",
-        limits = c(0, max(bw$value, na.rm = TRUE) * 8 / 1e9)) +
+    scale_y_continuous(name="Bandwidth (Gbit/s)", limits = c(0, NA)) +
     scale_colour_manual(name = "",
         values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2")) +
     ggtitle("Bandwidth history by relay flags") +
@@ -477,8 +472,7 @@ plot_dirbytes <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name="Bandwidth (Gbit/s)",
-        limits = c(0, max(dir$value, na.rm = TRUE) * 8 / 1e9)) +
+    scale_y_continuous(name="Bandwidth (Gbit/s)", limits = c(0, NA)) +
     scale_colour_hue(name = "",
         breaks = c("dirwrite", "dirread"),
         labels = c("Written dir bytes", "Read dir bytes")) +
@@ -519,8 +513,7 @@ plot_relayflags <- function(start, end, flags, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor, limits = as.Date(c(start, end))) +
-    scale_y_continuous(name = "", limits = c(0, max(networksize$value,
-        na.rm = TRUE))) +
+    scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_manual(name = "Relay flags", values = c("#E69F00",
         "#56B4E9", "#009E73", "#EE6A50", "#000000", "#0072B2"),
         breaks = flags, labels = flags) +
@@ -567,8 +560,7 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "") +
-    expand_limits(y = 0) +
+    scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_fill_manual(name = paste("Measured times on",
         ifelse(source == "all", "all sources", source), "per day"),
       breaks = c("line", "ribbon"),
@@ -724,8 +716,7 @@ plot_bandwidth_flags <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name="Bandwidth (Gbit/s)",
-        limits = c(0, max(bandwidth$value, na.rm = TRUE) * 8 / 1e9)) +
+    scale_y_continuous(name="Bandwidth (Gbit/s)", limits = c(0, NA)) +
     scale_colour_manual(name = "",
         values = c("#E69F00", "#D6C827", "#009E73", "#00C34F")) +
     ggtitle(paste("Advertised bandwidth and bandwidth history by",
@@ -854,8 +845,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "", labels = formatter) +
-    expand_limits(y = 0) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     ggtitle(title)
   if (length(value) > 1) {
     plot <- plot +
@@ -904,8 +894,6 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
                    by = list(transport = u$transport), FUN = sum)
     a <- a[order(a$mid, decreasing = TRUE)[1:top], ]
     u <- u[u$transport %in% a$transport, ]
-    max_y <- ifelse(length(na.omit(u$high)) == 0, 0,
-        max(u$high, na.rm = TRUE))
     title <- paste("Bridge users by transport from ",
                    countryname(country), sep = "")
     date_breaks <- date_breaks(
@@ -919,8 +907,7 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "", limits = c(0, max_y),
-        labels = formatter) +
+    scale_y_continuous(name = "", limits = c(0, NA), labels = formatter) +
     scale_colour_hue(paste("Top-", top, " transports", sep = "")) +
     scale_fill_hue(paste("Top-", top, " transports", sep = "")) +
     ggtitle(title) +
@@ -951,7 +938,7 @@ plot_advbwdist_perc <- function(start, end, p, path) {
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "Advertised bandwidth in Gbit/s\n",
-        limits = c(0, max(t$advbw, na.rm = TRUE))) +
+        limits = c(0, NA)) +
     scale_colour_hue(name = "Percentile",
         breaks = rev(levels(t$percentile))) +
     ggtitle("Advertised bandwidth distribution\n")
@@ -979,7 +966,7 @@ plot_advbwdist_relay <- function(start, end, n, path) {
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "Advertised bandwidth in Gbit/s\n",
-        limits = c(0, max(t$advbw, na.rm = TRUE))) +
+        limits = c(0, NA)) +
     scale_colour_hue(name = "n", breaks = levels(t$relay)) +
     ggtitle("Advertised bandwidth of n-th fastest relays\n")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
@@ -1078,14 +1065,14 @@ plot_webstats_tb <- function(start, end, path) {
   ggplot(d, aes(x = log_date, y = count)) +
     geom_point() +
     geom_line() +
-    expand_limits(y = 0) +
     facet_grid(request_type ~ ., scales = "free_y") +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
+    scale_y_continuous(name = 'Requests per day\n', labels = formatter,
+        limits = c(0, NA)) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
     ggtitle("Tor Browser downloads and updates\n")
@@ -1103,13 +1090,13 @@ plot_webstats_tb_platform <- function(start, end, path) {
   ggplot(d, aes(x = log_date, y = count, colour = platform)) +
     geom_point() +
     geom_line() +
-    expand_limits(y = 0) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
+    scale_y_continuous(name = 'Requests per day\n', labels = formatter,
+        limits = c(0, NA)) +
     scale_colour_hue(name = "Platform",
         breaks = c("w", "m", "l", "o", ""),
         labels = c("Windows", "macOS", "Linux", "Other", "Unknown")) +
@@ -1134,13 +1121,13 @@ plot_webstats_tb_locale <- function(start, end, path) {
   ggplot(d, aes(x = log_date, y = count, colour = locale)) +
     geom_point() +
     geom_line() +
-    expand_limits(y = 0) +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
+    scale_y_continuous(name = 'Requests per day\n', labels = formatter,
+        limits = c(0, NA)) +
     scale_colour_hue(name = "Locale",
         breaks = c(e$locale, "(other)"),
         labels = c(e$locale, "Other")) +
@@ -1163,14 +1150,14 @@ plot_webstats_tm <- function(start, end, path) {
   ggplot(d, aes(x = log_date, y = count)) +
     geom_point() +
     geom_line() +
-    expand_limits(y = 0) +
     facet_grid(request_type ~ ., scales = "free_y") +
     scale_x_date(name = paste("\nThe Tor Project - ",
         "https://metrics.torproject.org/", sep = ""),
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = 'Requests per day\n', labels = formatter) +
+    scale_y_continuous(name = 'Requests per day\n', labels = formatter,
+        limits = c(0, NA)) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
     ggtitle("Tor Messenger downloads and updates\n")
@@ -1204,12 +1191,11 @@ plot_relays_ipv6 <- function(start, end, path) {
       labels = date_format(date_breaks$format),
       date_breaks = date_breaks$major,
       date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "") +
+    scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
       breaks = c("total", "announced", "reachable", "exiting"),
       labels = c("Total (IPv4) OR", "IPv6 announced OR", "IPv6 reachable OR",
         "IPv6 exiting")) +
-    expand_limits(y = 0) +
     ggtitle("Relays by IP version") +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
@@ -1239,11 +1225,10 @@ plot_bridges_ipv6 <- function(start, end, path) {
       labels = date_format(date_breaks$format),
       date_breaks = date_breaks$major,
       date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "") +
+    scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
       breaks = c("total", "announced"),
       labels = c("Total (IPv4) OR", "IPv6 announced OR")) +
-    expand_limits(y = 0) +
     ggtitle("Bridges by IP version") +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
@@ -1282,13 +1267,12 @@ plot_advbw_ipv6 <- function(start, end, path) {
       labels = date_format(date_breaks$format),
       date_breaks = date_breaks$major,
       date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "Bandwidth (Gbit/s)") +
+    scale_y_continuous(name = "Bandwidth (Gbit/s)", limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
       breaks = c("total", "total_guard", "total_exit", "reachable_guard",
         "reachable_exit", "exiting"),
       labels = c("Total (IPv4) OR", "Guard total (IPv4)", "Exit total (IPv4)",
         "Reachable guard IPv6 OR", "Reachable exit IPv6 OR", "IPv6 exiting")) +
-    expand_limits(y = 0) +
     ggtitle("Advertised bandwidth by IP version") +
     theme(legend.position = "top") +
     guides(colour = guide_legend(nrow = 2, byrow = TRUE))
