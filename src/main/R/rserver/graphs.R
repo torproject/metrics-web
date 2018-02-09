@@ -276,6 +276,8 @@ formatter <- function(x, ...) {
 theme_update(plot.title = element_text(hjust = 0.5),
   plot.margin = margin(5.5, 11, 5.5, 5.5))
 
+copyright_notice = "\nThe Tor Project - https://metrics.torproject.org/"
+
 plot_networksize <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
   s <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
@@ -298,8 +300,7 @@ plot_networksize <- function(start, end, path) {
     min(as.Date(networksize$date, "%Y-%m-%d"))))
   ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
     colour = variable)) + geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -335,8 +336,7 @@ plot_versions <- function(start, end, path) {
   ggplot(versions, aes(x = as.Date(date, "%Y-%m-%d"), y = relays,
       colour = version)) +
     geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -363,8 +363,7 @@ plot_platforms <- function(start, end, path) {
   ggplot(platforms, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
       colour = variable)) +
     geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -393,8 +392,7 @@ plot_bandwidth <- function(start, end, path) {
   ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
       y = value * 8 / 1e9, colour = variable)) +
     geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -439,8 +437,7 @@ plot_bwhist_flags <- function(start, end, path) {
   ggplot(bw, aes(x = as.Date(date, "%Y-%m-%d"), y = value * 8 / 1e9,
       colour = variable)) +
     geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -467,8 +464,7 @@ plot_dirbytes <- function(start, end, path) {
   ggplot(dir, aes(x = as.Date(date, "%Y-%m-%d"), y = value * 8 / 1e9,
       colour = variable)) +
     geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -508,8 +504,7 @@ plot_relayflags <- function(start, end, flags, path) {
     min(as.Date(networksize$date, "%Y-%m-%d"))))
   ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
     colour = as.factor(variable))) + geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor, limits = as.Date(c(start, end))) +
@@ -555,8 +550,7 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
     geom_line(colour = colour, size = 0.75) +
     geom_ribbon(data = torperf, aes(x = date, ymin = q1/1e3,
       ymax = q3/1e3, fill = "ribbon")) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -608,8 +602,7 @@ plot_torperf_failures <- function(start, end, source, server, filesize, path) {
   ggplot(torperf, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
     colour = variable)) +
     geom_point(size = 2) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -642,8 +635,7 @@ plot_connbidirect <- function(start, end, path) {
     geom_line(size = 0.75) +
     geom_ribbon(aes(x = date, ymin = X0.25, ymax = X0.75,
                 fill = direction), alpha = 0.5, show_guide = FALSE) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -711,8 +703,7 @@ plot_bandwidth_flags <- function(start, end, path) {
   ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
       y = value * 8 / 1e9, colour = variable)) +
     geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -840,8 +831,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
   }
   plot <- plot +
     geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -902,8 +892,7 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
     ggplot(u, aes(x = as.Date(date), ymin = low, ymax = high,
                 colour = transport, fill = transport)) +
     geom_ribbon(alpha = 0.5, size = 0.5) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -932,8 +921,7 @@ plot_advbwdist_perc <- function(start, end, p, path) {
   ggplot(t, aes(x = as.Date(date), y = advbw, colour = percentile)) +
     facet_grid(variable ~ .) +
     geom_line(size = 0.75) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -960,8 +948,7 @@ plot_advbwdist_relay <- function(start, end, n, path) {
   ggplot(t, aes(x = as.Date(date), y = advbw, colour = relay)) +
     facet_grid(variable ~ .) +
     geom_line(size = 0.75) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -984,8 +971,7 @@ plot_hidserv_dir_onions_seen <- function(start, end, path) {
                                       - min(h$date, na.rm = TRUE)))
   ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"), y = wiqm)) +
     geom_line(size = 0.75) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -1008,8 +994,7 @@ plot_hidserv_rend_relayed_cells <- function(start, end, path) {
   ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"),
       y = wiqm * 8 * 512 / (86400 * 1e6))) +
     geom_line(size = 0.75) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -1034,8 +1019,7 @@ plot_hidserv_frac_reporting <- function(start, end, path) {
       colour = type)) +
     geom_line(size = 0.75) +
     geom_hline(yintercept = 0.01, linetype = 2) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -1066,8 +1050,7 @@ plot_webstats_tb <- function(start, end, path) {
     geom_point() +
     geom_line() +
     facet_grid(request_type ~ ., scales = "free_y") +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -1090,8 +1073,7 @@ plot_webstats_tb_platform <- function(start, end, path) {
   ggplot(d, aes(x = log_date, y = count, colour = platform)) +
     geom_point() +
     geom_line() +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -1121,8 +1103,7 @@ plot_webstats_tb_locale <- function(start, end, path) {
   ggplot(d, aes(x = log_date, y = count, colour = locale)) +
     geom_point() +
     geom_line() +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -1151,8 +1132,7 @@ plot_webstats_tm <- function(start, end, path) {
     geom_point() +
     geom_line() +
     facet_grid(request_type ~ ., scales = "free_y") +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-        "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
@@ -1186,8 +1166,7 @@ plot_relays_ipv6 <- function(start, end, path) {
       value = "count") %>%
     ggplot(aes(x = valid_after_date, y = count, colour = category)) +
     geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-      "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
       labels = date_format(date_breaks$format),
       date_breaks = date_breaks$major,
       date_minor_breaks = date_breaks$minor) +
@@ -1220,8 +1199,7 @@ plot_bridges_ipv6 <- function(start, end, path) {
     gather(total, announced, key = "category", value = "count") %>%
     ggplot(aes(x = valid_after_date, y = count, colour = category)) +
     geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-      "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
       labels = date_format(date_breaks$format),
       date_breaks = date_breaks$major,
       date_minor_breaks = date_breaks$minor) +
@@ -1262,8 +1240,7 @@ plot_advbw_ipv6 <- function(start, end, path) {
     ggplot(aes(x = valid_after_date, y = (count * 8) / 1e9,
       colour = category)) +
     geom_line(size = 1) +
-    scale_x_date(name = paste("\nThe Tor Project - ",
-      "https://metrics.torproject.org/", sep = ""),
+    scale_x_date(name = copyright_notice,
       labels = date_format(date_breaks$format),
       date_breaks = date_breaks$major,
       date_minor_breaks = date_breaks$minor) +
