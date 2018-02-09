@@ -276,6 +276,9 @@ formatter <- function(x, ...) {
 theme_update(plot.title = element_text(hjust = 0.5),
   plot.margin = margin(5.5, 11, 5.5, 5.5))
 
+# Set the default line size of geom_line() to 1.
+update_geom_defaults("line", list(size = 1))
+
 copyright_notice = "\nThe Tor Project - https://metrics.torproject.org/"
 
 plot_networksize <- function(start, end, path) {
@@ -299,7 +302,7 @@ plot_networksize <- function(start, end, path) {
     as.numeric(max(as.Date(networksize$date, "%Y-%m-%d")) -
     min(as.Date(networksize$date, "%Y-%m-%d"))))
   ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-    colour = variable)) + geom_line(size = 1) +
+    colour = variable)) + geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -335,7 +338,7 @@ plot_versions <- function(start, end, path) {
     min(as.Date(versions$date, "%Y-%m-%d"))))
   ggplot(versions, aes(x = as.Date(date, "%Y-%m-%d"), y = relays,
       colour = version)) +
-    geom_line(size = 1) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -362,7 +365,7 @@ plot_platforms <- function(start, end, path) {
     min(as.Date(platforms$date, "%Y-%m-%d"))))
   ggplot(platforms, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
       colour = variable)) +
-    geom_line(size = 1) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -391,7 +394,7 @@ plot_bandwidth <- function(start, end, path) {
     min(as.Date(bandwidth$date, "%Y-%m-%d"))))
   ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
       y = value * 8 / 1e9, colour = variable)) +
-    geom_line(size = 1) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -436,7 +439,7 @@ plot_bwhist_flags <- function(start, end, path) {
     min(as.Date(bw$date, "%Y-%m-%d"))))
   ggplot(bw, aes(x = as.Date(date, "%Y-%m-%d"), y = value * 8 / 1e9,
       colour = variable)) +
-    geom_line(size = 1) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -463,7 +466,7 @@ plot_dirbytes <- function(start, end, path) {
     min(as.Date(dir$date, "%Y-%m-%d"))))
   ggplot(dir, aes(x = as.Date(date, "%Y-%m-%d"), y = value * 8 / 1e9,
       colour = variable)) +
-    geom_line(size = 1) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -503,7 +506,7 @@ plot_relayflags <- function(start, end, flags, path) {
     as.numeric(max(as.Date(end, "%Y-%m-%d")) -
     min(as.Date(networksize$date, "%Y-%m-%d"))))
   ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-    colour = as.factor(variable))) + geom_line(size = 1) +
+    colour = as.factor(variable))) + geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -702,7 +705,7 @@ plot_bandwidth_flags <- function(start, end, path) {
     levels = levels(bandwidth$variable)[c(3, 4, 1, 2)])
   ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
       y = value * 8 / 1e9, colour = variable)) +
-    geom_line(size = 1) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -830,7 +833,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
           colour = "firebrick2")
   }
   plot <- plot +
-    geom_line(size = 1) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -920,7 +923,7 @@ plot_advbwdist_perc <- function(start, end, p, path) {
     min(as.Date(t$date, "%Y-%m-%d"))))
   ggplot(t, aes(x = as.Date(date), y = advbw, colour = percentile)) +
     facet_grid(variable ~ .) +
-    geom_line(size = 0.75) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -947,7 +950,7 @@ plot_advbwdist_relay <- function(start, end, n, path) {
     min(as.Date(t$date, "%Y-%m-%d"))))
   ggplot(t, aes(x = as.Date(date), y = advbw, colour = relay)) +
     facet_grid(variable ~ .) +
-    geom_line(size = 0.75) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -970,7 +973,7 @@ plot_hidserv_dir_onions_seen <- function(start, end, path) {
   date_breaks <- date_breaks(as.numeric(max(h$date, na.rm = TRUE)
                                       - min(h$date, na.rm = TRUE)))
   ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"), y = wiqm)) +
-    geom_line(size = 0.75) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -993,7 +996,7 @@ plot_hidserv_rend_relayed_cells <- function(start, end, path) {
                                       - min(h$date, na.rm = TRUE)))
   ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"),
       y = wiqm * 8 * 512 / (86400 * 1e6))) +
-    geom_line(size = 0.75) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
@@ -1017,7 +1020,7 @@ plot_hidserv_frac_reporting <- function(start, end, path) {
                                       - min(h$date, na.rm = TRUE)))
   ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"), y = frac,
       colour = type)) +
-    geom_line(size = 0.75) +
+    geom_line() +
     geom_hline(yintercept = 0.01, linetype = 2) +
     scale_x_date(name = copyright_notice,
         labels = date_format(date_breaks$format),
@@ -1165,7 +1168,7 @@ plot_relays_ipv6 <- function(start, end, path) {
     gather(total, announced, reachable, exiting, key = "category",
       value = "count") %>%
     ggplot(aes(x = valid_after_date, y = count, colour = category)) +
-    geom_line(size = 1) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
       labels = date_format(date_breaks$format),
       date_breaks = date_breaks$major,
@@ -1198,7 +1201,7 @@ plot_bridges_ipv6 <- function(start, end, path) {
       by = "1 day")), all = TRUE) %>%
     gather(total, announced, key = "category", value = "count") %>%
     ggplot(aes(x = valid_after_date, y = count, colour = category)) +
-    geom_line(size = 1) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
       labels = date_format(date_breaks$format),
       date_breaks = date_breaks$major,
@@ -1239,7 +1242,7 @@ plot_advbw_ipv6 <- function(start, end, path) {
       exiting, key = "category", value = "count") %>%
     ggplot(aes(x = valid_after_date, y = (count * 8) / 1e9,
       colour = category)) +
-    geom_line(size = 1) +
+    geom_line() +
     scale_x_date(name = copyright_notice,
       labels = date_format(date_breaks$format),
       date_breaks = date_breaks$major,
