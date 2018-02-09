@@ -7,4 +7,5 @@
 # Only necessary after very first checkout without recursion.
 #
 git submodule update --init --remote
+cd src/submods/metrics-lib/ && ./src/main/resources/bootstrap-development.sh
 
