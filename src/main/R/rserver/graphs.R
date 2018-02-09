@@ -273,13 +273,25 @@ formatter <- function(x, ...) {
   format(x, ..., scientific = FALSE, big.mark = ' ')
 }
 
-theme_update(plot.title = element_text(hjust = 0.5),
-  plot.margin = margin(5.5, 11, 5.5, 5.5))
+theme_update(
+  # Make plot title centered, and leave some room to the plot.
+  plot.title = element_text(hjust = 0.5, margin = margin(b = 11)),
+
+  # Leave a little more room to the right for long x axis labels.
+  plot.margin = margin(5.5, 11, 5.5, 5.5),
+
+  # Leave some room between plot and x axis label, which we use for the
+  # copyright notice.
+  axis.title.x = element_text(margin = margin(t = 11)),
+
+  # Leave some room between plot and y axis label.
+  axis.title.y = element_text(margin = margin(r = 11))
+)
 
 # Set the default line size of geom_line() to 1.
 update_geom_defaults("line", list(size = 1))
 
-copyright_notice = "\nThe Tor Project - https://metrics.torproject.org/"
+copyright_notice = "The Tor Project - https://metrics.torproject.org/"
 
 plot_networksize <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date() - 2))
@@ -310,7 +322,7 @@ plot_networksize <- function(start, end, path) {
     scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_hue("", breaks = c("relays", "bridges"),
         labels = c("Relays", "Bridges")) +
-    ggtitle("Number of relays\n")
+    ggtitle("Number of relays")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -347,7 +359,7 @@ plot_versions <- function(start, end, path) {
     scale_colour_manual(name = "Tor version",
       values = colours[colours$breaks %in% visible_versions, 2],
       breaks = visible_versions) +
-    ggtitle("Relay versions\n")
+    ggtitle("Relay versions")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -375,7 +387,7 @@ plot_platforms <- function(start, end, path) {
       breaks = c("Linux", "Darwin", "BSD", "Windows", "Other"),
       labels = c("Linux", "macOS", "BSD", "Windows", "Other"),
       values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#333333")) +
-    ggtitle("Relay platforms\n")
+    ggtitle("Relay platforms")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -515,7 +527,7 @@ plot_relayflags <- function(start, end, flags, path) {
     scale_colour_manual(name = "Relay flags", values = c("#E69F00",
         "#56B4E9", "#009E73", "#EE6A50", "#000000", "#0072B2"),
         breaks = flags, labels = flags) +
-    ggtitle("Number of relays with relay flags assigned\n")
+    ggtitle("Number of relays with relay flags assigned")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -651,7 +663,7 @@ plot_connbidirect <- function(start, end, path) {
                    breaks = c("both", "write", "read"),
         labels = c("Both reading and writing", "Mostly writing",
                    "Mostly reading")) +
-    ggtitle("Fraction of connections used uni-/bidirectionally\n") +
+    ggtitle("Fraction of connections used uni-/bidirectionally") +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -734,11 +746,10 @@ plot_userstats <- function(start, end, node, variable, value, events,
   if (node == 'relay') {
     if (value != 'all') {
       u <- u[u$country == value, ]
-      title <- paste("Directly connecting users from ",
-                     countryname(value), "\n", sep = "")
+      title <- paste("Directly connecting users from", countryname(value))
     } else {
       u <- u[u$country == '', ]
-      title <- "Directly connecting users\n"
+      title <- "Directly connecting users"
     }
     u <- aggregate(list(lower = u$lower, upper = u$upper,
                         users = u$clients),
@@ -764,7 +775,7 @@ plot_userstats <- function(start, end, node, variable, value, events,
                      by = list(date = as.Date(u$date, "%Y-%m-%d"),
                                value = u$transport),
                      FUN = sum)
-      title <- paste("Bridge users by transport\n")
+      title <- paste("Bridge users by transport")
     } else {
       u <- u[u$transport == value, ]
       u <- aggregate(list(lower = u$lower, upper = u$upper,
@@ -772,17 +783,17 @@ plot_userstats <- function(start, end, node, variable, value, events,
                      by = list(date = as.Date(u$date, "%Y-%m-%d"),
                                value = u$transport),
                      FUN = sum)
-      title <- paste("Bridge users using ",
+      title <- paste("Bridge users using",
                ifelse(value == '<??>', 'unknown pluggable transport(s)',
                ifelse(value == '<OR>', 'default OR protocol',
                ifelse(value == '!<OR>', 'any pluggable transport',
                ifelse(value == 'fte', 'FTE',
                ifelse(value == 'websocket', 'Flash proxy/websocket',
-               paste('transport', value)))))), "\n", sep = "")
+               paste('transport', value)))))))
     }
   } else if (variable == 'version') {
     u <- u[u$version == value, ]
-    title <- paste("Bridge users using IP", value, "\n", sep = "")
+    title <- paste("Bridge users using IP", value, sep = "")
     u <- aggregate(list(lower = u$lower, upper = u$upper,
                         users = u$clients),
                    by = list(date = as.Date(u$date, "%Y-%m-%d"),
@@ -791,11 +802,10 @@ plot_userstats <- function(start, end, node, variable, value, events,
   } else {
     if (value != 'all') {
       u <- u[u$country == value, ]
-      title <- paste("Bridge users from ", countryname(value),
-                     "\n", sep = "")
+      title <- paste("Bridge users from", countryname(value))
     } else {
       u <- u[u$country == '' & u$transport == '' & u$version == '', ]
-      title <- "Bridge users\n"
+      title <- "Bridge users"
     }
     u <- aggregate(list(lower = u$lower, upper = u$upper,
                         users = u$clients),
@@ -928,11 +938,11 @@ plot_advbwdist_perc <- function(start, end, p, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "Advertised bandwidth in Gbit/s\n",
+    scale_y_continuous(name = "Advertised bandwidth in Gbit/s",
         limits = c(0, NA)) +
     scale_colour_hue(name = "Percentile",
         breaks = rev(levels(t$percentile))) +
-    ggtitle("Advertised bandwidth distribution\n")
+    ggtitle("Advertised bandwidth distribution")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -955,10 +965,10 @@ plot_advbwdist_relay <- function(start, end, n, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = "Advertised bandwidth in Gbit/s\n",
+    scale_y_continuous(name = "Advertised bandwidth in Gbit/s",
         limits = c(0, NA)) +
     scale_colour_hue(name = "n", breaks = levels(t$relay)) +
-    ggtitle("Advertised bandwidth of n-th fastest relays\n")
+    ggtitle("Advertised bandwidth of n-th fastest relays")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -979,7 +989,7 @@ plot_hidserv_dir_onions_seen <- function(start, end, path) {
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "") +
-    ggtitle("Unique .onion addresses\n")
+    ggtitle("Unique .onion addresses")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -1002,7 +1012,7 @@ plot_hidserv_rend_relayed_cells <- function(start, end, path) {
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
     scale_y_continuous(name = "") +
-    ggtitle("Onion-service traffic in Mbit/s\n")
+    ggtitle("Onion-service traffic in Mbit/s")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -1057,11 +1067,11 @@ plot_webstats_tb <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = 'Requests per day\n', labels = formatter,
+    scale_y_continuous(name = 'Requests per day', labels = formatter,
         limits = c(0, NA)) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
-    ggtitle("Tor Browser downloads and updates\n")
+    ggtitle("Tor Browser downloads and updates")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -1080,14 +1090,14 @@ plot_webstats_tb_platform <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = 'Requests per day\n', labels = formatter,
+    scale_y_continuous(name = 'Requests per day', labels = formatter,
         limits = c(0, NA)) +
     scale_colour_hue(name = "Platform",
         breaks = c("w", "m", "l", "o", ""),
         labels = c("Windows", "macOS", "Linux", "Other", "Unknown")) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
-    ggtitle("Tor Browser downloads by platform\n")
+    ggtitle("Tor Browser downloads by platform")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -1110,14 +1120,14 @@ plot_webstats_tb_locale <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = 'Requests per day\n', labels = formatter,
+    scale_y_continuous(name = 'Requests per day', labels = formatter,
         limits = c(0, NA)) +
     scale_colour_hue(name = "Locale",
         breaks = c(e$locale, "(other)"),
         labels = c(e$locale, "Other")) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
-    ggtitle("Tor Browser downloads by locale\n")
+    ggtitle("Tor Browser downloads by locale")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -1139,11 +1149,11 @@ plot_webstats_tm <- function(start, end, path) {
         labels = date_format(date_breaks$format),
         date_breaks = date_breaks$major,
         date_minor_breaks = date_breaks$minor) +
-    scale_y_continuous(name = 'Requests per day\n', labels = formatter,
+    scale_y_continuous(name = 'Requests per day', labels = formatter,
         limits = c(0, NA)) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
-    ggtitle("Tor Messenger downloads and updates\n")
+    ggtitle("Tor Messenger downloads and updates")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
