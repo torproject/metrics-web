@@ -294,7 +294,6 @@ update_geom_defaults("line", list(size = 1))
 copyright_notice = "The Tor Project - https://metrics.torproject.org/"
 
 plot_networksize <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   s <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$date >= start & s$date <= end & s$flag == '' &
@@ -327,7 +326,6 @@ plot_networksize <- function(start, end, path) {
 }
 
 plot_versions <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   s <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$date >= start & s$date <= end & s$flag == '' &
@@ -364,7 +362,6 @@ plot_versions <- function(start, end, path) {
 }
 
 plot_platforms <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   s <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$date >= start & s$date <= end & s$flag == '' &
@@ -392,7 +389,6 @@ plot_platforms <- function(start, end, path) {
 }
 
 plot_bandwidth <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 4))
   b <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "bandwidth.csv", sep = ""), stringsAsFactors = FALSE)
   b <- b[b$date >= start & b$date <= end & b$isexit == '' &
@@ -421,7 +417,6 @@ plot_bandwidth <- function(start, end, path) {
 }
 
 plot_bwhist_flags <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 4))
   b <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "bandwidth.csv", sep = ""), stringsAsFactors = FALSE)
   b <- b[b$date >= start & b$date <= end & b$isexit != '' &
@@ -465,7 +460,6 @@ plot_bwhist_flags <- function(start, end, path) {
 }
 
 plot_dirbytes <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 4))
   b <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "bandwidth.csv", sep = ""), stringsAsFactors = FALSE)
   b <- b[b$date >= start & b$date <= end & b$isexit == '' &
@@ -493,7 +487,6 @@ plot_dirbytes <- function(start, end, path) {
 }
 
 plot_relayflags <- function(start, end, flags, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   s <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "servers.csv", sep = ""), stringsAsFactors = FALSE)
   s <- s[s$date >= start & s$date <= end & s$country == '' &
@@ -532,7 +525,6 @@ plot_relayflags <- function(start, end, flags, path) {
 }
 
 plot_torperf <- function(start, end, source, server, filesize, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   filesizeVal <- ifelse(filesize == '50kb', 50 * 1024,
           ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
   t <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
@@ -582,7 +574,6 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
 }
 
 plot_torperf_failures <- function(start, end, source, server, filesize, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   filesizeVal <- ifelse(filesize == '50kb', 50 * 1024,
           ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
   t <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
@@ -633,7 +624,6 @@ plot_torperf_failures <- function(start, end, source, server, filesize, path) {
 }
 
 plot_connbidirect <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   c <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "connbidirect2.csv", sep = ""), stringsAsFactors = FALSE)
   c <- c[c$date >= start & c$date <= end, ]
@@ -669,7 +659,6 @@ plot_connbidirect <- function(start, end, path) {
 }
 
 plot_bandwidth_flags <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 4))
   b <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "bandwidth.csv", sep = ""), stringsAsFactors = FALSE)
   b <- b[b$date >= start & b$date <= end & b$isexit != '' &
@@ -733,7 +722,6 @@ plot_bandwidth_flags <- function(start, end, path) {
 
 plot_userstats <- function(start, end, node, variable, value, events,
                            path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   load(paste("/srv/metrics.torproject.org/metrics/shared/RData/clients-",
              node, ".RData", sep = ""))
   c <- data
@@ -887,7 +875,6 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
   } else {
     top <- 3
     country <- ifelse(country == "all", NA, country)
-    end <- min(end, as.character(Sys.Date() - 2))
     load(paste("/srv/metrics.torproject.org/metrics/shared/RData/",
                "userstats-bridge-combined.RData", sep = ""))
     u <- data
@@ -919,7 +906,6 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
 }
 
 plot_advbwdist_perc <- function(start, end, p, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   t <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "advbwdist.csv", sep = ""), stringsAsFactors = FALSE)
   t <- t[t$date >= start & t$date <= end &
@@ -947,7 +933,6 @@ plot_advbwdist_perc <- function(start, end, p, path) {
 }
 
 plot_advbwdist_relay <- function(start, end, n, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   t <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "advbwdist.csv", sep = ""), stringsAsFactors = FALSE)
   t <- t[t$date >= start & t$date <= end & t$relay %in% as.numeric(n), ]
@@ -973,7 +958,6 @@ plot_advbwdist_relay <- function(start, end, n, path) {
 }
 
 plot_hidserv_dir_onions_seen <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   h <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "hidserv.csv", sep = ""), stringsAsFactors = FALSE)
   h <- h[h$date >= start & h$date <= end & h$type == "dir-onions-seen", ]
@@ -994,7 +978,6 @@ plot_hidserv_dir_onions_seen <- function(start, end, path) {
 }
 
 plot_hidserv_rend_relayed_cells <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   h <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "hidserv.csv", sep = ""), stringsAsFactors = FALSE)
   h <- h[h$date >= start & h$date <= end &
@@ -1017,7 +1000,6 @@ plot_hidserv_rend_relayed_cells <- function(start, end, path) {
 }
 
 plot_hidserv_frac_reporting <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   h <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "hidserv.csv", sep = ""), stringsAsFactors = FALSE)
   h <- h[h$date >= start & h$date <= end, ]
@@ -1048,7 +1030,6 @@ plot_hidserv_frac_reporting <- function(start, end, path) {
 }
 
 plot_webstats_tb <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   load("/srv/metrics.torproject.org/metrics/shared/RData/webstats-tb.RData")
   d <- data
   d <- d[d$log_date >= start & d$log_date <= end, ]
@@ -1076,7 +1057,6 @@ plot_webstats_tb <- function(start, end, path) {
 }
 
 plot_webstats_tb_platform <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   d <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "webstats.csv", sep = ""), stringsAsFactors = FALSE)
   d <- d[d$log_date >= start & d$log_date <= end & d$request_type == 'tbid', ]
@@ -1102,7 +1082,6 @@ plot_webstats_tb_platform <- function(start, end, path) {
 }
 
 plot_webstats_tb_locale <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   d <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "webstats.csv", sep = ""), stringsAsFactors = FALSE)
   d <- d[d$log_date >= start & d$log_date <= end & d$request_type == 'tbid', ]
@@ -1132,7 +1111,6 @@ plot_webstats_tb_locale <- function(start, end, path) {
 }
 
 plot_webstats_tm <- function(start, end, path) {
-  end <- min(end, as.character(Sys.Date() - 2))
   load("/srv/metrics.torproject.org/metrics/shared/RData/webstats-tm.RData")
   d <- data
   d <- d[d$log_date >= start & d$log_date <= end, ]
@@ -1163,8 +1141,7 @@ plot_relays_ipv6 <- function(start, end, path) {
     colClasses = c("valid_after_date" = "Date")) %>%
     filter(server == "relay")
   start_date <- max(as.Date(start), min(all_relay_data$valid_after_date))
-  end_date <- min(as.Date(end), max(all_relay_data$valid_after_date),
-    Sys.Date() - 2)
+  end_date <- min(as.Date(end), max(all_relay_data$valid_after_date))
   date_breaks <- date_breaks(as.numeric(end_date - start_date))
   all_relay_data %>%
     filter(valid_after_date >= start_date, valid_after_date <= end_date) %>%
@@ -1199,8 +1176,7 @@ plot_bridges_ipv6 <- function(start, end, path) {
     colClasses = c("valid_after_date" = "Date")) %>%
     filter(server == "bridge")
   start_date <- max(as.Date(start), min(all_bridge_data$valid_after_date))
-  end_date <- min(as.Date(end), max(all_bridge_data$valid_after_date),
-    Sys.Date() - 2)
+  end_date <- min(as.Date(end), max(all_bridge_data$valid_after_date))
   date_breaks <- date_breaks(as.numeric(end_date - start_date))
   all_bridge_data %>%
     filter(valid_after_date >= start_date, valid_after_date <= end_date) %>%
@@ -1231,8 +1207,7 @@ plot_advbw_ipv6 <- function(start, end, path) {
     colClasses = c("valid_after_date" = "Date")) %>%
     filter(server == "relay")
   start_date <- max(as.Date(start), min(all_relay_data$valid_after_date))
-  end_date <- min(as.Date(end), max(all_relay_data$valid_after_date),
-    Sys.Date() - 2)
+  end_date <- min(as.Date(end), max(all_relay_data$valid_after_date))
   date_breaks <- date_breaks(as.numeric(end_date - start_date))
   all_relay_data %>%
     filter(valid_after_date >= start_date, valid_after_date <= end_date) %>%
