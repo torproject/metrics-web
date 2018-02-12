@@ -64,6 +64,10 @@ public class Aggregator {
       return;
     }
 
+    /* Exclude any statistics being as recent as yesterday or newer. */
+    String yesterday = DateTimeHelper.format(System.currentTimeMillis()
+        - DateTimeHelper.ONE_DAY, DateTimeHelper.ISO_DATE_FORMAT);
+
     /* Re-arrange extrapolated network totals by statistics interval end
      * date, and include the computed network total as weight for the
      * extrapolated value.  More precisely, map keys are ISO-formatted
@@ -76,6 +80,9 @@ public class Aggregator {
       String date = DateTimeHelper.format(
           extrapolated.getStatsDateMillis(),
           DateTimeHelper.ISO_DATE_FORMAT);
+      if (date.compareTo(yesterday) >= 0) {
+        continue;
+      }
       if (extrapolated.getFractionRendRelayedCells() > 0.0) {
         if (!extrapolatedCells.containsKey(date)) {
           extrapolatedCells.put(date, new ArrayList<>());
