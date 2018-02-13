@@ -1095,20 +1095,16 @@ plot_webstats_tm <- function(start, end, path) {
 }
 
 plot_relays_ipv6 <- function(start, end, path) {
-  all_relay_data <- read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
+  read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
     colClasses = c("valid_after_date" = "Date")) %>%
-    filter(server == "relay")
-  start_date <- max(as.Date(start), min(all_relay_data$valid_after_date))
-  end_date <- min(as.Date(end), max(all_relay_data$valid_after_date))
-  all_relay_data %>%
-    filter(valid_after_date >= start_date, valid_after_date <= end_date) %>%
+    filter(valid_after_date >= as.Date(start),
+      valid_after_date <= as.Date(end), server == "relay") %>%
     group_by(valid_after_date) %>%
     summarize(total = sum(server_count_sum_avg),
       announced = sum(server_count_sum_avg[announced_ipv6 == 't']),
       reachable = sum(server_count_sum_avg[reachable_ipv6_relay == 't']),
       exiting = sum(server_count_sum_avg[exiting_ipv6_relay == 't'])) %>%
-    merge(data.frame(valid_after_date = seq(start_date, end_date,
-      by = "1 day")), all = TRUE) %>%
+    complete(valid_after_date = full_seq(valid_after_date, period = 1)) %>%
     gather(total, announced, reachable, exiting, key = "category",
       value = "count") %>%
     ggplot(aes(x = valid_after_date, y = count, colour = category)) +
@@ -1127,18 +1123,14 @@ plot_relays_ipv6 <- function(start, end, path) {
 }
 
 plot_bridges_ipv6 <- function(start, end, path) {
-  all_bridge_data <- read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
+  read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
     colClasses = c("valid_after_date" = "Date")) %>%
-    filter(server == "bridge")
-  start_date <- max(as.Date(start), min(all_bridge_data$valid_after_date))
-  end_date <- min(as.Date(end), max(all_bridge_data$valid_after_date))
-  all_bridge_data %>%
-    filter(valid_after_date >= start_date, valid_after_date <= end_date) %>%
+    filter(valid_after_date >= as.Date(start),
+      valid_after_date <= as.Date(end), server == "bridge") %>%
     group_by(valid_after_date) %>%
     summarize(total = sum(server_count_sum_avg),
       announced = sum(server_count_sum_avg[announced_ipv6 == 't'])) %>%
-    merge(data.frame(valid_after_date = seq(start_date, end_date,
-      by = "1 day")), all = TRUE) %>%
+    complete(valid_after_date = full_seq(valid_after_date, period = 1)) %>%
     gather(total, announced, key = "category", value = "count") %>%
     ggplot(aes(x = valid_after_date, y = count, colour = category)) +
     geom_line() +
@@ -1155,13 +1147,10 @@ plot_bridges_ipv6 <- function(start, end, path) {
 }
 
 plot_advbw_ipv6 <- function(start, end, path) {
-  all_relay_data <- read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
+  read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
     colClasses = c("valid_after_date" = "Date")) %>%
-    filter(server == "relay")
-  start_date <- max(as.Date(start), min(all_relay_data$valid_after_date))
-  end_date <- min(as.Date(end), max(all_relay_data$valid_after_date))
-  all_relay_data %>%
-    filter(valid_after_date >= start_date, valid_after_date <= end_date) %>%
+    filter(valid_after_date >= as.Date(start),
+      valid_after_date <= as.Date(end), server == "relay") %>%
     group_by(valid_after_date) %>%
     summarize(total = sum(advertised_bandwidth_bytes_sum_avg),
       total_guard = sum(advertised_bandwidth_bytes_sum_avg[guard_relay != 'f']),
@@ -1172,8 +1161,7 @@ plot_advbw_ipv6 <- function(start, end, path) {
         reachable_ipv6_relay != 'f' & exit_relay != 'f']),
       exiting = sum(advertised_bandwidth_bytes_sum_avg[
         exiting_ipv6_relay != 'f'])) %>%
-    merge(data.frame(valid_after_date = seq(start_date, end_date,
-      by = "1 day")), all = TRUE) %>%
+    complete(valid_after_date = full_seq(valid_after_date, period = 1)) %>%
     gather(total, total_guard, total_exit, reachable_guard, reachable_exit,
       exiting, key = "category", value = "count") %>%
     ggplot(aes(x = valid_after_date, y = (count * 8) / 1e9,
