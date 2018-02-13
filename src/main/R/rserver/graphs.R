@@ -320,10 +320,7 @@ theme_update(
 
   # Leave some room between plot and x axis label, which we use for the
   # copyright notice.
-  axis.title.x = element_text(margin = margin(t = 11)),
-
-  # Leave some room between plot and y axis label.
-  axis.title.y = element_text(margin = margin(r = 11))
+  axis.title.x = element_text(margin = margin(t = 11))
 )
 
 # Set the default line size of geom_line() to 1.
@@ -429,7 +426,8 @@ plot_bandwidth <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "Bandwidth (Gbit/s)", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+      limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
         breaks = c("bwadv", "bwhist"),
         labels = c("Advertised bandwidth", "Bandwidth history")) +
@@ -468,7 +466,8 @@ plot_bwhist_flags <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name="Bandwidth (Gbit/s)", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+      limits = c(0, NA)) +
     scale_colour_manual(name = "",
         values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2")) +
     ggtitle("Bandwidth history by relay flags") +
@@ -489,7 +488,8 @@ plot_dirbytes <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name="Bandwidth (Gbit/s)", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+      limits = c(0, NA)) +
     scale_colour_hue(name = "",
         breaks = c("dirwrite", "dirread"),
         labels = c("Written dir bytes", "Read dir bytes")) +
@@ -698,7 +698,8 @@ plot_bandwidth_flags <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name="Bandwidth (Gbit/s)", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+      limits = c(0, NA)) +
     scale_colour_manual(name = "",
         values = c("#E69F00", "#D6C827", "#009E73", "#00C34F")) +
     ggtitle(paste("Advertised bandwidth and bandwidth history by",
@@ -895,8 +896,8 @@ plot_advbwdist_perc <- function(start, end, p, path) {
     geom_line() +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "Advertised bandwidth in Gbit/s",
-        limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+      limits = c(0, NA)) +
     scale_colour_hue(name = "Percentile",
         breaks = rev(levels(t$percentile))) +
     ggtitle("Advertised bandwidth distribution")
@@ -916,8 +917,8 @@ plot_advbwdist_relay <- function(start, end, n, path) {
     geom_line() +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "Advertised bandwidth in Gbit/s",
-        limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+      limits = c(0, NA)) +
     scale_colour_hue(name = "n", breaks = levels(t$relay)) +
     ggtitle("Advertised bandwidth of n-th fastest relays")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
@@ -999,8 +1000,7 @@ plot_webstats_tb <- function(start, end, path) {
     facet_grid(request_type ~ ., scales = "free_y") +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = 'Requests per day', labels = formatter,
-        limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
     ggtitle("Tor Browser downloads and updates")
@@ -1018,8 +1018,7 @@ plot_webstats_tb_platform <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = 'Requests per day', labels = formatter,
-        limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_hue(name = "Platform",
         breaks = c("w", "m", "l", "o", ""),
         labels = c("Windows", "macOS", "Linux", "Other", "Unknown")) +
@@ -1044,8 +1043,7 @@ plot_webstats_tb_locale <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = 'Requests per day', labels = formatter,
-        limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_hue(name = "Locale",
         breaks = c(e$locale, "(other)"),
         labels = c(e$locale, "Other")) +
@@ -1069,8 +1067,7 @@ plot_webstats_tm <- function(start, end, path) {
     facet_grid(request_type ~ ., scales = "free_y") +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = 'Requests per day', labels = formatter,
-        limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
     ggtitle("Tor Messenger downloads and updates")
@@ -1162,7 +1159,8 @@ plot_advbw_ipv6 <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = copyright_notice, breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "Bandwidth (Gbit/s)", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+      limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
       breaks = c("total", "total_guard", "total_exit", "reachable_guard",
         "reachable_exit", "exiting"),
