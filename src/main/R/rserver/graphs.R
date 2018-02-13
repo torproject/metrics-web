@@ -316,11 +316,7 @@ theme_update(
   plot.title = element_text(hjust = 0.5, margin = margin(b = 11)),
 
   # Leave a little more room to the right for long x axis labels.
-  plot.margin = margin(5.5, 11, 5.5, 5.5),
-
-  # Leave some room between plot and x axis label, which we use for the
-  # copyright notice.
-  axis.title.x = element_text(margin = margin(t = 11))
+  plot.margin = margin(5.5, 11, 5.5, 5.5)
 )
 
 # Set the default line size of geom_line() to 1.
@@ -350,12 +346,13 @@ plot_networksize <- function(start, end, path) {
   networksize <- melt(s, id = "date")
   ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
     colour = variable)) + geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_hue("", breaks = c("relays", "bridges"),
         labels = c("Relays", "Bridges")) +
-    ggtitle("Number of relays")
+    ggtitle("Number of relays") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -380,13 +377,14 @@ plot_versions <- function(start, end, path) {
   ggplot(versions, aes(x = as.Date(date, "%Y-%m-%d"), y = relays,
       colour = version)) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_manual(name = "Tor version",
       values = colours[colours$breaks %in% visible_versions, 2],
       breaks = visible_versions) +
-    ggtitle("Relay versions")
+    ggtitle("Relay versions") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -401,14 +399,15 @@ plot_platforms <- function(start, end, path) {
   ggplot(platforms, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
       colour = variable)) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_manual(name = "Platform",
       breaks = c("Linux", "Darwin", "BSD", "Windows", "Other"),
       labels = c("Linux", "macOS", "BSD", "Windows", "Other"),
       values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#333333")) +
-    ggtitle("Relay platforms")
+    ggtitle("Relay platforms") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -424,7 +423,7 @@ plot_bandwidth <- function(start, end, path) {
   ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
       y = value * 8 / 1e9, colour = variable)) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
@@ -432,6 +431,7 @@ plot_bandwidth <- function(start, end, path) {
         breaks = c("bwadv", "bwhist"),
         labels = c("Advertised bandwidth", "Bandwidth history")) +
     ggtitle("Total relay bandwidth") +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -464,13 +464,14 @@ plot_bwhist_flags <- function(start, end, path) {
   ggplot(bw, aes(x = as.Date(date, "%Y-%m-%d"), y = value * 8 / 1e9,
       colour = variable)) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_manual(name = "",
         values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2")) +
     ggtitle("Bandwidth history by relay flags") +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -486,7 +487,7 @@ plot_dirbytes <- function(start, end, path) {
   ggplot(dir, aes(x = as.Date(date, "%Y-%m-%d"), y = value * 8 / 1e9,
       colour = variable)) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
@@ -494,6 +495,7 @@ plot_dirbytes <- function(start, end, path) {
         breaks = c("dirwrite", "dirread"),
         labels = c("Written dir bytes", "Read dir bytes")) +
     ggtitle("Number of bytes spent on answering directory requests") +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -521,13 +523,14 @@ plot_relayflags <- function(start, end, flags, path) {
       value = rep(NA, length(missing) * 6)), networksize)
   ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
     colour = as.factor(variable))) + geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_manual(name = "Relay flags", values = c("#E69F00",
         "#56B4E9", "#009E73", "#EE6A50", "#000000", "#0072B2"),
         breaks = flags, labels = flags) +
-    ggtitle("Number of relays with relay flags assigned")
+    ggtitle("Number of relays with relay flags assigned") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -561,7 +564,7 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
     geom_line(colour = colour, size = 0.75) +
     geom_ribbon(data = torperf, aes(x = date, ymin = q1/1e3,
       ymax = q3/1e3, fill = "ribbon")) +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_fill_manual(name = paste("Measured times on",
@@ -571,6 +574,7 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
       values = paste(colour, c("", "66"), sep = "")) +
     ggtitle(paste("Time in seconds to complete", filesizeStr,
         "request to", server, "server")) +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -607,7 +611,7 @@ plot_torperf_failures <- function(start, end, source, server, filesize, path) {
   ggplot(torperf, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
     colour = variable)) +
     geom_point(size = 2) +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = percent) +
     scale_colour_hue(name = paste("Problems encountered on",
@@ -616,6 +620,7 @@ plot_torperf_failures <- function(start, end, source, server, filesize, path) {
         labels = c("Timeouts", "Failures")) +
     ggtitle(paste("Timeouts and failures of", filesizeStr,
         "requests to", server, "server")) +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -634,7 +639,7 @@ plot_connbidirect <- function(start, end, path) {
     geom_line(size = 0.75) +
     geom_ribbon(aes(x = date, ymin = X0.25, ymax = X0.75,
                 fill = direction), alpha = 0.5, show_guide = FALSE) +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = percent) +
     scale_colour_hue(name = "Medians and interquartile ranges",
@@ -646,6 +651,7 @@ plot_connbidirect <- function(start, end, path) {
         labels = c("Both reading and writing", "Mostly writing",
                    "Mostly reading")) +
     ggtitle("Fraction of connections used uni-/bidirectionally") +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -696,7 +702,7 @@ plot_bandwidth_flags <- function(start, end, path) {
   ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
       y = value * 8 / 1e9, colour = variable)) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
@@ -704,6 +710,7 @@ plot_bandwidth_flags <- function(start, end, path) {
         values = c("#E69F00", "#D6C827", "#009E73", "#00C34F")) +
     ggtitle(paste("Advertised bandwidth and bandwidth history by",
         "relay flags")) +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -817,10 +824,11 @@ plot_userstats <- function(start, end, node, variable, value, events,
   }
   plot <- plot +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
-    ggtitle(title)
+    ggtitle(title) +
+    labs(caption = copyright_notice)
   if (length(value) > 1) {
     plot <- plot +
       scale_colour_hue(name = "", breaks = value,
@@ -871,12 +879,13 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
     ggplot(u, aes(x = as.Date(date), ymin = low, ymax = high,
                 colour = transport, fill = transport)) +
     geom_ribbon(alpha = 0.5, size = 0.5) +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", limits = c(0, NA), labels = formatter) +
     scale_colour_hue(paste("Top-", top, " transports", sep = "")) +
     scale_fill_hue(paste("Top-", top, " transports", sep = "")) +
     ggtitle(title) +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
     ggsave(filename = path, width = 8, height = 5, dpi = 150)
   }
@@ -894,13 +903,14 @@ plot_advbwdist_perc <- function(start, end, p, path) {
   ggplot(t, aes(x = as.Date(date), y = advbw, colour = percentile)) +
     facet_grid(variable ~ .) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "Percentile",
         breaks = rev(levels(t$percentile))) +
-    ggtitle("Advertised bandwidth distribution")
+    ggtitle("Advertised bandwidth distribution") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -915,12 +925,13 @@ plot_advbwdist_relay <- function(start, end, n, path) {
   ggplot(t, aes(x = as.Date(date), y = advbw, colour = relay)) +
     facet_grid(variable ~ .) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "n", breaks = levels(t$relay)) +
-    ggtitle("Advertised bandwidth of n-th fastest relays")
+    ggtitle("Advertised bandwidth of n-th fastest relays") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -933,10 +944,11 @@ plot_hidserv_dir_onions_seen <- function(start, end, path) {
                         wiqm = ifelse(h$frac >= 0.01, h$wiqm, NA)))
   ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"), y = wiqm)) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "") +
-    ggtitle("Unique .onion addresses")
+    ggtitle("Unique .onion addresses") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -951,10 +963,11 @@ plot_hidserv_rend_relayed_cells <- function(start, end, path) {
   ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"),
       y = wiqm * 8 * 512 / (86400 * 1e6))) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "") +
-    ggtitle("Onion-service traffic in Mbit/s")
+    ggtitle("Onion-service traffic in Mbit/s") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -971,7 +984,7 @@ plot_hidserv_frac_reporting <- function(start, end, path) {
       colour = type)) +
     geom_line() +
     geom_hline(yintercept = 0.01, linetype = 2) +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = percent) +
     scale_colour_hue(name = "",
@@ -980,6 +993,7 @@ plot_hidserv_frac_reporting <- function(start, end, path) {
                                 "Unique .onion addresses")) +
     ggtitle(paste("Fraction of relays reporting onion-service",
                        "statistics")) +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -998,12 +1012,13 @@ plot_webstats_tb <- function(start, end, path) {
     geom_point() +
     geom_line() +
     facet_grid(request_type ~ ., scales = "free_y") +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
-    ggtitle("Tor Browser downloads and updates")
+    ggtitle("Tor Browser downloads and updates") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -1016,7 +1031,7 @@ plot_webstats_tb_platform <- function(start, end, path) {
   ggplot(d, aes(x = log_date, y = count, colour = platform)) +
     geom_point() +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_hue(name = "Platform",
@@ -1024,7 +1039,8 @@ plot_webstats_tb_platform <- function(start, end, path) {
         labels = c("Windows", "macOS", "Linux", "Other", "Unknown")) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
-    ggtitle("Tor Browser downloads by platform")
+    ggtitle("Tor Browser downloads by platform") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -1041,7 +1057,7 @@ plot_webstats_tb_locale <- function(start, end, path) {
   ggplot(d, aes(x = log_date, y = count, colour = locale)) +
     geom_point() +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_hue(name = "Locale",
@@ -1049,7 +1065,8 @@ plot_webstats_tb_locale <- function(start, end, path) {
         labels = c(e$locale, "Other")) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
-    ggtitle("Tor Browser downloads by locale")
+    ggtitle("Tor Browser downloads by locale") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -1065,12 +1082,13 @@ plot_webstats_tm <- function(start, end, path) {
     geom_point() +
     geom_line() +
     facet_grid(request_type ~ ., scales = "free_y") +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA)) +
-    ggtitle("Tor Messenger downloads and updates")
+    ggtitle("Tor Messenger downloads and updates") +
+    labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
@@ -1093,7 +1111,7 @@ plot_relays_ipv6 <- function(start, end, path) {
       value = "count") %>%
     ggplot(aes(x = valid_after_date, y = count, colour = category)) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
@@ -1101,6 +1119,7 @@ plot_relays_ipv6 <- function(start, end, path) {
       labels = c("Total (IPv4) OR", "IPv6 announced OR", "IPv6 reachable OR",
         "IPv6 exiting")) +
     ggtitle("Relays by IP version") +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -1121,13 +1140,14 @@ plot_bridges_ipv6 <- function(start, end, path) {
     gather(total, announced, key = "category", value = "count") %>%
     ggplot(aes(x = valid_after_date, y = count, colour = category)) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
       breaks = c("total", "announced"),
       labels = c("Total (IPv4) OR", "IPv6 announced OR")) +
     ggtitle("Bridges by IP version") +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -1157,7 +1177,7 @@ plot_advbw_ipv6 <- function(start, end, path) {
     ggplot(aes(x = valid_after_date, y = (count * 8) / 1e9,
       colour = category)) +
     geom_line() +
-    scale_x_date(name = copyright_notice, breaks = custom_breaks,
+    scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
@@ -1167,6 +1187,7 @@ plot_advbw_ipv6 <- function(start, end, path) {
       labels = c("Total (IPv4) OR", "Guard total (IPv4)", "Exit total (IPv4)",
         "Reachable guard IPv6 OR", "Reachable exit IPv6 OR", "IPv6 exiting")) +
     ggtitle("Advertised bandwidth by IP version") +
+    labs(caption = copyright_notice) +
     theme(legend.position = "top") +
     guides(colour = guide_legend(nrow = 2, byrow = TRUE))
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
