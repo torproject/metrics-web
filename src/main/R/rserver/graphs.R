@@ -348,7 +348,7 @@ plot_networksize <- function(start, end, path) {
     colour = variable)) + geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_hue("", breaks = c("relays", "bridges"),
         labels = c("Relays", "Bridges")) +
     ggtitle("Number of relays") +
@@ -379,7 +379,7 @@ plot_versions <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_manual(name = "Tor version",
       values = colours[colours$breaks %in% visible_versions, 2],
       breaks = visible_versions) +
@@ -401,7 +401,7 @@ plot_platforms <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_manual(name = "Platform",
       breaks = c("Linux", "Darwin", "BSD", "Windows", "Other"),
       labels = c("Linux", "macOS", "BSD", "Windows", "Other"),
@@ -525,7 +525,7 @@ plot_relayflags <- function(start, end, flags, path) {
     colour = as.factor(variable))) + geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_manual(name = "Relay flags", values = c("#E69F00",
         "#56B4E9", "#009E73", "#EE6A50", "#000000", "#0072B2"),
         breaks = flags, labels = flags) +
@@ -566,13 +566,14 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
       ymax = q3/1e3, fill = "ribbon")) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "s"),
+      limits = c(0, NA)) +
     scale_fill_manual(name = paste("Measured times on",
         ifelse(source == "all", "all sources", source), "per day"),
       breaks = c("line", "ribbon"),
       labels = c("Median", "1st to 3rd quartile"),
       values = paste(colour, c("", "66"), sep = "")) +
-    ggtitle(paste("Time in seconds to complete", filesizeStr,
+    ggtitle(paste("Time to complete", filesizeStr,
         "request to", server, "server")) +
     labs(caption = copyright_notice) +
     theme(legend.position = "top")
@@ -613,7 +614,7 @@ plot_torperf_failures <- function(start, end, source, server, filesize, path) {
     geom_point(size = 2) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = percent) +
+    scale_y_continuous(name = "", labels = percent, limits = c(0, NA)) +
     scale_colour_hue(name = paste("Problems encountered on",
         ifelse(source == "all", "all sources", source)),
         h.start = 45, breaks = c("timeouts", "failures"),
@@ -641,7 +642,7 @@ plot_connbidirect <- function(start, end, path) {
                 fill = direction), alpha = 0.5, show_guide = FALSE) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = percent) +
+    scale_y_continuous(name = "", labels = percent, limits = c(0, NA)) +
     scale_colour_hue(name = "Medians and interquartile ranges",
                      breaks = c("both", "write", "read"),
         labels = c("Both reading and writing", "Mostly writing",
@@ -946,7 +947,7 @@ plot_hidserv_dir_onions_seen <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "") +
+    scale_y_continuous(name = "", limits = c(0, NA), labels = formatter) +
     ggtitle("Unique .onion addresses") +
     labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
@@ -961,12 +962,13 @@ plot_hidserv_rend_relayed_cells <- function(start, end, path) {
              data.frame(date = as.Date(h$date, "%Y-%m-%d"),
                         wiqm = ifelse(h$frac >= 0.01, h$wiqm, NA)))
   ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"),
-      y = wiqm * 8 * 512 / (86400 * 1e6))) +
+      y = wiqm * 8 * 512 / (86400 * 1e9))) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "") +
-    ggtitle("Onion-service traffic in Mbit/s") +
+    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+      limits = c(0, NA)) +
+    ggtitle("Onion-service traffic") +
     labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
@@ -986,7 +988,7 @@ plot_hidserv_frac_reporting <- function(start, end, path) {
     geom_hline(yintercept = 0.01, linetype = 2) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = percent) +
+    scale_y_continuous(name = "", labels = percent, limits = c(0, NA)) +
     scale_colour_hue(name = "",
                      breaks = c("rend-relayed-cells", "dir-onions-seen"),
                      labels = c("Onion-service traffic",
@@ -1113,7 +1115,7 @@ plot_relays_ipv6 <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
       breaks = c("total", "announced", "reachable", "exiting"),
       labels = c("Total (IPv4) OR", "IPv6 announced OR", "IPv6 reachable OR",
@@ -1142,7 +1144,7 @@ plot_bridges_ipv6 <- function(start, end, path) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", limits = c(0, NA)) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
       breaks = c("total", "announced"),
       labels = c("Total (IPv4) OR", "IPv6 announced OR")) +
