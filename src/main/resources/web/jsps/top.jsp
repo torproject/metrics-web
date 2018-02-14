@@ -40,6 +40,9 @@
   <!-- custom styles and javascript -->
   <link rel="stylesheet" href="/css/style.css">
   <script src="/js/script.js"></script>
+  <c:forEach var="additionalStylesheet" items="${additionalStylesheets}">
+  <link rel="stylesheet" href="${additionalStylesheet}">
+  </c:forEach>
 
 </head>
 
