@@ -179,7 +179,7 @@
                   includes="logback.xml" />
       <zipfileset dir="${resources}/web"
                   prefix=""
-                  includes="css/* images/* js/* fonts/**" />
+                  includes="css/* images/* js/* fonts/** rs/**" />
       <zipfileset dir="${resources}/web/jsps"
                   prefix="WEB-INF"
                   includes="*.jsp"/>
