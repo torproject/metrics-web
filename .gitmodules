@@ -4,3 +4,6 @@
 [submodule "src/submods/metrics-lib"]
 	path = src/submods/metrics-lib
 	url = https://git.torproject.org/metrics-lib.git
+[submodule "src/main/resources/web/rs"]
+	path = src/main/resources/web/rs
+	url = https://git.torproject.org/atlas.git
