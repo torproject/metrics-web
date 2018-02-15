@@ -324,6 +324,17 @@
     <url-pattern>/research.html</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>RelaySearch</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.RelaySearchServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RelaySearch</servlet-name>
+    <url-pattern>/rs.html</url-pattern>
+  </servlet-mapping>
+
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
