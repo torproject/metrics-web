@@ -2674,21 +2674,13 @@
   {
     "start": "2017-12-04",
     "ongoing": true,
-    "description": "DDoS attack uses a bug in the KIST scheduler to crash relays by running them out of memory.",
+    "description": "DDoS attack creates load on the network.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-relays/2017-December/013669.html\">tor-relays thread</a>",
       "<a href=\"https://metrics.torproject.org/relayflags.html?start=2017-11-01&end=2018-01-31&flag=Running&flag=Exit&flag=Fast&flag=Guard&flag=Stable&flag=HSDir\">relay graph</a>",
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-December/001604.html\">summary post</a>",
-      "<a href=\"https://bugs.torproject.org/24665\">ticket</a>"
+      "<a href=\"https://bugs.torproject.org/24902\">ticket</a>"
     ]
-  },
-  {
-    "start": "2017-12-12",
-    "end": "2018-01-18",
-    "protocols": [
-      "meek"
-    ],
-    "description": "Outage of the <a href=\"https://atlas.torproject.org/#details/C20658946DD706A7A2181159A1A04CD838570D04\">meek.bamsoftware.com</a> (unthrottled for public use), <a href=\"https://atlas.torproject.org/#details/AA033EEB61601B2B7312D89B62AAA23DC3ED8A34\">meek.bamsoftware.com:7443</a> (former meek-azure, now unused), and <a href=\"https://atlas.torproject.org/#details/D36B0328969EC57AB3085A4470882D99A09C0492\">gaeuploader.meek.bamsoftware.com</a> (used by <a href=\"https://github.com/katherinelitor/GAEuploader\">GAEuploader</a>) bridges."
   },
   {
     "start": "2017-12-05",
@@ -2700,6 +2692,14 @@
     "links": [
       "<a href=\"https://www.techzim.co.zw/2017/12/zimbabwe-internet-outage-here-what-happened/\">article</a>"
     ]
+  },
+  {
+    "start": "2017-12-12",
+    "end": "2018-01-18",
+    "protocols": [
+      "meek"
+    ],
+    "description": "Outage of the <a href=\"https://atlas.torproject.org/#details/C20658946DD706A7A2181159A1A04CD838570D04\">meek.bamsoftware.com</a> (unthrottled for public use), <a href=\"https://atlas.torproject.org/#details/AA033EEB61601B2B7312D89B62AAA23DC3ED8A34\">meek.bamsoftware.com:7443</a> (former meek-azure, now unused), and <a href=\"https://atlas.torproject.org/#details/D36B0328969EC57AB3085A4470882D99A09C0492\">gaeuploader.meek.bamsoftware.com</a> (used by <a href=\"https://github.com/katherinelitor/GAEuploader\">GAEuploader</a>) bridges."
   },
   {
     "start": "2017-12-20",
@@ -2714,7 +2714,7 @@
   },
   {
     "start": "2017-12-21",
-    "description": "Release of tor 0.3.2.8-rc, intended to fix the bug that was enabling an ongoing DDoS on relays.",
+    "description": "Release of tor 0.3.2.8-rc, intended to fix the KIST bug that enabled a DoS on relays by running them out of memory..",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2017-December/043844.html\">announcement</a>",
       "<a href=\"https://bugs.torproject.org/24665\">ticket</a>"
@@ -2732,6 +2732,19 @@
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-11-01&end=2018-01-20&country=ir\">relay graph</a>",
       "<a href=\"https://metrics.torproject.org/userstats-bridge-country.html?start=2017-11-01&end=2018-01-20&country=ir\">bridge graph</a>",
       "<a href=\"https://twitter.com/nusenu_/status/948914485045145601\">tweet</a>"
+    ]
+  },
+  {
+    "start": "2018-01-01",
+    "places": [
+      "ae"
+    ],
+    "protocols": [
+      "relay"
+    ],
+    "description": "User report that the UAE blocked Tor, bridges work.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/25137#comment:17\">comment</a>"
     ]
   },
   {
@@ -2759,6 +2772,51 @@
     "links": [
       "<a href=\"https://metrics.torproject.org/versions.html?start=2017-12-01&end=2018-03-01\">relay versions graph</a>"
     ]
+  },
+  {
+    "start": "2018-01-20",
+    "protocols": [
+      "relay"
+    ],
+    "description": "Some more directory authorities upgrade to 0.3.2.9 which enforces new requirements for the exit flag. ~50 relays lose the exit flag",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-relays/2018-February/014478.html\">tor-relays post</a>"
+    ]
+  },
+  {
+    "start": "2018-02-08",
+    "protocols": [
+      "ipv4",
+      "ipv6"
+    ],
+    "description": "geoip and geoip6 databases updated to \"February 7 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest FF83AD73DE7672C77EDF8888F4B241642C7C90F7</code>, <code>geoip6-db-digest B1CDBFEB7C88F82EF3B5289CAFEED1321FA4693F</code>).",
+    "links": [
+      "<a href=\"https://gitweb.torproject.org/tor.git/commit/?id=f1278b7e573f01edb8bc3ab4d7fbfbd65b5d2c60\">commit</a>"
+    ]
+  },
+  {
+    "start": "2018-02-10",
+    "protocols": [
+      "relay"
+    ],
+    "description": "Tor 0.3.3.2-alpha is released (containing important denial-of-service migitations for relays)",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-0332-alpha-released-bugfixes-and-dos-prevention\">blog</a>"
+    ]
+  },
+  {
+    "start": "2018-02-11",
+    "protocols": [
+      "relay"
+    ],
+    "description": "Tor 0.3.3.2-alpha reaches FreeBSD repositories"
+  },
+  {
+    "start": "2018-02-12",
+    "protocols": [
+      "relay"
+    ],
+    "description": "Tor 0.3.3.2-alpha reaches deb.torproject.org repositories"
   },
   {
     "start": "2016-02-24",
@@ -2891,7 +2949,7 @@
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-06-01&country=ae&events=off\">graph</a>",
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-January/000284.html\">metrics-team thread</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/5pbukk/united_arab_emirates_went_from_10k_tor_users_to/\">reddit thread</a>",
-      "<a href=\"https://trac.torproject.org/projects/tor/ticket/25137#comment:10\">comment about botnet</a>"
+      "<a href=\"https://bugs.torproject.org/25137#comment:10\">comment about botnet</a>"
     ],
     "unknown": true
   },
@@ -3327,7 +3385,7 @@
       "<OR>",
       "relay"
     ],
-    "description": "Steady increase of relay users in Germany, from 180k to around 500k. It could increase further starting 2017-12-10.",
+    "description": "Steady increase of relay users in Germany, from 180k to around 500k. It would increase further starting 2017-12-10.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-08-15&end=2017-12-01&country=de&events=off\">de graph</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/7b53kq/direct_users_from_germany_go_from_200k_to_500k_in/\">reddit thread</a>"
@@ -3369,7 +3427,7 @@
   },
   {
     "start": "2017-12-10",
-    "ongoing": true,
+    "end": "2018-02-01",
     "places": [
       "de"
     ],
@@ -3377,7 +3435,7 @@
       "<OR>",
       "relay"
     ],
-    "description": "Further increase of relay users in Germany, from 500k to over 1M.",
+    "description": "Further, slow increase of relay users in Germany, from 500k to over 1.5M.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-11-01&end=2018-01-15&country=de&events=off\">graph</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/7ldrox/tor_usage_in_germany_what_happend/\">reddit thread</a>"
