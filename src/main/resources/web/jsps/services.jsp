@@ -29,7 +29,7 @@
       <h2>Network status <a href="#status" name="status" class="anchor">#</a></h2>
       <p>The following tools let you explore currently running relays and bridges.</p>
       <ul>
-        <li><a href="https://atlas.torproject.org/">Relay Search</a> displays data about single relays and bridges in the Tor Network.</li>
+        <li><a href="/rs.html">Relay Search</a> displays data about single relays and bridges in the Tor Network.</li>
         <li><a href="https://consensus-health.torproject.org/" target="_blank">Consensus Health</a> displays information about the current directory consensus and votes.</li>
         <li><a href="https://tormap.void.gr/" target="_blank">Tor Map</a> displays an interactive map of Tor relays and provides KML files for relay locations.</li>
         <li><a href="https://nusenu.github.io/OrNetStats/" target="_blank">OrNetStats</a> displays statistics for monitoring diversity in the Tor network.</li>
