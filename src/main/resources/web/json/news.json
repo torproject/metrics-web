@@ -1453,7 +1453,7 @@
     "protocols": [
       "meek"
     ],
-    "description": "Established an unthrottled bridge <a href=\"https://atlas.torproject.org/#details/C20658946DD706A7A2181159A1A04CD838570D04\">C20658946DD706A7A2181159A1A04CD838570D04</a> for people who set up their own meek CDN configuration."
+    "description": "Established an unthrottled bridge <a href=\"https://metrics.torproject.org/rs.html#details/C20658946DD706A7A2181159A1A04CD838570D04\">C20658946DD706A7A2181159A1A04CD838570D04</a> for people who set up their own meek CDN configuration."
   },
   {
     "start": "2016-01-07",
@@ -1819,7 +1819,7 @@
     "protocols": [
       "obfs3"
     ],
-    "description": "Default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>) upgrade and begin reporting statistics to the new bridge authority Bifroest."
+    "description": "Default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://metrics.torproject.org/rs.html#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>) upgrade and begin reporting statistics to the new bridge authority Bifroest."
   },
   {
     "start": "2016-09-23",
@@ -1827,7 +1827,7 @@
     "protocols": [
       "obfs3"
     ],
-    "description": "Outage of default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://atlas.torproject.org/#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>). (Start date not known for sure, though it must have been after 2016-09-23; discussed in non-archived tor-team email.)"
+    "description": "Outage of default obfs3 bridges \"Unnamed\" and \"Unnamed\" (fingerprint <a href=\"https://metrics.torproject.org/rs.html#details/AF9F66B7B04F8FF6F32D455F05135250A16543C9\">AF9F66B7B04F8FF6F32D455F05135250A16543C9</a>). (Start date not known for sure, though it must have been after 2016-09-23; discussed in non-archived tor-team email.)"
   },
   {
     "start": "2016-09-24",
@@ -2003,7 +2003,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9C805C955CB124D188C0D44F271E9BE57DE2109\">Lisbeth</a> turns on timing obfuscation (<code>iat-mode=1</code>).",
+    "description": "Default obfs4 bridge <a href=\"https://metrics.torproject.org/rs.html#details/D9C805C955CB124D188C0D44F271E9BE57DE2109\">Lisbeth</a> turns on timing obfuscation (<code>iat-mode=1</code>).",
     "links": [
       "<a href=\"https://bugs.torproject.org/20837\">ticket</a>"
     ]
@@ -2246,7 +2246,7 @@
     "protocols": [
       "snowflake"
     ],
-    "description": "Set <code>AssumeReachable 1</code> on the Snowflake bridge <a href=\"https://atlas.torproject.org/#details/2B280B23E1107BB62ABFC40DDCC8824814F80A72\">2B280B23E1107BB62ABFC40DDCC8824814F80A72</a> in an attempt to make it start publishing statistics.",
+    "description": "Set <code>AssumeReachable 1</code> on the Snowflake bridge <a href=\"https://metrics.torproject.org/rs.html#details/2B280B23E1107BB62ABFC40DDCC8824814F80A72\">2B280B23E1107BB62ABFC40DDCC8824814F80A72</a> in an attempt to make it start publishing statistics.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-May/012243.html\">mailing list post</a>"
     ]
@@ -2290,7 +2290,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Set <code>AssumeReachable 1</code> on the default obfs4 bridges <a href=\"https://atlas.torproject.org/#details/C8CBDB2464FC9804A69531437BCF2BE31FDD2EE4\">cymrubridge31</a> and <a href=\"https://atlas.torproject.org/#details/0BAC39417268B96B9F514E7F63FA6FBA1A788955\">cymrubridge33</a> in an attempt to make them publish statistics.",
+    "description": "Set <code>AssumeReachable 1</code> on the default obfs4 bridges <a href=\"https://metrics.torproject.org/rs.html#details/C8CBDB2464FC9804A69531437BCF2BE31FDD2EE4\">cymrubridge31</a> and <a href=\"https://metrics.torproject.org/rs.html#details/0BAC39417268B96B9F514E7F63FA6FBA1A788955\">cymrubridge33</a> in an attempt to make them publish statistics.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-dev/2017-May/012283.html\">mailing list post</a>"
     ]
@@ -2301,7 +2301,7 @@
       "ipv6",
       "obfs4"
     ],
-    "description": "Tor Browser 7.0 released. Adds an IPv6 address for default obfs4 bridge Lisbeth. Adds new default obfs4 bridges <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a> and <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
+    "description": "Tor Browser 7.0 released. Adds an IPv6 address for default obfs4 bridge Lisbeth. Adds new default obfs4 bridges <a href=\"https://metrics.torproject.org/rs.html#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a> and <a href=\"https://metrics.torproject.org/rs.html#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
     "links": [
       "<a href=\"https://blog.torproject.org/blog/tor-browser-70-released\">blog post</a>",
       "<a href=\"https://bugs.torproject.org/22429\">IPv6 ticket</a>",
@@ -2335,7 +2335,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>.",
+    "description": "Outage of default obfs4 bridge <a href=\"https://metrics.torproject.org/rs.html#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-June/001211.html\">mailing list post</a>"
     ]
@@ -2346,7 +2346,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
+    "description": "Outage of default obfs4 bridge <a href=\"https://metrics.torproject.org/rs.html#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-June/001211.html\">mailing list post</a>"
     ]
@@ -2369,7 +2369,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>.",
+    "description": "Outage of default obfs4 bridge <a href=\"https://metrics.torproject.org/rs.html#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
     ]
@@ -2380,7 +2380,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
+    "description": "Outage of default obfs4 bridge <a href=\"https://metrics.torproject.org/rs.html#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
     ]
@@ -2399,7 +2399,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
+    "description": "Outage of default obfs4 bridge <a href=\"https://metrics.torproject.org/rs.html#details/D9E712E593400635462172121B7DB90B07669F71\">dragon</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
     ]
@@ -2410,7 +2410,7 @@
     "protocols": [
       "obfs4"
     ],
-    "description": "Outage of default obfs4 bridge <a href=\"https://atlas.torproject.org/#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>.",
+    "description": "Outage of default obfs4 bridge <a href=\"https://metrics.torproject.org/rs.html#details/854173307E33686BBBAC36A3A093BEF320B719D4\">frosty</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-project/2017-July/001280.html\">mailing list post</a>"
     ]
@@ -2434,7 +2434,7 @@
     ],
     "description": "Outage of meek-amazon bridge, caused by an expired certificate.",
     "links": [
-      "<a href=\"https://atlas.torproject.org/#details/F4AD82B2032EDEF6C02C5A529C42CFAFE516564D\">Atlas</a>",
+      "<a href=\"https://metrics.torproject.org/rs.html#details/F4AD82B2032EDEF6C02C5A529C42CFAFE516564D\">Atlas</a>",
       "<a href=\"https://crt.sh/?id=130970041\">expired certificate</a>",
       "<a href=\"https://crt.sh/?id=192217077\">new certificate</a>"
     ]
@@ -2489,7 +2489,7 @@
     "protocols": [
       "bridge"
     ],
-    "description": "Outage of the bridge authority <a href=\"https://atlas.torproject.org/#details/1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1\">Bifroest</a>.",
+    "description": "Outage of the bridge authority <a href=\"https://metrics.torproject.org/rs.html#details/1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1\">Bifroest</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-August/000441.html\">mailing list post</a>",
       "<a href=\"https://metrics.torproject.org/networksize.html?start=2017-07-01&end=2017-08-27\">graph</a>"
@@ -2537,7 +2537,7 @@
     "protocols": [
       "bridge"
     ],
-    "description": "Outage of the bridge authority <a href=\"https://atlas.torproject.org/#details/1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1\">Bifroest</a>."
+    "description": "Outage of the bridge authority <a href=\"https://metrics.torproject.org/rs.html#details/1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1\">Bifroest</a>."
   },
   {
     "start": "2017-09-15",
@@ -2699,7 +2699,7 @@
     "protocols": [
       "meek"
     ],
-    "description": "Outage of the <a href=\"https://atlas.torproject.org/#details/C20658946DD706A7A2181159A1A04CD838570D04\">meek.bamsoftware.com</a> (unthrottled for public use), <a href=\"https://atlas.torproject.org/#details/AA033EEB61601B2B7312D89B62AAA23DC3ED8A34\">meek.bamsoftware.com:7443</a> (former meek-azure, now unused), and <a href=\"https://atlas.torproject.org/#details/D36B0328969EC57AB3085A4470882D99A09C0492\">gaeuploader.meek.bamsoftware.com</a> (used by <a href=\"https://github.com/katherinelitor/GAEuploader\">GAEuploader</a>) bridges."
+    "description": "Outage of the <a href=\"https://metrics.torproject.org/rs.html#details/C20658946DD706A7A2181159A1A04CD838570D04\">meek.bamsoftware.com</a> (unthrottled for public use), <a href=\"https://metrics.torproject.org/rs.html#details/AA033EEB61601B2B7312D89B62AAA23DC3ED8A34\">meek.bamsoftware.com:7443</a> (former meek-azure, now unused), and <a href=\"https://metrics.torproject.org/rs.html#details/D36B0328969EC57AB3085A4470882D99A09C0492\">gaeuploader.meek.bamsoftware.com</a> (used by <a href=\"https://github.com/katherinelitor/GAEuploader\">GAEuploader</a>) bridges."
   },
   {
     "start": "2017-12-20",
@@ -3294,7 +3294,7 @@
       "ipv6",
       "obfs4"
     ],
-    "description": "Jump in IPv6 users of the <a href=\"https://atlas.torproject.org/#details/D9C805C955CB124D188C0D44F271E9BE57DE2109\">Lisbeth</a> default obfs4 bridge.",
+    "description": "Jump in IPv6 users of the <a href=\"https://metrics.torproject.org/rs.html#details/D9C805C955CB124D188C0D44F271E9BE57DE2109\">Lisbeth</a> default obfs4 bridge.",
     "links": [
       "<a href=\"https://bugs.torproject.org/22429#comment:7\">comment</a>"
     ],
