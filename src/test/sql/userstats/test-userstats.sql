@@ -192,6 +192,7 @@ PREPARE new_merged(timestamp without time zone,
 
 EXECUTE new_imported('2013-04-11 14:00:00', '2013-04-11 15:00:00');
 SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 15:00:00'::timestamp without time zone)$$,
   'Should insert new entry into empty table as is');
@@ -200,7 +201,8 @@ DELETE FROM merged;
 
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 14:00:00');
 EXECUTE new_imported('2013-04-11 16:00:00', '2013-04-11 17:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 14:00:00'::timestamp without time zone),
            ('2013-04-11 17:00:00'::timestamp without time zone)$$,
@@ -210,7 +212,8 @@ DELETE FROM merged;
 
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 15:00:00');
 EXECUTE new_imported('2013-04-11 15:00:00', '2013-04-11 17:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 17:00:00'::timestamp without time zone)$$,
   'Should merge two contiguous entries');
@@ -219,7 +222,8 @@ DELETE FROM merged;
 
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 16:00:00');
 EXECUTE new_imported('2013-04-11 14:00:00', '2013-04-11 17:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 16:00:00'::timestamp without time zone)$$,
   'Should skip entry that starts before and ends after the start of ' ||
@@ -229,7 +233,8 @@ DELETE FROM merged;
 
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 15:00:00');
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 16:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 15:00:00'::timestamp without time zone)$$,
   'Should skip entry that starts at and ends after the start of ' ||
@@ -239,7 +244,8 @@ DELETE FROM merged;
 
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 16:00:00');
 EXECUTE new_imported('2013-04-11 14:00:00', '2013-04-11 15:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 16:00:00'::timestamp without time zone)$$,
   'Should skip entry that starts after another new entry starts and ' ||
@@ -249,7 +255,8 @@ DELETE FROM merged;
 
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 16:00:00');
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 16:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 16:00:00'::timestamp without time zone)$$,
   'Should skip entry that has same start and end as another new entry');
@@ -258,7 +265,8 @@ DELETE FROM merged;
 
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 16:00:00');
 EXECUTE new_imported('2013-04-11 14:00:00', '2013-04-11 16:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 16:00:00'::timestamp without time zone)$$,
   'Should skip entry that starts before and ends at the end of ' ||
@@ -268,7 +276,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 16:00:00', '2013-04-11 17:00:00');
 EXECUTE new_imported('2013-04-11 14:00:00', '2013-04-11 15:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 15:00:00'::timestamp without time zone),
            ('2013-04-11 17:00:00'::timestamp without time zone)$$,
@@ -278,7 +287,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 15:00:00', '2013-04-11 16:00:00');
 EXECUTE new_imported('2013-04-11 14:00:00', '2013-04-11 15:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 16:00:00'::timestamp without time zone)$$,
   'Should merge entry that ends when existing entry starts');
@@ -287,7 +297,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 14:00:00', '2013-04-11 15:00:00');
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 14:30:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_start FROM merged',
   $$VALUES ('2013-04-11 14:00:00'::timestamp without time zone)$$,
   'Should skip entry that starts before but ends after existing entry ' ||
@@ -298,7 +309,8 @@ DELETE FROM merged;
 EXECUTE new_merged('2013-04-11 11:00:00', '2013-04-11 13:00:00');
 EXECUTE new_merged('2013-04-11 14:00:00', '2013-04-11 16:00:00');
 EXECUTE new_imported('2013-04-11 13:00:00', '2013-04-11 15:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 13:00:00'::timestamp without time zone),
            ('2013-04-11 16:00:00'::timestamp without time zone)$$,
@@ -309,7 +321,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 14:00:00', '2013-04-11 17:00:00');
 EXECUTE new_imported('2013-04-11 14:00:00', '2013-04-11 15:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 17:00:00'::timestamp without time zone)$$,
   'Should skip entry that starts when existing entry starts');
@@ -318,7 +331,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 14:00:00', '2013-04-11 17:00:00');
 EXECUTE new_imported('2013-04-11 15:00:00', '2013-04-11 16:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 17:00:00'::timestamp without time zone)$$,
   'Should skip entry that starts after and ends before existing entry');
@@ -327,7 +341,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 14:00:00', '2013-04-11 17:00:00');
 EXECUTE new_imported('2013-04-11 14:00:00', '2013-04-11 17:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 17:00:00'::timestamp without time zone)$$,
   'Should skip entry that is already contained');
@@ -336,7 +351,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 14:00:00', '2013-04-11 17:00:00');
 EXECUTE new_imported('2013-04-11 16:00:00', '2013-04-11 17:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 17:00:00'::timestamp without time zone)$$,
   'Should skip entry that ends when existing entry ends');
@@ -345,7 +361,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 14:00:00', '2013-04-11 17:00:00');
 EXECUTE new_imported('2013-04-11 16:00:00', '2013-04-11 18:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 17:00:00'::timestamp without time zone)$$,
   'Should skip entry that starts before but ends after existing entry ' ||
@@ -356,7 +373,8 @@ DELETE FROM merged;
 EXECUTE new_merged('2013-04-11 14:00:00', '2013-04-11 17:00:00');
 EXECUTE new_merged('2013-04-11 18:00:00', '2013-04-11 19:00:00');
 EXECUTE new_imported('2013-04-11 16:00:00', '2013-04-11 18:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 17:00:00'::timestamp without time zone),
            ('2013-04-11 19:00:00'::timestamp without time zone)$$,
@@ -368,7 +386,8 @@ DELETE FROM merged;
 EXECUTE new_merged('2013-04-11 11:00:00', '2013-04-11 13:00:00');
 EXECUTE new_merged('2013-04-11 15:00:00', '2013-04-11 17:00:00');
 EXECUTE new_imported('2013-04-11 12:00:00', '2013-04-11 16:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 13:00:00'::timestamp without time zone),
            ('2013-04-11 17:00:00'::timestamp without time zone)$$,
@@ -379,7 +398,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 14:00:00', '2013-04-11 15:00:00');
 EXECUTE new_imported('2013-04-11 15:00:00', '2013-04-11 16:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 16:00:00'::timestamp without time zone)$$,
   'Should merge entry that ends when existing entry starts');
@@ -388,7 +408,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 14:00:00', '2013-04-11 15:00:00');
 EXECUTE new_imported('2013-04-11 16:00:00', '2013-04-11 17:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 15:00:00'::timestamp without time zone),
            ('2013-04-11 17:00:00'::timestamp without time zone)$$,
@@ -398,7 +419,8 @@ DELETE FROM merged;
 
 EXECUTE new_merged('2013-04-11 15:00:00', '2013-04-11 16:00:00');
 EXECUTE new_imported('2013-04-11 14:00:00', '2013-04-11 17:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 16:00:00'::timestamp without time zone)$$,
   'Should skip entry that starts before existing entry starts and ' ||
@@ -409,7 +431,8 @@ DELETE FROM merged;
 EXECUTE new_merged('2013-04-11 13:00:00', '2013-04-11 14:00:00');
 EXECUTE new_merged('2013-04-11 15:00:00', '2013-04-11 16:00:00');
 EXECUTE new_imported('2013-04-11 12:00:00', '2013-04-11 17:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 14:00:00'::timestamp without time zone),
            ('2013-04-11 16:00:00'::timestamp without time zone)$$,
@@ -420,7 +443,8 @@ DELETE FROM merged;
 
 EXECUTE new_imported('2013-04-11 23:00:00', '2013-04-12 00:00:00');
 EXECUTE new_imported('2013-04-12 00:00:00', '2013-04-12 01:00:00');
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-12 00:00:00'::timestamp without time zone),
            ('2013-04-12 01:00:00'::timestamp without time zone)$$,
@@ -433,7 +457,8 @@ INSERT INTO imported (fingerprint, node, metric, country, transport,
   version, stats_start, stats_end, val) VALUES
   ('9876543210987654321098765432109876543210', 'relay', 'status', '', '',
   '', '2013-04-11 12:00:00', '2013-04-11 17:00:00', 0);
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 17:00:00'::timestamp without time zone),
            ('2013-04-11 17:00:00'::timestamp without time zone)$$,
@@ -447,7 +472,8 @@ INSERT INTO imported (fingerprint, node, metric, country, transport,
   version, stats_start, stats_end, val) VALUES
   ('9876543210987654321098765432109876543210', 'relay', 'status', '', '',
   '', '2013-04-11 14:00:00', '2013-04-11 16:00:00', 0);
--- SELECT merge(); -- TODO fix: ERROR:  relation "merged_part" already exists
+SELECT merge();
+DROP TABLE merged_part;
 SELECT bag_eq('SELECT stats_end FROM merged',
   $$VALUES ('2013-04-11 15:00:00'::timestamp without time zone),
            ('2013-04-11 16:00:00'::timestamp without time zone)$$,
