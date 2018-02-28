@@ -21,8 +21,6 @@ public class Metric {
 
   private String[] parameters;
 
-  private String[] data;
-
   private String[] table_headers;
 
   private String[] table_cell_formats;
@@ -73,10 +71,6 @@ public class Metric {
 
   public String[] getDataColumnSpec() {
     return this.data_column_spec;
-  }
-
-  public String[] getData() {
-    return this.data;
   }
 
   public boolean getIncludeRelatedEvents() {

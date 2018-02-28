@@ -50,7 +50,6 @@ public class LinkServlet extends MetricServlet {
     }
     request.setAttribute("description",
         this.descriptions.get(requestedId));
-    request.setAttribute("data", this.data.get(requestedId));
     request.getRequestDispatcher("WEB-INF/link.jsp").forward(request,
         response);
   }

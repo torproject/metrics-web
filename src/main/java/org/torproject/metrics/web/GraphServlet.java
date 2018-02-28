@@ -151,7 +151,6 @@ public class GraphServlet extends MetricServlet {
     }
     request.setAttribute("description",
         this.descriptions.get(requestedId));
-    request.setAttribute("data", this.data.get(requestedId));
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Date defaultEndDate = new Date();

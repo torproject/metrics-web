@@ -41,7 +41,8 @@ public class GraphImageServlet extends HttpServlet {
     String requestedGraph = request.getRequestURI();
     String fileType = null;
     if (requestedGraph.endsWith(".png")
-        || requestedGraph.endsWith(".pdf")) {
+        || requestedGraph.endsWith(".pdf")
+        || requestedGraph.endsWith(".csv")) {
       fileType = requestedGraph.substring(requestedGraph.length() - 3);
       requestedGraph = requestedGraph.substring(0, requestedGraph.length()
           - 4);

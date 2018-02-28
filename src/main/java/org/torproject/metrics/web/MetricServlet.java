@@ -31,8 +31,6 @@ public abstract class MetricServlet extends AnyServlet {
 
   protected Map<String, String[]> tableCellFormats = new HashMap<>();
 
-  protected Map<String, String[]> data = new HashMap<>();
-
   protected Map<String, Category> categoriesById = new HashMap<>();
 
   protected Set<String> includeRelatedEvents = new HashSet<>();
@@ -61,9 +59,6 @@ public abstract class MetricServlet extends AnyServlet {
       }
       if (metric.getTableCellFormats() != null) {
         this.tableCellFormats.put(id, metric.getTableCellFormats());
-      }
-      if (metric.getData() != null) {
-        this.data.put(id, metric.getData());
       }
       if (metric.getIncludeRelatedEvents()) {
         this.includeRelatedEvents.add(id);

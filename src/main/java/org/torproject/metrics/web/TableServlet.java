@@ -62,7 +62,6 @@ public class TableServlet extends MetricServlet {
         this.descriptions.get(requestedId));
     request.setAttribute("tableheader",
         this.tableHeaders.get(requestedId));
-    request.setAttribute("data", this.data.get(requestedId));
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Date defaultEndDate = new Date();

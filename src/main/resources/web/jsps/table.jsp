@@ -64,15 +64,6 @@
     </p>
 </form>
 
-<c:if test="${fn:length(data) > 0}">
-<p>Download underlying data:</p>
-<ul>
-<c:forEach var="row" items="${data}">
-<li><a href="stats/${row}.csv">CSV</a> (<a href="stats.html#${row}">format</a>)</li>
-</c:forEach>
-</ul>
-</c:if>
-
             </div><!-- col-md-4 -->
           </div><!-- row -->
         </div><!-- tab-pane -->

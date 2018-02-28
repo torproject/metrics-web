@@ -124,8 +124,13 @@ public class RObjectGenerator implements ServletContextListener {
     if (checkedParameters == null) {
       return null;
     }
-    StringBuilder queryBuilder =
-        new StringBuilder().append(function).append("(");
+    StringBuilder queryBuilder = new StringBuilder();
+    if ("csv".equalsIgnoreCase(fileType)) {
+      queryBuilder.append("write_");
+    } else {
+      queryBuilder.append("plot_");
+    }
+    queryBuilder.append(function).append("(");
     StringBuilder imageFilenameBuilder =
         new StringBuilder(requestedGraph);
     for (Map.Entry<String, String[]> parameter

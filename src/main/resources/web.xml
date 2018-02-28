@@ -121,62 +121,91 @@
     <servlet-name>GraphImage</servlet-name>
     <url-pattern>/networksize.png</url-pattern>
     <url-pattern>/networksize.pdf</url-pattern>
+    <url-pattern>/networksize.csv</url-pattern>
     <url-pattern>/relaycountries.png</url-pattern>
     <url-pattern>/relaycountries.pdf</url-pattern>
+    <url-pattern>/relaycountries.csv</url-pattern>
     <url-pattern>/relayflags.png</url-pattern>
     <url-pattern>/relayflags.pdf</url-pattern>
+    <url-pattern>/relayflags.csv</url-pattern>
     <url-pattern>/versions.png</url-pattern>
     <url-pattern>/versions.pdf</url-pattern>
+    <url-pattern>/versions.csv</url-pattern>
     <url-pattern>/platforms.png</url-pattern>
     <url-pattern>/platforms.pdf</url-pattern>
+    <url-pattern>/platforms.csv</url-pattern>
     <url-pattern>/bandwidth.png</url-pattern>
     <url-pattern>/bandwidth.pdf</url-pattern>
+    <url-pattern>/bandwidth.csv</url-pattern>
     <url-pattern>/bwhist-flags.png</url-pattern>
     <url-pattern>/bwhist-flags.pdf</url-pattern>
+    <url-pattern>/bwhist-flags.csv</url-pattern>
     <url-pattern>/bandwidth-flags.png</url-pattern>
     <url-pattern>/bandwidth-flags.pdf</url-pattern>
+    <url-pattern>/bandwidth-flags.csv</url-pattern>
     <url-pattern>/dirbytes.png</url-pattern>
     <url-pattern>/dirbytes.pdf</url-pattern>
+    <url-pattern>/dirbytes.csv</url-pattern>
     <url-pattern>/torperf.png</url-pattern>
     <url-pattern>/torperf.pdf</url-pattern>
+    <url-pattern>/torperf.csv</url-pattern>
     <url-pattern>/torperf-failures.png</url-pattern>
     <url-pattern>/torperf-failures.pdf</url-pattern>
+    <url-pattern>/torperf-failures.csv</url-pattern>
     <url-pattern>/connbidirect.png</url-pattern>
     <url-pattern>/connbidirect.pdf</url-pattern>
+    <url-pattern>/connbidirect.csv</url-pattern>
     <url-pattern>/userstats-relay-country.png</url-pattern>
     <url-pattern>/userstats-relay-country.pdf</url-pattern>
+    <url-pattern>/userstats-relay-country.csv</url-pattern>
     <url-pattern>/userstats-bridge-country.png</url-pattern>
     <url-pattern>/userstats-bridge-country.pdf</url-pattern>
+    <url-pattern>/userstats-bridge-country.csv</url-pattern>
     <url-pattern>/userstats-bridge-transport.png</url-pattern>
     <url-pattern>/userstats-bridge-transport.pdf</url-pattern>
+    <url-pattern>/userstats-bridge-transport.csv</url-pattern>
     <url-pattern>/userstats-bridge-combined.png</url-pattern>
     <url-pattern>/userstats-bridge-combined.pdf</url-pattern>
+    <url-pattern>/userstats-bridge-combined.csv</url-pattern>
     <url-pattern>/userstats-bridge-version.png</url-pattern>
     <url-pattern>/userstats-bridge-version.pdf</url-pattern>
+    <url-pattern>/userstats-bridge-version.csv</url-pattern>
     <url-pattern>/advbwdist-perc.png</url-pattern>
     <url-pattern>/advbwdist-perc.pdf</url-pattern>
+    <url-pattern>/advbwdist-perc.csv</url-pattern>
     <url-pattern>/advbwdist-relay.png</url-pattern>
     <url-pattern>/advbwdist-relay.pdf</url-pattern>
+    <url-pattern>/advbwdist-relay.csv</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.png</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.pdf</url-pattern>
+    <url-pattern>/hidserv-dir-onions-seen.csv</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.png</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.pdf</url-pattern>
+    <url-pattern>/hidserv-rend-relayed-cells.csv</url-pattern>
     <url-pattern>/hidserv-frac-reporting.png</url-pattern>
     <url-pattern>/hidserv-frac-reporting.pdf</url-pattern>
+    <url-pattern>/hidserv-frac-reporting.csv</url-pattern>
     <url-pattern>/webstats-tb.png</url-pattern>
     <url-pattern>/webstats-tb.pdf</url-pattern>
+    <url-pattern>/webstats-tb.csv</url-pattern>
     <url-pattern>/webstats-tb-platform.png</url-pattern>
     <url-pattern>/webstats-tb-platform.pdf</url-pattern>
+    <url-pattern>/webstats-tb-platform.csv</url-pattern>
     <url-pattern>/webstats-tb-locale.png</url-pattern>
     <url-pattern>/webstats-tb-locale.pdf</url-pattern>
+    <url-pattern>/webstats-tb-locale.csv</url-pattern>
     <url-pattern>/webstats-tm.png</url-pattern>
     <url-pattern>/webstats-tm.pdf</url-pattern>
-    <url-pattern>/relays-ipv6.pdf</url-pattern>
+    <url-pattern>/webstats-tm.csv</url-pattern>
     <url-pattern>/relays-ipv6.png</url-pattern>
-    <url-pattern>/bridges-ipv6.pdf</url-pattern>
+    <url-pattern>/relays-ipv6.pdf</url-pattern>
+    <url-pattern>/relays-ipv6.csv</url-pattern>
     <url-pattern>/bridges-ipv6.png</url-pattern>
-    <url-pattern>/advbw-ipv6.pdf</url-pattern>
+    <url-pattern>/bridges-ipv6.pdf</url-pattern>
+    <url-pattern>/bridges-ipv6.csv</url-pattern>
     <url-pattern>/advbw-ipv6.png</url-pattern>
+    <url-pattern>/advbw-ipv6.pdf</url-pattern>
+    <url-pattern>/advbw-ipv6.csv</url-pattern>
   </servlet-mapping>
 
   <servlet>
