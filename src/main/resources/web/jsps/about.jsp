@@ -24,6 +24,43 @@
       through a rigorous review and discussion process before appearing here.
       We never publish statistics&mdash;or aggregate statistics&mdash;of
       sensitive data, such as unencrypted contents of traffic.</p>
+      <p>The goals of a privacy and anonymity network like Tor are not easily
+      combined with extensive data gathering, but at the same time data is needed for
+      monitoring, understanding, and improving the network. Data can be used to
+      detect possible censorship events or attacks against the network. Safety and
+      privacy concerns regarding data collection by Tor Metrics are guided by the <a
+      href="https://research.torproject.org/safetyboard.html#guidelines">Tor Research
+      Safety Board's guidelines</a>.  Safety and privacy assessment is usually done
+      openly by discussion during the proposal process for changes to the Tor source,
+      and/or supported by closer analysis in form of <a
+      href="https://research.torproject.org/techreports.html">Tor Technical
+      Reports</a>.</p>
+      <p>For data we collect from the public Tor network, we will always follow
+      three main guidelines:</p>
+      <dl class="dl-horizontal">
+      <dt>Data minimalism</dt>
+      <dd>The first and most important guideline is that only the minimum
+      amount of statistical data should be gathered to solve a given problem.
+      The level of detail of measured data should be as small as possible.</dd>
+      <dt>Source aggregation</dt>
+      <dd>Possibly sensitive data should exist for as short a time
+      as possible. Data should be aggregated at its source, including
+      categorizing single events and memorizing category counts only, summing
+      up event counts over large time frames, and being imprecise regarding
+      exact event counts.</dd>
+      <dt>Transparency</dt>
+      <dd>All algorithms to gather statistical data need to be discussed
+      publicly before deploying them. All measured statistical data should be
+      made publicly available as a safeguard to not gather data that is too
+      sensitive.</dd>
+      </dl>
+      <p>You can read more about safety considerations when collecting data in
+      the Tor network in "<a
+      href="https://www.freehaven.net/anonbib/#wecsr10measuring-tor">A Case
+      Study on Measuring Statistical Data in the Tor Anonymity Network</a>" by
+      Karsten Loesing, Steven J. Murdoch, and Roger Dingledine.  <i>In the
+      Proceedings of the Workshop on Ethics in Computer Security Research
+      (WECSR 2010), Tenerife, Canary Islands, Spain, January 2010.</i></p>
 
       <h2>Ecosystem <a href="#ecosystem" name="ecosystem" class="anchor">#</a></h2>
       <p>Tor relays and bridges collect aggregated statistics about their usage
