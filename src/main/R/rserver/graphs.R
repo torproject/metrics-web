@@ -348,7 +348,7 @@ plot_networksize <- function(start, end, path) {
     s <- rbind(s,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         relays = NA, bridges = NA))
-  networksize <- melt(s, id = "date")
+  networksize <- gather(s, variable, value, -date)
   ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
     colour = variable)) + geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
@@ -456,7 +456,7 @@ prepare_bandwidth <- function(start, end) {
 
 plot_bandwidth <- function(start, end, path) {
   b <- prepare_bandwidth(start, end)
-  bandwidth <- melt(b, id = "date")
+  bandwidth <- gather(b, variable, value, -date)
   ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
       y = value, colour = variable)) +
     geom_line() +
@@ -544,7 +544,7 @@ prepare_dirbytes <- function(start, end, path) {
 
 plot_dirbytes <- function(start, end, path) {
   b <- prepare_dirbytes(start, end)
-  dir <- melt(b, id = "date")
+  dir <- gather(b, variable, value, -date)
   ggplot(dir, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
       colour = variable)) +
     geom_line() +
@@ -699,7 +699,7 @@ plot_torperf_failures <- function(start, end, source, server, filesize, path) {
     torperf <- rbind(torperf,
         data.frame(date = as.Date(missing, origin = "1970-01-01"),
         timeouts = NA, failures = NA))
-  torperf <- melt(torperf, id = "date")
+  torperf <- gather(torperf, variable, value, -date)
   filesizes <- data.frame(filesizes = c("5mb", "1mb", "50kb"),
       label = c("5 MiB", "1 MiB", "50 KiB"), stringsAsFactors = FALSE)
   filesizeStr <- filesizes[filesizes$filesize == filesize, "label"]
@@ -734,7 +734,7 @@ prepare_connbidirect <- function(start, end) {
                               levels = c("both", "write", "read")),
                   quantile = paste("X", c$quantile, sep = ""),
                   fraction = c$fraction / 100)
-  c <- cast(c, date + direction ~ quantile, value = "fraction")
+  c <- spread(c, quantile, fraction)
   c
 }
 
@@ -743,7 +743,7 @@ plot_connbidirect <- function(start, end, path) {
   ggplot(c, aes(x = date, y = X0.5, colour = direction)) +
     geom_line(size = 0.75) +
     geom_ribbon(aes(x = date, ymin = X0.25, ymax = X0.75,
-                fill = direction), alpha = 0.5, show_guide = FALSE) +
+                fill = direction), alpha = 0.5, show.legend = FALSE) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = percent, limits = c(0, NA)) +
@@ -787,7 +787,7 @@ prepare_bandwidth_flags <- function(start, end) {
   b <- aggregate(list(advbw = b$advbw, bwhist = b$bwhist),
                  by = list(date = b$date, flag = b$flag), FUN = sum,
                  na.rm = TRUE, na.action = NULL)
-  b <- melt(b, id.vars = c("date", "flag"), variable_name = "type")
+  b <- gather(b, type, value, -c(date, flag))
   bandwidth <- b[b$value > 0, ]
   dates <- seq(from = as.Date(start, "%Y-%m-%d"),
       to = as.Date(end, "%Y-%m-%d"), by = "1 day")
