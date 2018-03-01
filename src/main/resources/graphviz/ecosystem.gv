@@ -1,0 +1,56 @@
+digraph ecosystem {
+    node [fontname="Source Sans Pro"];
+    subgraph cluster_network {
+        label="Public Tor Network";
+        fontname="Source Sans Pro Semi-Bold";
+        node [color="#59316b",fillcolor="#e1d3e8",style="filled"];
+        relays [label="Relays"];
+        bridges [label="Bridges"];
+        dirauths [label="Directory Authorities"];
+        bridgeauth [label="Bridge Authority"];
+    }
+    subgraph cluster_metrics {
+        label="Tor Metrics";
+        fontname="Source Sans Pro Semi-Bold";
+        labelloc=b;
+        subgraph resdev {
+            node [color="#6b5831",style="filled",fillcolor="#ede9e1"];
+            collector [label="CollecTor"];
+            onionoo [label="Onionoo"];
+            subgraph lib {
+                node [shape=box,margin="0.11,0.11",height=0,width=0,fontsize=8];
+                lib1 [label="metrics-lib"];
+                lib2 [label="metrics-lib"];
+                lib3 [label="metrics-lib"];
+            }
+        }
+        subgraph user {
+            node [color="#436b31",style="filled",fillcolor="#d4e5cc"];
+            statistics [label="Tor Metrics Graphs"];
+            exonerator [label="Exonerator"];
+            rs [label="Relay Search"];
+            bot [label="metrics-bot"];
+            consensushealth [label="Consensus Health"];
+        }
+    }
+    relays -> dirauths;
+    bridges -> bridgeauth;
+    dirauths -> collector;
+    dirauths -> consensushealth;
+    bridgeauth -> collector;
+    collector -> lib1;
+    lib1 -> statistics;
+    collector -> lib2;
+    lib2 -> onionoo;
+    collector -> lib3;
+    lib3 -> exonerator;
+    onionoo -> rs;
+    onionoo -> bot;
+    legend [rank=sink,fontsize=10,shape=none,label=
+      <<table cellspacing="0" cellborder="1">
+        <tr><td>Legend</td></tr>
+        <tr><td bgcolor="#e1d3e8" color="#59316b">Public Tor Network Servers</td></tr>
+        <tr><td bgcolor="#ede9e1" color="#6b5831">Tools for Researchers and Developers</td></tr>
+        <tr><td bgcolor="#d4e5cc" color="#436b31">Tools for End-Users</td></tr>
+      </table>>];
+}
