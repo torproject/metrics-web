@@ -569,19 +569,18 @@ a family.
 
 <li>
 <a id="parameters_version"></a>
-<b>version <span class="label label-primary">updated</span></b>
+<b>version</b>
 <a href="#parameters_version" class="anchor">#</a>
 <p>
 Return only relays or bridges running a Tor version that starts with the
 parameter value <i>without</i> leading <code>"Tor"</code>.
 Searches are case-insensitive.
-<span class="blue">Extended to bridges on November 28, 2017.</span>
 </p>
 </li>
 
 <li>
 <a id="parameters_host_name"></a>
-<b>host_name <span class="label label-primary">new</span></b>
+<b>host_name</b>
 <a href="#parameters_host_name" class="anchor">#</a>
 <p>
 Return only relays with a domain name <i>ending</i> in the given (partial)
@@ -590,13 +589,12 @@ Searches for subdomains of a specific domain should ideally be prefixed
 with a period, for example: ".csail.mit.edu".
 Non-ASCII host name characters must be encoded as punycode.
 Filtering by host name is case-insensitive.
-<span class="blue">Added on November 17, 2017.</span>
 </p>
 </li>
 
 <li>
 <a id="parameters_recommended_version"></a>
-<b>recommended_version <span class="label label-primary">new</span></b>
+<b>recommended_version</b>
 <a href="#parameters_recommended_version" class="anchor">#</a>
 <p>
 Return only relays and bridges running a Tor software version that is
@@ -606,7 +604,6 @@ Uses the version in the consensus or bridge network status.
 Relays and bridges are not contained in either result, if the version they
 are running is not known.
 Parameter values are case-insensitive.
-<span class="blue">Added on November 28, 2017.</span>
 </p>
 </li>
 
@@ -740,14 +737,13 @@ Omitted if no major protocol changes are planned.
 
 <li>
 <a id="responses_build_revision"></a>
-<b>build_revision <span class="label label-primary">new</span></b>
+<b>build_revision</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
 <a href="#responses_build_revision" class="anchor">#</a>
 <p>
 Git revision of the Onionoo instance's software used to write this
 response, which will be omitted if unknown.
-<span class="blue">Added on October 10, 2017.</span>
 </p>
 </li>
 
@@ -1455,7 +1451,7 @@ found.
 
 <li>
 <a id="details_relay_version"></a>
-<b>version <span class="label label-primary">new</span></b>
+<b>version</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_version" class="anchor">#</a>
@@ -1465,7 +1461,6 @@ by the directory authorities in the "v" line of the consensus.
 Omitted if either the directory authorities or the relay did not report
 which version the relay runs or if the relay runs an alternative Tor
 implementation.
-<span class="blue">Added on November 28, 2017.</span>
 </p>
 </li>
 
@@ -1486,7 +1481,7 @@ the relay did not report which version it runs.
 
 <li>
 <a id="details_relay_effective_family"></a>
-<b>effective_family <span class="label label-primary">updated</span></b>
+<b>effective_family</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_effective_family" class="anchor">#</a>
@@ -1497,14 +1492,12 @@ These relays are part of this relay's family and they consider this relay
 to be part of their family.
 Omitted if empty or if descriptor containing this information cannot be
 found.
-<span class="blue">Removed the $ prefix from fingerprintson December 20,
-2017.</span>
 </p>
 </li>
 
 <li>
 <a id="details_relay_alleged_family"></a>
-<b>alleged_family <span class="label label-primary">updated</span></b>
+<b>alleged_family</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_alleged_family" class="anchor">#</a>
@@ -1515,14 +1508,12 @@ These relays are part of this relay's family but they don't consider this
 relay to be part of their family.
 Omitted if empty or if descriptor containing this information cannot be
 found.
-<span class="blue">Removed the $ prefix from fingerprintson December 20,
-2017.</span>
 </p>
 </li>
 
 <li>
 <a id="details_relay_indirect_family"></a>
-<b>indirect_family <span class="label label-primary">updated</span></b>
+<b>indirect_family</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_indirect_family" class="anchor">#</a>
@@ -1532,8 +1523,6 @@ mutual family relationship with this relay but that can be reached by
 following effective, mutual family relationships starting at this relay.
 Omitted if empty or if descriptor containing this information cannot be
 found.
-<span class="blue">Removed the $ prefix from fingerprintson December 20,
-2017.</span>
 </p>
 </li>
 
@@ -1619,7 +1608,7 @@ contain measurement information.
 
 <li>
 <a id="details_relay_unreachable_or_addresses"></a>
-<b>unreachable_or_addresses <span class="label label-primary">new</span></b>
+<b>unreachable_or_addresses</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_unreachable_or_addresses" class="anchor">#</a>
@@ -1640,7 +1629,6 @@ relays with unreachable addresses will be included here.
 Addresses are in arbitrary order.
 IPv6 hex characters are all lower-case.
 Omitted if empty.
-<span class="blue">Added on November 17, 2017.</span>
 </p>
 </li>
 
@@ -1801,7 +1789,7 @@ information cannot be found.
 
 <li>
 <a id="details_bridge_version"></a>
-<b>version <span class="label label-primary">new</span></b>
+<b>version</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
 <a href="#details_bridge_version" class="anchor">#</a>
@@ -1811,13 +1799,12 @@ by the bridge in the "platform" line of its server descriptor.
 Omitted if not provided by the bridge, if the descriptor containing this
 information cannot be found, or if the bridge runs an alternative Tor
 implementation.
-<span class="blue">Added on November 28, 2017.</span>
 </p>
 </li>
 
 <li>
 <a id="details_bridge_recommended_version"></a>
-<b>recommended_version <span class="label label-primary">new</span></b>
+<b>recommended_version</b>
 <code class="typeof">boolean</code>
 <span class="required-false">optional</span>
 <a href="#details_bridge_recommended_version" class="anchor">#</a>
@@ -1827,7 +1814,6 @@ recommended by the directory authorities or not.
 Uses the bridge version in the bridge network status.
 Omitted if either the directory authorities did not recommend versions, or
 the bridge did not report which version it runs.
-<span class="blue">Added on November 28, 2017.</span>
 </p>
 </li>
 
