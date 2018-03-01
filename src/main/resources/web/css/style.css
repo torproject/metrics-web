@@ -336,10 +336,27 @@ body .topButton {
     color: #5bc0de;
 }
 
+/* home jumbotron */
+.jumbotron {
+    padding-bottom: 10px;
+}
+.jumbotron h1 {
+    margin-top: -20px;
+    font-size: 50px;
+}
+@media only screen and (max-width : 991px) { .jumbotron h1 { font-size: 46px; } }
+@media only screen and (max-width : 352px) {
+    .jumbotron h1 {
+        font-size: 38px;
+    }
+    .jumbotron p {
+        display: none;
+    }
+}
 
 /* home dashboard page */
 .dashboard {
-    padding:3em 5em 0 5em;
+    padding:0em 5em 0 5em;
 }
 .dashboard .col-sm-4 {
     margin-bottom:2em;
@@ -353,10 +370,27 @@ body .topButton {
     padding:2em 2em 1em 2em;
     color:#999;
 }
-.dashboard h2, .dashboard p {
-    color:#999;
+.dashboard h2 {
+    font-size: 42px;
+    color: rgb(125, 70, 152);
+    padding-top: 0;
+    margin-top: 0;
 }
-.dashboard a[href], .dashboard a[href]:hover, .dashboard a[href]:focus, .dashboard a[href]:active, .dashboard a[href] h2 {
+.dashboard h3 {
+    font-size: 26px;
+}
+@media (max-width: 992px) {
+    .dashboard h3 {
+        font-size: 20px;
+    }
+}
+.dashboard h3, .dashboard p {
+    color: #999;
+}
+.dashboard p.lead {
+    color: #333;
+}
+.dashboard a[href], .dashboard a[href]:hover, .dashboard a[href]:focus, .dashboard a[href]:active, .dashboard a[href] h3 {
     color:#68b030;
 }
 .dashboard a[href]:hover {
