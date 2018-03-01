@@ -329,28 +329,20 @@ stats_dir = "/srv/metrics.torproject.org/metrics/shared/stats/"
 rdata_dir = "/srv/metrics.torproject.org/metrics/shared/RData/"
 
 prepare_networksize <- function(start, end) {
-  s <- read.csv(paste(stats_dir, "servers.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  s <- s[s$date >= start & s$date <= end & s$flag == '' &
-         s$country == '' & s$version == '' & s$platform == '' &
-         s$ec2bridge == '', ]
-  s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"), relays = s$relays,
-                  bridges = s$bridges)
-  s
+  read.csv(paste(stats_dir, "servers.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end), flag == '',
+      country == '', version == '', platform == '', ec2bridge == '') %>%
+    select(date, relays, bridges)
 }
 
 plot_networksize <- function(start, end, path) {
-  s <- prepare_networksize(start, end)
-  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
-      to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, as.Date(s$date, origin = "1970-01-01"))
-  if (length(missing) > 0)
-    s <- rbind(s,
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        relays = NA, bridges = NA))
-  networksize <- gather(s, variable, value, -date)
-  ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-    colour = variable)) + geom_line() +
+  prepare_networksize(start, end) %>%
+    gather(variable, value, -date) %>%
+    complete(date = full_seq(date, period = 1),
+      variable = c("relays", "bridges")) %>%
+    ggplot(aes(x = date, y = value, colour = variable)) +
+    geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
@@ -367,14 +359,11 @@ write_networksize <- function(start, end, path) {
 }
 
 prepare_versions <- function(start, end) {
-  s <- read.csv(paste(stats_dir, "servers.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  s <- s[s$date >= start & s$date <= end & s$flag == '' &
-         s$country == '' & s$version != '' & s$platform == '' &
-         s$ec2bridge == '', ]
-  s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"), version = s$version,
-                  relays = s$relays)
-  s
+  read.csv(paste(stats_dir, "servers.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end), flag == '',
+      country == '', version != '', platform == '', ec2bridge == '') %>%
+    select(date, version, relays)
 }
 
 plot_versions <- function(start, end, path) {
@@ -389,8 +378,7 @@ plot_versions <- function(start, end, path) {
     stringsAsFactors = FALSE)
   versions <- s[s$version %in% known_versions, ]
   visible_versions <- sort(unique(versions$version))
-  ggplot(versions, aes(x = as.Date(date, "%Y-%m-%d"), y = relays,
-      colour = version)) +
+  ggplot(versions, aes(x = date, y = relays, colour = version)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -410,21 +398,18 @@ write_versions <- function(start, end, path) {
 }
 
 prepare_platforms <- function(start, end) {
-  s <- read.csv(paste(stats_dir, "servers.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  s <- s[s$date >= start & s$date <= end & s$flag == '' &
-         s$country == '' & s$version == '' & s$platform != '' &
-         s$ec2bridge == '', ]
-  platforms <- data.frame(date = as.Date(s$date, "%Y-%m-%d"),
-      variable = ifelse(s$platform == "Darwin", "macOS", s$platform),
-      value = s$relays)
-  platforms
+  read.csv(paste(stats_dir, "servers.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end), flag == '',
+      country == '', version == '', platform != '', ec2bridge == '') %>%
+    select(date, platform, relays) %>%
+    mutate(platform = ifelse(platform == "Darwin", "macOS",
+      as.character(platform)))
 }
 
 plot_platforms <- function(start, end, path) {
-  platforms <- prepare_platforms(start, end)
-  ggplot(platforms, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-      colour = variable)) +
+  prepare_platforms(start, end) %>%
+    ggplot(aes(x = date, y = relays, colour = platform)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -439,33 +424,31 @@ plot_platforms <- function(start, end, path) {
 
 write_platforms <- function(start, end, path) {
   prepare_platforms(start, end) %>%
-    spread(variable, value) %>%
+    spread(platform, relays) %>%
     write.csv(path, quote = FALSE, row.names = FALSE)
 }
 
 prepare_bandwidth <- function(start, end) {
-  b <- read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  b <- b[b$date >= start & b$date <= end & b$isexit == '' &
-         b$isguard == '', ]
-  b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
-                  bwadv = b$advbw * 8 / 1e9,
-                  bwhist = (b$bwread + b$bwwrite) * 8 / 2e9)
-  b
+  read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end), isexit == '',
+      isguard == '') %>%
+    mutate(advbw = advbw * 8 / 1e9) %>%
+    mutate(bwhist = (bwread + bwwrite) * 8 / 2e9) %>%
+    select(date, advbw, bwhist)
 }
 
 plot_bandwidth <- function(start, end, path) {
-  b <- prepare_bandwidth(start, end)
-  bandwidth <- gather(b, variable, value, -date)
-  ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
-      y = value, colour = variable)) +
+  prepare_bandwidth(start, end) %>%
+    gather(variable, value, -date) %>%
+    ggplot(aes(x = date, y = value, colour = variable)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
-        breaks = c("bwadv", "bwhist"),
+        breaks = c("advbw", "bwhist"),
         labels = c("Advertised bandwidth", "Bandwidth history")) +
     ggtitle("Total relay bandwidth") +
     labs(caption = copyright_notice) +
@@ -479,37 +462,22 @@ write_bandwidth <- function(start, end, path) {
 }
 
 prepare_bwhist_flags <- function(start, end) {
-  b <- read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  b <- b[b$date >= start & b$date <= end & b$isexit != '' &
-         b$isguard != '', ]
-  bw <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
-                  isexit = b$isexit == 't', isguard = b$isguard == 't',
-                  read = b$bwread, written = b$bwwrite)
-  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
-      to = as.Date(end, "%Y-%m-%d"), by = "1 day")
-  missing <- setdiff(dates, as.Date(bw$date, origin = "1970-01-01"))
-  if (length(missing) > 0)
-    bw <- rbind(bw,
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        isexit = FALSE, isguard = FALSE, read = NA, written = NA),
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        isexit = FALSE, isguard = TRUE, read = NA, written = NA),
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        isexit = TRUE, isguard = FALSE, read = NA, written = NA),
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        isexit = TRUE, isguard = TRUE, read = NA, written = NA))
-  bw <- data.frame(date = bw$date, variable = ifelse(bw$isexit,
-        ifelse(bw$isguard, "guard_and_exit", "exit_only"),
-        ifelse(bw$isguard, "guard_only", "middle_only")),
-        value = (bw$read + bw$written) * 8 / 2e9)
-  bw
+  read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end), isexit != '',
+      isguard != '') %>%
+    mutate(variable = ifelse(isexit == 't',
+        ifelse(isguard == 't', "guard_and_exit", "exit_only"),
+        ifelse(isguard == 't', "guard_only", "middle_only")),
+      value = (bwread + bwwrite) * 8 / 2e9) %>%
+    select(date, variable, value)
 }
 
 plot_bwhist_flags <- function(start, end, path) {
-  bw <- prepare_bwhist_flags(start, end)
-  ggplot(bw, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-      colour = variable)) +
+  prepare_bwhist_flags(start, end) %>%
+    complete(date = full_seq(date, period = 1),
+      variable = unique(variable)) %>%
+    ggplot(aes(x = date, y = value, colour = variable)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -532,21 +500,19 @@ write_bwhist_flags <- function(start, end, path) {
 }
 
 prepare_dirbytes <- function(start, end, path) {
-  b <- read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  b <- b[b$date >= start & b$date <= end & b$isexit == '' &
-         b$isguard == '', ]
-  b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
-                  dirread = b$dirread * 8 / 1e9,
-                  dirwrite = b$dirwrite * 8 / 1e9)
-  b
+  read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end), isexit == '',
+      isguard == '') %>%
+    mutate(dirread = dirread * 8 / 1e9,
+      dirwrite = dirwrite * 8 / 1e9) %>%
+    select(date, dirread, dirwrite)
 }
 
 plot_dirbytes <- function(start, end, path) {
-  b <- prepare_dirbytes(start, end)
-  dir <- gather(b, variable, value, -date)
-  ggplot(dir, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-      colour = variable)) +
+  prepare_dirbytes(start, end) %>%
+    gather(variable, value, -date) %>%
+    ggplot(aes(x = date, y = value, colour = variable)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -567,33 +533,20 @@ write_dirbytes <- function(start, end, path) {
 }
 
 prepare_relayflags <- function(start, end, flags) {
-  s <- read.csv(paste(stats_dir, "servers.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  s <- s[s$date >= start & s$date <= end & s$country == '' &
-         s$version == '' & s$platform == '' & s$ec2bridge == '', ]
-  s <- data.frame(date = as.Date(s$date, "%Y-%m-%d"),
-                  variable = ifelse(s$flag == '', 'Running', s$flag),
-                  value = s$relays)
-  networksize <- s[s$variable %in% flags, ]
-  networksize
+  read.csv(paste(stats_dir, "servers.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end), country == '',
+      version == '', platform == '', ec2bridge == '') %>%
+    mutate(flag = ifelse(flag == '', 'Running', as.character(flag))) %>%
+    filter(flag %in% flags) %>%
+    select(date, flag, relays)
 }
 
 plot_relayflags <- function(start, end, flags, path) {
-  networksize <- prepare_relayflags(start, end, flags)
-  networksize <- rbind(data.frame(
-    date = as.Date(end) + 1,
-    variable = c("Running", "Exit", "Guard", "Fast", "Stable", "HSDir"),
-    value = NA), networksize)
-  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
-      to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, networksize$date)
-  if (length(missing) > 0)
-    networksize <- rbind(data.frame(
-      date = as.Date(rep(missing, 6), origin = "1970-01-01"),
-      variable = c("Running", "Exit", "Guard", "Fast", "Stable", "HSDir"),
-      value = rep(NA, length(missing) * 6)), networksize)
-  ggplot(networksize, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-    colour = as.factor(variable))) + geom_line() +
+  prepare_relayflags(start, end, flags) %>%
+    complete(date = full_seq(date, period = 1), flag = unique(flag)) %>%
+    ggplot(aes(x = date, y = relays, colour = as.factor(flag))) +
+    geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
@@ -616,32 +569,24 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
   filesizeVal <- ifelse(filesize == '50kb', 50 * 1024,
           ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
   t <- read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
-    stringsAsFactors = FALSE)
+    colClasses = c("date" = "Date"))
   known_sources <- c("all", unique(t[t$source != "", "source"]))
   colours <- data.frame(source = known_sources,
       colour = brewer.pal(length(known_sources), "Paired"),
       stringsAsFactors = FALSE)
-  t <- t[t$date >= start & t$date <= end & t$filesize == filesizeVal &
-         t$source == ifelse(source == 'all', '', source) &
-         t$server == server, ]
-  torperf <- data.frame(date = as.Date(t$date, "%Y-%m-%d"),
-                        q1 = t$q1, md = t$md, q3 = t$q3)
-  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
-      to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, torperf$date)
-  if (length(missing) > 0)
-    torperf <- rbind(torperf,
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        q1 = NA, md = NA, q3 = NA))
   colour <- colours[colours$source == source, "colour"]
   filesizes <- data.frame(filesizes = c("5mb", "1mb", "50kb"),
       label = c("5 MiB", "1 MiB", "50 KiB"), stringsAsFactors = FALSE)
   filesizeStr <- filesizes[filesizes$filesize == filesize, "label"]
-  ggplot(torperf, aes(x = as.Date(date, "%Y-%m-%d"), y = md/1e3,
-      fill = "line")) +
+  t[t$date >= as.Date(start) & t$date <= as.Date(end) &
+         t$filesize == filesizeVal &
+         t$source == ifelse(source == 'all', '', source) &
+         t$server == server, ] %>%
+    transmute(date, q1 = q1 / 1e3, md = md / 1e3, q3 = q3 / 1e3) %>%
+    complete(date = full_seq(date, period = 1)) %>%
+    ggplot(aes(x = date, y = md, fill = "line")) +
     geom_line(colour = colour, size = 0.75) +
-    geom_ribbon(data = torperf, aes(x = date, ymin = q1/1e3,
-      ymax = q3/1e3, fill = "ribbon")) +
+    geom_ribbon(aes(x = date, ymin = q1, ymax = q3, fill = "ribbon")) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "s"),
@@ -671,8 +616,7 @@ write_torperf <- function(start, end, source_, server_, filesize_, path) {
         ifelse(filesize_ == '1mb', 1024 * 1024, 5 * 1024 * 1024)),
       source == ifelse(source_ == 'all', '', source_),
       server == server_) %>%
-    select(date, q1, md, q3) %>%
-    mutate(q1 = q1 / 1e3, md = md / 1e3, q3 = q3 / 1e3) %>%
+    transmute(date, q1 = q1 / 1e3, md = md / 1e3, q3 = q3 / 1e3) %>%
     write.csv(path, quote = FALSE, row.names = FALSE)
 }
 
@@ -680,31 +624,21 @@ prepare_torperf_failures <- function(start, end, source, server, filesize) {
   filesizeVal <- ifelse(filesize == '50kb', 50 * 1024,
           ifelse(filesize == '1mb', 1024 * 1024, 5 * 1024 * 1024))
   t <- read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  t <- t[t$date >= start & t$date <= end & t$filesize == filesizeVal &
+    colClasses = c("date" = "Date"))
+  t[t$date >= start & t$date <= end & t$filesize == filesizeVal &
          t$source == ifelse(source == 'all', '', source) &
-         t$server == server & t$requests > 0, ]
-  torperf <- data.frame(date = as.Date(t$date, "%Y-%m-%d"),
-                        timeouts = t$timeouts / t$requests,
-                        failures = t$failures / t$requests)
-  torperf
+         t$server == server & t$requests > 0, ] %>%
+  transmute(date, timeouts = timeouts / requests,
+    failures = failures / requests)
 }
 
 plot_torperf_failures <- function(start, end, source, server, filesize, path) {
-  torperf <- prepare_torperf_failures(start, end, source, server, filesize)
-  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
-      to = as.Date(end, "%Y-%m-%d"), by="1 day")
-  missing <- setdiff(dates, torperf$date)
-  if (length(missing) > 0)
-    torperf <- rbind(torperf,
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        timeouts = NA, failures = NA))
-  torperf <- gather(torperf, variable, value, -date)
   filesizes <- data.frame(filesizes = c("5mb", "1mb", "50kb"),
       label = c("5 MiB", "1 MiB", "50 KiB"), stringsAsFactors = FALSE)
   filesizeStr <- filesizes[filesizes$filesize == filesize, "label"]
-  ggplot(torperf, aes(x = as.Date(date, "%Y-%m-%d"), y = value,
-    colour = variable)) +
+  prepare_torperf_failures(start, end, source, server, filesize) %>%
+    gather(variable, value, -date) %>%
+    ggplot(aes(x = date, y = value, colour = variable)) +
     geom_point(size = 2) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -726,21 +660,17 @@ write_torperf_failures <- function(start, end, source, server, filesize, path) {
 }
 
 prepare_connbidirect <- function(start, end) {
-  c <- read.csv(paste(stats_dir, "connbidirect2.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  c <- c[c$date >= start & c$date <= end, ]
-  c <- data.frame(date = as.Date(c$date),
-                  direction = factor(c$direction,
-                              levels = c("both", "write", "read")),
-                  quantile = paste("X", c$quantile, sep = ""),
-                  fraction = c$fraction / 100)
-  c <- spread(c, quantile, fraction)
-  c
+  read.csv(paste(stats_dir, "connbidirect2.csv", sep = ""),
+    colClasses = c("date" = "Date", "direction" = "factor")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end)) %>%
+    mutate(quantile = paste("X", quantile, sep = ""),
+      fraction = fraction / 100) %>%
+    spread(quantile, fraction)
 }
 
 plot_connbidirect <- function(start, end, path) {
-  c <- prepare_connbidirect(start, end)
-  ggplot(c, aes(x = date, y = X0.5, colour = direction)) +
+  prepare_connbidirect(start, end) %>%
+    ggplot(aes(x = date, y = X0.5, colour = direction)) +
     geom_line(size = 0.75) +
     geom_ribbon(aes(x = date, ymin = X0.25, ymax = X0.75,
                 fill = direction), alpha = 0.5, show.legend = FALSE) +
@@ -772,10 +702,10 @@ write_connbidirect <- function(start, end, path) {
 
 prepare_bandwidth_flags <- function(start, end) {
   b <- read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
-    stringsAsFactors = FALSE)
+    colClasses = c("date" = "Date"))
   b <- b[b$date >= start & b$date <= end & b$isexit != '' &
          b$isguard != '', ]
-  b <- data.frame(date = as.Date(b$date, "%Y-%m-%d"),
+  b <- data.frame(date = b$date,
                   isexit = b$isexit == 't', isguard = b$isguard == 't',
                   advbw = b$advbw * 8 / 1e9,
                   bwhist = (b$bwread + b$bwwrite) * 8 / 2e9)
@@ -789,21 +719,6 @@ prepare_bandwidth_flags <- function(start, end) {
                  na.rm = TRUE, na.action = NULL)
   b <- gather(b, type, value, -c(date, flag))
   bandwidth <- b[b$value > 0, ]
-  dates <- seq(from = as.Date(start, "%Y-%m-%d"),
-      to = as.Date(end, "%Y-%m-%d"), by = "1 day")
-  missing <- setdiff(dates, as.Date(bandwidth$date,
-    origin = "1970-01-01"))
-  if (length(missing) > 0) {
-    bandwidth <- rbind(bandwidth,
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        type = "advbw", flag = "exit", value = NA),
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        type = "bwhist", flag = "exit", value = NA),
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        type = "advbw", flag = "guard", value = NA),
-        data.frame(date = as.Date(missing, origin = "1970-01-01"),
-        type = "bwhist", flag = "guard", value = NA))
-  }
   bandwidth <- data.frame(date = bandwidth$date,
     variable = as.factor(paste(bandwidth$flag, "_", bandwidth$type,
     sep = "")), value = bandwidth$value)
@@ -813,9 +728,10 @@ prepare_bandwidth_flags <- function(start, end) {
 }
 
 plot_bandwidth_flags <- function(start, end, path) {
-  bandwidth <- prepare_bandwidth_flags(start, end)
-  ggplot(bandwidth, aes(x = as.Date(date, "%Y-%m-%d"),
-      y = value, colour = variable)) +
+  prepare_bandwidth_flags(start, end) %>%
+    complete(date = full_seq(date, period = 1),
+      variable = unique(variable)) %>%
+    ggplot(aes(x = date, y = value, colour = variable)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -1107,29 +1023,27 @@ write_userstats_bridge_combined <- function(start, end, country, path) {
 }
 
 prepare_advbwdist_perc <- function(start, end, p) {
-  t <- read.csv(paste(stats_dir,
-                "advbwdist.csv", sep = ""), stringsAsFactors = FALSE)
-  t <- t[t$date >= start & t$date <= end &
-         t$percentile %in% as.numeric(p), ]
-  t <- data.frame(date = t$date, percentile = as.factor(t$percentile),
-                  variable = ifelse(t$isexit != "t", "all", "exits"),
-                  advbw = t$advbw * 8 / 1e9)
-  t
+  read.csv(paste(stats_dir, "advbwdist.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end),
+      percentile %in% as.numeric(p)) %>%
+    transmute(date, percentile = as.factor(percentile),
+      variable = ifelse(isexit != "t", "all", "exits"),
+      advbw = advbw * 8 / 1e9)
 }
 
 plot_advbwdist_perc <- function(start, end, p, path) {
-  t <- prepare_advbwdist_perc(start, end, p)
-  t$variable <- ifelse(t$variable == "all", "All relays",
-                       "Exits only")
-  ggplot(t, aes(x = as.Date(date), y = advbw, colour = percentile)) +
+  prepare_advbwdist_perc(start, end, p) %>%
+    mutate(variable = ifelse(variable == "all", "All relays",
+      "Exits only")) %>%
+    ggplot(aes(x = date, y = advbw, colour = percentile)) +
     facet_grid(variable ~ .) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
-    scale_colour_hue(name = "Percentile",
-        breaks = rev(levels(t$percentile))) +
+    scale_colour_hue(name = "Percentile") +
     ggtitle("Advertised bandwidth distribution") +
     labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
@@ -1143,27 +1057,27 @@ write_advbwdist_perc <- function(start, end, p, path) {
 }
 
 prepare_advbwdist_relay <- function(start, end, n) {
-  t <- read.csv(paste(stats_dir, "advbwdist.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  t <- t[t$date >= start & t$date <= end & t$relay %in% as.numeric(n), ]
-  t <- data.frame(date = t$date, relay = as.factor(t$relay),
-                  variable = ifelse(t$isexit != "t", "all", "exits"),
-                  advbw = t$advbw * 8 / 1e9)
-  t
+  read.csv(paste(stats_dir, "advbwdist.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end),
+      relay %in% as.numeric(n)) %>%
+    transmute(date, relay = as.factor(relay),
+      variable = ifelse(isexit != "t", "all", "exits"),
+      advbw = advbw * 8 / 1e9)
 }
 
 plot_advbwdist_relay <- function(start, end, n, path) {
-  t <- prepare_advbwdist_relay(start, end, n)
-  t$variable <- ifelse(t$variable == "all", "All relays",
-                       "Exits only")
-  ggplot(t, aes(x = as.Date(date), y = advbw, colour = relay)) +
+  prepare_advbwdist_relay(start, end, n) %>%
+    mutate(variable = ifelse(variable == "all", "All relays",
+      "Exits only")) %>%
+    ggplot(aes(x = date, y = advbw, colour = relay)) +
     facet_grid(variable ~ .) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
-    scale_colour_hue(name = "n", breaks = levels(t$relay)) +
+    scale_colour_hue(name = "n") +
     ggtitle("Advertised bandwidth of n-th fastest relays") +
     labs(caption = copyright_notice)
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
@@ -1177,17 +1091,16 @@ write_advbwdist_relay <- function(start, end, n, path) {
 }
 
 prepare_hidserv_dir_onions_seen <- function(start, end) {
-  h <- read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  h <- h[h$date >= start & h$date <= end & h$type == "dir-onions-seen", ]
-  h <- data.frame(date = as.Date(h$date, "%Y-%m-%d"),
-                  onions = ifelse(h$frac >= 0.01, h$wiqm, NA))
-  h
+  read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end),
+      type == "dir-onions-seen") %>%
+    transmute(date = date, onions = ifelse(frac >= 0.01, wiqm, NA))
 }
 
 plot_hidserv_dir_onions_seen <- function(start, end, path) {
-  h <- prepare_hidserv_dir_onions_seen(start, end)
-  ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"), y = onions)) +
+  prepare_hidserv_dir_onions_seen(start, end) %>%
+    ggplot(aes(x = date, y = onions)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -1203,19 +1116,17 @@ write_hidserv_dir_onions_seen <- function(start, end, path) {
 }
 
 prepare_hidserv_rend_relayed_cells <- function(start, end) {
-  h <- read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  h <- h[h$date >= start & h$date <= end &
-         h$type == "rend-relayed-cells", ]
-  h <- data.frame(date = as.Date(h$date, "%Y-%m-%d"),
-                  relayed = ifelse(h$frac >= 0.01,
-                                   h$wiqm * 8 * 512 / (86400 * 1e9), NA))
-  h
+  read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end),
+      type == "rend-relayed-cells") %>%
+    transmute(date,
+      relayed = ifelse(frac >= 0.01, wiqm * 8 * 512 / (86400 * 1e9), NA))
 }
 
 plot_hidserv_rend_relayed_cells <- function(start, end, path) {
-  h <- prepare_hidserv_rend_relayed_cells(start, end)
-  ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"), y = relayed)) +
+  prepare_hidserv_rend_relayed_cells(start, end) %>%
+    ggplot(aes(x = date, y = relayed)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -1232,18 +1143,15 @@ write_hidserv_rend_relayed_cells <- function(start, end, path) {
 }
 
 prepare_hidserv_frac_reporting <- function(start, end) {
-  h <- read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  h <- h[h$date >= start & h$date <= end, ]
-  h <- data.frame(date = as.Date(h$date, "%Y-%m-%d"),
-                  frac = h$frac, type = h$type)
-  h
+  read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(date >= as.Date(start), date <= as.Date(end)) %>%
+    select(date, frac, type)
 }
 
 plot_hidserv_frac_reporting <- function(start, end, path) {
-  h <- prepare_hidserv_frac_reporting(start, end)
-  ggplot(h, aes(x = as.Date(date, origin = "1970-01-01"), y = frac,
-      colour = type)) +
+  prepare_hidserv_frac_reporting(start, end) %>%
+    ggplot(aes(x = date, y = frac, colour = type)) +
     geom_line() +
     geom_hline(yintercept = 0.01, linetype = 2) +
     scale_x_date(name = "", breaks = custom_breaks,
@@ -1269,10 +1177,9 @@ write_hidserv_frac_reporting <- function(start, end, path) {
 
 prepare_webstats_tb <- function(start, end) {
   load(paste(rdata_dir, "webstats-tb.RData", sep = ""))
-  d <- data
-  d <- d[d$log_date >= start & d$log_date <= end, ]
-  d$request_type <- factor(d$request_type)
-  d
+  data %>%
+    filter(log_date >= as.Date(start), log_date <= as.Date(end)) %>%
+    mutate(request_type = factor(request_type))
 }
 
 plot_webstats_tb <- function(start, end, path) {
@@ -1306,17 +1213,17 @@ write_webstats_tb <- function(start, end, path) {
 }
 
 prepare_webstats_tb_platform <- function(start, end) {
-  d <- read.csv(paste(stats_dir, "webstats.csv", sep = ""),
-    stringsAsFactors = FALSE)
-  d <- d[d$log_date >= start & d$log_date <= end & d$request_type == 'tbid', ]
-  d <- aggregate(list(count = d$count), by = list(log_date = as.Date(d$log_date),
-    platform = d$platform), FUN = sum)
-  d
+  read.csv(paste(stats_dir, "webstats.csv", sep = ""),
+    colClasses = c("log_date" = "Date")) %>%
+    filter(log_date >= as.Date(start), log_date <= as.Date(end),
+      request_type == 'tbid') %>%
+    group_by(log_date, platform) %>%
+    summarize(count = sum(count))
 }
 
 plot_webstats_tb_platform <- function(start, end, path) {
-  d <- prepare_webstats_tb_platform(start, end)
-  ggplot(d, aes(x = log_date, y = count, colour = platform)) +
+  prepare_webstats_tb_platform(start, end) %>%
+    ggplot(aes(x = log_date, y = count, colour = platform)) +
     geom_point() +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
@@ -1342,13 +1249,13 @@ write_webstats_tb_platform <- function(start, end, path) {
 
 plot_webstats_tb_locale <- function(start, end, path) {
   d <- read.csv(paste(stats_dir, "webstats.csv", sep = ""),
-    stringsAsFactors = FALSE)
+    colClasses = c("log_date" = "Date"))
   d <- d[d$log_date >= start & d$log_date <= end & d$request_type == 'tbid', ]
   e <- d
   e <- aggregate(list(count = e$count), by = list(locale = e$locale), FUN = sum)
   e <- e[order(e$count, decreasing = TRUE), ]
   e <- e[1:5, ]
-  d <- aggregate(list(count = d$count), by = list(log_date = as.Date(d$log_date),
+  d <- aggregate(list(count = d$count), by = list(log_date = d$log_date,
     locale = ifelse(d$locale %in% e$locale, d$locale, '(other)')), FUN = sum)
   ggplot(d, aes(x = log_date, y = count, colour = locale)) +
     geom_point() +
@@ -1373,13 +1280,13 @@ plot_webstats_tb_locale <- function(start, end, path) {
 # breaks and labels. Left as future work.
 write_webstats_tb_locale <- function(start, end, path) {
   d <- read.csv(paste(stats_dir, "webstats.csv", sep = ""),
-    stringsAsFactors = FALSE)
+    colClasses = c("log_date" = "Date"))
   d <- d[d$log_date >= start & d$log_date <= end & d$request_type == 'tbid', ]
   e <- d
   e <- aggregate(list(count = e$count), by = list(locale = e$locale), FUN = sum)
   e <- e[order(e$count, decreasing = TRUE), ]
   e <- e[1:5, ]
-  d <- aggregate(list(count = d$count), by = list(log_date = as.Date(d$log_date),
+  d <- aggregate(list(count = d$count), by = list(log_date = d$log_date,
     locale = ifelse(d$locale %in% e$locale, d$locale, 'other')), FUN = sum)
   d %>%
     mutate(locale = tolower(locale)) %>%
@@ -1390,10 +1297,9 @@ write_webstats_tb_locale <- function(start, end, path) {
 
 prepare_webstats_tm <- function(start, end) {
   load(paste(rdata_dir, "webstats-tm.RData", sep = ""))
-  d <- data
-  d <- d[d$log_date >= start & d$log_date <= end, ]
-  d$request_type <- factor(d$request_type)
-  d
+  data %>%
+    filter(log_date >= as.Date(start), log_date <= as.Date(end)) %>%
+    mutate(request_type = factor(request_type))
 }
 
 plot_webstats_tm <- function(start, end, path) {
