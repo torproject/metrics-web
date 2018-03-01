@@ -566,7 +566,7 @@ archived.
 
 <p>
 The exit list service
-<a href="https://www.torproject.org/tordnsel/dist/" target="_blank">TorDNSEL</a>
+<a href="https://gitweb.torproject.org/tordnsel.git/tree/README" target="_blank">TorDNSEL</a>
 publishes exit lists containing the IP addresses of relays that it found
 when exiting through them.
 </p>
@@ -579,7 +579,7 @@ when exiting through them.
 </h3>
 
 <p>
-Tor Check makes the list of known exits and corresponding exit IP
+TorDNSEL makes the list of known exits and corresponding exit IP
 addresses available in a specific format.
 The document below shows an entry of the exit list written on
 December 28, 2010 at 15:21:44 UTC.
