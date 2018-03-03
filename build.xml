@@ -220,6 +220,21 @@
     </exec>
   </target>
 
+  <target name="generate-graphviz-pngs" >
+    <apply executable="dot"
+           dest="${basedir}/src/main/resources/web/images"
+           verbose="true" >
+      <arg value="-Tpng" />
+      <arg value="-o" />
+      <targetfile />
+      <srcfile />
+      <fileset dir="${basedir}/src/main/resources/graphviz" >
+        <include name="*.gv" />
+      </fileset>
+      <mapper type="glob" from="*.gv" to="*.png" />
+    </apply>
+  </target>
+
   <!-- This can be adapted to point at the actual work directory. -->
   <property name="prepare.deployment"
             value="/srv/metrics.torproject.org/metrics/work" />
