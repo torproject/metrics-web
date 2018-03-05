@@ -125,6 +125,9 @@ body {
     }
 }
 
+.navbar-secondary {
+    min-height:0px;
+}
 .navbar-secondary .section-header {
     padding:3px 14px;
     text-transform:uppercase;
