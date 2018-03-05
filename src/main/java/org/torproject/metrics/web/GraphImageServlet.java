@@ -64,13 +64,26 @@ public class GraphImageServlet extends HttpServlet {
     }
 
     /* Write graph bytes to response. */
-    response.setContentType("image/" + fileType);
-    response.setHeader("Content-Length",
-        String.valueOf(graph.getBytes().length));
+    byte[] headerBytes = ("#\n"
+        + "# The Tor Project\n"
+        + "#\n"
+        + "# URL: https://metrics.torproject.org"
+          + request.getRequestURI()
+          + (null == request.getQueryString() ? ""
+          : "?" + request.getQueryString()) + "\n"
+        + "#\n").getBytes();
+    response.setContentType(
+        ("csv".equals(fileType) ? "text/" : "image/") + fileType);
+    response.setHeader("Content-Length", String.valueOf(
+        ("csv".equals(fileType) ? headerBytes.length : 0)
+        + graph.getBytes().length));
     response.setHeader("Content-Disposition",
         "inline; filename=\"" + graph.getFileName() + "\"");
     BufferedOutputStream output = new BufferedOutputStream(
         response.getOutputStream(), 1024);
+    if ("csv".equals(fileType)) {
+      output.write(headerBytes);
+    }
     output.write(graph.getBytes(), 0, graph.getBytes().length);
     output.flush();
     output.close();
