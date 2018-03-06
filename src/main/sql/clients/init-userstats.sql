@@ -681,6 +681,9 @@ CREATE OR REPLACE VIEW estimated AS SELECT
   -- request statistics.
   WHERE a.frac BETWEEN 0.1 AND 1.0
 
+  -- Skip estimates that are as recent as yesterday or newer.
+  AND a.date < current_date - 1
+
   -- Order results.
   ORDER BY date DESC, node, version, transport, country;
 
@@ -748,6 +751,9 @@ CREATE OR REPLACE VIEW combined AS SELECT
   -- Only include estimates with at least 10% of nodes reporting directory
   -- request statistics.
   WHERE a.frac BETWEEN 0.1 AND 1.0
+
+  -- Skip estimates that are as recent as yesterday or newer.
+  AND a.date < current_date - 1
 
   -- Order results.
   ORDER BY date DESC;

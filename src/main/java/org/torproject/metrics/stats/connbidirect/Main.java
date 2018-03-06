@@ -429,6 +429,8 @@ public class Main {
       SortedSet<RawStat> rawStats) {
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    String yesterday = dateFormat.format(System.currentTimeMillis()
+        - ONE_DAY_IN_MILLIS);
     SortedMap<String, List<Short>> fractionsByDateAndDirection
         = new TreeMap<>();
     final String[] directions = new String[] { "read", "write", "both" };
@@ -436,6 +438,9 @@ public class Main {
       if (rawStat.fingerprint != null) {
         String date = dateFormat.format(rawStat.dateDays
             * ONE_DAY_IN_MILLIS);
+        if (date.compareTo(yesterday) >= 0) {
+          continue;
+        }
         short[] fractions = new short[] { rawStat.fractionRead,
             rawStat.fractionWrite, rawStat.fractionBoth };
         for (int i = 0; i < directions.length; i++) {

@@ -99,7 +99,7 @@ WITH included_statuses AS (
   GROUP BY DATE(valid_after), server
   HAVING COUNT(status_id) >= 12
   AND DATE(valid_after)
-    < (SELECT MAX(DATE(valid_after)) FROM included_statuses) - 1
+    < (SELECT MAX(DATE(valid_after)) FROM included_statuses)
 )
 SELECT DATE(valid_after) AS valid_after_date, server,
   CASE WHEN server = 'relay' THEN guard_relay ELSE NULL END AS guard_relay,

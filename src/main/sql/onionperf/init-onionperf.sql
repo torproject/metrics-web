@@ -69,6 +69,7 @@ SELECT DATE(start) AS date,
     AND readbytes < filesize THEN 1 ELSE NULL END) AS failures,
   COUNT(*) AS requests
 FROM measurements
+WHERE DATE(start) < current_date - 1
 GROUP BY date, filesize, source, server
 UNION
 SELECT DATE(start) AS date,
@@ -83,6 +84,7 @@ SELECT DATE(start) AS date,
     AND readbytes < filesize THEN 1 ELSE NULL END) AS failures,
   COUNT(*) AS requests
 FROM measurements
+WHERE DATE(start) < current_date - 1
 GROUP BY date, filesize, 3, server) sub
 ORDER BY date, filesize, source, server;
 

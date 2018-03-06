@@ -720,7 +720,7 @@ CREATE VIEW stats_servers AS
   (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
   NULL AS platform, TRUE AS ec2bridge, NULL AS relays,
   avg_running_ec2 AS bridges FROM bridge_network_size
-  WHERE date < current_date - 1)
+  WHERE date < current_date)
 UNION ALL
   (SELECT COALESCE(network_size.date, bridge_network_size.date) AS date,
   NULL AS flag, NULL AS country, NULL AS version, NULL AS platform,
@@ -729,57 +729,57 @@ UNION ALL
   FULL OUTER JOIN bridge_network_size
   ON network_size.date = bridge_network_size.date
   WHERE COALESCE(network_size.date, bridge_network_size.date) <
-  current_date - 1)
+  current_date)
 UNION ALL
   (SELECT date, 'Exit' AS flag, NULL AS country, NULL AS version,
   NULL AS platform, NULL AS ec2bridge, avg_exit AS relays,
-  NULL AS bridges FROM network_size WHERE date < current_date - 1)
+  NULL AS bridges FROM network_size WHERE date < current_date)
 UNION ALL
   (SELECT date, 'Guard' AS flag, NULL AS country, NULL AS version,
   NULL AS platform, NULL AS ec2bridge, avg_guard AS relays,
-  NULL AS bridges FROM network_size WHERE date < current_date - 1)
+  NULL AS bridges FROM network_size WHERE date < current_date)
 UNION ALL
   (SELECT date, 'Fast' AS flag, NULL AS country, NULL AS version,
   NULL AS platform, NULL AS ec2bridge, avg_fast AS relays,
-  NULL AS bridges FROM network_size WHERE date < current_date - 1)
+  NULL AS bridges FROM network_size WHERE date < current_date)
 UNION ALL
   (SELECT date, 'Stable' AS flag, NULL AS country, NULL AS version,
   NULL AS platform, NULL AS ec2bridge, avg_stable AS relays,
-  NULL AS bridges FROM network_size WHERE date < current_date - 1)
+  NULL AS bridges FROM network_size WHERE date < current_date)
 UNION ALL
   (SELECT date, 'HSDir' AS flag, NULL AS country, NULL AS version,
   NULL AS platform, NULL AS ec2bridge, avg_hsdir AS relays,
-  NULL AS bridges FROM network_size WHERE date < current_date - 1)
+  NULL AS bridges FROM network_size WHERE date < current_date)
 UNION ALL
   (SELECT date, NULL AS flag, CASE WHEN country != 'zz' THEN country
   ELSE '??' END AS country, NULL AS version, NULL AS platform,
   NULL AS ec2bridge, relays, NULL AS bridges FROM relay_countries
-  WHERE date < current_date - 1)
+  WHERE date < current_date)
 UNION ALL
   (SELECT date, NULL AS flag, NULL AS country, version, NULL AS platform,
   NULL AS ec2bridge, relays, NULL AS bridges FROM relay_versions
-  WHERE date < current_date - 1)
+  WHERE date < current_date)
 UNION ALL
   (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
   'Linux' AS platform, NULL AS ec2bridge, avg_linux AS relays,
-  NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
+  NULL AS bridges FROM relay_platforms WHERE date < current_date)
 UNION ALL
   (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
   'Darwin' AS platform, NULL AS ec2bridge, avg_darwin AS relays,
-  NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
+  NULL AS bridges FROM relay_platforms WHERE date < current_date)
 UNION ALL
   (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
   'BSD' AS platform, NULL AS ec2bridge, avg_bsd AS relays,
-  NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
+  NULL AS bridges FROM relay_platforms WHERE date < current_date)
 UNION ALL
   (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
   'Windows' AS platform, NULL AS ec2bridge, avg_windows AS relays,
-  NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
+  NULL AS bridges FROM relay_platforms WHERE date < current_date)
 UNION ALL
   (SELECT date, NULL AS flag, NULL AS country, NULL AS version,
   'Other' AS platform, NULL AS ec2bridge, avg_other AS relays,
-  NULL AS bridges FROM relay_platforms WHERE date < current_date - 1)
-ORDER BY 1, 2, 3, 4, 5, 6;
+  NULL AS bridges FROM relay_platforms WHERE date < current_date)
+ORDER BY date, flag, country, version, platform, ec2bridge;
 
 -- View for exporting bandwidth statistics.
 CREATE VIEW stats_bandwidth AS
@@ -797,7 +797,7 @@ CREATE VIEW stats_bandwidth AS
   AND bandwidth_flags.isexit = bwhist_flags.isexit
   AND bandwidth_flags.isguard = bwhist_flags.isguard
   WHERE COALESCE(bandwidth_flags.date, bwhist_flags.date) <
-  current_date - 3)
+  current_date - 2)
 UNION ALL
   (SELECT COALESCE(total_bandwidth.date, total_bwhist.date, u.date)
   AS date, NULL AS isexit, NULL AS isguard,
@@ -818,6 +818,6 @@ UNION ALL
   AND bwp / bwd <= 3) u
   ON COALESCE(total_bandwidth.date, total_bwhist.date) = u.date
   WHERE COALESCE(total_bandwidth.date, total_bwhist.date, u.date) <
-  current_date - 3)
-ORDER BY 1, 2, 3;
+  current_date - 2)
+ORDER BY date, isexit, isguard;
 
