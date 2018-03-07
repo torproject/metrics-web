@@ -2819,6 +2819,14 @@
     "description": "Tor 0.3.3.2-alpha reaches deb.torproject.org repositories"
   },
   {
+    "start": "2018-02-27",
+    "ongoing": true,
+    "description": "Less than 3 bandwidth authorities are available.",
+    "links": [
+      "<a href=\"https://lists.torproject.org/pipermail/tor-relays/2018-February/014676.html\">tor-relays</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "places": [
       "tm"
@@ -3439,6 +3447,22 @@
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-11-01&end=2018-01-15&country=de&events=off\">graph</a>",
       "<a href=\"https://www.reddit.com/r/TOR/comments/7ldrox/tor_usage_in_germany_what_happend/\">reddit thread</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-12-12",
+    "end": "2018-01-10",
+    "places": [
+      "fr"
+    ],
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Temporary tripling of relay users in France. Bridges not affected.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-10-01&end=2018-03-01&country=fr&events=off\">graph</a>"
     ],
     "unknown": true
   }
