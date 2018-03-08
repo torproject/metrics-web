@@ -2827,6 +2827,14 @@
     ]
   },
   {
+    "start": "2018-03-03",
+    "description": "Release of tor 0.3.2.10, 0.3.1.10, and 0.2.9.15, which offer better resistance against DoS attacks.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/new-stable-tor-releases-security-fixes-and-dos-prevention-03210-03110-02915\">blog post</a>",
+      "<a href=\"https://bugs.torproject.org/24902\">ticket</a>"
+    ]
+  },
+  {
     "start": "2016-02-24",
     "places": [
       "tm"
