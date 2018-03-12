@@ -363,6 +363,8 @@ def write_all(tss, minc, maxc, RANGES_FILE, INTERVAL=7):
         if not minv < maxv:
           print minv, maxv, series[i-INTERVAL], minc[i], maxc[i]
         assert minv < maxv
+        if minv < 0.0:
+          minv = 0.0
         ranges_file.write("%s,%s,%s,%s\n" % (tss.all_dates[i], c, minv, maxv))
   ranges_file.close()
 
