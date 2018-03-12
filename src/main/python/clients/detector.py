@@ -60,8 +60,6 @@ import country_info
 # write utf8 to file
 import codecs
 
-days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-
 def get_country_name_from_cc(country_code):
   if (country_code.lower() in country_info.countries):
     return country_info.countries[country_code.lower()]
@@ -208,145 +206,6 @@ def make_tendencies_minmax(l, INTERVAL = 1):
   ## print minx[-1], maxx[-1]
   return minx, maxx
 
-# Makes pretty plots
-def raw_plot(series, minc, maxc, labels, xtitle):
-    assert len(xtitle) == 3
-    fname, stitle, slegend = xtitle
-
-    font = {'family' : 'Bitstream Vera Sans',
-        'weight' : 'normal',
-        'size'   : 8}
-    matplotlib.rc('font', **font)
-
-    ylim( (-max(series)*0.1, max(series)*1.1) )
-    plot(labels, series, linewidth=1.0, label="Users")
-
-    wherefill = []
-    for mm,mx in zip(minc, maxc):
-      wherefill += [not (mm == None and mx == None)]
-      assert mm < mx or (mm == None and mx == None)
-
-    fill_between(labels, minc, maxc, where=wherefill, color="gray", label="Prediction")
-
-    vdown = []
-    vup = []
-    for i,v in enumerate(series):
-      if minc[i] != None and v < minc[i]:
-        vdown += [v]
-        vup += [None]
-      elif maxc[i] != None and v > maxc[i]:
-        vdown += [None]
-        vup += [v]
-      else:
-        vup += [None]
-        vdown += [None]
-
-    plot(labels, vdown, 'o', ms=10, lw=2, alpha=0.5, mfc='orange', label="Downturns")
-    plot(labels, vup, 'o', ms=10, lw=2, alpha=0.5, mfc='green', label="Upturns")
-
-    legend(loc=2)
-
-    xlabel('Time (days)')
-    ylabel('Users')
-    title(stitle)
-    grid(True)
-    F = gcf()
-
-    F.set_size_inches(10,5)
-    F.savefig(fname,  format="png", dpi = (150))
-    close()
-
-def absolute_plot(series, minc, maxc, labels,INTERVAL, xtitle):
-  in_minc = []
-  in_maxc = []
-  for i, v in enumerate(series):
-    if i > 0 and i - INTERVAL >= 0 and series[i] != None and series[i-INTERVAL] != None and series[i-INTERVAL] != 0 and minc[i]!= None and maxc[i]!= None:
-      in_minc += [minc[i] * poisson.ppf(1-0.9999, series[i-INTERVAL])]
-      in_maxc += [maxc[i] * poisson.ppf(0.9999, series[i-INTERVAL])]
-      if not in_minc[-1] < in_maxc[-1]:
-        print in_minc[-1], in_maxc[-1], series[i-INTERVAL], minc[i], maxc[i]
-      assert in_minc[-1] < in_maxc[-1]
-    else:
-      in_minc += [None]
-      in_maxc += [None]
-  raw_plot(series, in_minc, in_maxc, labels, xtitle)
-
-"""Return the number of downscores and upscores of a time series
-'series', given tendencies 'minc' and 'maxc' for the time interval
-'INTERVAL'.
-
-If 'scoring_interval' is specifed we only consider upscore/downscore
-that happened in the latest 'scoring_interval' days.
-"""
-def censor_score(series, minc, maxc, INTERVAL, scoring_interval=None):
-  upscore = 0
-  downscore = 0
-
-  if scoring_interval is None:
-    scoring_interval = len(series)
-  assert(len(series) >= scoring_interval)
-
-  for i, v in enumerate(series):
-    if i > 0 and i - INTERVAL >= 0 and series[i] != None and series[i-INTERVAL] != None and series[i-INTERVAL] != 0 and minc[i]!= None and maxc[i]!= None:
-      in_minc = minc[i] * poisson.ppf(1-0.9999, series[i-INTERVAL])
-      in_maxc = maxc[i] * poisson.ppf(0.9999, series[i-INTERVAL])
-      if (i >= (len(series) - scoring_interval)):
-        downscore += 1 if minc[i] != None and v < in_minc else 0
-        upscore += 1 if maxc[i] != None and v > in_maxc else 0
-
-  return downscore, upscore
-
-def plot_target(tss, TARGET, xtitle, minx, maxx, DAYS=365, INTERV = 7):
-  ctarget = tss.get_country_series(TARGET)
-  c = n_day_rel(ctarget, INTERV)
-  absolute_plot(ctarget[-DAYS:], minx[-DAYS:], maxx[-DAYS:], tss.all_dates[-DAYS:],INTERV, xtitle = xtitle)
-
-def write_censorship_report_prologue(report_file, dates, notification_period):
-  if (notification_period == 1):
-    date_str = "%s" % (dates[-1]) # no need for date range if it's just one day
-  else:
-    date_str = "%s to %s" % (dates[-notification_period], dates[-1])
-
-  prologue = "=======================\n"
-  prologue += "Automatic Censorship Report for %s\n" % (date_str)
-  prologue += "=======================\n\n"
-  report_file.write(prologue)
-
-## Make a league table of censorship + nice graphs
-def plot_all(tss, minx, maxx, INTERV, DAYS=None, rdir="img"):
-  rdir = os.path.realpath(rdir)
-  if not os.path.exists(rdir) or not os.path.isdir(rdir):
-    print "ERROR: %s does not exist or is not a directory." % rdir
-    return
-
-  summary_file = file(os.path.join(rdir, "summary.txt"), "w")
-
-  if DAYS == None:
-    DAYS = 6*31
-
-  s = tss.get_largest(200)
-  scores = []
-  for num, li in s:
-    print ".",
-    ds,us = censor_score(tss.get_country_series(li)[-DAYS:], minx[-DAYS:], maxx[-DAYS:], INTERV)
-    # print ds, us
-    scores += [(ds,num, us, li)]
-  scores.sort()
-  scores.reverse()
-  s = "\n=======================\n"
-  s+= "Report for %s to %s\n" % (tss.all_dates[-DAYS], tss.all_dates[-1])
-  s+= "=======================\n"
-  print s
-  summary_file.write(s)
-  for a,nx, b,c in scores:
-    if a > 0:
-      s = "%s -- down: %2d (up: %2d affected: %s)" % (c, a, b, nx)
-      print s
-      summary_file.write(s + "\n")
-      xtitle = (os.path.join(rdir, "%03d-%s-censor.png" % (a,c)), "Tor report for %s -- down: %2d (up: %2d affected: %s)" % (c, a, b, nx),"")
-      plot_target(tss, c,xtitle, minx, maxx, DAYS, INTERV)
-  summary_file.close()
-
 """Write a CSV report on the minimum/maximum users of each country per date."""
 def write_all(tss, minc, maxc, RANGES_FILE, INTERVAL=7):
   ranges_file = file(RANGES_FILE, "w")
@@ -368,69 +227,15 @@ def write_all(tss, minc, maxc, RANGES_FILE, INTERVAL=7):
         ranges_file.write("%s,%s,%s,%s\n" % (tss.all_dates[i], c, minv, maxv))
   ranges_file.close()
 
-"""Return a URL that points to a graph in metrics.tpo that displays
-the number of direct Tor users in country 'country_code', for a
-'period'-days period.
-
-Let's hope that the metrics.tpo URL scheme doesn't change often.
-"""
-def get_tor_usage_graph_url_for_cc_and_date(country_code, dates, period):
-  url = "https://metrics.torproject.org/users.html?graph=userstats-relay-country&start=%s&end=%s&country=%s&events=on#userstats-relay-country\n" % \
-      (dates[-period], dates[-1], country_code)
-  return url
-
-"""Write a file containing a short censorship report over the last
-'notification_period' days.
-"""
-def write_ml_report(tss, minx, maxx, INTERV, DAYS, notification_period=None):
-  if notification_period is None:
-    notification_period = DAYS
-
-  report_file = codecs.open('short_censorship_report.txt', 'w', 'utf-8')
-  file_prologue_written = False
-
-  s = tss.get_largest(None) # no restrictions, get 'em all.
-  scores = []
-  for num, li in s:
-    ds,us = censor_score(tss.get_country_series(li)[-DAYS:], minx[-DAYS:], maxx[-DAYS:], INTERV, notification_period)
-    scores += [(ds,num, us, li)]
-  scores.sort()
-  scores.reverse()
-
-  for downscores,users_n,upscores,country_code in scores:
-    if (downscores > 0) or (upscores > 0):
-      if not file_prologue_written:
-        write_censorship_report_prologue(report_file, tss.all_dates, notification_period)
-        file_prologue_written = True
-
-      if ((upscores > 0) and (downscores == 0)):
-        s = "We detected an unusual spike of Tor users in %s (%d upscores, %d users):\n" % \
-            (get_country_name_from_cc(country_code), upscores, users_n)
-      else:
-        s = "We detected %d potential censorship events in %s (users: %d, upscores: %d):\n" % \
-            (downscores, get_country_name_from_cc(country_code), users_n, upscores)
-
-      # Also give out a link for the appropriate usage graph for a 90-days period.
-      s += get_tor_usage_graph_url_for_cc_and_date(country_code, tss.all_dates, 90)
-
-      report_file.write(s + "\n")
-
-  report_file.close()
-
 # INTERV is the time interval to model connection rates;
 # consider maximum DAYS days back.
 def detect(CSV_FILE = "userstats-detector.csv",
-           RANGES_FILE = "userstats-ranges.csv", GRAPH_DIR = "img",
-           INTERV = 7, DAYS = 6 * 31, REPORT = True):
+           RANGES_FILE = "userstats-ranges.csv",
+           INTERV = 7, DAYS = 6 * 31):
   tss = torstatstore(CSV_FILE)
   l = tss.get_largest_locations(50)
   minx, maxx = make_tendencies_minmax(l, INTERV)
-  #plot_all(tss, minx, maxx, INTERV, DAYS, rdir=GRAPH_DIR)
   write_all(tss, minx, maxx, RANGES_FILE, INTERV)
-
-  if REPORT:
-    # Make our short report; only consider events of the last day
-    write_ml_report(tss, minx, maxx, INTERV, DAYS, 1)
 
 def main():
   detect()
