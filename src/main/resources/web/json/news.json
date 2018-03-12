@@ -2492,6 +2492,7 @@
     "description": "Outage of the bridge authority <a href=\"https://metrics.torproject.org/rs.html#details/1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1\">Bifroest</a>.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2017-August/000441.html\">mailing list post</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2018-March/000713.html\">mailing list post</a>",
       "<a href=\"https://metrics.torproject.org/networksize.html?start=2017-07-01&end=2017-08-27\">graph</a>"
     ]
   },
@@ -2538,6 +2539,18 @@
       "bridge"
     ],
     "description": "Outage of the bridge authority <a href=\"https://metrics.torproject.org/rs.html#details/1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1\">Bifroest</a>."
+  },
+  {
+    "start": "2017-09-15",
+    "end": "2017-09-16",
+    "protocols": [
+      "bridge"
+    ],
+    "description": "The bridge authority was down due to an issue with its offline master key.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/networksize.html?start=2017-07-01&end=2018-01-01\">graph</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2018-March/000713.html\">mailing list post</a>"
+    ]
   },
   {
     "start": "2017-09-15",
@@ -2694,6 +2707,18 @@
     ]
   },
   {
+    "start": "2017-12-08",
+    "end": "2017-12-11",
+    "protocols": [
+      "bridge"
+    ],
+    "description": "The bridge authority was down for unknown reasons.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/networksize.html?start=2017-07-01&end=2018-01-01\">graph</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2018-March/000713.html\">mailing list post</a>"
+    ]
+  },
+  {
     "start": "2017-12-12",
     "end": "2018-01-18",
     "protocols": [
@@ -2820,7 +2845,7 @@
   },
   {
     "start": "2018-02-27",
-    "ongoing": true,
+    "end": "2018-03-02",
     "description": "Less than 3 bandwidth authorities are available.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-relays/2018-February/014676.html\">tor-relays</a>"
@@ -3471,6 +3496,35 @@
     "description": "Temporary tripling of relay users in France. Bridges not affected.",
     "links": [
       "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-10-01&end=2018-03-01&country=fr&events=off\">graph</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2017-12-16",
+    "end": "2017-12-17",
+    "protocols": [
+      "bridge"
+    ],
+    "description": "Drop in the number of measured bridges.",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/networksize.html?start=2017-07-01&end=2018-01-01\">graph</a>",
+      "<a href=\"https://lists.torproject.org/pipermail/metrics-team/2018-March/000713.html\">mailing list post</a>"
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2018-03-05",
+    "end": "2018-03-08",
+    "places": [
+      "de"
+    ],
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Steady drop in the number of relay users in Germany, from 1.5M to 650k. (Drop coincides with the release of tor 0.3.2.10, 0.3.1.10, and 0.2.9.15, which offer better resistance against DoS attacks; as well as improvements in speed for downloads from onions <a href=\"https://metrics.torproject.org/torperf.html?start=2017-12-10&end=2018-03-10&source=all&server=onion&filesize=5mb\">graph</a>; see this <a href=\"https://metrics.torproject.org/connbidirect.html\">graph</a> as well. More datapoints: DDoS of the network happened <a href=\"https://lists.torproject.org/pipermail/tor-project/2017-December/001604.html\">around the time</a> that saw an increase in the number of relay users in Germany, see entry above or <a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-12-11&end=2017-12-22&country=de&events=off\">graph</a>)",
+    "links": [
+      "<a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2017-11-10&end=2018-03-10&country=de&events=off\">graph</a>"
     ],
     "unknown": true
   }
