@@ -295,6 +295,16 @@ Extended the "version" parameter to bridges, added a
 Removed the $ from fingerprints in fields "effective_family", "alleged_family",
 and "indirect_family" on December 20, 2017.
 <a href="#versions_5_0" class="anchor">#</a></li>
+<li><a id="versions_5_1"></a><strong>5.1</strong>
+Always added a relay's own fingerprint to its "effective_family" and made
+nickname fields "n" in summary documents and "nickname" in details documents
+required fields on March 14, 2018.
+<a href="#versions_5_1" class="anchor">#</a></li>
+<li><a id="versions_6_0"></a><strong>6.0</strong>
+(scheduled, but not deployed yet!): Include all exit addresses in
+"exit_addresses", regardless of whether they're used as OR addresses or not, to
+be deployed after April 14, 2018.
+<a href="#versions_6_0" class="anchor">#</a></li>
 </ul>
 
 
@@ -873,13 +883,13 @@ Relay summary objects contain the following key-value pairs:
 
 <li>
 <a id="summary_relay_n"></a>
-<b>n</b>
+<b>n <span class="label label-primary">updated</span></b>
 <code class="typeof">string</code>
-<span class="required-false">optional</span>
+<span class="required-true">required</span>
 <a href="#summary_relay_n" class="anchor">#</a>
 <p>
 Relay nickname consisting of 1&ndash;19 alphanumerical characters.
-Omitted if the relay nickname is <strong>"Unnamed"</strong>.
+<span class="blue">Turned into required field on March 14, 2018.</span>
 </p>
 </li>
 
@@ -936,13 +946,13 @@ Bridge summary objects contain the following key-value pairs:
 
 <li>
 <a id="summary_bridge_n"></a>
-<b>n</b>
+<b>n <span class="label label-primary">updated</span></b>
 <code class="typeof">string</code>
-<span class="required-false">optional</span>
+<span class="required-true">required</span>
 <a href="#summary_bridge_n" class="anchor">#</a>
 <p>
 Bridge nickname consisting of 1&ndash;19 alphanumerical characters.
-Omitted if the bridge nickname is <strong>"Unnamed"</strong>.
+<span class="blue">Turned into required field on March 14, 2018.</span>
 </p>
 </li>
 
@@ -1001,13 +1011,13 @@ Relay details objects contain the following key-value pairs:
 
 <li>
 <a id="details_relay_nickname"></a>
-<b>nickname</b>
+<b>nickname <span class="label label-primary">updated</span></b>
 <code class="typeof">string</code>
-<span class="required-false">optional</span>
+<span class="required-true">required</span>
 <a href="#details_relay_nickname" class="anchor">#</a>
 <p>
 Relay nickname consisting of 1&ndash;19 alphanumerical characters.
-Omitted if the relay nickname is <strong>"Unnamed"</strong>.
+<span class="blue">Turned into required field on March 14, 2018.</span>
 </p>
 </li>
 
@@ -1481,7 +1491,7 @@ the relay did not report which version it runs.
 
 <li>
 <a id="details_relay_effective_family"></a>
-<b>effective_family</b>
+<b>effective_family <span class="label label-primary">updated</span></b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_effective_family" class="anchor">#</a>
@@ -1490,8 +1500,10 @@ Array of fingerprints of relays that are in an effective,
 mutual family relationship with this relay.
 These relays are part of this relay's family and they consider this relay
 to be part of their family.
-Omitted if empty or if descriptor containing this information cannot be
-found.
+Always contains the relay's own fingerprint.
+Omitted if the descriptor containing this information cannot be found.
+<span class="blue">Updated to always include the relay's own fingerprint on
+March 14, 2018.</span>
 </p>
 </li>
 
@@ -1646,14 +1658,13 @@ Bridge details objects contain the following key-value pairs:
 
 <li>
 <a id="details_bridge_nickname"></a>
-<b>nickname</b>
+<b>nickname <span class="label label-primary">updated</span></b>
 <code class="typeof">string</code>
-<span class="required-false">optional</span>
+<span class="required-true">required</span>
 <a href="#details_bridge_nickname" class="anchor">#</a>
 <p>
-Bridge nickname consisting of 1&ndash;19
-alphanumerical characters.
-Omitted if the bridge nickname is <strong>"Unnamed"</strong>.
+Bridge nickname consisting of 1&ndash;19 alphanumerical characters.
+<span class="blue">Turned into required field on March 14, 2018.</span>
 </p>
 </li>
 
