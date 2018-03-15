@@ -2621,6 +2621,20 @@
     ]
   },
   {
+    "start": "2017-10-25",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Release of tor 0.2.5.15, 0.2.8.16, 0.2.9.13, 0.3.0.12, and 0.3.1.8, which add a new directory authority bastet, and change the IP address of the directory authority Longclaw.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/new-stable-tor-releases-0318-03012-02913-02816-02515\">blog post</a>",
+      "<a href=\"https://blog.torproject.org/introducing-bastet-our-new-directory-authority\">Bastet blog post</a>",
+      "<a href=\"https://bugs.torproject.org/23910\">bastet ticket</a>",
+      "<a href=\"https://bugs.torproject.org/23592\">Longclaw ticket</a>"
+    ]
+  },
+  {
     "start": "2017-11-01",
     "places": [
       "ru"
@@ -2661,6 +2675,17 @@
     ]
   },
   {
+    "start": "2017-11-14",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Release of Tor Browser 7.0.10, containing tor 0.3.1.8, which adds a new directory authority bastet, and changes the IP address of the directory authority Longclaw.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-7010-released\">blog post</a>"
+    ]
+  },
+  {
     "start": "2017-11-15",
     "end": "2017-11-15",
     "protocols": [
@@ -2669,6 +2694,17 @@
     "description": "Outage of meek-amazon bridge.",
     "links": [
       "<a href=\"https://bugs.torproject.org/24284\">ticket</a>"
+    ]
+  },
+  {
+    "start": "2017-11-15",
+    "protocols": [
+      "<OR>",
+      "relay"
+    ],
+    "description": "Release of Tor Browser 7.5a8, containing tor 0.3.2.4-alpha, which adds a new directory authority bastet, and changes the IP address of the directory authority Longclaw.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-75a8-released\">blog post</a>"
     ]
   },
   {
@@ -2682,6 +2718,19 @@
       "<a href=\"https://dailytimes.com.pk/147132/social-media-goes-down-in-pakistan/\">article</a>",
       "<a href=\"https://digitalrightsfoundation.pk/press-release-drf-and-netblocks-find-blanket-and-nation-wide-ban-on-social-media-in-pakistan-and-demand-it-to-be-lifted-immediately/\">NetBlocks data</a>",
       "<a href=\"https://ooni.torproject.org/post/how-pakistan-blocked-social-media/\">OONI/Bytes For All report</a>"
+    ]
+  },
+  {
+    "start": "2017-12-01",
+    "protocols": [
+      "<OR>",
+      "ipv6",
+      "relay"
+    ],
+    "description": "Release of tor 0.2.8.17, 0.2.9.14, 0.3.0.13, 0.3.1.9, and 0.3.2.6-alpha, which add an IPv6 address for the bridge authority bastet.",
+    "links": [
+      "<a href=\"https://bugs.torproject.org/24394\">ticket</a>",
+      "<a href=\"https://blog.torproject.org/new-stable-tor-releases-security-fixes-0319-03013-02914-02817-02516\">blog post</a>"
     ]
   },
   {
@@ -2719,6 +2768,30 @@
     ]
   },
   {
+    "start": "2017-12-09",
+    "protocols": [
+      "<OR>",
+      "ipv6",
+      "relay"
+    ],
+    "description": "Release of Tor Browser 7.0.11, containing tor 0.3.1.9, which adds an IPv6 address for the bridge authority bastet.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-7011-released\">blog post</a>"
+    ]
+  },
+  {
+    "start": "2017-12-09",
+    "protocols": [
+      "<OR>",
+      "ipv6",
+      "relay"
+    ],
+    "description": "Release of Tor Browser 7.5a9, containing tor 0.3.2.6-alpha, which adds an IPv6 address for the bridge authority bastet.",
+    "links": [
+      "<a href=\"https://blog.torproject.org/tor-browser-75a9-released\">blog post</a>"
+    ]
+  },
+  {
     "start": "2017-12-12",
     "end": "2018-01-18",
     "protocols": [
@@ -2739,7 +2812,7 @@
   },
   {
     "start": "2017-12-21",
-    "description": "Release of tor 0.3.2.8-rc, intended to fix the KIST bug that enabled a DoS on relays by running them out of memory..",
+    "description": "Release of tor 0.3.2.8-rc, intended to fix the KIST bug that enabled a DoS on relays by running them out of memory.",
     "links": [
       "<a href=\"https://lists.torproject.org/pipermail/tor-talk/2017-December/043844.html\">announcement</a>",
       "<a href=\"https://bugs.torproject.org/24665\">ticket</a>"
