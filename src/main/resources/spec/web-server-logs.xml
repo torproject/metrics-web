@@ -190,7 +190,7 @@ mod_log_config module</eref>.</t>
         <t>Sanitized log files may additionally be sorted into directories by
         virtual host and date as in:
         <list>
-          <t>&lt;virtual-host&gt;/YYYY/MM/&lt;virtual-host&gt;_&lt;physical-host&gt;_access.log_YYYYMMDD[.xz]</t>
+          <t>&lt;virtual-host&gt;/YYYY/MM/DD/&lt;virtual-host&gt;_&lt;physical-host&gt;_access.log_YYYYMMDD[.xz]</t>
         </list>
         The virtual hostnames, like 'metrics.torproject.org' or
         'dist.torproject.org', are more familiar to the public and were therefore

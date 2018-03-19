@@ -277,7 +277,7 @@ of the filename.</p>
 by virtual host and date as in:</p>
 <ul class="empty">
 <li>
-&lt;virtual-host&gt;/YYYY/MM/&lt;virtual-host&gt;_&lt;physical-host&gt;_access.log_YYYYMMDD[.xz]</li>
+&lt;virtual-host&gt;/YYYY/MM/DD/&lt;virtual-host&gt;_&lt;physical-host&gt;_access.log_YYYYMMDD[.xz]</li>
 </ul>
 <p>The virtual hostnames, like 'metrics.torproject.org' or
 'dist.torproject.org', are more familiar to the public and were
