@@ -80,14 +80,14 @@ public class NewsServlet extends AnyServlet {
         .getStart()) > 0);
 
     /* Sort news into categories. */
-    Map<String[], List<String>> newsByCategory = new LinkedHashMap<>();
+    Map<String[], List<News>> newsByCategory = new LinkedHashMap<>();
     for (String[] category : cutOffDates.values()) {
       newsByCategory.put(category, new ArrayList<>());
     }
     for (News news : this.sortedNews) {
       for (Map.Entry<String, String[]> category : cutOffDates.entrySet()) {
         if (news.getStart().compareTo(category.getKey()) >= 0) {
-          newsByCategory.get(category.getValue()).add(news.formatAsTableRow());
+          newsByCategory.get(category.getValue()).add(news);
           break;
         }
       }

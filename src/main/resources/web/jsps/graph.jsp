@@ -193,8 +193,8 @@
                   be related to the displayed graph.</td></tr>
                   </c:when>
                   <c:otherwise>
-                  <c:forEach var="relatedEvent" items="${relatedEvents}">
-                  ${relatedEvent}
+                  <c:forEach var="entry" items="${relatedEvents}">
+                    <%@ include file="news-item.jsp" %>
                   </c:forEach>
                   </c:otherwise>
                   </c:choose>

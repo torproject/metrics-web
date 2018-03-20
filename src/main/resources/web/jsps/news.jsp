@@ -30,7 +30,7 @@
         </thead>
         <tbody>
           <c:forEach var="entry" items="${category.value}">
-          ${entry}
+            <%@ include file="news-item.jsp" %>
           </c:forEach>
         </tbody>
       </table>

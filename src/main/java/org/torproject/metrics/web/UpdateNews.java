@@ -33,12 +33,7 @@ public class UpdateNews {
         if (!line.startsWith("||") || line.startsWith("||=start")) {
           continue;
         }
-        line = line.trim()
-            .replaceAll("×", "&times;")
-            .replaceAll("§", "&sect;")
-            .replaceAll("–", "&ndash;")
-            .replaceAll("“", "&ldquo;")
-            .replaceAll("”", "&rdquo;");
+        line = line.trim();
         String[] parts = line.split("\\|\\|");
         News entry = new News();
         entry.start = parts[1].replaceAll("~", "").trim();
@@ -97,18 +92,31 @@ public class UpdateNews {
               + desc.substring(open + 1, close) + "</code>"
               + desc.substring(close + 1);
         }
-        entry.description = desc;
+        entry.description = desc
+            .replaceAll("&", "&amp;")
+            .replaceAll("×", "&times;")
+            .replaceAll("§", "&sect;")
+            .replaceAll("–", "&ndash;")
+            .replaceAll("“", "&ldquo;")
+            .replaceAll("”", "&rdquo;");
+        String shortDesc = desc
+            .replaceAll("\\<.*?\\>", "")
+            .replaceAll("&.*;", "");
+        if (shortDesc.indexOf(". ") != -1) {
+          shortDesc = shortDesc.substring(0, shortDesc.indexOf(". "));
+        }
+        if (shortDesc.indexOf(" (") != -1) {
+          shortDesc = shortDesc.substring(0, shortDesc.indexOf(" ("));
+        }
+        entry.shortDescription = shortDesc;
         if (parts.length >= 7) {
           for (String link : parts[6].split("[\\[\\]]")) {
             link = link.trim();
             if (link.isEmpty()) {
               continue;
             }
-            if (null == entry.links) {
-              entry.links = new ArrayList<>();
-            }
-            entry.links.add("<a href=\"" + link.substring(0, link.indexOf(" "))
-                + "\">" + link.substring(link.indexOf(" ") + 1) + "</a>");
+            entry.addLink(link.substring(link.indexOf(" ") + 1),
+              link.substring(0, link.indexOf(" ")));
           }
         }
         entry.unknown = unknown;

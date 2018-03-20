@@ -3,11 +3,25 @@
 
 package org.torproject.metrics.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class News {
+
+  public class Link {
+    String label;
+    String target;
+
+    public String getLabel() {
+      return label;
+    }
+
+    public String getTarget() {
+      return target;
+    }
+  }
 
   String start;
 
@@ -19,17 +33,29 @@ public class News {
 
   List<String> protocols;
 
+  String shortDescription;
+
   String description;
 
-  List<String> links;
+  List<Link> links;
 
   Boolean unknown;
 
-  String getStart() {
+  void addLink(String label, String target) {
+    if (null == links) {
+      links = new ArrayList<>();
+    }
+    Link link = new Link();
+    link.label = label;
+    link.target = target;
+    links.add(link);
+  }
+
+  public String getStart() {
     return this.start;
   }
 
-  String getEnd() {
+  public String getEnd() {
     return this.end;
   }
 
@@ -37,7 +63,7 @@ public class News {
    * Returns whether or not the event is ongoing. If no value was set, it is
    * assumed that the event is not ongoing.
    */
-  boolean getOngoing() {
+  public boolean isOngoing() {
     if (this.ongoing != null) {
       return this.ongoing;
     } else {
@@ -45,27 +71,52 @@ public class News {
     }
   }
 
-  List<String> getPlaces() {
+  public List<String> getPlaces() {
     return this.places;
   }
 
-  String[] getProtocols() {
-    return (String[]) this.protocols.toArray();
+  /**
+   * Returns an array of country names looked up from the country codes
+   * associated with this news entry. If a country is unknown, that country
+   * will be added to the list as "Unknown Country". There is no deduplication
+   * of countries, including the output of "Unknown Country".
+   */
+  public List<String> getPlaceNames() {
+    if (null == this.places) {
+      return null;
+    }
+    List<String> placeNames = new ArrayList<>();
+    for (String place : this.places) {
+      if (countries.containsKey(place)) {
+        placeNames.add(countries.get(place));
+      } else {
+        placeNames.add("Unknown Country");
+      }
+    }
+    return placeNames;
   }
 
-  String getDescription() {
+  public List<String> getProtocols() {
+    return this.protocols;
+  }
+
+  public String getDescription() {
     return this.description;
   }
 
-  String[] getLinks() {
-    return (String[]) this.links.toArray();
+  public String getShortDescription() {
+    return this.shortDescription;
+  }
+
+  public List<Link> getLinks() {
+    return this.links;
   }
 
   /**
    * Returns whether or not the reason for an event is known. If no value was
    * set, it is assumed that the reason is known.
    */
-  boolean isUnknown() {
+  public boolean isUnknown() {
     if (this.unknown != null) {
       return this.unknown;
     } else {
@@ -82,81 +133,4 @@ public class News {
     }
   }
 
-  String formatAsTableRow() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("<tr><td><span class=\"dates\">");
-    if (null == this.start) {
-      /* Invalid event without start date. */
-      sb.append("N/A");
-    } else if (this.getOngoing()) {
-      /* Ongoing event. */
-      sb.append(this.start).append(" to present");
-    } else if (null == this.end || this.start.equals(this.end)) {
-      /* Single-day event. */
-      sb.append(this.start);
-    } else {
-      /* Multi-day event. */
-      sb.append(this.start).append(" to ").append(this.end);
-    }
-    sb.append("</span></td><td>");
-    if (null != this.places) {
-      boolean appendUnknownCountry = false;
-      for (String place : this.getPlaces()) {
-        if (countries.containsKey(place)) {
-          sb.append(" <span class=\"label label-warning\">")
-              .append(countries.get(place)).append("</span>");
-        } else {
-          appendUnknownCountry = true;
-        }
-      }
-      if (appendUnknownCountry) {
-        sb.append(" <span class=\"label label-warning\">"
-            + "Unknown country</span>");
-      }
-    }
-    if (null != this.protocols) {
-      for (String protocol : this.protocols) {
-        switch (protocol) {
-          case "relay":
-            sb.append(" <span class=\"label label-success\">Relays</span>");
-            break;
-          case "bridge":
-            sb.append(" <span class=\"label label-primary\">Bridges</span>");
-            break;
-          case "<OR>":
-            sb.append(" <span class=\"label label-info\">&lt;OR&gt;</span>");
-            break;
-          default:
-            sb.append(" <span class=\"label label-info\">").append(protocol)
-                .append("</span>");
-            break;
-        }
-      }
-    }
-    if (this.isUnknown()) {
-      sb.append(" <span class=\"label label-default\">Unknown</span>");
-    }
-    sb.append("</td><td>");
-    if (null != this.description) {
-      sb.append(this.description).append("<br/>");
-    }
-    if (null != this.links) {
-      for (String link : this.links) {
-        int tagEnd = link.indexOf('>');
-        if (tagEnd < 0 || tagEnd + 2 > link.length()) {
-          continue;
-        }
-        sb.append(link, 0, tagEnd);
-        sb.append(" class=\"link\"");
-        if (!link.startsWith("<a href=\"https://metrics.torproject.org/")) {
-          sb.append(" target=\"_blank\"");
-        }
-        sb.append('>')
-            .append(link.substring(tagEnd + 1, tagEnd + 2).toUpperCase())
-            .append(link.substring(tagEnd + 2));
-      }
-    }
-    sb.append("</td></tr>");
-    return sb.toString();
-  }
 }

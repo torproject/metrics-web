@@ -472,7 +472,9 @@ a.btn[target="_blank"]:before {
     top: -2px;
     margin-left: 5px;
 }
-
+.metrics-news-link {
+    text-transform: capitalize;
+}
 
 /* faq */
 .faq h2 {

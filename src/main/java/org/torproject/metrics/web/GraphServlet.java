@@ -244,7 +244,7 @@ public class GraphServlet extends MetricServlet {
         if (!"off".equals(eventsParameter)) {
           request.setAttribute("displayEventsNotice", true);
         }
-        List<String> relatedEvents = new ArrayList<>();
+        List<News> relatedEvents = new ArrayList<>();
         for (News event : this.sortedEvents) {
           if (null == event.getStart()) {
             /* Skip event without start date. */
@@ -272,7 +272,7 @@ public class GraphServlet extends MetricServlet {
           }
           /* We could filter by transport or version here, but that's a
            * non-trivial task. */
-          relatedEvents.add(event.formatAsTableRow());
+          relatedEvents.add(event);
         }
         request.setAttribute("relatedEvents", relatedEvents);
       }
