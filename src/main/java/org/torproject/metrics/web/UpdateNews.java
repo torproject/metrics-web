@@ -116,7 +116,7 @@ public class UpdateNews {
               continue;
             }
             entry.addLink(link.substring(link.indexOf(" ") + 1),
-              link.substring(0, link.indexOf(" ")));
+                link.substring(0, link.indexOf(" ")));
           }
         }
         entry.unknown = unknown;

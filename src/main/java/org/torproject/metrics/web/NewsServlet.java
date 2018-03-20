@@ -53,7 +53,15 @@ public class NewsServlet extends AnyServlet {
   @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
+    if (request.getRequestURI().endsWith("news.atom")) {
+      doGetAtom(request, response);
+    } else {
+      doGetHtml(request, response);
+    }
+  }
 
+  private void doGetHtml(HttpServletRequest request,
+      HttpServletResponse response) throws IOException, ServletException {
     /* Create categories based on current system time. */
     Map<String, String[]> cutOffDates = new LinkedHashMap<>();
     Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.US);
@@ -105,6 +113,14 @@ public class NewsServlet extends AnyServlet {
     request.setAttribute("categories", this.categories);
     request.setAttribute("news", newsByCategory);
     request.getRequestDispatcher("WEB-INF/news.jsp").forward(request,
+        response);
+  }
+
+  private void doGetAtom(HttpServletRequest request,
+      HttpServletResponse response) throws IOException, ServletException {
+    request.setAttribute("news", this.sortedNews);
+    request.setAttribute("updated", this.sortedNews.get(0).getStart());
+    request.getRequestDispatcher("WEB-INF/news-atom.jsp").forward(request,
         response);
   }
 }

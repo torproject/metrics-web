@@ -238,6 +238,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>NewsServlet</servlet-name>
+    <url-pattern>/news.atom</url-pattern>
     <url-pattern>/news.html</url-pattern>
   </servlet-mapping>
 
