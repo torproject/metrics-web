@@ -235,6 +235,20 @@
     </apply>
   </target>
 
+  <target name="generate-news-json" >
+    <echo message="Running java module UpdateNews ... " />
+    <available file="${dist}/${jarfile}" property="have.jar"/>
+    <fail unless="have.jar" message="Please run 'ant jar' first."/>
+    <java classname="org.torproject.metrics.web.UpdateNews">
+      <arg value="${basedir}/src/main/resources/web/json/news.json" />
+      <classpath>
+        <pathelement location="${dist}/${jarfile}" />
+        <pathelement location="${resources}" />
+      </classpath>
+    </java>
+    <echo message="Java module UpdateNews finished. " />
+  </target>
+
   <!-- This can be adapted to point at the actual work directory. -->
   <property name="prepare.deployment"
             value="/srv/metrics.torproject.org/metrics/work" />

@@ -9,21 +9,21 @@ import java.util.TreeMap;
 
 public class News {
 
-  private String start;
+  String start;
 
-  private String end;
+  String end;
 
-  private boolean ongoing;
+  Boolean ongoing;
 
-  private List<String> places;
+  List<String> places;
 
-  private String[] protocols;
+  List<String> protocols;
 
-  private String description;
+  String description;
 
-  private String[] links;
+  List<String> links;
 
-  private boolean unknown;
+  Boolean unknown;
 
   String getStart() {
     return this.start;
@@ -33,8 +33,16 @@ public class News {
     return this.end;
   }
 
+  /**
+   * Returns whether or not the event is ongoing. If no value was set, it is
+   * assumed that the event is not ongoing.
+   */
   boolean getOngoing() {
-    return this.ongoing;
+    if (this.ongoing != null) {
+      return this.ongoing;
+    } else {
+      return false;
+    }
   }
 
   List<String> getPlaces() {
@@ -42,7 +50,7 @@ public class News {
   }
 
   String[] getProtocols() {
-    return this.protocols;
+    return (String[]) this.protocols.toArray();
   }
 
   String getDescription() {
@@ -50,11 +58,19 @@ public class News {
   }
 
   String[] getLinks() {
-    return this.links;
+    return (String[]) this.links.toArray();
   }
 
+  /**
+   * Returns whether or not the reason for an event is known. If no value was
+   * set, it is assumed that the reason is known.
+   */
   boolean isUnknown() {
-    return this.unknown;
+    if (this.unknown != null) {
+      return this.unknown;
+    } else {
+      return false;
+    }
   }
 
   static SortedMap<String, String> countries;
@@ -72,7 +88,7 @@ public class News {
     if (null == this.start) {
       /* Invalid event without start date. */
       sb.append("N/A");
-    } else if (this.ongoing) {
+    } else if (this.getOngoing()) {
       /* Ongoing event. */
       sb.append(this.start).append(" to present");
     } else if (null == this.end || this.start.equals(this.end)) {
@@ -117,7 +133,7 @@ public class News {
         }
       }
     }
-    if (this.unknown) {
+    if (this.isUnknown()) {
       sb.append(" <span class=\"label label-default\">Unknown</span>");
     }
     sb.append("</td><td>");
@@ -144,4 +160,3 @@ public class News {
     return sb.toString();
   }
 }
-

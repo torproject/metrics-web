@@ -11,23 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateNews {
-  private static class News {
-    String start;
-    String end;
-    Boolean ongoing;
-    List<String> places;
-    List<String> protocols;
-    String description;
-    List<String> links;
-    Boolean unknown;
-  }
-
   /** Update news. */
   public static void main(String[] args) throws Exception {
     URL textFile = new URL(
         "https://trac.torproject.org/projects/tor/wiki/doc/"
         + "MetricsTimeline?format=txt");
-    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+    Gson gson = new GsonBuilder()
+        .disableHtmlEscaping()
+        .setPrettyPrinting()
+        .create();
     List<News> news = new ArrayList<>();
     try (BufferedReader br = new BufferedReader(new InputStreamReader(
         textFile.openStream()))) {
@@ -123,8 +115,7 @@ public class UpdateNews {
         news.add(entry);
       }
     }
-    try (FileWriter fw = new FileWriter(
-        "src/main/resources/web/json/news-raw.json")) {
+    try (FileWriter fw = new FileWriter(args[0])) {
       fw.write(gson.toJson(news));
     }
   }
