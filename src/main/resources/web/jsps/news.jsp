@@ -13,6 +13,11 @@
     </div>
 
     <div class="container">
+      <div class="pull-right">
+        <a href="/news.atom" title="Subscribe">
+          <i class="fa fa-2x fa-rss-square"></i>
+        </a>
+      </div>
       <h1>News <a href="#news" name="news" class="anchor">#</a></h1>
       <p>You're a journalist or more generally a person who wants to know what's going on in the Tor network?  We're collecting unusual events in the Tor network together with any insights we have into what we think has happened.</p>
     </div>
