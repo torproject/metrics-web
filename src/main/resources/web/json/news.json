@@ -4230,6 +4230,20 @@
     "description": "Tor 0.3.3.2-alpha reaches deb.torproject.org repositories"
   },
   {
+    "start": "2018-02-24",
+    "places": [
+      "cn"
+    ],
+    "shortDescription": "Blocking in China intensifies following the announcement of proposed changes to remove presidential term limits.",
+    "description": "Blocking in China intensifies following the announcement of proposed changes to remove presidential term limits.",
+    "links": [
+      {
+        "label": "article",
+        "target": "https://chinadigitaltimes.net/2018/02/sensitive-words-emperor-xi-jinping-ascend-throne/"
+      }
+    ]
+  },
+  {
     "start": "2018-02-27",
     "end": "2018-03-02",
     "shortDescription": "Less than 3 bandwidth authorities are available.",
@@ -4253,6 +4267,89 @@
       {
         "label": "ticket",
         "target": "https://bugs.torproject.org/24902"
+      }
+    ]
+  },
+  {
+    "start": "2018-03-07",
+    "end": "2018-03-15",
+    "places": [
+      "lk"
+    ],
+    "shortDescription": "Sri Lanka blocks Facebook, Instagram, WhatsApp, and Viber.",
+    "description": "Sri Lanka blocks Facebook, Instagram, WhatsApp, and Viber.",
+    "links": [
+      {
+        "label": "relay graph",
+        "target": "https://metrics.torproject.org/userstats-relay-country.html?start=2018-01-01&end=2018-04-01&country=lk"
+      },
+      {
+        "label": "bridge graph",
+        "target": "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-01-01&end=2018-04-01&country=lk"
+      },
+      {
+        "label": "article",
+        "target": "https://www.reuters.com/article/us-sri-lanka-clashes-socialmedia/sri-lanka-lifts-ban-on-facebook-imposed-after-spasm-of-communal-violence-idUSKCN1GR31R"
+      }
+    ]
+  },
+  {
+    "start": "2018-03-14",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Deployed an attempt to fix frequent crashes of the fallback snowflake proxies.",
+    "description": "Deployed an attempt to fix frequent crashes of the fallback snowflake proxies.",
+    "links": [
+      {
+        "label": "comment",
+        "target": "https://bugs.torproject.org/21312#comment:39"
+      },
+      {
+        "label": "commit",
+        "target": "https://gitweb.torproject.org/pluggable-transports/snowflake.git/commit/?id=f2abf5b60c289103d8661b8e54b3d3aee43a4aaf"
+      }
+    ]
+  },
+  {
+    "start": "2018-03-16",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Deployed another attempt to fix frequent crashes of the fallback snowflake proxies.",
+    "description": "Deployed another attempt to fix frequent crashes of the fallback snowflake proxies.",
+    "links": [
+      {
+        "label": "comment",
+        "target": "https://bugs.torproject.org/21312#comment:57"
+      }
+    ]
+  },
+  {
+    "start": "2018-03-22",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Disabled periodic restarts of the fallback snowflake proxies; gave them a memory limit of 200 MB.",
+    "description": "Disabled periodic restarts of the fallback snowflake proxies; gave them a memory limit of 200 MB.",
+    "links": [
+      {
+        "label": "comment",
+        "target": "https://bugs.torproject.org/21312#comment:63"
+      }
+    ]
+  },
+  {
+    "start": "2018-03-22",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Increased memory limit of the fallback snowflake proxies from 200 MB to 400 MB.",
+    "description": "Increased memory limit of the fallback snowflake proxies from 200 MB to 400 MB.",
+    "links": [
+      {
+        "label": "comment",
+        "target": "https://bugs.torproject.org/21312#comment:63"
       }
     ]
   },
