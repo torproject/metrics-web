@@ -22,37 +22,31 @@
 "#rfc.section.1">1.</a>&nbsp;<a href=
 "#n-purpose-of-this-document">Purpose of this document</a></h2>
 <div id="rfc.section.1.p.1">
-<p>BETA: As of November 14, 2017, this document is still under
-discussion and subject to change without prior notice. Feel free to
-<a href="/about.html#contact">contact us</a> for questions or
-concerns regarding this document.</p>
-</div>
-<div id="rfc.section.1.p.2">
 <p>Tor's web servers, like most web servers, keep request logs for
 maintenance and informational purposes.</p>
 </div>
-<div id="rfc.section.1.p.3">
+<div id="rfc.section.1.p.2">
 <p>However, unlike most other web servers, Tor's web servers use a
 privacy-aware log format that avoids logging too sensitive data
 about their users.</p>
 </div>
-<div id="rfc.section.1.p.4">
+<div id="rfc.section.1.p.3">
 <p>Also unlike most other web server logs, Tor's logs are neither
 archived nor analyzed before performing a number of post-processing
 steps to further reduce any privacy-sensitive parts.</p>
 </div>
-<div id="rfc.section.1.p.5">
+<div id="rfc.section.1.p.4">
 <p>This document describes 1) meta-data contained in log file names
 written by Tor's web servers, 2) the privacy-aware log format used
 in these files, and 3) subsequent sanitizing steps that are applied
 before archiving and analyzing these log files.</p>
 </div>
-<div id="rfc.section.1.p.6">
+<div id="rfc.section.1.p.5">
 <p>As a basis for our current implementation this document also
 describes the naming conventions for the input log files, which is
 just a description of the current state and subject to change.</p>
 </div>
-<div id="rfc.section.1.p.7">
+<div id="rfc.section.1.p.6">
 <p>As a convention for this document, all format strings conform to
 the format strings used by <a href=
 "http://httpd.apache.org/docs/current/mod/mod_log_config.html">Apache's

@@ -168,6 +168,15 @@
   <td><a href="/collector/recent/torperf/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/torperf/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
+<tr class="tableHeadline">
+  <td colspan="3"><b><a href="#webstats">Tor web server logs</a></b></td>
+</tr>
+<tr>
+  <td><a href="#type-webstats">Tor web server logs</a></td>
+  <td></td>
+  <td><a href="/collector/recent/webstats/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="/collector/archive/webstats/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+</tr>
 </tbody>
 </table>
 
@@ -693,6 +702,35 @@ measurement; optional.</li>
 <li><code>HOSTNAMEREMOTE:</code> Server machine hostname, which may be <code>"(NULL)"</code> if the TGen server was not able to find this information; optional.</li>
 <li><code>SOURCEADDRESS:</code> Public IP address of the OnionPerf host obtained by connecting to well-known servers and finding the IP address in the result, which may be <code>"unknown"</code> if OnionPerf was not able to find this information; optional.</li>
 </ul>
+
+
+
+<br>
+<h2 id="webstats" class="hover">Tor web server logs
+<a href="#webstats" class="anchor">#</a>
+</h2>
+
+<p>
+Tor's web servers, like most web servers, keep request logs for maintenance and
+informational purposes.
+However, unlike most other web servers, Tor's web servers use a privacy-aware
+log format that avoids logging too sensitive data about their users.
+Also unlike most other web server logs, Tor's logs are neither archived nor
+analyzed before performing a number of post-processing steps to further reduce
+any privacy-sensitive parts.
+</p>
+
+<h3 id="type-webstats" class="hover">Tor web server logs
+<a href="/collector/recent/webstats/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="/collector/archive/webstats/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="#type-webstats" class="anchor">#</a>
+</h3>
+
+<p>
+The data format and sanitizing steps for Tor web server logs are specified in
+detail on a separate <a href="web-server-logs.html">page</a>.
+</p>
+
 
     </div>
 

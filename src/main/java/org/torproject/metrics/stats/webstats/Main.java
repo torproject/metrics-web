@@ -3,14 +3,19 @@
 
 package org.torproject.metrics.stats.webstats;
 
-import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingByConcurrent;
+
+import org.torproject.descriptor.Descriptor;
+import org.torproject.descriptor.DescriptorParseException;
+import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.WebServerAccessLog;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,19 +28,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /** Main class of the webstats module that downloads log files from the server,
  * imports them into a database, and exports aggregate statistics to a CSV
@@ -44,26 +47,6 @@ public class Main {
 
   /** Logger for this class. */
   private static Logger log = LoggerFactory.getLogger(Main.class);
-
-  /** Pattern for links contained in directory listings. */
-  static final Pattern URL_STRING_PATTERN =
-      Pattern.compile(".*<a href=\"([^\"]+)\">.*");
-
-  static final Pattern LOG_FILE_URL_PATTERN =
-      Pattern.compile("^.*/([^/]+)/([^/]+)-access.log-(\\d{8}).xz$");
-
-  private static DateFormat logDateFormat;
-
-  static {
-    logDateFormat = new SimpleDateFormat("yyyyMMdd");
-    logDateFormat.setLenient(false);
-    logDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-  }
-
-  static final Pattern LOG_LINE_PATTERN = Pattern.compile(
-      "^0.0.0.[01] - - \\[\\d{2}/\\w{3}/\\d{4}:00:00:00 \\+0000\\] "
-      + "\"(GET|HEAD) ([^ ]{1,2048}) HTTP[^ ]+\" (\\d+) (-|\\d+) \"-\" \"-\" "
-      + "-$");
 
   private static final String LOG_DATE = "log_date";
 
@@ -88,12 +71,10 @@ public class Main {
     log.info("Starting webstats module.");
     String dbUrlString = "jdbc:postgresql:webstats";
     Connection connection = connectToDatabase(dbUrlString);
-    SortedSet<String> previouslyImportedLogFileUrls =
-        queryImportedFiles(connection);
-    String baseUrl = "https://webstats.torproject.org/out/";
-    SortedSet<String> newLogFileUrls = downloadDirectoryListings(baseUrl,
-        previouslyImportedLogFileUrls);
-    importLogFiles(connection, newLogFileUrls);
+    SortedSet<String> skipFiles = queryImportedFileNames(connection);
+    importLogFiles(connection, skipFiles,
+        new File("../../shared/in/recent/webstats"),
+        new File("../../shared/in/archive/webstats"));
     SortedSet<String> statistics = queryWebstats(connection);
     writeStatistics(Paths.get("stats", "webstats.csv"), statistics);
     disconnectFromDatabase(connection);
@@ -109,79 +90,55 @@ public class Main {
     return connection;
   }
 
-  static SortedSet<String> queryImportedFiles(Connection connection)
+  static SortedSet<String> queryImportedFileNames(Connection connection)
       throws SQLException {
-    log.info("Querying URLs of previously imported log files.");
+    log.info("Querying previously imported log files.");
     SortedSet<String> importedLogFileUrls = new TreeSet<>();
     Statement st = connection.createStatement();
-    String queryString = "SELECT url FROM files";
+    String queryString = "SELECT server, site, log_date FROM files";
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
-        importedLogFileUrls.add(rs.getString(1));
+        importedLogFileUrls.add(String.format("%s_%s_access.log_%s.xz",
+            rs.getString(1), rs.getString(2),
+            rs.getDate(3).toLocalDate().format(dateFormat)));
       }
     }
-    log.info("Found {} URLs of previously imported log files.",
+    log.info("Found {} previously imported log files.",
         importedLogFileUrls.size());
     return importedLogFileUrls;
   }
 
-  static SortedSet<String> downloadDirectoryListings(String baseUrl,
-      SortedSet<String> importedLogFileUrls) throws IOException {
-    log.info("Downloading directory listings from {}.", baseUrl);
-    List<String> directoryListings = new ArrayList<>();
-    directoryListings.add(baseUrl);
-    SortedSet<String> newLogFileUrls = new TreeSet<>();
-    while (!directoryListings.isEmpty()) {
-      String urlString = directoryListings.remove(0);
-      if (urlString.endsWith("/")) {
-        directoryListings.addAll(downloadDirectoryListing(urlString));
-      } else if (!urlString.endsWith(".xz")) {
-        log.debug("Skipping unrecognized URL {}.", urlString);
-      } else if (!importedLogFileUrls.contains(urlString)) {
-        newLogFileUrls.add(urlString);
+  static void importLogFiles(Connection connection, SortedSet<String> skipFiles,
+      File... inDirectories) {
+    for (Descriptor descriptor : DescriptorSourceFactory
+        .createDescriptorReader().readDescriptors(inDirectories)) {
+      if (!(descriptor instanceof WebServerAccessLog)) {
+        continue;
       }
-    }
-    log.info("Found {} URLs of log files that have not yet been imported.",
-        newLogFileUrls.size());
-    return newLogFileUrls;
-  }
-
-  static List<String> downloadDirectoryListing(String urlString)
-      throws IOException {
-    log.debug("Downloading directory listing from {}.", urlString);
-    List<String> urlStrings = new ArrayList<>();
-    try (BufferedReader br = new BufferedReader(new InputStreamReader(
-        new URL(urlString).openStream()))) {
-      String line;
-      while ((line = br.readLine()) != null) {
-        Matcher matcher = URL_STRING_PATTERN.matcher(line);
-        if (matcher.matches() && !matcher.group(1).startsWith("/")) {
-          urlStrings.add(urlString + matcher.group(1));
-        }
+      WebServerAccessLog logFile = (WebServerAccessLog) descriptor;
+      if (skipFiles.contains(logFile.getDescriptorFile().getName())) {
+        continue;
       }
-    }
-    return urlStrings;
-  }
-
-  static void importLogFiles(Connection connection,
-      SortedSet<String> newLogFileUrls) {
-    log.info("Downloading, parsing, and importing {} log files.",
-        newLogFileUrls.size());
-    for (String urlString : newLogFileUrls) {
       try {
-        Object[] metaData = parseMetaData(urlString);
-        if (metaData == null) {
-          continue;
-        }
-        Map<String, Integer> parsedLogLines = downloadAndParseLogFile(
-            urlString);
-        importLogLines(connection, urlString, metaData, parsedLogLines);
-      } catch (IOException | ParseException exc) {
-        log.warn("Cannot download or parse log file with URL {}.  Retrying "
-            + "in the next run.", urlString, exc);
+        Map<String, Long> parsedLogLines = logFile.logLines().parallel()
+            /* The following mapping can be removed with metrics-lib
+               version > 2.2.0 */
+            .map(line -> (WebServerAccessLog.Line) line)
+            .collect(groupingByConcurrent(line
+                -> String.format("%s %s %d", line.getMethod().name(),
+                truncateString(line.getRequest(), 2048), line.getResponse()),
+                counting()));
+        importLogLines(connection, logFile.getDescriptorFile().getName(),
+            logFile.getPhysicalHost(), logFile.getVirtualHost(),
+            logFile.getLogDate(), parsedLogLines);
+      } catch (DescriptorParseException exc) {
+        log.warn("Cannot parse log file with file name {}.  Retrying in the "
+            + "next run.", logFile.getDescriptorFile().getName(), exc);
       } catch (SQLException exc) {
-        log.warn("Cannot import log file with URL {} into the database.  "
-            + "Rolling back and retrying in the next run.", urlString, exc);
+        log.warn("Cannot import log file with file name {} into the database. "
+            + "Rolling back and retrying in the next run.",
+            logFile.getDescriptorFile().getName(), exc);
         try {
           connection.rollback();
         } catch (SQLException exceptionWhileRollingBack) {
@@ -191,68 +148,9 @@ public class Main {
     }
   }
 
-  private static Object[] parseMetaData(String urlString)
-      throws ParseException {
-    log.debug("Importing log file {}.", urlString);
-    if (urlString.contains("-ssl-access.log-")) {
-      log.debug("Skipping log file containing SSL requests with URL {}.",
-          urlString);
-      return null;
-    }
-    Matcher logFileUrlMatcher = LOG_FILE_URL_PATTERN.matcher(urlString);
-    if (!logFileUrlMatcher.matches()) {
-      log.debug("Skipping log file with unrecognized URL {}.", urlString);
-      return null;
-    }
-    String server = logFileUrlMatcher.group(1);
-    String site = logFileUrlMatcher.group(2);
-    long logDateMillis = logDateFormat.parse(logFileUrlMatcher.group(3))
-        .getTime();
-    return new Object[] { server, site, logDateMillis };
-  }
-
-  static Map<String, Integer> downloadAndParseLogFile(String urlString)
-      throws IOException {
-    int skippedLines = 0;
-    Map<String, Integer> parsedLogLines = new HashMap<>();
-    try (BufferedReader br = new BufferedReader(new InputStreamReader(
-        new XZCompressorInputStream(new URL(urlString).openStream())))) {
-      String line;
-      while ((line = br.readLine()) != null) {
-        if (!parseLogLine(line, parsedLogLines)) {
-          skippedLines++;
-        }
-      }
-    }
-    if (skippedLines > 0) {
-      log.debug("Skipped {} lines while parsing log file {}.", skippedLines,
-          urlString);
-    }
-    return parsedLogLines;
-  }
-
-  static boolean parseLogLine(String logLine,
-      Map<String, Integer> parsedLogLines) {
-    Matcher logLineMatcher = LOG_LINE_PATTERN.matcher(logLine);
-    if (!logLineMatcher.matches()) {
-      return false;
-    }
-    String method = logLineMatcher.group(1);
-    String resource = logLineMatcher.group(2);
-    int responseCode = Integer.parseInt(logLineMatcher.group(3));
-    String combined = String.format("%s %s %d", method, resource,
-        responseCode);
-    if (!parsedLogLines.containsKey(combined)) {
-      parsedLogLines.put(combined, 1);
-    } else {
-      parsedLogLines.put(combined, parsedLogLines.get(combined) + 1);
-    }
-    return true;
-  }
-
   private static void importLogLines(Connection connection, String urlString,
-      Object[] metaData, Map<String, Integer> parsedLogLines)
-      throws SQLException {
+      String server, String site, LocalDate logDate,
+      Map<String, Long> parsedLogLines) throws SQLException {
     PreparedStatement psFiles = connection.prepareStatement(
         "INSERT INTO files (url, server, site, " + LOG_DATE + ") "
         + "VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -264,20 +162,17 @@ public class Main {
     PreparedStatement psRequests = connection.prepareStatement(
         "INSERT INTO requests (file_id, method, resource_id, response_code, "
         + COUNT + ") VALUES (?, CAST(? AS method), ?, ?, ?)");
-    String server = (String) metaData[0];
-    String site = (String) metaData[1];
-    long logDateMillis = (long) metaData[2];
-    int fileId = insertFile(psFiles, urlString, server, site, logDateMillis);
+    int fileId = insertFile(psFiles, urlString, server, site, logDate);
     if (fileId < 0) {
       log.debug("Skipping previously imported log file {}.", urlString);
       return;
     }
-    for (Map.Entry<String, Integer> requests : parsedLogLines.entrySet()) {
+    for (Map.Entry<String, Long> requests : parsedLogLines.entrySet()) {
       String[] keyParts = requests.getKey().split(" ");
       String method = keyParts[0];
       String resource = keyParts[1];
       int responseCode = Integer.parseInt(keyParts[2]);
-      int count = requests.getValue();
+      long count = requests.getValue();
       int resourceId = insertResource(psResourcesSelect, psResourcesInsert,
           resource);
       if (resourceId < 0) {
@@ -290,18 +185,18 @@ public class Main {
           count);
     }
     connection.commit();
-    log.debug("Finished importing log file with URL {} into database.",
+    log.debug("Finished importing log file with file name {} into database.",
         urlString);
   }
 
   private static int insertFile(PreparedStatement psFiles, String urlString,
-      String server, String site, long logDateMillis) throws SQLException {
+      String server, String site, LocalDate logDate) throws SQLException {
     int fileId = -1;
     psFiles.clearParameters();
     psFiles.setString(1, truncateString(urlString, 2048));
     psFiles.setString(2, truncateString(server, 32));
     psFiles.setString(3, truncateString(site, 128));
-    psFiles.setDate(4, new Date(logDateMillis));
+    psFiles.setDate(4, Date.valueOf(logDate));
     psFiles.execute();
     try (ResultSet rs = psFiles.getGeneratedKeys()) {
       if (rs.next()) {
@@ -312,14 +207,14 @@ public class Main {
   }
 
   private static void insertRequest(PreparedStatement psRequests, int fileId,
-      String method, int resourceId, int responseCode, int count)
+      String method, int resourceId, int responseCode, long count)
       throws SQLException {
     psRequests.clearParameters();
     psRequests.setInt(1, fileId);
     psRequests.setString(2, method);
     psRequests.setInt(3, resourceId);
     psRequests.setInt(4, responseCode);
-    psRequests.setInt(5, count);
+    psRequests.setLong(5, count);
     psRequests.execute();
   }
 

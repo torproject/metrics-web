@@ -20,10 +20,6 @@
   </front>
   <middle>
     <section title="Purpose of this document">
-      <t>BETA: As of November 14, 2017, this document is still under
-      discussion and subject to change without prior notice. Feel free
-      to <eref target="/about.html#contact">contact us</eref> for questions or
-      concerns regarding this document.</t>
       <t>Tor's web servers, like most web servers, keep request logs for
       maintenance and informational purposes.</t>
       <t>However, unlike most other web servers, Tor's web servers use a

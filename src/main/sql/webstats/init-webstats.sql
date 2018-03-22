@@ -22,7 +22,7 @@ CREATE TABLE requests (
   method METHOD NOT NULL,
   resource_id INTEGER REFERENCES resources (resource_id) NOT NULL,
   response_code SMALLINT NOT NULL,
-  count INTEGER NOT NULL,
+  count BIGINT NOT NULL,
   UNIQUE (file_id, method, resource_id, response_code)
 );
 
