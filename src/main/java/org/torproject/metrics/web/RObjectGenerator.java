@@ -188,18 +188,18 @@ public class RObjectGenerator implements ServletContextListener {
       String parameterName = parameter.getKey();
       String[] parameterValues = parameter.getValue();
       for (String param : parameterValues) {
-        tableFilenameBuilder.append("-" + param);
+        tableFilenameBuilder.append("-").append(param);
       }
       if (parameterValues.length < 2) {
-        queryBuilder.append(parameterName + " = '"
-            + parameterValues[0] + "', ");
+        queryBuilder.append(parameterName).append(" = '")
+            .append(parameterValues[0]).append("', ");
       } else {
-        queryBuilder.append(parameterName + " = c(");
+        queryBuilder.append(parameterName).append(" = c(");
         for (int i = 0; i < parameterValues.length - 1; i++) {
-          queryBuilder.append("'" + parameterValues[i] + "', ");
+          queryBuilder.append("'").append(parameterValues[i]).append("', ");
         }
-        queryBuilder.append("'" + parameterValues[
-            parameterValues.length - 1] + "'), ");
+        queryBuilder.append("'").append(parameterValues[
+            parameterValues.length - 1]).append("'), ");
       }
     }
     tableFilenameBuilder.append(".tbl");
