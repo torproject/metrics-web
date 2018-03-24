@@ -328,6 +328,26 @@ stats_dir <- "/srv/metrics.torproject.org/metrics/shared/stats/"
 
 rdata_dir <- "/srv/metrics.torproject.org/metrics/shared/RData/"
 
+# Helper function that copies the appropriate no data object to filename.
+copy_no_data <- function(filename) {
+  len <- nchar(filename)
+  extension <- substr(filename, len - 3, len)
+  if (".csv" == extension) {
+    write("# No data available for the given parameters.", file=filename)
+  } else {
+    file.copy(paste(rdata_dir, "no-data-available", extension, sep = ""),
+      filename)
+  }
+}
+
+# Helper function wrapping calls into error handling.
+robust_call <- function(wrappee, filename) {
+  tryCatch(eval(wrappee), error = function(e) copy_no_data(filename),
+     finally = if (!file.exists(filename) || file.size(filename) == 0) {
+       copy_no_data(filename)
+       })
+}
+
 prepare_networksize <- function(start, end) {
   read.csv(paste(stats_dir, "servers.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%

@@ -117,19 +117,20 @@ public class RObjectGenerator implements ServletContextListener {
         == null) {
       return null;
     }
-    String function = this.availableGraphs.get(requestedGraph)
-        .getFunction();
     Map<String, String[]> checkedParameters = GraphParameterChecker
         .getInstance().checkParameters(requestedGraph, parameterMap);
     if (checkedParameters == null) {
       return null;
     }
     StringBuilder queryBuilder = new StringBuilder();
+    queryBuilder.append("robust_call(as.call(list(");
     if ("csv".equalsIgnoreCase(fileType)) {
       queryBuilder.append("write_");
     } else {
       queryBuilder.append("plot_");
     }
+    String function = this.availableGraphs.get(requestedGraph)
+        .getFunction();
     queryBuilder.append(function).append("(");
     StringBuilder imageFilenameBuilder =
         new StringBuilder(requestedGraph);
@@ -154,7 +155,7 @@ public class RObjectGenerator implements ServletContextListener {
     }
     imageFilenameBuilder.append(".").append(fileType);
     String imageFilename = imageFilenameBuilder.toString();
-    queryBuilder.append("path = '%s')");
+    queryBuilder.append("path = '%1$s'))), '%1$s')");
     String query = queryBuilder.toString();
     File imageFile = new File(this.cachedGraphsDirectory + "/"
         + imageFilename);

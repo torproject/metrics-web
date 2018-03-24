@@ -504,6 +504,7 @@
     <copy todir="${rdatadir}" >
       <fileset dir="${modulebase}/clients/RData" includes="*.RData" />
       <fileset dir="${modulebase}/webstats/RData" includes="*.RData" />
+      <fileset dir="${resources}/web/images/" includes="no-data-available.*" />
     </copy>
   </target>
 
