@@ -2826,6 +2826,21 @@
     ]
   },
   {
+    "start": "2016-11-16",
+    "shortDescription": "Tor Browser 6.5a4 is released",
+    "description": "Tor Browser 6.5a4 is released. It changes the <code>app.update.url</code>.",
+    "links": [
+      {
+        "label": "blog post",
+        "target": "https://blog.torproject.org/tor-browser-65a4-released"
+      },
+      {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/19481"
+      }
+    ]
+  },
+  {
     "start": "2016-11-18",
     "protocols": [
       "obfs4"
@@ -2937,6 +2952,20 @@
     ]
   },
   {
+    "start": "2016-12-13",
+    "protocols": [
+      "obfs4"
+    ],
+    "shortDescription": "Tor Browser 6.5a6 is released",
+    "description": "Tor Browser 6.5a6 is released. It fixes the <code>app.update.url</code>. It adds (uncomments) the default obfs4 bridge NX01:443. It activates timing obfuscation for certain obfs4 bridges. It changes the port of other obfs4 bridges.",
+    "links": [
+      {
+        "label": "blog post",
+        "target": "https://blog.torproject.org/tor-browser-65a6-released"
+      }
+    ]
+  },
+  {
     "start": "2016-12-15",
     "ongoing": true,
     "places": [
@@ -3007,6 +3036,44 @@
       {
         "label": "blog post",
         "target": "https://blog.torproject.org/blog/tor-browser-70a1-released"
+      }
+    ]
+  },
+  {
+    "start": "2017-01-24",
+    "shortDescription": "Tor Browser 6.5 is released",
+    "description": "Tor Browser 6.5 is released. It changes the <code>app.update.url</code>, which causes an apparent drop in update pings.",
+    "links": [
+      {
+        "label": "blog post",
+        "target": "https://blog.torproject.org/tor-browser-65-released"
+      },
+      {
+        "label": "graph",
+        "target": "https://metrics.torproject.org/webstats-tb.html?start=2017-01-01&end=2017-06-01"
+      },
+      {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/19481"
+      },
+      {
+        "label": "comment about app.update.url",
+        "target": "https://bugs.torproject.org/22346#comment:1"
+      }
+    ]
+  },
+  {
+    "start": "2017-01-25",
+    "end": "2017-04-05",
+    "protocols": [
+      "webstats"
+    ],
+    "shortDescription": "Tor Browser update pings roughly halve",
+    "description": "Tor Browser update pings roughly halve. The beginning corresponds with the release of Tor Browser 6.5.2, which changed the <code>app.update.url</code>. The end doesn't correspond to any release.",
+    "links": [
+      {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/22346"
       }
     ]
   },
@@ -3178,6 +3245,41 @@
       {
         "label": "analysis",
         "target": "https://lists.torproject.org/pipermail/tor-consensus-health/2017-May/007908.html"
+      }
+    ]
+  },
+  {
+    "start": "2017-04-19",
+    "protocols": [
+      "meek",
+      "obfs4"
+    ],
+    "shortDescription": "Tor Browser 6.5.2 is released",
+    "description": "Tor Browser 6.5.2 is released. It changes the <code>app.update.url</code>. It changes the meek-amazon backend. It adds the new default obfs4 bridges cymrubridge31:80 and cymrubridge33:80.",
+    "links": [
+      {
+        "label": "blog post",
+        "target": "https://blog.torproject.org/tor-browser-652-released"
+      },
+      {
+        "label": "comment about app.update.url",
+        "target": "https://bugs.torproject.org/22346#comment:1"
+      }
+    ]
+  },
+  {
+    "start": "2017-04-20",
+    "protocols": [
+      "meek",
+      "obfs4",
+      "scramblesuit"
+    ],
+    "shortDescription": "Tor Browser 7.0a3 is released",
+    "description": "Tor Browser 7.0a3 is released. It changes the <code>app.update.url</code>. It removes the last remaining scramblesuit bridge. It changes the meek-amazon backend. It adds the new default obfs4 bridges cymrubridge31:80 and cymrubridge33:80.",
+    "links": [
+      {
+        "label": "blog post",
+        "target": "https://blog.torproject.org/tor-browser-70a3-released"
       }
     ]
   },
@@ -4090,13 +4192,17 @@
   },
   {
     "start": "2017-12-28",
-    "ongoing": true,
+    "end": "2018-01-13",
     "places": [
       "ir"
     ],
-    "shortDescription": "Protests in Iran, blocking of various services including Tor.",
-    "description": "Protests in Iran, blocking of various services including Tor.",
+    "shortDescription": "Protests in Iran, blocking of various services including Tor",
+    "description": "Protests in Iran, blocking of various services including Tor. Instagram was unblocked 2018-01-06. Telegram was unblocked 2018-01-13.",
     "links": [
+      {
+        "label": "Wikipedia",
+        "target": "https://en.wikipedia.org/wiki/2017%E2%80%932018_Iranian_protests#Media_coverage_and_censorship"
+      },
       {
         "label": "OONI report",
         "target": "https://ooni.torproject.org/post/2018-iran-protests/"
@@ -4181,6 +4287,39 @@
       {
         "label": "tor-relays post",
         "target": "https://lists.torproject.org/pipermail/tor-relays/2018-February/014478.html"
+      }
+    ]
+  },
+  {
+    "start": "2018-01-23",
+    "protocols": [
+      "obfs4"
+    ],
+    "shortDescription": "Tor Browser 7.5 is released",
+    "description": "Tor Browser 7.5 is released. It adds the default obfs4 bridge noisetor01:46089.",
+    "links": [
+      {
+        "label": "blog post",
+        "target": "https://blog.torproject.org/tor-browser-75-released"
+      }
+    ]
+  },
+  {
+    "start": "2018-01-24",
+    "ongoing": true,
+    "protocols": [
+      "webstats"
+    ],
+    "shortDescription": "Tor Browser update pings roughly halve, again",
+    "description": "Tor Browser update pings roughly halve, again. The beginning corresponds with the release of Tor Browser 7.5; however unlike with Tor Browser 6.5.2, there was no change to <code>app.update.url</code> this time.",
+    "links": [
+      {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/22346"
+      },
+      {
+        "label": "thread",
+        "target": "https://lists.torproject.org/pipermail/metrics-team/2018-March/000750.html"
       }
     ]
   },
@@ -4350,6 +4489,28 @@
       {
         "label": "comment",
         "target": "https://bugs.torproject.org/21312#comment:63"
+      }
+    ]
+  },
+  {
+    "start": "2018-03-22",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Provisonally increased memory limits of the fallback snowflake proxies to 400 MB, 800 MB, or unlimited.",
+    "description": "Provisonally increased memory limits of the fallback snowflake proxies to 400 MB, 800 MB, or unlimited."
+  },
+  {
+    "start": "2018-03-23",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Restarted the fallback snowflake proxies with a limit on resident memory",
+    "description": "Restarted the fallback snowflake proxies with a limit on resident memory (<code>ulimit -m</code>) rather than virtual memory (<code>ulimit -v</code>).",
+    "links": [
+      {
+        "label": "comment",
+        "target": "https://bugs.torproject.org/21312#comment:64"
       }
     ]
   },
