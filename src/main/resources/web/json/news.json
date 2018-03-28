@@ -4515,6 +4515,24 @@
     ]
   },
   {
+    "start": "2018-03-26",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Release of Tor Browser 8.0a5",
+    "description": "Release of Tor Browser 8.0a5. Improves snowflake client performance.",
+    "links": [
+      {
+        "label": "blog post",
+        "target": "https://blog.torproject.org/tor-browser-80a5-released"
+      },
+      {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/21312"
+      }
+    ]
+  },
+  {
     "start": "2016-02-24",
     "places": [
       "tm"
