@@ -151,7 +151,6 @@
     </jar>
 
     <antcall target="generate-ml-javadoc" />
-    <antcall target="generate-specs" />
 
     <war destfile="${dist}/${warfile}"
          duplicate="fail"
@@ -184,9 +183,6 @@
                   prefix=""
                   includes="css/* images/* js/* fonts/** rs/**" />
       <zipfileset dir="${resources}/web/jsps"
-                  prefix="WEB-INF"
-                  includes="*.jsp"/>
-      <zipfileset dir="${specdir}"
                   prefix="WEB-INF"
                   includes="*.jsp"/>
       <zipfileset dir="${resources}"
@@ -287,7 +283,7 @@
     <exec executable="awk"
           dir="${specdir}"
           logError="true"
-          output="${specdir}/${specfile}.jsp"
+          output="${resources}/web/jsps/${specfile}.jsp"
           failonerror="true" >
       <arg value="-f" />
       <arg value="${basedir}/${resources}/spec/convert.awk" />
