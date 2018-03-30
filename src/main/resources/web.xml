@@ -273,6 +273,17 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>ReproducibleMetricsServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.ReproducibleMetricsServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReproducibleMetricsServlet</servlet-name>
+    <url-pattern>/reproducible-metrics.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>OperationServlet</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.OperationServlet
