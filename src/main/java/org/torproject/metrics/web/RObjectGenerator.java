@@ -131,7 +131,7 @@ public class RObjectGenerator implements ServletContextListener {
     }
     String function = this.availableGraphs.get(requestedGraph)
         .getFunction();
-    queryBuilder.append(function).append("(");
+    queryBuilder.append(function).append(", ");
     StringBuilder imageFilenameBuilder =
         new StringBuilder(requestedGraph);
     for (Map.Entry<String, String[]> parameter
@@ -155,7 +155,7 @@ public class RObjectGenerator implements ServletContextListener {
     }
     imageFilenameBuilder.append(".").append(fileType);
     String imageFilename = imageFilenameBuilder.toString();
-    queryBuilder.append("path = '%1$s'))), '%1$s')");
+    queryBuilder.append("path = '%1$s')), '%1$s')");
     String query = queryBuilder.toString();
     File imageFile = new File(this.cachedGraphsDirectory + "/"
         + imageFilename);
