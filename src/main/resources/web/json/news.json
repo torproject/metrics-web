@@ -5331,6 +5331,10 @@
       {
         "label": "reddit thread",
         "target": "https://www.reddit.com/r/TOR/comments/7b53kq/direct_users_from_germany_go_from_200k_to_500k_in/"
+      },
+      {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/24669"
       }
     ],
     "unknown": true
@@ -5399,6 +5403,10 @@
       {
         "label": "reddit thread",
         "target": "https://www.reddit.com/r/TOR/comments/7ldrox/tor_usage_in_germany_what_happend/"
+      },
+      {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/24669"
       }
     ],
     "unknown": true
@@ -5459,6 +5467,10 @@
       {
         "label": "graph",
         "target": "https://metrics.torproject.org/userstats-relay-country.html?start=2017-11-10&end=2018-03-10&country=de&events=off"
+      },
+      {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/24669"
       }
     ],
     "unknown": true
