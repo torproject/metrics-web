@@ -382,7 +382,7 @@ The sanitizing steps are specified in detail on a separate
 <h3 id="type-bridge-network-status" class="hover">Bridge Network Statuses
 <small><code>@type bridge-network-status 1.2</code></small>
 <a href="/collector/recent/bridge-descriptors/statuses/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="/collector/archive/bridge-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="/collector/archive/bridge-descriptors/statuses/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-bridge-network-status" class="anchor">#</a>
 </h3>
 
@@ -407,7 +407,7 @@ authority which produced the document, to the header.</li>
 <h3 id="type-bridge-server-descriptor" class="hover">Bridge Server descriptors
 <small><code>@type bridge-server-descriptor 1.2</code></small>
 <a href="/collector/recent/bridge-descriptors/server-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="/collector/archive/bridge-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="/collector/archive/bridge-descriptors/server-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-bridge-server-descriptor" class="anchor">#</a>
 </h3>
 
@@ -441,7 +441,7 @@ ports.</li>
 <h3 id="type-bridge-extra-info" class="hover">Bridge Extra-info Descriptors
 <small><code>@type bridge-extra-info 1.3</code></small>
 <a href="/collector/recent/bridge-descriptors/extra-infos/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
-<a href="/collector/archive/bridge-descriptors/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="/collector/archive/bridge-descriptors/extra-infos/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-bridge-extra-info" class="anchor">#</a>
 </h3>
 
