@@ -300,6 +300,9 @@ Always added a relay's own fingerprint to its "effective_family" and made
 nickname fields "n" in summary documents and "nickname" in details documents
 required fields on March 14, 2018.
 <a href="#versions_5_1" class="anchor">#</a></li>
+<li><a id="versions_5_2"></a><strong>5.2</strong>
+Added "version_status" field to details documents on April 6, 2018.
+<a href="#versions_5_2" class="anchor">#</a></li>
 <li><a id="versions_6_0"></a><strong>6.0</strong>
 (scheduled, but not deployed yet!): Include all exit addresses in
 "exit_addresses", regardless of whether they're used as OR addresses or not, to
@@ -1490,6 +1493,29 @@ the relay did not report which version it runs.
 </li>
 
 <li>
+<a id="details_relay_version_status"></a>
+<b>version_status</b> <span class="label label-primary">new</span></b>
+<code class="typeof">string</code>
+<span class="required-false">optional</span>
+<a href="#details_relay_version_status" class="anchor">#</a>
+<p>
+Status of the Tor software version of this relay based on the versions
+recommended by the directory authorities.
+Possible version statuses are:
+"recommended" if a version is listed as recommended;
+"experimental" if a version is newer than every recommended version;
+"obsolete" if a version is older than every recommended version;
+"new in series" if a version has other recommended versions with the same first
+three components, and the version is newer than all such recommended versions,
+but it is not newer than every recommended version;
+"unrecommended" if none of the above conditions hold.
+Omitted if either the directory authorities did not recommend versions, or the
+relay did not report which version it runs.
+<span class="blue">Added on April 6, 2018.</span>
+</p>
+</li>
+
+<li>
 <a id="details_relay_effective_family"></a>
 <b>effective_family <span class="label label-primary">updated</span></b>
 <code class="typeof">array of strings</code>
@@ -1825,6 +1851,29 @@ recommended by the directory authorities or not.
 Uses the bridge version in the bridge network status.
 Omitted if either the directory authorities did not recommend versions, or
 the bridge did not report which version it runs.
+</p>
+</li>
+
+<li>
+<a id="details_bridge_version_status"></a>
+<b>version_status</b> <span class="label label-primary">new</span></b>
+<code class="typeof">string</code>
+<span class="required-false">optional</span>
+<a href="#details_bridge_version_status" class="anchor">#</a>
+<p>
+Status of the Tor software version of this bridge based on the versions
+recommended by the directory authorities.
+Possible version statuses are:
+"recommended" if a version is listed as recommended;
+"experimental" if a version is newer than every recommended version;
+"obsolete" if a version is older than every recommended version;
+"new in series" if a version has other recommended versions with the same first
+three components, and the version is newer than all such recommended versions,
+but it is not newer than every recommended version;
+"unrecommended" if none of the above conditions hold.
+Omitted if either the directory authorities did not recommend versions, or the
+bridge did not report which version it runs.
+<span class="blue">Added on April 6, 2018.</span>
 </p>
 </li>
 
