@@ -137,7 +137,7 @@
 
   <!-- Create a .war file for deployment. -->
   <target name="war"
-          depends="submoduleupdate,compile">
+          depends="submoduleupdate,jar">
     <echo message="Removing problematic service definitions from"/>
     <echo message="${libs}/jetty9-apache-jsp${jetty.version}.jar and using "/>
     <echo message="${libs}/jetty9-apache-jsp${jetty.version}-tweaked.jar below." />
