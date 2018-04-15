@@ -429,7 +429,7 @@
   },
   {
     "start": "2012-02-08",
-    "ongoing": true,
+    "end": "2012-02-11",
     "places": [
       "ir"
     ],
@@ -442,6 +442,14 @@
       {
         "label": "blog post",
         "target": "https://blog.torproject.org/iran-partially-blocks-encrypted-network-traffic"
+      },
+      {
+        "label": "relay graph",
+        "target": "https://metrics.torproject.org/userstats-relay-country.html?start=2012-01-01&end=2012-04-01&country=ir"
+      },
+      {
+        "label": "bridge graph",
+        "target": "https://metrics.torproject.org/userstats-bridge-country.html?start=2012-01-01&end=2012-04-01&country=ir"
       }
     ]
   },
@@ -4489,6 +4497,10 @@
       {
         "label": "comment",
         "target": "https://bugs.torproject.org/21312#comment:63"
+      },
+      {
+        "label": "comment",
+        "target": "https://bugs.torproject.org/25688#comment:1"
       }
     ]
   },
@@ -4497,8 +4509,14 @@
     "protocols": [
       "snowflake"
     ],
-    "shortDescription": "Provisonally increased memory limits of the fallback snowflake proxies to 400 MB, 800 MB, or unlimited.",
-    "description": "Provisonally increased memory limits of the fallback snowflake proxies to 400 MB, 800 MB, or unlimited."
+    "shortDescription": "Provisionally increased memory limits of the fallback snowflake proxies to 400 MB, 800 MB, or unlimited.",
+    "description": "Provisionally increased memory limits of the fallback snowflake proxies to 400 MB, 800 MB, or unlimited.",
+    "links": [
+      {
+        "label": "comment",
+        "target": "https://bugs.torproject.org/25688#comment:1"
+      }
+    ]
   },
   {
     "start": "2018-03-23",
@@ -4511,6 +4529,10 @@
       {
         "label": "comment",
         "target": "https://bugs.torproject.org/21312#comment:64"
+      },
+      {
+        "label": "comment",
+        "target": "https://bugs.torproject.org/25688#comment:1"
       }
     ]
   },
@@ -4529,6 +4551,48 @@
       {
         "label": "ticket",
         "target": "https://bugs.torproject.org/21312"
+      }
+    ]
+  },
+  {
+    "start": "2018-03-27",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Restarted the fallback snowflake proxies with no limit on memory.",
+    "description": "Restarted the fallback snowflake proxies with no limit on memory.",
+    "links": [
+      {
+        "label": "comment",
+        "target": "https://bugs.torproject.org/25688#comment:1"
+      }
+    ]
+  },
+  {
+    "start": "2018-04-02",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Reinstated periodic restarts of the fallback snowflake proxies.",
+    "description": "Reinstated periodic restarts of the fallback snowflake proxies.",
+    "links": [
+      {
+        "label": "comment",
+        "target": "https://bugs.torproject.org/25688#comment:1"
+      }
+    ]
+  },
+  {
+    "start": "2018-04-13",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Snowflake client registrations",
+    "description": "Snowflake client registrations (based on domain fronting) stop working, because of a Google infrastructure change that stops domain fronting from working. The time of the change is between 2018-04-13 14:00:00 and 2018-04-13 18:00:00, based on when the bandwidth graph of the Snowflake bridge <a href=\"https://metrics.torproject.org/rs.html#details/5481936581E23D2D178105D44DB6915AB06BFB7F\">5481936581E23D2D178105D44DB6915AB06BFB7F</a> went to zero.",
+    "links": [
+      {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/25804"
       }
     ]
   },
@@ -5447,6 +5511,25 @@
       {
         "label": "mailing list post",
         "target": "https://lists.torproject.org/pipermail/metrics-team/2018-March/000713.html"
+      }
+    ],
+    "unknown": true
+  },
+  {
+    "start": "2018-02-01",
+    "end": "2018-02-05",
+    "places": [
+      "ir"
+    ],
+    "protocols": [
+      "meek"
+    ],
+    "shortDescription": "Drop of meek users in Iran; other transports not affected.",
+    "description": "Drop of meek users in Iran; other transports not affected.",
+    "links": [
+      {
+        "label": "graph",
+        "target": "https://metrics.torproject.org/userstats-bridge-combined.html?start=2018-01-14&end=2018-03-15&country=ir"
       }
     ],
     "unknown": true
