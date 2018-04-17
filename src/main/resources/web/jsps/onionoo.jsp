@@ -304,9 +304,8 @@ required fields on March 14, 2018.
 Added "version_status" field to details documents on April 6, 2018.
 <a href="#versions_5_2" class="anchor">#</a></li>
 <li><a id="versions_6_0"></a><strong>6.0</strong>
-(scheduled, but not deployed yet!): Include all exit addresses in
-"exit_addresses", regardless of whether they're used as OR addresses or not, to
-be deployed after April 14, 2018.
+Included all exit addresses in "exit_addresses", regardless of whether they are
+used as onion-routing addresses or not on April 17, 2018.
 <a href="#versions_6_0" class="anchor">#</a></li>
 </ul>
 
@@ -1053,7 +1052,7 @@ IPv6 hex characters are all lower-case.
 
 <li>
 <a id="details_relay_exit_addresses"></a>
-<b>exit_addresses</b>
+<b>exit_addresses <span class="label label-primary">updated</span></b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_exit_addresses" class="anchor">#</a>
@@ -1061,9 +1060,9 @@ IPv6 hex characters are all lower-case.
 Array of IPv4 or IPv6 addresses that the
 relay used to exit to the Internet in the past 24 hours.
 IPv6 hex characters are all lower-case.
-Only those addresses are listed that are different from onion-routing
-addresses.
 Omitted if array is empty.
+Changed on April 17, 2018 to include all exit addresses, regardless of whether
+they are used as onion-routing addresses or not.
 </p>
 </li>
 
