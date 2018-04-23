@@ -452,7 +452,7 @@ uni-/bidirectional connection usage were reported.</li>
 
 <li><b>direction:</b> Direction of reported fraction, which can be
 <b>"read"</b>, <b>"write"</b>, or <b>"both"</b> for connections classified as
-"mostly reading", "mostly writing", or "both reading as writing".  Connections
+"mostly reading", "mostly writing", or "both reading and writing".  Connections
 below the threshold have been removed from this statistics file entirely.</li>
 
 <li><b>quantile:</b> Quantile of the reported fraction when considering all
