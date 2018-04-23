@@ -4597,6 +4597,21 @@
     ]
   },
   {
+    "start": "2018-04-16",
+    "ongoing": true,
+    "places": [
+      "ru"
+    ],
+    "shortDescription": "Russia tries to block Telegram; disrupts many services on Amazon and Google cloud services.",
+    "description": "Russia tries to block Telegram; disrupts many services on Amazon and Google cloud services.",
+    "links": [
+      {
+        "label": "article",
+        "target": "https://www.bleepingcomputer.com/news/government/russia-bans-18-million-amazon-and-google-ips-in-attempt-to-block-telegram/"
+      }
+    ]
+  },
+  {
     "start": "2016-02-24",
     "places": [
       "tm"
