@@ -279,7 +279,7 @@
     "id": "oxford-anonymous-internet",
     "title": "&ldquo;The anonymous Internet&rdquo;",
     "type": "Link",
-    "description": "<p>The Oxford Internet Institute made a cartogram visualization of Tor users as compared to the overall Internet population.  They used the average number of Tor <a href=\"glossary.html#client\">users</a> per country from August 2012 to August 2013 and put it in relation to total Internet users per country.  More details and conclusions can be found on the <a href=\"http://geography.oii.ox.ac.uk/?page=tor\" target=\"_blank\">Information Geographies website at the Oxford Internet Institute</a>.</p><p><a href=\"http://geography.oii.ox.ac.uk/?page=tor\"><img src=\"images/oxford-anonymous-internet.png\" alt=\"The anonymous Internet\"></a></p>"
+    "description": "<p>The Oxford Internet Institute made a cartogram visualization of Tor users as compared to the overall Internet population.  They used the average number of Tor <a href=\"glossary.html#client\">users</a> per country from August 2012 to August 2013 and put it in relation to total Internet users per country.  <!--More details and conclusions can be found on the <a href=\"http://geography.oii.ox.ac.uk/?page=tor\" target=\"_blank\">Information Geographies website at the Oxford Internet Institute</a>.--></p><p><!--<a href=\"http://geography.oii.ox.ac.uk/?page=tor\">--><img src=\"images/oxford-anonymous-internet.png\" alt=\"The anonymous Internet\"><!--</a>--></p>"
   },
   {
     "id": "torperf",
