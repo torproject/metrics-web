@@ -37,7 +37,6 @@
         <li><a href="https://github.com/robgjansen/onionperf" target="_blank">OnionPerf</a> measures the performance of onion services.</li>
         <li><a href="https://ooni.torproject.org/" target="_blank">OONI</a> detects censorship, surveillance, and traffic manipulation on the internet.</li>
         <li><a href="https://gitweb.torproject.org/user/phw/sybilhunter.git/" target="_blank">Sybilhunter</a> attempts to detect Sybil attacks on the Tor network.</li>
-        <li><a href="https://webstats.torproject.org/" target="_blank">Webstats</a> collects logs from <code>torproject.org</code> web servers and provides them as a stripped-down version of Apache's "combined" log format without IP addresses, log times, HTTP parameters, referers, and user agent strings.</li>
       </ul>
     </div>
 

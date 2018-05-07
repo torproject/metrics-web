@@ -81,7 +81,7 @@
     "icon": "fa-download",
     "header": "Applications",
     "summary": "How many Tor applications, like Tor Browser, have been downloaded or updated.",
-    "description": "The following application statistics are based on the analysis of web server requests. All data comes from <a href=\"https://webstats.torproject.org/\" target=\"_blank\"><code>webstats.torproject.org</code></a> which collects logs from <code>torproject.org</code> web servers and provides them as a stripped-down version of Apache's \"combined\" log format without IP addresses, log times, HTTP parameters, referers, and user agent strings.",
+    "description": "The following application statistics are based on the analysis of web server requests. All data comes from <a href=\"/web-server-logs.html\">Tor web server logs</a> which are provided in a stripped-down version of Apache's \"combined\" log format without IP addresses, log times, HTTP parameters, referers, and user agent strings.",
     "metrics": [
       "webstats-tb",
       "webstats-tb-platform",
