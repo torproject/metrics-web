@@ -589,7 +589,7 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
   filesize_val <- ifelse(filesize == "50kb", 50 * 1024,
           ifelse(filesize == "1mb", 1024 * 1024, 5 * 1024 * 1024))
   t <- read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
-    colClasses = c("date" = "Date"))
+    colClasses = c("date" = "Date", "source" = "character"))
   known_sources <- c("all", unique(t[t$source != "", "source"]))
   colours <- data.frame(source = known_sources,
       colour = brewer.pal(length(known_sources), "Paired"),
