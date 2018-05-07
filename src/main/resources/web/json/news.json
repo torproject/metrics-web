@@ -4569,6 +4569,25 @@
     ]
   },
   {
+    "start": "2018-03-28",
+    "ongoing": true,
+    "places": [
+      "td"
+    ],
+    "shortDescription": "Chad blocks social messaging apps.",
+    "description": "Chad blocks social messaging apps.",
+    "links": [
+      {
+        "label": "article",
+        "target": "https://qz.com/1247234/chad-has-blocked-social-messaging-apps-bbc-amid-political-and-economic-anxiety/"
+      },
+      {
+        "label": "graph",
+        "target": "https://metrics.torproject.org/userstats-relay-country.html?start=2018-02-01&end=2018-05-15&country=td&events=off"
+      }
+    ]
+  },
+  {
     "start": "2018-04-02",
     "protocols": [
       "snowflake"
