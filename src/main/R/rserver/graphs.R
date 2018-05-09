@@ -580,8 +580,8 @@ plot_relayflags <- function(start, end, flags, path) {
 
 write_relayflags <- function(start, end, flags, path) {
   prepare_relayflags(start, end, flags) %>%
-    mutate(variable = tolower(variable)) %>%
-    spread(variable, value) %>%
+    mutate(flag = tolower(flag)) %>%
+    spread(flag, relays) %>%
     write.csv(path, quote = FALSE, row.names = FALSE)
 }
 
@@ -1269,7 +1269,7 @@ write_webstats_tb_platform <- function(start, end, path) {
 
 plot_webstats_tb_locale <- function(start, end, path) {
   d <- read.csv(paste(stats_dir, "webstats.csv", sep = ""),
-    colClasses = c("log_date" = "Date"))
+    colClasses = c("log_date" = "Date", "locale" = "character"))
   d <- d[d$log_date >= start & d$log_date <= end & d$request_type == "tbid", ]
   e <- d
   e <- aggregate(list(count = e$count), by = list(locale = e$locale), FUN = sum)
@@ -1300,7 +1300,7 @@ plot_webstats_tb_locale <- function(start, end, path) {
 # breaks and labels. Left as future work.
 write_webstats_tb_locale <- function(start, end, path) {
   d <- read.csv(paste(stats_dir, "webstats.csv", sep = ""),
-    colClasses = c("log_date" = "Date"))
+    colClasses = c("log_date" = "Date", "locale" = "character"))
   d <- d[d$log_date >= start & d$log_date <= end & d$request_type == "tbid", ]
   e <- d
   e <- aggregate(list(count = e$count), by = list(locale = e$locale), FUN = sum)
