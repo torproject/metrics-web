@@ -629,14 +629,14 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
 # harder than for other functions, because plot_torperf uses different
 # colours based on which sources exist, unrelated to which source is
 # plotted. Left as future work.
-write_torperf <- function(start, end, source_, server_, filesize_, path) {
+write_torperf <- function(start, end, source, server, filesize, path) {
   read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
     filter(date >= as.Date(start), date <= as.Date(end),
-      filesize == ifelse(filesize_ == "50kb", 50 * 1024,
-        ifelse(filesize_ == "1mb", 1024 * 1024, 5 * 1024 * 1024)),
-      source == ifelse(source_ == "all", "", source_),
-      server == server_) %>%
+      filesize == ifelse(!!filesize == "50kb", 50 * 1024,
+        ifelse(!!filesize == "1mb", 1024 * 1024, 5 * 1024 * 1024)),
+      source == ifelse(!!source == "all", "", !!source),
+      server == !!server) %>%
     transmute(date, q1 = q1 / 1e3, md = md / 1e3, q3 = q3 / 1e3) %>%
     write.csv(path, quote = FALSE, row.names = FALSE)
 }
@@ -921,18 +921,18 @@ plot_userstats_bridge_version <- function(start, end, version, path) {
   plot_userstats(start, end, "bridge", "version", version, "off", path)
 }
 
-write_userstats_relay_country <- function(start, end, country_, events,
+write_userstats_relay_country <- function(start, end, country, events,
     path) {
   load(paste(rdata_dir, "clients-relay.RData", sep = ""))
   u <- data %>%
     filter(date >= as.Date(start), date <= as.Date(end),
-      country == ifelse(country_ == "all", "", country_), transport == "",
+      country == ifelse(!!country == "all", "", !!country), transport == "",
       version == "")
-  if (country_ != "all" && events == "on") {
+  if (country != "all" && events == "on") {
     u <- u %>%
       mutate(downturns = clients < u$lower, upturns = clients > upper) %>%
       select(date, clients, downturns, upturns, lower, upper)
-  } else if (country_ != "all" && events != "off") {
+  } else if (country != "all" && events != "off") {
     u <- u %>%
       mutate(downturns = clients < u$lower, upturns = clients > upper) %>%
       select(date, clients, downturns, upturns)
@@ -945,11 +945,11 @@ write_userstats_relay_country <- function(start, end, country_, events,
     write.csv(path, quote = FALSE, row.names = FALSE)
 }
 
-write_userstats_bridge_country <- function(start, end, country_, path) {
+write_userstats_bridge_country <- function(start, end, country, path) {
   load(paste(rdata_dir, "clients-bridge.RData", sep = ""))
   data %>%
     filter(date >= as.Date(start), date <= as.Date(end),
-      country == ifelse(country_ == "all", "", country_), transport == "",
+      country == ifelse(!!country == "all", "", !!country), transport == "",
       version == "") %>%
     select(date, clients) %>%
     rename(users = clients) %>%
@@ -982,11 +982,11 @@ write_userstats_bridge_transport <- function(start, end, transports, path) {
     write.csv(path, quote = FALSE, row.names = FALSE)
 }
 
-write_userstats_bridge_version <- function(start, end, version_, path) {
+write_userstats_bridge_version <- function(start, end, version, path) {
   load(paste(rdata_dir, "clients-bridge.RData", sep = ""))
   data %>%
     filter(date >= as.Date(start), date <= as.Date(end),
-      country == "", transport == "", version == version_) %>%
+      country == "", transport == "", version == !!version) %>%
     select(date, clients) %>%
     rename(users = clients) %>%
     write.csv(path, quote = FALSE, row.names = FALSE)
