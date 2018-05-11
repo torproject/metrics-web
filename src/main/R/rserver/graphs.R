@@ -351,8 +351,13 @@ robust_call <- function(wrappee, filename) {
 prepare_networksize <- function(start, end) {
   read.csv(paste(stats_dir, "servers.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end), flag == "",
-      country == "", version == "", platform == "", ec2bridge == "") %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(flag == "") %>%
+    filter(country == "") %>%
+    filter(version == "") %>%
+    filter(platform == "") %>%
+    filter(ec2bridge == "") %>%
     select(date, relays, bridges)
 }
 
@@ -373,16 +378,21 @@ plot_networksize <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_networksize <- function(start, end, path) {
+write_networksize <- function(start = NULL, end = NULL, path) {
   prepare_networksize(start, end) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_versions <- function(start, end) {
   read.csv(paste(stats_dir, "servers.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end), flag == "",
-      country == "", version != "", platform == "", ec2bridge == "") %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(flag == "") %>%
+    filter(country == "") %>%
+    filter(version != "") %>%
+    filter(platform == "") %>%
+    filter(ec2bridge == "") %>%
     select(date, version, relays)
 }
 
@@ -411,17 +421,22 @@ plot_versions <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_versions <- function(start, end, path) {
+write_versions <- function(start = NULL, end = NULL, path) {
   prepare_versions(start, end) %>%
     spread(key = "version", value = "relays", fill = 0) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_platforms <- function(start, end) {
   read.csv(paste(stats_dir, "servers.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end), flag == "",
-      country == "", version == "", platform != "", ec2bridge == "") %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(flag == "") %>%
+    filter(country == "") %>%
+    filter(version == "") %>%
+    filter(platform != "") %>%
+    filter(ec2bridge == "") %>%
     select(date, platform, relays) %>%
     mutate(platform = ifelse(platform == "Darwin", "macOS",
       as.character(platform)))
@@ -442,17 +457,19 @@ plot_platforms <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_platforms <- function(start, end, path) {
+write_platforms <- function(start = NULL, end = NULL, path) {
   prepare_platforms(start, end) %>%
     spread(platform, relays) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_bandwidth <- function(start, end) {
   read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end), isexit != "",
-      isguard != "") %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(isexit != "") %>%
+    filter(isguard != "") %>%
     group_by(date) %>%
     summarize(advbw = sum(advbw) * 8 / 1e9,
       bwhist = sum(bwread + bwwrite) * 8 / 2e9) %>%
@@ -477,16 +494,18 @@ plot_bandwidth <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_bandwidth <- function(start, end, path) {
+write_bandwidth <- function(start = NULL, end = NULL, path) {
   prepare_bandwidth(start, end) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_bwhist_flags <- function(start, end) {
   read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end), isexit != "",
-      isguard != "") %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(isexit != "") %>%
+    filter(isguard != "") %>%
     mutate(variable = ifelse(isexit == "t",
         ifelse(isguard == "t", "guard_and_exit", "exit_only"),
         ifelse(isguard == "t", "guard_only", "middle_only")),
@@ -514,17 +533,19 @@ plot_bwhist_flags <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_bwhist_flags <- function(start, end, path) {
+write_bwhist_flags <- function(start = NULL, end = NULL, path) {
   prepare_bwhist_flags(start, end) %>%
     spread(variable, value) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_dirbytes <- function(start, end, path) {
   read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end), isexit == "",
-      isguard == "") %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(isexit == "") %>%
+    filter(isguard == "") %>%
     mutate(dirread = dirread * 8 / 1e9,
       dirwrite = dirwrite * 8 / 1e9) %>%
     select(date, dirread, dirwrite)
@@ -548,18 +569,22 @@ plot_dirbytes <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_dirbytes <- function(start, end, path) {
+write_dirbytes <- function(start = NULL, end = NULL, path) {
   prepare_dirbytes(start, end) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_relayflags <- function(start, end, flags) {
   read.csv(paste(stats_dir, "servers.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end), country == "",
-      version == "", platform == "", ec2bridge == "") %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(country == "") %>%
+    filter(version == "") %>%
+    filter(platform == "") %>%
+    filter(ec2bridge == "") %>%
     mutate(flag = ifelse(flag == "", "Running", as.character(flag))) %>%
-    filter(flag %in% flags) %>%
+    filter(if (!is.null(flags)) flag %in% flags else TRUE) %>%
     select(date, flag, relays)
 }
 
@@ -579,11 +604,11 @@ plot_relayflags <- function(start, end, flags, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_relayflags <- function(start, end, flags, path) {
+write_relayflags <- function(start = NULL, end = NULL, flags = NULL, path) {
   prepare_relayflags(start, end, flags) %>%
     mutate(flag = tolower(flag)) %>%
     spread(flag, relays) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 plot_torperf <- function(start, end, source, server, filesize, path) {
@@ -629,28 +654,39 @@ plot_torperf <- function(start, end, source, server, filesize, path) {
 # harder than for other functions, because plot_torperf uses different
 # colours based on which sources exist, unrelated to which source is
 # plotted. Left as future work.
-write_torperf <- function(start, end, source, server, filesize, path) {
+write_torperf <- function(start = NULL, end = NULL, source = NULL,
+    server = NULL, filesize = NULL, path) {
   read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end),
-      filesize == ifelse(!!filesize == "50kb", 50 * 1024,
-        ifelse(!!filesize == "1mb", 1024 * 1024, 5 * 1024 * 1024)),
-      source == ifelse(!!source == "all", "", !!source),
-      server == !!server) %>%
-    transmute(date, q1 = q1 / 1e3, md = md / 1e3, q3 = q3 / 1e3) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(if (!is.null(!!source))
+        source == ifelse(!!source == "all", "", !!source) else TRUE) %>%
+    filter(if (!is.null(!!server)) server == !!server else TRUE) %>%
+    filter(if (!is.null(!!filesize))
+        filesize == ifelse(!!filesize == "50kb", 50 * 1024,
+        ifelse(!!filesize == "1mb", 1024 * 1024, 5 * 1024 * 1024)) else
+        TRUE) %>%
+    transmute(date, filesize, source, server, q1 = q1 / 1e3, md = md / 1e3,
+      q3 = q3 / 1e3) %>%
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_torperf_failures <- function(start, end, source, server, filesize) {
-  filesize_val <- ifelse(filesize == "50kb", 50 * 1024,
-          ifelse(filesize == "1mb", 1024 * 1024, 5 * 1024 * 1024))
-  t <- read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
-    colClasses = c("date" = "Date"))
-  t[t$date >= start & t$date <= end & t$filesize == filesize_val &
-         t$source == ifelse(source == "all", "", source) &
-         t$server == server & t$requests > 0, ] %>%
-  transmute(date, timeouts = timeouts / requests,
-    failures = failures / requests)
+  read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(if (!is.null(!!filesize))
+        filesize == ifelse(!!filesize == "50kb", 50 * 1024,
+        ifelse(!!filesize == "1mb", 1024 * 1024, 5 * 1024 * 1024)) else
+        TRUE) %>%
+    filter(if (!is.null(!!source))
+        source == ifelse(!!source == "all", "", !!source) else TRUE) %>%
+    filter(if (!is.null(!!server)) server == !!server else TRUE) %>%
+    filter(requests > 0) %>%
+    transmute(date, filesize, source, server, timeouts = timeouts / requests,
+        failures = failures / requests)
 }
 
 plot_torperf_failures <- function(start, end, source, server, filesize, path) {
@@ -675,15 +711,17 @@ plot_torperf_failures <- function(start, end, source, server, filesize, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_torperf_failures <- function(start, end, source, server, filesize, path) {
+write_torperf_failures <- function(start = NULL, end = NULL, source = NULL,
+    server = NULL, filesize = NULL, path) {
   prepare_torperf_failures(start, end, source, server, filesize) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_connbidirect <- function(start, end) {
   read.csv(paste(stats_dir, "connbidirect2.csv", sep = ""),
     colClasses = c("date" = "Date", "direction" = "factor")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end)) %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
     mutate(quantile = paste("X", quantile, sep = ""),
       fraction = fraction / 100) %>%
     spread(quantile, fraction)
@@ -712,20 +750,23 @@ plot_connbidirect <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_connbidirect <- function(start, end, path) {
+write_connbidirect <- function(start = NULL, end = NULL, path) {
   prepare_connbidirect(start, end) %>%
     rename(q1 = X0.25, md = X0.5, q3 = X0.75) %>%
     gather(variable, value, -(date:direction)) %>%
     unite(temp, direction, variable) %>%
     spread(temp, value) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_bandwidth_flags <- function(start, end) {
   b <- read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
     colClasses = c("date" = "Date"))
-  b <- b[b$date >= start & b$date <= end & b$isexit != "" &
-         b$isguard != "", ]
+  b <- b %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(isexit != "") %>%
+    filter(isguard != "")
   b <- data.frame(date = b$date,
                   isexit = b$isexit == "t", isguard = b$isguard == "t",
                   advbw = b$advbw * 8 / 1e9,
@@ -770,10 +811,10 @@ plot_bandwidth_flags <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_bandwidth_flags <- function(start, end, path) {
+write_bandwidth_flags <- function(start = NULL, end = NULL, path) {
   prepare_bandwidth_flags(start, end) %>%
     spread(variable, value) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 plot_userstats <- function(start, end, node, variable, value, events,
@@ -921,48 +962,48 @@ plot_userstats_bridge_version <- function(start, end, version, path) {
   plot_userstats(start, end, "bridge", "version", version, "off", path)
 }
 
-write_userstats_relay_country <- function(start, end, country, events,
-    path) {
+write_userstats_relay_country <- function(start = NULL, end = NULL,
+    country = NULL, events = NULL, path) {
   load(paste(rdata_dir, "clients-relay.RData", sep = ""))
   u <- data %>%
-    filter(date >= as.Date(start), date <= as.Date(end),
-      country == ifelse(!!country == "all", "", !!country), transport == "",
-      version == "")
-  if (country != "all" && events == "on") {
-    u <- u %>%
-      mutate(downturns = clients < u$lower, upturns = clients > upper) %>%
-      select(date, clients, downturns, upturns, lower, upper)
-  } else if (country != "all" && events != "off") {
-    u <- u %>%
-      mutate(downturns = clients < u$lower, upturns = clients > upper) %>%
-      select(date, clients, downturns, upturns)
-  } else {
-    u <- u %>%
-      select(date, clients)
-  }
-  u %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(if (!is.null(!!country))
+      country == ifelse(!!country == "all", "", !!country) else TRUE) %>%
+    filter(transport == "") %>%
+    filter(version == "") %>%
+    mutate(downturns = clients < lower, upturns = clients > upper) %>%
+    select(date, country, clients, downturns, upturns, lower, upper) %>%
     rename(users = clients) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
-write_userstats_bridge_country <- function(start, end, country, path) {
+write_userstats_bridge_country <- function(start = NULL, end = NULL,
+    country = NULL, path) {
   load(paste(rdata_dir, "clients-bridge.RData", sep = ""))
   data %>%
-    filter(date >= as.Date(start), date <= as.Date(end),
-      country == ifelse(!!country == "all", "", !!country), transport == "",
-      version == "") %>%
-    select(date, clients) %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(if (!is.null(!!country))
+      country == ifelse(!!country == "all", "", !!country) else TRUE) %>%
+    filter(transport == "") %>%
+    filter(version == "") %>%
+    select(date, country, clients) %>%
     rename(users = clients) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
-write_userstats_bridge_transport <- function(start, end, transports, path) {
+write_userstats_bridge_transport <- function(start = NULL, end = NULL,
+    transports = NULL, path) {
   load(paste(rdata_dir, "clients-bridge.RData", sep = ""))
   u <- data %>%
-    filter(date >= as.Date(start), date <= as.Date(end),
-      country == "", version == "", transport != "") %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(country == "") %>%
+    filter(version == "") %>%
+    filter(transport != "") %>%
     select(date, transport, clients)
-  if ("!<OR>" %in% transports) {
+  if (is.null(transports) || "!<OR>" %in% transports) {
     n <- u %>%
       filter(transport != "<OR>") %>%
       group_by(date) %>%
@@ -971,7 +1012,7 @@ write_userstats_bridge_transport <- function(start, end, transports, path) {
                              clients = n$clients))
   }
   u %>%
-    filter(transport %in% transports) %>%
+    filter(if (!is.null(transports)) transport %in% transports else TRUE) %>%
     mutate(transport = ifelse(transport == "<OR>", "default_or_protocol",
       ifelse(transport == "!<OR>", "any_pt",
       ifelse(transport == "<??>", "unknown_pluggable_transports",
@@ -979,38 +1020,41 @@ write_userstats_bridge_transport <- function(start, end, transports, path) {
     group_by(date, transport) %>%
     select(date, transport, clients) %>%
     spread(transport, clients) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
-write_userstats_bridge_version <- function(start, end, version, path) {
+write_userstats_bridge_version <- function(start = NULL, end = NULL,
+    version = NULL, path) {
   load(paste(rdata_dir, "clients-bridge.RData", sep = ""))
   data %>%
-    filter(date >= as.Date(start), date <= as.Date(end),
-      country == "", transport == "", version == !!version) %>%
-    select(date, clients) %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(country == "") %>%
+    filter(transport == "") %>%
+    filter(if (!is.null(!!version)) version == !!version else TRUE) %>%
+    select(date, version, clients) %>%
     rename(users = clients) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_userstats_bridge_combined <- function(start, end, country) {
-  top <- 3
-  country <- ifelse(country == "all", NA, country)
   load(paste(rdata_dir, "userstats-bridge-combined.RData", sep = ""))
-  u <- data
-  u <- u[u$date >= start & u$date <= end
-         & (is.na(country) | u$country == country), ]
-  a <- aggregate(list(mid = (u$high + u$low) / 2),
-                 by = list(transport = u$transport), FUN = sum)
-  a <- a[order(a$mid, decreasing = TRUE)[1:top], ]
-  u <- u[u$transport %in% a$transport, ]
-  u
+  data %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(if (!is.null(!!country)) country == !!country else TRUE)
 }
 
 plot_userstats_bridge_combined <- function(start, end, country, path) {
   if (country == "all") {
     plot_userstats_bridge_country(start, end, country, path)
   } else {
+    top <- 3
     u <- prepare_userstats_bridge_combined(start, end, country)
+    a <- aggregate(list(mid = (u$high + u$low) / 2),
+                   by = list(transport = u$transport), FUN = sum)
+    a <- a[order(a$mid, decreasing = TRUE)[1:top], ]
+    u <- u[u$transport %in% a$transport, ]
     title <- paste("Bridge users by transport from ",
                    countryname(country), sep = "")
     ggplot(u, aes(x = as.Date(date), ymin = low, ymax = high,
@@ -1028,26 +1072,29 @@ plot_userstats_bridge_combined <- function(start, end, country, path) {
   }
 }
 
-write_userstats_bridge_combined <- function(start, end, country, path) {
-  if (country == "all") {
+write_userstats_bridge_combined <- function(start = NULL, end = NULL,
+    country = NULL, path) {
+  if (!is.null(country) && country == "all") {
     write_userstats_bridge_country(start, end, country, path)
   } else {
     prepare_userstats_bridge_combined(start, end, country) %>%
-      select(date, transport, low, high) %>%
-      mutate(transport = ifelse(transport == "<OR>",
-                                "default_or_protocol", transport)) %>%
+      select(date, country, transport, low, high) %>%
+      mutate(transport = ifelse(transport == "<OR>", "default_or_protocol",
+        ifelse(transport == "<??>", "unknown_transport", transport))) %>%
       gather(variable, value, -(date:transport)) %>%
       unite(temp, transport, variable) %>%
       spread(temp, value) %>%
-      write.csv(path, quote = FALSE, row.names = FALSE)
+      write.csv(path, quote = FALSE, row.names = FALSE, na = "")
   }
 }
 
 prepare_advbwdist_perc <- function(start, end, p) {
   read.csv(paste(stats_dir, "advbwdist.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end),
-      percentile %in% as.numeric(p)) %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(if (!is.null(p)) percentile %in% as.numeric(p) else
+      percentile != "") %>%
     transmute(date, percentile = as.factor(percentile),
       variable = ifelse(isexit != "t", "all", "exits"),
       advbw = advbw * 8 / 1e9)
@@ -1070,18 +1117,20 @@ plot_advbwdist_perc <- function(start, end, p, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_advbwdist_perc <- function(start, end, p, path) {
+write_advbwdist_perc <- function(start = NULL, end = NULL, p = NULL, path) {
   prepare_advbwdist_perc(start, end, p) %>%
     unite(temp, variable, percentile) %>%
     spread(temp, advbw) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_advbwdist_relay <- function(start, end, n) {
   read.csv(paste(stats_dir, "advbwdist.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end),
-      relay %in% as.numeric(n)) %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(if (!is.null(n)) relay %in% as.numeric(n) else
+      relay != "") %>%
     transmute(date, relay = as.factor(relay),
       variable = ifelse(isexit != "t", "all", "exits"),
       advbw = advbw * 8 / 1e9)
@@ -1104,18 +1153,19 @@ plot_advbwdist_relay <- function(start, end, n, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_advbwdist_relay <- function(start, end, n, path) {
+write_advbwdist_relay <- function(start = NULL, end = NULL, n = NULL, path) {
   prepare_advbwdist_relay(start, end, n) %>%
     unite(temp, variable, relay) %>%
     spread(temp, advbw) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_hidserv_dir_onions_seen <- function(start, end) {
   read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end),
-      type == "dir-onions-seen") %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(type == "dir-onions-seen") %>%
     transmute(date = date, onions = ifelse(frac >= 0.01, wiqm, NA))
 }
 
@@ -1131,16 +1181,17 @@ plot_hidserv_dir_onions_seen <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_hidserv_dir_onions_seen <- function(start, end, path) {
+write_hidserv_dir_onions_seen <- function(start = NULL, end = NULL, path) {
   prepare_hidserv_dir_onions_seen(start, end) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_hidserv_rend_relayed_cells <- function(start, end) {
   read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end),
-      type == "rend-relayed-cells") %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
+    filter(type == "rend-relayed-cells") %>%
     transmute(date,
       relayed = ifelse(frac >= 0.01, wiqm * 8 * 512 / (86400 * 1e9), NA))
 }
@@ -1158,15 +1209,16 @@ plot_hidserv_rend_relayed_cells <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_hidserv_rend_relayed_cells <- function(start, end, path) {
+write_hidserv_rend_relayed_cells <- function(start = NULL, end = NULL, path) {
   prepare_hidserv_rend_relayed_cells(start, end) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_hidserv_frac_reporting <- function(start, end) {
   read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end)) %>%
+    filter(if (!is.null(start)) date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) date <= as.Date(end) else TRUE) %>%
     select(date, frac, type)
 }
 
@@ -1189,17 +1241,18 @@ plot_hidserv_frac_reporting <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_hidserv_frac_reporting <- function(start, end, path) {
+write_hidserv_frac_reporting <- function(start = NULL, end = NULL, path) {
   prepare_hidserv_frac_reporting(start, end) %>%
     mutate(type = ifelse(type == "dir-onions-seen", "onions", "relayed")) %>%
     spread(type, frac) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_webstats_tb <- function(start, end) {
   load(paste(rdata_dir, "webstats-tb.RData", sep = ""))
   data %>%
-    filter(log_date >= as.Date(start), log_date <= as.Date(end)) %>%
+    filter(if (!is.null(start)) log_date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) log_date <= as.Date(end) else TRUE) %>%
     mutate(request_type = factor(request_type))
 }
 
@@ -1224,20 +1277,21 @@ plot_webstats_tb <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_webstats_tb <- function(start, end, path) {
+write_webstats_tb <- function(start = NULL, end = NULL, path) {
   prepare_webstats_tb(start, end) %>%
     rename(date = log_date) %>%
     spread(request_type, count) %>%
     rename(initial_downloads = tbid, signature_downloads = tbsd,
       update_pings = tbup, update_requests = tbur) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_webstats_tb_platform <- function(start, end) {
   read.csv(paste(stats_dir, "webstats.csv", sep = ""),
     colClasses = c("log_date" = "Date")) %>%
-    filter(log_date >= as.Date(start), log_date <= as.Date(end),
-      request_type == "tbid") %>%
+    filter(if (!is.null(start)) log_date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) log_date <= as.Date(end) else TRUE) %>%
+    filter(request_type == "tbid") %>%
     group_by(log_date, platform) %>%
     summarize(count = sum(count))
 }
@@ -1260,12 +1314,12 @@ plot_webstats_tb_platform <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_webstats_tb_platform <- function(start, end, path) {
+write_webstats_tb_platform <- function(start = NULL, end = NULL, path) {
   prepare_webstats_tb_platform(start, end) %>%
     rename(date = log_date) %>%
     spread(platform, count) %>%
     rename(linux = l, macos = m, windows = w) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 plot_webstats_tb_locale <- function(start, end, path) {
@@ -1299,10 +1353,13 @@ plot_webstats_tb_locale <- function(start, end, path) {
 # turned out to be a bit harder than for other functions, because
 # plot_webstats_tb_locale needs the preliminary data frame e for its
 # breaks and labels. Left as future work.
-write_webstats_tb_locale <- function(start, end, path) {
+write_webstats_tb_locale <- function(start = NULL, end = NULL, path) {
   d <- read.csv(paste(stats_dir, "webstats.csv", sep = ""),
     colClasses = c("log_date" = "Date", "locale" = "character"))
-  d <- d[d$log_date >= start & d$log_date <= end & d$request_type == "tbid", ]
+  d <- d %>%
+    filter(if (!is.null(start)) log_date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) log_date <= as.Date(end) else TRUE) %>%
+    filter(request_type == "tbid")
   e <- d
   e <- aggregate(list(count = e$count), by = list(locale = e$locale), FUN = sum)
   e <- e[order(e$count, decreasing = TRUE), ]
@@ -1313,13 +1370,14 @@ write_webstats_tb_locale <- function(start, end, path) {
     mutate(locale = tolower(locale)) %>%
     rename(date = log_date) %>%
     spread(locale, count) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_webstats_tm <- function(start, end) {
   load(paste(rdata_dir, "webstats-tm.RData", sep = ""))
   data %>%
-    filter(log_date >= as.Date(start), log_date <= as.Date(end)) %>%
+    filter(if (!is.null(start)) log_date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end)) log_date <= as.Date(end) else TRUE) %>%
     mutate(request_type = factor(request_type))
 }
 
@@ -1342,19 +1400,22 @@ plot_webstats_tm <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_webstats_tm <- function(start, end, path) {
+write_webstats_tm <- function(start = NULL, end = NULL, path) {
   prepare_webstats_tm(start, end) %>%
     rename(date = log_date) %>%
     spread(request_type, count) %>%
     rename(initial_downloads = tmid, update_pings = tmup) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_relays_ipv6 <- function(start, end) {
   read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
     colClasses = c("valid_after_date" = "Date")) %>%
-    filter(valid_after_date >= as.Date(start),
-      valid_after_date <= as.Date(end), server == "relay") %>%
+    filter(if (!is.null(start))
+        valid_after_date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end))
+        valid_after_date <= as.Date(end) else TRUE) %>%
+    filter(server == "relay") %>%
     group_by(valid_after_date) %>%
     summarize(total = sum(server_count_sum_avg),
       announced = sum(server_count_sum_avg[announced_ipv6 == "t"]),
@@ -1382,18 +1443,21 @@ plot_relays_ipv6 <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_relays_ipv6 <- function(start, end, path) {
+write_relays_ipv6 <- function(start = NULL, end = NULL, path) {
   prepare_relays_ipv6(start, end) %>%
     rename(date = valid_after_date) %>%
     spread(category, count) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_bridges_ipv6 <- function(start, end) {
   read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
     colClasses = c("valid_after_date" = "Date")) %>%
-    filter(valid_after_date >= as.Date(start),
-      valid_after_date <= as.Date(end), server == "bridge") %>%
+    filter(if (!is.null(start))
+        valid_after_date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end))
+        valid_after_date <= as.Date(end) else TRUE) %>%
+    filter(server == "bridge") %>%
     group_by(valid_after_date) %>%
     summarize(total = sum(server_count_sum_avg),
       announced = sum(server_count_sum_avg[announced_ipv6 == "t"])) %>%
@@ -1417,18 +1481,21 @@ plot_bridges_ipv6 <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_bridges_ipv6 <- function(start, end, path) {
+write_bridges_ipv6 <- function(start = NULL, end = NULL, path) {
   prepare_bridges_ipv6(start, end) %>%
     rename(date = valid_after_date) %>%
     spread(category, count) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
 prepare_advbw_ipv6 <- function(start, end) {
   read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
     colClasses = c("valid_after_date" = "Date")) %>%
-    filter(valid_after_date >= as.Date(start),
-      valid_after_date <= as.Date(end), server == "relay") %>%
+    filter(if (!is.null(start))
+        valid_after_date >= as.Date(start) else TRUE) %>%
+    filter(if (!is.null(end))
+        valid_after_date <= as.Date(end) else TRUE) %>%
+    filter(server == "relay") %>%
     group_by(valid_after_date) %>%
     summarize(total = sum(advertised_bandwidth_bytes_sum_avg),
       total_guard = sum(advertised_bandwidth_bytes_sum_avg[guard_relay != "f"]),
@@ -1465,10 +1532,10 @@ plot_advbw_ipv6 <- function(start, end, path) {
   ggsave(filename = path, width = 8, height = 5, dpi = 150)
 }
 
-write_advbw_ipv6 <- function(start, end, path) {
+write_advbw_ipv6 <- function(start = NULL, end = NULL, path) {
   prepare_advbw_ipv6(start, end) %>%
     rename(date = valid_after_date) %>%
     spread(category, advbw) %>%
-    write.csv(path, quote = FALSE, row.names = FALSE)
+    write.csv(path, quote = FALSE, row.names = FALSE, na = "")
 }
 
