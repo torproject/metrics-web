@@ -408,7 +408,7 @@
     "id": "webstats-tm",
     "title": "Tor Messenger downloads and updates",
     "type": "Graph",
-    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers related to Tor Messenger.  <em>Initial downloads</em> are requests made by the user to download a Tor Messenger executable from the Tor website.  <em>Update pings</em> are requests made by Tor Messenger to check whether a newer version is available.</p>",
+    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers related to Tor Messenger.  <em>Initial downloads</em> are requests made by the user to download a Tor Messenger executable from the Tor website.  <em>Update pings</em> are requests made by Tor Messenger to check whether a newer version is available.</p><p>Note that <a href=\"https://blog.torproject.org/sunsetting-tor-messenger\">Tor Messenger has been sunset</a> on April 2, 2018. This graph is soon going to disappear, too.</p>",
     "function": "webstats_tm",
     "parameters": [
       "start",
