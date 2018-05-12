@@ -4631,6 +4631,47 @@
     ]
   },
   {
+    "start": "2018-04-30",
+    "ongoing": true,
+    "places": [
+      "ir"
+    ],
+    "shortDescription": "Iranian ISPs block Telegram.",
+    "description": "Iranian ISPs block Telegram.",
+    "links": [
+      {
+        "label": "article",
+        "target": "https://arstechnica.com/tech-policy/2018/05/iran-blocks-telegram-pushes-replacement-with-death-to-america-emoji/"
+      },
+      {
+        "label": "relay graph",
+        "target": "https://metrics.torproject.org/userstats-relay-country.html?start=2018-03-01&end=2018-06-01&country=ir&events=off"
+      },
+      {
+        "label": "bridge graph",
+        "target": "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-03-11&end=2018-06-01&country=ir"
+      }
+    ]
+  },
+  {
+    "start": "2018-05-09",
+    "protocols": [
+      "snowflake"
+    ],
+    "shortDescription": "Release of Tor Browser 8.0a7, which changes the default Snowflake rendezvous to use an Azure domain front, instead of the Google one that had been non-functional since 2018-04-13.",
+    "description": "Release of Tor Browser 8.0a7, which changes the default Snowflake rendezvous to use an Azure domain front, instead of the Google one that had been non-functional since 2018-04-13.",
+    "links": [
+      {
+        "label": "blog post",
+        "target": "https://blog.torproject.org/tor-browser-80a7-released"
+      },
+      {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/26010"
+      }
+    ]
+  },
+  {
     "start": "2016-02-24",
     "places": [
       "tm"
