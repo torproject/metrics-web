@@ -43,6 +43,7 @@ import matplotlib
 
 # Dep: numpy
 import numpy
+from numpy import mean, std
 
 # Dep: scipy
 import scipy.stats
@@ -199,7 +200,8 @@ def make_tendencies_minmax(l, INTERVAL = 1):
         minx += [None]
         maxx += [None]
         continue
-      mu, signma = norm.fit(vals)
+      mu = mean(vals)
+      signma = std(vals)
       dists += [(mu, signma)]
       maxx += [norm.ppf(0.9999, mu, signma)]
       minx += [norm.ppf(1 - 0.9999, mu, signma)]
