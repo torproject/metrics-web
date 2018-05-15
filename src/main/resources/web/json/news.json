@@ -4640,6 +4640,10 @@
     "description": "Iranian ISPs block Telegram.",
     "links": [
       {
+        "label": "ticket",
+        "target": "https://bugs.torproject.org/26087"
+      },
+      {
         "label": "article",
         "target": "https://arstechnica.com/tech-policy/2018/05/iran-blocks-telegram-pushes-replacement-with-death-to-america-emoji/"
       },
