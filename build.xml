@@ -44,7 +44,6 @@
   <patternset id="common" >
     <include name="commons-codec-1.10.jar"/>
     <include name="commons-lang3-3.5.jar"/>
-    <include name="commons-lang-2.6.jar"/>
     <include name="gson-2.4.jar" />
     <include name="logback-core-1.1.9.jar" />
     <include name="logback-classic-1.1.9.jar" />
