@@ -47,7 +47,6 @@
     <include name="gson-2.4.jar" />
     <include name="logback-core-1.1.9.jar" />
     <include name="logback-classic-1.1.9.jar" />
-    <include name="postgresql-9.4.1212.jar"/>
     <include name="REngine.jar"/>
     <include name="Rserve.jar"/>
     <include name="slf4j-api-1.7.22.jar"/>
@@ -57,6 +56,7 @@
     <patternset refid="common" />
     <include name="metrics-lib-${metricslibversion}.jar"/>
     <include name="commons-compress-1.13.jar"/>
+    <include name="postgresql-9.4.1212.jar"/>
     <include name="servlet-api-3.1.jar"/>
     <include name="xz-1.6.jar"/>
   </patternset>
