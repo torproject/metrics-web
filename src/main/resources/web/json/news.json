@@ -4658,6 +4658,14 @@
     ]
   },
   {
+    "start": "2018-05-08",
+    "protocols": [
+      "meek"
+    ],
+    "shortDescription": "The meek-amazon bridge imposes a rate limit of 1 MB/s.",
+    "description": "The <a href=\"https://metrics.torproject.org/rs.html#details/F4AD82B2032EDEF6C02C5A529C42CFAFE516564D\">meek-amazon bridge</a> imposes a rate limit of 1 MB/s."
+  },
+  {
     "start": "2018-05-09",
     "protocols": [
       "snowflake"
@@ -4672,6 +4680,24 @@
       {
         "label": "ticket",
         "target": "https://bugs.torproject.org/26010"
+      }
+    ]
+  },
+  {
+    "start": "2018-05-14",
+    "protocols": [
+      "meek"
+    ],
+    "shortDescription": "Disabled the d2cly7j4zqgua7.cloudfront.net CDN endpoint for meek-amazon.",
+    "description": "Disabled the d2cly7j4zqgua7.cloudfront.net CDN endpoint for meek-amazon.",
+    "links": [
+      {
+        "label": "Tor Browser ticket",
+        "target": "https://bugs.torproject.org/26098"
+      },
+      {
+        "label": "Orbot ticket",
+        "target": "https://bugs.torproject.org/26111"
       }
     ]
   },
