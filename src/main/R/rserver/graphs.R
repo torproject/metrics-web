@@ -451,10 +451,11 @@ write_platforms <- function(start, end, path) {
 prepare_bandwidth <- function(start, end) {
   read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    filter(date >= as.Date(start), date <= as.Date(end), isexit == "",
-      isguard == "") %>%
-    mutate(advbw = advbw * 8 / 1e9) %>%
-    mutate(bwhist = (bwread + bwwrite) * 8 / 2e9) %>%
+    filter(date >= as.Date(start), date <= as.Date(end), isexit != "",
+      isguard != "") %>%
+    group_by(date) %>%
+    summarize(advbw = sum(advbw) * 8 / 1e9,
+      bwhist = sum(bwread + bwwrite) * 8 / 2e9) %>%
     select(date, advbw, bwhist)
 }
 

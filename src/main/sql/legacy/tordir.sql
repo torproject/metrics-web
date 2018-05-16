@@ -151,29 +151,6 @@ CREATE TABLE relay_versions (
     CONSTRAINT relay_versions_pkey PRIMARY KEY(date, version)
 );
 
--- TABLE total_bandwidth
--- Contains information for the whole network's total bandwidth which is
--- used in the bandwidth graphs.
-CREATE TABLE total_bandwidth (
-    date DATE NOT NULL,
-    bwavg BIGINT NOT NULL,
-    bwburst BIGINT NOT NULL,
-    bwobserved BIGINT NOT NULL,
-    bwadvertised BIGINT NOT NULL,
-    CONSTRAINT total_bandwidth_pkey PRIMARY KEY(date)
-);
-
--- TABLE total_bwhist
--- Contains the total number of read/written and the number of dir bytes
--- read/written by all relays in the network on a given day. The dir bytes
--- are an estimate based on the subset of relays that count dir bytes.
-CREATE TABLE total_bwhist (
-    date DATE NOT NULL,
-    read BIGINT,
-    written BIGINT,
-    CONSTRAINT total_bwhist_pkey PRIMARY KEY(date)
-);
-
 -- TABLE bandwidth_flags
 CREATE TABLE bandwidth_flags (
     date DATE NOT NULL,
@@ -473,64 +450,6 @@ CREATE OR REPLACE FUNCTION refresh_relay_versions() RETURNS INTEGER AS $$
     END;
 $$ LANGUAGE plpgsql;
 
--- FUNCTION refresh_total_bandwidth()
--- This keeps the table total_bandwidth up-to-date when necessary.
-CREATE OR REPLACE FUNCTION refresh_total_bandwidth() RETURNS INTEGER AS $$
-    DECLARE
-        min_date TIMESTAMP WITHOUT TIME ZONE;
-        max_date TIMESTAMP WITHOUT TIME ZONE;
-    BEGIN
-
-    min_date := (SELECT MIN(date) FROM updates);
-    max_date := (SELECT MAX(date) + 1 FROM updates);
-
-    DELETE FROM total_bandwidth
-    WHERE date IN (SELECT date FROM updates);
-
-    EXECUTE '
-    INSERT INTO total_bandwidth
-    (bwavg, bwburst, bwobserved, bwadvertised, date)
-    SELECT (SUM(bandwidthavg)
-            / relay_statuses_per_day.count)::BIGINT AS bwavg,
-        (SUM(bandwidthburst)
-            / relay_statuses_per_day.count)::BIGINT AS bwburst,
-        (SUM(bandwidthobserved)
-            / relay_statuses_per_day.count)::BIGINT AS bwobserved,
-        (SUM(LEAST(bandwidthavg, bandwidthobserved))
-            / relay_statuses_per_day.count)::BIGINT AS bwadvertised,
-        DATE(validafter)
-    FROM descriptor RIGHT JOIN statusentry
-    ON descriptor.descriptor = statusentry.descriptor
-    JOIN relay_statuses_per_day
-    ON DATE(validafter) = relay_statuses_per_day.date
-    WHERE isrunning = TRUE
-          AND validafter >= ''' || min_date || '''
-          AND validafter < ''' || max_date || '''
-          AND DATE(validafter) IN (SELECT date FROM updates)
-          AND relay_statuses_per_day.date >= ''' || min_date || '''
-          AND relay_statuses_per_day.date < ''' || max_date || '''
-          AND DATE(relay_statuses_per_day.date) IN
-              (SELECT date FROM updates)
-    GROUP BY DATE(validafter), relay_statuses_per_day.count';
-
-    RETURN 1;
-    END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION refresh_total_bwhist() RETURNS INTEGER AS $$
-  BEGIN
-  DELETE FROM total_bwhist WHERE date IN (SELECT date FROM updates);
-  INSERT INTO total_bwhist (date, read, written)
-  SELECT date, SUM(read_sum) AS read, SUM(written_sum) AS written
-  FROM bwhist
-  WHERE date >= (SELECT MIN(date) FROM updates)
-  AND date <= (SELECT MAX(date) FROM updates)
-  AND date IN (SELECT date FROM updates)
-  GROUP BY date;
-  RETURN 1;
-  END;
-$$ LANGUAGE plpgsql;
-
 CREATE OR REPLACE FUNCTION refresh_bandwidth_flags() RETURNS INTEGER AS $$
     DECLARE
         min_date TIMESTAMP WITHOUT TIME ZONE;
@@ -693,12 +612,8 @@ CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
     RAISE NOTICE '% Refreshing relay versions.', timeofday();
     PERFORM refresh_relay_versions();
     RAISE NOTICE '% Refreshing total relay bandwidth.', timeofday();
-    PERFORM refresh_total_bandwidth();
-    RAISE NOTICE '% Refreshing relay bandwidth history.', timeofday();
-    PERFORM refresh_total_bwhist();
-    RAISE NOTICE '% Refreshing total relay bandwidth by flags.', timeofday();
     PERFORM refresh_bandwidth_flags();
-    RAISE NOTICE '% Refreshing bandwidth history by flags.', timeofday();
+    RAISE NOTICE '% Refreshing bandwidth history.', timeofday();
     PERFORM refresh_bwhist_flags();
     RAISE NOTICE '% Refreshing user statistics.', timeofday();
     PERFORM refresh_user_stats();
@@ -799,23 +714,12 @@ CREATE VIEW stats_bandwidth AS
   WHERE COALESCE(bandwidth_flags.date, bwhist_flags.date) <
   current_date - 2)
 UNION ALL
-  (SELECT COALESCE(total_bandwidth.date, total_bwhist.date, u.date)
-  AS date, NULL AS isexit, NULL AS isguard,
-  total_bandwidth.bwadvertised AS advbw,
-  CASE WHEN total_bwhist.read IS NOT NULL
-  THEN total_bwhist.read / 86400 END AS bwread,
-  CASE WHEN total_bwhist.written IS NOT NULL
-  THEN total_bwhist.written / 86400 END AS bwwrite,
-  CASE WHEN u.date IS NOT NULL
-  THEN FLOOR(CAST(u.dr AS NUMERIC) / CAST(86400 AS NUMERIC)) END AS dirread,
-  CASE WHEN u.date IS NOT NULL
-  THEN FLOOR(CAST(u.dw AS NUMERIC) / CAST(86400 AS NUMERIC)) END AS dirwrite
-  FROM total_bandwidth FULL OUTER JOIN total_bwhist
-  ON total_bandwidth.date = total_bwhist.date
-  FULL OUTER JOIN (SELECT * FROM user_stats WHERE country = 'zy'
-  AND bwp / bwd <= 3) u
-  ON COALESCE(total_bandwidth.date, total_bwhist.date) = u.date
-  WHERE COALESCE(total_bandwidth.date, total_bwhist.date, u.date) <
-  current_date - 2)
+  (SELECT date, NULL AS isexit, NULL AS isguard, NULL AS advbw,
+  NULL AS bwread, NULL AS bwwrite,
+  FLOOR(CAST(dr AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirread,
+  FLOOR(CAST(dw AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirwrite
+  FROM user_stats
+  WHERE country = 'zy'
+  AND date < current_date - 2)
 ORDER BY date, isexit, isguard;
 
