@@ -146,10 +146,10 @@ public class RObjectGenerator implements ServletContextListener {
         imageFilenameBuilder.append("-").append(param);
       }
       if (parameterValues.length < 2) {
-        queryBuilder.append(parameterName).append(" = '")
+        queryBuilder.append(parameterName).append("_p = '")
             .append(parameterValues[0]).append("', ");
       } else {
-        queryBuilder.append(parameterName).append(" = c(");
+        queryBuilder.append(parameterName).append("_p = c(");
         for (int i = 0; i < parameterValues.length - 1; i++) {
           queryBuilder.append("'").append(parameterValues[i]).append("', ");
         }
@@ -159,7 +159,7 @@ public class RObjectGenerator implements ServletContextListener {
     }
     imageFilenameBuilder.append(".").append(fileType);
     String imageFilename = imageFilenameBuilder.toString();
-    queryBuilder.append("path = '%1$s')), '%1$s')");
+    queryBuilder.append("path_p = '%1$s')), '%1$s')");
     String query = queryBuilder.toString();
     File imageFile = new File(this.cachedGraphsDirectory + "/"
         + imageFilename);
