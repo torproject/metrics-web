@@ -807,11 +807,9 @@ UNION ALL
   CASE WHEN total_bwhist.written IS NOT NULL
   THEN total_bwhist.written / 86400 END AS bwwrite,
   CASE WHEN u.date IS NOT NULL
-  THEN FLOOR(CAST(u.dr AS NUMERIC) * CAST(u.brp AS NUMERIC) /
-  CAST(u.brd AS NUMERIC) / CAST(86400 AS NUMERIC)) END AS dirread,
+  THEN FLOOR(CAST(u.dr AS NUMERIC) / CAST(86400 AS NUMERIC)) END AS dirread,
   CASE WHEN u.date IS NOT NULL
-  THEN FLOOR(CAST(u.dw AS NUMERIC) * CAST(u.bwp AS NUMERIC) /
-  CAST(u.bwd AS NUMERIC) / CAST(86400 AS NUMERIC)) END AS dirwrite
+  THEN FLOOR(CAST(u.dw AS NUMERIC) / CAST(86400 AS NUMERIC)) END AS dirwrite
   FROM total_bandwidth FULL OUTER JOIN total_bwhist
   ON total_bandwidth.date = total_bwhist.date
   FULL OUTER JOIN (SELECT * FROM user_stats WHERE country = 'zy'

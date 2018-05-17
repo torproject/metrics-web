@@ -125,15 +125,14 @@ This metric includes any kind of traffic.</li>
 <li><b>bwwrite:</b> Similar to <b>bwread</b>, but for traffic written by
 relays.</li>
 
-<li><b>dirread:</b> Bandwidth in bytes per second that relays have read when
-serving directory data.  Not all relays report how many bytes they read when
-serving directory data which is why this value is an estimate from the available
-data.  This metric is not available for subsets of relays with certain relay
+<li><b>dirread:</b> Bandwidth in bytes per second that directory mirrors have
+read when serving directory data.
+This metric is not available for subsets of relays with certain relay
 flags, so that this column will contain the empty string if either <b>isexit</b>
 or <b>isguard</b> is non-empty.</li>
 
 <li><b>dirwrite:</b> Similar to <b>dirread</b>, but for traffic written by
-relays when serving directory data.</li>
+directory mirrors when serving directory data.</li>
 
 </ul>
 
