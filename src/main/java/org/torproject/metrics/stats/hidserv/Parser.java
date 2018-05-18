@@ -243,7 +243,7 @@ public class Parser {
    * right side of a bin and subtracting half of the bin size. */
   private long removeNoise(long reportedNumber, long binSize) {
     long roundedToNearestRightSideOfTheBin =
-        ((reportedNumber + binSize / 2) / binSize) * binSize;
+        Math.floorDiv((reportedNumber + binSize / 2), binSize) * binSize;
     long subtractedHalfOfBinSize =
         roundedToNearestRightSideOfTheBin - binSize / 2;
     return subtractedHalfOfBinSize;
