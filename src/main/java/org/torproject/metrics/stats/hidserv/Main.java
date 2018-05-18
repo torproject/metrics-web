@@ -38,11 +38,7 @@ public class Main {
     /* Parse new descriptors and store their contents using the document
      * stores. */
     System.out.println("Parsing descriptors...");
-    if (!parser.parseDescriptors()) {
-      System.err.println("Could not store parsed descriptors.  "
-          + "Terminating.");
-      return;
-    }
+    parser.parseDescriptors();
 
     /* Write the parse history to avoid parsing descriptor files again
      * next time.  It's okay to do this now and not at the end of the

@@ -162,16 +162,14 @@ public class Parser {
   /** Instructs the descriptor reader to parse descriptor files, and
    * handles the resulting parsed descriptors if they are either
    * extra-info descriptors or consensuses. */
-  public boolean parseDescriptors() {
+  public void parseDescriptors() {
     for (Descriptor descriptor : descriptorReader.readDescriptors(
         this.inDirectories)) {
       if (descriptor instanceof ExtraInfoDescriptor) {
         this.parseExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
       } else if (descriptor instanceof RelayNetworkStatusConsensus) {
-        if (!this.parseRelayNetworkStatusConsensus(
-            (RelayNetworkStatusConsensus) descriptor)) {
-          return false;
-        }
+        this.parseRelayNetworkStatusConsensus(
+            (RelayNetworkStatusConsensus) descriptor);
       }
     }
 
@@ -180,7 +178,7 @@ public class Parser {
      * descriptors.  In contrast, sets of computed network fractions are
      * stored immediately after processing the consensus they are based
      * on. */
-    return this.reportedHidServStatsStore.store(
+    this.reportedHidServStatsStore.store(
         this.reportedHidServStatsFile, this.reportedHidServStats);
   }
 
@@ -252,7 +250,7 @@ public class Parser {
   }
 
   /** Parses the given consensus. */
-  public boolean parseRelayNetworkStatusConsensus(
+  public void parseRelayNetworkStatusConsensus(
       RelayNetworkStatusConsensus consensus) {
 
     /* Make sure that the consensus contains Wxx weights. */
@@ -262,7 +260,7 @@ public class Parser {
       System.err.printf("Consensus with valid-after time %s doesn't "
           + "contain any Wxx weights.  Skipping.%n",
           DateTimeHelper.format(consensus.getValidAfterMillis()));
-      return false;
+      return;
     }
 
     /* More precisely, make sure that it contains Wmx weights, and then
@@ -274,7 +272,7 @@ public class Parser {
       System.err.printf("Consensus with valid-after time %s doesn't "
           + "contain expected Wmx weights.  Skipping.%n",
           DateTimeHelper.format(consensus.getValidAfterMillis()));
-      return false;
+      return;
     }
     double wmg = ((double) bandwidthWeights.get("Wmg")) / 10000.0;
     double wmm = ((double) bandwidthWeights.get("Wmm")) / 10000.0;
@@ -421,11 +419,8 @@ public class Parser {
         DateTimeHelper.ISO_DATE_FORMAT);
     File documentFile = new File(this.computedNetworkFractionsDirectory,
         date);
-    if (!this.computedNetworkFractionsStore.store(documentFile,
-        computedNetworkFractions)) {
-      return false;
-    }
-    return true;
+    this.computedNetworkFractionsStore.store(documentFile,
+        computedNetworkFractions);
   }
 }
 
