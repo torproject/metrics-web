@@ -10,6 +10,8 @@ import org.torproject.descriptor.NetworkStatusEntry;
 import org.torproject.descriptor.RelayNetworkStatusConsensus;
 import org.torproject.descriptor.ServerDescriptor;
 
+import org.apache.commons.math3.stat.descriptive.rank.Percentile;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -20,7 +22,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TimeZone;
+import java.util.TreeMap;
 
 public class Main {
 
@@ -115,29 +119,54 @@ public class Main {
       }
 
       /* Write advertised bandwidth percentiles of relays/exits. */
-      Collections.sort(advertisedBandwidthsAllRelays);
-      Collections.sort(advertisedBandwidthsExitsOnly);
       int[] percentiles = new int[] { 0, 1, 2, 3, 5, 9, 10, 20, 25, 30,
           40, 50, 60, 70, 75, 80, 90, 91, 95, 97, 98, 99, 100 };
       if (!advertisedBandwidthsAllRelays.isEmpty()) {
-        for (int percentile : percentiles) {
+        for (Map.Entry<Integer, Long> e : computePercentiles(
+            advertisedBandwidthsAllRelays, percentiles).entrySet()) {
           bw.write(String.format("%s,,,%d,%d%n", validAfter,
-              percentile, advertisedBandwidthsAllRelays.get(
-              ((advertisedBandwidthsAllRelays.size() - 1)
-              * percentile) / 100)));
+              e.getKey(), e.getValue()));
         }
       }
       if (!advertisedBandwidthsExitsOnly.isEmpty()) {
-        for (int percentile : percentiles) {
+        for (Map.Entry<Integer, Long> e : computePercentiles(
+            advertisedBandwidthsExitsOnly, percentiles).entrySet()) {
           bw.write(String.format("%s,TRUE,,%d,%d%n", validAfter,
-              percentile, advertisedBandwidthsExitsOnly.get(
-              ((advertisedBandwidthsExitsOnly.size() - 1)
-              * percentile) / 100)));
+              e.getKey(), e.getValue()));
         }
       }
     }
     descriptorReader.saveHistoryFile(historyFile);
     bw.close();
+  }
+
+  /** Compute percentiles (between 0 and 100) for the given list of values, and
+   * return a map with percentiles as keys and computed values as values. If the
+   * list of values is empty, the returned map contains all zeros. */
+  static SortedMap<Integer, Long> computePercentiles(
+      List<Long> valueList, int ... percentiles) {
+    SortedMap<Integer, Long> computedPercentiles = new TreeMap<>();
+    double[] valueArray = new double[valueList.size()];
+    long minValue = Long.MAX_VALUE;
+    for (int i = 0; i < valueList.size(); i++) {
+      valueArray[i] = valueList.get(i).doubleValue();
+      minValue = Math.min(minValue, valueList.get(i));
+    }
+    if (valueList.isEmpty()) {
+      minValue = 0L;
+    }
+    Percentile percentile = new Percentile()
+        .withEstimationType(Percentile.EstimationType.R_7);
+    percentile.setData(valueArray);
+    for (int p : percentiles) {
+      if (0 == p) {
+        computedPercentiles.put(p, minValue);
+      } else {
+        computedPercentiles.put(p,
+            (long) Math.floor(percentile.evaluate((double) p)));
+      }
+    }
+    return computedPercentiles;
   }
 }
 
