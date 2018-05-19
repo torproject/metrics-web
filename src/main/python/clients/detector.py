@@ -37,13 +37,9 @@
 ##  This script reads a .csv file of the number of Tor users and finds
 ##  anomalies that might be indicative of censorship.
 
-# Dep: matplotlib
-from pylab import *
-import matplotlib
-
 # Dep: numpy
 import numpy
-from numpy import mean, std
+from numpy import mean, std, percentile
 
 # Dep: scipy
 import scipy.stats
@@ -190,9 +186,9 @@ def make_tendencies_minmax(l, INTERVAL = 1):
       maxx += [None]
     else:
       vals.sort()
-      median = vals[len(vals)/2]
-      q1 = vals[len(vals)/4]
-      q2 = vals[(3*len(vals))/4]
+      median = percentile(vals, 50)
+      q1 = percentile(vals, 25)
+      q2 = percentile(vals, 75)
       qd = q2 - q1
       vals = [v for v in vals if median - qd*4 < v and  v < median + qd*4]
       if len(vals) < 8:
