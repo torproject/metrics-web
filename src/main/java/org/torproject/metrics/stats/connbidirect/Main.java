@@ -8,6 +8,8 @@ import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.ExtraInfoDescriptor;
 
+import org.apache.commons.math3.stat.descriptive.rank.Percentile;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +24,6 @@ import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -455,19 +456,39 @@ public class Main {
       }
     }
     final String[] quantiles = new String[] { "0.25", "0.5", "0.75" };
-    final int[] centiles = new int[] { 25, 50, 75 };
+    final double[] centiles = new double[] { 25.0, 50.0, 75.0 };
     for (Map.Entry<String, List<Short>> e
         : fractionsByDateAndDirection.entrySet()) {
       String dateAndDirection = e.getKey();
       List<Short> fractions = e.getValue();
-      Collections.sort(fractions);
+      SortedMap<Double, Short> computedPercentiles
+          = computePercentiles(fractions, centiles);
       for (int i = 0; i < quantiles.length; i++) {
         String dateDirectionAndQuantile = dateAndDirection + ","
             + quantiles[i];
-        short fraction = fractions.get((centiles[i] * fractions.size())
-            / 100);
+        short fraction = computedPercentiles.get(centiles[i]);
         aggregateStats.put(dateDirectionAndQuantile, fraction);
       }
     }
+  }
+
+  /** Compute percentiles (greater than 0.0 and smaller than or equal 100.0) for
+   * the given list of values, and return a map with percentiles as keys and
+   * computed values as values. If the list of values is empty, the returned map
+   * contains all zeros. */
+  static SortedMap<Double, Short> computePercentiles(List<Short> valueList,
+      double ... percentiles) {
+    SortedMap<Double, Short> computedPercentiles = new TreeMap<>();
+    double[] valueArray = new double[valueList.size()];
+    for (int i = 0; i < valueList.size(); i++) {
+      valueArray[i] = valueList.get(i).doubleValue();
+    }
+    Percentile percentile = new Percentile()
+        .withEstimationType(Percentile.EstimationType.R_7);
+    percentile.setData(valueArray);
+    for (double p : percentiles) {
+      computedPercentiles.put(p, (short) Math.floor(percentile.evaluate(p)));
+    }
+    return computedPercentiles;
   }
 }

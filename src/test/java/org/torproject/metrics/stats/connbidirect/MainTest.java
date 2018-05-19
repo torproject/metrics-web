@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -242,20 +244,71 @@ public class MainTest {
   @Test
   public void testUpdateAggregateStatsTwoRawStat() {
     SortedMap<String, Short> expectedAggregateStats = new TreeMap<>();
-    expectedAggregateStats.put("2015-08-18,read,0.25", (short) 32);
-    expectedAggregateStats.put("2015-08-18,read,0.5", (short) 42);
-    expectedAggregateStats.put("2015-08-18,read,0.75", (short) 42);
-    expectedAggregateStats.put("2015-08-18,write,0.25", (short) 22);
-    expectedAggregateStats.put("2015-08-18,write,0.5", (short) 32);
-    expectedAggregateStats.put("2015-08-18,write,0.75", (short) 32);
-    expectedAggregateStats.put("2015-08-18,both,0.25", (short) 12);
-    expectedAggregateStats.put("2015-08-18,both,0.5", (short) 22);
-    expectedAggregateStats.put("2015-08-18,both,0.75", (short) 22);
+    expectedAggregateStats.put("2015-08-18,read,0.25", (short) 34);
+    expectedAggregateStats.put("2015-08-18,read,0.5", (short) 37);
+    expectedAggregateStats.put("2015-08-18,read,0.75", (short) 39);
+    expectedAggregateStats.put("2015-08-18,write,0.25", (short) 24);
+    expectedAggregateStats.put("2015-08-18,write,0.5", (short) 27);
+    expectedAggregateStats.put("2015-08-18,write,0.75", (short) 29);
+    expectedAggregateStats.put("2015-08-18,both,0.25", (short) 14);
+    expectedAggregateStats.put("2015-08-18,both,0.5", (short) 17);
+    expectedAggregateStats.put("2015-08-18,both,0.75", (short) 19);
     SortedSet<Main.RawStat> rawStats = new TreeSet<>();
     rawStats.add(new Main.RawStat(DATE_A, FPR_A, (short) 32, (short) 22,
         (short) 12));
     rawStats.add(new Main.RawStat(DATE_A, FPR_B, (short) 42, (short) 32,
         (short) 22));
     assertStatsCanBeAggregated(expectedAggregateStats, rawStats);
+  }
+
+  @Test
+  public void testComputePercentilesZeroValues() {
+    List<Short> valueList = new ArrayList<>();
+    SortedMap<Double, Short> computedPercentiles = Main.computePercentiles(
+        valueList, 25.0, 50.0, 75.0);
+    assertEquals(0, computedPercentiles.get(25.0).shortValue());
+    assertEquals(0, computedPercentiles.get(50.0).shortValue());
+    assertEquals(0, computedPercentiles.get(75.0).shortValue());
+  }
+
+  @Test
+  public void testComputePercentilesTenValues() {
+    List<Short> valueList = new ArrayList<>();
+    valueList.add((short) 3);
+    valueList.add((short) 6);
+    valueList.add((short) 7);
+    valueList.add((short) 8);
+    valueList.add((short) 8);
+    valueList.add((short) 10);
+    valueList.add((short) 13);
+    valueList.add((short) 15);
+    valueList.add((short) 16);
+    valueList.add((short) 20);
+    SortedMap<Double, Short> computedPercentiles = Main.computePercentiles(
+        valueList, 25.0, 50.0, 75.0);
+    assertEquals(7, computedPercentiles.get(25.0).shortValue());
+    assertEquals(9, computedPercentiles.get(50.0).shortValue());
+    assertEquals(14, computedPercentiles.get(75.0).shortValue());
+  }
+
+  @Test
+  public void testComputePercentilesElevenValues() {
+    List<Short> valueList = new ArrayList<>();
+    valueList.add((short) 3);
+    valueList.add((short) 6);
+    valueList.add((short) 7);
+    valueList.add((short) 8);
+    valueList.add((short) 8);
+    valueList.add((short) 9);
+    valueList.add((short) 10);
+    valueList.add((short) 13);
+    valueList.add((short) 15);
+    valueList.add((short) 16);
+    valueList.add((short) 20);
+    SortedMap<Double, Short> computedPercentiles = Main.computePercentiles(
+        valueList, 25.0, 50.0, 75.0);
+    assertEquals(7, computedPercentiles.get(25.0).shortValue());
+    assertEquals(9, computedPercentiles.get(50.0).shortValue());
+    assertEquals(14, computedPercentiles.get(75.0).shortValue());
   }
 }
