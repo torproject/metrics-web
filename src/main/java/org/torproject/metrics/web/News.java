@@ -10,7 +10,7 @@ import java.util.TreeMap;
 
 public class News {
 
-  public class Link {
+  public static class Link {
     String label;
     String target;
 

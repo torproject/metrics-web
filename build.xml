@@ -9,7 +9,7 @@
   <property name="javadoc-title" value="MetricsWeb API Documentation"/>
   <property name="implementation-title" value="metrics-web" />
   <property name="release.version" value="1.0.3-dev" />
-  <property name="metricslibversion" value="2.2.0" />
+  <property name="metricslibversion" value="2.4.0" />
   <property name="jetty.version" value="-9.2.21.v20170120" />
   <property name="warfile"
             value="metrics-web-${release.version}.war"/>
@@ -44,7 +44,9 @@
   <patternset id="common" >
     <include name="commons-codec-1.10.jar"/>
     <include name="commons-lang3-3.5.jar"/>
-    <include name="gson-2.4.jar" />
+    <include name="jackson-annotations-2.8.6.jar"/>
+    <include name="jackson-core-2.8.6.jar"/>
+    <include name="jackson-databind-2.8.6.jar"/>
     <include name="logback-core-1.1.9.jar" />
     <include name="logback-classic-1.1.9.jar" />
     <include name="REngine.jar"/>

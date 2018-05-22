@@ -1,7 +1,10 @@
 package org.torproject.metrics.web;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
 import java.io.BufferedReader;
 import java.io.FileWriter;
@@ -16,10 +19,6 @@ public class UpdateNews {
     URL textFile = new URL(
         "https://trac.torproject.org/projects/tor/wiki/doc/"
         + "MetricsTimeline?format=txt");
-    Gson gson = new GsonBuilder()
-        .disableHtmlEscaping()
-        .setPrettyPrinting()
-        .create();
     List<News> news = new ArrayList<>();
     try (BufferedReader br = new BufferedReader(new InputStreamReader(
         textFile.openStream()))) {
@@ -123,8 +122,15 @@ public class UpdateNews {
         news.add(entry);
       }
     }
+    ObjectMapper objectMapper = new ObjectMapper()
+        .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+        .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+        .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
+        .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+    String newsString = objectMapper.writerWithDefaultPrettyPrinter()
+        .writeValueAsString(news);
     try (FileWriter fw = new FileWriter(args[0])) {
-      fw.write(gson.toJson(news));
+      fw.write(newsString);
     }
   }
 }
