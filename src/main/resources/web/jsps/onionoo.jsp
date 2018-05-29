@@ -1057,9 +1057,8 @@ IPv6 hex characters are all lower-case.
 <span class="required-false">optional</span>
 <a href="#details_relay_exit_addresses" class="anchor">#</a>
 <p>
-Array of IPv4 or IPv6 addresses that the
+Array of IPv4 addresses that the
 relay used to exit to the Internet in the past 24 hours.
-IPv6 hex characters are all lower-case.
 Omitted if array is empty.
 Changed on April 17, 2018 to include all exit addresses, regardless of whether
 they are used as onion-routing addresses or not.
