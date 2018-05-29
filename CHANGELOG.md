@@ -1,4 +1,7 @@
-# Changes in version ????
+# Changes in version 1.1.0 - 2018-05-29
+
+ * Medium changes
+   - Replace Gson with Jackson.
 
  * Minor changes
    - Avoid sending an error after a (partial) response.
