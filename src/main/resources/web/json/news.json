@@ -2981,13 +2981,31 @@
   } ]
 }, {
   "start" : "2018-04-16",
-  "ongoing" : true,
+  "end" : "2018-05-08",
   "places" : [ "ru" ],
-  "short_description" : "Russia tries to block Telegram; disrupts many services on Amazon and Google cloud services.",
-  "description" : "Russia tries to block Telegram; disrupts many services on Amazon and Google cloud services.",
+  "short_description" : "Russia tries to block Telegram; blocks about 18 million IP addresses including some belonging to Amazon and Google cloud services.",
+  "description" : "Russia tries to block Telegram; blocks about 18 million IP addresses including some belonging to Amazon and Google cloud services.",
   "links" : [ {
     "label" : "article",
     "target" : "https://www.bleepingcomputer.com/news/government/russia-bans-18-million-amazon-and-google-ips-in-attempt-to-block-telegram/"
+  }, {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-03-01&end=2018-07-15&country=ru"
+  }, {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-03-01&end=2018-07-15&country=ru"
+  } ]
+}, {
+  "start" : "2018-04-28",
+  "places" : [ "ru" ],
+  "short_description" : "Russia unblocks about 3 million IP addresses belonging to Amazon and OVH.",
+  "description" : "Russia unblocks about 3 million IP addresses belonging to Amazon and OVH.",
+  "links" : [ {
+    "label" : "Roskomnadzor press release",
+    "target" : "http://rkn.gov.ru/news/rsoc/news57288.htm"
+  }, {
+    "label" : "monitoring page",
+    "target" : "https://usher2.club/en/"
   } ]
 }, {
   "start" : "2018-04-30",
@@ -3007,6 +3025,18 @@
   }, {
     "label" : "bridge graph",
     "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-03-11&end=2018-06-01&country=ir"
+  } ]
+}, {
+  "start" : "2018-05-08",
+  "places" : [ "ru" ],
+  "short_description" : "Russia unblocks about 3.7 million IP addresses belonging to Google and Digital Ocean.",
+  "description" : "Russia unblocks about 3.7 million IP addresses belonging to Google and Digital Ocean.",
+  "links" : [ {
+    "label" : "Roskomnadzor press release",
+    "target" : "http://rkn.gov.ru/news/rsoc/news57454.htm"
+  }, {
+    "label" : "monitoring page",
+    "target" : "https://usher2.club/en/"
   } ]
 }, {
   "start" : "2018-05-08",
