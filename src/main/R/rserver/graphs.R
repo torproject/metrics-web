@@ -574,7 +574,7 @@ write_dirbytes <- function(start_p = NULL, end_p = NULL, path_p) {
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-prepare_relayflags <- function(start_p, end_p, flags_p) {
+prepare_relayflags <- function(start_p, end_p, flag_p) {
   read.csv(paste(stats_dir, "servers.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
@@ -584,12 +584,12 @@ prepare_relayflags <- function(start_p, end_p, flags_p) {
     filter(platform == "") %>%
     filter(ec2bridge == "") %>%
     mutate(flag = ifelse(flag == "", "Running", as.character(flag))) %>%
-    filter(if (!is.null(flags_p)) flag %in% flags_p else TRUE) %>%
+    filter(if (!is.null(flag_p)) flag %in% flag_p else TRUE) %>%
     select(date, flag, relays)
 }
 
-plot_relayflags <- function(start_p, end_p, flags_p, path_p) {
-  prepare_relayflags(start_p, end_p, flags_p) %>%
+plot_relayflags <- function(start_p, end_p, flag_p, path_p) {
+  prepare_relayflags(start_p, end_p, flag_p) %>%
     complete(date = full_seq(date, period = 1), flag = unique(flag)) %>%
     ggplot(aes(x = date, y = relays, colour = as.factor(flag))) +
     geom_line() +
@@ -598,15 +598,15 @@ plot_relayflags <- function(start_p, end_p, flags_p, path_p) {
     scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_manual(name = "Relay flags", values = c("#E69F00",
         "#56B4E9", "#009E73", "#EE6A50", "#000000", "#0072B2"),
-        breaks = flags_p, labels = flags_p) +
+        breaks = flag_p, labels = flag_p) +
     ggtitle("Number of relays with relay flags assigned") +
     labs(caption = copyright_notice)
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
 }
 
-write_relayflags <- function(start_p = NULL, end_p = NULL, flags_p = NULL,
+write_relayflags <- function(start_p = NULL, end_p = NULL, flag_p = NULL,
     path_p) {
-  prepare_relayflags(start_p, end_p, flags_p) %>%
+  prepare_relayflags(start_p, end_p, flag_p) %>%
     mutate(flag = tolower(flag)) %>%
     spread(flag, relays) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
