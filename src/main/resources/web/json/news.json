@@ -3675,4 +3675,33 @@
     "target" : "https://bugs.torproject.org/24669"
   } ],
   "unknown" : true
+}, {
+  "start" : "2018-04-15",
+  "ongoing" : true,
+  "protocols" : [ "bridge" ],
+  "short_description" : "Doubling of bridge users over about 45 days",
+  "description" : "Doubling of bridge users over about 45 days. Relay users unaffected.",
+  "links" : [ {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-03-01&end=2018-07-01&country=all&events=off"
+  }, {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-03-01&end=2018-07-01&country=all"
+  } ],
+  "unknown" : true
+}, {
+  "start" : "2018-05-23",
+  "ongoing" : true,
+  "places" : [ "bd", "pk" ],
+  "protocols" : [ "bridge" ],
+  "short_description" : "10× increase of bridge users in Bangldesh and Pakistan",
+  "description" : "10&times; increase of bridge users in Bangldesh and Pakistan (and possibly other places). Relay users unaffected.",
+  "links" : [ {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-04-01&end=2018-07-01&country=pk"
+  }, {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-04-01&end=2018-07-01&country=pk"
+  } ],
+  "unknown" : true
 } ]
