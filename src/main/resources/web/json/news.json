@@ -3068,6 +3068,24 @@
     "target" : "https://bugs.torproject.org/26111"
   } ]
 }, {
+  "start" : "2018-06-09",
+  "protocols" : [ "meek" ],
+  "short_description" : "Release of Tor Browser 7.5.5, removes meek-amazon option.",
+  "description" : "Release of Tor Browser 7.5.5, removes meek-amazon option.",
+  "links" : [ {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/tor-browser-755-released"
+  } ]
+}, {
+  "start" : "2018-06-10",
+  "protocols" : [ "meek" ],
+  "short_description" : "Release of Tor Browser 8.0a8, removes meek-amazon option.",
+  "description" : "Release of Tor Browser 8.0a8, removes meek-amazon option.",
+  "links" : [ {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/tor-browser-80a8-released"
+  } ]
+}, {
   "start" : "2016-02-24",
   "places" : [ "tm" ],
   "protocols" : [ "<OR>" ],
