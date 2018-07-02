@@ -1,0 +1,129 @@
+
+<h2 id="search-title"></h2>
+
+<div class="results_box">
+<% if(!aggregates) { %>
+    <% if(error == 0) { %>
+    <div class="alert alert-info">
+        <strong>No Results found!</strong><p>
+    No Tor relays matched your query :(</p>
+    <p><a href="#">Return to home page</a></p>
+    </div>
+    <% } else if (error == 2) { %>
+    <div class="alert alert-danger">
+        <strong>Backend error!</strong>
+        <p>Relay Search is unable to get a response from its backend server. This
+        probably means that the backend server is unavailable right now. This
+        can also happen, however, if you did not format your query correctly.
+        Please have a look at <a href="#about">the About page</a> that explains
+        what type of search queries are supported by Relay Search.</p>
+    </div>
+    <% } else if (error == 3) { %>
+    <div class="alert alert-danger">
+	<strong>JavaScript Error!</strong><p>There is a problem with your
+	javascript environment, you may have noscript enabled on the remote
+	onionoo backend. Try temporarily allowing noscript to connect to the
+	backend IP address. If the problem persits consult <a
+		href="https://trac.torproject.org/">the bugtracker.</a></p>
+    </div>
+    <% } else if (error == 5) { %>
+    <div class="alert alert-warning">
+        <strong>No query submitted!</strong>
+        <p>The search query was found to be empty, which is not supported. You
+        must enter a search query in order to generate results. Please have a
+        look at <a href="#about">the About page</a> that explains what type of
+        search queries are supported by Relay Search.</p>
+    </div>
+    <% } %>
+<% } else { %>
+
+<table class="table table-hover table-striped" id="torstatus_results">
+	<thead>
+		<tr>
+                        <% if (aType == "version") { %><th>Version</th><% } %>
+			<th>Country</sup></th>
+                        <th>Autonomous System</th>
+			<th>Consensus Weight</th>
+			<th>Advertised Bandwidth</th>
+			<th>Guard Probability</th>
+			<th>Middle Probability</th>
+			<th>Exit Probability</th>
+			<th>Relays</th>
+                        <th>Guard</th>
+                        <th>Exit</th>
+		</tr>
+	</thead>
+	<tbody>
+
+<% _.each(aggregates, function(aggregate) { %>
+  <tr>
+    <% if (aType == "version") { %>
+    <td>
+      <%= aggregate.version %>
+    </td>
+    <% } %>
+    <td>
+      <% if ((typeof aggregate.country) == "string") { %>
+        <a href="#search/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %><% } %>"><img class="inline country" src="/images/cc/<%= aggregate.country %>.png"> <%= countries[aggregate.country] %></a>
+      <% } else { %>
+        <% if ((typeof aggregate.as) == "string") { %>
+          (<a href="#aggregate/ascc/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("as:") == -1) { %>as:<%= aggregate.as %><% } %>"><%= aggregate.country.size %> distinct</a>)
+        <% } else { %>
+          (<a href="#aggregate/cc<%= (query || aggregate.version) ? "/" : "" %><% (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.country.size %> distinct</a>)
+        <% } %>
+      <% } %>
+    </td>
+    <td>
+      <% if ((typeof aggregate.as) == "string") { %>
+        <a href="#search/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("as:") == -1) { %>as:<%= aggregate.as  %><% } %>"><%= aggregate.as_name %> (<%= aggregate.as %>)</a>
+      <% } else { %>
+        <% if ((typeof aggregate.country) == "string") { %>
+          (<a href="#aggregate/ascc/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("country:") == -1) { %>country:<%= aggregate.country %><% } %>"><%= aggregate.as.size %> distinct</a>)
+        <% } else { %>
+          (<a href="#aggregate/as<%= (query || aggregate.version) ? "/" : "" %><% (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.as.size %> distinct</a>)
+        <% } %>
+      <% } %>
+    </td>
+    <td data-order="<%= aggregate.consensus_weight_fraction %>"><span class="tip" title="<%= aggregate.consensus_weight %>"><%= (aggregate.consensus_weight_fraction * 100).toFixed(4) %>%</span></td>
+    <td data-order="<%= aggregate.advertised_bandwidth %>"><%= hrBandwidth(aggregate.advertised_bandwidth) %></span></td>
+    <td data-order="<%= aggregate.guard_probability %>"><%= (aggregate.guard_probability * 100).toFixed(4) %>%</td>
+    <td data-order="<%= aggregate.middle_probability %>"><%= (aggregate.middle_probability * 100).toFixed(4) %>%</td>
+    <td data-order="<%= aggregate.exit_probability %>"><%= (aggregate.exit_probability * 100).toFixed(4) %>%</td>
+    <td>
+      <% if ((typeof aggregate.as) == "string" || (typeof aggregate.country) == "string") { %>
+        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.relays %></a>
+      <% } else { %>
+        <%= aggregate.relays %>
+      <% } %>
+    </td>
+    <td>
+      <% if (aggregate.guards > 0) { %>
+        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><% if (query.indexOf("flag:") == -1) { %>flag:guard <% } %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.guards %></a></td>
+      <% } else { %>
+        0
+      <% } %>
+    </td>
+    <td>
+      <% if (aggregate.exits > 0) { %>
+        <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><% if (query.indexOf("flag:") == -1) { %>flag:exit <% } %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.exits %></a></td>
+      <% } else { %>
+        0
+      <% } %>
+    </td>
+  </tr>
+<% }); %>
+</tbody>
+</table>
+<div class="panel panel-default">
+<div class="panel-body">
+<a href="#map<%= (query) ? "/" + query : "" %>" class="btn btn-primary">View Map</a>
+</div>
+</div>
+  <p>The aggregated search tool displays aggregated data about relays in the
+Tor network. It provides insight into diversity in the network and the
+probabilities of using relays in a particular country or AS as a guard, middle
+or exit relay. The results are restricted to only relays that were running at
+the last time the relays data was updated and do not include bridge data.</p>
+<p>Information for relays was published: <%= relaysPublished %> UTC.<p>
+<% } %>
+</div>

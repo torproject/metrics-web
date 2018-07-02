@@ -1,0 +1,133 @@
+
+<h2 id="search-title"></h2>
+
+<div class="results_box">
+<% if(!relays) { %>
+    <% if(error == 0) { %>
+    <div class="alert alert-info">
+        <strong>No Results found!</strong><p>
+    No Tor relays matched your query :(</p>
+    <p><a href="#">Return to home page</a></p>
+    </div>
+    <% } else if (error == 2) { %>
+    <div class="alert alert-danger">
+        <strong>Backend error!</strong>
+        <p>Relay Search is unable to get a response from its backend server. This
+        probably means that the backend server is unavailable right now. This
+        can also happen, however, if you did not format your query correctly.
+        Please have a look at <a href="#about">the About page</a> that explains
+        what type of search queries are supported by Relay Search.</p>
+    </div>
+    <% } else if (error == 3) { %>
+    <div class="alert alert-danger">
+	<strong>JavaScript Error!</strong><p>There is a problem with your
+	javascript environment, you may have noscript enabled on the remote
+	onionoo backend. Try temporarily allowing noscript to connect to the
+	backend IP address. If the problem persits consult <a
+		href="https://trac.torproject.org/">the bugtracker.</a></p>
+    </div>
+    <% } else if (error == 5) { %>
+    <div class="alert alert-warning">
+        <strong>No query submitted!</strong>
+        <p>The search query was found to be empty, which is not supported. You
+        must enter a search query in order to generate results. Please have a
+        look at <a href="#about">the About page</a> that explains what type of
+        search queries are supported by Relay Search.</p>
+    </div>
+    <% } %>
+<% } else { %>
+    <% if (error == 4) { %>
+    <div class="alert alert-warning">
+        <strong>Too many matches!</strong><p>The current version of
+        Relay Search does not support a result set greater than 2000 and only displays
+        the first 2000 hits. This is due to some performance issues in rendering
+        large results sets in JavaScript. Future versions will
+        hopefully manage to overcome this issue.</p>
+	<% if ( ! query.includes("running:true") ) { %><p>You may find it
+        useful to <a href="#search/running:true <%= query %>">add
+        <code>running:true</code> to your query</a> to only return relays that are
+        currently running.</p><% } %>
+    </div>
+    <% } %>
+
+
+<table class="table table-hover table-striped" id="torstatus_results">
+	<thead>
+		<tr>
+			<th></th>
+			<th>Nickname<sup>&dagger;</sup></th>
+			<th>Advertised Bandwidth</th>
+			<th>Uptime</th>
+			<th>Country</th>
+			<th>IPv4</th>
+			<th>IPv6</th>
+			<th>Flags</th>
+			<th style="white-space: nowrap;">Add. Flags</th>
+			<th>ORPort</th>
+			<th>DirPort</th>
+			<th>Type</th>
+		</tr>
+	</thead>
+	<tbody>
+
+<% _.each(relays, function(relay) { %>
+            <tr<% if (relay.get('running') === false) { %> class="danger"<% } %>>
+            <td>
+            <% if (relay.get('running') === false) { %>
+                <span class="tip circle circle-offline" title="This relay is offline."></span>
+            <% } else { %>
+                <span class="tip circle circle-online" title="This relay is running."></span>
+            <% } %>
+            </td>
+			<td>
+            <a href="#details/<%= relay.get('fingerprint') %>">
+            <%= _.escape(relay.get('nickname')) %></a>
+            <% if (!relay.get('is_bridge')) { %>
+	    (<a href="#search/family:<%= relay.get('fingerprint') %>"><%= relay.get('effective_family') == null ? 1 : relay.get('effective_family').length + 1 %></a>)
+            <% } %>
+            </a>
+            </td>
+			<td><span data-filter="<%= relay.get('bandwidth') %>"><%= relay.get('bandwidth_hr') %></span></td>
+			<td data-order="<%= relay.get('uptime') %>">
+            <span data-hidden="<%= relay.get('last_restarted') %>" title="<%= relay.get('uptime_hrfull') %>" data-filter="<%= relay.get('uptime') %>" class="tip uptime">
+            <% if (relay.get('running') === false) { %><s><% } %><%= relay.get('uptime_hr') %><% if (relay.get('running') === false) { %></s><% } %>
+            </span>
+            </td>
+            <% if ( relay.get('country')) { %>
+              <td data-order="<%= relay.get('countryname') %>">
+                <img class="tip inline country" title="<%= relay.get('countryname') %>" alt="<%= relay.get('countryname') %>" src="/images/cc/<%= relay.get('country') %>.png"/>
+              </td>
+            <% } else { %>
+              <td data-order="Unknown"><img class="tip inline country" title="Unknown" alt="Unknown" src="/images/cc/xz.png"></td>
+            <% } %>
+			<td><%= relay.get('or_address') %></td>
+			<td><%= (relay.get('or_v6_address')) ? relay.get('or_v6_address') : '-' %></td>
+			<td class="flags-cell">
+            <% _.each(relay.get('flags'), function(flag) { %><img class="tip flags" src="/images/flags/<%= flag[1] %>.png" alt="<%= flag[0] %>" title="<%= flag[0] %><br /><%= flag[2] %>"/><% }); %>
+            </td>
+            <td>
+            <% _.each(relay.get('additional_flags'), function(flag) { %><img class="tip flags" src="/images/flags/<%= flag[1] %>.png" alt="<%= flag[0] %>" title="<%= flag[0] %><br /><%= flag[2] %>"/><% }); %>
+            </td>
+			<td><%= relay.get('or_port') %></td>
+			<td><%= relay.get('dir_port') %></td>
+			<td>
+				<% if (relay.get('is_bridge')) { %>
+				Bridge
+				<% } else { %>
+				Relay
+				<% } %>
+			</td>
+            </tr>
+<% }); %>
+	</tbody>
+</table>
+<p><sup>&dagger;</sup>The number shown in brackets is the total effective
+family size for the relay including the relay itself. A size of 1 indicates
+that the relay does not have any other effective family members. Note that
+bridge relays do not advertise family members in their descriptors and so there
+is no value shown for bridge relays.</p>
+<p>Information for relays was published: <%= relaysPublished %> UTC.<br>
+Information for bridges was published: <%= bridgesPublished %> UTC.</p>
+<% } %>
+</div>
+

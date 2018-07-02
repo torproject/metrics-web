@@ -21,3 +21,8 @@ legacy.config
 # other
 *~
 
+# Ignore git mergetool backup files
+*.orig
+
+# Ignore Vim swap files
+*.swp

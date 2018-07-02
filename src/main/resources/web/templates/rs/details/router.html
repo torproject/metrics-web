@@ -1,0 +1,307 @@
+<h2>
+    Details for: <%= relay.get('nickname') %>
+    <% if (relay.get('running') === false) { %>
+    <span class="tip circle circle-offline" title="This relay is offline."></span>
+    <% } else { %>
+    <span class="tip circle circle-online" title="This relay is running."></span>
+    <% } %>
+</h2>
+
+<% if (relay.get('new_relay') === true) {%>
+<div class="alert alert-info">This relay appears to be less than 2 weeks old. <a href="https://blog.torproject.org/lifecycle-new-relay">This blog post</a> explains the lifecycle of a new relay, and why it will not be immediately fully used to capacity.</div>
+<% } %>
+<% if (relay.get('recommended_version') === false && relay.get('version_consistent') == true) { %>
+<div class="alert alert-danger">This relay is running a version of Tor that is not recommended.
+It is most likely too old and may be missing important security fixes. If
+this is the case, and this is your relay, you should update it as soon as
+possible. Development versions (versions that are too new) will also trigger
+this warning message (see bug <a
+href="https://bugs.torproject.org/24256">#24256</a>).</div>
+<% } %>
+<div class="row">
+    <div class="col-md-6">
+    <h3>Configuration</h3>
+    <dl>
+      <dt><span class="tip" title="This is the nickname that the Tor relay operator chose.">Nickname</span> <a href="#search/<%= _.escape(relay.get('nickname')) %>"><i class="fa fa-search"></i></a></dt>
+      <dd><%= _.escape(relay.get('nickname')) %></dd>
+
+      <dt><span class="tip" title="Addresses and ports where the relay listens for incoming connections from clients and other relays.">OR Addresses</span> <a href="#search/<%= relay.get('or_addresses')[0].split(":")[0] %>"><i class="fa fa-search"></i></a></dt>
+      <dd>
+        <pre class="pre-scrollable"><% _.each(relay.get('or_addresses'),
+          function(or_address) { %><%= $.trim(or_address) %><br><% }); %></pre>
+      </dd>
+      <% if (relay.get('unreachable_or_addresses').length > 0) { %>
+      <dt><span class="tip" title="Addresses and ports where the relay claims to listen for incoming connections from clients and other relays but that the directory authorities failed to confirm as reachable.">Unreachable OR Addresses</span></dt>
+      <dd>
+        <pre class="pre-scrollable"><% _.each(relay.get('unreachable_or_addresses'),
+          function(or_address) { %><%= $.trim(or_address) %><br><% }); %></pre>
+      </dd>
+      <% } %>
+
+      <dt><span class="tip" title="These are the contact details of the Tor relay operator">Contact</span></dt>
+      <dd><%= _.escape( relay.get('contact')!='undefined' ? relay.get('contact') : 'none' ) %></dd>
+
+      <dt><span class="tip" title="Address and port where the relay listens for directory requests.">Dir Address</span></dt>
+      <dd><%= relay.get('dir_address') ? relay.get('dir_address') : 'none' %></dd>
+
+      <dt><span class="tip" title="Addresses that the relay used to exit to the Internet in the past 24 hours. <em>Only lists addresses that are different from the OR addresses.</em>">Exit Addresses</span></dt>
+      <dd>
+        <% if (relay.get('exit_addresses')) { %>
+          <% _.each(relay.get('exit_addresses'), function(exit_address) { %>
+            <a href="#search/<%= exit_address %>"><%= exit_address %></a><br>
+          <% }); %>
+        <% } else { %>
+          none
+        <% } %>
+      </dd>
+
+      <dt>
+      <span class="tip" title="The volume of traffic, both incoming and outgoing, that the relay is willing to sustain, as configured by the operator and claimed to be observed from recent data transfers.">Advertised Bandwidth</span>
+      </dt>
+      <dd><span class="tip" title="Bandwidth rate: <%= relay.get('bandwidthr') %><br>Bandwidth burst: <%= relay.get('bandwidthb') %><br>Observed bandwidth: <%= relay.get('obandwidth') %>"><%= relay.get('bandwidth_hr') %></span></dd>
+      <dt><span class="tip" title="Port summary of IPv4 exit connections that the relay is going to accept or reject.">IPv4 Exit Policy Summary</span></dt>
+      <dd>
+      <% if ('accept' in relay.get('exit_policy_summary')) { %>
+        <pre class="pre-scrollable">accept<% _.each(relay.get('exit_policy_summary')['accept'],
+          function(ports) { %><br>  <%= $.trim(ports) %><% });} %></pre>
+      <% if ('reject' in relay.get('exit_policy_summary')) { %>
+        <pre class="pre-scrollable">reject<% _.each(relay.get('exit_policy_summary')['reject'],
+          function(ports) { %><br>  <%= $.trim(ports) %><% });} %></pre>
+      </dd>
+      <dt><span class="tip" title="Port summary of IPv6 exit connections that the relay is going to accept or reject.">IPv6 Exit Policy Summary</span></dt>
+      <dd>
+      <% if (relay.get('exit_policy_v6_summary') && ('accept' in relay.get('exit_policy_v6_summary'))) { %>
+        <pre class="pre-scrollable">accept<% _.each(relay.get('exit_policy_v6_summary')['accept'],
+          function(ports) { %><br>  <%= $.trim(ports) %><% });} %></pre>
+      <% if (relay.get('exit_policy_v6_summary') && ('reject' in relay.get('exit_policy_v6_summary'))) { %>
+        <pre class="pre-scrollable">reject<% _.each(relay.get('exit_policy_v6_summary')['reject'],
+          function(ports) { %><br>  <%= $.trim(ports) %><% });} %></pre>
+      <% if (relay.get('exit_policy_v6_summary') == null) { %>
+        <pre class="pre-scrollable">reject<br>  1-65535</pre>
+      <% } %>
+      </dd>
+      <dt><span class="tip" title="Policy of exit connections that the relay is going to accept or reject.">Exit Policy</span></dt>
+      <dd>
+      <pre class="pre-scrollable"><% _.each(relay.get('exit_policy'), function(line) { %>
+<%= $.trim(line) %><% }); %></pre>
+      </dd>
+    </dl>
+
+    <dt><span class="tip" title="Relays that are part of this relay's family and consider this relay to be part of their family.">Effective Family Members</span>
+    <% if (relay.get('effective_family') !== null) { %><a href="#search/family:<%= relay.get('fingerprint') %>"><i class="fa fa-search"></i></a><% } %></dt>
+    <dd>
+        <pre class="pre-scrollable"><% if (relay.get('effective_family') !== null) { %><% _.each(relay.get('effective_family'), function(member) { %><% var valid = member.match(RegExp("^[A-F0-9]{40}$")); %>
+<% if (valid) { %><a href="#details/<%= member %>"><% } %><%= member %><% if (valid) { %></a><% }}); %>
+<% } else { %>none<% } %></pre>
+    </dd>
+    <dt><span class="tip" title="Relays that are part of this relay's family but don't consider this relay to be part of their family.">Alleged Family Members</span></dt>
+    <dd>
+        <pre class="pre-scrollable"><% if (relay.get('alleged_family') !== null) { %><% _.each(relay.get('alleged_family'), function(member) { %><% var valid = member.match(RegExp("^[A-F0-9]{40}$")); %>
+<% if (valid) { %><a href="#details/<%= member %>" class="alleged"><% } %><%= member %><% if (valid) { %></a><% }}); %>
+<% } else { %>none<% } %></pre>
+    </dd>
+
+
+    </div>
+    <div class="col-md-6">
+    <% if (relay.get('running') === true) { %>
+    <h3>Properties</h3>
+    <% } else { %>
+    <h3>Last Known Properties</h3>
+    <% } %>
+    <dl>
+
+    <dt><span class="tip" title="20-byte unique identifier of the relay.">Fingerprint</span></dt>
+    <dd><pre><%= relay.get('fingerprint') %></pre></dd>
+
+    <% if (relay.get('running') === true) { %>
+    <dt><span class="tip" title="The time since this relay is online.">Uptime</span></dt>
+    <dd><%= relay.get('uptime_hrfull') %></dd>
+    <% } else { %>
+    <dt><span class="tip" title="The time since this relay was last seen online.">Downtime</span></dt>
+    <dd><%= relay.get('downtime') %></dd>
+    <dt><span class="tip" title="Timestamp when the relay was last seen in the consensus.">Last Seen</span></dt>
+    <dd><%= relay.get('last_seen') %></dd>
+    <% } %>
+
+    <dt><span class="tip" title="Flags that the directory authorities assigned to this relay.">Flags</span></dt>
+    <dd><% _.each(relay.get('flags'), function(flag) { %>
+        <span class="tip flags" title="<%= flag[2] %>">
+            <img class="inline" alt="" src="/images/flags/<%= flag[1] %>.png"/>
+            <span class="inline"><%= flag[0] %></span>
+        </span>
+    <% }); %>
+    </dd>
+    
+    <dt><span class="tip" title="Flags that have been generated by Relay Search to provide extra useful information. These flags do not appear in the directory consensus.">Additional Flags</span></dt>
+    <dd>
+    <dd>
+        <% var propertyCount = 0; %>
+        <% _.each(relay.get('additional_flags'), function(flag) { propertyCount++; %>
+            <span class="tip flags" title="<%= flag[2] %>">
+                <img class="inline" alt="" src="/images/flags/<%= flag[1] %>.png"/>
+                <span class="inline"><%= flag[0] %></span>
+            </span>
+        <% }); %>
+        <%= propertyCount==0 ? 'none' : '' %>
+    </dd>
+
+    <dt><span class="tip" title="Host name as found in a reverse DNS lookup of the relay's primary IP address. This field is updated at most once in 12 hours, unless the relay IP address changes. Omitted if the relay IP address was not looked up, if no lookup request was successful yet or if no A record was found matching the PTR record.">Host Name</span></dt>
+    <dd><% if (relay.get('host_name')) { %><%= relay.get('host_name') %><% } else { %>No PTR record found<% } %></dd>
+
+    <dt><span class="tip" title="Country as found in a GeoIP database by resolving the relay's first onion-routing address.">Country</span></dt>
+    <dd><% if (relay.get('country')) { %><img class="inline country" title="<%= relay.get('countryname') %>" alt="" src="/images/cc/<%= relay.get('country') %>.png"/> <%= relay.get('countryname') %><% } else { %>Unknown<% } %></dd>
+
+    <dt><span class="tip" title="Autonomous System Number">AS Number</span></dt>
+    <dd><% if (relay.get('as_number') !== null) { %><a href="#search/as:<%= relay.get('as_number') %>"><%= _.escape(relay.get('as_number')) %></a><% } else { %>unknown<% }; %></dd>
+
+    <dt><span class="tip" title="Autonomous System Name">AS Name</span></dt>
+    <dd><%= relay.get('as_name') ? _.escape(relay.get('as_name')) : "unknown" %></dd>
+
+    <dt><span class="tip" title="The first time that this relay was seen online.">First Seen</span></dt>
+    <dd><%= relay.get('first_seen') %> (<%= relay.get('age') %>)</dd>
+
+    <dt><span class="tip" title="Date and time when the relay was last (re-)started.">Last Restarted</span></dt>
+    <dd><%= relay.get('last_restarted') %></dd>
+
+
+    <dt><span class="tip" title="Weight assigned to this relay by the directory authorities that clients use in their path selection algorithm. The unit is arbitrary; currently it's kilobytes per second, but that might change in the future.">Consensus Weight</span></dt>
+    <dd><%= relay.get('consensus_weight') %></dd>
+
+    <dt><span class="tip" title="What OS and Tor version the relay is using">Platform</span></dt>
+    <dd><%= _.escape(relay.get('platform')) %><% if (!relay.get('version_consistent')) { %> (version is <%= _.escape(relay.get('version')) %> in consensus)<% } %></dd>
+
+    </dl>
+    </div>
+</div>
+
+<h3>History</h3>
+
+<ul class="nav nav-tabs">
+  <li id="history-1m-tab" class="history-tabs active"><a onclick="$('.history').hide();$('#history-1m').fadeIn();$('.history-tabs').removeClass('active');$('#history-1m-tab').addClass('active');">1 Month</a></li>
+  <li id="history-3m-tab" class="history-tabs"><a onclick="$('.history').hide();$('#history-3m').fadeIn();$('.history-tabs').removeClass('active');$('#history-3m-tab').addClass('active');">3 Months</a></li>
+  <li id="history-1y-tab" class="history-tabs"><a onclick="$('.history').hide();$('#history-1y').fadeIn();$('.history-tabs').removeClass('active');$('#history-1y-tab').addClass('active');">1 Year</a></li>
+  <li id="history-5y-tab" class="history-tabs"><a onclick="$('.history').hide();$('#history-5y').fadeIn();$('.history-tabs').removeClass('active');$('#history-5y-tab').addClass('active');">5 Years</a></li>
+</ul>
+
+<div class="tab-content" id="history-tab-content">
+  <div id="history-1m" class="history tab-pane active">
+    <div class="row">
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <div id="bw_month" class="graph">
+            <img src="/images/no-data-available.png" alt="">
+            </div>
+            <div class="caption">
+              <h5>1 Month graph</h5>
+              <a id="save_bw_month" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <div id="weights_month" class="graph">
+            <img src="/images/no-data-available.png" alt="">
+            </div>
+           <div class="caption">
+              <h5>1 Month graph</h5>
+              <a id="save_weights_month" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div id="history-3m" class="history tab-pane">
+    <div class="row">
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <div id="bw_months" class="graph">
+            <img src="/images/no-data-available.png" alt="">
+            </div>
+            <div class="caption">
+              <h5>3 Months graph</h5>
+              <a id="save_bw_months" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <div id="weights_months" class="graph">
+            <img src="/images/no-data-available.png" alt="">
+            </div>
+           <div class="caption">
+              <h5>3 Months graph</h5>
+              <a id="save_weights_months" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div id="history-1y" class="history tab-pane">
+    <div class="row">
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <div id="bw_year" class="graph">
+            <img src="/images/no-data-available.png" alt="">
+            </div>
+            <div class="caption">
+              <h5>1 Year graph</h5>
+              <a id="save_bw_year" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <div id="weights_year" class="graph">
+            <img src="/images/no-data-available.png" alt="">
+            </div>
+           <div class="caption">
+              <h5>1 Year graph</h5>
+              <a id="save_weights_year" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div id="history-5y" class="history tab-pane">
+    <div class="row">
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <div id="bw_years" class="graph">
+            <img src="/images/no-data-available.png" alt="">
+            </div>
+           <div class="caption">
+              <h5>5 Years graph</h5>
+              <a id="save_bw_years" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="thumbnail">
+            <div id="weights_years" class="graph">
+            <img src="/images/no-data-available.png" alt="">
+            </div>
+           <div class="caption">
+              <h5>5 Years graph</h5>
+              <a id="save_weights_years" href="">Save Graph</a>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<% if (relay.get('dir_address')) { %>
+<h3>Advanced</h3>
+<p>
+<a href="http://<%= relay.get('dir_address') %>/tor/server/authority"
+  class="btn btn-info">Latest server descriptor</a>
+
+<a href="http://<%= relay.get('dir_address') %>/tor/extra/authority"
+  class="btn btn-info">Latest extra-info descriptor</a>
+</p>
+<% } %>
+
+</div><!-- container-fluid -->
+
+<p>Information for relays was published: <%= relay.get('relaysPublished') %> UTC.</p>

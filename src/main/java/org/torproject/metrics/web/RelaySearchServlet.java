@@ -23,7 +23,7 @@ public class RelaySearchServlet extends AnyServlet {
       HttpServletResponse response) throws IOException, ServletException {
 
     /* Forward the request to the JSP that does all the hard work. */
-    String[] additionalStylesheets = {"/rs/css/atlas.css"};
+    String[] additionalStylesheets = {"/css/atlas.css"};
     request.setAttribute("additionalStylesheets", additionalStylesheets);
     request.setAttribute("categories", this.categories);
     request.getRequestDispatcher("WEB-INF/rs.jsp").forward(request,

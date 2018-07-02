@@ -29,7 +29,7 @@
     <noscript>
       <div class="alert alert-warning">
       <p><strong>JavaScript required</strong><br>
-      Please enable JavaScript to use this service. If you are using Tor Browser on High Security mode, it is possible to enable JavaScript to run only on this page. Click the NoScript <img src="img/noscript.png"> icon on your address bar and select "Temporarily allow all on this page". Relay Search only uses JavaScript resources that are hosted by the Tor Metrics team.</p>
+      Please enable JavaScript to use this service. If you are using Tor Browser on High Security mode, it is possible to enable JavaScript to run only on this page. Click the NoScript <img src="images/noscript.png"> icon on your address bar and select "Temporarily allow all on this page". Relay Search only uses JavaScript resources that are hosted by the Tor Metrics team.</p>
     </noscript>
   </div>
 </div> <!-- /container -->
@@ -39,6 +39,6 @@
     urlArgs: "v29"
   };
 </script>
-<script data-main="/rs/js/main" src="/rs/js/libs/require/require.js"></script>
+<script data-main="/js/rs/main" src="/js/rs/libs/require/require.js"></script>
 
 <jsp:include page="bottom.jsp"/>

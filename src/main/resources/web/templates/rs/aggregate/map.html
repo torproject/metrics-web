@@ -1,0 +1,67 @@
+
+<h2 id="search-title"></h2>
+
+<% if(!aggregates) { %>
+    <% if(error == 0) { %>
+    <div class="alert alert-info">
+        <strong>No Results found!</strong><p>
+    No Tor relays matched your query :(</p>
+    <p><a href="#">Return to home page</a></p>
+    </div>
+    <% } else if (error == 2) { %>
+    <div class="alert alert-danger">
+        <strong>Backend error!</strong>
+        <p>Relay Search is unable to get a response from its backend server. This
+        probably means that the backend server is unavailable right now. This
+        can also happen, however, if you did not format your query correctly.
+        Please have a look at <a href="#about">the About page</a> that explains
+        what type of search queries are supported by Relay Search.</p>
+    </div>
+    <% } else if (error == 3) { %>
+    <div class="alert alert-danger">
+	<strong>JavaScript Error!</strong><p>There is a problem with your
+	javascript environment, you may have noscript enabled on the remote
+	onionoo backend. Try temporarily allowing noscript to connect to the
+	backend IP address. If the problem persits consult <a
+		href="https://trac.torproject.org/">the bugtracker.</a></p>
+    </div>
+    <% } else if (error == 5) { %>
+    <div class="alert alert-warning">
+        <strong>No query submitted!</strong>
+        <p>The search query was found to be empty, which is not supported. You
+        must enter a search query in order to generate results. Please have a
+        look at <a href="#about">the About page</a> that explains what type of
+        search queries are supported by Relay Search.</p>
+    </div>
+    <% } %>
+<% } else { %>
+   <div class="panel panel-default">
+   <div class="panel-body">
+   <div id="aggregate-map">
+    <div class="alert alert-danger" id="no-svg">
+        <strong>SVG Not Supported!</strong>
+        <p>Your browser does not support Scalable Vector Graphics. This support
+        is required in order to produce the map view. If you are using Tor
+        Browser on high-security mode, you will need to use either medium- or
+        low-security mode instead to view the map.</p>
+    </div>
+   </div>
+   <div id="map-explain"></div>
+   </div></div>
+   <div class="panel panel-default">
+   <div class="panel-body">
+   <form id="map-radio-buttons">
+     <label class="radio-inline"><input type="radio" name="aggregate-property" value="relays"<% if (mapProperty == "relays") { %> checked="checked"<% } %>> Number of Relays</label>
+     <label class="radio-inline"><input type="radio" name="aggregate-property" value="consensus_weight_fraction"<% if (mapProperty == "consensus_weight_fraction") { %> checked="checked"<% } %>> Consensus Weight</label>
+     <label class="radio-inline"><input type="radio" name="aggregate-property" value="guard_probability"<% if (mapProperty == "guard_probability") { %> checked="checked"<% } %>> Guard Probability</label>
+     <label class="radio-inline"><input type="radio" name="aggregate-property" value="middle_probability"<% if (mapProperty == "middle_probability") { %> checked="checked"<% } %>> Middle Probability</label>
+     <label class="radio-inline"><input type="radio" name="aggregate-property" value="exit_probability"<% if (mapProperty == "exit_probability") { %> checked="checked"<% } %>> Exit Probability</label>
+     <label class="radio-inline"><input type="radio" name="aggregate-property" value="advertised_bandwidth"<% if (mapProperty == "advertised_bandwidth") { %> checked="checked"<% } %>> Advertised Bandwidth</label>
+     <label class="radio-inline"><input type="radio" name="aggregate-property" value="consensus_weight_to_bandwidth"<% if (mapProperty == "consensus_weight_to_bandwidth") { %> checked="checked"<% } %>> Consensus Weight to Bandwidth Ratio</label>
+   </form>
+   <a class="btn btn-primary" href="#aggregate/cc<%= (query) ? "/" + query : "" %>">View Table</a>
+   <a class="btn btn-secondary" id="save_svg">Save Map</a>
+   <a class="btn btn-secondary" id="permalink">Permalink</a>
+   </div>
+   </div>
+<% } %>

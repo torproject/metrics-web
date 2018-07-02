@@ -1,0 +1,103 @@
+.progress {
+    width: 50%;
+    margin: 100px auto;
+    display: none;
+}
+
+.progress-bar {
+    width: 100%;
+}
+
+#secondary-search {
+    display: none;
+}
+
+a.alleged {
+	color: #FE9F30;
+}
+
+.flags {
+    padding: 2px;
+}
+
+span.flags {
+    display: inline-block;
+}
+
+.tooltip-inner {
+    text-align:left;
+}
+
+#outdatedData > div {
+    position:relative;
+    top:60px;
+}
+
+.circle {
+    display: inline-block;
+    vertical-align: middle;
+    background: #999999;
+    width: 10px;
+    height: 10px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.circle-online {
+    background: #25d918;
+}
+
+.circle-offline {
+    background: #ff1515;
+}
+
+#home-search, #home-aggregate-search, #home-advanced-search, #map-radio-buttons {
+    padding: 0;
+    margin: 0 0 10px 0;
+    width: 100%;
+}
+
+td, th {
+    padding: 2px!important;
+}
+
+.form-control {
+    max-width: none !important;
+}
+
+.flags-cell {
+    width: 150px;
+}
+
+/* Allow displaying long contact info (#23868) */
+dd {
+    -ms-word-break: break-all;
+    word-break: break-all;
+
+    /* Non standard for webkit */
+    word-break: break-word;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+/* Override style.css from metrics.torproject.org style */
+td a {
+    padding-right: 0 !important;
+}
+
+.day-spinner {
+    width: 120px;
+    display: inline;
+}
+
+label.radio-inline {
+    display: inline !important;
+    width: auto;
+}
+
+#no-svg {
+    display: none;
+}
