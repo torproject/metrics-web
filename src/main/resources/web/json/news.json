@@ -3694,11 +3694,11 @@
   } ],
   "unknown" : true
 }, {
-  "start" : "2018-04-15",
+  "start" : "2018-05-23",
   "ongoing" : true,
   "protocols" : [ "bridge" ],
-  "short_description" : "Doubling of bridge users over about 45 days",
-  "description" : "Doubling of bridge users over about 45 days. Relay users unaffected.",
+  "short_description" : "Sharp increase in bridge users in many unrelated countries, affecting even the global aggregate",
+  "description" : "Sharp increase in bridge users in many unrelated countries, affecting even the global aggregate. Relay users unaffected. The graphs reach a peak around 2018-06-07 and then begin falling again. An incomplete sampling of affected countries: <a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2018-04-01&amp;end=2018-07-01&amp;country=bd\">Bangladesh</a> <a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2018-04-01&amp;end=2018-07-01&amp;country=cl\">Chile</a> <a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2018-04-01&amp;end=2018-07-01&amp;country=id\">Indonesia</a> <a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2018-04-01&amp;end=2018-07-01&amp;country=ma\">Morocco</a> <a href=\"https://metrics.torproject.org/userstats-relay-country.html?start=2018-04-01&amp;end=2018-07-01&amp;country=ve\">Venezuela</a>.",
   "links" : [ {
     "label" : "relay graph",
     "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-03-01&end=2018-07-01&country=all&events=off"
@@ -3708,18 +3708,34 @@
   } ],
   "unknown" : true
 }, {
-  "start" : "2018-05-23",
-  "ongoing" : true,
-  "places" : [ "bd", "pk" ],
-  "protocols" : [ "bridge" ],
-  "short_description" : "10× increase of bridge users in Bangldesh and Pakistan",
-  "description" : "10&times; increase of bridge users in Bangldesh and Pakistan (and possibly other places). Relay users unaffected.",
+  "start" : "2018-06-10",
+  "places" : [ "tr" ],
+  "protocols" : [ "relay" ],
+  "short_description" : "Jump of relay users in Turkey, from 5k to about 30k",
+  "description" : "Jump of relay users in Turkey, from 5k to about 30k. The timing corresponds to the release of Tor Browser 7.5.5 and 8.0a8.",
   "links" : [ {
     "label" : "relay graph",
-    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-04-01&end=2018-07-01&country=pk"
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-04-01&end=2018-07-15&country=tr"
   }, {
     "label" : "bridge graph",
-    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-04-01&end=2018-07-01&country=pk"
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-04-01&end=2018-07-15&country=tr"
+  }, {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/21014#comment:19"
+  } ],
+  "unknown" : true
+}, {
+  "start" : "2018-06-20",
+  "ongoing" : true,
+  "places" : [ "ve" ],
+  "short_description" : "Venezuela's largest ISP, CANTV, blocks direct access to Tor and the IP addresses of default bridges",
+  "description" : "Venezuela's largest ISP, CANTV, blocks direct access to Tor and the IP addresses of default bridges. meek and non-default bridges are reported to work.",
+  "links" : [ {
+    "label" : "mailing list post",
+    "target" : "https://lists.torproject.org/pipermail/tor-project/2018-June/001842.html"
+  }, {
+    "label" : "Access Now report",
+    "target" : "https://www.accessnow.org/venezuela-blocks-tor/"
   } ],
   "unknown" : true
 } ]
