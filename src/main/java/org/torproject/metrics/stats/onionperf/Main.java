@@ -26,11 +26,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.SortedSet;
+import java.util.Set;
 import java.util.TimeZone;
-import java.util.TreeSet;
 
 public class Main {
 
@@ -43,8 +43,12 @@ public class Main {
     String dbUrlString = "jdbc:postgresql:onionperf";
     Connection connection = connectToDatabase(dbUrlString);
     importOnionPerfFiles(connection);
-    SortedSet<String> statistics = queryOnionPerf(connection);
-    writeStatistics(Paths.get("stats", "torperf-1.1.csv"), statistics);
+    writeStatistics(Paths.get("stats", "torperf-1.1.csv"),
+        queryOnionPerf(connection));
+    writeStatistics(Paths.get("stats", "buildtimes.csv"),
+        queryBuildTimes(connection));
+    writeStatistics(Paths.get("stats", "latencies.csv"),
+        queryLatencies(connection));
     disconnectFromDatabase(connection);
     log.info("Terminated onionperf module.");
   }
@@ -76,6 +80,13 @@ public class Main {
         + "hostnameremote, sourceaddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, "
         + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
         + "?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+    PreparedStatement psBuildTimesSelect = connection.prepareStatement(
+        "SELECT position FROM buildtimes WHERE measurement_id = ?");
+
+    PreparedStatement psBuildTimesInsert = connection.prepareStatement(
+        "INSERT INTO buildtimes (measurement_id, position, buildtime, delta) "
+            + "VALUES (?, ?, ?, ?)");
 
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     DescriptorReader dr = DescriptorSourceFactory.createDescriptorReader();
@@ -184,7 +195,30 @@ public class Main {
           }
         }
       }
-      /* Could use measurementId to insert path. */
+      if (null != tr.getBuildTimes()) {
+        psBuildTimesSelect.clearParameters();
+        psBuildTimesSelect.setInt(1, measurementId);
+        Set<Integer> skipPositions = new HashSet<>();
+        try (ResultSet rs = psBuildTimesSelect.executeQuery()) {
+          while (rs.next()) {
+            skipPositions.add(rs.getInt(1));
+          }
+        }
+        int position = 1;
+        long previousBuildTime = 0L;
+        for (long buildtime : tr.getBuildTimes()) {
+          if (!skipPositions.contains(position)) {
+            psBuildTimesInsert.clearParameters();
+            psBuildTimesInsert.setInt(1, measurementId);
+            psBuildTimesInsert.setInt(2, position);
+            psBuildTimesInsert.setInt(3, (int) buildtime);
+            psBuildTimesInsert.setInt(4, (int) (buildtime - previousBuildTime));
+            psBuildTimesInsert.execute();
+          }
+          position++;
+          previousBuildTime = buildtime;
+        }
+      }
       connection.commit();
     }
   }
@@ -197,10 +231,12 @@ public class Main {
     return originalString;
   }
 
-  static SortedSet<String> queryOnionPerf(Connection connection)
+  static List<String> queryOnionPerf(Connection connection)
       throws SQLException {
     log.info("Querying statistics from database.");
-    SortedSet<String> statistics = new TreeSet<>();
+    List<String> statistics = new ArrayList<>();
+    statistics
+        .add("date,filesize,source,server,q1,md,q3,timeouts,failures,requests");
     Statement st = connection.createStatement();
     String queryString = "SELECT date, filesize, source, server, q1, md, q3, "
         + "timeouts, failures, requests FROM onionperf";
@@ -225,20 +261,66 @@ public class Main {
     return statistics;
   }
 
+  static List<String> queryBuildTimes(Connection connection)
+      throws SQLException {
+    log.info("Querying buildtime statistics from database.");
+    List<String> statistics = new ArrayList<>();
+    statistics.add("date,source,position,q1,md,q3");
+    Statement st = connection.createStatement();
+    String queryString = "SELECT date, source, position, q1, md, q3 "
+        + "FROM buildtimes_stats";
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    try (ResultSet rs = st.executeQuery(queryString)) {
+      while (rs.next()) {
+        statistics.add(String.format("%s,%s,%d,%d,%d,%d",
+            dateFormat.format(rs.getDate("date", calendar)),
+            emptyNull(rs.getString("source")),
+            rs.getInt("position"),
+            rs.getInt("q1"),
+            rs.getInt("md"),
+            rs.getInt("q3")));
+      }
+    }
+    return statistics;
+  }
+
+  static List<String> queryLatencies(Connection connection)
+      throws SQLException {
+    log.info("Querying latency statistics from database.");
+    List<String> statistics = new ArrayList<>();
+    statistics.add("date,source,server,q1,md,q3");
+    Statement st = connection.createStatement();
+    String queryString = "SELECT date, source, server, q1, md, q3 "
+        + "FROM latencies_stats";
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    try (ResultSet rs = st.executeQuery(queryString)) {
+      while (rs.next()) {
+        statistics.add(String.format("%s,%s,%s,%d,%d,%d",
+            dateFormat.format(rs.getDate("date", calendar)),
+            emptyNull(rs.getString("source")),
+            rs.getString("server"),
+            rs.getInt("q1"),
+            rs.getInt("md"),
+            rs.getInt("q3")));
+      }
+    }
+    return statistics;
+  }
+
   private static String emptyNull(String text) {
     return null == text ? "" : text;
   }
 
-  static void writeStatistics(Path webstatsPath,
-      SortedSet<String> statistics) throws IOException {
+  static void writeStatistics(Path webstatsPath, List<String> statistics)
+      throws IOException {
     webstatsPath.toFile().getParentFile().mkdirs();
-    List<String> lines = new ArrayList<>();
-    lines
-        .add("date,filesize,source,server,q1,md,q3,timeouts,failures,requests");
-    lines.addAll(statistics);
-    log.info("Writing {} lines to {}.", lines.size(),
+    log.info("Writing {} lines to {}.", statistics.size(),
         webstatsPath.toFile().getAbsolutePath());
-    Files.write(webstatsPath, lines, StandardCharsets.UTF_8);
+    Files.write(webstatsPath, statistics, StandardCharsets.UTF_8);
   }
 
   private static void disconnectFromDatabase(Connection connection)

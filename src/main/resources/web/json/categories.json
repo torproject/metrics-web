@@ -61,7 +61,9 @@
     "description": "We use <a href=\"https://gitweb.torproject.org/torperf.git\">Torperf</a> and <a href=\"https://github.com/robgjansen/onionperf\">OnionPerf</a> to run performance measurements. Both work by fetching files of different sizes over Tor and measuring how long that takes.",
     "metrics": [
       "torperf",
-      "torperf-failures"
+      "torperf-failures",
+      "onionperf-buildtimes",
+      "onionperf-latencies"
     ]
   },
   {

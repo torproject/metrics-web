@@ -43,6 +43,14 @@ CREATE TABLE IF NOT EXISTS measurements (
   UNIQUE (source, filesize, start)
 );
 
+CREATE TABLE IF NOT EXISTS buildtimes (
+  measurement_id INTEGER REFERENCES measurements (measurement_id) NOT NULL,
+  position INTEGER NOT NULL,
+  buildtime INTEGER NOT NULL,
+  delta INTEGER NOT NULL,
+  UNIQUE (measurement_id, position)
+);
+
 CREATE TYPE server AS ENUM ('public', 'onion');
 
 CREATE OR REPLACE VIEW onionperf AS
@@ -87,4 +95,64 @@ FROM measurements
 WHERE DATE(start) < current_date - 1
 GROUP BY date, filesize, 3, server) sub
 ORDER BY date, filesize, source, server;
+
+CREATE OR REPLACE VIEW buildtimes_stats AS
+SELECT date,
+  source,
+  position,
+  TRUNC(q[1]) AS q1,
+  TRUNC(q[2]) AS md,
+  TRUNC(q[3]) AS q3
+FROM (
+SELECT DATE(start) AS date,
+  source,
+  position,
+  PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY delta) AS q
+FROM measurements NATURAL JOIN buildtimes
+WHERE DATE(start) < current_date - 1
+AND position <= 3
+GROUP BY date, source, position
+UNION
+SELECT DATE(start) AS date,
+  '' AS source,
+  position,
+  PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY delta) AS q
+FROM measurements NATURAL JOIN buildtimes
+WHERE DATE(start) < current_date - 1
+AND position <= 3
+GROUP BY date, 2, position) sub
+ORDER BY date, source, position;
+
+CREATE OR REPLACE VIEW latencies_stats AS
+SELECT date,
+  source,
+  server,
+  TRUNC(q[1]) AS q1,
+  TRUNC(q[2]) AS md,
+  TRUNC(q[3]) AS q3
+FROM (
+SELECT DATE(start) AS date,
+  source,
+  CASE WHEN endpointremote LIKE '%.onion%' THEN 'onion'
+    ELSE 'public' END AS server,
+  PERCENTILE_CONT(ARRAY[0.25,0.5,0.75])
+  WITHIN GROUP(ORDER BY dataresponse - datarequest) AS q
+FROM measurements
+WHERE DATE(start) < current_date - 1
+AND datarequest > 0
+AND dataresponse > 0
+GROUP BY date, source, server
+UNION
+SELECT DATE(start) AS date,
+  '' AS source,
+  CASE WHEN endpointremote LIKE '%.onion%' THEN 'onion'
+    ELSE 'public' END AS server,
+  PERCENTILE_CONT(ARRAY[0.25,0.5,0.75])
+  WITHIN GROUP(ORDER BY dataresponse - datarequest) AS q
+FROM measurements
+WHERE DATE(start) < current_date - 1
+AND datarequest > 0
+AND dataresponse > 0
+GROUP BY date, 2, server) sub
+ORDER BY date, source, server;
 

@@ -310,6 +310,30 @@
     ]
   },
   {
+    "id": "onionperf-buildtimes",
+    "title": "Circuit build times",
+    "type": "Graph",
+    "description": "<p>This graph shows build times of circuits used for downloading static files of different sizes over Tor. The graph shows the range of measurements from first to third quartile, and highlights the median. The slowest and fastest quarter of measurements are omitted from the graph.</p>",
+    "function": "onionperf_buildtimes",
+    "parameters": [
+      "start",
+      "end",
+      "source"
+    ]
+  },
+  {
+    "id": "onionperf-latencies",
+    "title": "Circuit round-trip latencies",
+    "type": "Graph",
+    "description": "<p>This graph shows round-trip latencies of circuits used for downloading static files of different sizes over Tor, either from a server on the public internet or from a version 2 onion server. Round-trip latencies are measured as the time between sending the HTTP request and receiving the HTTP response header. The graph shows the range of measurements from first to third quartile, and highlights the median. The slowest and fastest quarter of measurements are omitted from the graph.</p>",
+    "function": "onionperf_latencies",
+    "parameters": [
+      "start",
+      "end",
+      "source"
+    ]
+  },
+  {
     "id": "connbidirect",
     "title": "Fraction of connections used uni-/bidirectionally",
     "type": "Graph",

@@ -43,6 +43,8 @@
     <url-pattern>/userstats-bridge-version.html</url-pattern>
     <url-pattern>/torperf.html</url-pattern>
     <url-pattern>/torperf-failures.html</url-pattern>
+    <url-pattern>/onionperf-buildtimes.html</url-pattern>
+    <url-pattern>/onionperf-latencies.html</url-pattern>
     <url-pattern>/connbidirect.html</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.html</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.html</url-pattern>
@@ -152,6 +154,12 @@
     <url-pattern>/torperf-failures.png</url-pattern>
     <url-pattern>/torperf-failures.pdf</url-pattern>
     <url-pattern>/torperf-failures.csv</url-pattern>
+    <url-pattern>/onionperf-buildtimes.png</url-pattern>
+    <url-pattern>/onionperf-buildtimes.pdf</url-pattern>
+    <url-pattern>/onionperf-buildtimes.csv</url-pattern>
+    <url-pattern>/onionperf-latencies.png</url-pattern>
+    <url-pattern>/onionperf-latencies.pdf</url-pattern>
+    <url-pattern>/onionperf-latencies.csv</url-pattern>
     <url-pattern>/connbidirect.png</url-pattern>
     <url-pattern>/connbidirect.pdf</url-pattern>
     <url-pattern>/connbidirect.csv</url-pattern>

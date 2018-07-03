@@ -721,6 +721,81 @@ write_torperf_failures <- function(start_p = NULL, end_p = NULL,
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
+prepare_onionperf_buildtimes <- function(start_p, end_p, source_p) {
+    read.csv(paste(stats_dir, "buildtimes.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
+    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
+    filter(if (!is.null(source_p))
+        source == ifelse(source_p == "all", "", source_p) else TRUE)
+}
+
+write_onionperf_buildtimes <- function(start_p = NULL, end_p = NULL,
+    source_p = NULL, path_p) {
+  prepare_onionperf_buildtimes(start_p, end_p, source_p) %>%
+    write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
+}
+
+plot_onionperf_buildtimes <- function(start_p, end_p, source_p, path_p) {
+  prepare_onionperf_buildtimes(start_p, end_p, source_p) %>%
+    mutate(date = as.Date(date),
+      position = factor(position, levels = seq(1, 3, 1),
+        labels = c("1st hop", "2nd hop", "3rd hop"))) %>%
+    ggplot(aes(x = date, y = md, colour = position, fill = position)) +
+    geom_line(size = 0.75) +
+    geom_ribbon(aes(x = as.Date(date), ymin = q1, ymax = q3, alpha = 0.5),
+      show.legend = FALSE) +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "ms"),
+      limits = c(0, NA)) +
+    scale_colour_hue(name = "Medians and interquartile ranges") +
+    scale_fill_hue(name = "Medians and interquartile ranges") +
+    ggtitle(ifelse(source_p == "all", "Circuit build times on all sources",
+        paste("Circuit build times on", source_p))) +
+    labs(caption = copyright_notice) +
+    theme(legend.position = "top")
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
+prepare_onionperf_latencies <- function(start_p, end_p, source_p) {
+    read.csv(paste(stats_dir, "latencies.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
+    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
+    filter(if (!is.null(source_p))
+        source == ifelse(source_p == "all", "", source_p) else TRUE)
+}
+
+write_onionperf_latencies <- function(start_p = NULL, end_p = NULL,
+    source_p = NULL, path_p) {
+  prepare_onionperf_latencies(start_p, end_p, source_p) %>%
+    write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
+}
+
+plot_onionperf_latencies <- function(start_p, end_p, source_p, path_p) {
+  prepare_onionperf_latencies(start_p, end_p, source_p) %>%
+    mutate(date = as.Date(date),
+      server = factor(server, levels = c("public", "onion"),
+        labels = c("public server", "onion server"))) %>%
+    ggplot(aes(x = date, y = md, colour = server, fill = server)) +
+    geom_line(size = 0.75) +
+    geom_ribbon(aes(x = as.Date(date), ymin = q1, ymax = q3, alpha = 0.5),
+      show.legend = FALSE) +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "ms"),
+      limits = c(0, NA)) +
+    scale_colour_hue(name = "Medians and interquartile ranges") +
+    scale_fill_hue(name = "Medians and interquartile ranges") +
+    ggtitle(ifelse(source_p == "all",
+        "Circuit round-trip latencies on all sources",
+        paste("Circuit round-trip latencies on", source_p))) +
+    labs(caption = copyright_notice) +
+    theme(legend.position = "top")
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
 prepare_connbidirect <- function(start_p, end_p) {
   read.csv(paste(stats_dir, "connbidirect2.csv", sep = ""),
     colClasses = c("date" = "Date", "direction" = "factor")) %>%
