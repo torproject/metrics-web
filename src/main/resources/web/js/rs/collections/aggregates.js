@@ -30,8 +30,8 @@ define([
              This code will never be assigned for use with ISO 3166-1 and is "user-assigned".
              Fun fact: UN/LOCODE assigns XZ to represent installations in international waters. */
           relay.country = ((typeof relay.country) == "undefined") ? "xz" : relay.country;
-          relay.as_number = ((typeof relay.as_number) == "undefined") ? 0 : relay.as_number;
-          if (relay.as_number == 0) relay.as_name = "Unknown";
+          relay.as_number = ((typeof relay.as_number) == "undefined") ? "AS0" : relay.as_number;
+          if (relay.as_number == "AS0") relay.as_name = "Unknown";
 
           var ccAggregate = false;
           var asAggregate = false;
@@ -75,7 +75,7 @@ define([
             if (relay.country !== "xz") aggregates[aggregateKey].country.add(relay.country);
           }
           if (!asAggregate) {
-            if (relay.as_number !== 0) aggregates[aggregateKey].as.add(relay.as_number);
+            if (relay.as_number !== "AS0") aggregates[aggregateKey].as.add(relay.as_number);
           }
           aggregates[aggregateKey].relays++;
           if ((typeof relay.guard_probability) !== "undefined") aggregates[aggregateKey].guard_probability += relay.guard_probability;
