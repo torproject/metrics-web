@@ -10,13 +10,11 @@
 <% if (relay.get('new_relay') === true) {%>
 <div class="alert alert-info">This relay appears to be less than 2 weeks old. <a href="https://blog.torproject.org/lifecycle-new-relay">This blog post</a> explains the lifecycle of a new relay, and why it will not be immediately fully used to capacity.</div>
 <% } %>
-<% if (relay.get('recommended_version') === false && relay.get('version_consistent') == true) { %>
-<div class="alert alert-danger">This relay is running a version of Tor that is not recommended.
-It is most likely too old and may be missing important security fixes. If
-this is the case, and this is your relay, you should update it as soon as
-possible. Development versions (versions that are too new) will also trigger
-this warning message (see bug <a
-href="https://bugs.torproject.org/24256">#24256</a>).</div>
+<% if (relay.get('version_status') === 'obsolete'
+        && relay.get('version_consistent') == true) { %>
+<div class="alert alert-danger">This relay is running a version of Tor that is
+too old and may be missing important security fixes. If this is your relay, you
+should update it as soon as possible.</div>
 <% } %>
 <div class="row">
     <div class="col-md-6">

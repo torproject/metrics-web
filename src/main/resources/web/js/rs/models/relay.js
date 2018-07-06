@@ -60,7 +60,7 @@ define([
             var model = this;
             _.each(flags, function(flag) {
                 if (flag == "Not Recommended") {
-                    output.push([flag,"notrecommended", "This relay is running a Tor version that is not recommended by the directory authorities and may contain known issues."]);
+                    output.push([flag,"notrecommended", "This relay is running a Tor version that is not recommended by the directory authorities and may contain known issues. This includes both obsolete and experimental versions."]);
                 }
                 if (flag == "Unmeasured") {
                     output.push([flag,"unmeasured", "This relay has not been measured by at least 3 bandwidth authorities and so its consensus weight is currently capped. This is expected for new relays."]);
