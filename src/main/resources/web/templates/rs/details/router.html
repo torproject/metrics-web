@@ -148,7 +148,7 @@ should update it as soon as possible.</div>
     <dd><% if (relay.get('host_name')) { %><%= relay.get('host_name') %><% } else { %>No PTR record found<% } %></dd>
 
     <dt><span class="tip" title="Country as found in a GeoIP database by resolving the relay's first onion-routing address.">Country</span></dt>
-    <dd><% if (relay.get('country')) { %><img class="inline country" title="<%= relay.get('countryname') %>" alt="" src="/images/cc/<%= relay.get('country') %>.png"/> <%= relay.get('countryname') %><% } else { %>Unknown<% } %></dd>
+    <dd><% if (relay.get('country')) { %><img class="inline country" title="<%= relay.get('countryname') %>" alt="" src="/images/cc/<%= relay.get('country') %>.png"/> <a href="#search/country:<%= relay.get('country') %>"><%= relay.get('countryname') %></a> (<a href="#search/country:<%= relay.get('country') %>%20flag:exit"><img src="/images/flags/exit.png" title="All exits in <%= relay.get('countryname') %>"></a>)<% } else { %>Unknown<% } %></dd>
 
     <dt><span class="tip" title="Autonomous System Number">AS Number</span></dt>
     <dd><% if (relay.get('as_number') !== null) { %><a href="#search/as:<%= relay.get('as_number') %>"><%= _.escape(relay.get('as_number')) %></a><% } else { %>unknown<% }; %></dd>
