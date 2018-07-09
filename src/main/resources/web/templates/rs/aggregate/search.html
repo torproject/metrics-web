@@ -62,28 +62,36 @@
       <%= aggregate.version %>
     </td>
     <% } %>
-    <td>
       <% if ((typeof aggregate.country) == "string") { %>
-        <a href="#search/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %><% } %>"><img class="inline country" src="/images/cc/<%= aggregate.country %>.png"> <%= countries[aggregate.country] %></a>
+        <td data-order="0000000001<%= countries[aggregate.country] %>">
+          <a href="#search/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %><% } %>"><img class="inline country" src="/images/cc/<%= aggregate.country %>.png"> <%= countries[aggregate.country] %></a>
+        </td>
       <% } else { %>
         <% if ((typeof aggregate.as) == "string") { %>
-          (<a href="#aggregate/ascc/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("as:") == -1) { %>as:<%= aggregate.as %><% } %>"><%= aggregate.country.size %> distinct</a>)
+          <td data-order="<%= aggregate.country.size.toString().padStart(10, "0") %>">
+            (<a href="#aggregate/ascc/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("as:") == -1) { %>as:<%= aggregate.as %><% } %>"><%= aggregate.country.size %> distinct</a>)
+          </td>
         <% } else { %>
-          (<a href="#aggregate/cc<%= (query || aggregate.version) ? "/" : "" %><% (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.country.size %> distinct</a>)
+          <td data-order="<%= aggregate.country.size.toString().padStart(10, "0") %>">
+            (<a href="#aggregate/cc<%= (query || aggregate.version) ? "/" : "" %><% (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.country.size %> distinct</a>)
+          </td>
         <% } %>
       <% } %>
-    </td>
-    <td>
       <% if ((typeof aggregate.as) == "string") { %>
-        <a href="#search/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("as:") == -1) { %>as:<%= aggregate.as  %><% } %>"><%= aggregate.as_name %> (<%= aggregate.as %>)</a>
+        <td data-order="0000000001<%= aggregate.as_name %>">
+          <a href="#search/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("as:") == -1) { %>as:<%= aggregate.as  %><% } %>"><%= aggregate.as_name %> (<%= aggregate.as %>)</a>
+          </td>
       <% } else { %>
         <% if ((typeof aggregate.country) == "string") { %>
-          (<a href="#aggregate/ascc/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("country:") == -1) { %>country:<%= aggregate.country %><% } %>"><%= aggregate.as.size %> distinct</a>)
+          <td data-order="<%= aggregate.as.size.toString().padStart(10, "0") %>">
+            (<a href="#aggregate/ascc/<%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %><% if (query.indexOf("country:") == -1) { %>country:<%= aggregate.country %><% } %>"><%= aggregate.as.size %> distinct</a>)
+          </td>
         <% } else { %>
-          (<a href="#aggregate/as<%= (query || aggregate.version) ? "/" : "" %><% (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.as.size %> distinct</a>)
+          <td data-order="<%= aggregate.as.size.toString().padStart(10, "0") %>">
+            (<a href="#aggregate/as<%= (query || aggregate.version) ? "/" : "" %><% (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.as.size %> distinct</a>)
+          </td>
         <% } %>
       <% } %>
-    </td>
     <td data-order="<%= aggregate.consensus_weight_fraction %>"><span class="tip" title="<%= aggregate.consensus_weight %>"><%= (aggregate.consensus_weight_fraction * 100).toFixed(4) %>%</span></td>
     <td data-order="<%= aggregate.advertised_bandwidth %>"><%= hrBandwidth(aggregate.advertised_bandwidth) %></span></td>
     <td data-order="<%= aggregate.guard_probability %>"><%= (aggregate.guard_probability * 100).toFixed(4) %>%</td>
