@@ -3086,6 +3086,48 @@
     "target" : "https://blog.torproject.org/tor-browser-80a8-released"
   } ]
 }, {
+  "start" : "2018-06-20",
+  "ongoing" : true,
+  "places" : [ "ve" ],
+  "short_description" : "Venezuela's largest ISP, CANTV, blocks direct access to Tor and the IP addresses of default bridges",
+  "description" : "Venezuela's largest ISP, CANTV, blocks direct access to Tor and the IP addresses of default bridges. meek and non-default bridges are reported to work.",
+  "links" : [ {
+    "label" : "mailing list post",
+    "target" : "https://lists.torproject.org/pipermail/tor-project/2018-June/001842.html"
+  }, {
+    "label" : "Access Now report",
+    "target" : "https://www.accessnow.org/venezuela-blocks-tor/"
+  } ]
+}, {
+  "start" : "2018-07-01",
+  "ongoing" : true,
+  "places" : [ "ug" ],
+  "short_description" : "A social media tax takes effect in Uganda",
+  "description" : "A social media tax takes effect in Uganda. The government pressures ISPs to block VPNs.",
+  "links" : [ {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-05-01&end=2018-08-01&country=ug&events=off"
+  }, {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-05-01&end=2018-08-01&country=ug&events=off"
+  }, {
+    "label" : "BBC article",
+    "target" : "https://www.bbc.com/news/world-africa-44315675"
+  }, {
+    "label" : "AllAfrica article",
+    "target" : "http://allafrica.com/stories/201807040129.html"
+  } ]
+}, {
+  "start" : "2018-07-04",
+  "end" : "2018-07-06",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Outage of the Snowflake bridge, caused by a full disk.",
+  "description" : "Outage of the Snowflake bridge, caused by a full disk.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26661"
+  } ]
+}, {
   "start" : "2016-02-24",
   "places" : [ "tm" ],
   "protocols" : [ "<OR>" ],
@@ -3722,20 +3764,6 @@
   }, {
     "label" : "comment",
     "target" : "https://bugs.torproject.org/21014#comment:19"
-  } ],
-  "unknown" : true
-}, {
-  "start" : "2018-06-20",
-  "ongoing" : true,
-  "places" : [ "ve" ],
-  "short_description" : "Venezuela's largest ISP, CANTV, blocks direct access to Tor and the IP addresses of default bridges",
-  "description" : "Venezuela's largest ISP, CANTV, blocks direct access to Tor and the IP addresses of default bridges. meek and non-default bridges are reported to work.",
-  "links" : [ {
-    "label" : "mailing list post",
-    "target" : "https://lists.torproject.org/pipermail/tor-project/2018-June/001842.html"
-  }, {
-    "label" : "Access Now report",
-    "target" : "https://www.accessnow.org/venezuela-blocks-tor/"
   } ],
   "unknown" : true
 } ]
