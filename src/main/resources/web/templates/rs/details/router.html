@@ -126,7 +126,7 @@ should update it as soon as possible.</div>
     <dd><% _.each(relay.get('flags'), function(flag) { %>
         <span class="tip flags" title="<%= flag[2] %>">
             <img class="inline" alt="" src="/images/flags/<%= flag[1] %>.png"/>
-            <span class="inline"><%= flag[0] %></span>
+            <a href="#search/flag:<%= flag[1] %>"><span class="inline"><%= flag[0] %></span></a>
         </span>
     <% }); %>
     </dd>
