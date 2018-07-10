@@ -111,7 +111,7 @@
     <td data-order="<%= aggregate.middle_probability %>"><%= (aggregate.middle_probability * 100).toFixed(4) %>%</td>
     <td data-order="<%= aggregate.exit_probability %>"><%= (aggregate.exit_probability * 100).toFixed(4) %>%</td>
     <td>
-      <% if ((typeof aggregate.as) == "string" || (typeof aggregate.country) == "string") { %>
+      <% if ((typeof aggregate.as) == "string" || (typeof aggregate.country) == "string" || (typeof aggregate.version) == "string") { %>
         <a href="#search/<% if ((typeof aggregate.as) == "string" && query.indexOf("as:") == -1) { %>as:<%= aggregate.as %> <% } if ((typeof aggregate.country) == "string" && query.indexOf("country:") == -1) { %>country:<%= aggregate.country  %> <% } %><%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.relays %></a>
       <% } else { %>
         <%= aggregate.relays %>
