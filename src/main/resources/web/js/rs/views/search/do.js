@@ -18,9 +18,10 @@ define([
     },
     render: function(query){
       document.title = "Relay Search";
-      var compiledTemplate = _.template(doSearchTemplate)
+      var compiledTemplate = _.template(doSearchTemplate);
+      var relays = this.relays;
       this.$el.html(compiledTemplate({query: query,
-                                     relays: this.relays,
+                                     relays: relays,
                                      countries: CountryCodes,
                                      error: this.error,
                                      relaysPublished: this.relaysPublished,
@@ -49,6 +50,14 @@ define([
         "aaSorting": [[2, "desc"]],
         "fnDrawCallback": function( oSettings ) {
           $(".tip").tooltip({'html':true});
+        },
+        "footerCallback": function( tfoot, data, start, end, display ) {
+          console.log(relays);
+          var sumAdvertisedBandwidths = 0;
+          for (var i = 0; i < relays.length; i++) {
+            sumAdvertisedBandwidths += relays[i].get("advertised_bandwidth");
+          }
+          $(tfoot).find('th').eq(2).html(hrBandwidth(sumAdvertisedBandwidths));
         }
       });
     },

@@ -53,6 +53,19 @@
                         <th>Exit</th>
 		</tr>
 	</thead>
+	<tfoot>
+		<tr>
+                        <th colspan="<% if (aType == "version") { %>3<% } else { %>2<% } %>">Total</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+		</tr>
+	</tfoot>
 	<tbody>
 
 <% _.each(aggregates, function(aggregate) { %>
