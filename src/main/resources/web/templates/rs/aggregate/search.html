@@ -86,7 +86,7 @@
           </td>
         <% } else { %>
           <td data-order="<%= aggregate.country.size.toString().padStart(10, "0") %>">
-            (<a href="#aggregate/cc<%= (query || aggregate.version) ? "/" : "" %><% (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.country.size %> distinct</a>)
+            (<a href="#aggregate/cc<%= (query || aggregate.version) ? "/" : "" %><%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.country.size %> distinct</a>)
           </td>
         <% } %>
       <% } %>
@@ -101,7 +101,7 @@
           </td>
         <% } else { %>
           <td data-order="<%= aggregate.as.size.toString().padStart(10, "0") %>">
-            (<a href="#aggregate/as<%= (query || aggregate.version) ? "/" : "" %><% (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.as.size %> distinct</a>)
+            (<a href="#aggregate/as<%= (query || aggregate.version) ? "/" : "" %><%= (query) ? query + " " : "" %><%= (aggregate.version) ? "version:" + aggregate.version + " " : "" %>"><%= aggregate.as.size %> distinct</a>)
           </td>
         <% } %>
       <% } %>
