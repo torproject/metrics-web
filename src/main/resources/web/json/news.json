@@ -3128,6 +3128,18 @@
     "target" : "https://bugs.torproject.org/26661"
   } ]
 }, {
+  "start" : "2018-07-14",
+  "protocols" : [ "bridge" ],
+  "short_description" : "Release of Tor 0.3.3.9, switches bridge authority Bifroest to Serge.",
+  "description" : "Release of Tor 0.3.3.9, switches bridge authority Bifroest to <a href=\"https://metrics.torproject.org/rs.html#details/BA44A889E64B93FAA2B114E02C2A279A8555C533\">Serge</a>.",
+  "links" : [ {
+    "label" : "announcement",
+    "target" : "https://lists.torproject.org/pipermail/tor-announce/2018-July/000162.html"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26771"
+  } ]
+}, {
   "start" : "2016-02-24",
   "places" : [ "tm" ],
   "protocols" : [ "<OR>" ],
