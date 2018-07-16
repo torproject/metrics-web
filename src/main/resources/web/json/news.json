@@ -3092,6 +3092,9 @@
   "short_description" : "Venezuela's largest ISP, CANTV, blocks direct access to Tor and the IP addresses of default bridges",
   "description" : "Venezuela's largest ISP, CANTV, blocks direct access to Tor and the IP addresses of default bridges. meek and non-default bridges are reported to work.",
   "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26807"
+  }, {
     "label" : "mailing list post",
     "target" : "https://lists.torproject.org/pipermail/tor-project/2018-June/001842.html"
   }, {
