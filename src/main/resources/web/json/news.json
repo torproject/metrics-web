@@ -3140,6 +3140,15 @@
     "target" : "https://bugs.torproject.org/26771"
   } ]
 }, {
+  "start" : "2018-07-15",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Made the Snowflake bridge report to the new Serge bridge authority.",
+  "description" : "Made the Snowflake bridge report to the new Serge bridge authority.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/26783#comment:1"
+  } ]
+}, {
   "start" : "2016-02-24",
   "places" : [ "tm" ],
   "protocols" : [ "<OR>" ],
