@@ -202,6 +202,9 @@ public class ConsensusStatsFileHandler {
           } else if (descriptorFileName.contains(
               "1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1")) {
             authority = "Bifroest";
+          } else if (descriptorFileName.contains(
+              "BA44A889E64B93FAA2B114E02C2A279A8555C533")) {
+            authority = "Serge";
           }
           if (authority == null) {
             this.logger.warning("Did not recognize the bridge authority "
