@@ -307,6 +307,15 @@ Added "version_status" field to details documents on April 6, 2018.
 Included all exit addresses in "exit_addresses", regardless of whether they are
 used as onion-routing addresses or not on April 17, 2018.
 <a href="#versions_6_0" class="anchor">#</a></li>
+<li><a id="versions_6_1"></a><strong>6.1</strong>
+Added a new "os" parameter to filter relays and bridges by operating
+system, extended the "as" and "country" parameters by a special
+country code and AS number to return relays that were not found in the
+GeoIP database, and deprecated the "host_name" field in details
+documents in favor of the new "verified_host_names" and
+"unverified_host_names" fields for more accurate DNS results on July
+16, 2018.
+<a href="#versions_6_1" class="anchor">#</a></li>
 </ul>
 
 
@@ -480,24 +489,30 @@ whether they have been running in the past week.
 
 <li>
 <a id="parameters_country"></a>
-<b>country</b>
+<b>country <span class="label label-primary">updated</span></b>
 <a href="#parameters_country" class="anchor">#</a>
 <p>
-Return only relays which are located in the
-given country as identified by a two-letter country code.
-Filtering by country code is case-insensitive.
+Return only relays which are located in the given country as identified by a
+two-letter country code.  Filtering by country code is case-insensitive. The
+special country code <tt>xz</tt> can be used for relays that were not found in
+the GeoIP database.
+<span class="blue">Updated to recognize special country code
+<tt>xz</tt> on July
+16, 2018.</span>
 </p>
 </li>
 
 <li>
 <a id="parameters_as"></a>
-<b>as</b>
+<b>as <span class="label label-primary">updated</span></b>
 <a href="#parameters_as" class="anchor">#</a>
 <p>
-Return only relays which are located in the
-given autonomous system (AS) as identified by the AS number (with or
-without preceding "AS" part).
-Filtering by AS number is case-insensitive.
+Return only relays which are located in the given autonomous system (AS) as
+identified by the AS number (with or without preceding "AS" part).  Filtering
+by AS number is case-insensitive. The special AS number <tt>0</tt> can be used
+for relays that were not found in the GeoIP database.
+<span class="blue">Updated to recognize special AS number <tt>0</tt>
+on July 16, 2018.</span>
 </p>
 </li>
 
@@ -587,6 +602,17 @@ a family.
 Return only relays or bridges running a Tor version that starts with the
 parameter value <i>without</i> leading <code>"Tor"</code>.
 Searches are case-insensitive.
+</p>
+</li>
+
+<li>
+<a id="parameters_os"></a>
+<b>os <span class="label label-primary">new</span></b>
+<a href="#parameters_os" class="anchor">#</a>
+<p>
+Return only relays or bridges running on an operating system that starts with
+the parameter value. Searches are case-insensitive.
+<span class="blue">Added on July 16, 2018.</span>
 </p>
 </li>
 
@@ -1289,7 +1315,7 @@ change in the future.
 
 <li>
 <a id="details_relay_host_name"></a>
-<b>host_name</b>
+<b>host_name</b> <span class="label label-warning">deprecated</span>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_host_name" class="anchor">#</a>
@@ -1300,6 +1326,44 @@ This field is updated at most once in 12 hours, unless the relay IP
 address changes.
 Omitted if the relay IP address was not looked up, if no lookup request
 was successful yet, or if no A record was found matching the PTR record.
+<span class="red">Deprecated on July 16, 2018.</span>
+</p>
+</li>
+
+<li>
+<a id="details_relay_verified_host_names"></a>
+<b>verified_host_names</b> <span class="label label-primary">new</span></b>
+<code class="typeof">array of strings</code>
+<span class="required-false">optional</span>
+<a href="#details_relay_verified_host_names" class="anchor">#</a>
+<p>
+Host names as found in a reverse DNS lookup of the
+relay's primary IP address for which a matching
+A record was also found.
+This field is updated at most once in 12 hours, unless the relay IP
+address changes.
+Omitted if the relay IP address was not looked up, if no lookup request
+was successful yet, or if no A records were found matching the PTR records
+(i.e. it was not possible to verify the value of any of the PTR records).
+<span class="blue">Added on July 16, 2018.</span>
+</p>
+</li>
+
+<li>
+<a id="details_relay_unverified_host_names"></a>
+<b>unverified_host_names</b> <span class="label label-primary">new</span></b>
+<code class="typeof">array of strings</code>
+<span class="required-false">optional</span>
+<a href="#details_relay_unverified_host_names" class="anchor">#</a>
+<p>
+Host names as found in a reverse DNS lookup of the
+relay's primary IP address that for which a matching A record was not found.
+This field is updated at most once in 12 hours, unless the relay IP
+address changes.
+Omitted if the relay IP address was not looked up, if no lookup request
+was successful yet, or if A records were found matching all PTR records
+(i.e. it was possible to verify the value of each of the PTR records).
+<span class="blue">Added on July 16, 2018.</span>
 </p>
 </li>
 
