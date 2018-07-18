@@ -216,7 +216,8 @@ define([
                     relay.or_port = relay.or_addresses ? relay.or_addresses[0].split(":")[1] : 0;
                     relay.dir_port = relay.dir_address ? relay.dir_address.split(":")[1] : 0;
                     relay.exit_addresses = relay.exit_addresses ? relay.exit_addresses : null;
-                    relay.host_name = relay.host_name ? relay.host_name : null;
+                    relay.verified_host_names = relay.verified_host_names ? relay.verified_host_names : null;
+                    relay.unverified_host_names = relay.unverified_host_names ? relay.unverified_host_names : null;
                     relay.country = relay.country ? relay.country.toLowerCase() : null;
                     relay.countryname = relay.country ? CountryCodes[relay.country] : null;
                     relay.age = relay.first_seen ? model.parsedate(relay.first_seen).hrfull : null;

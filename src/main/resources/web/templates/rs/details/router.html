@@ -144,8 +144,10 @@ should update it as soon as possible.</div>
         <%= propertyCount==0 ? 'none' : '' %>
     </dd>
 
-    <dt><span class="tip" title="Host name as found in a reverse DNS lookup of the relay's primary IP address. This field is updated at most once in 12 hours, unless the relay IP address changes. Omitted if the relay IP address was not looked up, if no lookup request was successful yet or if no A record was found matching the PTR record.">Host Name</span></dt>
-    <dd><% if (relay.get('host_name')) { %><%= relay.get('host_name') %><% } else { %>No PTR record found<% } %></dd>
+    <dt><span class="tip" title="Host name as found in a reverse DNS lookup of the relay's primary IP address. This field is updated at most once in 12 hours, unless the relay IP address changes. Omitted if the relay IP address was not looked up, if no lookup request was successful yet. If no A record was found matching the PTR record then the host name will be followed by an asterisk.">Host Name</span></dt>
+    <dd>
+        <pre class="pre-scrollable"><% if (relay.get('verified_host_names') !== null) { %><% _.each(relay.get('verified_host_names'), function(host_name) { %><a href="#search/host_name:<%= host_name %>"><%= host_name %></a><% }); } %><% if (relay.get('unverified_host_names') !== null) { %><% _.each(relay.get('unverified_host_names'), function(host_name) { %><a class="alleged" href="#search/host_name:<%= host_name %>"><%= host_name %></a>*<% }); } %><% if(relay.get('verified_host_names') == relay.get('unverified_host_names')) { %>none<% } %></pre>
+    </dd>
 
     <dt><span class="tip" title="Country as found in a GeoIP database by resolving the relay's first onion-routing address.">Country</span></dt>
     <dd><% if (relay.get('country')) { %><img class="inline country" title="<%= relay.get('countryname') %>" alt="" src="/images/cc/<%= relay.get('country') %>.png"/> <a href="#search/country:<%= relay.get('country') %>"><%= relay.get('countryname') %></a> (<a href="#search/country:<%= relay.get('country') %>%20flag:exit"><img src="/images/flags/exit.png" title="All exits in <%= relay.get('countryname') %>"></a>)<% } else { %>Unknown<% } %></dd>
