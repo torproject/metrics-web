@@ -3102,6 +3102,18 @@
     "target" : "https://www.accessnow.org/venezuela-blocks-tor/"
   } ]
 }, {
+  "start" : "2018-06-27",
+  "protocols" : [ "meek" ],
+  "short_description" : "Release of Tor Browser 8.0a9 with non-working meek.",
+  "description" : "Release of Tor Browser 8.0a9 with non-working meek.",
+  "links" : [ {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/new-release-tor-browser-80a9"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26477"
+  } ]
+}, {
   "start" : "2018-07-01",
   "ongoing" : true,
   "places" : [ "ug" ],
@@ -3133,14 +3145,17 @@
 }, {
   "start" : "2018-07-14",
   "protocols" : [ "bridge" ],
-  "short_description" : "Release of Tor 0.3.3.9, switches bridge authority Bifroest to Serge.",
-  "description" : "Release of Tor 0.3.3.9, switches bridge authority Bifroest to <a href=\"https://metrics.torproject.org/rs.html#details/BA44A889E64B93FAA2B114E02C2A279A8555C533\">Serge</a>.",
+  "short_description" : "Release of Tor 0.2.9.16, 0.3.2.11, 0.3.3.9, and 0.3.4.5-rc",
+  "description" : "Release of Tor 0.2.9.16, 0.3.2.11, 0.3.3.9, and 0.3.4.5-rc. Switches bridge authority from Bifroest to <a href=\"https://metrics.torproject.org/rs.html#details/BA44A889E64B93FAA2B114E02C2A279A8555C533\">Serge</a>.",
   "links" : [ {
     "label" : "announcement",
-    "target" : "https://lists.torproject.org/pipermail/tor-announce/2018-July/000162.html"
+    "target" : "https://lists.torproject.org/pipermail/tor-relays/2018-July/015681.html"
   }, {
     "label" : "ticket",
     "target" : "https://bugs.torproject.org/26771"
+  }, {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/new-release-tor-0339-bridge-authority-update"
   } ]
 }, {
   "start" : "2018-07-15",
