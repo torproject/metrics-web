@@ -921,6 +921,37 @@
     "target" : "https://bugs.torproject.org/13174"
   } ]
 }, {
+  "start" : "2014-09-26",
+  "end" : "2014-12-15",
+  "places" : [ "hk" ],
+  "short_description" : "\"Umbrella Revolution\" protests in Hong Kong.",
+  "description" : "\"Umbrella Revolution\" protests in Hong Kong.",
+  "links" : [ {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2014-01-01&end=2015-02-01&country=hk"
+  }, {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2014-01-01&end=2015-02-01&country=hk"
+  } ]
+}, {
+  "start" : "2014-09-29",
+  "places" : [ "cn" ],
+  "short_description" : "China blocks Instagram in response to ongoing protests in Hong Kong",
+  "description" : "China blocks Instagram in response to ongoing protests in Hong Kong. A research paper by Hobbs and Roberts shows evidence for an increase in circumvention, but the measurable effect on Tor is slight if anything.",
+  "links" : [ {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2014-01-01&end=2015-02-01&country=cn"
+  }, {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2014-01-01&end=2015-02-01&country=cn"
+  }, {
+    "label" : "BBC article",
+    "target" : "https://www.bbc.com/news/technology-29409533"
+  }, {
+    "label" : "research paper",
+    "target" : "http://www.margaretroberts.net/wp-content/uploads/2016/08/selfiecensorship.pdf"
+  } ]
+}, {
   "start" : "2014-09-29",
   "protocols" : [ "meek" ],
   "short_description" : "Changed the bridge backing meek-amazon.",
