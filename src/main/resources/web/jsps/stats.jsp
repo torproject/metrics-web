@@ -13,13 +13,837 @@
       </ul>
     </div>
 
-    <div class="container">
-      <h1>Pre-aggregated statistics files used on this website <a href="#stats" name="stats" class="anchor">#</a></h1>
-      <p>This page contains specifications and links to pre-aggregated statistics files used on this website.</p>
-    </div>
+<div class="container">
+
+<h1>Statistics files used on this website <a href="#stats" name="stats" class="anchor">#</a></h1>
+
+<p>This page contains specifications of statistics files used on this website.</p>
+
+<h3>Parameters</h3>
+
+<p>All per-graph statistics files (excluding the now deprecated pre-aggregated files) are available for download via an URL of the form:</p>
+
+<pre>
+https://metrics.torproject.org/identifier.csv
+</pre>
+
+<p>These URLs all support a set of <em>optional</em> parameters that can be used to further customize their content. Typically, these are <b>start</b> and <b>end</b> plus additional parameters as specified below. Including a parameter in a URL typically filters the resulting statistics file by the given parameter value. In reverse, omitting a parameter produces a larger statistics file that is not filtered by that parameter.</p>
+
+<h3>Columns</h3>
+
+<p>Each per-graph statistics file (again, excluding the deprecated pre-aggregated files) starts with a comment section, followed by a header line and then the actual data lines. Columns are pre-defined and specified further down below. The rule of thumb for columns is that neither the choice of parameters nor availability of data should affect the set of columns, but that only a code change can add, change, or remove a column. This rule of thumb is not yet implemented for all per-graph statistics files.</p>
+
+<p>Applications must not rely on the order of columns, as this order may change when columns are removed. Instead, applications should refer to columns by their name. Applications should be able to handle newly added columns and fail gracefully in case of removed columns.</p>
+
+<h3>Changes</h3>
+
+<p>Changes to columns will be announced on this page at least a couple weeks in advance as well as on the <a href="https://lists.torproject.org/cgi-bin/mailman/listinfo/tor-dev">tor-dev@ mailing list</a>.</p>
+
+<p>The following changes have been made in the past or are scheduled to become effective in the near future:</p>
+
+<ul>
+<li><b>February 28, 2018:</b> Added per-graph CSV files to eventually replace pre-aggregated CSV files.</li>
+<li><b>May 29, 2018:</b> Made all parameters of per-graph CSV files optional to support providing both pre-filtered and complete data sets.</li>
+<li><b>July 31, 2018:</b> Announced pending changes to per-graph CSV files to become effective on August 15 and pre-aggregated CSV files to be removed by September 15.</li>
+<li><b>August 15, 2018 (scheduled):</b> Make the first batch of changes to per-graph CSV files (marked as "Suggested change" below).</li>
+<li><b>September 15, 2018 (scheduled):</b> Remove all pre-aggregated CSV files.</li>
+</ul>
+
+</div>
 
 <div class="container">
-<h2>Number of relays and bridges <a href="#servers" name="servers" class="anchor">#</a></h2>
+<h2><i class="fa fa-users fa-fw" aria-hidden="true"></i>
+Users <a href="#users" name="users" class="anchor">#</a></h2>
+
+<h3>Relay users
+<a href="/userstats-relay-country.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/userstats-relay-country.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/userstats-relay-country">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>country:</b> Two-letter lower-case country code of clients to include in the file, or <b>"all"</b> for all clients.</li>
+<li><b>events:</b> Ignored; only present for compatibility reasons with the corresponding graph.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) for which user numbers are estimated.</li>
+<li><b>country:</b> Two-letter lower-case country code as found in a GeoIP database by resolving clients' IP addresses, or <b>"??"</b> if client IP addresses could not be resolved. If this column contains the empty string, all clients are included, regardless of their country code.</li>
+<li><b>users:</b> Estimated number of clients.</li>
+<li><b>downturns:</b> Whether the estimated number of clients is below the lower number of expected clients, indicating a possible censorship-related event. If this column contains the empty string, there are no expectations on the number of clients.</li>
+<li><b>upturns:</b> Whether the estimated number of clients is above the upper number of expected clients, indicating a possible censorship-related event. If this column contains the empty string, there are no expectations on the number of clients.</li>
+<li><b>lower:</b> Lower number of expected clients under the assumption that there has been no censorship event. If this column contains the empty string, there are no expectations on the number of clients.</li>
+<li><b>upper:</b> Upper number of expected clients under the assumption that there has been no release of censorship. If this column contains the empty string, there are no expectations on the number of clients.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Remove the <b>downturns</b> and <b>upturns</b> columns which are trivial to compute as <b>users &lt; lower</b> and <b>users &gt; upper</b>, and which don't necessarily make the CSV file easier to handle. There could even be a gentle hint on computing the dots in the graph from two columns.</p>
+</div>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Add <b>frac</b> column ("Fraction of relays (as value between 0 and 1) that the estimate is based on.") which might be relevant for pro users. Related to the discussion on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
+</div>
+
+<h3>Bridge users by country
+<a href="/userstats-bridge-country.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/userstats-bridge-country.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/userstats-bridge-country">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>country:</b> Two-letter lower-case country code of clients to include in the file, or <b>"all"</b> for all clients.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) for which user numbers are estimated.</li>
+<li><b>country:</b> Two-letter lower-case country code as found in a GeoIP database by resolving clients' IP addresses, or <b>"??"</b> if client IP addresses could not be resolved. If this column contains the empty string, all clients are included, regardless of their country code.</li>
+<li><b>users:</b> Estimated number of clients.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Add <b>frac</b> column ("Fraction of bridges (as value between 0 and 1) that the estimate is based on.") which might be relevant for pro users. Related to the discussion on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
+</div>
+
+<h3>Bridge users by transport
+<a href="/userstats-bridge-transport.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/userstats-bridge-transport.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/userstats-bridge-transport">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>transport:</b> Lower-case transport name to include in the file. Possible values include <b>"obfs4"</b>, <b>"websocket"</b> for Flash proxy/websocket, <b>"fte"</b> for FTE, <b>"!%3COR%3E"</b> (percent encoding of <b>"!&lt;OR&gt;"</b>) for any pluggable transport, <b>"%3C??%3E</b> (percent encoding of <b>"&lt;??&gt;"</b>) for unknown pluggable transport(s), or <b>"%3COR%3E"</b> (percent encoding of <b>"&lt;OR&gt;"</b>) for the default OR protocol. Can be given multiple times.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) for which user numbers are estimated.</li>
+<li><b>$transport:</b> One or more columns with the estimated number of clients using transport with lower-case name <b>$transport</b> to connect to the Tor network using bridges. Examples for transport names are <b>"obfs4"</b>, <b>"websocket"</b> for Flash proxy/websocket, <b>"fte"</b> for FTE, <b>"any_pt"</b> for any pluggable transport, <b>"unknown_pluggable_transports"</b> for unknown pluggable transport(s), or <b>"default_or_protocol"</b> for the default OR protocol.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Replace <b>$transport</b> by a <b>transport</b> column for the transport name (written as non-percent-encoded !&lt;OR&gt;, &lt;??&gt;, and &lt;OR&gt; for consistency with the <b>transport</b> parameter) and a <b>users</b> column for the estimated number of clients, similar to the bridge users by country graph.</p>
+</div>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Add <b>frac</b> column ("Fraction of bridges (as value between 0 and 1) that the estimate is based on.") which might be relevant for pro users. Related to the discussion on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
+</div>
+
+<h3>Bridge users by country and transport
+<a href="/userstats-bridge-combined.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/userstats-bridge-combined.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/userstats-bridge-combined">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>country:</b> Two-letter lower-case country code of clients to include in the file, or <b>"all"</b> for all clients (which, however, produces the same file as the bridge users by country for <b>"all"</b> countries).</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) for which user numbers are estimated.</li>
+<li><b>country:</b> Two-letter lower-case country code as found in a GeoIP database by resolving clients' IP addresses, or <b>"??"</b> if client IP addresses could not be resolved.</li>
+<li><b>$transport_high:</b> Upper bound of estimated users from the given country and transport. Transport names are written in lower case, and the default OR protocol is written as <b>default_or_protocol</b>.</li>
+<li><b>$transport_low:</b> Lower bound of estimated users from the given country and transport. Transport names are written in lower case, and the default OR protocol is written as <b>default_or_protocol</b>.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Replace <b>$transport_high</b> and <b>$transport_low</b> by a <b>transport</b> column for the transport name (written as non-percent-encoded &lt;OR&gt; for consistency with the previous graph) and a <b>high</b> and a <b>low</b> column for the upper and lower bound.</p>
+</div>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Add <b>frac</b> column ("Fraction of bridges (as value between 0 and 1) that the estimate is based on.") which might be relevant for pro users. Related to the discussion on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
+</div>
+
+<h3>Bridge users by IP version
+<a href="/userstats-bridge-version.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/userstats-bridge-version.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/userstats-bridge-version">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>version:</b> IP version used by clients to connect to the Tor network
+using bridges, which can be either <b>"v4"</b> or <b>"v6"</b>.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) for which user numbers are estimated.</li>
+<li><b>version:</b> IP version used by clients to connect to the Tor network using bridges, which can be either <b>"v4"</b> or <b>"v6"</b>. If this column contains the empty string, all clients are included, regardless of their IP version.</li>
+<li><b>users:</b> Estimated number of clients.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Add <b>frac</b> column ("Fraction of bridges (as value between 0 and 1) that the estimate is based on.") which might be relevant for pro users. Related to the discussion on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
+</div>
+
+</div>
+
+<div class="container">
+<h2><i class="fa fa-server fa-fw" aria-hidden="true"></i>
+Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
+
+<h3>Relays and bridges
+<a href="/networksize.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/networksize.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/networksize">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when relays or bridges have been listed as running.</li>
+<li><b>relays:</b> Average number of relays.</li>
+<li><b>bridges:</b> Average number of bridges.</li>
+</ul>
+
+<h3>Relays by relay flag
+<a href="/relayflags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/relayflags.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/relayflags">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>flag:</b> Relay flag to include in the file. Examples are <b>"Running"</b>, <b>"Exit"</b>, <b>"Fast"</b>, <b>"Guard"</b>, <b>"Stable"</b>, and <b>"HSDir"</b>. This parameter can be given multiple times with different parameter values to include more relay numbers in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
+<li><b>$flag:</b> Average number of relays with the given relay flag in lower case, which can be <b>"exit"</b>, <b>"fast"</b>, <b>"guard"</b>, <b>"hsdir"</b>, <b>"fast"</b>, <b>"running"</b>, and <b>"stable"</b>.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Replace <b>$flag</b> columns by a <b>flag</b> and a <b>relays</b> column, and include the relay flag name in their original capitalization, rather than lower-cased.</p>
+</div>
+
+<h3>Relays by tor version
+<a href="/versions.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/versions.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/versions">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
+<li><b>$version:</b> Average number of relays with the given first three dotted numbers of the Tor software version as reported by the relay. An example is <b>"0.3.4"</b>.
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Replace <b>$version</b> columns by a <b>version</b> and a <b>relays</b> column.</p>
+</div>
+
+<h3>Relays by platform
+<a href="/platforms.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/platforms.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/platforms">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
+<li><b>BSD:</b> Average number of relays on *BSD.</li>
+<li><b>Linux:</b> Average number of relays on Linux.</li>
+<li><b>Other:</b> Average number of relays on another platform than Linux, *BSD, Windows, or macOS.</li>
+<li><b>Windows:</b> Average number of relays on Windows.</li>
+<li><b>macOS:</b> Average number of relays on macOS.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Change platform-specific columns to be all lower-case as a good practice to only use lower-cased column names everywhere.</p>
+</div>
+
+<h3>Relays by IP version
+<a href="/relays-ipv6.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/relays-ipv6.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/relays-ipv6">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
+<li><b>announced:</b> Average number of relays that have announced an IPv6 address in their server descriptor.</li>
+<li><b>exiting:</b> Average number of relays that have announced an IPv6 exit policy other than <b>"reject 1-65535"</b> in their server descriptor.</li>
+<li><b>reachable:</b> Average number of relays with an IPv6 address that was confirmed as reachable by the directory authorities.</li>
+<li><b>total:</b> Average number of relays.</li>
+</ul>
+
+<h3>Bridges by IP version
+<a href="/bridges-ipv6.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/bridges-ipv6.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/bridges-ipv6">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when bridges have been listed as running.</li>
+<li><b>announced:</b> Average number of bridges that have announced an IPv6 address in their server descriptor.</li>
+<li><b>total:</b> Average number of bridges.</li>
+</ul>
+
+</div>
+
+<div class="container">
+<h2><i class="fa fa-road fa-fw" aria-hidden="true"></i>
+Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
+
+<h3>Total relay bandwidth
+<a href="/bandwidth.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/bandwidth.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/bandwidth">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
+<li><b>advbw:</b> Total advertised bandwidth in Gbit/s that relays are capable to provide.</li>
+<li><b>bwhist:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of all relays.</li>
+</ul>
+
+<h3>Advertised and consumed bandwidth by relay flag
+<a href="/bandwidth-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/bandwidth-flags.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/bandwidth-flags">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
+<li><b>guard_advbw:</b> Total advertised bandwidth in Gbit/s that relays with the <b>"Guard"</b> relay flag are capable to provide.</li>
+<li><b>guard_bwhist:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays with the <b>"Guard"</b> relay flag.</li>
+<li><b>exit_advbw:</b> Total advertised bandwidth in Gbit/s that relays with the <b>"Exit"</b> relay flag are capable to provide.</li>
+<li><b>exit_bwhist:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays with the <b>"Exit"</b> relay flag.</li>
+</ul>
+
+<h3>Advertised bandwidth by IP version
+<a href="/advbw-ipv6.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/advbw-ipv6.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/advbw-ipv6">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
+<li><b>exiting:</b> Total advertised bandwidth in Gbit/s of all relays that have announced an IPv6 exit policy other than <b>"reject 1-65535"</b> in their server descriptor.</li>
+<li><b>reachable_exit:</b> Total advertised bandwidth in Gbit/s of relays with the <b>"Exit"</b> relay flag and an IPv6 address that was confirmed as reachable by the directory authorities.</li>
+<li><b>reachable_guard:</b> Total advertised bandwidth in Gbit/s of relays with the <b>"Guard"</b> relay flag and an IPv6 address that was confirmed as reachable by the directory authorities.</li>
+<li><b>total:</b> Total advertised bandwidth in Gbit/s of all relays.</li>
+<li><b>total_exit:</b> Total advertised bandwidth in Gbit/s of relays with the <b>"Exit"</b> relay flag.</li>
+<li><b>total_guard:</b> Total advertised bandwidth in Gbit/s of relays with the <b>"Guard"</b> relay flag.</li>
+</ul>
+
+<h3>Advertised bandwidth distribution
+<a href="/advbwdist-perc.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/advbwdist-perc.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/advbwdist-perc">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>p:</b> Percentile to include in the file, with pre-defined possible values: 100, 99, 98, 97, 95, 91, 90, 80, 75, 70, 60, 50, 40, 30, 25, 20, 10, 9, 5, 3, 2, 1, 0. Can be given multiple times.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
+<li><b>all_$p:</b> Advertised bandwidth in Gbit/s of the p-th percentile of all relays.</li>
+<li><b>exits_$p:</b> Advertised bandwidth in Gbit/s of the p-th percentile of relays with the <b>"Exit"</b> relay flag.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Replace <b>all_p$</b> and <b>exits_$p</b> columns by three columns <b>p</b>, <b>all</b>, and <b>exit</b>.</p>
+</div>
+
+<h3>Advertised bandwidth of n-th fastest relays
+<a href="/advbwdist-relay.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/advbwdist-relay.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/advbwdist-relay">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>n:</b> Relay by advertised bandwidth to include in the file, with pre-defined possible values: 1, 2, 3, 5, 10, 20, 30, 50, 100, 200, 300, 500, 1000, 2000, 3000, 5000. Can be given multiple times.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
+<li><b>all_$n:</b> Advertised bandwidth in Gbit/s of n-th fastest relay.</li>
+<li><b>exits_$n:</b> Advertised bandwidth in Gbit/s of n-th fastest relay with the <b>"Exit"</b> relay flag.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Replace <b>all_n$</b> and <b>exits_$n</b> columns by three columns <b>n</b>, <b>all</b>, and <b>exit</b>.</p>
+</div>
+
+<h3>Consumed bandwidth by Exit/Guard flag combination
+<a href="/bwhist-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/bwhist-flags.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/bwhist-flags">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
+<li><b>exit_only:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays without <b>"Guard"</b> and with <b>"Exit"</b> relay flag.</li>
+<li><b>guard_and_exit:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays with both <b>"Guard"</b> and <b>"Exit"</b> relay flag.</li>
+<li><b>guard_only:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays with <b>"Guard"</b> and without <b>"Exit"</b> relay flag.</li>
+<li><b>middle_only:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays with neither <b>"Guard"</b> nor <b>"Exit"</b> relay flag.</li>
+</ul>
+
+<h3>Bandwidth spent on answering directory requests
+<a href="/dirbytes.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/dirbytes.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/dirbytes">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
+<li><b>dirread:</b> Bandwidth in Gbit/s that directory mirrors have read when serving directory data.</li>
+<li><b>dirwrite:</b> Bandwidth in Gbit/s that directory mirrors have written when serving directory data.</li>
+</ul>
+
+<h3>Fraction of connections used uni-/bidirectionally
+<a href="/connbidirect.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/connbidirect.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/connbidirect">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) for which statistics on uni-/bidirectional connection usage were reported.</li>
+<li><b>both_md:</b> Median of fraction of connections classified as both reading and writing.</li>
+<li><b>both_q1:</b> First quartile of fraction of connections classified as both reading and writing.</li>
+<li><b>both_q3:</b> Third quartile of fraction of connections classified as both reading and writing.</li>
+<li><b>read_md:</b> Median of fraction of connections classified as mostly reading.</li>
+<li><b>read_q1:</b> First quartile of fraction of connections classified as mostly reading.</li>
+<li><b>read_q3:</b> Third quartile of fraction of connections classified as mostly reading.</li>
+<li><b>write_md:</b> Median of fraction of connections classified as mostly writing.</li>
+<li><b>write_q1:</b> First quartile of fraction of connections classified as mostly writing.</li>
+<li><b>write_q3:</b> Third quartile of fraction of connections classified as mostly writing.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Replace columns except <b>date</b> by four columns <b>direction</b>, <b>q1</b>, <b>md</b>, and <b>q3</b>.</p>
+</div>
+
+</div>
+
+<div class="container">
+<h2><i class="fa fa-dashboard fa-fw" aria-hidden="true"></i>
+Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
+
+<h3>Time to download files over Tor
+<a href="/torperf.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/torperf.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/torperf">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements, or <b>"all"</b> for measurements performed by any service.</li>
+<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to a version 2 onion server.</li>
+<li><b>filesize:</b> Size of the downloaded file in bytes, with pre-defined possible values: <b>"50kb"</b>, <b>"1mb"</b>, or <b>"5mb"</b>.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
+<li><b>filesize:</b> Size of the downloaded file in bytes.</li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements. If this column contains the empty string, all measurements are included, regardless of which service performed them.</li>
+<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
+<li><b>q1:</b> First quartile of time in milliseconds until receiving the last byte.</li>
+<li><b>md:</b> Median of time in milliseconds until receiving the last byte.</li>
+<li><b>q3:</b> Third quartile of time in milliseconds until receiving the last byte.</li>
+</ul>
+
+<h3>Timeouts and failures of downloading files over Tor
+<a href="/torperf-failures.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/torperf-failures.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/torperf-failures">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements, or <b>"all"</b> for measurements performed by any service.</li>
+<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to a version 2 onion server.</li>
+<li><b>filesize:</b> Size of the downloaded file in bytes, with pre-defined possible values: <b>"50kb"</b>, <b>"1mb"</b>, or <b>"5mb"</b>.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
+<li><b>filesize:</b> Size of the downloaded file in bytes.</li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements. If this column contains the empty string, all measurements are included, regardless of which service performed them.</li>
+<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
+<li><b>timeouts:</b> Fraction of requests that timed out when attempting to download the static file over Tor.</li>
+<li><b>failures:</b> Fraction of requests that failed when attempting to download the static file over Tor.</li>
+</ul>
+
+<h3>Circuit build times
+<a href="/onionperf-buildtimes.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/onionperf-buildtimes.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/onionperf-buildtimes">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements, or <b>"all"</b> for measurements performed by any service.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements. If this column contains the empty string, all measurements are included, regardless of which service performed them.</li>
+<li><b>position:</b> Position in the circuit, from first to third hop.</li>
+<li><b>q1:</b> First quartile of time in milliseconds until successfully extending the circuit to the given position.</li>
+<li><b>md:</b> Median of time in milliseconds until successfully extending the circuit to the given position.</li>
+<li><b>q3:</b> Third quartile of time in milliseconds until successfully extending the circuit to the given position.</li>
+</ul>
+
+<h3>Circuit round-trip latencies
+<a href="/onionperf-latencies.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/onionperf-latencies.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/onionperf-latencies">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements, or <b>"all"</b> for measurements performed by any service.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements. If this column contains the empty string, all measurements are included, regardless of which service performed them.</li>
+<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
+<li><b>q1:</b> First quartile of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
+<li><b>md:</b> Median of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
+<li><b>q3:</b> Third quartile of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
+</ul>
+
+</div>
+
+<div class="container">
+<h2><i class="fa fa-map-signs fa-fw" aria-hidden="true"></i>
+Onion Services <a href="#onion-services" name="servers" class="anchor">#</a></h2>
+
+<h3>Unique .onion addresses (version 2 only)
+<a href="/hidserv-dir-onions-seen.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/hidserv-dir-onions-seen.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/hidserv-dir-onions-seen">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
+<li><b>onions:</b> Estimated number of unique .onion addresses observed by onion-service directories.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Add <b>frac</b> column as suggested on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
+</div>
+
+<h3>Onion-service traffic (versions 2 and 3)
+<a href="/hidserv-rend-relayed-cells.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/hidserv-rend-relayed-cells.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/hidserv-rend-relayed-cells">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
+<li><b>relayed:</b> Estimated bandwidth in Gbit/s relayed on rendezvous circuits as observed by rendezvous points.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Add <b>frac</b> column as suggested on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
+</div>
+
+<h3>Fraction of relays reporting onion-service statistics
+<a href="/hidserv-frac-reporting.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/hidserv-frac-reporting.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/hidserv-frac-reporting">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
+<li><b>onions:</b> Total network fraction of statistics reported by onion-service directories.</li>
+<li><b>relayed:</b> Total network fraction of statistics reported by rendezvous points.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Remove section and data as suggested on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
+</div>
+
+</div>
+
+<div class="container">
+<h2><i class="fa fa-download fa-fw" aria-hidden="true"></i>
+Applications <a href="#applications" name="applications" class="anchor">#</a></h2>
+
+<h3>Tor Browser downloads and updates
+<a href="/webstats-tb.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/webstats-tb.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/webstats-tb">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when requests to <code>torproject.org</code> web servers have been logged.</li>
+<li><b>initial_downloads:</b> Number of Tor Browser initial downloads: GET requests to all sites with resource strings <code>'%/torbrowser/%.exe'</code>, <code>'%/torbrowser/%.dmg'</code>, and <code>'%/torbrowser/%.tar.xz'</code> and response code 200.</li>
+<li><b>signature_downloads:</b> Number of Tor Browser signature downloads: GET requests to all sites with resource strings <code>'%/torbrowser/%.exe.asc'</code>, <code>'%/torbrowser/%.dmg.asc'</code>, and <code>'%/torbrowser/%.tar.xz.asc'</code> and response code 200.</li>
+<li><b>update_pings:</b> Number of Tor Browser update pings: GET requests to all sites with resource strings <code>'%/torbrowser/update\__/%'</code> and response code 200.</li>
+<li><b>update_requests:</b> Number of Tor Browser update requests: GET requests to all sites with resource strings <code>'%/torbrowser/%.mar'</code> and response code 302.</li>
+</ul>
+
+<h3>Tor Browser downloads by platform
+<a href="/webstats-tb-platform.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/webstats-tb-platform.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/webstats-tb-platform">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when requests to <code>torproject.org</code> web servers have been logged.</li>
+<li><b>linux:</b> Number of Tor Browser initial downloads for Linux.</li>
+<li><b>macos:</b> Number of Tor Browser initial downloads for macOS.</li>
+<li><b>windows:</b> Number of Tor Browser initial downloads for Windows.</li>
+</ul>
+
+<h3>Tor Browser downloads by locale
+<a href="/webstats-tb-locale.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/webstats-tb-locale.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/webstats-tb-locale">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+</ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when requests to <code>torproject.org</code> web servers have been logged.</li>
+<li><b>$locale:</b> Number of Tor Browser initial downloads for the given locale; limited to the top-5 locales in the requested time period.</li>
+</ul>
+
+<div class="bs-callout bs-callout-warning">
+<h3>Suggested change</h3>
+<p>Replace all locale-specific columns by two columns <b>locale</b> and <b>count</b> to avoid dynamically changing columns. Maybe also take out the limitation to top-5 locales in the file (not the graph), similar to how the "Bridge users by country and transport" file contains all transports, not just the top-3 ones.</p>
+</div>
+
+<h3>Tor Messenger downloads and updates
+<a href="/webstats-tm.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/webstats-tm.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="/webstats-tm">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>log_date:</b> UTC date (YYYY-MM-DD) when requests to <code>torproject.org</code> web servers have been logged.</li>
+<li><b>initial_downloads:</b> Number of Tor Messenger initial downloads: GET requests to all sites with resource strings <code>'%/tormessenger/%.exe'</code>, <code>'%/tormessenger/%.dmg'</code>, and <code>'%/tormessenger/%.tar.xz'</code> and response code 200.</li>
+<li><b>update_pings:</b> Number of Tor Messenger update pings: GET requests to all sites with resource strings <code>'%/tormessenger/update\__/%'</code> and response code 200.</li>
+</ul>
+
+</div>
+
+<div class="container">
+<h2>Pre-aggregated statistics files used on this website (deprecated) <a href="#stats" name="stats" class="anchor">#</a></h2>
+
+<p>The remaining part of this page contains specifications and links to pre-aggregated statistics files.
+These files will no longer be publicly available after September 15, 2018.
+All relevant contained data will still be available via the statistics files specified above.</p>
+
+<div class="container">
+<h3>Number of relays and bridges (deprecated) <a href="#servers" name="servers" class="anchor">#</a></h3>
+
+<div class="bs-callout bs-callout-danger">
+<h3>Deprecation notice</h3>
+<p>The following file will no longer be publicly available after September 15, 2018.</p>
+</div>
 
 <p>The following data file contains the number of running <a
 href="glossary.html#relay">relays</a> and <a href="glossary.html#bridge">bridges</a>
@@ -85,7 +909,12 @@ only, this column contains the empty string.</li>
 </div>
 
 <div class="container">
-<h2>Bandwidth provided and consumed by relays <a href="#bandwidth" name="bandwidth" class="anchor">#</a></h2>
+<h3>Bandwidth provided and consumed by relays (deprecated) <a href="#bandwidth-deprecated" name="bandwidth-deprecated" class="anchor">#</a></h3>
+
+<div class="bs-callout bs-callout-danger">
+<h3>Deprecation notice</h3>
+<p>The following file will no longer be publicly available after September 15, 2018.</p>
+</div>
 
 <p>The following data file contains statistics on <a
 href="glossary.html#advertised-bandwidth">advertised</a> and <a
@@ -139,7 +968,12 @@ directory mirrors when serving directory data.</li>
 </div>
 
 <div class="container">
-<h2>Relays and bridges supporting IPv6 <a href="#ipv6servers" name="ipv6servers" class="anchor">#</a></h2>
+<h3>Relays and bridges supporting IPv6 (deprecated) <a href="#ipv6servers-deprecated" name="ipv6servers-deprecated" class="anchor">#</a></h3>
+
+<div class="bs-callout bs-callout-danger">
+<h3>Deprecation notice</h3>
+<p>The following file will no longer be publicly available after September 15, 2018.</p>
+</div>
 
 <p>The following data file contains statistics on <a href="glossary.html#relay">relays</a> and <a href="glossary.html#bridge">bridges</a> supporting IPv6.
 A relay can support IPv6 by announcing an IPv6 address and port for the OR protocol, which may then be confirmed as reachable by the <a href="glossary.html#directory-authority">directory authorities</a>.
@@ -207,7 +1041,12 @@ Always the empty string for bridges.</li>
 </div>
 
 <div class="container">
-<h2>Advertised bandwidth distribution and n-th fastest relays <a href="#advbwdist" name="advbwdist" class="anchor">#</a></h2>
+<h3>Advertised bandwidth distribution and n-th fastest relays (deprecated) <a href="#advbwdist-deprecated" name="advbwdist-deprecated" class="anchor">#</a></h3>
+
+<div class="bs-callout bs-callout-danger">
+<h3>Deprecation notice</h3>
+<p>The following file will no longer be publicly available after September 15, 2018.</p>
+</div>
 
 <p>The following data file contains statistics on the distribution of <a
 href="glossary.html#advertised-bandwidth">advertised bandwidth</a> of relays in the
@@ -245,7 +1084,12 @@ relays.</li>
 </div>
 
 <div class="container">
-<h2>Estimated number of clients in the Tor network <a href="#clients" name="clients" class="anchor">#</a></h2>
+<h3>Estimated number of clients in the Tor network (deprecated) <a href="#clients-deprecated" name="clients-deprecated" class="anchor">#</a></h3>
+
+<div class="bs-callout bs-callout-danger">
+<h3>Deprecation notice</h3>
+<p>The following file will no longer be publicly available after September 15, 2018.</p>
+</div>
 
 <p>The following data file contains estimates on the number of <a
 href="glossary.html#client">clients</a> in the network.  These numbers are derived
@@ -309,7 +1153,12 @@ should be handled with more care.</li>
 </div>
 
 <div class="container">
-<h2>Estimated number of clients by country and transport <a href="#userstats-combined" name="userstats-combined" class="anchor">#</a></h2>
+<h3>Estimated number of clients by country and transport (deprecated) <a href="#userstats-combined-deprecated" name="userstats-combined-deprecated" class="anchor">#</a></h3>
+
+<div class="bs-callout bs-callout-danger">
+<h3>Deprecation notice</h3>
+<p>The following file will no longer be publicly available after September 15, 2018.</p>
+</div>
 
 <p>The following data file contains additional statistics on the number of <a
 href="glossary.html#client">clients</a> in the network.  This data file is related
@@ -373,7 +1222,12 @@ there are users by either of the two numbers.</li>
 </div>
 
 <div class="container">
-<h2>Performance of downloading static files over Tor <a href="#torperf-1.1" name="torperf-1.1" class="anchor">#</a></h2>
+<h3>Performance of downloading static files over Tor (deprecated) <a href="#torperf-1.1-deprecated" name="torperf-1.1-deprecated" class="anchor">#</a></h3>
+
+<div class="bs-callout bs-callout-danger">
+<h3>Deprecation notice</h3>
+<p>The following file will no longer be publicly available after September 15, 2018.</p>
+</div>
 
 <p>The following data file contains aggregate statistics on performance when
 downloading static files of different sizes over Tor.  These statistics are
@@ -426,7 +1280,12 @@ over Tor.</li>
 </div>
 
 <div class="container">
-<h2>Fraction of connections used uni-/bidirectionally <a href="#connbidirect2" name="connbidirect2" class="anchor">#</a></h2>
+<h3>Fraction of connections used uni-/bidirectionally (deprecated) <a href="#connbidirect2-deprecated" name="connbidirect2-deprecated" class="anchor">#</a></h3>
+
+<div class="bs-callout bs-callout-danger">
+<h3>Deprecation notice</h3>
+<p>The following file will no longer be publicly available after September 15, 2018.</p>
+</div>
 
 <p>The following data file contains statistics on the fraction of direct
 connections between a <a href="glossary.html#relay">relay</a> and other nodes in
@@ -468,7 +1327,12 @@ fractions for the three directions "read", "write", and "both" sum up to exactly
 </div>
 
 <div class="container">
-<h2>Onion-service statistics <a href="#hidserv" name="hidserv" class="anchor">#</a></h2>
+<h3>Onion-service statistics (deprecated) <a href="#hidserv-deprecated" name="hidserv-deprecated" class="anchor">#</a></h3>
+
+<div class="bs-callout bs-callout-danger">
+<h3>Deprecation notice</h3>
+<p>The following file will no longer be publicly available after September 15, 2018.</p>
+</div>
 
 <p>The following data file contains <a
 href="glossary.html#onion-service">onion-service</a> statistics gathered by a
@@ -512,7 +1376,12 @@ fraction.</li>
 </div>
 
 <div class="container">
-<h2>Requests to <code>torproject.org</code> web servers <a href="#webstats" name="webstats" class="anchor">#</a></h2>
+<h3>Requests to <code>torproject.org</code> web servers (deprecated) <a href="#webstats-deprecated" name="webstats-deprecated" class="anchor">#</a></h3>
+
+<div class="bs-callout bs-callout-danger">
+<h3>Deprecation notice</h3>
+<p>The following file will no longer be publicly available after September 15, 2018.</p>
+</div>
 
 <p>The following data file contains aggregate statistics on requests to <code>torproject.org</code> web servers.</p>
 
