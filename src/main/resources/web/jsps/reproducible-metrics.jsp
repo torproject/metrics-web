@@ -136,7 +136,7 @@ This approach also works with <var>r(R)</var> being the sum of requests from <em
 
 <p>Estimate the number of clients per country and day using the following formula:</p>
 
-<pre>r(N) = r(R) / frac / 10</pre>
+<pre>r(N) = floor(r(R) / frac / 10)</pre>
 
 <p>A client that is connected 24/7 makes about 15 requests per day, but not all clients are connected 24/7, so we picked the number 10 for the average client. We simply divide directory requests by 10 and consider the result as the number of users. Another way of looking at it, is that we assume that each request represents a client that stays online for one tenth of a day, so 2 hours and 24 minutes.</p>
 <p>Skip dates where <var>frac</var> is smaller than 10% and hence too low for a robust estimate, or where <var>frac</var> is greater than 100%, which would indicate an issue in the previous step.</p>
