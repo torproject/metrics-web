@@ -291,23 +291,23 @@ Extended the "version" parameter to bridges, added a
 "recommended_version" field to bridge details documents on November
 28, 2017.
 <a href="#versions_4_4" class="anchor">#</a></li>
-<li><a id="versions_5_0"></a><strong>5.0</strong>
+<li><a id="versions_5_0"></a><strong>5.0</strong>:
 Removed the $ from fingerprints in fields "effective_family", "alleged_family",
 and "indirect_family" on December 20, 2017.
 <a href="#versions_5_0" class="anchor">#</a></li>
-<li><a id="versions_5_1"></a><strong>5.1</strong>
+<li><a id="versions_5_1"></a><strong>5.1</strong>:
 Always added a relay's own fingerprint to its "effective_family" and made
 nickname fields "n" in summary documents and "nickname" in details documents
 required fields on March 14, 2018.
 <a href="#versions_5_1" class="anchor">#</a></li>
-<li><a id="versions_5_2"></a><strong>5.2</strong>
+<li><a id="versions_5_2"></a><strong>5.2</strong>:
 Added "version_status" field to details documents on April 6, 2018.
 <a href="#versions_5_2" class="anchor">#</a></li>
-<li><a id="versions_6_0"></a><strong>6.0</strong>
+<li><a id="versions_6_0"></a><strong>6.0</strong>:
 Included all exit addresses in "exit_addresses", regardless of whether they are
 used as onion-routing addresses or not on April 17, 2018.
 <a href="#versions_6_0" class="anchor">#</a></li>
-<li><a id="versions_6_1"></a><strong>6.1</strong>
+<li><a id="versions_6_1"></a><strong>6.1</strong>:
 Added a new "os" parameter to filter relays and bridges by operating
 system, extended the "as" and "country" parameters by a special
 country code and AS number to return relays that were not found in the
