@@ -935,6 +935,11 @@
   } ]
 }, {
   "start" : "2014-09-29",
+  "protocols" : [ "meek" ],
+  "short_description" : "Changed the bridge backing meek-amazon.",
+  "description" : "Changed the bridge backing meek-amazon."
+}, {
+  "start" : "2014-09-29",
   "places" : [ "cn" ],
   "short_description" : "China blocks Instagram in response to ongoing protests in Hong Kong",
   "description" : "China blocks Instagram in response to ongoing protests in Hong Kong. A research paper by Hobbs and Roberts shows evidence for an increase in circumvention, but the measurable effect on Tor is slight if anything.",
@@ -951,11 +956,6 @@
     "label" : "research paper",
     "target" : "http://www.margaretroberts.net/wp-content/uploads/2016/08/selfiecensorship.pdf"
   } ]
-}, {
-  "start" : "2014-09-29",
-  "protocols" : [ "meek" ],
-  "short_description" : "Changed the bridge backing meek-amazon.",
-  "description" : "Changed the bridge backing meek-amazon."
 }, {
   "start" : "2014-10-14",
   "protocols" : [ "meek" ],
@@ -2896,6 +2896,15 @@
     "target" : "https://www.reuters.com/article/us-sri-lanka-clashes-socialmedia/sri-lanka-lifts-ban-on-facebook-imposed-after-spasm-of-communal-violence-idUSKCN1GR31R"
   } ]
 }, {
+  "start" : "2018-03-12",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"March 8 2018 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"March 8 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 0FD75C42A32E82100361BD367CB13862806E6A13</code>, <code>geoip6-db-digest 5AFA101C4A6AD4289CEE4575943D6BA851606245</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=3418a3a7f0199c0573213dfa586315ff2329f667"
+  } ]
+}, {
   "start" : "2018-03-14",
   "protocols" : [ "snowflake" ],
   "short_description" : "Deployed an attempt to fix frequent crashes of the fallback snowflake proxies.",
@@ -3002,6 +3011,15 @@
     "target" : "https://bugs.torproject.org/25688#comment:1"
   } ]
 }, {
+  "start" : "2018-04-05",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"April 3 2018 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"April 3 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 8A53650327E8D30E971DC90F564BA9BD1A513F19</code>, <code>geoip6-db-digest 698852511F6BC27DFFC115805044C71FDCCF70AF</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=1fa396b0a49448103ad16cb411163e6f5d741cc0"
+  } ]
+}, {
   "start" : "2018-04-13",
   "protocols" : [ "snowflake" ],
   "short_description" : "Snowflake client registrations",
@@ -3099,6 +3117,15 @@
     "target" : "https://bugs.torproject.org/26111"
   } ]
 }, {
+  "start" : "2018-05-15",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"May 1 2018 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"May 1 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 765D2F123DDA7DAEA9C9263975E2B4BAFBD2B908</code>, <code>geoip6-db-digest 2AA568CC898BF9924FBACEA26946AA7ED10E7D87</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=033e4723f3651062779ff64a619ec526950857f5"
+  } ]
+}, {
   "start" : "2018-06-09",
   "protocols" : [ "meek" ],
   "short_description" : "Release of Tor Browser 7.5.5, removes meek-amazon option.",
@@ -3115,6 +3142,15 @@
   "links" : [ {
     "label" : "blog post",
     "target" : "https://blog.torproject.org/tor-browser-80a8-released"
+  } ]
+}, {
+  "start" : "2018-06-11",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"June 7 2018 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"June 7 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 93112125248AD2C11A2531B934FD4AC03999738D</code>, <code>geoip6-db-digest BFD2B453F2D9DC875B7B0C464A185E6C3202534F</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=ae540569ce25041db6e78119b2879a127906fbd5"
   } ]
 }, {
   "start" : "2018-06-20",
@@ -3174,10 +3210,52 @@
     "target" : "https://bugs.torproject.org/26661"
   } ]
 }, {
+  "start" : "2018-07-06",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"July 3 2018 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"July 3 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest CFFD7B0544879150A31F966E83DBB7DDDFA16F49</code>, <code>geoip6-db-digest B25710F60CB23F0C76F58AFB0A26A26ACB701BB2</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=9faa28b60e5012549a2ea207028db655257d3a74"
+  } ]
+}, {
+  "start" : "2018-07-06",
+  "protocols" : [ "bridge" ],
+  "short_description" : "The bridge authority Bifroest stops publishing bridge descriptors",
+  "description" : "The bridge authority Bifroest stops publishing bridge descriptors. Bridge stats are unavailable until 2018-07-13 and the introduction of a new bridge authority.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26711"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26771"
+  }, {
+    "label" : "mailing list post",
+    "target" : "https://lists.torproject.org/pipermail/metrics-team/2018-July/000863.html"
+  }, {
+    "label" : "number of bridges graph",
+    "target" : "https://metrics.torproject.org/networksize.html?start=2018-06-01&end=2018-09-01"
+  } ]
+}, {
+  "start" : "2018-07-13",
+  "protocols" : [ "bridge" ],
+  "short_description" : "The replacement bridge authority Serge begins publishing bridge descriptors.",
+  "description" : "The replacement bridge authority Serge begins publishing bridge descriptors.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26771"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26786"
+  }, {
+    "label" : "number of bridges graph",
+    "target" : "https://metrics.torproject.org/networksize.html?start=2018-06-01&end=2018-09-01"
+  } ]
+}, {
   "start" : "2018-07-14",
   "protocols" : [ "bridge" ],
   "short_description" : "Release of Tor 0.2.9.16, 0.3.2.11, 0.3.3.9, and 0.3.4.5-rc",
-  "description" : "Release of Tor 0.2.9.16, 0.3.2.11, 0.3.3.9, and 0.3.4.5-rc. Switches bridge authority from Bifroest to <a href=\"https://metrics.torproject.org/rs.html#details/BA44A889E64B93FAA2B114E02C2A279A8555C533\">Serge</a>.",
+  "description" : "Release of Tor 0.2.9.16, 0.3.2.11, 0.3.3.9, and 0.3.4.5-rc. Switches bridge authority from Bifroest to <a href=\"https://metrics.torproject.org/rs.html#details/BA44A889E64B93FAA2B114E02C2A279A8555C533\">Serge</a>. The number of bridges begins counting up from zero as bridges are upgraded. The estimated number of bridge users remained unavailable until 2018-07-21 because of the discontinuity.",
   "links" : [ {
     "label" : "announcement",
     "target" : "https://lists.torproject.org/pipermail/tor-relays/2018-July/015681.html"
@@ -3187,6 +3265,9 @@
   }, {
     "label" : "blog post",
     "target" : "https://blog.torproject.org/new-release-tor-0339-bridge-authority-update"
+  }, {
+    "label" : "number of bridges graph",
+    "target" : "https://metrics.torproject.org/networksize.html?start=2018-06-01&end=2018-09-01"
   } ]
 }, {
   "start" : "2018-07-15",
@@ -3196,6 +3277,18 @@
   "links" : [ {
     "label" : "comment",
     "target" : "https://bugs.torproject.org/26783#comment:1"
+  } ]
+}, {
+  "start" : "2018-07-21",
+  "protocols" : [ "bridge" ],
+  "short_description" : "The estimated number of bridge users becomes available again, following the introduction of the new bridge authority Serge on 2018-07-13",
+  "description" : "The estimated number of bridge users becomes available again, following the introduction of the new bridge authority Serge on 2018-07-13. The stats took about a week to reappear because of the discontinuity in bridge reporting affecting the estimated fraction of reporting bridges.",
+  "links" : [ {
+    "label" : "mailing list post",
+    "target" : "https://lists.torproject.org/pipermail/metrics-team/2018-July/000866.html"
+  }, {
+    "label" : "graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-06-01&end=2018-09-01&country=all"
   } ]
 }, {
   "start" : "2016-02-24",
