@@ -316,6 +316,19 @@ documents in favor of the new "verified_host_names" and
 "unverified_host_names" fields for more accurate DNS results on July
 16, 2018.
 <a href="#versions_6_1" class="anchor">#</a></li>
+<li><a id="versions_6_2"></a><strong>6.2</strong>:
+Added an "as" field to details document, deprecated the "as_number" field, added
+an "as_name" parameter to search for relays by AS name, and added support for
+comma-separated lists in the "as" and the "lookup" parameters on August 3, 2018.
+<a href="#versions_6_2" class="anchor">#</a></li>
+<li><a id="versions_7_0"></a><strong>7.0</strong>:
+(scheduled, but not deployed yet!): Extend the "version" parameter to support
+lists and ranges, remove redundant "1_week" and "1_month" graphs from clients
+documents, change "3_months" graphs to "6_months" graphs in all documents
+containing history objects, remove the "fingerprint" parameter, and remove the
+previously deprecated "as_number" field from details documents, to be deployed
+after September 3, 2018.
+<a href="#versions_7_0" class="anchor">#</a></li>
 </ul>
 
 
@@ -472,7 +485,7 @@ Lookups are case-insensitive.
 
 <li>
 <a id="parameters_fingerprint"></a>
-<b>fingerprint</b>
+<b>fingerprint <span class="label label-warning">deprecated</span></b>
 <a href="#parameters_fingerprint" class="anchor">#</a>
 <p>
 Return only the relay with the parameter value matching the fingerprint
@@ -484,6 +497,7 @@ with two exceptions:
 not</i> be hashed (again) using SHA-1;
 (2) the response will contain any matching relay or bridge regardless of
 whether they have been running in the past week.
+<span class="red">Scheduled to be removed after September 3, 2018.</span>
 </p>
 </li>
 
@@ -507,12 +521,32 @@ the GeoIP database.
 <b>as <span class="label label-primary">updated</span></b>
 <a href="#parameters_as" class="anchor">#</a>
 <p>
-Return only relays which are located in the given autonomous system (AS) as
-identified by the AS number (with or without preceding "AS" part).  Filtering
-by AS number is case-insensitive. The special AS number <tt>0</tt> can be used
-for relays that were not found in the GeoIP database.
+Return only relays which are located in either one of the given autonomous
+systems (AS) as identified by AS number (with or without preceding "AS" part).
+Multiple AS numbers can be provided separated by commas.
+Filtering by AS number is case-insensitive.
+The special AS number <tt>0</tt> can be used for relays that were not found in
+the GeoIP database.
 <span class="blue">Updated to recognize special AS number <tt>0</tt>
-on July 16, 2018.</span>
+on July 16, 2018 and to support comma-separated lists of AS numbers on August 3,
+2018.</span>
+</p>
+</li>
+
+<li>
+<a id="parameters_as_name"></a>
+<b>as_name <span class="label label-primary">new</span></b>
+<a href="#parameters_as_name" class="anchor">#</a>
+<p>
+Return only relays with the parameter value matching (part of) the autonomous
+system (AS) name they are located in.
+If the parameter value contains spaces, only relays are returned which
+contain all space-separated parts in their AS name.
+Only printable ASCII characters are permitted in the parameter value,
+some of which need to be percent-encoded (# as %23, % as %25, &#38; as
+%26, + as %2B, and / as %2F).
+Comparisons are case-insensitive.
+<span class="blue">Added on August 3, 2018.</span>
 </p>
 </li>
 
@@ -596,12 +630,22 @@ a family.
 
 <li>
 <a id="parameters_version"></a>
-<b>version</b>
+<b>version <span class="label label-primary">updated</span></b>
 <a href="#parameters_version" class="anchor">#</a>
 <p>
 Return only relays or bridges running a Tor version that starts with the
 parameter value <i>without</i> leading <code>"Tor"</code>.
 Searches are case-insensitive.
+<span class="blue">Scheduled to support lists and ranges after September 3,
+2018:
+Return only relays or bridges running either Tor version from a list or range
+given in the parameter value.
+Tor versions must be provided <i>without</i> the leading <code>"Tor"</code>
+part.
+Multiple versions can either be provided as a comma-separated list (","), as a
+range separated by two dots (".."), or as a list of ranges.
+Provided versions are parsed and matched by parsed dotted numbers, rather than
+by string prefix.</span>
 </p>
 </li>
 
@@ -1271,8 +1315,8 @@ database.
 </li>
 
 <li>
-<a id="details_relay_as_number"></a>
-<b>as_number</b>
+<a id="details_relay_as"></a>
+<b>as <span class="label label-primary">new</span></b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_as_number" class="anchor">#</a>
@@ -1282,6 +1326,23 @@ resolving the relay's first onion-routing IP address.
 AS number strings start with "AS", followed directly by the AS number.
 Omitted if the relay IP address could not be found in the AS
 database.
+<span class="blue">Added on August 3, 2018.</span>
+</p>
+</li>
+
+<li>
+<a id="details_relay_as_number"></a>
+<b>as_number</b> <span class="label label-warning">deprecated</span>
+<code class="typeof">string</code>
+<span class="required-false">optional</span>
+<a href="#details_relay_as_number" class="anchor">#</a>
+<p>
+AS number as found in an AS database by
+resolving the relay's first onion-routing IP address.
+AS number strings start with "AS", followed directly by the AS number.
+Omitted if the relay IP address could not be found in the AS
+database.
+<span class="red">Scheduled to be removed after September 3, 2018.</span>
 </p>
 </li>
 
@@ -2088,7 +2149,7 @@ hexadecimal characters.
 
 <li>
 <a id="bandwidth_relay_write_history"></a>
-<b>write_history</b>
+<b>write_history <span class="label label-primary">updated</span></b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
 <a href="#bandwidth_relay_write_history" class="anchor">#</a>
@@ -2112,6 +2173,8 @@ The unit is bytes per second.
 Contained graph history objects may contain null values if the relay did
 not provide any bandwidth data or only data for less than 20% of a given
 time period.
+<span class="blue">Scheduled to no longer contain a "3_months" graph and instead
+a "6_months" graph after September 3, 2018.</span>
 </p>
 </li>
 
@@ -2222,7 +2285,7 @@ hexadecimal characters.
 
 <li>
 <a id="weights_relay_consensus_weight_fraction"></a>
-<b>consensus_weight_fraction</b>
+<b>consensus_weight_fraction <span class="label label-primary">updated</span></b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
 <a href="#weights_relay_consensus_weight_fraction" class="anchor">#</a>
@@ -2245,6 +2308,8 @@ period and higher data resolution.
 The unit is path-selection probability.
 Contained graph history objects may contain null values if the relay was
 running less than 20% of a given time period.
+<span class="blue">Scheduled to no longer contain a "3_months" graph and instead
+a "6_months" graph after September 3, 2018.</span>
 </p>
 </li>
 
@@ -2357,7 +2422,7 @@ of 40 upper-case hexadecimal characters.
 
 <li>
 <a id="clients_bridge_average_clients"></a>
-<b>average_clients</b>
+<b>average_clients <span class="label label-primary">updated</span></b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
 <a href="#clients_bridge_average_clients" class="anchor">#</a>
@@ -2377,6 +2442,8 @@ time period and higher data resolution.
 The unit is number of clients.
 Contained graph history objects may contain null values if the bridge did
 not report client statistics for at least 50% of a given time period.
+<span class="blue">Scheduled to no longer contain "1_week", "1_month", and
+"3_months" graphs and instead a "6_months" graph after September 3, 2018.</span>
 </p>
 </li>
 
@@ -2420,7 +2487,7 @@ hexadecimal characters.
 
 <li>
 <a id="uptime_relay_uptime"></a>
-<b>uptime</b>
+<b>uptime <span class="label label-primary">updated</span></b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
 <a href="#uptime_relay_uptime" class="anchor">#</a>
@@ -2440,6 +2507,8 @@ period and higher data resolution.
 The unit is fractional uptime from 0 to 1.
 Contained graph history objects may contain null values if less than 20%
 of network statuses have been processed for a given time period.
+<span class="blue">Scheduled to no longer contain a "3_months" graph and instead
+a "6_months" graph after September 3, 2018.</span>
 </p>
 </li>
 
