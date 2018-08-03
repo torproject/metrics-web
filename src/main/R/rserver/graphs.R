@@ -1489,7 +1489,8 @@ plot_webstats_tm <- function(start_p, end_p, path_p) {
 write_webstats_tm <- function(start_p = NULL, end_p = NULL, path_p) {
   prepare_webstats_tm(start_p, end_p) %>%
     rename(date = log_date) %>%
-    spread(request_type, count) %>%
+    mutate(request_type = factor(request_type, levels = c("tmid", "tmup"))) %>%
+    spread(request_type, count, drop = FALSE) %>%
     rename(initial_downloads = tmid, update_pings = tmup) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
