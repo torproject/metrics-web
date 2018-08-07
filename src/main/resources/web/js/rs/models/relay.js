@@ -239,7 +239,7 @@ define([
 
                     /* Synthetic Additional Flags */
                     var additional_flags = []
-                    if (!((typeof relay.recommended_version !== 'undefined') ? relay.recommended_version : false) && relay.version_consistent) additional_flags.push("Not Recommended");
+                    if (!((typeof relay.recommended_version !== 'undefined') ? relay.recommended_version : true) && relay.version_consistent) additional_flags.push("Not Recommended");
                     if (!((typeof relay.measured !== 'undefined') ? relay.measured : true)) additional_flags.push("Unmeasured");
                     if (((typeof relay.hibernating !== 'undefined') ? relay.hibernating : false)) additional_flags.push("Hibernating");
                     if (IsFallbackDir(relay.fingerprint)) additional_flags.push("FallbackDir");
