@@ -121,7 +121,7 @@ define([
         return text;
       }
 
-      d3.json("/rs/json/countries.topo.json", function(error, us) {
+      d3.json("/json/countries.topo.json", function(error, us) {
       g.append("g")
         .attr("id", "countries")
         .style("fill","#fff")
