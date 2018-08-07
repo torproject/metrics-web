@@ -62,6 +62,12 @@ define([
                 if (flag == "Not Recommended") {
                     output.push([flag,"notrecommended", "This relay is running a Tor version that is not recommended by the directory authorities and may contain known issues. This includes both obsolete and experimental versions."]);
                 }
+                if (flag == "Outdated") {
+                    output.push([flag,"outdated", "This relay is running a Tor version that is considered obsolete. If this is your relay then you should upgrade at the earliest opportunity."]);
+                }
+                if (flag == "Experimental") {
+                    output.push([flag,"experimental", "This relay is running a Tor version that is considered experimental. Please report any bugs found. If this is not intentional, you may consider switching to the most recent release instead."]);
+                }
                 if (flag == "Unmeasured") {
                     output.push([flag,"unmeasured", "This relay has not been measured by at least 3 bandwidth authorities and so its consensus weight is currently capped. This is expected for new relays."]);
                 }
@@ -236,10 +242,17 @@ define([
                     relay.flags = model.parseflags(relay.flags, relay.is_bridge);
 
                     relay.version_consistent = relay.version == relay.platform.split(" ")[1];
+                    if (relay.version_consistent) {
+                        relay.version_status = relay.version_status ? relay.version_status : "recommended";
+                    } else {
+                        relay.version_status = "recommended";
+                    }
 
                     /* Synthetic Additional Flags */
                     var additional_flags = []
                     if (!((typeof relay.recommended_version !== 'undefined') ? relay.recommended_version : true) && relay.version_consistent) additional_flags.push("Not Recommended");
+                    if (relay.version_status === 'obsolete') additional_flags.push("Obsolete");
+                    if (relay.version_status === 'experimental') additional_flags.push("Experimental");
                     if (!((typeof relay.measured !== 'undefined') ? relay.measured : true)) additional_flags.push("Unmeasured");
                     if (((typeof relay.hibernating !== 'undefined') ? relay.hibernating : false)) additional_flags.push("Hibernating");
                     if (IsFallbackDir(relay.fingerprint)) additional_flags.push("FallbackDir");
