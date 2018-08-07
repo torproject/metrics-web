@@ -52,7 +52,6 @@ define([
           $(".tip").tooltip({'html':true});
         },
         "footerCallback": function( tfoot, data, start, end, display ) {
-          console.log(relays);
           var sumAdvertisedBandwidths = 0;
           for (var i = 0; i < relays.length; i++) {
             sumAdvertisedBandwidths += relays[i].get("advertised_bandwidth");
