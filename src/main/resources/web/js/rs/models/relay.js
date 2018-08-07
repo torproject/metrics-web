@@ -273,6 +273,8 @@ define([
                         relay.is_bridge = true;
                     }
                     if (relay) {
+                        relay.onionooVersion = data.version;
+                        relay.buildRevision = data.build_revision;
                         relay.bridgesPublished = data.bridges_published;
                         relay.relaysPublished = data.relays_published;
                         model.processRelay(options, model, relay);

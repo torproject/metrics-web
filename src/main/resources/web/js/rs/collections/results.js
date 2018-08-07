@@ -19,6 +19,8 @@ define([
                 this.fresh_until = response.fresh_until;
                 this.valid_after = response.valid_after;
                 var relays = [];
+                var onionooVersion = response.version;
+                var buildRevision = response.build_revision;
                 var relaysPublished = response.relays_published;
                 var bridgesPublished = response.bridges_published;
                 options.error = function(options) {
@@ -64,7 +66,8 @@ define([
                     $('.progress-bar').html("Rendering results...");
                     setTimeout(function() {
                       collection[options.add ? 'add' : 'reset'](relays, options);
-                      success(err, relaysPublished, bridgesPublished);
+                      success(err, onionooVersion, buildRevision,
+                              relaysPublished, bridgesPublished);
                     }, 500);
                   } else {
                     $('.progress-bar').width((lookedUpRelays / relays.length * 100) + "%");

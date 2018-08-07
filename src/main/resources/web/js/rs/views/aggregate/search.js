@@ -25,6 +25,8 @@ define([
                                      aType: this.collection.aType,
                                      countries: CountryCodes,
                                      error: this.error,
+                                     onionooVersion: this.onionooVersion,
+                                     buildRevision: this.buildRevision,
                                      relaysPublished: this.relaysPublished,
                                      bridgesPublished: this.bridgesPublished}));
 

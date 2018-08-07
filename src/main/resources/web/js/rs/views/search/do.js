@@ -24,6 +24,8 @@ define([
                                      relays: relays,
                                      countries: CountryCodes,
                                      error: this.error,
+                                     onionooVersion: this.onionooVersion,
+                                     buildRevision: this.buildRevision,
                                      relaysPublished: this.relaysPublished,
                                      bridgesPublished: this.bridgesPublished}));
 

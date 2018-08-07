@@ -246,6 +246,8 @@ define([
                                      aggregates: this.collection.models,
                                      countries: CountryCodes,
                                      error: this.error,
+                                     onionooVersion: this.onionooVersion,
+                                     buildRevision: this.buildRevision,
                                      relaysPublished: this.relaysPublished,
                                      bridgesPublished: this.bridgesPublished}));
 

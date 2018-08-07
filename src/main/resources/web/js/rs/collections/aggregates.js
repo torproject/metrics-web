@@ -20,6 +20,8 @@ define([
         this.fresh_until = response.fresh_until;
         this.valid_after = response.valid_after;
         var aggregates = {};
+        var onionooVersion = response.version;
+        var buildRevision = response.build_revision;
         var relaysPublished = response.relays_published;
         var bridgesPublished = response.bridges_published;
         options.error = function(options) {
@@ -122,7 +124,8 @@ define([
           aggregatesArr.push(aggregate);
         });
         collection[options.add ? 'add' : 'reset'](aggregatesArr, options);
-        success(err, relaysPublished, bridgesPublished);
+        success(err, onionooVersion, buildRevision, relaysPublished,
+                bridgesPublished);
       }).fail(function(jqXHR, textStatus, errorThrown) {
         if(jqXHR.statusText == "error") {
           error(2);

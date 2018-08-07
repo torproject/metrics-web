@@ -96,8 +96,11 @@ define([
           query = "";
         }
         aggregateSearchView.collection.lookup({
-          success: function(err, relaysPublished, bridgesPublished){
+          success: function(err, onionooVersion, buildRevision, relaysPublished,
+                            bridgesPublished){
           aggregateSearchView.error = err;
+          aggregateSearchView.onionooVersion = onionooVersion;
+          aggregateSearchView.buildRevision = buildRevision;
           aggregateSearchView.relaysPublished = relaysPublished;
           aggregateSearchView.bridgesPublished = bridgesPublished;
           aggregateSearchView.render(query);
@@ -137,8 +140,11 @@ define([
           query = "";
         }
         aggregateMapView.collection.lookup({
-          success: function(err, relaysPublished, bridgesPublished){
+          success: function(err, onionooVersion, buildRevision, relaysPublished,
+                            bridgesPublished){
           aggregateMapView.error = err;
+          aggregateMapView.onionooVersion = onionooVersion;
+          aggregateMapView.buildRevision = buildRevision;
           aggregateMapView.relaysPublished = relaysPublished;
           aggregateMapView.bridgesPublished = bridgesPublished;
           aggregateMapView.render(query);
@@ -176,7 +182,8 @@ define([
           doSearchView.collection.url =
               doSearchView.collection.baseurl + this.hashFingerprint(query);
           doSearchView.collection.lookup({
-              success: function(err, relaysPublished, bridgesPublished){
+              success: function(err, onionooVersion, buildRevision,
+                                relaysPublished, bridgesPublished){
                   doSearchView.relays = doSearchView.collection.models;
                   // Redirect to the details page when there is exactly one
                   // search result.
@@ -185,7 +192,9 @@ define([
                           doSearchView.relays[0].fingerprint);
                       return;
                   }
-		    doSearchView.error = err;
+		  doSearchView.error = err;
+                  doSearchView.onionooVersion = onionooVersion;
+                  doSearchView.buildRevision = buildRevision;
                   doSearchView.relaysPublished = relaysPublished;
                   doSearchView.bridgesPublished = bridgesPublished;
                   doSearchView.render(query);
