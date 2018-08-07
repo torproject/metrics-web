@@ -3291,6 +3291,31 @@
     "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-06-01&end=2018-09-01&country=all"
   } ]
 }, {
+  "start" : "2018-07-29",
+  "ongoing" : true,
+  "places" : [ "bd" ],
+  "short_description" : "Protests over road safety in Dhaka, Bangladesh",
+  "description" : "Protests over road safety in Dhaka, Bangladesh. Reports of mobile network throttling and blocking of Facebook.",
+  "links" : [ {
+    "label" : "New York Times article",
+    "target" : "https://www.nytimes.com/2018/08/05/world/asia/bangladesh-students-protests.html"
+  }, {
+    "label" : "Daily Star article on throttling",
+    "target" : "https://www.thedailystar.net/country/bangladesh-mobile-internet-speed-brought-down-across-for-24hrs-1615909"
+  } ]
+}, {
+  "start" : "2018-08-04",
+  "end" : "2018-08-05",
+  "short_description" : "Collector was missing consensuses",
+  "description" : "Collector was missing consensuses. They were recovered via recent relay consensus diffs.",
+  "links" : [ {
+    "label" : "metrics-team thread",
+    "target" : "https://lists.torproject.org/pipermail/metrics-team/2018-August/000869.html"
+  }, {
+    "label" : "tor-relays thread",
+    "target" : "https://lists.torproject.org/pipermail/tor-relays/2018-August/015850.html"
+  } ]
+}, {
   "start" : "2016-02-24",
   "places" : [ "tm" ],
   "protocols" : [ "<OR>" ],
