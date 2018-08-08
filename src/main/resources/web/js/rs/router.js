@@ -225,7 +225,12 @@ define([
 
         doSearchView.collection.url = "https://onionoo.torproject.org/details?type=relay&order=-consensus_weight&limit=250&running=true";
             doSearchView.collection.lookup({
-                success: function(err){
+                success: function(err, onionooVersion, buildRevision,
+                                  relaysPublished, bridgesPublished){
+                    doSearchView.onionooVersion = onionooVersion;
+                    doSearchView.buildRevision = buildRevision;
+                    doSearchView.relaysPublished = relaysPublished;
+                    doSearchView.bridgesPublished = bridgesPublished;
                     doSearchView.relays = doSearchView.collection.models;
                     doSearchView.error = err;
                     doSearchView.render("");
