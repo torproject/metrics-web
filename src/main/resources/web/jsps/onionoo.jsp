@@ -1406,7 +1406,10 @@ address changes.
 Omitted if the relay IP address was not looked up, if no lookup request
 was successful yet, or if no A records were found matching the PTR records
 (i.e. it was not possible to verify the value of any of the PTR records).
-<span class="blue">Added on July 16, 2018.</span>
+A DNSSEC validating resolver is used for these lookups. Failure to validate
+DNSSEC signatures will prevent those names from appearing in this field.
+<span class="blue">Added on July 16, 2018. Updated to clarify that
+a DNSSEC validating resolver is used on August 17, 2018.</span>
 </p>
 </li>
 
@@ -1424,7 +1427,10 @@ address changes.
 Omitted if the relay IP address was not looked up, if no lookup request
 was successful yet, or if A records were found matching all PTR records
 (i.e. it was possible to verify the value of each of the PTR records).
-<span class="blue">Added on July 16, 2018.</span>
+A DNSSEC validating resolver is used for these lookups. Failure to validate
+DNSSEC signatures will prevent those names from appearing in this field.
+<span class="blue">Added on July 16, 2018. Updated to clarify that
+a DNSSEC validating resolver is used on August 17, 2018.</span>
 </p>
 </li>
 
