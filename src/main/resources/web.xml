@@ -48,7 +48,6 @@
     <url-pattern>/connbidirect.html</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.html</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.html</url-pattern>
-    <url-pattern>/hidserv-frac-reporting.html</url-pattern>
     <url-pattern>/webstats-tb.html</url-pattern>
     <url-pattern>/webstats-tb-platform.html</url-pattern>
     <url-pattern>/webstats-tb-locale.html</url-pattern>
@@ -190,9 +189,6 @@
     <url-pattern>/hidserv-rend-relayed-cells.png</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.pdf</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.csv</url-pattern>
-    <url-pattern>/hidserv-frac-reporting.png</url-pattern>
-    <url-pattern>/hidserv-frac-reporting.pdf</url-pattern>
-    <url-pattern>/hidserv-frac-reporting.csv</url-pattern>
     <url-pattern>/webstats-tb.png</url-pattern>
     <url-pattern>/webstats-tb.pdf</url-pattern>
     <url-pattern>/webstats-tb.csv</url-pattern>

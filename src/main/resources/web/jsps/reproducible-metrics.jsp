@@ -671,7 +671,6 @@ For further background on the following steps, refer to the technical report tit
 <ul>
 <li>Unique .onion addresses (version 2 only) <a href="/hidserv-dir-onions-seen.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 <li>Onion-service traffic (versions 2 and 3) <a href="/hidserv-rend-relayed-cells.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
-<li>Fraction of relays reporting onion-service statistics <a href="/hidserv-frac-reporting.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 </ul>
 
 <h4>Step 1: Parse reported statistics from extra-info descriptors</h4>

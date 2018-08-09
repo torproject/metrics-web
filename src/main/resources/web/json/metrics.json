@@ -367,17 +367,6 @@
     ]
   },
   {
-    "id": "hidserv-frac-reporting",
-    "title": "Fraction of relays reporting onion-service statistics",
-    "type": "Graph",
-    "description": "<p>This graph shows the fraction of <a href=\"glossary.html#relay\">relays</a> that report statistics on <a href=\"glossary.html#onion-service\">onion service</a> usage.  If at least 1% of relays report a statistic, it gets extrapolated towards a network total, where higher fractions are produce more accurate results.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
-    "function": "hidserv_frac_reporting",
-    "parameters": [
-      "start",
-      "end"
-    ]
-  },
-  {
     "id": "uncharted-data-flow",
     "title": "&ldquo;TorFlow&rdquo;",
     "type": "Link",

@@ -74,8 +74,7 @@
     "description": "Onion services are services that are only accessible via the Tor network.",
     "metrics": [
       "hidserv-dir-onions-seen",
-      "hidserv-rend-relayed-cells",
-      "hidserv-frac-reporting"
+      "hidserv-rend-relayed-cells"
     ]
   },
   {

@@ -1287,40 +1287,6 @@ write_hidserv_rend_relayed_cells <- function(start_p = NULL, end_p = NULL,
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-prepare_hidserv_frac_reporting <- function(start_p, end_p) {
-  read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
-    filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
-    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    select(date, frac, type)
-}
-
-plot_hidserv_frac_reporting <- function(start_p, end_p, path_p) {
-  prepare_hidserv_frac_reporting(start_p, end_p) %>%
-    ggplot(aes(x = date, y = frac, colour = type)) +
-    geom_line() +
-    geom_hline(yintercept = 0.01, linetype = 2) +
-    scale_x_date(name = "", breaks = custom_breaks,
-      labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = percent, limits = c(0, NA)) +
-    scale_colour_hue(name = "",
-                     breaks = c("rend-relayed-cells", "dir-onions-seen"),
-                     labels = c("Onion-service traffic",
-                                "Unique .onion addresses")) +
-    ggtitle(paste("Fraction of relays reporting onion-service",
-                       "statistics")) +
-    labs(caption = copyright_notice) +
-    theme(legend.position = "top")
-  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
-}
-
-write_hidserv_frac_reporting <- function(start_p = NULL, end_p = NULL, path_p) {
-  prepare_hidserv_frac_reporting(start_p, end_p) %>%
-    mutate(type = ifelse(type == "dir-onions-seen", "onions", "relayed")) %>%
-    spread(type, frac) %>%
-    write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
-}
-
 prepare_webstats_tb <- function(start_p, end_p) {
   load(paste(rdata_dir, "webstats-tb.RData", sep = ""))
   data %>%

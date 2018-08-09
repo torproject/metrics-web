@@ -633,31 +633,6 @@ Onion Services <a href="#onion-services" name="servers" class="anchor">#</a></h2
 <li><b>frac:</b> Total network fraction of statistics reported by rendezvous points.</li>
 </ul>
 
-<h3>Fraction of relays reporting onion-service statistics
-<a href="/hidserv-frac-reporting.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
-<a href="/hidserv-frac-reporting.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/hidserv-frac-reporting">#</a></h3>
-
-<h4>Parameters</h4>
-
-<ul>
-<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-</ul>
-
-<h4>Columns</h4>
-
-<ul>
-<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
-<li><b>onions:</b> Total network fraction of statistics reported by onion-service directories.</li>
-<li><b>relayed:</b> Total network fraction of statistics reported by rendezvous points.</li>
-</ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Remove section and data as suggested on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
-</div>
-
 </div>
 
 <div class="container">
