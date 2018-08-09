@@ -423,7 +423,6 @@ plot_versions <- function(start_p, end_p, path_p) {
 
 write_versions <- function(start_p = NULL, end_p = NULL, path_p) {
   prepare_versions(start_p, end_p) %>%
-    spread(key = "version", value = "relays", fill = 0) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
@@ -459,6 +458,7 @@ plot_platforms <- function(start_p, end_p, path_p) {
 
 write_platforms <- function(start_p = NULL, end_p = NULL, path_p) {
   prepare_platforms(start_p, end_p) %>%
+    mutate(platform = tolower(platform)) %>%
     spread(platform, relays) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
@@ -607,8 +607,6 @@ plot_relayflags <- function(start_p, end_p, flag_p, path_p) {
 write_relayflags <- function(start_p = NULL, end_p = NULL, flag_p = NULL,
     path_p) {
   prepare_relayflags(start_p, end_p, flag_p) %>%
-    mutate(flag = tolower(flag)) %>%
-    spread(flag, relays) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
@@ -832,9 +830,6 @@ plot_connbidirect <- function(start_p, end_p, path_p) {
 write_connbidirect <- function(start_p = NULL, end_p = NULL, path_p) {
   prepare_connbidirect(start_p, end_p) %>%
     rename(q1 = X0.25, md = X0.5, q3 = X0.75) %>%
-    gather(variable, value, -(date:direction)) %>%
-    unite(temp, direction, variable) %>%
-    spread(temp, value) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
@@ -900,7 +895,8 @@ plot_userstats <- function(start_p, end_p, node_p, variable_p, value_p,
     events_p, path_p) {
   load(paste(rdata_dir, "clients-", node_p, ".RData", sep = ""))
   c <- data
-  u <- c[c$date >= start_p & c$date <= end_p, ]
+  u <- c[c$date >= start_p & c$date <= end_p, c("date", "country", "transport",
+      "version", "lower", "upper", "clients")]
   u <- rbind(u, data.frame(date = start_p,
       country = ifelse(variable_p == "country" & value_p != "all", value_p, ""),
       transport = ifelse(variable_p == "transport", value_p, ""),
@@ -1053,8 +1049,7 @@ write_userstats_relay_country <- function(start_p = NULL, end_p = NULL,
       country == ifelse(country_p == "all", "", country_p) else TRUE) %>%
     filter(transport == "") %>%
     filter(version == "") %>%
-    mutate(downturns = clients < lower, upturns = clients > upper) %>%
-    select(date, country, clients, downturns, upturns, lower, upper) %>%
+    select(date, country, clients, lower, upper, frac) %>%
     rename(users = clients) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
@@ -1069,7 +1064,7 @@ write_userstats_bridge_country <- function(start_p = NULL, end_p = NULL,
       country == ifelse(country_p == "all", "", country_p) else TRUE) %>%
     filter(transport == "") %>%
     filter(version == "") %>%
-    select(date, country, clients) %>%
+    select(date, country, clients, frac) %>%
     rename(users = clients) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
@@ -1083,24 +1078,21 @@ write_userstats_bridge_transport <- function(start_p = NULL, end_p = NULL,
     filter(country == "") %>%
     filter(version == "") %>%
     filter(transport != "") %>%
-    select(date, transport, clients)
+    select(date, transport, clients, frac)
   if (is.null(transport_p) || "!<OR>" %in% transport_p) {
     n <- u %>%
       filter(transport != "<OR>") %>%
-      group_by(date) %>%
+      group_by(date, frac) %>%
       summarize(clients = sum(clients))
     u <- rbind(u, data.frame(date = n$date, transport = "!<OR>",
-                             clients = n$clients))
+                             clients = n$clients, frac = n$frac))
   }
   u %>%
     filter(if (!is.null(transport_p)) transport %in% transport_p else TRUE) %>%
-    mutate(transport = ifelse(transport == "<OR>", "default_or_protocol",
-      ifelse(transport == "!<OR>", "any_pt",
-      ifelse(transport == "<??>", "unknown_pluggable_transports",
-      transport)))) %>%
     group_by(date, transport) %>%
-    select(date, transport, clients) %>%
-    spread(transport, clients) %>%
+    select(date, transport, clients, frac) %>%
+    rename(users = clients) %>%
+    arrange(date, transport) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
@@ -1113,7 +1105,7 @@ write_userstats_bridge_version <- function(start_p = NULL, end_p = NULL,
     filter(country == "") %>%
     filter(transport == "") %>%
     filter(if (!is.null(version_p)) version == version_p else TRUE) %>%
-    select(date, version, clients) %>%
+    select(date, version, clients, frac) %>%
     rename(users = clients) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
@@ -1159,12 +1151,8 @@ write_userstats_bridge_combined <- function(start_p = NULL, end_p = NULL,
     write_userstats_bridge_country(start_p, end_p, country_p, path_p)
   } else {
     prepare_userstats_bridge_combined(start_p, end_p, country_p) %>%
-      select(date, country, transport, low, high) %>%
-      mutate(transport = ifelse(transport == "<OR>", "default_or_protocol",
-        ifelse(transport == "<??>", "unknown_transport", transport))) %>%
-      gather(variable, value, -(date:transport)) %>%
-      unite(temp, transport, variable) %>%
-      spread(temp, value) %>%
+      select(date, country, transport, low, high, frac) %>%
+      arrange(date, country, transport) %>%
       write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
   }
 }
@@ -1201,8 +1189,8 @@ plot_advbwdist_perc <- function(start_p, end_p, p_p, path_p) {
 write_advbwdist_perc <- function(start_p = NULL, end_p = NULL, p_p = NULL,
     path_p) {
   prepare_advbwdist_perc(start_p, end_p, p_p) %>%
-    unite(temp, variable, percentile) %>%
-    spread(temp, advbw) %>%
+    spread(variable, advbw) %>%
+    rename(p = percentile) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
@@ -1238,8 +1226,8 @@ plot_advbwdist_relay <- function(start_p, end_p, n_p, path_p) {
 write_advbwdist_relay <- function(start_p = NULL, end_p = NULL, n_p = NULL,
     path_p) {
   prepare_advbwdist_relay(start_p, end_p, n_p) %>%
-    unite(temp, variable, relay) %>%
-    spread(temp, advbw) %>%
+    spread(variable, advbw) %>%
+    rename(n = relay) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
@@ -1249,7 +1237,7 @@ prepare_hidserv_dir_onions_seen <- function(start_p, end_p) {
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(type == "dir-onions-seen") %>%
-    transmute(date = date, onions = ifelse(frac >= 0.01, wiqm, NA))
+    transmute(date, onions = ifelse(frac >= 0.01, wiqm, NA), frac)
 }
 
 plot_hidserv_dir_onions_seen <- function(start_p, end_p, path_p) {
@@ -1277,7 +1265,7 @@ prepare_hidserv_rend_relayed_cells <- function(start_p, end_p) {
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(type == "rend-relayed-cells") %>%
     transmute(date,
-      relayed = ifelse(frac >= 0.01, wiqm * 8 * 512 / (86400 * 1e9), NA))
+      relayed = ifelse(frac >= 0.01, wiqm * 8 * 512 / (86400 * 1e9), NA), frac)
 }
 
 plot_hidserv_rend_relayed_cells <- function(start_p, end_p, path_p) {
@@ -1440,22 +1428,14 @@ plot_webstats_tb_locale <- function(start_p, end_p, path_p) {
 # plot_webstats_tb_locale needs the preliminary data frame e for its
 # breaks and labels. Left as future work.
 write_webstats_tb_locale <- function(start_p = NULL, end_p = NULL, path_p) {
-  d <- read.csv(paste(stats_dir, "webstats.csv", sep = ""),
-    colClasses = c("log_date" = "Date", "locale" = "character"))
-  d <- d %>%
+  read.csv(paste(stats_dir, "webstats.csv", sep = ""),
+    colClasses = c("log_date" = "Date", "locale" = "character")) %>%
     filter(if (!is.null(start_p)) log_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) log_date <= as.Date(end_p) else TRUE) %>%
-    filter(request_type == "tbid")
-  e <- d
-  e <- aggregate(list(count = e$count), by = list(locale = e$locale), FUN = sum)
-  e <- e[order(e$count, decreasing = TRUE), ]
-  e <- e[1:5, ]
-  d <- aggregate(list(count = d$count), by = list(log_date = d$log_date,
-    locale = ifelse(d$locale %in% e$locale, d$locale, "other")), FUN = sum)
-  d %>%
-    mutate(locale = tolower(locale)) %>%
+    filter(request_type == "tbid") %>%
+    group_by(log_date, locale) %>%
+    summarize(initial_downloads = sum(count)) %>%
     rename(date = log_date) %>%
-    spread(locale, count) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 

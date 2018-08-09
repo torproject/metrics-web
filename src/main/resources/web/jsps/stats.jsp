@@ -45,7 +45,7 @@ https://metrics.torproject.org/identifier.csv
 <li><b>February 28, 2018:</b> Added per-graph CSV files to eventually replace pre-aggregated CSV files.</li>
 <li><b>May 29, 2018:</b> Made all parameters of per-graph CSV files optional to support providing both pre-filtered and complete data sets.</li>
 <li><b>July 31, 2018:</b> Announced pending changes to per-graph CSV files to become effective on August 15 and pre-aggregated CSV files to be removed by September 15.</li>
-<li><b>August 15, 2018 (scheduled):</b> Make the first batch of changes to per-graph CSV files (marked as "Suggested change" below).</li>
+<li><b>August 15, 2018:</b> Made the first batch of changes to per-graph CSV files.</li>
 <li><b>September 15, 2018 (scheduled):</b> Remove all pre-aggregated CSV files.</li>
 </ul>
 
@@ -75,21 +75,10 @@ Users <a href="#users" name="users" class="anchor">#</a></h2>
 <li><b>date:</b> UTC date (YYYY-MM-DD) for which user numbers are estimated.</li>
 <li><b>country:</b> Two-letter lower-case country code as found in a GeoIP database by resolving clients' IP addresses, or <b>"??"</b> if client IP addresses could not be resolved. If this column contains the empty string, all clients are included, regardless of their country code.</li>
 <li><b>users:</b> Estimated number of clients.</li>
-<li><b>downturns:</b> Whether the estimated number of clients is below the lower number of expected clients, indicating a possible censorship-related event. If this column contains the empty string, there are no expectations on the number of clients.</li>
-<li><b>upturns:</b> Whether the estimated number of clients is above the upper number of expected clients, indicating a possible censorship-related event. If this column contains the empty string, there are no expectations on the number of clients.</li>
-<li><b>lower:</b> Lower number of expected clients under the assumption that there has been no censorship event. If this column contains the empty string, there are no expectations on the number of clients.</li>
-<li><b>upper:</b> Upper number of expected clients under the assumption that there has been no release of censorship. If this column contains the empty string, there are no expectations on the number of clients.</li>
+<li><b>lower:</b> Lower number of expected clients under the assumption that there has been no censorship event. If <b>users &lt; lower</b>, a censorship-related event might have happened in this country on the given day. If this column contains the empty string, there are no expectations on the number of clients.</li>
+<li><b>upper:</b> Upper number of expected clients under the assumption that there has been no release of censorship. If <b>users &gt; upper</b>, a censorship-related event might have happened in this country on the given day. If this column contains the empty string, there are no expectations on the number of clients.</li>
+<li><b>frac:</b> Fraction of relays in percent that the estimate is based on.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Remove the <b>downturns</b> and <b>upturns</b> columns which are trivial to compute as <b>users &lt; lower</b> and <b>users &gt; upper</b>, and which don't necessarily make the CSV file easier to handle. There could even be a gentle hint on computing the dots in the graph from two columns.</p>
-</div>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Add <b>frac</b> column ("Fraction of relays (as value between 0 and 1) that the estimate is based on.") which might be relevant for pro users. Related to the discussion on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
-</div>
 
 <h3>Bridge users by country
 <a href="/userstats-bridge-country.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -110,12 +99,8 @@ Users <a href="#users" name="users" class="anchor">#</a></h2>
 <li><b>date:</b> UTC date (YYYY-MM-DD) for which user numbers are estimated.</li>
 <li><b>country:</b> Two-letter lower-case country code as found in a GeoIP database by resolving clients' IP addresses, or <b>"??"</b> if client IP addresses could not be resolved. If this column contains the empty string, all clients are included, regardless of their country code.</li>
 <li><b>users:</b> Estimated number of clients.</li>
+<li><b>frac:</b> Fraction of bridges in percent that the estimate is based on.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Add <b>frac</b> column ("Fraction of bridges (as value between 0 and 1) that the estimate is based on.") which might be relevant for pro users. Related to the discussion on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
-</div>
 
 <h3>Bridge users by transport
 <a href="/userstats-bridge-transport.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -134,18 +119,10 @@ Users <a href="#users" name="users" class="anchor">#</a></h2>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) for which user numbers are estimated.</li>
-<li><b>$transport:</b> One or more columns with the estimated number of clients using transport with lower-case name <b>$transport</b> to connect to the Tor network using bridges. Examples for transport names are <b>"obfs4"</b>, <b>"websocket"</b> for Flash proxy/websocket, <b>"fte"</b> for FTE, <b>"any_pt"</b> for any pluggable transport, <b>"unknown_pluggable_transports"</b> for unknown pluggable transport(s), or <b>"default_or_protocol"</b> for the default OR protocol.</li>
+<li><b>transport:</b> Transport name used by clients to connect to the Tor network using bridges. Examples are <b>"obfs4"</b>, <b>"websocket"</b> for Flash proxy/websocket, <b>"fte"</b> for FTE, <b>"!&lt;OR&gt;"</b> for any pluggable transport, <b>"&lt;??&gt;"</b> for unknown pluggable transport(s), or <b>"&lt;OR&gt;"</b> for the default OR protocol.</li>
+<li><b>users:</b> Estimated number of clients.</li>
+<li><b>frac:</b> Fraction of bridges in percent that the estimate is based on.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Replace <b>$transport</b> by a <b>transport</b> column for the transport name (written as non-percent-encoded !&lt;OR&gt;, &lt;??&gt;, and &lt;OR&gt; for consistency with the <b>transport</b> parameter) and a <b>users</b> column for the estimated number of clients, similar to the bridge users by country graph.</p>
-</div>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Add <b>frac</b> column ("Fraction of bridges (as value between 0 and 1) that the estimate is based on.") which might be relevant for pro users. Related to the discussion on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
-</div>
 
 <h3>Bridge users by country and transport
 <a href="/userstats-bridge-combined.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -165,19 +142,11 @@ Users <a href="#users" name="users" class="anchor">#</a></h2>
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) for which user numbers are estimated.</li>
 <li><b>country:</b> Two-letter lower-case country code as found in a GeoIP database by resolving clients' IP addresses, or <b>"??"</b> if client IP addresses could not be resolved.</li>
-<li><b>$transport_high:</b> Upper bound of estimated users from the given country and transport. Transport names are written in lower case, and the default OR protocol is written as <b>default_or_protocol</b>.</li>
-<li><b>$transport_low:</b> Lower bound of estimated users from the given country and transport. Transport names are written in lower case, and the default OR protocol is written as <b>default_or_protocol</b>.</li>
+<li><b>transport:</b> Transport name used by clients to connect to the Tor network using bridges. Examples are <b>"obfs4"</b>, <b>"websocket"</b> for Flash proxy/websocket, <b>"fte"</b> for FTE, <b>"&lt;??&gt;"</b> for unknown pluggable transport(s), or <b>"&lt;OR&gt;"</b> for the default OR protocol.</li>
+<li><b>high:</b> Upper bound of estimated users from the given country and transport.</li>
+<li><b>low:</b> Lower bound of estimated users from the given country and transport.</li>
+<li><b>frac:</b> Fraction of bridges in percent that the estimate is based on.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Replace <b>$transport_high</b> and <b>$transport_low</b> by a <b>transport</b> column for the transport name (written as non-percent-encoded &lt;OR&gt; for consistency with the previous graph) and a <b>high</b> and a <b>low</b> column for the upper and lower bound.</p>
-</div>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Add <b>frac</b> column ("Fraction of bridges (as value between 0 and 1) that the estimate is based on.") which might be relevant for pro users. Related to the discussion on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
-</div>
 
 <h3>Bridge users by IP version
 <a href="/userstats-bridge-version.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -199,14 +168,8 @@ using bridges, which can be either <b>"v4"</b> or <b>"v6"</b>.</li>
 <li><b>date:</b> UTC date (YYYY-MM-DD) for which user numbers are estimated.</li>
 <li><b>version:</b> IP version used by clients to connect to the Tor network using bridges, which can be either <b>"v4"</b> or <b>"v6"</b>. If this column contains the empty string, all clients are included, regardless of their IP version.</li>
 <li><b>users:</b> Estimated number of clients.</li>
+<li><b>frac:</b> Fraction of bridges in percent that the estimate is based on.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Add <b>frac</b> column ("Fraction of bridges (as value between 0 and 1) that the estimate is based on.") which might be relevant for pro users. Related to the discussion on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
-</div>
-
-</div>
 
 <div class="container">
 <h2><i class="fa fa-server fa-fw" aria-hidden="true"></i>
@@ -249,13 +212,9 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
-<li><b>$flag:</b> Average number of relays with the given relay flag in lower case, which can be <b>"exit"</b>, <b>"fast"</b>, <b>"guard"</b>, <b>"hsdir"</b>, <b>"fast"</b>, <b>"running"</b>, and <b>"stable"</b>.</li>
+<li><b>flag:</b> Relay flag, which can be <b>"Exit"</b>, <b>"Fast"</b>, <b>"Guard"</b>, <b>"HSDir"</b>, <b>"Fast"</b>, <b>"Running"</b>, or <b>"Stable"</b>.</li>
+<li><b>relays:</b> Average number of relays.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Replace <b>$flag</b> columns by a <b>flag</b> and a <b>relays</b> column, and include the relay flag name in their original capitalization, rather than lower-cased.</p>
-</div>
 
 <h3>Relays by tor version
 <a href="/versions.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -273,13 +232,9 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
-<li><b>$version:</b> Average number of relays with the given first three dotted numbers of the Tor software version as reported by the relay. An example is <b>"0.3.4"</b>.
+<li><b>version:</b> First three dotted numbers of the Tor software version as reported by the relay. An example is <b>"0.3.4"</b>.</li>
+<li><b>relays:</b> Average number of relays.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Replace <b>$version</b> columns by a <b>version</b> and a <b>relays</b> column.</p>
-</div>
 
 <h3>Relays by platform
 <a href="/platforms.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -297,17 +252,12 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
-<li><b>BSD:</b> Average number of relays on *BSD.</li>
-<li><b>Linux:</b> Average number of relays on Linux.</li>
-<li><b>Other:</b> Average number of relays on another platform than Linux, *BSD, Windows, or macOS.</li>
-<li><b>Windows:</b> Average number of relays on Windows.</li>
-<li><b>macOS:</b> Average number of relays on macOS.</li>
+<li><b>bsd:</b> Average number of relays on *BSD.</li>
+<li><b>linux:</b> Average number of relays on Linux.</li>
+<li><b>macos:</b> Average number of relays on macOS.</li>
+<li><b>other:</b> Average number of relays on another platform than Linux, *BSD, Windows, or macOS.</li>
+<li><b>windows:</b> Average number of relays on Windows.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Change platform-specific columns to be all lower-case as a good practice to only use lower-cased column names everywhere.</p>
-</div>
 
 <h3>Relays by IP version
 <a href="/relays-ipv6.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -440,14 +390,9 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
-<li><b>all_$p:</b> Advertised bandwidth in Gbit/s of the p-th percentile of all relays.</li>
-<li><b>exits_$p:</b> Advertised bandwidth in Gbit/s of the p-th percentile of relays with the <b>"Exit"</b> relay flag.</li>
-</ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Replace <b>all_p$</b> and <b>exits_$p</b> columns by three columns <b>p</b>, <b>all</b>, and <b>exit</b>.</p>
-</div>
+<li><b>p:</b> Percentile as value between 0 and 100.</li>
+<li><b>all:</b> Advertised bandwidth in Gbit/s of the p-th percentile of all relays.</li>
+<li><b>exits:</b> Advertised bandwidth in Gbit/s of the p-th percentile of relays with the <b>"Exit"</b> relay flag.</li>
 
 <h3>Advertised bandwidth of n-th fastest relays
 <a href="/advbwdist-relay.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -466,14 +411,10 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
-<li><b>all_$n:</b> Advertised bandwidth in Gbit/s of n-th fastest relay.</li>
-<li><b>exits_$n:</b> Advertised bandwidth in Gbit/s of n-th fastest relay with the <b>"Exit"</b> relay flag.</li>
+<li><b>n:</b> Position of the relay in an ordered list of all advertised bandwidths, starting at 1 for the fastest relay in the network.</li>
+<li><b>all:</b> Advertised bandwidth in Gbit/s of n-th fastest relay.</li>
+<li><b>exits:</b> Advertised bandwidth in Gbit/s of n-th fastest relay with the <b>"Exit"</b> relay flag.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Replace <b>all_n$</b> and <b>exits_$n</b> columns by three columns <b>n</b>, <b>all</b>, and <b>exit</b>.</p>
-</div>
 
 <h3>Consumed bandwidth by Exit/Guard flag combination
 <a href="/bwhist-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -533,21 +474,11 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) for which statistics on uni-/bidirectional connection usage were reported.</li>
-<li><b>both_md:</b> Median of fraction of connections classified as both reading and writing.</li>
-<li><b>both_q1:</b> First quartile of fraction of connections classified as both reading and writing.</li>
-<li><b>both_q3:</b> Third quartile of fraction of connections classified as both reading and writing.</li>
-<li><b>read_md:</b> Median of fraction of connections classified as mostly reading.</li>
-<li><b>read_q1:</b> First quartile of fraction of connections classified as mostly reading.</li>
-<li><b>read_q3:</b> Third quartile of fraction of connections classified as mostly reading.</li>
-<li><b>write_md:</b> Median of fraction of connections classified as mostly writing.</li>
-<li><b>write_q1:</b> First quartile of fraction of connections classified as mostly writing.</li>
-<li><b>write_q3:</b> Third quartile of fraction of connections classified as mostly writing.</li>
+<li><b>direction:</b> Direction of reported fraction, which can be <b>"read"</b>, <b>"write"</b>, or <b>"both"</b> for connections classified as "mostly reading", "mostly writing", or "both reading and writing". Connections below the threshold have been removed from this statistics file entirely.</li>
+<li><b>q1:</b> First quartile of fraction of connections.</li>
+<li><b>md:</b> Median of fraction of connections.</li>
+<li><b>q3:</b> Third quartile of fraction of connections.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Replace columns except <b>date</b> by four columns <b>direction</b>, <b>q1</b>, <b>md</b>, and <b>q3</b>.</p>
-</div>
 
 </div>
 
@@ -679,12 +610,8 @@ Onion Services <a href="#onion-services" name="servers" class="anchor">#</a></h2
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
 <li><b>onions:</b> Estimated number of unique .onion addresses observed by onion-service directories.</li>
+<li><b>frac:</b> Total network fraction of statistics reported by onion-service directories.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Add <b>frac</b> column as suggested on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
-</div>
 
 <h3>Onion-service traffic (versions 2 and 3)
 <a href="/hidserv-rend-relayed-cells.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -703,12 +630,8 @@ Onion Services <a href="#onion-services" name="servers" class="anchor">#</a></h2
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
 <li><b>relayed:</b> Estimated bandwidth in Gbit/s relayed on rendezvous circuits as observed by rendezvous points.</li>
+<li><b>frac:</b> Total network fraction of statistics reported by rendezvous points.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Add <b>frac</b> column as suggested on <a href="https://bugs.torproject.org/26950">#26950</a>.</p>
-</div>
 
 <h3>Fraction of relays reporting onion-service statistics
 <a href="/hidserv-frac-reporting.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -800,13 +723,9 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 
 </ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when requests to <code>torproject.org</code> web servers have been logged.</li>
-<li><b>$locale:</b> Number of Tor Browser initial downloads for the given locale; limited to the top-5 locales in the requested time period.</li>
+<li><b>locale:</b> Locale, like "en-US" for English (United States), "de" for German, etc., and "??" for unrecognized locales.</li>
+<li><b>initial_downloads:</b> Number of Tor Browser initial downloads.</li>
 </ul>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Suggested change</h3>
-<p>Replace all locale-specific columns by two columns <b>locale</b> and <b>count</b> to avoid dynamically changing columns. Maybe also take out the limitation to top-5 locales in the file (not the graph), similar to how the "Bridge users by country and transport" file contains all transports, not just the top-3 ones.</p>
-</div>
 
 <h3>Tor Messenger downloads and updates
 <a href="/webstats-tm.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
