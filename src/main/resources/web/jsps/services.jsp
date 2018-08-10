@@ -21,7 +21,7 @@
       <h2>Network archive <a href="#archive" name="archive" class="anchor">#</a></h2>
       <p>The following tool lets you browse the network archive for relays running in the past.</p>
       <ul>
-        <li><a href="https://exonerator.torproject.org/" target="_blank">ExoneraTor</a> tells you if an IP was used by a Tor relay on a given date.</li>
+        <li><a href="/exonerator.html">ExoneraTor</a> tells you if an IP was used by a Tor relay on a given date.</li>
       </ul>
     </div>
 

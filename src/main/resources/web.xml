@@ -384,6 +384,17 @@
     <url-pattern>/rs.html</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>ExoneraTor</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.ExoneraTorWrapperServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExoneraTor</servlet-name>
+    <url-pattern>/exonerator.html</url-pattern>
+  </servlet-mapping>
+
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>

@@ -10,6 +10,7 @@
   <property name="implementation-title" value="metrics-web" />
   <property name="release.version" value="1.1.0-dev" />
   <property name="metricslibversion" value="2.4.0" />
+  <property name="exoneratorversion" value="3.0.0" />
   <property name="jetty.version" value="-9.2.21.v20170120" />
   <property name="warfile"
             value="metrics-web-${release.version}.war"/>
@@ -64,6 +65,7 @@
   </patternset>
 
   <patternset id="web" >
+    <include name="exonerator-${exoneratorversion}-thin.jar" />
     <include name="jetty9-annotations${jetty.version}.jar"/>
     <include name="jetty9-server${jetty.version}.jar"/>
     <include name="jetty9-servlet${jetty.version}.jar"/>
@@ -193,6 +195,9 @@
       <zipfileset dir="${resources}/web/json"
                   prefix="WEB-INF/json"
                   includes="metrics.json categories.json news.json"/>
+
+      <zipfileset dir="${resources}/web/properties"
+                  includes="*.properties"/>
 
       <zipfileset dir="${basedir}/src/submods/metrics-lib/generated/javadoc"
                   prefix="metrics-lib" />
