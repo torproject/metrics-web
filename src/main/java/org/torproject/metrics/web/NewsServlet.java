@@ -6,7 +6,6 @@ package org.torproject.metrics.web;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -36,8 +35,7 @@ public class NewsServlet extends AnyServlet {
         sortedNews.add(news);
       }
     }
-    Collections.sort(sortedNews,
-        (o1, o2) -> o1.getStart().compareTo(o2.getStart()) * -1);
+    sortedNews.sort((o1, o2) -> o1.getStart().compareTo(o2.getStart()) * -1);
     this.sortedNews = sortedNews;
     SortedMap<String, String> countries = new TreeMap<>();
     for (String[] country : Countries.getInstance().getCountryList()) {

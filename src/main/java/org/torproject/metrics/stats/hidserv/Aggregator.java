@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -124,8 +123,7 @@ public class Aggregator {
         /* Sort extrapolated network totals contained in the first array
          * element.  (The second array element contains the computed
          * network fraction as weight.) */
-        Collections.sort(weightedValues,
-            Comparator.comparingDouble(doubles -> doubles[0]));
+        weightedValues.sort(Comparator.comparingDouble(doubles -> doubles[0]));
 
         /* For the weighted mean, sum up all previously extrapolated
          * values weighted with their network fractions (which happens to

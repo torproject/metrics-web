@@ -5,7 +5,6 @@ package org.torproject.metrics.web;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -71,8 +70,7 @@ public abstract class MetricServlet extends AnyServlet {
       }
     }
     this.sortedEvents.addAll(ContentProvider.getInstance().getNewsList());
-    Collections.sort(this.sortedEvents,
-        (o1, o2) -> o2.getStart().compareTo(o1.getStart()));
+    this.sortedEvents.sort((o1, o2) -> o2.getStart().compareTo(o1.getStart()));
   }
 }
 
