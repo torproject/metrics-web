@@ -87,11 +87,7 @@ public class News {
     }
     List<String> placeNames = new ArrayList<>();
     for (String place : this.places) {
-      if (countries.containsKey(place)) {
-        placeNames.add(countries.get(place));
-      } else {
-        placeNames.add("Unknown Country");
-      }
+      placeNames.add(countries.getOrDefault(place, "Unknown Country"));
     }
     return placeNames;
   }
