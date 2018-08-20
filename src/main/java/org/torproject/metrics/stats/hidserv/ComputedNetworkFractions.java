@@ -84,7 +84,7 @@ public class ComputedNetworkFractions implements Document {
   }
 
   private static Map<Long, String> previouslyFormattedDates =
-      Collections.synchronizedMap(new HashMap<Long, String>());
+      Collections.synchronizedMap(new HashMap<>());
 
   /** Returns a string representation of this object, consisting of two
    * strings: the first string contains fingerprint and valid-after date,
@@ -117,7 +117,7 @@ public class ComputedNetworkFractions implements Document {
   }
 
   private static Map<String, Long> previouslyParsedDates =
-      Collections.synchronizedMap(new HashMap<String, Long>());
+      Collections.synchronizedMap(new HashMap<>());
 
   /** Instantiates an empty fractions object that will be initialized more
    * by the parse method.

@@ -93,7 +93,7 @@ public class Aggregator {
       }
       if (extrapolated.getFractionDirOnionsSeen() > 0.0) {
         if (!extrapolatedOnions.containsKey(date)) {
-          extrapolatedOnions.put(date, new ArrayList<double[]>());
+          extrapolatedOnions.put(date, new ArrayList<>());
         }
         extrapolatedOnions.get(date).add(new double[] {
             extrapolated.getExtrapolatedDirOnionsSeen(),
