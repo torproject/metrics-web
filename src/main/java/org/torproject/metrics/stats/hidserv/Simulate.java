@@ -172,12 +172,7 @@ public class Simulate {
       } while (totalReportingProbability < fraction - 0.001
           || totalReportingProbability > fraction + 0.001);
       Collections.sort(singleRelayExtrapolations,
-          new Comparator<double[]>() {
-            public int compare(double[] o1, double[] o2) {
-              return o1[0] < o2[0] ? -1 : o1[0] > o2[0] ? 1 : 0;
-            }
-          }
-      );
+          Comparator.comparingDouble(o -> o[0]));
       double totalProbability = 0.0;
       double totalValues = 0.0;
       double totalInterquartileProbability = 0.0;
@@ -332,12 +327,7 @@ public class Simulate {
       } while (totalReportingProbability < fraction - 0.001
           || totalReportingProbability > fraction + 0.001);
       Collections.sort(singleRelayExtrapolations,
-          new Comparator<double[]>() {
-            public int compare(double[] first, double[] second) {
-              return Double.compare(first[0], second[0]);
-            }
-          }
-      );
+          Comparator.comparingDouble(doubles -> doubles[0]));
       double totalProbability = 0.0;
       double totalValues = 0.0;
       double totalInterquartileProbability = 0.0;

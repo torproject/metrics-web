@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,11 +36,8 @@ public class NewsServlet extends AnyServlet {
         sortedNews.add(news);
       }
     }
-    Collections.sort(sortedNews, new Comparator<News>() {
-      public int compare(News o1, News o2) {
-        return o1.getStart().compareTo(o2.getStart()) * -1;
-      }
-    });
+    Collections.sort(sortedNews,
+        (o1, o2) -> o1.getStart().compareTo(o2.getStart()) * -1);
     this.sortedNews = sortedNews;
     SortedMap<String, String> countries = new TreeMap<>();
     for (String[] country : Countries.getInstance().getCountryList()) {

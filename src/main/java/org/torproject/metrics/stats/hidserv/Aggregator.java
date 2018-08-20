@@ -125,12 +125,7 @@ public class Aggregator {
          * element.  (The second array element contains the computed
          * network fraction as weight.) */
         Collections.sort(weightedValues,
-            new Comparator<double[]>() {
-              public int compare(double[] first, double[] second) {
-                return Double.compare(first[0], second[0]);
-              }
-            }
-        );
+            Comparator.comparingDouble(doubles -> doubles[0]));
 
         /* For the weighted mean, sum up all previously extrapolated
          * values weighted with their network fractions (which happens to

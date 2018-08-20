@@ -76,30 +76,27 @@ public class RObjectGenerator implements ServletContextListener {
     servletContext.setAttribute("RObjectGenerator", this);
 
     /* Periodically generate R objects with default parameters. */
-    new Thread() {
-      @Override
-      public void run() {
-        long lastUpdated = 0L;
-        long sleep;
-        while (true) {
-          while ((sleep = maxCacheAge * 1000L / 2L + lastUpdated
-              - System.currentTimeMillis()) > 0L) {
-            try {
-              Thread.sleep(sleep);
-            } catch (InterruptedException e) {
-              /* Nothing we can handle. */
-            }
+    new Thread(() -> {
+      long lastUpdated = 0L;
+      long sleep;
+      while (true) {
+        while ((sleep = maxCacheAge * 1000L / 2L + lastUpdated
+            - System.currentTimeMillis()) > 0L) {
+          try {
+            Thread.sleep(sleep);
+          } catch (InterruptedException e) {
+            /* Nothing we can handle. */
           }
-          for (String tableId : availableTables.keySet()) {
-            generateTable(tableId, new HashMap(), false);
-          }
-          for (String graphId : availableGraphs.keySet()) {
-            generateGraph(graphId, "png", new HashMap(), false);
-          }
-          lastUpdated = System.currentTimeMillis();
         }
+        for (String tableId : availableTables.keySet()) {
+          generateTable(tableId, new HashMap(), false);
+        }
+        for (String graphId : availableGraphs.keySet()) {
+          generateGraph(graphId, "png", new HashMap(), false);
+        }
+        lastUpdated = System.currentTimeMillis();
       }
-    }.start();
+    }).start();
   }
 
   @Override
