@@ -16,11 +16,6 @@ public class BubblesServlet extends MetricServlet {
   private static final long serialVersionUID = -6011833075497881033L;
 
   @Override
-  public void init() throws ServletException {
-    super.init();
-  }
-
-  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
     String requestUri = request.getRequestURI();

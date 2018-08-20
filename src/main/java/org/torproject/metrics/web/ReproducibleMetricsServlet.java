@@ -14,11 +14,6 @@ public class ReproducibleMetricsServlet extends AnyServlet {
   private static final long serialVersionUID = 6099009779662419291L;
 
   @Override
-  public void init() throws ServletException {
-    super.init();
-  }
-
-  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 

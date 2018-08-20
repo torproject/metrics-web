@@ -14,11 +14,6 @@ public class OnionooServlet extends AnyServlet {
   private static final long serialVersionUID = 3036525855022445178L;
 
   @Override
-  public void init() throws ServletException {
-    super.init();
-  }
-
-  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 

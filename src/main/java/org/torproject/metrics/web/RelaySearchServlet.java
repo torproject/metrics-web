@@ -14,11 +14,6 @@ public class RelaySearchServlet extends AnyServlet {
   private static final long serialVersionUID = 1L;
 
   @Override
-  public void init() throws ServletException {
-    super.init();
-  }
-
-  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 

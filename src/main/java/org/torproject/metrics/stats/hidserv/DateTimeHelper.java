@@ -40,24 +40,7 @@ public class DateTimeHelper {
    * timestamps, protected using ThreadLocal to ensure that each thread
    * uses its own instances. */
   private static ThreadLocal<Map<String, DateFormat>> dateFormats =
-      new ThreadLocal<Map<String, DateFormat>>() {
-
-    public Map<String, DateFormat> get() {
-      return super.get();
-    }
-
-    protected Map<String, DateFormat> initialValue() {
-      return new HashMap<>();
-    }
-
-    public void remove() {
-      super.remove();
-    }
-
-    public void set(Map<String, DateFormat> value) {
-      super.set(value);
-    }
-  };
+      ThreadLocal.withInitial(HashMap::new);
 
   /** Returns an instance of DateFormat for the given format, and if no
    * such instance exists, creates one and puts it in the map. */

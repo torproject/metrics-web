@@ -14,11 +14,6 @@ public class GlossaryServlet extends AnyServlet {
   private static final long serialVersionUID = -971194326457109601L;
 
   @Override
-  public void init() throws ServletException {
-    super.init();
-  }
-
-  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 

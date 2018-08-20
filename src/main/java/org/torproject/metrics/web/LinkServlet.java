@@ -15,11 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 public class LinkServlet extends MetricServlet {
 
   @Override
-  public void init() throws ServletException {
-    super.init();
-  }
-
-  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
     String requestUri = request.getRequestURI();

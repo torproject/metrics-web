@@ -14,11 +14,6 @@ public class IndexServlet extends AnyServlet {
   private static final long serialVersionUID = -5156539049907533057L;
 
   @Override
-  public void init() throws ServletException {
-    super.init();
-  }
-
-  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 

@@ -14,11 +14,6 @@ public class ServicesServlet extends AnyServlet {
   private static final long serialVersionUID = 516625494518844400L;
 
   @Override
-  public void init() throws ServletException {
-    super.init();
-  }
-
-  @Override
   public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 
