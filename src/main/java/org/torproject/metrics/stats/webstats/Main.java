@@ -122,9 +122,6 @@ public class Main {
       }
       try {
         Map<String, Long> parsedLogLines = logFile.logLines().parallel()
-            /* The following mapping can be removed with metrics-lib
-               version > 2.2.0 */
-            .map(line -> (WebServerAccessLog.Line) line)
             .collect(groupingByConcurrent(line
                 -> String.format("%s %s %d", line.getMethod().name(),
                 truncateString(line.getRequest(), 2048), line.getResponse()),
