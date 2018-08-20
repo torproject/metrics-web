@@ -99,7 +99,7 @@ public class UpdateNews {
             .replaceAll("“", "&ldquo;")
             .replaceAll("”", "&rdquo;");
         String shortDesc = desc
-            .replaceAll("\\<.*?\\>", "")
+            .replaceAll("<.*?>", "")
             .replaceAll("&.*;", "");
         if (shortDesc.contains(". ")) {
           shortDesc = shortDesc.substring(0, shortDesc.indexOf(". "));
