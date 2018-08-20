@@ -57,7 +57,7 @@ public class TableParameterChecker {
    * the parameters are invalid.
    */
   public Map<String, String[]> checkParameters(String tableType,
-      Map requestParameters) {
+      Map<String, String[]> requestParameters) {
 
     /* Check if the table type exists. */
     if (tableType == null
@@ -80,8 +80,8 @@ public class TableParameterChecker {
       String[] startParameter = null;
       String[] endParameter = null;
       if (requestParameters != null) {
-        startParameter = (String[]) requestParameters.get("start");
-        endParameter = (String[]) requestParameters.get("end");
+        startParameter = requestParameters.get("start");
+        endParameter = requestParameters.get("end");
       }
       long endTimestamp = System.currentTimeMillis();
       if (endParameter != null && endParameter.length > 0

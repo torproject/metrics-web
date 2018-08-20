@@ -92,7 +92,7 @@ public class RObjectGenerator implements ServletContextListener {
           generateTable(tableId, new HashMap(), false);
         }
         for (String graphId : availableGraphs.keySet()) {
-          generateGraph(graphId, "png", new HashMap(), false);
+          generateGraph(graphId, "png", new HashMap<>(), false);
         }
         lastUpdated = System.currentTimeMillis();
       }
@@ -108,7 +108,7 @@ public class RObjectGenerator implements ServletContextListener {
    * the given parameters, possibly after checking whether the cache
    * already contains that graph. */
   public RObject generateGraph(String requestedGraph, String fileType,
-      Map parameterMap, boolean checkCache) {
+      Map<String, String[]> parameterMap, boolean checkCache) {
     if (!this.availableGraphs.containsKey(requestedGraph)
         || this.availableGraphs.get(requestedGraph).getFunction()
         == null) {
@@ -168,7 +168,7 @@ public class RObjectGenerator implements ServletContextListener {
    * possibly after checking whether the cache already contains that
    * table. */
   public List<Map<String, String>> generateTable(String requestedTable,
-      Map parameterMap, boolean checkCache) {
+      Map<String, String[]> parameterMap, boolean checkCache) {
     if (!this.availableTables.containsKey(requestedTable)
         || this.availableTables.get(requestedTable).getFunction()
         == null) {
