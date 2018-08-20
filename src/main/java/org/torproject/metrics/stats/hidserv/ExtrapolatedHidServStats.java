@@ -142,10 +142,10 @@ public class ExtrapolatedHidServStats implements Document {
       return false;
     }
     String fingerprint = secondParts[0];
-    double extrapolatedRendRelayedCells = 0.0;
-    double fractionRendRelayedCells = 0.0;
-    double extrapolatedDirOnionsSeen = 0.0;
-    double fractionDirOnionsSeen = 0.0;
+    double extrapolatedRendRelayedCells;
+    double fractionRendRelayedCells;
+    double extrapolatedDirOnionsSeen;
+    double fractionDirOnionsSeen;
     try {
       extrapolatedRendRelayedCells = secondParts[1].equals("") ? 0.0
           : Double.parseDouble(secondParts[1]);

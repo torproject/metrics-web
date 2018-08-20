@@ -120,9 +120,9 @@ public class ReportedHidServStats implements Document {
     if (statsEndMillis == DateTimeHelper.NO_TIME_AVAILABLE) {
       return false;
     }
-    long statsIntervalSeconds = -1L;
-    long rendRelayedCells = -1L;
-    long dirOnionsSeen = -1L;
+    long statsIntervalSeconds;
+    long rendRelayedCells;
+    long dirOnionsSeen;
     try {
       statsIntervalSeconds = Long.parseLong(secondParts[1]);
       rendRelayedCells = Long.parseLong(secondParts[2]);

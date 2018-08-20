@@ -71,7 +71,7 @@ public class ConsensusStatsFileHandler {
   private int bridgeResultsAdded = 0;
 
   /* Database connection string. */
-  private String connectionUrl = null;
+  private String connectionUrl;
 
   private SimpleDateFormat dateTimeFormat;
 
