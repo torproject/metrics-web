@@ -6,7 +6,6 @@ package org.torproject.metrics.web;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,8 +32,7 @@ public class GraphImageServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request,
-      HttpServletResponse response) throws IOException,
-      ServletException {
+      HttpServletResponse response) throws IOException {
 
     /* Find out which graph type was requested and make sure we know this
      * graph type and file type. */

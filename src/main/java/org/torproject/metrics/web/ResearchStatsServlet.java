@@ -55,7 +55,7 @@ public class ResearchStatsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request,
-      HttpServletResponse response) throws IOException, ServletException {
+      HttpServletResponse response) throws IOException {
     File statsFile = this.determineStatsFile(request);
     if (statsFile == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -84,7 +84,7 @@ public class ResearchStatsServlet extends HttpServlet {
   }
 
   private void writeStatsFile(File statsFile,
-      HttpServletResponse response) throws IOException, ServletException {
+      HttpServletResponse response) throws IOException {
     response.setContentType("text/csv");
     response.setHeader("Content-Length", String.valueOf(
         statsFile.length()));

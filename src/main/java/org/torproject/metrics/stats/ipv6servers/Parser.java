@@ -51,13 +51,12 @@ class Parser {
   }
 
   Ipv6NetworkStatus parseRelayNetworkStatusConsensus(
-      RelayNetworkStatusConsensus consensus) throws Exception {
+      RelayNetworkStatusConsensus consensus) {
     return this.parseStatus(true, consensus.getValidAfterMillis(),
         consensus.getStatusEntries().values());
   }
 
-  Ipv6NetworkStatus parseBridgeNetworkStatus(BridgeNetworkStatus status)
-      throws Exception {
+  Ipv6NetworkStatus parseBridgeNetworkStatus(BridgeNetworkStatus status) {
     return this.parseStatus(false, status.getPublishedMillis(),
         status.getStatusEntries().values());
   }
