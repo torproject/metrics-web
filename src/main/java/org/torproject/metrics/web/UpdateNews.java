@@ -101,10 +101,10 @@ public class UpdateNews {
         String shortDesc = desc
             .replaceAll("\\<.*?\\>", "")
             .replaceAll("&.*;", "");
-        if (shortDesc.indexOf(". ") != -1) {
+        if (shortDesc.contains(". ")) {
           shortDesc = shortDesc.substring(0, shortDesc.indexOf(". "));
         }
-        if (shortDesc.indexOf(" (") != -1) {
+        if (shortDesc.contains(" (")) {
           shortDesc = shortDesc.substring(0, shortDesc.indexOf(" ("));
         }
         entry.shortDescription = shortDesc;
