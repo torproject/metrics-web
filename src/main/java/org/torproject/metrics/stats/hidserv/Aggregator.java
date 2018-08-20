@@ -3,6 +3,9 @@
 
 package org.torproject.metrics.stats.hidserv;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -20,6 +23,8 @@ import java.util.TreeMap;
  * Also calculate simpler statistics like the number of reported
  * statistics and the total network fraction of reporting relays. */
 public class Aggregator {
+
+  private static Logger log = LoggerFactory.getLogger(Aggregator.class);
 
   /** Document file containing extrapolated hidden-service statistics. */
   private File extrapolatedHidServStatsFile;
@@ -57,8 +62,8 @@ public class Aggregator {
         this.extrapolatedHidServStatsStore.retrieve(
         this.extrapolatedHidServStatsFile);
     if (extrapolatedStats == null) {
-      System.err.printf("Unable to retrieve extrapolated hidden-service "
-          + "statistics from file %s.  Skipping aggregation step.%n",
+      log.warn("Unable to retrieve extrapolated hidden-service "
+          + "statistics from file {}. Skipping aggregation step.",
           this.extrapolatedHidServStatsFile.getAbsolutePath());
       return;
     }
@@ -187,7 +192,7 @@ public class Aggregator {
         this.hidservStatsCsvFile))) {
       bw.write(sb.toString());
     } catch (IOException e) {
-      System.err.printf("Unable to write results to %s.  Ignoring.",
+      log.warn("Unable to write results to {}. Ignoring.",
           this.extrapolatedHidServStatsFile.getAbsolutePath());
     }
   }

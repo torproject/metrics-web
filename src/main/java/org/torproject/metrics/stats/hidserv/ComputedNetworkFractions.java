@@ -3,6 +3,9 @@
 
 package org.torproject.metrics.stats.hidserv;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +14,9 @@ import java.util.Map;
  * assumed to observe in the network.  These fractions are computed from
  * status entries and bandwidth weights in a network status consensus. */
 public class ComputedNetworkFractions implements Document {
+
+  private static Logger log
+      = LoggerFactory.getLogger(ComputedNetworkFractions.class);
 
   /** Relay fingerprint consisting of 40 upper-case hex characters. */
   private String fingerprint;
@@ -131,21 +137,18 @@ public class ComputedNetworkFractions implements Document {
   @Override
   public boolean parse(String[] formattedStrings) {
     if (formattedStrings.length != 2) {
-      System.err.printf("Invalid number of formatted strings.  "
-          + "Skipping.%n");
+      log.warn("Invalid number of formatted strings. Skipping.");
       return false;
     }
     String[] firstParts = formattedStrings[0].split(",", 2);
     if (firstParts.length != 2) {
-      System.err.printf("Invalid number of comma-separated values.  "
-          + "Skipping.%n");
+      log.warn("Invalid number of comma-separated values. Skipping.");
       return false;
     }
     String fingerprint = firstParts[0];
     String[] secondParts = formattedStrings[1].split(",", 3);
     if (secondParts.length != 3) {
-      System.err.printf("Invalid number of comma-separated values.  "
-          + "Skipping.%n");
+      log.warn("Invalid number of comma-separated values. Skipping.");
       return false;
     }
     String validAfterDate = firstParts[1];
@@ -163,7 +166,7 @@ public class ComputedNetworkFractions implements Document {
     if (validAfterDateMillis == DateTimeHelper.NO_TIME_AVAILABLE
         || validAfterTimeMillis < 0L
         || validAfterTimeMillis >= DateTimeHelper.ONE_DAY) {
-      System.err.printf("Invalid date/hour format.  Skipping.%n");
+      log.warn("Invalid date/hour format. Skipping.");
       return false;
     }
     long validAfterMillis = validAfterDateMillis + validAfterTimeMillis;
@@ -176,7 +179,7 @@ public class ComputedNetworkFractions implements Document {
           ? 0.0 : Double.parseDouble(secondParts[2]);
       return true;
     } catch (NumberFormatException e) {
-      System.err.printf("Invalid number format.  Skipping.%n");
+      log.warn("Invalid number format. Skipping.");
       return false;
     }
   }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileWriter;
@@ -14,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateNews {
+
+  private static Logger log = LoggerFactory.getLogger(UpdateNews.class);
+
   /** Update news. */
   public static void main(String[] args) throws Exception {
     URL textFile = new URL(
@@ -72,7 +77,7 @@ public class UpdateNews {
           int space = desc.indexOf(" ", open);
           int close = desc.indexOf("]", open);
           if (open < 0 || space < 0 || close < 0) {
-            System.err.println("Cannot convert link.");
+            log.warn("Cannot convert link in line {}. Exiting.");
             System.exit(1);
           }
           desc = desc.substring(0, open) + "<a href=\""
@@ -84,7 +89,7 @@ public class UpdateNews {
           int open = desc.indexOf("`");
           int close = desc.indexOf("`", open + 1);
           if (open < 0 || close < 0) {
-            System.err.println("Cannot convert code fragment.");
+            log.warn("Cannot convert code fragment in line {}. Exiting.");
             System.exit(1);
           }
           desc = desc.substring(0, open) + "<code>"

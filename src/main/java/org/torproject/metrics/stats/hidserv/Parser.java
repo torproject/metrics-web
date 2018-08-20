@@ -10,6 +10,9 @@ import org.torproject.descriptor.ExtraInfoDescriptor;
 import org.torproject.descriptor.NetworkStatusEntry;
 import org.torproject.descriptor.RelayNetworkStatusConsensus;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,6 +34,8 @@ import java.util.TreeSet;
  * network fractions from consensuses, and write parsed contents to
  * document files for later use. */
 public class Parser {
+
+  private static Logger log = LoggerFactory.getLogger(Parser.class);
 
   /** File containing tuples of last-modified times and file names of
    * descriptor files parsed in the previous execution. */
@@ -106,14 +111,14 @@ public class Parser {
             String[] parts = line.split(" ", 2);
             excludedFiles.put(parts[1], Long.parseLong(parts[0]));
           } catch (NumberFormatException e) {
-            System.err.printf("Illegal line '%s' in parse history.  "
-                + "Skipping line.%n", line);
+            log.warn("Illegal line '{}' in parse history. Skipping line.", line,
+                e);
           }
         }
       } catch (IOException e) {
-        System.err.printf("Could not read history file '%s'.  Not "
+        log.warn("Could not read history file '{}'. Not "
             + "excluding descriptors in this execution.",
-            this.parseHistoryFile.getAbsolutePath());
+            this.parseHistoryFile.getAbsolutePath(), e);
       }
 
       /* Tell the descriptor reader to exclude the files contained in the
@@ -146,9 +151,8 @@ public class Parser {
             + "\n");
       }
     } catch (IOException e) {
-      System.err.printf("Could not write history file '%s'.  Not "
-          + "excluding descriptors in next execution.",
-          this.parseHistoryFile.getAbsolutePath());
+      log.warn("Could not write history file '{}'. Not excluding descriptors "
+          + "in next execution.", this.parseHistoryFile.getAbsolutePath(), e);
     }
   }
 
@@ -234,8 +238,8 @@ public class Parser {
      * because relays can in theory write anything in their extra-info
      * descriptors.  But maybe we'll want to know. */
     } else {
-      System.err.println("Relay " + fingerprint + " published "
-          + "incomplete hidserv-stats.  Ignoring.");
+      log.warn("Relay {} published incomplete hidserv-stats. Ignoring.",
+          fingerprint);
     }
   }
 
@@ -257,8 +261,8 @@ public class Parser {
     SortedMap<String, Integer> bandwidthWeights =
         consensus.getBandwidthWeights();
     if (bandwidthWeights == null) {
-      System.err.printf("Consensus with valid-after time %s doesn't "
-          + "contain any Wxx weights.  Skipping.%n",
+      log.warn("Consensus with valid-after time {} doesn't contain any Wxx "
+          + "weights. Skipping.",
           DateTimeHelper.format(consensus.getValidAfterMillis()));
       return;
     }
@@ -269,8 +273,8 @@ public class Parser {
         new TreeSet<>(Arrays.asList("Wmg,Wmm,Wme,Wmd".split(",")));
     expectedWeightKeys.removeAll(bandwidthWeights.keySet());
     if (!expectedWeightKeys.isEmpty()) {
-      System.err.printf("Consensus with valid-after time %s doesn't "
-          + "contain expected Wmx weights.  Skipping.%n",
+      log.warn("Consensus with valid-after time {} doesn't contain expected "
+          + "Wmx weights. Skipping.",
           DateTimeHelper.format(consensus.getValidAfterMillis()));
       return;
     }

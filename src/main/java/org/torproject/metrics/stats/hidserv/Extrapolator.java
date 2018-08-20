@@ -3,6 +3,9 @@
 
 package org.torproject.metrics.stats.hidserv;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.util.HashSet;
 import java.util.Map;
@@ -16,6 +19,8 @@ import java.util.TreeSet;
  * dividing them by the computed fraction of hidden-service activity
  * observed by the relay. */
 public class Extrapolator {
+
+  private static Logger log = LoggerFactory.getLogger(Extrapolator.class);
 
   /** Document file containing previously parsed reported hidden-service
    * statistics. */
@@ -84,8 +89,8 @@ public class Extrapolator {
 
     /* Make sure that all documents could be retrieved correctly. */
     if (extrapolatedStats == null || reportedStats == null) {
-      System.err.printf("Could not read previously parsed or "
-          + "extrapolated hidserv-stats.  Skipping.");
+      log.warn("Could not read previously parsed or extrapolated "
+          + "hidserv-stats. Skipping.");
       return false;
     }
 

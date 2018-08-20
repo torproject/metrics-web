@@ -3,10 +3,16 @@
 
 package org.torproject.metrics.stats.hidserv;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /* Hidden-service statistics reported by a single relay covering a single
  * statistics interval of usually 24 hours.  These statistics are reported
  * by the relay in the "hidserv-" lines of its extra-info descriptor. */
 public class ReportedHidServStats implements Document {
+
+  private static Logger log
+      = LoggerFactory.getLogger(ReportedHidServStats.class);
 
   /* Relay fingerprint consisting of 40 upper-case hex characters. */
   private String fingerprint;
@@ -109,7 +115,8 @@ public class ReportedHidServStats implements Document {
   @Override
   public boolean parse(String[] formattedStrings) {
     if (formattedStrings.length != 2) {
-      System.err.printf("Invalid number of formatted strings.  Skipping.%n");
+      log.warn("Invalid number of formatted strings: {} Skipping.",
+          formattedStrings.length);
       return false;
     }
     String[] secondParts = formattedStrings[1].split(",", 4);

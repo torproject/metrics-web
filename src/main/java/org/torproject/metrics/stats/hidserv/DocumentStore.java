@@ -3,6 +3,9 @@
 
 package org.torproject.metrics.stats.hidserv;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,6 +24,8 @@ import java.util.TreeSet;
 /** Utility class to store serialized objects implementing the Document
  * interface to a file and later to retrieve them. */
 public class DocumentStore<T extends Document> {
+
+  private static Logger log = LoggerFactory.getLogger(DocumentStore.class);
 
   /** Document class, needed to create new instances when retrieving
    * documents. */
@@ -41,8 +46,8 @@ public class DocumentStore<T extends Document> {
     /* Retrieve existing documents. */
     Set<T> retrievedDocuments = this.retrieve(documentFile);
     if (retrievedDocuments == null) {
-      System.err.printf("Unable to read and update %s.  Not storing "
-          + "documents.%n", documentFile.getAbsoluteFile());
+      log.warn("Unable to read and update {}. Not storing documents.",
+          documentFile.getAbsoluteFile());
       return false;
     }
 
@@ -64,9 +69,9 @@ public class DocumentStore<T extends Document> {
     File documentTempFile = new File(documentFile.getAbsoluteFile()
         + ".tmp");
     if (documentTempFile.exists()) {
-      System.err.printf("Temporary document file %s still exists, "
+      log.warn("Temporary document file {} still exists, "
           + "indicating that a previous execution did not terminate "
-          + "cleanly.  Not storing documents.%n",
+          + "cleanly.  Not storing documents.",
           documentTempFile.getAbsoluteFile());
       return false;
     }
@@ -86,8 +91,8 @@ public class DocumentStore<T extends Document> {
       documentFile.delete();
       documentTempFile.renameTo(documentFile);
     } catch (IOException e) {
-      System.err.printf("Unable to write %s.  Not storing documents.%n",
-          documentFile.getAbsolutePath());
+      log.warn("Unable to write {}. Not storing documents.",
+          documentFile.getAbsolutePath(), e);
       return false;
     }
 
@@ -121,9 +126,9 @@ public class DocumentStore<T extends Document> {
         if (!line.startsWith(" ")) {
           formattedString0 = line;
         } else if (formattedString0 == null) {
-          System.err.printf("First line in %s must not start with a "
-              + "space.  Not retrieving any previously stored "
-              + "documents.%n", documentFile.getAbsolutePath());
+          log.warn("First line in {} must not start with a space. Not "
+              + "retrieving any previously stored documents.",
+              documentFile.getAbsolutePath());
           return null;
         } else if (prefix.length() > formattedString0.length()
             && !(formattedString0 + line.substring(1))
@@ -138,24 +143,21 @@ public class DocumentStore<T extends Document> {
           T document = this.clazz.newInstance();
           if (!document.parse(new String[] { formattedString0,
               line.substring(1) })) {
-            System.err.printf("Unable to read line %d from %s.  Not "
-                + "retrieving any previously stored documents.%n",
-                lnr.getLineNumber(), documentFile.getAbsolutePath());
+            log.warn("Unable to read line {} from {}. Not retrieving any "
+                + "previously stored documents.", lnr.getLineNumber(),
+                documentFile.getAbsolutePath());
             return null;
           }
           result.add(document);
         }
       }
     } catch (IOException e) {
-      System.err.printf("Unable to read %s.  Not retrieving any "
-          + "previously stored documents.%n",
-          documentFile.getAbsolutePath());
-      e.printStackTrace();
+      log.warn("Unable to read {}. Not retrieving any previously stored "
+          + "documents.", documentFile.getAbsolutePath(), e);
       return null;
     } catch (InstantiationException | IllegalAccessException e) {
-      System.err.printf("Unable to read %s.  Cannot instantiate document "
-          + "object.%n", documentFile.getAbsolutePath());
-      e.printStackTrace();
+      log.warn("Unable to read {}. Cannot instantiate document object.",
+          documentFile.getAbsolutePath(), e);
       return null;
     }
     return result;

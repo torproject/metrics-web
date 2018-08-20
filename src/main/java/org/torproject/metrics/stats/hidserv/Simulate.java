@@ -3,6 +3,9 @@
 
 package org.torproject.metrics.stats.hidserv;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -20,6 +23,9 @@ import java.util.TreeSet;
 /* NOTE: This class is not required for running the Main class!  (It
  * contains its own main method.) */
 public class Simulate {
+
+  private static Logger log = LoggerFactory.getLogger(Simulate.class);
+
   private static File simCellsCsvFile =
       new File("out/csv/sim-cells.csv");
 
@@ -28,11 +34,11 @@ public class Simulate {
 
   /** Runs two simulations to evaluate this data-processing module. */
   public static void main(String[] args) throws Exception {
-    System.out.print("Simulating extrapolation of rendezvous cells");
+    log.info("Simulating extrapolation of rendezvous cells");
     simulateManyCells();
-    System.out.print("\nSimulating extrapolation of .onions");
+    log.info("Simulating extrapolation of .onions");
     simulateManyOnions();
-    System.out.println("\nTerminating.");
+    log.info("Terminating.");
   }
 
   private static Random rnd = new Random();
@@ -45,7 +51,7 @@ public class Simulate {
     final int numberOfExtrapolations = 1000;
     for (int i = 0; i < numberOfExtrapolations; i++) {
       bw.write(simulateCells(i));
-      System.out.print(".");
+      log.info(".");
     }
     bw.close();
   }
@@ -58,7 +64,7 @@ public class Simulate {
     final int numberOfExtrapolations = 1000;
     for (int i = 0; i < numberOfExtrapolations; i++) {
       bw.write(simulateOnions(i));
-      System.out.print(".");
+      log.info(".");
     }
     bw.close();
   }

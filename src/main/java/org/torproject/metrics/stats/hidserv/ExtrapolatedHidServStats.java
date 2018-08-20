@@ -3,10 +3,16 @@
 
 package org.torproject.metrics.stats.hidserv;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /** Extrapolated network totals of hidden-service statistics reported by a
  * single relay.  Extrapolated values are based on reported statistics and
  * computed network fractions in the statistics interval. */
 public class ExtrapolatedHidServStats implements Document {
+
+  private static Logger log
+      = LoggerFactory.getLogger(ExtrapolatedHidServStats.class);
 
   /** Date of statistics interval end in milliseconds. */
   private long statsDateMillis;
@@ -130,15 +136,16 @@ public class ExtrapolatedHidServStats implements Document {
   @Override
   public boolean parse(String[] formattedStrings) {
     if (formattedStrings.length != 2) {
-      System.err.printf("Invalid number of formatted strings.  Skipping.%n");
+      log.warn("Invalid number of formatted strings: {}. Skipping.",
+          formattedStrings.length);
       return false;
     }
     long statsDateMillis = DateTimeHelper.parse(formattedStrings[0],
         DateTimeHelper.ISO_DATE_FORMAT);
     String[] secondParts = formattedStrings[1].split(",", 5);
     if (secondParts.length != 5) {
-      System.err.printf("Invalid number of comma-separated values.  "
-          + "Skipping.%n");
+      log.warn("Invalid number of comma-separated values: {}. Skipping.",
+          secondParts.length);
       return false;
     }
     String fingerprint = secondParts[0];

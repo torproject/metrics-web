@@ -12,6 +12,9 @@ import org.torproject.descriptor.ExtraInfoDescriptor;
 import org.torproject.descriptor.NetworkStatusEntry;
 import org.torproject.descriptor.RelayNetworkStatusConsensus;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -24,6 +27,8 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 
 public class Main {
+
+  private static Logger log = LoggerFactory.getLogger(Main.class);
 
   /** Executes this data-processing module. */
   public static void main(String[] args) throws Exception {
@@ -46,8 +51,8 @@ public class Main {
       writeToSingleFile = false;
       byStatsDateNotByDescHour = false;
     } else {
-      System.err.println("Usage: java " + Main.class.getName()
-          + " [ --stats-date | --desc-hour ]");
+      log.warn("Usage: java {} [ --stats-date | --desc-hour ]",
+          Main.class.getName());
       System.exit(1);
     }
   }
