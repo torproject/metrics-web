@@ -321,9 +321,8 @@ public class ConsensusStatsFileHandler {
     /* Add average number of bridges per day to the database. */
     if (connectionUrl != null) {
       try {
-        Map<String, String> insertRows = new HashMap<>();
         Map<String, String> updateRows = new HashMap<>();
-        insertRows.putAll(this.bridgesPerDay);
+        Map<String, String> insertRows = new HashMap<>(this.bridgesPerDay);
         Connection conn = DriverManager.getConnection(connectionUrl);
         conn.setAutoCommit(false);
         Statement statement = conn.createStatement();
