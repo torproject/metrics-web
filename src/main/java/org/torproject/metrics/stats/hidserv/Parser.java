@@ -241,9 +241,7 @@ public class Parser {
   private long removeNoise(long reportedNumber, long binSize) {
     long roundedToNearestRightSideOfTheBin =
         Math.floorDiv((reportedNumber + binSize / 2), binSize) * binSize;
-    long subtractedHalfOfBinSize =
-        roundedToNearestRightSideOfTheBin - binSize / 2;
-    return subtractedHalfOfBinSize;
+    return roundedToNearestRightSideOfTheBin - binSize / 2;
   }
 
   /** Parses the given consensus. */
