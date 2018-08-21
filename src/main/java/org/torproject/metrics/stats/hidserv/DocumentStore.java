@@ -132,11 +132,9 @@ public class DocumentStore<T extends Document> {
             && !(formattedString0 + line.substring(1))
             .startsWith(prefix)) {
           /* Skip combined line not starting with prefix. */
-          continue;
         } else if (prefix.length() > 0
             && !formattedString0.startsWith(prefix)) {
           /* Skip line not starting with prefix. */
-          continue;
         } else {
           T document = this.clazz.newInstance();
           if (!document.parse(new String[] { formattedString0,
