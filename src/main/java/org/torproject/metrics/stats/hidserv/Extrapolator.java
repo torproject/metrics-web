@@ -99,9 +99,7 @@ public class Extrapolator {
         new TreeMap<>();
     for (ReportedHidServStats stat : reportedStats) {
       String fingerprint = stat.getFingerprint();
-      if (!parsedStatsByFingerprint.containsKey(fingerprint)) {
-        parsedStatsByFingerprint.put(fingerprint, new HashSet<>());
-      }
+      parsedStatsByFingerprint.putIfAbsent(fingerprint, new HashSet<>());
       parsedStatsByFingerprint.get(fingerprint).add(stat);
     }
 

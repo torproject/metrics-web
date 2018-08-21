@@ -257,13 +257,9 @@ public class ConsensusStatsFileHandler {
         continue;
       }
       String date = bridgesRawLine.substring(0, 10);
-      if (!bridgesPerDayAndAuthority.containsKey(date)) {
-        bridgesPerDayAndAuthority.put(date, new TreeMap<>());
-      }
+      bridgesPerDayAndAuthority.putIfAbsent(date, new TreeMap<>());
       String authority = parts[1];
-      if (!bridgesPerDayAndAuthority.get(date).containsKey(authority)) {
-        bridgesPerDayAndAuthority.get(date).put(authority, new int[3]);
-      }
+      bridgesPerDayAndAuthority.get(date).putIfAbsent(authority, new int[3]);
       int[] bridges = bridgesPerDayAndAuthority.get(date).get(authority);
       bridges[0] += brunning;
       bridges[1] += Integer.parseInt(parts[3]);

@@ -44,9 +44,7 @@ public abstract class MetricServlet extends AnyServlet {
       String id = metric.getId();
       String title = metric.getTitle();
       String type = metric.getType();
-      if (!this.idsByType.containsKey(type)) {
-        this.idsByType.put(type, new HashSet<>());
-      }
+      this.idsByType.putIfAbsent(type, new HashSet<>());
       this.idsByType.get(type).add(id);
       this.titles.put(id, title);
       this.descriptions.put(id, metric.getDescription());

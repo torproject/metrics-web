@@ -447,11 +447,8 @@ public class Main {
             rawStat.fractionWrite, rawStat.fractionBoth };
         for (int i = 0; i < directions.length; i++) {
           String dateAndDirection = date + "," + directions[i];
-          if (!fractionsByDateAndDirection.containsKey(
-              dateAndDirection)) {
-            fractionsByDateAndDirection.put(dateAndDirection,
-                new ArrayList<>());
-          }
+          fractionsByDateAndDirection.putIfAbsent(dateAndDirection,
+              new ArrayList<>());
           fractionsByDateAndDirection.get(dateAndDirection).add(
               fractions[i]);
         }

@@ -88,17 +88,13 @@ public class Aggregator {
         continue;
       }
       if (extrapolated.getFractionRendRelayedCells() > 0.0) {
-        if (!extrapolatedCells.containsKey(date)) {
-          extrapolatedCells.put(date, new ArrayList<>());
-        }
+        extrapolatedCells.putIfAbsent(date, new ArrayList<>());
         extrapolatedCells.get(date).add(new double[] {
             extrapolated.getExtrapolatedRendRelayedCells(),
             extrapolated.getFractionRendRelayedCells() });
       }
       if (extrapolated.getFractionDirOnionsSeen() > 0.0) {
-        if (!extrapolatedOnions.containsKey(date)) {
-          extrapolatedOnions.put(date, new ArrayList<>());
-        }
+        extrapolatedOnions.putIfAbsent(date, new ArrayList<>());
         extrapolatedOnions.get(date).add(new double[] {
             extrapolated.getExtrapolatedDirOnionsSeen(),
             extrapolated.getFractionDirOnionsSeen() });
