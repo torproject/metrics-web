@@ -3,6 +3,9 @@
 
 package org.torproject.metrics.stats.servers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,8 +14,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Initialize configuration with hard-coded defaults, overwrite with
@@ -20,6 +21,8 @@ import java.util.logging.Logger;
  * configuration.
  */
 public class Configuration {
+
+  private static Logger log = LoggerFactory.getLogger(Configuration.class);
 
   private boolean importDirectoryArchives = false;
 
@@ -47,21 +50,16 @@ public class Configuration {
   /** Initializes this configuration class. */
   public Configuration() {
 
-    /* Initialize logger. */
-    Logger logger = Logger.getLogger(Configuration.class.getName());
-
     /* Read config file, if present. */
     File configFile = new File("config");
     if (!configFile.exists()) {
-      logger.warning("Could not find config file.");
+      log.warn("Could not find config file.");
       return;
     }
     String line = null;
     try (BufferedReader br = new BufferedReader(new FileReader(configFile))) {
       while ((line = br.readLine()) != null) {
-        if (line.startsWith("#") || line.length() < 1) {
-          continue;
-        } else if (line.startsWith("ImportDirectoryArchives")) {
+        if (line.startsWith("ImportDirectoryArchives")) {
           this.importDirectoryArchives = Integer.parseInt(
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("DirectoryArchivesDirectory")) {
@@ -90,27 +88,26 @@ public class Configuration {
         } else if (line.startsWith("WriteBridgeStats")) {
           this.writeBridgeStats = Integer.parseInt(
               line.split(" ")[1]) != 0;
-        } else {
-          logger.severe("Configuration file contains unrecognized "
-              + "configuration key in line '" + line + "'! Exiting!");
+        } else if (!line.startsWith("#") && line.length() > 0) {
+          log.error("Configuration file contains unrecognized "
+              + "configuration key in line '{}'! Exiting!", line);
           System.exit(1);
         }
       }
     } catch (ArrayIndexOutOfBoundsException e) {
-      logger.severe("Configuration file contains configuration key "
-          + "without value in line '" + line + "'. Exiting!");
+      log.warn("Configuration file contains configuration key without value in "
+          + "line '{}'. Exiting!", line);
       System.exit(1);
     } catch (MalformedURLException e) {
-      logger.severe("Configuration file contains illegal URL or IP:port "
-          + "pair in line '" + line + "'. Exiting!");
+      log.warn("Configuration file contains illegal URL or IP:port pair in "
+          + "line '{}'. Exiting!", line);
       System.exit(1);
     } catch (NumberFormatException e) {
-      logger.severe("Configuration file contains illegal value in line '"
-          + line + "' with legal values being 0 or 1. Exiting!");
+      log.warn("Configuration file contains illegal value in line '{}' with "
+          + "legal values being 0 or 1. Exiting!", line);
       System.exit(1);
     } catch (IOException e) {
-      logger.log(Level.SEVERE, "Unknown problem while reading config "
-          + "file! Exiting!", e);
+      log.error("Unknown problem while reading config file! Exiting!", e);
       System.exit(1);
     }
   }

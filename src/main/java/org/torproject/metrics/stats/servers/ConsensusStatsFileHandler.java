@@ -9,6 +9,9 @@ import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.NetworkStatusEntry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,8 +31,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Generates statistics on the average number of relays and bridges per
@@ -63,10 +64,8 @@ public class ConsensusStatsFileHandler {
    */
   private SortedMap<String, String> bridgesPerDay;
 
-  /**
-   * Logger for this class.
-   */
-  private Logger logger;
+  private static Logger log = LoggerFactory.getLogger(
+      ConsensusStatsFileHandler.class);
 
   private int bridgeResultsAdded = 0;
 
@@ -113,14 +112,10 @@ public class ConsensusStatsFileHandler {
     this.dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     this.dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    /* Initialize logger. */
-    this.logger = Logger.getLogger(
-        ConsensusStatsFileHandler.class.getName());
-
     /* Read in number of running bridges per bridge status. */
     if (this.bridgeConsensusStatsRawFile.exists()) {
-      this.logger.fine("Reading file "
-          + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
+      log.debug("Reading file {}...",
+          this.bridgeConsensusStatsRawFile.getAbsolutePath());
       try (BufferedReader br = new BufferedReader(new FileReader(
           this.bridgeConsensusStatsRawFile))) {
         String line;
@@ -131,9 +126,9 @@ public class ConsensusStatsFileHandler {
           }
           String[] parts = line.split(",");
           if (parts.length < 2 || parts.length > 4) {
-            this.logger.warning("Corrupt line '" + line + "' in file "
-                + this.bridgeConsensusStatsRawFile.getAbsolutePath()
-                + "! Aborting to read this file!");
+            log.warn("Corrupt line '{}' in file {}! Aborting to read this "
+                + "file!", line,
+                this.bridgeConsensusStatsRawFile.getAbsolutePath());
             break;
           }
           /* Assume that all lines without authority nickname are based on
@@ -149,12 +144,11 @@ public class ConsensusStatsFileHandler {
           } /* No more cases as we already checked the range above. */
           this.bridgesRaw.put(key, value);
         }
-        this.logger.fine("Finished reading file "
-            + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
+        log.debug("Finished reading file {}.",
+            this.bridgeConsensusStatsRawFile.getAbsolutePath());
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Failed to read file "
-            + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "!",
-            e);
+        log.warn("Failed to read file {}!",
+            this.bridgeConsensusStatsRawFile.getAbsolutePath(), e);
       }
     }
   }
@@ -169,14 +163,13 @@ public class ConsensusStatsFileHandler {
         + authorityNickname;
     String line = publishedAuthority + "," + running + "," + runningEc2Bridges;
     if (!this.bridgesRaw.containsKey(publishedAuthority)) {
-      this.logger.finer("Adding new bridge numbers: " + line);
+      log.debug("Adding new bridge numbers: {}", line);
       this.bridgesRaw.put(publishedAuthority, line);
       this.bridgeResultsAdded++;
     } else if (!line.equals(this.bridgesRaw.get(publishedAuthority))) {
-      this.logger.warning("The numbers of running bridges we were just "
-          + "given (" + line + ") are different from what we learned "
-          + "before (" + this.bridgesRaw.get(publishedAuthority) + ")! "
-          + "Overwriting!");
+      log.warn("The numbers of running bridges we were just given ({}) are "
+          + "different from what we learned before ({})! Overwriting!", line,
+          this.bridgesRaw.get(publishedAuthority));
       this.bridgesRaw.put(publishedAuthority, line);
     }
   }
@@ -184,7 +177,7 @@ public class ConsensusStatsFileHandler {
   /** Imports sanitized bridge descriptors. */
   public void importSanitizedBridges() {
     if (bridgesDir.exists()) {
-      logger.fine("Importing files in directory " + bridgesDir + "/...");
+      log.debug("Importing files in directory {}/...", bridgesDir);
       DescriptorReader reader =
           DescriptorSourceFactory.createDescriptorReader();
       File historyFile = new File(statsDirectory,
@@ -207,8 +200,8 @@ public class ConsensusStatsFileHandler {
             authority = "Serge";
           }
           if (authority == null) {
-            this.logger.warning("Did not recognize the bridge authority "
-                + "that generated " + descriptorFileName + ".  Skipping.");
+            log.warn("Did not recognize the bridge authority that generated "
+                + "{}. Skipping.", descriptorFileName);
             continue;
           }
           this.addBridgeNetworkStatus(
@@ -218,7 +211,7 @@ public class ConsensusStatsFileHandler {
       if (keepImportHistory) {
         reader.saveHistoryFile(historyFile);
       }
-      logger.info("Finished importing bridge descriptors.");
+      log.info("Finished importing bridge descriptors.");
     }
   }
 
@@ -285,18 +278,18 @@ public class ConsensusStatsFileHandler {
       String line = "," + brunning + "," + brunningEc2;
       /* Are our results new? */
       if (!this.bridgesPerDay.containsKey(date)) {
-        this.logger.finer("Adding new average bridge numbers: " + date + line);
+        log.debug("Adding new average bridge numbers: {}{}", date, line);
         this.bridgesPerDay.put(date, line);
       } else if (!line.equals(this.bridgesPerDay.get(date))) {
-        this.logger.finer("Replacing existing average bridge numbers ("
-            + this.bridgesPerDay.get(date) + " with new numbers: " + line);
+        log.debug("Replacing existing average bridge numbers ({} with new "
+            + "numbers: {}", this.bridgesPerDay.get(date), line);
         this.bridgesPerDay.put(date, line);
       }
     }
 
     /* Write raw numbers of running bridges to disk. */
-    this.logger.fine("Writing file "
-        + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "...");
+    log.debug("Writing file {}...",
+        this.bridgeConsensusStatsRawFile.getAbsolutePath());
     this.bridgeConsensusStatsRawFile.getParentFile().mkdirs();
     try (BufferedWriter bw = new BufferedWriter(
         new FileWriter(this.bridgeConsensusStatsRawFile))) {
@@ -306,12 +299,11 @@ public class ConsensusStatsFileHandler {
         bw.append(line);
         bw.newLine();
       }
-      this.logger.fine("Finished writing file "
-          + this.bridgeConsensusStatsRawFile.getAbsolutePath() + ".");
+      log.debug("Finished writing file {}.",
+          this.bridgeConsensusStatsRawFile.getAbsolutePath());
     } catch (IOException e) {
-      this.logger.log(Level.WARNING, "Failed to write file "
-          + this.bridgeConsensusStatsRawFile.getAbsolutePath() + "!",
-          e);
+      log.warn("Failed to write file {}!",
+          this.bridgeConsensusStatsRawFile.getAbsolutePath(), e);
     }
 
     /* Add average number of bridges per day to the database. */
@@ -372,8 +364,7 @@ public class ConsensusStatsFileHandler {
         conn.commit();
         conn.close();
       } catch (SQLException e) {
-        logger.log(Level.WARNING, "Failed to add average bridge numbers "
-            + "to database.", e);
+        log.warn("Failed to add average bridge numbers to database.", e);
       }
     }
 
@@ -394,14 +385,14 @@ public class ConsensusStatsFileHandler {
       try {
         if (now - 6L * 60L * 60L * 1000L > dateTimeFormat.parse(
             this.bridgesRaw.lastKey()).getTime()) {
-          logger.warning("Last known bridge status is more than 6 hours "
-              + "old: " + this.bridgesRaw.lastKey());
+          log.warn("Last known bridge status is more than 6 hours old: {}",
+              this.bridgesRaw.lastKey());
         }
       } catch (ParseException e) {
-        logger.warning("Can't parse the timestamp? Reason: " + e);
+        log.warn("Can't parse the timestamp? Reason: {}", e);
       }
     }
-    logger.info(dumpStats.toString());
+    log.info(dumpStats.toString());
   }
 }
 

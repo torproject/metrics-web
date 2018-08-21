@@ -3,29 +3,31 @@
 
 package org.torproject.metrics.stats.servers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 public class LockFile {
 
   private File lockFile;
-  private Logger logger;
+
+  private static Logger log = LoggerFactory.getLogger(LockFile.class);
 
   public LockFile() {
     this.lockFile = new File("lock");
-    this.logger = Logger.getLogger(LockFile.class.getName());
   }
 
   /** Acquires the lock by checking whether a lock file already exists,
    * and if not, by creating one with the current system time as
    * content. */
   public boolean acquireLock() {
-    this.logger.fine("Trying to acquire lock...");
+    log.debug("Trying to acquire lock...");
     try {
       if (this.lockFile.exists()) {
         BufferedReader br = new BufferedReader(new FileReader("lock"));
@@ -40,10 +42,10 @@ public class LockFile {
       bw.append("").append(String.valueOf(System.currentTimeMillis()))
           .append("\n");
       bw.close();
-      this.logger.fine("Acquired lock.");
+      log.debug("Acquired lock.");
       return true;
     } catch (IOException e) {
-      this.logger.warning("Caught exception while trying to acquire "
+      log.warn("Caught exception while trying to acquire "
           + "lock!");
       return false;
     }
@@ -51,9 +53,9 @@ public class LockFile {
 
   /** Releases the lock by deleting the lock file, if present. */
   public void releaseLock() {
-    this.logger.fine("Releasing lock...");
+    log.debug("Releasing lock...");
     this.lockFile.delete();
-    this.logger.fine("Released lock.");
+    log.debug("Released lock.");
   }
 }
 

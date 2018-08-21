@@ -3,8 +3,10 @@
 
 package org.torproject.metrics.stats.servers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
-import java.util.logging.Logger;
 
 /**
  * Coordinate downloading and parsing of descriptors and extraction of
@@ -12,14 +14,12 @@ import java.util.logging.Logger;
  */
 public class Main {
 
+  private static Logger log = LoggerFactory.getLogger(Main.class);
+
   /** Executes this data-processing module. */
   public static void main(String[] args) {
 
-    /* Initialize logging configuration. */
-    new LoggingConfiguration();
-
-    Logger logger = Logger.getLogger(Main.class.getName());
-    logger.info("Starting ERNIE.");
+    log.info("Starting ERNIE.");
 
     // Initialize configuration
     Configuration config = new Configuration();
@@ -27,7 +27,7 @@ public class Main {
     // Use lock file to avoid overlapping runs
     LockFile lf = new LockFile();
     if (!lf.acquireLock()) {
-      logger.severe("Warning: ERNIE is already running or has not exited "
+      log.error("Warning: ERNIE is already running or has not exited "
           + "cleanly! Exiting!");
       System.exit(1);
     }
@@ -74,7 +74,7 @@ public class Main {
     // Remove lock file
     lf.releaseLock();
 
-    logger.info("Terminating ERNIE.");
+    log.info("Terminating ERNIE.");
   }
 }
 

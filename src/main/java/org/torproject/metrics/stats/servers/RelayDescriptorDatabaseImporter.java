@@ -13,6 +13,9 @@ import org.torproject.descriptor.ServerDescriptor;
 
 import org.postgresql.util.PGbytea;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -37,8 +40,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Parse directory data.
@@ -130,10 +131,8 @@ public final class RelayDescriptorDatabaseImporter {
    */
   private PreparedStatement psC;
 
-  /**
-   * Logger for this class.
-   */
-  private Logger logger;
+  private static Logger log
+      = LoggerFactory.getLogger(RelayDescriptorDatabaseImporter.class);
 
   /**
    * Directory for writing raw import files.
@@ -202,10 +201,6 @@ public final class RelayDescriptorDatabaseImporter {
     this.statsDirectory = statsDirectory;
     this.keepImportHistory = keepImportHistory;
 
-    /* Initialize logger. */
-    this.logger = Logger.getLogger(
-        RelayDescriptorDatabaseImporter.class.getName());
-
     if (connectionUrl != null) {
       try {
         /* Connect to database. */
@@ -244,8 +239,7 @@ public final class RelayDescriptorDatabaseImporter {
         this.scheduledUpdates = new HashSet<>();
         this.importIntoDatabase = true;
       } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not connect to database or "
-            + "prepare statements.", e);
+        log.warn("Could not connect to database or prepare statements.", e);
       }
     }
 
@@ -271,7 +265,7 @@ public final class RelayDescriptorDatabaseImporter {
           this.dateTimeFormat.format(timestamp).substring(0, 10)
           + " 00:00:00").getTime();
     } catch (ParseException e) {
-      this.logger.log(Level.WARNING, "Internal parsing error.", e);
+      log.warn("Internal parsing error.", e);
       return;
     }
     if (!this.scheduledUpdates.contains(dateMillis)) {
@@ -341,9 +335,8 @@ public final class RelayDescriptorDatabaseImporter {
           insertedStatusEntries.add(fingerprint);
         }
       } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not add network status "
-            + "consensus entry.  We won't make any further SQL requests "
-            + "in this execution.", e);
+        log.warn("Could not add network status consensus entry. We won't make "
+            + "any further SQL requests in this execution.", e);
         this.importIntoDatabase = false;
       }
     }
@@ -387,7 +380,7 @@ public final class RelayDescriptorDatabaseImporter {
         this.statusentryOut.write(PGbytea.toPGString(rawDescriptor)
             .replaceAll("\\\\", "\\\\\\\\") + "\n");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Could not write network status "
+        log.warn("Could not write network status "
             + "consensus entry to raw database import file.  We won't "
             + "make any further attempts to write raw import files in "
             + "this execution.", e);
@@ -444,7 +437,7 @@ public final class RelayDescriptorDatabaseImporter {
           }
         }
       } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not add server "
+        log.warn("Could not add server "
             + "descriptor.  We won't make any further SQL requests in "
             + "this execution.", e);
         this.importIntoDatabase = false;
@@ -472,7 +465,7 @@ public final class RelayDescriptorDatabaseImporter {
             + (extraInfoDigest != null ? extraInfoDigest : "\\N")
             + "\n");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Could not write server "
+        log.warn("Could not write server "
             + "descriptor to raw database import file.  We won't make "
             + "any further attempts to write raw import files in this "
             + "execution.", e);
@@ -573,7 +566,7 @@ public final class RelayDescriptorDatabaseImporter {
     for (String bandwidthHistoryString : bandwidthHistoryStrings) {
       String[] parts = bandwidthHistoryString.split(" ");
       if (parts.length != 6) {
-        this.logger.finer("Bandwidth history line does not have expected "
+        log.debug("Bandwidth history line does not have expected "
             + "number of elements. Ignoring this line.");
         continue;
       }
@@ -581,14 +574,13 @@ public final class RelayDescriptorDatabaseImporter {
       try {
         intervalLength = Long.parseLong(parts[3].substring(1));
       } catch (NumberFormatException e) {
-        this.logger.fine("Bandwidth history line does not have valid "
-            + "interval length '" + parts[3] + " " + parts[4] + "'. "
-            + "Ignoring this line.");
+        log.debug("Bandwidth history line does not have valid interval length "
+            + "'{} {}'. Ignoring this line.", parts[3], parts[4]);
         continue;
       }
       String[] values = parts[5].split(",");
       if (intervalLength % 900L != 0L) {
-        this.logger.fine("Bandwidth history line does not contain "
+        log.debug("Bandwidth history line does not contain "
             + "multiples of 15-minute intervals. Ignoring this line.");
         continue;
       } else if (intervalLength != 900L) {
@@ -606,7 +598,7 @@ public final class RelayDescriptorDatabaseImporter {
           values = newValues;
           intervalLength = 900L;
         } catch (NumberFormatException e) {
-          this.logger.fine("Number format exception while parsing "
+          log.debug("Number format exception while parsing "
               + "bandwidth history line. Ignoring this line.");
           continue;
         }
@@ -620,16 +612,15 @@ public final class RelayDescriptorDatabaseImporter {
         dateStart = dateTimeFormat.parse(parts[1] + " 00:00:00")
             .getTime();
       } catch (ParseException e) {
-        this.logger.fine("Parse exception while parsing timestamp in "
+        log.debug("Parse exception while parsing timestamp in "
             + "bandwidth history line. Ignoring this line.");
         continue;
       }
       if (Math.abs(published - intervalEnd)
           > 7L * 24L * 60L * 60L * 1000L) {
-        this.logger.fine("Extra-info descriptor publication time "
-            + dateTimeFormat.format(published) + " and last interval "
-            + "time " + intervalEndTime + " in " + type + " line differ "
-            + "by more than 7 days! Not adding this line!");
+        log.debug("Extra-info descriptor publication time {} and last interval "
+            + "time {} in {} line differ by more than 7 days! Not adding this "
+            + "line!", dateTimeFormat.format(published), intervalEndTime, type);
         continue;
       }
       long currentIntervalEnd = intervalEnd;
@@ -655,7 +646,7 @@ public final class RelayDescriptorDatabaseImporter {
           currentIntervalEnd -= intervalLength * 1000L;
         }
       } catch (NumberFormatException e) {
-        this.logger.fine("Number format exception while parsing "
+        log.debug("Number format exception while parsing "
             + "bandwidth history line. Ignoring this line.");
         continue;
       }
@@ -703,7 +694,7 @@ public final class RelayDescriptorDatabaseImporter {
               this.csH.executeBatch();
             }
           } catch (SQLException | ParseException e) {
-            this.logger.log(Level.WARNING, "Could not insert bandwidth "
+            log.warn("Could not insert bandwidth "
                 + "history line into database.  We won't make any "
                 + "further SQL requests in this execution.", e);
             this.importIntoDatabase = false;
@@ -722,7 +713,7 @@ public final class RelayDescriptorDatabaseImporter {
                 + dirreadIntArray.toString() + "','"
                 + dirwrittenIntArray.toString() + "');\n");
           } catch (IOException e) {
-            this.logger.log(Level.WARNING, "Could not write bandwidth "
+            log.warn("Could not write bandwidth "
                 + "history to raw database import file.  We won't make "
                 + "any further attempts to write raw import files in "
                 + "this execution.", e);
@@ -797,7 +788,7 @@ public final class RelayDescriptorDatabaseImporter {
           }
         }
       } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not add network status "
+        log.warn("Could not add network status "
             + "consensus.  We won't make any further SQL requests in "
             + "this execution.", e);
         this.importIntoDatabase = false;
@@ -815,7 +806,7 @@ public final class RelayDescriptorDatabaseImporter {
         String validAfterString = this.dateTimeFormat.format(validAfter);
         this.consensusOut.write(validAfterString + "\n");
       } catch (IOException e) {
-        this.logger.log(Level.WARNING, "Could not write network status "
+        log.warn("Could not write network status "
             + "consensus to raw database import file.  We won't make "
             + "any further attempts to write raw import files in this "
             + "execution.", e);
@@ -826,7 +817,7 @@ public final class RelayDescriptorDatabaseImporter {
 
   /** Imports relay descriptors into the database. */
   public void importRelayDescriptors() {
-    logger.fine("Importing files in directories " + archivesDirectories
+    log.info("Importing files in directories " + archivesDirectories
         + "/...");
     if (!this.archivesDirectories.isEmpty()) {
       DescriptorReader reader =
@@ -854,7 +845,7 @@ public final class RelayDescriptorDatabaseImporter {
       }
     }
 
-    logger.info("Finished importing relay descriptors.");
+    log.info("Finished importing relay descriptors.");
   }
 
   private void addRelayNetworkStatusConsensus(
@@ -913,12 +904,12 @@ public final class RelayDescriptorDatabaseImporter {
   public void closeConnection() {
 
     /* Log stats about imported descriptors. */
-    this.logger.info(String.format("Finished importing relay "
-        + "descriptors: %d consensuses, %d network status entries, %d "
-        + "votes, %d server descriptors, %d extra-info descriptors, %d "
-        + "bandwidth history elements, and %d dirreq stats elements",
+    log.info("Finished importing relay "
+        + "descriptors: {} consensuses, {} network status entries, {} "
+        + "votes, {} server descriptors, {} extra-info descriptors, {} "
+        + "bandwidth history elements, and {} dirreq stats elements",
         rcsCount, rrsCount, rvsCount, rdsCount, resCount, rhsCount,
-        rqsCount));
+        rqsCount);
 
     /* Insert scheduled updates a second time, just in case the refresh
      * run has started since inserting them the first time in which case
@@ -933,7 +924,7 @@ public final class RelayDescriptorDatabaseImporter {
           this.psU.execute();
         }
       } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not add scheduled dates "
+        log.warn("Could not add scheduled dates "
             + "for the next refresh run.", e);
       }
     }
@@ -945,14 +936,12 @@ public final class RelayDescriptorDatabaseImporter {
 
         this.conn.commit();
       } catch (SQLException e)  {
-        this.logger.log(Level.WARNING, "Could not commit final records "
-            + "to database", e);
+        log.warn("Could not commit final records to database", e);
       }
       try {
         this.conn.close();
       } catch (SQLException e) {
-        this.logger.log(Level.WARNING, "Could not close database "
-            + "connection.", e);
+        log.warn("Could not close database connection.", e);
       }
     }
 
@@ -975,8 +964,7 @@ public final class RelayDescriptorDatabaseImporter {
         this.consensusOut.close();
       }
     } catch (IOException e) {
-      this.logger.log(Level.WARNING, "Could not close one or more raw "
-          + "database import files.", e);
+      log.warn("Could not close one or more raw database import files.", e);
     }
   }
 }
