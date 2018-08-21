@@ -15,12 +15,12 @@ public interface Document {
    * group.  Ideally, the first string is equivalent for many documents
    * stored in the same file, and the second string is different for those
    * documents.</p> */
-  public String[] format();
+  String[] format();
 
   /** Initializes an object using the given array of two strings.
    *
    * <p>These are the same two strings that the format method
    * provides.</p> */
-  public boolean parse(String[] formattedStrings);
+  boolean parse(String[] formattedStrings);
 }
 
