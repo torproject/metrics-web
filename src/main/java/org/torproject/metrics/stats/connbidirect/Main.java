@@ -180,8 +180,8 @@ public class Main {
       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
       dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
       for (long conflictingDate : conflictingDates) {
-        sb.append("\n "
-            + dateFormat.format(conflictingDate * ONE_DAY_IN_MILLIS));
+        sb.append("\n ")
+            .append(dateFormat.format(conflictingDate * ONE_DAY_IN_MILLIS));
       }
       log.warn(sb.toString());
       return;
