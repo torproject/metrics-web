@@ -78,8 +78,8 @@ public class Main {
           return new RawStat(dateDays, fingerprint, fractionRead,
               fractionWrite, fractionBoth);
         } else {
-          log.warn("Could not deserialize raw statistic from string '" + string
-              + "'.");
+          log.warn("Could not deserialize raw statistic from string '{}'.",
+              string);
           return null;
         }
       } catch (NumberFormatException e) {
