@@ -345,7 +345,7 @@ public class RObjectGenerator implements ServletContextListener {
         this.result = new RObject(baos.toByteArray(), this.fileName,
             lastModified);
       } catch (IOException e) {
-        return;
+        /* Nothing to do here. */
       }
     }
 

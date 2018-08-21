@@ -199,19 +199,10 @@ public class Parser {
     /* Extract the fingerprint from the parsed descriptor. */
     String fingerprint = extraInfoDescriptor.getFingerprint();
 
-    /* If the descriptor did not contain any of the expected hidserv-*
-     * lines, don't do anything.  This applies to the majority of
-     * descriptors, at least as long as only a minority of relays reports
-     * these statistics. */
-    if (extraInfoDescriptor.getHidservStatsEndMillis() < 0L
-        && extraInfoDescriptor.getHidservRendRelayedCells() == null
-        && extraInfoDescriptor.getHidservDirOnionsSeen() == null) {
-      return;
-
     /* If the descriptor contained all expected hidserv-* lines, create a
      * new stats object and put it in the local map, so that it will later
      * be written to a document file. */
-    } else if (extraInfoDescriptor.getHidservStatsEndMillis() >= 0L
+    if (extraInfoDescriptor.getHidservStatsEndMillis() >= 0L
         && extraInfoDescriptor.getHidservStatsIntervalLength() >= 0L
         && extraInfoDescriptor.getHidservRendRelayedCells() != null
         && extraInfoDescriptor.getHidservRendRelayedCellsParameters() != null
@@ -237,7 +228,9 @@ public class Parser {
      * out a warning.  This case does not warrant any further action,
      * because relays can in theory write anything in their extra-info
      * descriptors.  But maybe we'll want to know. */
-    } else {
+    } else if (extraInfoDescriptor.getHidservStatsEndMillis() >= 0L
+        || extraInfoDescriptor.getHidservRendRelayedCells() != null
+        || extraInfoDescriptor.getHidservDirOnionsSeen() != null) {
       log.warn("Relay {} published incomplete hidserv-stats. Ignoring.",
           fingerprint);
     }
