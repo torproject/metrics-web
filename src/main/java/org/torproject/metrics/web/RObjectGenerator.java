@@ -89,7 +89,7 @@ public class RObjectGenerator implements ServletContextListener {
           }
         }
         for (String tableId : availableTables.keySet()) {
-          generateTable(tableId, new HashMap(), false);
+          generateTable(tableId, new HashMap<>(), false);
         }
         for (String graphId : availableGraphs.keySet()) {
           generateGraph(graphId, "png", new HashMap<>(), false);
