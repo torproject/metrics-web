@@ -173,7 +173,7 @@ public final class RelayDescriptorDatabaseImporter {
 
   /**
    * Set of fingerprints that we imported for the valid-after time in
-   * <code>lastCheckedStatusEntries</code>.
+   * {@code lastCheckedStatusEntries}.
    */
   private Set<String> insertedStatusEntries = new HashSet<>();
 

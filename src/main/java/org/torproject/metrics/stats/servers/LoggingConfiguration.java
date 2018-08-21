@@ -20,7 +20,6 @@ import java.util.logging.Logger;
  *
  * <p>Log levels used by ERNIE:</p>
  *
- * <p>
  * <ul>
  * <li>SEVERE: An event made it impossible to continue program execution.
  *     WARNING: A potential problem occurred that requires the operator to
@@ -34,7 +33,6 @@ import java.util.logging.Logger;
  *     using FINER.</li>
  * <li>FINEST: Most detailed debug messages. Not used.</li>
  * </ul>
- * </p>
  */
 public class LoggingConfiguration {
 

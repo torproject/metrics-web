@@ -33,11 +33,11 @@ import java.util.logging.Logger;
 
 /**
  * Generates statistics on the average number of relays and bridges per
- * day. Accepts parse results from <code>RelayDescriptorParser</code> and
- * <code>BridgeDescriptorParser</code> and stores them in intermediate
- * result files <code>stats/consensus-stats-raw</code> and
- * <code>stats/bridge-consensus-stats-raw</code>. Writes final results to
- * <code>stats/consensus-stats</code> for all days for which at least half
+ * day. Accepts parse results from {@code RelayDescriptorParser} and
+ * {@code BridgeDescriptorParser} and stores them in intermediate
+ * result files {@code stats/consensus-stats-raw} and
+ * {@code stats/bridge-consensus-stats-raw}. Writes final results to
+ * {@code stats/consensus-stats} for all days for which at least half
  * of the expected consensuses or statuses are known.
  */
 public class ConsensusStatsFileHandler {
@@ -52,14 +52,14 @@ public class ConsensusStatsFileHandler {
    * Number of running bridges in a given bridge status. Map keys are the bridge
    * status time formatted as "yyyy-MM-dd HH:mm:ss", a comma, and the bridge
    * authority nickname, map values are lines as read from
-   * <code>stats/bridge-consensus-stats-raw</code>.
+   * {@code stats/bridge-consensus-stats-raw}.
    */
   private SortedMap<String, String> bridgesRaw;
 
   /**
    * Average number of running bridges per day. Map keys are dates
    * formatted as "yyyy-MM-dd", map values are the remaining columns as written
-   * to <code>stats/consensus-stats</code>.
+   * to {@code stats/consensus-stats}.
    */
   private SortedMap<String, String> bridgesPerDay;
 
@@ -83,9 +83,9 @@ public class ConsensusStatsFileHandler {
 
   /**
    * Initializes this class, including reading in intermediate results
-   * files <code>stats/consensus-stats-raw</code> and
-   * <code>stats/bridge-consensus-stats-raw</code> and final results file
-   * <code>stats/consensus-stats</code>.
+   * files {@code stats/consensus-stats-raw} and
+   * {@code stats/bridge-consensus-stats-raw} and final results file
+   * {@code stats/consensus-stats}.
    */
   public ConsensusStatsFileHandler(String connectionUrl,
       File bridgesDir, File statsDirectory,
