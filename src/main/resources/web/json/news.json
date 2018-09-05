@@ -3939,19 +3939,35 @@
   "unknown" : true
 }, {
   "start" : "2018-06-10",
+  "end" : "2018-07-11",
   "places" : [ "tr" ],
   "protocols" : [ "relay" ],
   "short_description" : "Jump of relay users in Turkey, from 5k to about 30k",
-  "description" : "Jump of relay users in Turkey, from 5k to about 30k. The timing corresponds to the release of Tor Browser 7.5.5 and 8.0a8.",
+  "description" : "Jump of relay users in Turkey, from 5k to about 30k. The timing of the beginning corresponds to the release of Tor Browser 7.5.5 and 8.0a8.",
   "links" : [ {
     "label" : "relay graph",
-    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-04-01&end=2018-07-15&country=tr"
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-05-01&end=2018-09-15&country=tr"
   }, {
     "label" : "bridge graph",
-    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-04-01&end=2018-07-15&country=tr"
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-05-01&end=2018-09-15&country=tr"
   }, {
     "label" : "comment",
     "target" : "https://bugs.torproject.org/21014#comment:19"
+  } ],
+  "unknown" : true
+}, {
+  "start" : "2018-07-28",
+  "ongoing" : true,
+  "places" : [ "tr" ],
+  "protocols" : [ "relay" ],
+  "short_description" : "Another jump of relay users in Turkey, from 5k to about 30k.",
+  "description" : "Another jump of relay users in Turkey, from 5k to about 30k.",
+  "links" : [ {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-05-01&end=2018-09-15&country=tr"
+  }, {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-05-01&end=2018-09-15&country=tr"
   } ],
   "unknown" : true
 } ]
