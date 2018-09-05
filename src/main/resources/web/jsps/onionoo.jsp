@@ -322,12 +322,11 @@ an "as_name" parameter to search for relays by AS name, and added support for
 comma-separated lists in the "as" and the "lookup" parameters on August 3, 2018.
 <a href="#versions_6_2" class="anchor">#</a></li>
 <li><a id="versions_7_0"></a><strong>7.0</strong>:
-(scheduled, but not deployed yet!): Extend the "version" parameter to support
-lists and ranges, remove redundant "1_week" and "1_month" graphs from clients
-documents, change "3_months" graphs to "6_months" graphs in all documents
-containing history objects, remove the "fingerprint" parameter, and remove the
-previously deprecated "as_number" field from details documents, to be deployed
-after September 3, 2018.
+Extended the "version" parameter to support lists and ranges, removed redundant
+"1_week" and "1_month" graphs from clients documents, changed "3_months" graphs
+to "6_months" graphs in all documents containing history objects, removed the
+"fingerprint" parameter, and removed the previously deprecated "as_number" field
+from details documents on September 10, 2018.
 <a href="#versions_7_0" class="anchor">#</a></li>
 </ul>
 
@@ -485,7 +484,7 @@ Lookups are case-insensitive.
 
 <li>
 <a id="parameters_fingerprint"></a>
-<b>fingerprint <span class="label label-warning">deprecated</span></b>
+<b>fingerprint <span class="label label-warning">removed</span></b>
 <a href="#parameters_fingerprint" class="anchor">#</a>
 <p>
 Return only the relay with the parameter value matching the fingerprint
@@ -497,7 +496,7 @@ with two exceptions:
 not</i> be hashed (again) using SHA-1;
 (2) the response will contain any matching relay or bridge regardless of
 whether they have been running in the past week.
-<span class="red">Scheduled to be removed after September 3, 2018.</span>
+<span class="red">Removed on September 10, 2018.</span>
 </p>
 </li>
 
@@ -633,11 +632,6 @@ a family.
 <b>version <span class="label label-primary">updated</span></b>
 <a href="#parameters_version" class="anchor">#</a>
 <p>
-Return only relays or bridges running a Tor version that starts with the
-parameter value <i>without</i> leading <code>"Tor"</code>.
-Searches are case-insensitive.
-<span class="blue">Scheduled to support lists and ranges after September 3,
-2018:
 Return only relays or bridges running either Tor version from a list or range
 given in the parameter value.
 Tor versions must be provided <i>without</i> the leading <code>"Tor"</code>
@@ -645,7 +639,9 @@ part.
 Multiple versions can either be provided as a comma-separated list (","), as a
 range separated by two dots (".."), or as a list of ranges.
 Provided versions are parsed and matched by parsed dotted numbers, rather than
-by string prefix.</span>
+by string prefix.
+<span class="blue">Extended to support lists and ranges on September 10,
+2018.</span>
 </p>
 </li>
 
@@ -1332,7 +1328,7 @@ database.
 
 <li>
 <a id="details_relay_as_number"></a>
-<b>as_number</b> <span class="label label-warning">deprecated</span>
+<b>as_number</b> <span class="label label-warning">removed</span>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_as_number" class="anchor">#</a>
@@ -1342,7 +1338,7 @@ resolving the relay's first onion-routing IP address.
 AS number strings start with "AS", followed directly by the AS number.
 Omitted if the relay IP address could not be found in the AS
 database.
-<span class="red">Scheduled to be removed after September 3, 2018.</span>
+<span class="red">Removed on September 10, 2018.</span>
 </p>
 </li>
 
@@ -2166,7 +2162,7 @@ Keys are string representation of the time period covered by the graph
 history object.
 Keys are fixed strings <strong>"3_days"</strong>,
 <strong>"1_week"</strong>, <strong>"1_month"</strong>,
-<strong>"3_months"</strong>, <strong>"1_year"</strong>, and
+<strong>"6_months"</strong>, <strong>"1_year"</strong>, and
 <strong>"5_years"</strong>.
 Keys refer to the last known bandwidth history of a relay, not to the time
 when the bandwidth document was published.
@@ -2179,8 +2175,8 @@ The unit is bytes per second.
 Contained graph history objects may contain null values if the relay did
 not provide any bandwidth data or only data for less than 20% of a given
 time period.
-<span class="blue">Scheduled to no longer contain a "3_months" graph and instead
-a "6_months" graph after September 3, 2018.</span>
+<span class="blue">Updated to no longer contain a "3_months" graph and instead a
+"6_months" graph on September 10, 2018.</span>
 </p>
 </li>
 
@@ -2304,7 +2300,7 @@ relay to be selected by clients.
 Keys are string representation of the time period covered by the graph
 history object.
 Keys are fixed strings <strong>"1_week"</strong>,
-<strong>"1_month"</strong>, <strong>"3_months"</strong>,
+<strong>"1_month"</strong>, <strong>"6_months"</strong>,
 <strong>"1_year"</strong>, and <strong>"5_years"</strong>.
 Keys refer to the last known weights history of a relay, not to the time
 when the weights document was published.
@@ -2314,8 +2310,8 @@ period and higher data resolution.
 The unit is path-selection probability.
 Contained graph history objects may contain null values if the relay was
 running less than 20% of a given time period.
-<span class="blue">Scheduled to no longer contain a "3_months" graph and instead
-a "6_months" graph after September 3, 2018.</span>
+<span class="blue">Updated to no longer contain a "3_months" graph and instead a
+"6_months" graph on September 10, 2018.</span>
 </p>
 </li>
 
@@ -2437,8 +2433,7 @@ Object containing graph history objects with the average number of clients
 connecting to this bridge.
 Keys are string representation of the time period covered by the graph
 history object.
-Keys are fixed strings <strong>"1_week"</strong>,
-<strong>"1_month"</strong>, <strong>"3_months"</strong>,
+Keys are fixed strings <strong>"6_months"</strong>,
 <strong>"1_year"</strong>, and <strong>"5_years"</strong>.
 Keys refer to the last known clients history of a bridge, not to the time
 when the clients document was published.
@@ -2448,8 +2443,8 @@ time period and higher data resolution.
 The unit is number of clients.
 Contained graph history objects may contain null values if the bridge did
 not report client statistics for at least 50% of a given time period.
-<span class="blue">Scheduled to no longer contain "1_week", "1_month", and
-"3_months" graphs and instead a "6_months" graph after September 3, 2018.</span>
+<span class="blue">Updated to no longer contain "1_week", "1_month", and
+"3_months" graphs and instead a "6_months" graph on September 10, 2018.</span>
 </p>
 </li>
 
@@ -2503,7 +2498,7 @@ relay.
 Keys are string representation of the time period covered by the graph
 history object.
 Keys are fixed strings <strong>"1_week"</strong>,
-<strong>"1_month"</strong>, <strong>"3_months"</strong>,
+<strong>"1_month"</strong>, <strong>"6_months"</strong>,
 <strong>"1_year"</strong>, and <strong>"5_years"</strong>.
 Keys refer to the last known uptime history of a relay, not to the time
 when the uptime document was published.
@@ -2513,8 +2508,8 @@ period and higher data resolution.
 The unit is fractional uptime from 0 to 1.
 Contained graph history objects may contain null values if less than 20%
 of network statuses have been processed for a given time period.
-<span class="blue">Scheduled to no longer contain a "3_months" graph and instead
-a "6_months" graph after September 3, 2018.</span>
+<span class="blue">Updated to no longer contain a "3_months" graph and instead a
+"6_months" graph on September 10, 2018.</span>
 </p>
 </li>
 
