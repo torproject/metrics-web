@@ -594,7 +594,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 
 <div class="container">
 <h2><i class="fa fa-map-signs fa-fw" aria-hidden="true"></i>
-Onion Services <a href="#onion-services" name="servers" class="anchor">#</a></h2>
+Onion Services <a href="#onion-services" name="onion-services" class="anchor">#</a></h2>
 
 <h3>Unique .onion addresses (version 2 only)
 <a href="/hidserv-dir-onions-seen.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
