@@ -171,6 +171,8 @@ using bridges, which can be either <b>"v4"</b> or <b>"v6"</b>.</li>
 <li><b>frac:</b> Fraction of bridges in percent that the estimate is based on.</li>
 </ul>
 
+</div>
+
 <div class="container">
 <h2><i class="fa fa-server fa-fw" aria-hidden="true"></i>
 Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
@@ -393,6 +395,7 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <li><b>p:</b> Percentile as value between 0 and 100.</li>
 <li><b>all:</b> Advertised bandwidth in Gbit/s of the p-th percentile of all relays.</li>
 <li><b>exits:</b> Advertised bandwidth in Gbit/s of the p-th percentile of relays with the <b>"Exit"</b> relay flag.</li>
+</ul>
 
 <h3>Advertised bandwidth of n-th fastest relays
 <a href="/advbwdist-relay.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
@@ -696,7 +699,7 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 
 <h4>Columns</h4>
 
-</ul>
+<ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when requests to <code>torproject.org</code> web servers have been logged.</li>
 <li><b>locale:</b> Locale, like "en-US" for English (United States), "de" for German, etc., and "??" for unrecognized locales.</li>
 <li><b>initial_downloads:</b> Number of Tor Browser initial downloads.</li>
@@ -730,6 +733,8 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 <p>The remaining part of this page contains specifications and links to pre-aggregated statistics files.
 These files will no longer be publicly available after September 15, 2018.
 All relevant contained data will still be available via the statistics files specified above.</p>
+
+</div>
 
 <div class="container">
 <h3>Number of relays and bridges (deprecated) <a href="#servers" name="servers" class="anchor">#</a></h3>

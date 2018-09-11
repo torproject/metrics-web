@@ -304,7 +304,7 @@ If the <code>"platform"</code> line contains neither of these substrings, memori
 If the platform line is missing, we skip this descriptor, which later leads to not counting this relay at all rather than including it in the "Other" group, which is slightly wrong.</li>
 <li>IPv6 announced OR: Parse any <code>"or-address"</code> lines and memorize whether at least one of them contains an IPv6 address. This indicates that the relay announced an IPv6 address.</li>
 <li>IPv6 exiting: Parse the <code>"ipv6-policy"</code> line, if present, and memorize whether it's different from "reject 1-65535". This indicates whether the relay permitted exiting to IPv6 targets. If the line is not present, memorize that the relay does not permit exiting to IPv6 targets.</li>
-<li>Server descriptor digest: Compute the SHA-1 digest, or determine it from the file name in case of archived descriptor tarballs.</p>
+<li>Server descriptor digest: Compute the SHA-1 digest, or determine it from the file name in case of archived descriptor tarballs.</li>
 </ul>
 
 <h4>Step 3: Compute daily averages</h4>
@@ -429,7 +429,7 @@ Refer to the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.tx
 
 <ul>
 <li>Advertised bandwidth: Parse the three values (or just two in very old descriptors) from the <code>"bandwidth"</code> line. These values stand for the average bandwidth, burst bandwidth, and observed bandwidth. The advertised bandwidth is the minimum of these values.</li>
-<li>Server descriptor digest: Compute the SHA-1 digest, or determine it from the file name in case of archived descriptor tarballs.</p>
+<li>Server descriptor digest: Compute the SHA-1 digest, or determine it from the file name in case of archived descriptor tarballs.</li>
 </ul>
 
 <!-- Note: In the bandwidth and bandwidth-flags graph we calculate advertised bandwidth as minimum of first and third value and ignore the second. However, tor ensures in config.c that RelayBandwidthBurst is at least equal to RelayBandwidthRate. Hence, the result is the same. -->
