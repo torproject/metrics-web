@@ -661,7 +661,7 @@ Again, we compute the 25th, 50th, and 75th percentiles of these build times in t
 
 <div class="container">
 <h2><i class="fa fa-map-signs fa-fw" aria-hidden="true"></i>
-Onion Services <a href="#onion-services" name="servers" class="anchor">#</a></h2>
+Onion Services <a href="#onion-services" name="onion-services" class="anchor">#</a></h2>
 
 <p>Our <a href="/glossary.html#onion-service">onion services</a> statistics are based on two statistics reported by relays that have been added in 2014 to give some first insights into onion-service usage.
 For further background on the following steps, refer to the technical report titled <a href="https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf">"Extrapolating network totals from hidden-service statistics"</a> that this description is based on (which was written before hidden services were renamed to onion services).</p>
