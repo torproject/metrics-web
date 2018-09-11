@@ -58,7 +58,7 @@ Users <a href="#users" name="users" class="anchor">#</a></h2>
 <h3>Relay users
 <a href="/userstats-relay-country.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/userstats-relay-country.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/userstats-relay-country">#</a></h3>
+<a href="#userstats-relay-country" name="userstats-relay-country" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -83,7 +83,7 @@ Users <a href="#users" name="users" class="anchor">#</a></h2>
 <h3>Bridge users by country
 <a href="/userstats-bridge-country.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/userstats-bridge-country.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/userstats-bridge-country">#</a></h3>
+<a href="#userstats-bridge-country" name="userstats-bridge-country"class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -105,7 +105,7 @@ Users <a href="#users" name="users" class="anchor">#</a></h2>
 <h3>Bridge users by transport
 <a href="/userstats-bridge-transport.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/userstats-bridge-transport.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/userstats-bridge-transport">#</a></h3>
+<a href="#userstats-bridge-transport" name="userstats-bridge-transport" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -127,7 +127,7 @@ Users <a href="#users" name="users" class="anchor">#</a></h2>
 <h3>Bridge users by country and transport
 <a href="/userstats-bridge-combined.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/userstats-bridge-combined.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/userstats-bridge-combined">#</a></h3>
+<a href="#userstats-bridge-combined" name="userstats-bridge-combined" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -151,7 +151,7 @@ Users <a href="#users" name="users" class="anchor">#</a></h2>
 <h3>Bridge users by IP version
 <a href="/userstats-bridge-version.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/userstats-bridge-version.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/userstats-bridge-version">#</a></h3>
+<a href="#userstats-bridge-version" name="userstats-bridge-version" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -180,7 +180,7 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 <h3>Relays and bridges
 <a href="/networksize.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/networksize.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/networksize">#</a></h3>
+<a href="#networksize" name="networksize" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -200,7 +200,7 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 <h3>Relays by relay flag
 <a href="/relayflags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/relayflags.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/relayflags">#</a></h3>
+<a href="#relayflags" name="relayflags" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -221,7 +221,7 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 <h3>Relays by tor version
 <a href="/versions.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/versions.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/versions">#</a></h3>
+<a href="#versions" name="versions" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -241,7 +241,7 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 <h3>Relays by platform
 <a href="/platforms.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/platforms.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/platforms">#</a></h3>
+<a href="#platforms" name="platforms" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -264,7 +264,7 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 <h3>Relays by IP version
 <a href="/relays-ipv6.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/relays-ipv6.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/relays-ipv6">#</a></h3>
+<a href="#relays-ipv6" name="relays-ipv6" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -286,7 +286,7 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 <h3>Bridges by IP version
 <a href="/bridges-ipv6.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/bridges-ipv6.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/bridges-ipv6">#</a></h3>
+<a href="#bridges-ipv6" name="bridges-ipv6" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -312,7 +312,7 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <h3>Total relay bandwidth
 <a href="/bandwidth.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/bandwidth.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/bandwidth">#</a></h3>
+<a href="#bandwidth" name="bandwidth" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -332,7 +332,7 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <h3>Advertised and consumed bandwidth by relay flag
 <a href="/bandwidth-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/bandwidth-flags.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/bandwidth-flags">#</a></h3>
+<a href="#bandwidth-flags" name="bandwidth-flags" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -354,7 +354,7 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <h3>Advertised bandwidth by IP version
 <a href="/advbw-ipv6.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/advbw-ipv6.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/advbw-ipv6">#</a></h3>
+<a href="#advbw-ipv6" name="advbw-ipv6" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -378,7 +378,7 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <h3>Advertised bandwidth distribution
 <a href="/advbwdist-perc.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/advbwdist-perc.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/advbwdist-perc">#</a></h3>
+<a href="#advbwdist-perc" name="advbwdist-perc" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -400,7 +400,7 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <h3>Advertised bandwidth of n-th fastest relays
 <a href="/advbwdist-relay.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/advbwdist-relay.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/advbwdist-relay">#</a></h3>
+<a href="#advbwdist-relay" name="advbwdist-relay" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -422,7 +422,7 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <h3>Consumed bandwidth by Exit/Guard flag combination
 <a href="/bwhist-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/bwhist-flags.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/bwhist-flags">#</a></h3>
+<a href="#bwhist-flags" name="bwhist-flags" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -444,7 +444,7 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <h3>Bandwidth spent on answering directory requests
 <a href="/dirbytes.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/dirbytes.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/dirbytes">#</a></h3>
+<a href="#dirbytes" name="dirbytes" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -464,7 +464,7 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <h3>Fraction of connections used uni-/bidirectionally
 <a href="/connbidirect.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/connbidirect.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/connbidirect">#</a></h3>
+<a href="#connbidirect" name="connbidirect" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -492,7 +492,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <h3>Time to download files over Tor
 <a href="/torperf.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/torperf.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/torperf">#</a></h3>
+<a href="#torperf" name="torperf" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -519,7 +519,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <h3>Timeouts and failures of downloading files over Tor
 <a href="/torperf-failures.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/torperf-failures.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/torperf-failures">#</a></h3>
+<a href="#torperf-failures" name="torperf-failures" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -545,7 +545,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <h3>Circuit build times
 <a href="/onionperf-buildtimes.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/onionperf-buildtimes.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/onionperf-buildtimes">#</a></h3>
+<a href="#onionperf-buildtimes" name="onionperf-buildtimes" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -569,7 +569,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <h3>Circuit round-trip latencies
 <a href="/onionperf-latencies.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/onionperf-latencies.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/onionperf-latencies">#</a></h3>
+<a href="#onionperf-latencies" name="onionperf-latencies" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -599,7 +599,7 @@ Onion Services <a href="#onion-services" name="servers" class="anchor">#</a></h2
 <h3>Unique .onion addresses (version 2 only)
 <a href="/hidserv-dir-onions-seen.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/hidserv-dir-onions-seen.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/hidserv-dir-onions-seen">#</a></h3>
+<a href="#hidserv-dir-onions-seen" name="hidserv-dir-onions-seen" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -619,7 +619,7 @@ Onion Services <a href="#onion-services" name="servers" class="anchor">#</a></h2
 <h3>Onion-service traffic (versions 2 and 3)
 <a href="/hidserv-rend-relayed-cells.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/hidserv-rend-relayed-cells.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/hidserv-rend-relayed-cells">#</a></h3>
+<a href="#hidserv-rend-relayed-cells" name="hidserv-rend-relayed-cells" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -645,7 +645,7 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 <h3>Tor Browser downloads and updates
 <a href="/webstats-tb.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/webstats-tb.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/webstats-tb">#</a></h3>
+<a href="#webstats-tb" name="webstats-tb" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -667,7 +667,7 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 <h3>Tor Browser downloads by platform
 <a href="/webstats-tb-platform.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/webstats-tb-platform.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/webstats-tb-platform">#</a></h3>
+<a href="#webstats-tb-platform" name="webstats-tb-platform" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -688,7 +688,7 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 <h3>Tor Browser downloads by locale
 <a href="/webstats-tb-locale.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/webstats-tb-locale.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/webstats-tb-locale">#</a></h3>
+<a href="#webstats-tb-locale" name="webstats-tb-locale" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
@@ -708,7 +708,7 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 <h3>Tor Messenger downloads and updates
 <a href="/webstats-tm.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/webstats-tm.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="/webstats-tm">#</a></h3>
+<a href="#webstats-tm" name="webstats-tm" class="anchor">#</a></h3>
 
 <h4>Parameters</h4>
 
