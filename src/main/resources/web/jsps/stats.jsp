@@ -112,7 +112,7 @@ Users <a href="#users" name="users" class="anchor">#</a></h2>
 <ul>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>transport:</b> Lower-case transport name to include in the file. Possible values include <b>"obfs4"</b>, <b>"websocket"</b> for Flash proxy/websocket, <b>"fte"</b> for FTE, <b>"!%3COR%3E"</b> (percent encoding of <b>"!&lt;OR&gt;"</b>) for any pluggable transport, <b>"%3C??%3E</b> (percent encoding of <b>"&lt;??&gt;"</b>) for unknown pluggable transport(s), or <b>"%3COR%3E"</b> (percent encoding of <b>"&lt;OR&gt;"</b>) for the default OR protocol. Can be given multiple times.</li>
+<li><b>transport:</b> Lower-case transport name to include in the file. Possible values include <b>"obfs4"</b>, <b>"websocket"</b> for Flash proxy/websocket, <b>"fte"</b> for FTE, <b>"!%3COR%3E"</b> (percent encoding of <b>"!&lt;OR&gt;"</b>) for any pluggable transport, <b>"%3C??%3E"</b> (percent encoding of <b>"&lt;??&gt;"</b>) for unknown pluggable transport(s), or <b>"%3COR%3E"</b> (percent encoding of <b>"&lt;OR&gt;"</b>) for the default OR protocol. Can be given multiple times.</li>
 </ul>
 
 <h4>Columns</h4>
