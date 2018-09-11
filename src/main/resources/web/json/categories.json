@@ -1,6 +1,6 @@
 [
   {
-    "id": "clients",
+    "id": "users",
     "icon": "fa-users",
     "header": "Users",
     "summary": "Where Tor users are from and how they connect to Tor.",

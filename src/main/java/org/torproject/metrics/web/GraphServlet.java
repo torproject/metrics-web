@@ -141,6 +141,7 @@ public class GraphServlet extends MetricServlet {
     request.setAttribute("title", this.titles.get(requestedId));
     if (this.categoriesById.containsKey(requestedId)) {
       Category category = this.categoriesById.get(requestedId);
+      request.setAttribute("categoryId", category.getId());
       request.setAttribute("categoryHeader", category.getHeader());
       request.setAttribute("categoryDescription", category.getDescription());
       List<String[]> categoryTabs = new ArrayList<>();

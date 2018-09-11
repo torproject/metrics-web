@@ -161,6 +161,8 @@
 <p>Download data as
 <a href="${id}.csv${parameters}">CSV</a>.</p>
 
+<p>Learn more about the CSV data <a href="/stats.html#${id}">format</a> or how to <a href="/reproducible-metrics.html#${categoryId}">reproduce</a> the graph data.</p>
+
             </div><!-- col-md-4 -->
           </div><!-- row -->
 

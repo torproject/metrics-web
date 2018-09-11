@@ -24,6 +24,7 @@
         <li><a href="collector.html">CollecTor</a> collects and archives data from various nodes and services in the public Tor network.</li>
         <li><a href="stats.html">Statistics</a> used for visualizations on this site are available in the CSV format.</li>
         <li><a href="onionoo.html">Onionoo</a> provides current and historical data about relays and bridges via a web-based API.</li>
+        <li><a href="reproducible-metrics.html">Reproducible Metrics</a> specifies how to reproduce the data behind the graphs on this site.</li>
       </ul>
     </div>
 
