@@ -119,6 +119,8 @@
       <h2>Contact <a href="#contact" name="contact" class="anchor">#</a></h2>
       <p>If you have any questions or suggestions, contact us at <a href="mailto:metrics-team@lists.torproject.org">metrics-team@lists.torproject.org</a>, which is a <a href="https://lists.torproject.org/cgi-bin/mailman/listinfo/metrics-team" target="_blank">public mailing list</a>.</p>
 
+      <p>If you have a question about a relay or operating a relay, please contact <a href="mailto:tor-relays@lists.torproject.org">tor-relays@lists.torproject.org</a>, which is a <a href="https://lists.torproject.org/cgi-bin/mailman/listinfo/tor-relays" target="_blank">public mailing list</a> or <a href="https://lists.torproject.org/pipermail/tor-relays/" target="_blank">search the list archives</a> for answers.</p>
+
       <p>Tor Metrics is a project of:</p>
 <pre>The Tor Project, Inc.
 217 1st Ave South #4903
