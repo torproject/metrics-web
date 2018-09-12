@@ -234,7 +234,7 @@ define([
                     relay.uptime = relay.last_restarted ? relay.uptime.millisecs : null;
                     relay.last_restarted = relay.last_restarted ? relay.last_restarted : null;
                     relay.downtime = relay.last_seen ? model.parsedate(relay.last_seen).hrfull : null;
-                    relay.as_number = relay.as_number ? relay.as_number : null;
+                    relay.as = relay.as ? relay.as : null;
                     relay.as_name = relay.as_name ? relay.as_name : null;
                     relay.transports = relay.transports ? relay.transports : null;
                     relay.fingerprint = relay.hashed_fingerprint ? relay.hashed_fingerprint : relay.fingerprint;

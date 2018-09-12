@@ -7,7 +7,7 @@ define([
 ], function($, _, Backbone, aggregateModel){
   var aggregatesCollection = Backbone.Collection.extend({
     model: aggregateModel,
-    baseurl: 'https://onionoo.torproject.org/details?running=true&type=relay&fields=country,guard_probability,middle_probability,exit_probability,consensus_weight,consensus_weight_fraction,advertised_bandwidth,flags,as_number,as_name,measured,version',
+    baseurl: 'https://onionoo.torproject.org/details?running=true&type=relay&fields=country,guard_probability,middle_probability,exit_probability,consensus_weight,consensus_weight_fraction,advertised_bandwidth,flags,as,as_name,measured,version',
     url: '',
     aType: 'cc',
     lookup: function(options) {
@@ -32,8 +32,8 @@ define([
              This code will never be assigned for use with ISO 3166-1 and is "user-assigned".
              Fun fact: UN/LOCODE assigns XZ to represent installations in international waters. */
           relay.country = ((typeof relay.country) == "undefined") ? "xz" : relay.country;
-          relay.as_number = ((typeof relay.as_number) == "undefined") ? "AS0" : relay.as_number;
-          if (relay.as_number == "AS0") relay.as_name = "Unknown";
+          relay.as = ((typeof relay.as) == "undefined") ? "AS0" : relay.as;
+          if (relay.as == "AS0") relay.as_name = "Unknown";
 
           var ccAggregate = false;
           var asAggregate = false;
@@ -45,13 +45,13 @@ define([
             aggregateKey = relay.country;
             ccAggregate = true;
           } else if (collection.aType == "as") {
-            aggregateKey = relay.as_number;
+            aggregateKey = relay.as;
             asAggregate = true;
           } else if (collection.aType == "version") {
             aggregateKey = relay.version.split(".").slice(0, 3).join(".") + ".";
             versionAggregate = true;
           } else {
-            aggregateKey = relay.country + "/" + relay.as_number;
+            aggregateKey = relay.country + "/" + relay.as;
             ccAggregate = asAggregate = true;
           }
 
@@ -63,7 +63,7 @@ define([
               aggregates[aggregateKey].country = new Set();
             }
             if (asAggregate) {
-              aggregates[aggregateKey].as = relay.as_number;
+              aggregates[aggregateKey].as = relay.as;
             } else {
               aggregates[aggregateKey].as = new Set();
             }
@@ -77,7 +77,7 @@ define([
             if (relay.country !== "xz") aggregates[aggregateKey].country.add(relay.country);
           }
           if (!asAggregate) {
-            if (relay.as_number !== "AS0") aggregates[aggregateKey].as.add(relay.as_number);
+            if (relay.as !== "AS0") aggregates[aggregateKey].as.add(relay.as);
           }
           aggregates[aggregateKey].relays++;
           if ((typeof relay.guard_probability) !== "undefined") aggregates[aggregateKey].guard_probability += relay.guard_probability;

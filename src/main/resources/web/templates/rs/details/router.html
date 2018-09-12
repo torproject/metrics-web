@@ -153,7 +153,7 @@ should update it as soon as possible.</div>
     <dd><% if (relay.get('country')) { %><img class="inline country" title="<%= relay.get('countryname') %>" alt="" src="/images/cc/<%= relay.get('country') %>.png"/> <a href="#search/country:<%= relay.get('country') %>"><%= relay.get('countryname') %></a> (<a href="#search/country:<%= relay.get('country') %>%20flag:exit"><img src="/images/flags/exit.png" title="All exits in <%= relay.get('countryname') %>"></a>)<% } else { %>Unknown<% } %></dd>
 
     <dt><span class="tip" title="Autonomous System Number">AS Number</span></dt>
-    <dd><% if (relay.get('as_number') !== null) { %><a href="#search/as:<%= relay.get('as_number') %>"><%= _.escape(relay.get('as_number')) %></a><% } else { %>unknown<% }; %></dd>
+    <dd><% if (relay.get('as') !== null) { %><a href="#search/as:<%= relay.get('as') %>"><%= _.escape(relay.get('as')) %></a><% } else { %>unknown<% }; %></dd>
 
     <dt><span class="tip" title="Autonomous System Name">AS Name</span></dt>
     <dd><%= relay.get('as_name') ? _.escape(relay.get('as_name')) : "unknown" %></dd>
