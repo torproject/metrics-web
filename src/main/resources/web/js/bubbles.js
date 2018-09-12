@@ -7,9 +7,9 @@ var graphs = {
          group_id_func: function(relay) { return undefined; },
          group_name_func: function(relay) { return 'Relays'; },
   }, 'as': {
-         extra_fields: ['as_number', 'as_name'],
+         extra_fields: ['as', 'as_name'],
          group: "autonomous systems",
-         group_id_func: function(relay) { return relay.as_number; },
+         group_id_func: function(relay) { return relay.as; },
          group_name_func: function(relay) { return relay.as_name; },
   }, 'contact': {
          extra_fields: ['contact'],
