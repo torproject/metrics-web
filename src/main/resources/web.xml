@@ -96,23 +96,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>ResearchStats</servlet-name>
-    <servlet-class>
-      org.torproject.metrics.web.ResearchStatsServlet
-    </servlet-class>
-    <init-param>
-      <param-name>statsDir</param-name>
-      <param-value>
-        /srv/metrics.torproject.org/metrics/shared/stats/
-      </param-value>
-    </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResearchStats</servlet-name>
-    <url-pattern>/stats/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>GraphImage</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.GraphImageServlet
