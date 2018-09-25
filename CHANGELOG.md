@@ -1,3 +1,9 @@
+# Changes in version 1.2.0 - 2018-08-25
+
+ * Medium changes
+   - Add ExoneraTor 4.0.0 thin jar as dependency.
+
+
 # Changes in version 1.1.0 - 2018-05-29
 
  * Medium changes
