@@ -22,6 +22,11 @@
         <New class="org.apache.tomcat.util.scan.StandardJarScanner" />
       </Arg>
     </Call>
+    <Get name="sessionHandler">
+      <Get name="sessionManager">
+        <Set name="usingCookies" type="boolean">false</Set>
+      </Get>
+    </Get>
   </New>
 
   <Call class="org.eclipse.jetty.webapp.Configuration$ClassList" name="setServerDefault">
