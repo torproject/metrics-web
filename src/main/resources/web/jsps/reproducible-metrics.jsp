@@ -242,11 +242,9 @@ We therefore refer to Step 4 of the <a href="#relay-users">Relay users</a> descr
 <h2><i class="fa fa-server fa-fw" aria-hidden="true"></i>
 Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 
-<p>The following description applies to the following graphs and table:</p>
-
 <p>Statistics on the number of servers&mdash;<a href="/glossary.html#relay">relays</a> and <a href="/glossary.html#bridge">bridges</a>&mdash;were among the first to appear on Tor Metrics.
-These statistics have one thing in common: they use the number of running servers as their metric.
-Possible alternatives would be to use <a href="/glossary.html#consensus-weight">consensus weight</a> fractions or guard/middle/exit probabilities as metrics, but we're not doing that yet.
+Most of these statistics have one thing in common: they use the number of running servers as their metric.
+Possible alternatives are to use <a href="/glossary.html#consensus-weight">consensus weight</a> totals/fractions or guard/middle/exit probabilities as metrics, but we only recently started doing that.
 In the following, we describe how exactly we count servers.</p>
 
 <h3 id="running-relays" class="hover">Running relays
@@ -393,6 +391,36 @@ However, a small number of missing server descriptors per status is acceptable a
 <p>Skip the last day of the results if it matches the current UTC date, because those averages may still change throughout the day.
 For the <a href="/bridges-ipv6.html">Bridges by IP version</a> graph we further skip days for which fewer than 12 statuses are known.
 The goal is to avoid over-representing a few statuses during periods when the bridge directory authority had trouble producing a status for at least half of the day.</p>
+
+<h3 id="consensus-weight" class="hover">Consensus weight
+<a href="#consensus-weight" class="anchor">#</a>
+</h3>
+
+<p>The following statistic uses measured bandwidth, also known as <a href="/glossary.html#consensus-weight">consensus weight</a>, as metric for relay statistics, rather than absolute relay counts.</p>
+
+<p>The following description applies to the following graph:</p>
+
+<ul>
+<li>Total consensus weights across bandwidth authorities <a href="/totalcw.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
+</ul>
+
+<h4>Step 1: Parse votes.</h4>
+
+<p>Obtain votes from <a href="/collector.html#type-network-status-vote-3">CollecTor</a>.
+Refer to the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">Tor directory protocol, version 3</a> for details on the descriptor format.</p>
+
+<p>Parse and memorize the <code>"valid-after"</code> time from the vote header. We use this UTC timestamp to aggregate by the UTC date.</p>
+
+<p>Also parse the <code>"nickname"</code> and <code>"identity"</code> fields from the <code>"dir-source"</code> line. We use the identity to aggregate by authority and the nickname for display purposes.</p>
+
+<p>Parse the (optional) <code>"w"</code> lines of all status entries and compute the total of all measured bandwidth values denoted by the <code>"Measured="</code> keyword. If an entry does not contain such a value, skip the entry. If a vote does not contain a single measured bandwidth value, skip the vote.</code>
+
+<h4>Step 2: Compute daily averages</h4>
+
+<p>Go through all previously processed votes by valid-after UTC date and authority.
+If an authority published less than 12 votes on a given UTC date, skip this date and authority.
+Also skip the last date of the results, because those averages may still change throughout the day.
+For all remaining combinations of date and authority, compute the arithmetic mean of total measured bandwidth, rounded down to the next-smaller integer number.</p>
 
 </div>
 

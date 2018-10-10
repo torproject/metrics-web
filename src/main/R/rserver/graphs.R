@@ -1572,3 +1572,35 @@ write_advbw_ipv6 <- function(start_p = NULL, end_p = NULL, path_p) {
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
+prepare_totalcw <- function(start_p, end_p) {
+  read.csv(paste(stats_dir, "totalcw.csv", sep = ""),
+    colClasses = c("valid_after_date" = "Date")) %>%
+    filter(if (!is.null(start_p))
+        valid_after_date >= as.Date(start_p) else TRUE) %>%
+    filter(if (!is.null(end_p))
+        valid_after_date <= as.Date(end_p) else TRUE)
+}
+
+plot_totalcw <- function(start_p, end_p, path_p) {
+  prepare_totalcw(start_p, end_p) %>%
+    complete(valid_after_date = full_seq(valid_after_date, period = 1),
+        nesting(nickname)) %>%
+    ggplot(aes(x = valid_after_date, y = measured_sum_avg,
+      colour = nickname)) +
+    geom_line(na.rm = TRUE) +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
+    scale_colour_hue(name = "") +
+    ggtitle("Total consensus weights across bandwidth authorities") +
+    labs(caption = copyright_notice)
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
+write_totalcw <- function(start_p = NULL, end_p = NULL, path_p) {
+  prepare_totalcw(start_p, end_p) %>%
+    rename(date = valid_after_date, totalcw = measured_sum_avg) %>%
+    arrange(date, nickname) %>%
+    write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
+}
+

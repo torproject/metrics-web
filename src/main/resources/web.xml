@@ -55,6 +55,7 @@
     <url-pattern>/relays-ipv6.html</url-pattern>
     <url-pattern>/bridges-ipv6.html</url-pattern>
     <url-pattern>/advbw-ipv6.html</url-pattern>
+    <url-pattern>/totalcw.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -193,6 +194,9 @@
     <url-pattern>/advbw-ipv6.png</url-pattern>
     <url-pattern>/advbw-ipv6.pdf</url-pattern>
     <url-pattern>/advbw-ipv6.csv</url-pattern>
+    <url-pattern>/totalcw.png</url-pattern>
+    <url-pattern>/totalcw.pdf</url-pattern>
+    <url-pattern>/totalcw.csv</url-pattern>
   </servlet-mapping>
 
   <servlet>

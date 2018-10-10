@@ -45,6 +45,7 @@
   <patternset id="common" >
     <include name="commons-codec-1.10.jar"/>
     <include name="commons-lang3-3.5.jar"/>
+    <include name="commons-math3-3.6.1.jar"/>
     <include name="jackson-annotations-2.8.6.jar"/>
     <include name="jackson-core-2.8.6.jar"/>
     <include name="jackson-databind-2.8.6.jar"/>
@@ -319,6 +320,7 @@
     <antcall target="clients" />
     <antcall target="ipv6servers" />
     <antcall target="webstats" />
+    <antcall target="totalcw" />
     <antcall target="make-data-available" />
   </target>
 
@@ -470,6 +472,14 @@
     </antcall>
   </target>
 
+  <target name="totalcw" >
+    <property name="module.name" value="totalcw" />
+    <antcall target="run-java" >
+      <param name="module.main"
+             value="org.torproject.metrics.stats.totalcw.Main" />
+    </antcall>
+  </target>
+
   <!--
       The run-rserver target documents a working option of
       configuring an R server for running metrics-web.
@@ -506,6 +516,7 @@
                includes="clients*.csv userstats-combined.csv" />
       <fileset dir="${modulebase}/ipv6servers/stats" includes="ipv6servers.csv" />
       <fileset dir="${modulebase}/webstats/stats" includes="webstats.csv" />
+      <fileset dir="${modulebase}/totalcw/stats" includes="totalcw.csv" />
     </copy>
     <copy todir="${rdatadir}" >
       <fileset dir="${modulebase}/clients/RData" includes="*.RData" />

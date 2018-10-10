@@ -427,5 +427,16 @@
       "start",
       "end"
     ]
+  },
+  {
+    "id": "totalcw",
+    "title": "Total consensus weights across bandwidth authorities",
+    "type": "Graph",
+    "description": "<p>This graph shows total consensus weights across bandwidth authorities. This graph may be useful for comparing bandwidth authority implementations by comparing their total bandwidth weights.</p>",
+    "function": "totalcw",
+    "parameters": [
+      "start",
+      "end"
+    ]
   }
 ]

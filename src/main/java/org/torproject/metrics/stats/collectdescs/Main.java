@@ -24,6 +24,7 @@ public class Main {
             "/recent/relay-descriptors/consensuses/",
             "/recent/relay-descriptors/extra-infos/",
             "/recent/relay-descriptors/server-descriptors/",
+            "/recent/relay-descriptors/votes/",
             "/recent/torperf/",
             "/recent/webstats/"
         }, 0L, new File("../../shared/in"), true);

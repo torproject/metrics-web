@@ -30,6 +30,7 @@
       "platforms",
       "relays-ipv6",
       "bridges-ipv6",
+      "totalcw",
       "uptimes",
       "networkchurn",
       "bubbles"

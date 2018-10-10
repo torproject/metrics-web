@@ -1,0 +1,239 @@
+@type network-status-vote-3 1.0
+network-status-version 3
+vote-status vote
+consensus-methods 25 26 27 28
+published 2018-10-14 23:50:00
+valid-after 2018-10-15 00:00:00
+fresh-until 2018-10-15 01:00:00
+valid-until 2018-10-15 03:00:00
+voting-delay 300 300
+recommended-relay-protocols Cons=1-2 Desc=1-2 DirCache=1 HSDir=1 HSIntro=3 HSRend=1 Link=4 Microdesc=1-2 Relay=2
+recommended-client-protocols Cons=1-2 Desc=1-2 DirCache=1 HSDir=1 HSIntro=3 HSRend=1 Link=4 Microdesc=1-2 Relay=2
+required-relay-protocols Cons=1 Desc=1 DirCache=1 HSDir=1 HSIntro=3 HSRend=1 Link=3-4 Microdesc=1 Relay=1-2
+required-client-protocols Cons=1-2 Desc=1-2 DirCache=1 HSDir=1 HSIntro=3 HSRend=1 Link=4 Microdesc=1-2 Relay=2
+known-flags Authority BadExit Exit Fast Guard HSDir Running Stable V2Dir Valid
+flag-thresholds stable-uptime=1224875 stable-mtbf=2831347 fast-speed=96000 guard-wfu=98.000% guard-tk=691200 guard-bw-inc-exits=9950000 guard-bw-exc-exits=8290000 enough-mtbf=1 ignoring-advertised-bws=1
+params CircuitPriorityHalflifeMsec=30000 DoSCircuitCreationEnabled=1 DoSConnectionEnabled=1 DoSConnectionMaxConcurrentCount=50 DoSRefuseSingleHopClientRendezvous=1 NumDirectoryGuards=3 NumEntryGuards=1 NumNTorsPerTAP=100 Support022HiddenServices=0 UseNTorHandshake=1 UseOptimisticData=1 bwauthpid=1 cbttestfreq=10 hs_service_max_rdv_failures=1 hsdir_spread_store=4 pb_disablepct=0 usecreatefast=0
+dir-source Faravahar EFCBE720AB3A82B99F9E953CD5BF50F7EEFC7B97 154.35.175.225 154.35.175.225 80 443
+contact 0x0B47D56D Sina Rabbani (inf0) <sina redteam net>
+shared-rand-participate
+shared-rand-commit 1 sha3-256 EFCBE720AB3A82B99F9E953CD5BF50F7EEFC7B97 AAAAAFvD2IDD8w9Bf35KfCrPuE49LIm5bKHISapdb3PoYLGv5ZOo6w==
+shared-rand-previous-value 9 Vd2znClwwth89jp91diG/Bs1AH+0ExSgRFmyVOMJwwE=
+shared-rand-current-value 9 oiXRUZGkT26O9aQmu/A52utoBF3gp27h0TvJ4gkDHkw=
+dir-key-certificate-version 3
+fingerprint EFCBE720AB3A82B99F9E953CD5BF50F7EEFC7B97
+dir-key-published 2018-06-30 16:50:42
+dir-key-expires 2019-06-30 16:50:42
+dir-identity-key
+-----BEGIN RSA PUBLIC KEY-----
+MIIBigKCAYEAwBmqdD+G0q3smN5OBFHCcK5pQH5G1GIpFJ1JxCVEp92tTK4ZHnot
+9RzMfag6zQFqwLaJ+yEb1DOjTdTMfcUTsj5f3GUqPB+U7shSMAvvAAM+Bx/4m1AU
+u6sk4XmPB1bCBfcRl4zhnY6XFIbj0ktuBDblcxHz3lDgHFpBoci9sF59mM14MZ09
+EdwgeckcU5oeq6ApuSlUVaOT8xsKV/yeK4SKaFfDclwPAJuitQ5CpqctP7ExmlrY
+sboTDtz7/Xa6OccaGDEUf7TRlipvUX6rvlmvHm3qjdixVfExpa8E5QG79GZTL82p
+1zBd3iqc6QEnRDTiW9cMUeQt4EvrwOUVVYPWo3hp1C/iiNzWraDays2xuhaSB0gj
+fPatu2CFW5XB2vd9IvIiWeklSFqnF8DL38jDL7DbFiETJreGsDMR03yHWVd0MbPz
+OrvAxG4tJn+JtnwhzlbRjnfk53jOTbiM0vMV8h/ztapCiJeT/6i7nVQ1xL2boeYw
+5RDUlwZaQiaXAgMBAAE=
+-----END RSA PUBLIC KEY-----
+dir-signing-key
+-----BEGIN RSA PUBLIC KEY-----
+MIIBCgKCAQEA5KK/zS8zPPinA7QGbcPEPH90hoagF9EmvvgYjQ8m2L2g15/3WrdQ
+J8Ue0n0JaOb2crZEJ+d1IwbvX9mFpFx4xNsGA3CPg1/RAHwvmB7HctGOO39Y+I4h
+KLyV4AWVPXb7uvWr8Stec9sW6QLwkz2bhW61DvBlCapBzQPPqm2R+dNCUXE6ATQv
+se8jzggu1YHKk5GSLrXUvuWKbZFBb5WKaZjRXAXt3I9jSS61SG6rxJmM7uujfrkF
+UOmb5T83oWCU1zgjyz5bs0j39A7K+FxQPlMUYUe8eyo0dNu6bwSwnm0C6JGmEZXn
+ee+KeQd6Kai8++uOiPWxfqIpSD8XkF0PkwIDAQAB
+-----END RSA PUBLIC KEY-----
+dir-key-crosscert
+-----BEGIN ID SIGNATURE-----
+gVMfY1HWevSFyr5COCTcd3Y7MdSF1WnaSNUQ1YjGrM1TC4leTRAuJ1ds1uQ/jt4w
+0vbM+1X0PRuOeb7o3+Cdn2DAgjeZE5R2BCk/qowXwxHpGwCjsjkCAhHWoiXtNprj
+hUveHhMgESRK5e7l/bXC/EIFnwvmw1caQZdfwMsxzJMU8is3XJGZIEtHgAvk5AzV
+SUL+CamS/S22FdHKzvsxtLM54lWu2IQZh3QYKQnST3kdDg2fVO8eDSn5iROS58oU
+FRB8duf4knv2PGPaCB9SVfM4XouXePZZkC73VEvqnjQSxjYK3yP/msL/bbqwIgu9
+6DE1Rfqw3bfT3/yObotAYg==
+-----END ID SIGNATURE-----
+dir-key-certification
+-----BEGIN SIGNATURE-----
+ZfZ6bRHneOwthgn3/yKeLTixlaj/xVBEtFGrB5sISPAOS3XddBPMR1w2eGMZ5Dlm
+DT6Gd+C4jTOt3KjMo0NiJVpWJBNqb9sBUR0Qkc23urjgvWvy8e9AmaIKFuTrtNCX
+4qHFs3ZDElNwyIQEhLsLTtbKd1/EO0rDUlhKOT1U4rJAc+Vc51FqlFPHON8d34GK
+Qsmj+njIsMV06K1XO9TF4ERtbglzFAw+QjrzEsUSa3EIzmeYAxekiWI/KfG38WuL
+zW+11z0aJbGRtbfQbTbOuq02R3VlpkyxKDwOn0lOCXdUUpN2BK5+noAxyZeESjuN
++1rzNl5QdHgOddQA8rwUeeLYpCublWiDpm231K4q/CrT0+PJTjApfyGY5OK9HSUB
+pF/wudq+aeGT94w6A27YAQufzRYZssJZx/XOD+ptY22ddJMF8d5vvL4ZqAkd6HI6
+V55pW4NgCu6pAliAarFo3y0SUXQaiDSOzJiB9Sm6NyPpVvmVywfUvD7380u6YHf/
+-----END SIGNATURE-----
+r seele AAoQ1DAR6kkoo19hBAX5K0QztNw xlbC5aW8ovDVh2t6VcKF/phheSg 2018-10-14 21:41:22 67.174.243.193 9001 0
+s Running Stable V2Dir Valid
+v Tor 0.3.4.8
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=60 Measured=15
+p reject 1-65535
+id ed25519 ZtzhbIWHJpGQG+5N7hbRTtenyzq2RNJrx0QegtoY+bY
+m 25,26,27,28 sha256=4l7u4Oy1sCG/08MtsHimtWtaC1ydC/GOtCqRD/5ewgs
+r PutoElQueLee293884 AAwffNL+oHO5EdyUoWAOwvEX3ws Ay3cnaaHjnolSRe3ZjKcGlY17Q8 2018-10-14 08:06:47 174.127.217.73 55554 0
+s Fast Guard Running Stable V2Dir Valid
+v Tor 0.3.3.9
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=4950 Measured=5550
+p reject 1-65535
+id ed25519 /58lPWzxxQfwoxed8I9l+D3+hTdOQ6RpgVgM9FCxil4
+m 25,26,27,28 sha256=0/b37HV9enGTzbwrxxg/0R5PfwRtRosXgtU5+vi/gBk
+r CalyxInstitute14 ABG9JIWtRdmE7EFZyI/AZuXjMA4 +8xNQyAVPkKgtLH0AISVZFNuAq0 2018-10-14 11:10:20 162.247.74.201 443 80
+s Exit Fast Guard HSDir Running Stable V2Dir Valid
+v Tor 0.3.3.7
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=10000 Measured=12900
+p accept 20-23,43,53,79-81,88,110,143,194,220,389,443,464,531,543-544,554,563,636,706,749,873,902-904,981,989-995,1194,1220,1293,1500,1533,1677,1723,1755,1863,2082-2083,2086-2087,2095-2096,2102-2104,3128,3389,3690,4321,4643,5050,5190,5222-5223,5228,5900,6660-6669,6679,6697,8000,8008,8074,8080,8087-8088,8332-8333,8443,8888,9418,9999-10000,11371,12350,19294,19638,23456,33033,64738
+id ed25519 /AcSvVFxaIBxaB5I/7mwdVbMdP6JjDsEPVLU6Hj22a0
+m 25,26,27,28 sha256=7nBT4mYr4H5Jj71Qq7Nan7R7KqWPTRG89Oq1/5m4c1M
+r Neldoreth ABUk3UA9cp8I9+XXeBPvEnVs+o0 nms8ZM18C/K5XzLmgO5fHchjhFc 2018-10-14 19:09:56 185.13.39.197 443 80
+s Fast Guard Running Stable V2Dir Valid
+v Tor 0.3.4.8
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=5242 Measured=8480
+p reject 1-65535
+id ed25519 eZ49J/mRCMtMbD2GDZsjZm/gqqG9z5S6M5GykZmd2ro
+m 25,26,27,28 sha256=IxCWEdRM6Hqk1fiYx+DK9ufUPI49SE6Z4C8onbsBVXo
+r UbuntuCore246 ACenhGJF+i26Aj46wfqAaI8dc7s EmwRg8iMnKJc8GEusZxhsVf9PJI 2018-10-14 23:13:35 212.199.61.38 43511 0
+s Fast V2Dir Valid
+v Tor 0.3.3.10
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=121 Measured=120
+p reject 1-65535
+id ed25519 crWebog3RcKMV49zyu6pF5A/MxQM89x2cKNRK1wbTjM
+m 25,26,27,28 sha256=98nmfhxVBZqk7VUfyXQWpJmLAfWloZtMXu5H9FVt+p8
+r rotor25 ADQsDhVdRULlU5F4iy13nxRXjes m/3hkTP+ETmoYWZ3JrniJAeRHho 2018-10-14 17:19:08 188.24.22.193 9001 9030
+s Fast Running V2Dir Valid
+v Tor 0.3.4.8
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=3987 Measured=5580
+p reject 1-65535
+id ed25519 8ybCWdul+E3HdzEb1YR3Fbp6EIwnGGPsUhsSh7FUnfs
+m 25,26,27,28 sha256=ZeMCL1T4SogPYK0iyuzYZoyFx+mp9/Ng8vGmE8wI9rU
+r torbogen AEHgFQsKMHUGwoY+/J8rfjpSOzY DXa3G+iPbGQo4AK2iazVY6R4eKs 2018-10-14 20:19:33 178.142.72.49 9001 9030
+s Fast Running V2Dir Valid
+v Tor 0.3.3.9
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=1275 Measured=1430
+p reject 1-65535
+id ed25519 NzIv9KWavK4f+6426ctrr9UnsFl/Yt8ixEAP6OO/kVo
+m 25,26,27,28 sha256=lFXLHMP6Map0qD298F+eeybL4pqtXDRG7a7r4R7knlw
+r nicolass67atoll AES/YhfxWxj3ZvK1O85bPg4BV+k iK+QhopNtEipMSL+EeI6b/DitVc 2018-10-14 15:48:15 163.172.10.89 9001 0
+s Fast Running Stable V2Dir Valid
+v Tor 0.2.9.16
+pr Cons=1-2 Desc=1-2 DirCache=1 HSDir=1 HSIntro=3 HSRend=1-2 Link=1-4 LinkAuth=1 Microdesc=1-2 Relay=1-2
+w Bandwidth=1048 Measured=773
+p reject 1-65535
+id ed25519 ++ezzEs6r+0m0YDwFAjwpIIbNKtzMbKB13osAAoGQ/c
+m 25,26,27,28 sha256=kGlToMt+rD0tL3N+5Plqj8Nav1FVQMiSYpz0adtzs0I
+r zzzzzzzzzzzzzzzzzzz AEVz/pNLpV0H2ucjF3k69OQbdbY 1FUGYNQtQo1MgV4jRP2XJapWemI 2018-10-14 23:43:10 77.12.174.141 9002 9031
+s Fast Running V2Dir Valid
+v Tor 0.3.2.10
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=565 Measured=189
+p reject 1-65535
+id ed25519 QnM3RTCh53wbKiC6N6IsCQHs3pj9J547xUNtrk5FnYE
+m 25,26,27,28 sha256=+1jqHQZNEebT5DFJHZIPE35at9TzFCB5hzqDWAxrXGk
+r helga AFnZKULbO4TlLrTYfp97GVz00AU ngp++P8hEV+Pj/j9OvvDCyuDqKA 2018-10-14 17:09:42 88.99.216.194 9001 9030
+s Fast HSDir Running Stable V2Dir Valid
+v Tor 0.3.4.8
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=409 Measured=254
+p reject 1-65535
+id ed25519 M1nVVuHebCChHayS1hsajAkzpe4c8bEFKP499V3yBG4
+m 25,26,27,28 sha256=//iWXvWzIkvqFqwTf367uZJ2UoNwcrCrLcOs7DY5xvE
+r Torpi AHJ/OiwdDxcxqRJnxBFQecFrILQ bLi/i6JuuPmoWm1aGd73dy2tYlA 2018-10-14 15:51:48 110.146.4.151 9001 9030
+s Running Stable V2Dir Valid
+v Tor 0.2.4.29
+pr Cons=1 Desc=1 DirCache=1 HSDir=1 HSIntro=3 HSRend=1 Link=1-4 LinkAuth=1 Microdesc=1 Relay=1-2
+w Bandwidth=92 Measured=31
+p reject 1-65535
+id ed25519 none
+m 25,26,27,28 sha256=TiQfeDGlZq6VrCEKFDCA0uvS6hiv8CVMdkLyRxuRZpU
+r VeespRU2 AHTsqCvVi4uxkJycTyN/2XebI/w r3AsIyXKvSFzC+5eDuiUgPTmG9g 2018-10-14 09:25:26 185.22.172.237 443 80
+s Fast Guard HSDir Running Stable V2Dir Valid
+v Tor 0.3.3.7
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=10000 Measured=26700
+p reject 1-65535
+id ed25519 obR35oXyInFbtgitDsbasslq2SNFSTZeI1+2bJfK6HE
+m 25,26,27,28 sha256=+tNKyFkcOSA/CufXMtSfprtve7qkoDx4yjGG/XdH6Ec
+r Quintex13 AHe8unJE2z5qXtJ0boYXAGZoSIc GwoBS5ddT7ktxwqHjHYNc2u53xU 2018-10-14 07:38:44 199.249.223.62 443 80
+s Exit Fast HSDir Running Stable V2Dir Valid
+v Tor 0.3.4.8
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=9426 Measured=5000
+p accept 20-23,43,53,79-81,88,110,143,194,220,389,443,464-465,531,543-544,554,563,587,636,706,749,873,902-904,981,989-995,1194,1220,1293,1500,1533,1677,1723,1755,1863,2082-2083,2086-2087,2095-2096,2102-2104,3128,3389,3690,4321,4643,5050,5190,5222-5223,5228,5900,6660-6669,6679,6697,8000,8008,8074,8080,8082,8087-8088,8232-8233,8332-8333,8443,8888,9418,9999-10000,11371,19294,19638,50002,64738
+id ed25519 cHUct3VAkb+T4KQQQg9fLuH5feoGyjxang+Jihs0E80
+m 25,26,27,28 sha256=/JQIKi/L0aSZ8uMKc0DsHBeH2OmsvAj9GbXq8i8QQcE
+r UbuntuCore246 AH4Yastcf3fGnzddzt9ZT/1r9pk 9kJql4jbylNMYXhvn4OasP55fck 2018-10-14 11:03:40 77.146.180.194 40523 0
+s V2Dir Valid
+v Tor 0.3.3.10
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=382 Measured=19
+p reject 1-65535
+id ed25519 rSPYL+kdnVmyJ9/Ni96SNABxuvE4DDLwO9l9tqeicoA
+m 25,26,27,28 sha256=hGcbcAmK7x/tNRe7iBBqNlj6sZByhmhTSwWw/wYZo3s
+r torrelay04 AH/ZCOnPz1nmT7pCt1cdLPQBvF0 n5XUymNehFnO8hTftwd4NIozrjQ 2018-10-14 18:52:54 159.69.153.73 9000 0
+a [2a01:4f8:1c1c:5cec::1]:9000
+s Fast Running Stable Valid
+v Tor 0.3.4.8
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=8030 Measured=9010
+p reject 1-65535
+id ed25519 OJfT1k1R4UB3eNZ7+Mx9MCh9a5RBXqCcqtDfqQw4UvA
+m 25,26,27 sha256=R60ONtNwXwpVOajWfWlH4yQ7a6rBYwgLJ87p5wH55fk
+m 28 sha256=8oP/xai6UYcjJY5gx9fgrLTYY66vgdAr4y2F+R7tqUQ
+r bigamy AH/cDMglli4ShKYaaMk4pmr75XA dMrr7wRTfKoVfCRHLuR0IZFSWsI 2018-10-14 13:28:57 185.24.218.171 9001 8080
+s Exit Fast Running Stable V2Dir Valid
+v Tor 0.3.4.8
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=10000 Measured=30400
+p accept 20-21,23,43,53,79-81,88,110,143,194,220,389,443,464-465,531,543-544,554,563,587,636,706,749,853,873,902-904,981,989-995,1220,1293,1500,1533,1677,1723,1755,1863,2082-2087,2095-2096,2102-2104,2374-2382,3128,3389,3690,4321,4643,5050,5190,5222-5223,5228,5900,6660-6669,6679,6697,8000-8100,8232-8233,8332-8333,8443,8888,9418,9999-10000,11371,19294,19638,50002,64738
+id ed25519 fTOvB48qkzbEyLpBemkuyBv9UieAUeM8RNfCypusrs0
+m 25,26,27,28 sha256=GpLj/6GejSGtvDxUAUrZgarLCVjbcZVDduWCqvShOBk
+r zech1989 AI57cMO0p1ILW+q4Bnq83I5j8f0 boK7UYxCaZy4lpe8irfYPFsX6SY 2018-10-14 21:18:08 185.243.53.99 9001 9030
+s Fast Guard HSDir Running Stable V2Dir Valid
+v Tor 0.3.4.8
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=9726 Measured=11300
+p reject 1-65535
+id ed25519 wPhoSjgH8xrZ/K2wKhYKd2IR6iQ2/pO4V9rIObVIZ30
+m 25,26,27,28 sha256=hx94DElvCTLaJLuCbKr5rShGxcpKpz8f5eZdYhXwfEQ
+r paris AJf70aisEQPfmPHoXdUsUPAdOtY 9x4Jiv45IDG4EDSSXfOd+Ss9qtc 2018-10-14 22:06:20 178.19.111.147 9001 8000
+s Exit Fast Guard HSDir Running Stable V2Dir Valid
+v Tor 0.3.4.8
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=10000 Measured=40700
+p accept 20-21,23,43,53,79-81,88,110,143,194,220,389,443,464-465,531,543-544,554,563,587,636,706,749,853,873,902-904,981,989-995,1220,1293,1500,1533,1677,1723,1755,1863,2082-2087,2095-2096,2102-2104,2374-2382,3128,3389,3690,4321,4643,5050,5190,5222-5223,5228,5900,6660-6669,6679,6697,8000-8100,8232-8233,8332-8333,8443,8888,9418,9999-10000,11371,19294,19638,50002,64738
+id ed25519 s49ps0kX/BuncEzm6dG6ZmLs7DCanj/WcXlPVt0D7Tw
+m 25,26,27,28 sha256=L9vWM3tYYI2RLlnofu1m9nMTckLVSKMXftVTDUwidhw
+r jactr AJhR35M3VLAN3odvzkCIzhtJQME RLckbaDnNUH4qGCkOmDo20UwE28 2018-10-14 23:26:36 84.40.112.70 9001 9030
+s Running Stable V2Dir Valid
+v Tor 0.2.9.15
+pr Cons=1-2 Desc=1-2 DirCache=1 HSDir=1 HSIntro=3 HSRend=1-2 Link=1-4 LinkAuth=1 Microdesc=1-2 Relay=1-2
+w Bandwidth=131 Measured=77
+p reject 1-65535
+id ed25519 +Jc2Ppp+/hmdtaE8T2uxkZIhOD5/kCEfz8gyDCMiDpg
+m 25,26,27,28 sha256=tD+2RMOICoOQRFeZH6D4Kx8mRN4JzhfrtcQs8q78hPA
+r IsThisAGoodIdea AJ2M8WzPcSMatc5VyCoDRG2j+Us Gce3qKSpkK8w2D+9k75V7vNdWzI 2018-10-14 16:51:45 220.233.27.93 9001 0
+s Running Valid
+v Tor 0.3.3.9
+pr Cons=1-2 Desc=1-2 DirCache=1-2 HSDir=1-2 HSIntro=3-4 HSRend=1-2 Link=1-5 LinkAuth=1,3 Microdesc=1-2 Relay=1-2
+w Bandwidth=80 Measured=6
+p reject 1-65535
+id ed25519 peXjh3W6mWzg9iZALqNEDyP3ONQO7Vp9uSzqSszVHOA
+m 25,26,27,28 sha256=1jmLpMLTUMJr2IoHyDpGCrc/ZuBakhVUWivZ7NKwAz4
+directory-footer
+directory-signature EFCBE720AB3A82B99F9E953CD5BF50F7EEFC7B97 517095062288D1B5C7BD6517A677C586D996818B
+-----BEGIN SIGNATURE-----
+RdWrXeRxh4lZB1oTsOTy+AcYFruKg6Xzfl/D/srqmSfihcLoBIwWXePe2aLDycTj
+fcLPRt3HUnHzII61reqsVKzDXGAybMdYpPE9kygA60INsyAYFAdigMEDwY0C2qIZ
+MMJrSyORovHh4YOQHoesZPDgCUuYkuAjheKwwxdJ4O6mcYJyusm9OWVy8Iej4lKW
+ySFXC6sQt3L81MVAE24eBA1eTmUUf3fWpK/UbD0GjHYD8J+qgxm8hDwrYwVUQKmU
+u3RuRcuPYfC0tPgKLNB8sHP2o292q026M8RbcE0GnvPBQS6r2uIDfBfQLETwg0do
+h7HVCq11GZIdYe4eCZu8rQ==
+-----END SIGNATURE-----

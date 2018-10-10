@@ -304,6 +304,26 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 <li><b>total:</b> Average number of bridges.</li>
 </ul>
 
+<h3>Total consensus weights across bandwidth authorities
+<a href="/totalcw.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/totalcw.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="#totalcw" name="totalcw" class="anchor">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when bridges have been listed as running.</li>
+<li><b>nickname:</b> Bandwidth authority nickname.</li>
+<li><b>totalcw:</b> Total consensus weight of all relays measured by the bandwidth authority.</li>
+</ul>
+
 </div>
 
 <div class="container">
