@@ -809,8 +809,8 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 
 <ul>
 <li>Tor Browser downloads and updates <a href="/webstats-tb.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
-<li>Tor Browser downloads by platform <a href="/webstats-tb-platform.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
-<li>Tor Browser downloads by locale <a href="/webstats-tb-locale.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
+<li>Tor Browser downloads and updates by platform <a href="/webstats-tb-platform.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
+<li>Tor Browser downloads and updates by locale <a href="/webstats-tb-locale.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 <li>Tor Messenger downloads and updates <a href="/webstats-tm.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 </ul>
 

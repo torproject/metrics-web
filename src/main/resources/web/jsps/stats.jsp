@@ -47,7 +47,7 @@ https://metrics.torproject.org/identifier.csv
 <li><b>July 31, 2018:</b> Announced pending changes to per-graph CSV files to become effective on August 15 and pre-aggregated CSV files to be removed by September 15.</li>
 <li><b>August 15, 2018:</b> Made the first batch of changes to per-graph CSV files.</li>
 <li><b>September 15, 2018:</b> Removed all pre-aggregated CSV files.</li>
-<li><b>October 28, 2018:</b> Add and/or remove columns to <a href="#webstats-tb-platform">Tor Browser downloads by platform</a> and <a href="#webstats-tb-locale">Tor Browser downloads by locale</a> graphs.</li>
+<li><b>October 28, 2018:</b> Added and/or removed columns to <a href="#webstats-tb-platform">Tor Browser downloads and updates by platform</a> and <a href="#webstats-tb-locale">Tor Browser downloads and updates by locale</a> graphs.</li>
 </ul>
 
 </div>
@@ -685,7 +685,7 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 <li><b>update_requests:</b> Number of Tor Browser update requests: GET requests to all sites with resource strings <code>'%/torbrowser/%.mar'</code> and response code 302.</li>
 </ul>
 
-<h3>Tor Browser downloads by platform
+<h3>Tor Browser downloads and updates by platform
 <a href="/webstats-tb-platform.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/webstats-tb-platform.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
 <a href="#webstats-tb-platform" name="webstats-tb-platform" class="anchor">#</a></h3>
@@ -701,15 +701,12 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when requests to <code>torproject.org</code> web servers have been logged.</li>
-<li><b>linux:</b> Number of Tor Browser initial downloads for Linux. <span class="red">This column is going to be removed after October 28, 2018.</span></li>
-<li><b>macos:</b> Number of Tor Browser initial downloads for macOS. <span class="red">This column is going to be removed after October 28, 2018.</span></li>
-<li><b>windows:</b> Number of Tor Browser initial downloads for Windows. <span class="red">This column is going to be removed after October 28, 2018.</span></li>
-<li><b>platform:</b> Platform, like "Linux", "macOS", or "Windows". <span class="blue">This column is going to be added after October 28, 2018.</span></li>
-<li><b>initial_downloads:</b> Number of Tor Browser initial downloads. <span class="blue">This column is going to be added after October 28, 2018.</span></li>
-<li><b>update_pings:</b> Number of Tor Browser update pings. <span class="blue">This column is going to be added after October 28, 2018.</span></li>
+<li><b>platform:</b> Platform, like "Linux", "macOS", or "Windows".</li>
+<li><b>initial_downloads:</b> Number of Tor Browser initial downloads.</li>
+<li><b>update_pings:</b> Number of Tor Browser update pings.</li>
 </ul>
 
-<h3>Tor Browser downloads by locale
+<h3>Tor Browser downloads and updates by locale
 <a href="/webstats-tb-locale.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/webstats-tb-locale.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
 <a href="#webstats-tb-locale" name="webstats-tb-locale" class="anchor">#</a></h3>
@@ -727,7 +724,7 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 <li><b>date:</b> UTC date (YYYY-MM-DD) when requests to <code>torproject.org</code> web servers have been logged.</li>
 <li><b>locale:</b> Locale, like "en-US" for English (United States), "de" for German, etc., and "??" for unrecognized locales.</li>
 <li><b>initial_downloads:</b> Number of Tor Browser initial downloads.</li>
-<li><b>update_pings:</b> Number of Tor Browser update pings. <span class="blue">This column is going to be added after October 28, 2018.</span></li>
+<li><b>update_pings:</b> Number of Tor Browser update pings.</li>
 </ul>
 
 <h3>Tor Messenger downloads and updates

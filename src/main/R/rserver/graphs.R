@@ -1331,14 +1331,17 @@ prepare_webstats_tb_platform <- function(start_p, end_p) {
     colClasses = c("log_date" = "Date")) %>%
     filter(if (!is.null(start_p)) log_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) log_date <= as.Date(end_p) else TRUE) %>%
-    filter(request_type == "tbid") %>%
-    group_by(log_date, platform) %>%
+    filter(request_type %in% c("tbid", "tbup")) %>%
+    group_by(log_date, platform, request_type) %>%
     summarize(count = sum(count))
 }
 
 plot_webstats_tb_platform <- function(start_p, end_p, path_p) {
-  prepare_webstats_tb_platform(start_p, end_p) %>%
-    ggplot(aes(x = log_date, y = count, colour = platform)) +
+  d <- prepare_webstats_tb_platform(start_p, end_p)
+  levels(d$request_type) <- list(
+      "Initial downloads" = "tbid",
+      "Update pings" = "tbup")
+  ggplot(d, aes(x = log_date, y = count, colour = platform)) +
     geom_point() +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
@@ -1347,9 +1350,11 @@ plot_webstats_tb_platform <- function(start_p, end_p, path_p) {
     scale_colour_hue(name = "Platform",
         breaks = c("w", "m", "l", "o", ""),
         labels = c("Windows", "macOS", "Linux", "Other", "Unknown")) +
+    facet_grid(request_type ~ ., scales = "free_y") +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
-          strip.background = element_rect(fill = NA)) +
-    ggtitle("Tor Browser downloads by platform") +
+          strip.background = element_rect(fill = NA),
+          legend.position = "top") +
+    ggtitle("Tor Browser downloads and updates by platform") +
     labs(caption = copyright_notice)
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
 }
@@ -1357,8 +1362,8 @@ plot_webstats_tb_platform <- function(start_p, end_p, path_p) {
 write_webstats_tb_platform <- function(start_p = NULL, end_p = NULL, path_p) {
   prepare_webstats_tb_platform(start_p, end_p) %>%
     rename(date = log_date) %>%
-    spread(platform, count) %>%
-    rename(linux = l, macos = m, windows = w) %>%
+    spread(request_type, count, fill = 0) %>%
+    rename(initial_downloads = tbid, update_pings = tbup) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
@@ -1366,12 +1371,16 @@ plot_webstats_tb_locale <- function(start_p, end_p, path_p) {
   d <- read.csv(paste(stats_dir, "webstats.csv", sep = ""),
     colClasses = c("log_date" = "Date", "locale" = "character"))
   d <- d[d$log_date >= start_p & d$log_date <= end_p &
-         d$request_type == "tbid", ]
+         d$request_type %in% c("tbid", "tbup"), ]
+  levels(d$request_type) <- list(
+      "Initial downloads" = "tbid",
+      "Update pings" = "tbup")
   e <- d
   e <- aggregate(list(count = e$count), by = list(locale = e$locale), FUN = sum)
   e <- e[order(e$count, decreasing = TRUE), ]
   e <- e[1:5, ]
   d <- aggregate(list(count = d$count), by = list(log_date = d$log_date,
+    request_type = d$request_type,
     locale = ifelse(d$locale %in% e$locale, d$locale, "(other)")), FUN = sum)
   ggplot(d, aes(x = log_date, y = count, colour = locale)) +
     geom_point() +
@@ -1382,9 +1391,11 @@ plot_webstats_tb_locale <- function(start_p, end_p, path_p) {
     scale_colour_hue(name = "Locale",
         breaks = c(e$locale, "(other)"),
         labels = c(e$locale, "Other")) +
+    facet_grid(request_type ~ ., scales = "free_y") +
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
-          strip.background = element_rect(fill = NA)) +
-    ggtitle("Tor Browser downloads by locale") +
+          strip.background = element_rect(fill = NA),
+          legend.position = "top") +
+    ggtitle("Tor Browser downloads and updates by locale") +
     labs(caption = copyright_notice)
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
 }
@@ -1399,10 +1410,13 @@ write_webstats_tb_locale <- function(start_p = NULL, end_p = NULL, path_p) {
     colClasses = c("log_date" = "Date", "locale" = "character")) %>%
     filter(if (!is.null(start_p)) log_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) log_date <= as.Date(end_p) else TRUE) %>%
-    filter(request_type == "tbid") %>%
-    group_by(log_date, locale) %>%
-    summarize(initial_downloads = sum(count)) %>%
+    filter(request_type %in% c("tbid", "tbup")) %>%
     rename(date = log_date) %>%
+    group_by(date, locale, request_type) %>%
+    summarize(count = sum(count)) %>%
+    mutate(request_type = factor(request_type, levels = c("tbid", "tbup"))) %>%
+    spread(request_type, count, fill = 0) %>%
+    rename(initial_downloads = tbid, update_pings = tbup) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 

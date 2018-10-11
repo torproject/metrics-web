@@ -397,9 +397,9 @@
   },
   {
     "id": "webstats-tb-platform",
-    "title": "Tor Browser downloads by platform",
+    "title": "Tor Browser downloads and updates by platform",
     "type": "Graph",
-    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers to download a Tor Browser executable, broken down by platform (Windows, macOS, Linux) of the requested executable.  Note that this graph does <em>not</em> show the platform used to download Tor Browser but the platform that it was downloaded for.</p>",
+    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers to download a Tor Browser executable and requests made by Tor Browser to check for an update, broken down by platform (Windows, macOS, Linux). Note that, at least for initial downloads, this graph does <em>not</em> show the platform used to download Tor Browser but the platform that it was downloaded for.</p>",
     "function": "webstats_tb_platform",
     "parameters": [
       "start",
@@ -408,9 +408,9 @@
   },
   {
     "id": "webstats-tb-locale",
-    "title": "Tor Browser downloads by locale",
+    "title": "Tor Browser downloads and updates by locale",
     "type": "Graph",
-    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers to download a Tor Browser executable, broken down by requested locale.</p>",
+    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers to download a Tor Browser executable and requests made by Tor Browser to check for an update, broken down by locale.</p>",
     "function": "webstats_tb_locale",
     "parameters": [
       "start",
