@@ -73,7 +73,7 @@
       </div>
 
       <div class="col-sm-4">
-        <a href="https://exonerator.torproject.org/"><i class="fa fa-history fa-fw fa-4x" aria-hidden="true"></i> <h3>Network Archive</h3> <p>Look up if a particular IP address was used as a Tor relay on a particular date.</p></a>
+        <a href="/exonerator.html"><i class="fa fa-history fa-fw fa-4x" aria-hidden="true"></i> <h3>Network Archive</h3> <p>Look up if a particular IP address was used as a Tor relay on a particular date.</p></a>
       </div>
 
     </div>
