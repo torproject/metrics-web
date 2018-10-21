@@ -400,7 +400,8 @@ plot_versions <- function(start_p, end_p, path_p) {
   s <- prepare_versions(start_p, end_p)
   known_versions <- c("Other", "0.1.0", "0.1.1", "0.1.2", "0.2.0",
         "0.2.1", "0.2.2", "0.2.3", "0.2.4", "0.2.5", "0.2.6", "0.2.7",
-        "0.2.8", "0.2.9", "0.3.0", "0.3.1", "0.3.2", "0.3.3", "0.3.4")
+        "0.2.8", "0.2.9", "0.3.0", "0.3.1", "0.3.2", "0.3.3", "0.3.4",
+        "0.3.5")
   getPalette <- colorRampPalette(brewer.pal(12, "Paired"))
   colours <- data.frame(breaks = known_versions,
     values = rep(brewer.pal(min(12, length(known_versions)), "Paired"),
