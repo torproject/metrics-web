@@ -58,9 +58,9 @@ SELECT date,
   filesize,
   source,
   server,
-  q[1] AS q1,
-  q[2] AS md,
-  q[3] AS q3,
+  CASE WHEN q IS NULL THEN NULL ELSE q[1] END AS q1,
+  CASE WHEN q IS NULL THEN NULL ELSE q[2] END AS md,
+  CASE WHEN q IS NULL THEN NULL ELSE q[3] END AS q3,
   timeouts,
   failures,
   requests
@@ -70,7 +70,9 @@ SELECT DATE(start) AS date,
   source,
   CASE WHEN endpointremote LIKE '%.onion%' THEN 'onion'
     ELSE 'public' END AS server,
-  PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY datacomplete) AS q,
+  CASE WHEN COUNT(*) > 0 THEN
+    PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY datacomplete)
+    ELSE NULL END AS q,
   COUNT(CASE WHEN didtimeout OR datacomplete < 1 THEN 1 ELSE NULL END)
     AS timeouts,
   COUNT(CASE WHEN NOT didtimeout AND datacomplete >= 1
@@ -85,7 +87,9 @@ SELECT DATE(start) AS date,
   '' AS source,
   CASE WHEN endpointremote LIKE '%.onion%' THEN 'onion'
     ELSE 'public' END AS server,
-  PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY datacomplete) AS q,
+  CASE WHEN COUNT(*) > 0 THEN
+    PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY datacomplete)
+    ELSE NULL END AS q,
   COUNT(CASE WHEN didtimeout OR datacomplete < 1 THEN 1 ELSE NULL END)
     AS timeouts,
   COUNT(CASE WHEN NOT didtimeout AND datacomplete >= 1
