@@ -28,6 +28,7 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class TotalcwRelayNetworkStatusVoteTest {
 
+  /** Provide test data. */
   @Parameters
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][] {

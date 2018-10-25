@@ -3,9 +3,10 @@
 
 package org.torproject.metrics.stats.totalcw;
 
-import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 import org.torproject.descriptor.NetworkStatusEntry;
 import org.torproject.descriptor.RelayNetworkStatusVote;
+
+import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 
 import java.time.Instant;
 import java.time.ZoneId;
