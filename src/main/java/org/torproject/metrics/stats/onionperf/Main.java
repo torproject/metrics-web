@@ -250,9 +250,9 @@ public class Main {
             rs.getInt("filesize"),
             emptyNull(rs.getString("source")),
             emptyNull(rs.getString("server")),
-            rs.getDouble("q1"),
-            rs.getDouble("md"),
-            rs.getDouble("q3"),
+            getDoubleFromResultSet(rs, "q1"),
+            getDoubleFromResultSet(rs, "md"),
+            getDoubleFromResultSet(rs, "q3"),
             rs.getInt("timeouts"),
             rs.getInt("failures"),
             rs.getInt("requests")));
@@ -313,6 +313,20 @@ public class Main {
 
   private static String emptyNull(String text) {
     return null == text ? "" : text;
+  }
+
+  /** Retrieves the <code>double</code> value of the designated column in the
+   * current row of the given <code>ResultSet</code> object as a
+   * <code>Double</code> object, or <code>null</code> if the retrieved value was
+   * <code>NULL</code>. */
+  private static Double getDoubleFromResultSet(ResultSet rs, String columnLabel)
+      throws SQLException {
+    double result = rs.getDouble(columnLabel);
+    if (rs.wasNull()) {
+      return null;
+    } else {
+      return result;
+    }
   }
 
   static void writeStatistics(Path webstatsPath, List<String> statistics)
