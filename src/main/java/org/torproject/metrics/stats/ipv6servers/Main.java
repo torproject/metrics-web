@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 /** Main class of the ipv6servers module that imports relevant parts from server
  * descriptors and network statuses into a database, and exports aggregate
- * statistics on IPv6 support to a CSV file. */
+ * statistics to CSV files. */
 public class Main {
 
   private static Logger log = LoggerFactory.getLogger(Main.class);
@@ -61,8 +61,13 @@ public class Main {
           } else if (descriptor instanceof BridgeNetworkStatus) {
             database.insertStatus(parser.parseBridgeNetworkStatus(
                 (BridgeNetworkStatus) descriptor));
+          } else if (null != descriptor.getRawDescriptorBytes()) {
+            log.debug("Skipping unknown descriptor of type {} starting with "
+                + "'{}'.", descriptor.getClass(),
+                new String(descriptor.getRawDescriptorBytes(), 0,
+                Math.min(descriptor.getRawDescriptorLength(), 100)));
           } else {
-            log.debug("Skipping unknown descriptor of type {}.",
+            log.debug("Skipping unknown, empty descriptor of type {}.",
                 descriptor.getClass());
           }
         }
@@ -81,11 +86,16 @@ public class Main {
       reader.saveHistoryFile(historyFile);
 
       log.info("Querying aggregated statistics from the database.");
-      Iterable<OutputLine> output = database.queryServersIpv6();
-      log.info("Writing aggregated statistics to {}.", Configuration.output);
-      if (null != output) {
-        new Writer().write(Paths.get(Configuration.output), output);
-      }
+      new Writer().write(Paths.get(Configuration.output, "ipv6servers.csv"),
+          database.queryServersIpv6());
+      new Writer().write(Paths.get(Configuration.output, "networksize.csv"),
+          database.queryNetworksize());
+      new Writer().write(Paths.get(Configuration.output, "relayflags.csv"),
+          database.queryRelayflags());
+      new Writer().write(Paths.get(Configuration.output, "versions.csv"),
+          database.queryVersions());
+      new Writer().write(Paths.get(Configuration.output, "platforms.csv"),
+          database.queryPlatforms());
 
       log.info("Terminating ipv6servers module.");
     } catch (SQLException sqle) {

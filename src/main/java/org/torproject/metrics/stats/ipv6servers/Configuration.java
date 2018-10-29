@@ -13,6 +13,6 @@ class Configuration {
   static String history = System.getProperty("ipv6servers.history",
       "status/read-descriptors");
   static String output = System.getProperty("ipv6servers.output",
-      "stats/ipv6servers.csv");
+      "stats/");
 }
 

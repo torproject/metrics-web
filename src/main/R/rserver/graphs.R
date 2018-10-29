@@ -349,16 +349,10 @@ robust_call <- function(wrappee, filename) {
 }
 
 prepare_networksize <- function(start_p, end_p) {
-  read.csv(paste(stats_dir, "servers.csv", sep = ""),
+  read.csv(paste(stats_dir, "networksize.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
-    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(flag == "") %>%
-    filter(country == "") %>%
-    filter(version == "") %>%
-    filter(platform == "") %>%
-    filter(ec2bridge == "") %>%
-    select(date, relays, bridges)
+    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE)
 }
 
 plot_networksize <- function(start_p, end_p, path_p) {
@@ -384,16 +378,10 @@ write_networksize <- function(start_p = NULL, end_p = NULL, path_p) {
 }
 
 prepare_versions <- function(start_p, end_p) {
-  read.csv(paste(stats_dir, "servers.csv", sep = ""),
+  read.csv(paste(stats_dir, "versions.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
-    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(flag == "") %>%
-    filter(country == "") %>%
-    filter(version != "") %>%
-    filter(platform == "") %>%
-    filter(ec2bridge == "") %>%
-    select(date, version, relays)
+    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE)
 }
 
 plot_versions <- function(start_p, end_p, path_p) {
@@ -428,18 +416,10 @@ write_versions <- function(start_p = NULL, end_p = NULL, path_p) {
 }
 
 prepare_platforms <- function(start_p, end_p) {
-  read.csv(paste(stats_dir, "servers.csv", sep = ""),
+  read.csv(paste(stats_dir, "platforms.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
-    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(flag == "") %>%
-    filter(country == "") %>%
-    filter(version == "") %>%
-    filter(platform != "") %>%
-    filter(ec2bridge == "") %>%
-    select(date, platform, relays) %>%
-    mutate(platform = ifelse(platform == "Darwin", "macOS",
-      as.character(platform)))
+    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE)
 }
 
 plot_platforms <- function(start_p, end_p, path_p) {
@@ -451,7 +431,8 @@ plot_platforms <- function(start_p, end_p, path_p) {
     scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
     scale_colour_manual(name = "Platform",
       breaks = c("Linux", "macOS", "BSD", "Windows", "Other"),
-      values = c("#E69F00", "#56B4E9", "#009E73", "#0072B2", "#333333")) +
+      values = c("Linux" = "#56B4E9", "macOS" = "#333333", "BSD" = "#E69F00",
+          "Windows" = "#0072B2", "Other" = "#009E73")) +
     ggtitle("Relay platforms") +
     labs(caption = copyright_notice)
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
@@ -576,17 +557,11 @@ write_dirbytes <- function(start_p = NULL, end_p = NULL, path_p) {
 }
 
 prepare_relayflags <- function(start_p, end_p, flag_p) {
-  read.csv(paste(stats_dir, "servers.csv", sep = ""),
+  read.csv(paste(stats_dir, "relayflags.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(country == "") %>%
-    filter(version == "") %>%
-    filter(platform == "") %>%
-    filter(ec2bridge == "") %>%
-    mutate(flag = ifelse(flag == "", "Running", as.character(flag))) %>%
-    filter(if (!is.null(flag_p)) flag %in% flag_p else TRUE) %>%
-    select(date, flag, relays)
+    filter(if (!is.null(flag_p)) flag %in% flag_p else TRUE)
 }
 
 plot_relayflags <- function(start_p, end_p, flag_p, path_p) {

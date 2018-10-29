@@ -3,6 +3,8 @@
  * Medium changes
    - Start downloading and processing votes.
    - Add Apache Commons Math 3.6.1 as dependency.
+   - Extend ipv6servers module to generate servers part of legacy
+     module.
 
 
 # Changes in version 1.2.0 - 2018-08-25

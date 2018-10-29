@@ -16,7 +16,7 @@ import java.util.List;
 class Writer {
 
   /** Write output lines to the given file. */
-  void write(Path filePath, Iterable<OutputLine> outputLines)
+  void write(Path filePath, Iterable<String[]> outputLines)
       throws IOException {
     File parentFile = filePath.toFile().getParentFile();
     if (null != parentFile && !parentFile.exists()) {
@@ -26,9 +26,15 @@ class Writer {
       }
     }
     List<String> formattedOutputLines = new ArrayList<>();
-    formattedOutputLines.add(OutputLine.columnHeadersDelimitedBy(","));
-    for (OutputLine line : outputLines) {
-      formattedOutputLines.add(line.toString());
+    for (String[] outputLine : outputLines) {
+      StringBuilder formattedOutputLine = new StringBuilder();
+      for (String outputLinePart : outputLine) {
+        formattedOutputLine.append(',');
+        if (null != outputLinePart) {
+          formattedOutputLine.append(outputLinePart);
+        }
+      }
+      formattedOutputLines.add(formattedOutputLine.substring(1));
     }
     Files.write(filePath, formattedOutputLines, StandardCharsets.UTF_8);
   }

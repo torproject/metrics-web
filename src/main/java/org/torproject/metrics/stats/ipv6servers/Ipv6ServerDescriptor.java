@@ -10,6 +10,14 @@ class Ipv6ServerDescriptor {
   /** Hex-encoded SHA-1 server descriptor digest. */
   String digest;
 
+  /** Platform obtained from the platform line without the Tor software
+   * version. */
+  String platform;
+
+  /** Tor software version obtained from the platform line without the
+   * platform. */
+  String version;
+
   /** Advertised bandwidth bytes of this relay as the minimum of bandwidth rate,
    * bandwidth burst, and observed bandwidth (if reported); 0 for bridges. */
   int advertisedBandwidth;
