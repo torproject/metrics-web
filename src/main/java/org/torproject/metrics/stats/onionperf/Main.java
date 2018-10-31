@@ -248,8 +248,8 @@ public class Main {
         statistics.add(String.format("%s,%d,%s,%s,%.0f,%.0f,%.0f,%d,%d,%d",
             dateFormat.format(rs.getDate("date", calendar)),
             rs.getInt("filesize"),
-            emptyNull(rs.getString("source")),
-            emptyNull(rs.getString("server")),
+            getStringFromResultSet(rs, "source"),
+            getStringFromResultSet(rs, "server"),
             getDoubleFromResultSet(rs, "q1"),
             getDoubleFromResultSet(rs, "md"),
             getDoubleFromResultSet(rs, "q3"),
@@ -276,7 +276,7 @@ public class Main {
       while (rs.next()) {
         statistics.add(String.format("%s,%s,%d,%d,%d,%d",
             dateFormat.format(rs.getDate("date", calendar)),
-            emptyNull(rs.getString("source")),
+            getStringFromResultSet(rs, "source"),
             rs.getInt("position"),
             rs.getInt("q1"),
             rs.getInt("md"),
@@ -301,7 +301,7 @@ public class Main {
       while (rs.next()) {
         statistics.add(String.format("%s,%s,%s,%d,%d,%d",
             dateFormat.format(rs.getDate("date", calendar)),
-            emptyNull(rs.getString("source")),
+            getStringFromResultSet(rs, "source"),
             rs.getString("server"),
             rs.getInt("q1"),
             rs.getInt("md"),
@@ -311,8 +311,13 @@ public class Main {
     return statistics;
   }
 
-  private static String emptyNull(String text) {
-    return null == text ? "" : text;
+  /** Retrieves the <code>String</code> value of the designated column in the
+   * current row of the given <code>ResultSet</code> object, or returns the
+   * empty string if the retrieved value was <code>NULL</code>. */
+  private static String getStringFromResultSet(ResultSet rs, String columnLabel)
+      throws SQLException {
+    String result = rs.getString(columnLabel);
+    return null == result ? "" : result;
   }
 
   /** Retrieves the <code>double</code> value of the designated column in the
@@ -322,11 +327,7 @@ public class Main {
   private static Double getDoubleFromResultSet(ResultSet rs, String columnLabel)
       throws SQLException {
     double result = rs.getDouble(columnLabel);
-    if (rs.wasNull()) {
-      return null;
-    } else {
-      return result;
-    }
+    return rs.wasNull() ? null : result;
   }
 
   static void writeStatistics(Path webstatsPath, List<String> statistics)
