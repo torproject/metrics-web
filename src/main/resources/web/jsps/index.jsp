@@ -6,6 +6,11 @@
 </jsp:include>
 
   <div class="container">
+
+  <div class="col-12 alert alert-success" role="alert">
+    <strong>We're hiring</strong> &ndash; The Tor Project is seeking an experienced Data Architect to take our metrics work to the next level. <a href="https://www.torproject.org/about/jobs-metrics-data-architect.html.en" target="_blank">Read the job posting.</a>
+  </div>
+
   <div class="jumbotron">
     <h1>Welcome to Tor Metrics!</h1>
     <div class="row">

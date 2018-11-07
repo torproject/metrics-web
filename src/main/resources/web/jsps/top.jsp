@@ -89,7 +89,6 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
 
         <!-- secondary navigation items -->
         <li class="visible-xs section-header">More</li>
-        <li><a href="https://www.torproject.org/about/jobs-metrics-data-architect.html.en"><i class="fa fa-bullhorn fa-fw hidden-sm" aria-hidden="true"></i> We Are Hiring!</a></li>
         <li <c:if test="${'News'.equals(param.navActive)}"> class="active"</c:if>><a href="/news.html"><i class="fa fa-newspaper-o fa-fw hidden-sm" aria-hidden="true"></i> News</a></li>
         <li <c:if test="${'Sources'.equals(param.navActive)}"> class="active"</c:if>><a href="/sources.html"><i class="fa fa-archive fa-fw hidden-sm" aria-hidden="true"></i> Sources</a></li>
         <li <c:if test="${'Services'.equals(param.navActive)}"> class="active"</c:if>><a href="/services.html"><i class="fa fa-cogs fa-fw hidden-sm" aria-hidden="true"></i> Services</a></li>
