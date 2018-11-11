@@ -369,14 +369,6 @@
     <exec executable="psql"
           dir="${localmoddir}"
           failonerror="true" >
-      <arg value="-c COPY (SELECT * FROM stats_servers) TO STDOUT WITH CSV HEADER;" />
-      <arg value="--dbname=tordir"/>
-      <arg value="--output=${statsdir}/servers.csv" />
-    </exec>
-
-    <exec executable="psql"
-          dir="${localmoddir}"
-          failonerror="true" >
       <arg value="-c COPY (SELECT * FROM stats_bandwidth) TO STDOUT WITH CSV HEADER;" />
       <arg value="--dbname=tordir"/>
       <arg value="--output=${statsdir}/bandwidth.csv" />
@@ -515,7 +507,7 @@
       <fileset dir="${modulebase}/hidserv/stats" includes="hidserv.csv" />
       <fileset dir="${modulebase}/clients/stats"
                includes="clients*.csv userstats-combined.csv" />
-      <fileset dir="${modulebase}/ipv6servers/stats" includes="ipv6servers.csv" />
+      <fileset dir="${modulebase}/ipv6servers/stats" includes="*.csv" />
       <fileset dir="${modulebase}/webstats/stats" includes="webstats.csv" />
       <fileset dir="${modulebase}/totalcw/stats" includes="totalcw.csv" />
     </copy>
