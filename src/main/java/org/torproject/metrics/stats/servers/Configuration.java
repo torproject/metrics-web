@@ -102,7 +102,6 @@ public class Configuration {
     if (this.directoryArchivesDirectories.isEmpty()) {
       String prefix = "../../shared/in/recent/relay-descriptors/";
       return Arrays.asList(new File(prefix + "consensuses/"),
-          new File(prefix + "server-descriptors/"),
           new File(prefix + "extra-infos/"));
     } else {
       return this.directoryArchivesDirectories;

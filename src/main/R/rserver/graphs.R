@@ -446,16 +446,19 @@ write_platforms <- function(start_p = NULL, end_p = NULL, path_p) {
 }
 
 prepare_bandwidth <- function(start_p, end_p) {
-  read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
+  advbw <- read.csv(paste(stats_dir, "advbw.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
+    transmute(date, variable = "advbw", value = advbw * 8 / 1e9)
+  bwhist <- read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    transmute(date, variable = "bwhist", value = (bwread + bwwrite) * 8 / 2e9)
+  rbind(advbw, bwhist) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(isexit != "") %>%
-    filter(isguard != "") %>%
-    group_by(date) %>%
-    summarize(advbw = sum(advbw) * 8 / 1e9,
-      bwhist = sum(bwread + bwwrite) * 8 / 2e9) %>%
-    select(date, advbw, bwhist)
+    filter(!is.na(value)) %>%
+    group_by(date, variable) %>%
+    summarize(value = sum(value)) %>%
+    spread(variable, value)
 }
 
 plot_bandwidth <- function(start_p, end_p, path_p) {
@@ -810,33 +813,24 @@ write_connbidirect <- function(start_p = NULL, end_p = NULL, path_p) {
 }
 
 prepare_bandwidth_flags <- function(start_p, end_p) {
-  b <- read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
-    colClasses = c("date" = "Date"))
-  b <- b %>%
+  advbw <- read.csv(paste(stats_dir, "advbw.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    transmute(date, isguard, isexit, variable = "advbw",
+      value = advbw * 8 / 1e9)
+  bwhist <- read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
+    colClasses = c("date" = "Date")) %>%
+    transmute(date, isguard, isexit, variable = "bwhist",
+      value = (bwread + bwwrite) * 8 / 2e9)
+  rbind(advbw, bwhist) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(isexit != "") %>%
-    filter(isguard != "")
-  b <- data.frame(date = b$date,
-                  isexit = b$isexit == "t", isguard = b$isguard == "t",
-                  advbw = b$advbw * 8 / 1e9,
-                  bwhist = (b$bwread + b$bwwrite) * 8 / 2e9)
-  b <- rbind(
-    data.frame(b[b$isguard == TRUE, ], flag = "guard"),
-    data.frame(b[b$isexit == TRUE, ], flag = "exit"))
-  b <- data.frame(date = b$date, advbw = b$advbw, bwhist = b$bwhist,
-                  flag = b$flag)
-  b <- aggregate(list(advbw = b$advbw, bwhist = b$bwhist),
-                 by = list(date = b$date, flag = b$flag), FUN = sum,
-                 na.rm = TRUE, na.action = NULL)
-  b <- gather(b, type, value, -c(date, flag))
-  bandwidth <- b[b$value > 0, ]
-  bandwidth <- data.frame(date = bandwidth$date,
-    variable = as.factor(paste(bandwidth$flag, "_", bandwidth$type,
-    sep = "")), value = bandwidth$value)
-  bandwidth$variable <- factor(bandwidth$variable,
-    levels = levels(bandwidth$variable)[c(3, 4, 1, 2)])
-  bandwidth
+    group_by(date, variable) %>%
+    summarize(exit = sum(value[isexit == "t"]),
+      guard = sum(value[isguard == "t"])) %>%
+    gather(flag, value, -date, -variable) %>%
+    unite(variable, flag, variable) %>%
+    mutate(variable = factor(variable,
+      levels = c("guard_advbw", "guard_bwhist", "exit_advbw", "exit_bwhist")))
 }
 
 plot_bandwidth_flags <- function(start_p, end_p, path_p) {

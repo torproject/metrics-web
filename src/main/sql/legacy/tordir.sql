@@ -3,33 +3,6 @@
 
 CREATE LANGUAGE plpgsql;
 
--- TABLE descriptor
--- Contains all of the descriptors published by routers.
-CREATE TABLE descriptor (
-    descriptor CHARACTER(40) NOT NULL,
-    nickname CHARACTER VARYING(19) NOT NULL,
-    address CHARACTER VARYING(15) NOT NULL,
-    orport INTEGER NOT NULL,
-    dirport INTEGER NOT NULL,
-    fingerprint CHARACTER(40) NOT NULL,
-    bandwidthavg BIGINT NOT NULL,
-    bandwidthburst BIGINT NOT NULL,
-    bandwidthobserved BIGINT NOT NULL,
-    platform CHARACTER VARYING(256),
-    published TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    uptime BIGINT,
-    extrainfo CHARACTER(40),
-    CONSTRAINT descriptor_pkey PRIMARY KEY (descriptor)
-);
-
-CREATE OR REPLACE FUNCTION delete_old_descriptor()
-RETURNS INTEGER AS $$
-    BEGIN
-    DELETE FROM descriptor WHERE DATE(published) < current_date - 14;
-    RETURN 1;
-    END;
-$$ LANGUAGE plpgsql;
-
 -- Contains bandwidth histories reported by relays in extra-info
 -- descriptors. Each row contains the reported bandwidth in 15-minute
 -- intervals for each relay and date.
@@ -97,22 +70,6 @@ RETURNS INTEGER AS $$
     END;
 $$ LANGUAGE plpgsql;
 
--- TABLE consensus
--- Contains all of the consensuses published by the directories.
-CREATE TABLE consensus (
-    validafter TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    CONSTRAINT consensus_pkey PRIMARY KEY (validafter)
-);
-
--- TABLE bandwidth_flags
-CREATE TABLE bandwidth_flags (
-    date DATE NOT NULL,
-    isexit BOOLEAN NOT NULL,
-    isguard BOOLEAN NOT NULL,
-    bwadvertised BIGINT NOT NULL,
-    CONSTRAINT bandwidth_flags_pkey PRIMARY KEY(date, isexit, isguard)
-);
-
 -- TABLE bwhist_flags
 CREATE TABLE bwhist_flags (
     date DATE NOT NULL,
@@ -149,15 +106,6 @@ CREATE TABLE user_stats (
     CONSTRAINT user_stats_pkey PRIMARY KEY(date, country)
 );
 
--- TABLE relay_statuses_per_day
--- A helper table which is commonly used to update the tables above in the
--- refresh_* functions.
-CREATE TABLE relay_statuses_per_day (
-    date DATE NOT NULL,
-    count INTEGER NOT NULL,
-    CONSTRAINT relay_statuses_per_day_pkey PRIMARY KEY(date)
-);
-
 -- Dates to be included in the next refresh run.
 CREATE TABLE scheduled_updates (
     id SERIAL,
@@ -173,24 +121,6 @@ CREATE TABLE updates (
     id INTEGER,
     date DATE
 );
-
--- FUNCTION refresh_relay_statuses_per_day()
--- Updates helper table which is used to refresh the aggregate tables.
-CREATE OR REPLACE FUNCTION refresh_relay_statuses_per_day()
-RETURNS INTEGER AS $$
-    BEGIN
-    DELETE FROM relay_statuses_per_day
-    WHERE date IN (SELECT date FROM updates);
-    INSERT INTO relay_statuses_per_day (date, count)
-    SELECT DATE(validafter) AS date, COUNT(*) AS count
-    FROM consensus
-    WHERE DATE(validafter) >= (SELECT MIN(date) FROM updates)
-    AND DATE(validafter) <= (SELECT MAX(date) FROM updates)
-    AND DATE(validafter) IN (SELECT date FROM updates)
-    GROUP BY DATE(validafter);
-    RETURN 1;
-    END;
-$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION array_sum (BIGINT[]) RETURNS BIGINT AS $$
   SELECT SUM($1[i])::bigint
@@ -247,44 +177,10 @@ $$ LANGUAGE plpgsql;
 
 -- refresh_* functions
 -- The following functions keep their corresponding aggregate tables
--- up-to-date. They should be called every time ERNIE is run, or when new
--- data is finished being added to the descriptor or statusentry tables.
+-- up-to-date. They should be called every time this module is run, or when new
+-- data is finished being added to the statusentry tables.
 -- They find what new data has been entered or updated based on the
 -- updates table.
-
-CREATE OR REPLACE FUNCTION refresh_bandwidth_flags() RETURNS INTEGER AS $$
-    DECLARE
-        min_date TIMESTAMP WITHOUT TIME ZONE;
-        max_date TIMESTAMP WITHOUT TIME ZONE;
-    BEGIN
-
-    min_date := (SELECT MIN(date) FROM updates);
-    max_date := (SELECT MAX(date) + 1 FROM updates);
-
-  DELETE FROM bandwidth_flags WHERE date IN (SELECT date FROM updates);
-  EXECUTE '
-  INSERT INTO bandwidth_flags (date, isexit, isguard, bwadvertised)
-  SELECT DATE(validafter) AS date,
-      BOOL_OR(isexit) AS isexit,
-      BOOL_OR(isguard) AS isguard,
-      (SUM(LEAST(bandwidthavg, bandwidthobserved))
-      / relay_statuses_per_day.count)::BIGINT AS bwadvertised
-    FROM descriptor RIGHT JOIN statusentry
-    ON descriptor.descriptor = statusentry.descriptor
-    JOIN relay_statuses_per_day
-    ON DATE(validafter) = relay_statuses_per_day.date
-    WHERE isrunning = TRUE
-          AND validafter >= ''' || min_date || '''
-          AND validafter < ''' || max_date || '''
-          AND DATE(validafter) IN (SELECT date FROM updates)
-          AND relay_statuses_per_day.date >= ''' || min_date || '''
-          AND relay_statuses_per_day.date < ''' || max_date || '''
-          AND DATE(relay_statuses_per_day.date) IN
-              (SELECT date FROM updates)
-    GROUP BY DATE(validafter), isexit, isguard, relay_statuses_per_day.count';
-  RETURN 1;
-  END;
-$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION refresh_bwhist_flags() RETURNS INTEGER AS $$
     DECLARE
@@ -391,18 +287,12 @@ CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
     DELETE FROM updates;
     RAISE NOTICE '% Copying scheduled dates.', timeofday();
     INSERT INTO updates SELECT * FROM scheduled_updates;
-    RAISE NOTICE '% Refreshing relay statuses per day.', timeofday();
-    PERFORM refresh_relay_statuses_per_day();
-    RAISE NOTICE '% Refreshing total relay bandwidth.', timeofday();
-    PERFORM refresh_bandwidth_flags();
     RAISE NOTICE '% Refreshing bandwidth history.', timeofday();
     PERFORM refresh_bwhist_flags();
     RAISE NOTICE '% Refreshing user statistics.', timeofday();
     PERFORM refresh_user_stats();
     RAISE NOTICE '% Deleting processed dates.', timeofday();
     DELETE FROM scheduled_updates WHERE id IN (SELECT id FROM updates);
-    RAISE NOTICE '% Deleting old descriptors.', timeofday();
-    PERFORM delete_old_descriptor();
     RAISE NOTICE '% Deleting old bandwidth histories.', timeofday();
     PERFORM delete_old_bwhist();
     RAISE NOTICE '% Deleting old status entries.', timeofday();
@@ -414,23 +304,14 @@ $$ LANGUAGE plpgsql;
 
 -- View for exporting bandwidth statistics.
 CREATE VIEW stats_bandwidth AS
-  (SELECT COALESCE(bandwidth_flags.date, bwhist_flags.date) AS date,
-  COALESCE(bandwidth_flags.isexit, bwhist_flags.isexit) AS isexit,
-  COALESCE(bandwidth_flags.isguard, bwhist_flags.isguard) AS isguard,
-  bandwidth_flags.bwadvertised AS advbw,
-  CASE WHEN bwhist_flags.read IS NOT NULL
-  THEN bwhist_flags.read / 86400 END AS bwread,
-  CASE WHEN bwhist_flags.written IS NOT NULL
-  THEN bwhist_flags.written / 86400 END AS bwwrite,
+  (SELECT date, isexit, isguard,
+  read / 86400 AS bwread,
+  written / 86400 AS bwwrite,
   NULL AS dirread, NULL AS dirwrite
-  FROM bandwidth_flags FULL OUTER JOIN bwhist_flags
-  ON bandwidth_flags.date = bwhist_flags.date
-  AND bandwidth_flags.isexit = bwhist_flags.isexit
-  AND bandwidth_flags.isguard = bwhist_flags.isguard
-  WHERE COALESCE(bandwidth_flags.date, bwhist_flags.date) <
-  current_date - 2)
+  FROM bwhist_flags
+  WHERE date < current_date - 2)
 UNION ALL
-  (SELECT date, NULL AS isexit, NULL AS isguard, NULL AS advbw,
+  (SELECT date, NULL AS isexit, NULL AS isguard,
   NULL AS bwread, NULL AS bwwrite,
   FLOOR(CAST(dr AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirread,
   FLOOR(CAST(dw AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirwrite

@@ -435,6 +435,28 @@ class Database implements AutoCloseable {
     return statistics;
   }
 
+  /** Query the bandwidth_advbw view. */
+  List<String[]> queryAdvbw() throws SQLException {
+    List<String[]> statistics = new ArrayList<>();
+    String columns = "date, isexit, isguard, advbw";
+    statistics.add(columns.split(", "));
+    Statement st = this.connection.createStatement();
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
+        Locale.US);
+    String queryString = "SELECT " + columns + " FROM bandwidth_advbw";
+    try (ResultSet rs = st.executeQuery(queryString)) {
+      while (rs.next()) {
+        String[] outputLine = new String[4];
+        outputLine[0] = rs.getDate("date", calendar).toLocalDate().toString();
+        outputLine[1] = rs.getString("isexit");
+        outputLine[2] = rs.getString("isguard");
+        outputLine[3] = getLongFromResultSet(rs, "advbw");
+        statistics.add(outputLine);
+      }
+    }
+    return statistics;
+  }
+
   /** Query the servers_networksize view. */
   List<String[]> queryNetworksize() throws SQLException {
     List<String[]> statistics = new ArrayList<>();

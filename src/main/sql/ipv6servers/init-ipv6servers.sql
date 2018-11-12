@@ -312,6 +312,17 @@ GROUP BY DATE(valid_after), server, guard_relay, exit_relay, announced_ipv6,
 ORDER BY valid_after_date, server, guard_relay, exit_relay, announced_ipv6,
   exiting_ipv6_relay, reachable_ipv6_relay;
 
+-- View on advertised bandwidth by Exit/Guard flag combination.
+CREATE OR REPLACE VIEW bandwidth_advbw AS
+SELECT valid_after_date AS date,
+  exit_relay AS isexit,
+  guard_relay AS isguard,
+  FLOOR(SUM(advertised_bandwidth_bytes_sum_avg)) AS advbw
+FROM ipv6servers
+WHERE server = 'relay'
+GROUP BY date, isexit, isguard
+ORDER BY date, isexit, isguard;
+
 -- View on the number of running servers by relay flag.
 CREATE OR REPLACE VIEW servers_flags_complete AS
 WITH included_statuses AS (

@@ -9,7 +9,6 @@ import org.torproject.descriptor.DescriptorSourceFactory;
 import org.torproject.descriptor.ExtraInfoDescriptor;
 import org.torproject.descriptor.NetworkStatusEntry;
 import org.torproject.descriptor.RelayNetworkStatusConsensus;
-import org.torproject.descriptor.ServerDescriptor;
 
 import org.postgresql.util.PGbytea;
 
@@ -20,7 +19,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,7 +26,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,10 +41,6 @@ import java.util.TreeSet;
 /**
  * Parse directory data.
  */
-
-/* TODO Split up this class and move its parts to cron.network,
- * cron.users, and status.relaysearch packages.  Requires extensive
- * changes to the database schema though. */
 public final class RelayDescriptorDatabaseImporter {
 
   /**
@@ -58,19 +51,9 @@ public final class RelayDescriptorDatabaseImporter {
   /* Counters to keep track of the number of records committed before
    * each transaction. */
 
-  private int rdsCount = 0;
-
-  private int resCount = 0;
-
   private int rhsCount = 0;
 
   private int rrsCount = 0;
-
-  private int rcsCount = 0;
-
-  private int rvsCount = 0;
-
-  private int rqsCount = 0;
 
   /**
    * Relay descriptor database connection.
@@ -83,18 +66,6 @@ public final class RelayDescriptorDatabaseImporter {
    * database before.
    */
   private PreparedStatement psSs;
-
-  /**
-   * Prepared statement to check whether a given server descriptor has
-   * been imported into the database before.
-   */
-  private PreparedStatement psDs;
-
-  /**
-   * Prepared statement to check whether a given network status consensus
-   * has been imported into the database before.
-   */
-  private PreparedStatement psCs;
 
   /**
    * Set of dates that have been inserted into the database for being
@@ -115,21 +86,10 @@ public final class RelayDescriptorDatabaseImporter {
   private PreparedStatement psR;
 
   /**
-   * Prepared statement to insert a server descriptor into the database.
-   */
-  private PreparedStatement psD;
-
-  /**
    * Callable statement to insert the bandwidth history of an extra-info
    * descriptor into the database.
    */
   private CallableStatement csH;
-
-  /**
-   * Prepared statement to insert a network status consensus into the
-   * database.
-   */
-  private PreparedStatement psC;
 
   private static Logger log
       = LoggerFactory.getLogger(RelayDescriptorDatabaseImporter.class);
@@ -145,19 +105,9 @@ public final class RelayDescriptorDatabaseImporter {
   private BufferedWriter statusentryOut;
 
   /**
-   * Raw import file containing server descriptors.
-   */
-  private BufferedWriter descriptorOut;
-
-  /**
    * Raw import file containing bandwidth histories.
    */
   private BufferedWriter bwhistOut;
-
-  /**
-   * Raw import file containing consensuses.
-   */
-  private BufferedWriter consensusOut;
 
   /**
    * Date format to parse timestamps.
@@ -212,10 +162,6 @@ public final class RelayDescriptorDatabaseImporter {
         /* Prepare statements. */
         this.psSs = conn.prepareStatement("SELECT fingerprint "
             + "FROM statusentry WHERE validafter = ?");
-        this.psDs = conn.prepareStatement("SELECT COUNT(*) "
-            + "FROM descriptor WHERE descriptor = ?");
-        this.psCs = conn.prepareStatement("SELECT COUNT(*) "
-            + "FROM consensus WHERE validafter = ?");
         this.psR = conn.prepareStatement("INSERT INTO statusentry "
             + "(validafter, nickname, fingerprint, descriptor, "
             + "published, address, orport, dirport, isauthority, "
@@ -224,16 +170,8 @@ public final class RelayDescriptorDatabaseImporter {
             + "isvalid, isv2dir, isv3dir, version, bandwidth, ports, "
             + "rawdesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
             + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        this.psD = conn.prepareStatement("INSERT INTO descriptor "
-            + "(descriptor, nickname, address, orport, dirport, "
-            + "fingerprint, bandwidthavg, bandwidthburst, "
-            + "bandwidthobserved, platform, published, uptime, "
-            + "extrainfo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
-            + "?)");
         this.csH = conn.prepareCall("{call insert_bwhist(?, ?, ?, ?, ?, "
             + "?)}");
-        this.psC = conn.prepareStatement("INSERT INTO consensus "
-            + "(validafter) VALUES (?)");
         this.psU = conn.prepareStatement("INSERT INTO scheduled_updates "
             + "(date) VALUES (?)");
         this.scheduledUpdates = new HashSet<>();
@@ -390,95 +328,9 @@ public final class RelayDescriptorDatabaseImporter {
   }
 
   /**
-   * Insert server descriptor into database.
-   */
-  public void addServerDescriptorContents(String descriptor,
-      String nickname, String address, int orPort, int dirPort,
-      String relayIdentifier, long bandwidthAvg, long bandwidthBurst,
-      long bandwidthObserved, String platform, long published,
-      Long uptime, String extraInfoDigest) {
-    if (this.importIntoDatabase) {
-      try {
-        this.addDateToScheduledUpdates(published);
-        this.addDateToScheduledUpdates(
-            published + 24L * 60L * 60L * 1000L);
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        this.psDs.setString(1, descriptor);
-        ResultSet rs = psDs.executeQuery();
-        rs.next();
-        if (rs.getInt(1) == 0) {
-          this.psD.clearParameters();
-          this.psD.setString(1, descriptor);
-          this.psD.setString(2, nickname);
-          this.psD.setString(3, address);
-          this.psD.setInt(4, orPort);
-          this.psD.setInt(5, dirPort);
-          this.psD.setString(6, relayIdentifier);
-          this.psD.setLong(7, bandwidthAvg);
-          this.psD.setLong(8, bandwidthBurst);
-          this.psD.setLong(9, bandwidthObserved);
-          /* Remove all non-ASCII characters from the platform string, or
-           * we'll make Postgres unhappy.  Sun's JDK and OpenJDK behave
-           * differently when creating a new String with a given encoding.
-           * That's what the regexp below is for. */
-          this.psD.setString(10, new String(platform.getBytes(),
-              StandardCharsets.US_ASCII).replaceAll("[^\\p{ASCII}]",""));
-          this.psD.setTimestamp(11, new Timestamp(published), cal);
-          if (null != uptime) {
-            this.psD.setLong(12, uptime);
-          } else {
-            this.psD.setNull(12, Types.BIGINT);
-          }
-          this.psD.setString(13, extraInfoDigest);
-          this.psD.executeUpdate();
-          rdsCount++;
-          if (rdsCount % autoCommitCount == 0)  {
-            this.conn.commit();
-          }
-        }
-      } catch (SQLException e) {
-        log.warn("Could not add server "
-            + "descriptor.  We won't make any further SQL requests in "
-            + "this execution.", e);
-        this.importIntoDatabase = false;
-      }
-    }
-    if (this.writeRawImportFiles) {
-      try {
-        if (this.descriptorOut == null) {
-          new File(rawFilesDirectory).mkdirs();
-          this.descriptorOut = new BufferedWriter(new FileWriter(
-              rawFilesDirectory + "/descriptor.sql"));
-          this.descriptorOut.write(" COPY descriptor (descriptor, "
-              + "nickname, address, orport, dirport, fingerprint, "
-              + "bandwidthavg, bandwidthburst, bandwidthobserved, "
-              + "platform, published, uptime, extrainfo) FROM stdin;\n");
-        }
-        this.descriptorOut.write(descriptor.toLowerCase() + "\t"
-            + nickname + "\t" + address + "\t" + orPort + "\t" + dirPort
-            + "\t" + relayIdentifier + "\t" + bandwidthAvg + "\t"
-            + bandwidthBurst + "\t" + bandwidthObserved + "\t"
-            + (platform != null && platform.length() > 0
-            ? new String(platform.getBytes(), StandardCharsets.US_ASCII)
-            : "\\N") + "\t" + this.dateTimeFormat.format(published) + "\t"
-            + (uptime >= 0 ? uptime : "\\N") + "\t"
-            + (extraInfoDigest != null ? extraInfoDigest : "\\N")
-            + "\n");
-      } catch (IOException e) {
-        log.warn("Could not write server "
-            + "descriptor to raw database import file.  We won't make "
-            + "any further attempts to write raw import files in this "
-            + "execution.", e);
-        this.writeRawImportFiles = false;
-      }
-    }
-  }
-
-  /**
    * Insert extra-info descriptor into database.
    */
-  public void addExtraInfoDescriptorContents(String extraInfoDigest,
-      String nickname, String fingerprint, long published,
+  public void addExtraInfoDescriptorContents(String fingerprint, long published,
       List<String> bandwidthHistoryLines) {
     if (!bandwidthHistoryLines.isEmpty()) {
       this.addBandwidthHistory(fingerprint.toLowerCase(), published,
@@ -766,55 +618,6 @@ public final class RelayDescriptorDatabaseImporter {
     }
   }
 
-  /**
-   * Insert network status consensus into database.
-   */
-  public void addConsensus(long validAfter) {
-    if (this.importIntoDatabase) {
-      try {
-        this.addDateToScheduledUpdates(validAfter);
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        Timestamp validAfterTimestamp = new Timestamp(validAfter);
-        this.psCs.setTimestamp(1, validAfterTimestamp, cal);
-        ResultSet rs = psCs.executeQuery();
-        rs.next();
-        if (rs.getInt(1) == 0) {
-          this.psC.clearParameters();
-          this.psC.setTimestamp(1, validAfterTimestamp, cal);
-          this.psC.executeUpdate();
-          rcsCount++;
-          if (rcsCount % autoCommitCount == 0)  {
-            this.conn.commit();
-          }
-        }
-      } catch (SQLException e) {
-        log.warn("Could not add network status "
-            + "consensus.  We won't make any further SQL requests in "
-            + "this execution.", e);
-        this.importIntoDatabase = false;
-      }
-    }
-    if (this.writeRawImportFiles) {
-      try {
-        if (this.consensusOut == null) {
-          new File(rawFilesDirectory).mkdirs();
-          this.consensusOut = new BufferedWriter(new FileWriter(
-              rawFilesDirectory + "/consensus.sql"));
-          this.consensusOut.write(" COPY consensus (validafter) "
-              + "FROM stdin;\n");
-        }
-        String validAfterString = this.dateTimeFormat.format(validAfter);
-        this.consensusOut.write(validAfterString + "\n");
-      } catch (IOException e) {
-        log.warn("Could not write network status "
-            + "consensus to raw database import file.  We won't make "
-            + "any further attempts to write raw import files in this "
-            + "execution.", e);
-        this.writeRawImportFiles = false;
-      }
-    }
-  }
-
   /** Imports relay descriptors into the database. */
   public void importRelayDescriptors() {
     log.info("Importing files in directories " + archivesDirectories
@@ -834,8 +637,6 @@ public final class RelayDescriptorDatabaseImporter {
         if (descriptor instanceof RelayNetworkStatusConsensus) {
           this.addRelayNetworkStatusConsensus(
               (RelayNetworkStatusConsensus) descriptor);
-        } else if (descriptor instanceof ServerDescriptor) {
-          this.addServerDescriptor((ServerDescriptor) descriptor);
         } else if (descriptor instanceof ExtraInfoDescriptor) {
           this.addExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
         }
@@ -862,18 +663,6 @@ public final class RelayDescriptorDatabaseImporter {
           statusEntry.getBandwidth(), statusEntry.getPortList(),
           statusEntry.getStatusEntryBytes());
     }
-    this.addConsensus(consensus.getValidAfterMillis());
-  }
-
-  private void addServerDescriptor(ServerDescriptor descriptor) {
-    this.addServerDescriptorContents(
-        descriptor.getDigestSha1Hex(), descriptor.getNickname(),
-        descriptor.getAddress(), descriptor.getOrPort(),
-        descriptor.getDirPort(), descriptor.getFingerprint(),
-        descriptor.getBandwidthRate(), descriptor.getBandwidthBurst(),
-        descriptor.getBandwidthObserved(), descriptor.getPlatform(),
-        descriptor.getPublishedMillis(), descriptor.getUptime(),
-        descriptor.getExtraInfoDigestSha1Hex());
   }
 
   private void addExtraInfoDescriptor(ExtraInfoDescriptor descriptor) {
@@ -892,8 +681,7 @@ public final class RelayDescriptorDatabaseImporter {
       bandwidthHistoryLines.add(
           descriptor.getDirreqReadHistory().getLine());
     }
-    this.addExtraInfoDescriptorContents(descriptor.getDigestSha1Hex(),
-        descriptor.getNickname(),
+    this.addExtraInfoDescriptorContents(
         descriptor.getFingerprint().toLowerCase(),
         descriptor.getPublishedMillis(), bandwidthHistoryLines);
   }
@@ -904,12 +692,8 @@ public final class RelayDescriptorDatabaseImporter {
   public void closeConnection() {
 
     /* Log stats about imported descriptors. */
-    log.info("Finished importing relay "
-        + "descriptors: {} consensuses, {} network status entries, {} "
-        + "votes, {} server descriptors, {} extra-info descriptors, {} "
-        + "bandwidth history elements, and {} dirreq stats elements",
-        rcsCount, rrsCount, rvsCount, rdsCount, resCount, rhsCount,
-        rqsCount);
+    log.info("Finished importing relay descriptors: {} network status entries "
+        + "and {} bandwidth history elements", rrsCount, rhsCount);
 
     /* Insert scheduled updates a second time, just in case the refresh
      * run has started since inserting them the first time in which case
@@ -951,17 +735,9 @@ public final class RelayDescriptorDatabaseImporter {
         this.statusentryOut.write("\\.\n");
         this.statusentryOut.close();
       }
-      if (this.descriptorOut != null) {
-        this.descriptorOut.write("\\.\n");
-        this.descriptorOut.close();
-      }
       if (this.bwhistOut != null) {
         this.bwhistOut.write("\\.\n");
         this.bwhistOut.close();
-      }
-      if (this.consensusOut != null) {
-        this.consensusOut.write("\\.\n");
-        this.consensusOut.close();
       }
     } catch (IOException e) {
       log.warn("Could not close one or more raw database import files.", e);

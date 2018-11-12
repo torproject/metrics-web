@@ -88,6 +88,8 @@ public class Main {
       log.info("Querying aggregated statistics from the database.");
       new Writer().write(Paths.get(Configuration.output, "ipv6servers.csv"),
           database.queryServersIpv6());
+      new Writer().write(Paths.get(Configuration.output, "advbw.csv"),
+          database.queryAdvbw());
       new Writer().write(Paths.get(Configuration.output, "networksize.csv"),
           database.queryNetworksize());
       new Writer().write(Paths.get(Configuration.output, "relayflags.csv"),
