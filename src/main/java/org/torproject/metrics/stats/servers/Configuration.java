@@ -30,12 +30,6 @@ public class Configuration {
 
   private boolean keepDirectoryArchiveImportHistory = false;
 
-  private boolean importSanitizedBridges = false;
-
-  private String sanitizedBridgesDirectory = "in/bridge-descriptors/";
-
-  private boolean keepSanitizedBridgesImportHistory = false;
-
   private boolean writeRelayDescriptorDatabase = false;
 
   private String relayDescriptorDatabaseJdbc =
@@ -44,8 +38,6 @@ public class Configuration {
   private boolean writeRelayDescriptorsRawFiles = false;
 
   private String relayDescriptorRawFilesDirectory = "pg-import/";
-
-  private boolean writeBridgeStats = false;
 
   /** Initializes this configuration class. */
   public Configuration() {
@@ -67,14 +59,6 @@ public class Configuration {
         } else if (line.startsWith("KeepDirectoryArchiveImportHistory")) {
           this.keepDirectoryArchiveImportHistory = Integer.parseInt(
               line.split(" ")[1]) != 0;
-        } else if (line.startsWith("ImportSanitizedBridges")) {
-          this.importSanitizedBridges = Integer.parseInt(
-              line.split(" ")[1]) != 0;
-        } else if (line.startsWith("SanitizedBridgesDirectory")) {
-          this.sanitizedBridgesDirectory = line.split(" ")[1];
-        } else if (line.startsWith("KeepSanitizedBridgesImportHistory")) {
-          this.keepSanitizedBridgesImportHistory = Integer.parseInt(
-              line.split(" ")[1]) != 0;
         } else if (line.startsWith("WriteRelayDescriptorDatabase")) {
           this.writeRelayDescriptorDatabase = Integer.parseInt(
               line.split(" ")[1]) != 0;
@@ -85,9 +69,6 @@ public class Configuration {
               line.split(" ")[1]) != 0;
         } else if (line.startsWith("RelayDescriptorRawFilesDirectory")) {
           this.relayDescriptorRawFilesDirectory = line.split(" ")[1];
-        } else if (line.startsWith("WriteBridgeStats")) {
-          this.writeBridgeStats = Integer.parseInt(
-              line.split(" ")[1]) != 0;
         } else if (!line.startsWith("#") && line.length() > 0) {
           log.error("Configuration file contains unrecognized "
               + "configuration key in line '{}'! Exiting!", line);
@@ -136,18 +117,6 @@ public class Configuration {
     return this.writeRelayDescriptorDatabase;
   }
 
-  public boolean getImportSanitizedBridges() {
-    return this.importSanitizedBridges;
-  }
-
-  public String getSanitizedBridgesDirectory() {
-    return this.sanitizedBridgesDirectory;
-  }
-
-  public boolean getKeepSanitizedBridgesImportHistory() {
-    return this.keepSanitizedBridgesImportHistory;
-  }
-
   public String getRelayDescriptorDatabaseJdbc() {
     return this.relayDescriptorDatabaseJdbc;
   }
@@ -158,10 +127,6 @@ public class Configuration {
 
   public String getRelayDescriptorRawFilesDirectory() {
     return this.relayDescriptorRawFilesDirectory;
-  }
-
-  public boolean getWriteBridgeStats() {
-    return this.writeBridgeStats;
   }
 }
 

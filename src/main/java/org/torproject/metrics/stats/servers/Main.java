@@ -54,23 +54,6 @@ public class Main {
       }
     }
 
-    // Prepare consensus stats file handler (used for stats on running
-    // bridges only)
-    ConsensusStatsFileHandler csfh = config.getWriteBridgeStats()
-        ? new ConsensusStatsFileHandler(
-        config.getRelayDescriptorDatabaseJdbc(),
-        new File(config.getSanitizedBridgesDirectory()),
-        statsDirectory, config.getKeepSanitizedBridgesImportHistory())
-        : null;
-
-    // Import sanitized bridges and write updated stats files to disk
-    if (csfh != null) {
-      if (config.getImportSanitizedBridges()) {
-        csfh.importSanitizedBridges();
-      }
-      csfh.writeFiles();
-    }
-
     // Remove lock file
     lf.releaseLock();
 
