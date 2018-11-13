@@ -24,20 +24,10 @@ public class Configuration {
 
   private static Logger log = LoggerFactory.getLogger(Configuration.class);
 
-  private boolean importDirectoryArchives = false;
-
   private List<File> directoryArchivesDirectories = new ArrayList<>();
-
-  private boolean keepDirectoryArchiveImportHistory = false;
-
-  private boolean writeRelayDescriptorDatabase = false;
 
   private String relayDescriptorDatabaseJdbc =
       "jdbc:postgresql://localhost/tordir?user=metrics&password=password";
-
-  private boolean writeRelayDescriptorsRawFiles = false;
-
-  private String relayDescriptorRawFilesDirectory = "pg-import/";
 
   /** Initializes this configuration class. */
   public Configuration() {
@@ -51,24 +41,10 @@ public class Configuration {
     String line = null;
     try (BufferedReader br = new BufferedReader(new FileReader(configFile))) {
       while ((line = br.readLine()) != null) {
-        if (line.startsWith("ImportDirectoryArchives")) {
-          this.importDirectoryArchives = Integer.parseInt(
-              line.split(" ")[1]) != 0;
-        } else if (line.startsWith("DirectoryArchivesDirectory")) {
+        if (line.startsWith("DirectoryArchivesDirectory")) {
           this.directoryArchivesDirectories.add(new File(line.split(" ")[1]));
-        } else if (line.startsWith("KeepDirectoryArchiveImportHistory")) {
-          this.keepDirectoryArchiveImportHistory = Integer.parseInt(
-              line.split(" ")[1]) != 0;
-        } else if (line.startsWith("WriteRelayDescriptorDatabase")) {
-          this.writeRelayDescriptorDatabase = Integer.parseInt(
-              line.split(" ")[1]) != 0;
         } else if (line.startsWith("RelayDescriptorDatabaseJDBC")) {
           this.relayDescriptorDatabaseJdbc = line.split(" ")[1];
-        } else if (line.startsWith("WriteRelayDescriptorsRawFiles")) {
-          this.writeRelayDescriptorsRawFiles = Integer.parseInt(
-              line.split(" ")[1]) != 0;
-        } else if (line.startsWith("RelayDescriptorRawFilesDirectory")) {
-          this.relayDescriptorRawFilesDirectory = line.split(" ")[1];
         } else if (!line.startsWith("#") && line.length() > 0) {
           log.error("Configuration file contains unrecognized "
               + "configuration key in line '{}'! Exiting!", line);
@@ -93,10 +69,6 @@ public class Configuration {
     }
   }
 
-  public boolean getImportDirectoryArchives() {
-    return this.importDirectoryArchives;
-  }
-
   /** Returns directories containing archived descriptors. */
   public List<File> getDirectoryArchivesDirectories() {
     if (this.directoryArchivesDirectories.isEmpty()) {
@@ -108,24 +80,8 @@ public class Configuration {
     }
   }
 
-  public boolean getKeepDirectoryArchiveImportHistory() {
-    return this.keepDirectoryArchiveImportHistory;
-  }
-
-  public boolean getWriteRelayDescriptorDatabase() {
-    return this.writeRelayDescriptorDatabase;
-  }
-
   public String getRelayDescriptorDatabaseJdbc() {
     return this.relayDescriptorDatabaseJdbc;
-  }
-
-  public boolean getWriteRelayDescriptorsRawFiles() {
-    return this.writeRelayDescriptorsRawFiles;
-  }
-
-  public String getRelayDescriptorRawFilesDirectory() {
-    return this.relayDescriptorRawFilesDirectory;
   }
 }
 

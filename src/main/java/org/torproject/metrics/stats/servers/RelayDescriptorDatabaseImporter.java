@@ -10,15 +10,10 @@ import org.torproject.descriptor.ExtraInfoDescriptor;
 import org.torproject.descriptor.NetworkStatusEntry;
 import org.torproject.descriptor.RelayNetworkStatusConsensus;
 
-import org.postgresql.util.PGbytea;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -95,21 +90,6 @@ public final class RelayDescriptorDatabaseImporter {
       = LoggerFactory.getLogger(RelayDescriptorDatabaseImporter.class);
 
   /**
-   * Directory for writing raw import files.
-   */
-  private String rawFilesDirectory;
-
-  /**
-   * Raw import file containing status entries.
-   */
-  private BufferedWriter statusentryOut;
-
-  /**
-   * Raw import file containing bandwidth histories.
-   */
-  private BufferedWriter bwhistOut;
-
-  /**
    * Date format to parse timestamps.
    */
   private SimpleDateFormat dateTimeFormat;
@@ -126,30 +106,24 @@ public final class RelayDescriptorDatabaseImporter {
    */
   private Set<String> insertedStatusEntries = new HashSet<>();
 
-  private boolean importIntoDatabase;
-
-  private boolean writeRawImportFiles;
+  private boolean importIntoDatabase = true;
 
   private List<File> archivesDirectories;
 
   private File statsDirectory;
-
-  private boolean keepImportHistory;
 
   /**
    * Initialize database importer by connecting to the database and
    * preparing statements.
    */
   public RelayDescriptorDatabaseImporter(String connectionUrl,
-      String rawFilesDirectory, List<File> archivesDirectories,
-      File statsDirectory, boolean keepImportHistory) {
+      List<File> archivesDirectories, File statsDirectory) {
 
     if (archivesDirectories == null || statsDirectory == null) {
       throw new IllegalArgumentException();
     }
     this.archivesDirectories = archivesDirectories;
     this.statsDirectory = statsDirectory;
-    this.keepImportHistory = keepImportHistory;
 
     if (connectionUrl != null) {
       try {
@@ -175,16 +149,9 @@ public final class RelayDescriptorDatabaseImporter {
         this.psU = conn.prepareStatement("INSERT INTO scheduled_updates "
             + "(date) VALUES (?)");
         this.scheduledUpdates = new HashSet<>();
-        this.importIntoDatabase = true;
       } catch (SQLException e) {
         log.warn("Could not connect to database or prepare statements.", e);
       }
-    }
-
-    /* Remember where we want to write raw import files. */
-    if (rawFilesDirectory != null) {
-      this.rawFilesDirectory = rawFilesDirectory;
-      this.writeRawImportFiles = true;
     }
 
     /* Initialize date format, so that we can format timestamps. */
@@ -276,53 +243,6 @@ public final class RelayDescriptorDatabaseImporter {
         log.warn("Could not add network status consensus entry. We won't make "
             + "any further SQL requests in this execution.", e);
         this.importIntoDatabase = false;
-      }
-    }
-    if (this.writeRawImportFiles) {
-      try {
-        if (this.statusentryOut == null) {
-          new File(rawFilesDirectory).mkdirs();
-          this.statusentryOut = new BufferedWriter(new FileWriter(
-              rawFilesDirectory + "/statusentry.sql"));
-          this.statusentryOut.write(" COPY statusentry (validafter, "
-              + "nickname, fingerprint, descriptor, published, address, "
-              + "orport, dirport, isauthority, isbadExit, "
-              + "isbaddirectory, isexit, isfast, isguard, ishsdir, "
-              + "isnamed, isstable, isrunning, isunnamed, isvalid, "
-              + "isv2dir, isv3dir, version, bandwidth, ports, rawdesc) "
-              + "FROM stdin;\n");
-        }
-        this.statusentryOut.write(
-            this.dateTimeFormat.format(validAfter) + "\t" + nickname
-            + "\t" + fingerprint.toLowerCase() + "\t"
-            + descriptor.toLowerCase() + "\t"
-            + this.dateTimeFormat.format(published) + "\t" + address
-            + "\t" + orPort + "\t" + dirPort + "\t"
-            + (flags.contains("Authority") ? "t" : "f") + "\t"
-            + (flags.contains("BadExit") ? "t" : "f") + "\t"
-            + (flags.contains("BadDirectory") ? "t" : "f") + "\t"
-            + (flags.contains("Exit") ? "t" : "f") + "\t"
-            + (flags.contains("Fast") ? "t" : "f") + "\t"
-            + (flags.contains("Guard") ? "t" : "f") + "\t"
-            + (flags.contains("HSDir") ? "t" : "f") + "\t"
-            + (flags.contains("Named") ? "t" : "f") + "\t"
-            + (flags.contains("Stable") ? "t" : "f") + "\t"
-            + (flags.contains("Running") ? "t" : "f") + "\t"
-            + (flags.contains("Unnamed") ? "t" : "f") + "\t"
-            + (flags.contains("Valid") ? "t" : "f") + "\t"
-            + (flags.contains("V2Dir") ? "t" : "f") + "\t"
-            + (flags.contains("V3Dir") ? "t" : "f") + "\t"
-            + (version != null ? version : "\\N") + "\t"
-            + (bandwidth >= 0 ? bandwidth : "\\N") + "\t"
-            + (ports != null ? ports : "\\N") + "\t");
-        this.statusentryOut.write(PGbytea.toPGString(rawDescriptor)
-            .replaceAll("\\\\", "\\\\\\\\") + "\n");
-      } catch (IOException e) {
-        log.warn("Could not write network status "
-            + "consensus entry to raw database import file.  We won't "
-            + "make any further attempts to write raw import files in "
-            + "this execution.", e);
-        this.writeRawImportFiles = false;
       }
     }
   }
@@ -552,26 +472,6 @@ public final class RelayDescriptorDatabaseImporter {
             this.importIntoDatabase = false;
           }
         }
-        if (this.writeRawImportFiles) {
-          try {
-            if (this.bwhistOut == null) {
-              new File(rawFilesDirectory).mkdirs();
-              this.bwhistOut = new BufferedWriter(new FileWriter(
-                  rawFilesDirectory + "/bwhist.sql"));
-            }
-            this.bwhistOut.write("SELECT insert_bwhist('" + fingerprint
-                + "','" + lastDate + "','" + readIntArray.toString()
-                + "','" + writtenIntArray.toString() + "','"
-                + dirreadIntArray.toString() + "','"
-                + dirwrittenIntArray.toString() + "');\n");
-          } catch (IOException e) {
-            log.warn("Could not write bandwidth "
-                + "history to raw database import file.  We won't make "
-                + "any further attempts to write raw import files in "
-                + "this execution.", e);
-            this.writeRawImportFiles = false;
-          }
-        }
         readArray = writtenArray = dirreadArray = dirwrittenArray = null;
       }
       if (historyLine.equals("EOL")) {
@@ -628,9 +528,7 @@ public final class RelayDescriptorDatabaseImporter {
       reader.setMaxDescriptorsInQueue(10);
       File historyFile = new File(statsDirectory,
           "database-importer-relay-descriptor-history");
-      if (keepImportHistory) {
-        reader.setHistoryFile(historyFile);
-      }
+      reader.setHistoryFile(historyFile);
       for (Descriptor descriptor : reader.readDescriptors(
           this.archivesDirectories.toArray(
           new File[this.archivesDirectories.size()]))) {
@@ -641,9 +539,7 @@ public final class RelayDescriptorDatabaseImporter {
           this.addExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
         }
       }
-      if (keepImportHistory) {
-        reader.saveHistoryFile(historyFile);
-      }
+      reader.saveHistoryFile(historyFile);
     }
 
     log.info("Finished importing relay descriptors.");
@@ -727,20 +623,6 @@ public final class RelayDescriptorDatabaseImporter {
       } catch (SQLException e) {
         log.warn("Could not close database connection.", e);
       }
-    }
-
-    /* Close raw import files. */
-    try {
-      if (this.statusentryOut != null) {
-        this.statusentryOut.write("\\.\n");
-        this.statusentryOut.close();
-      }
-      if (this.bwhistOut != null) {
-        this.bwhistOut.write("\\.\n");
-        this.bwhistOut.close();
-      }
-    } catch (IOException e) {
-      log.warn("Could not close one or more raw database import files.", e);
     }
   }
 }
