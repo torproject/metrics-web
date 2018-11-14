@@ -122,8 +122,11 @@ public class Ipv6NetworkStatusTest {
         for (Ipv6NetworkStatus.Entry parsedEntry
             : parsedNetworkStatus.entries) {
           if (this.digest.equals(parsedEntry.digest)) {
-            assertEquals(this.description, this.guard, parsedEntry.guard);
-            assertEquals(this.description, this.exit, parsedEntry.exit);
+            assertEquals(this.description, this.guard,
+                parsedEntry.flags.contains("Guard"));
+            assertEquals(this.description, this.exit,
+                parsedEntry.flags.contains("Exit")
+                && !parsedEntry.flags.contains("BadExit"));
             assertEquals(this.description, this.reachable,
                 parsedEntry.reachable);
             foundEntry = true;
