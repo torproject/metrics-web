@@ -1,7 +1,7 @@
 /* Copyright 2011--2018 The Tor Project
  * See LICENSE for licensing information */
 
-package org.torproject.metrics.stats.servers;
+package org.torproject.metrics.stats.bwhist;
 
 import org.torproject.descriptor.Descriptor;
 import org.torproject.descriptor.DescriptorReader;
@@ -20,6 +20,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -108,22 +110,19 @@ public final class RelayDescriptorDatabaseImporter {
 
   private boolean importIntoDatabase = true;
 
-  private List<File> archivesDirectories;
+  private File[] descriptorDirectories;
 
-  private File statsDirectory;
+  private File historyFile;
 
   /**
    * Initialize database importer by connecting to the database and
    * preparing statements.
    */
-  public RelayDescriptorDatabaseImporter(String connectionUrl,
-      List<File> archivesDirectories, File statsDirectory) {
+  public RelayDescriptorDatabaseImporter(File[] descriptorDirectories,
+      File historyFile, String connectionUrl) {
 
-    if (archivesDirectories == null || statsDirectory == null) {
-      throw new IllegalArgumentException();
-    }
-    this.archivesDirectories = archivesDirectories;
-    this.statsDirectory = statsDirectory;
+    this.descriptorDirectories = descriptorDirectories;
+    this.historyFile = historyFile;
 
     if (connectionUrl != null) {
       try {
@@ -520,29 +519,20 @@ public final class RelayDescriptorDatabaseImporter {
 
   /** Imports relay descriptors into the database. */
   public void importRelayDescriptors() {
-    log.info("Importing files in directories " + archivesDirectories
-        + "/...");
-    if (!this.archivesDirectories.isEmpty()) {
-      DescriptorReader reader =
-          DescriptorSourceFactory.createDescriptorReader();
-      reader.setMaxDescriptorsInQueue(10);
-      File historyFile = new File(statsDirectory,
-          "database-importer-relay-descriptor-history");
-      reader.setHistoryFile(historyFile);
-      for (Descriptor descriptor : reader.readDescriptors(
-          this.archivesDirectories.toArray(
-          new File[this.archivesDirectories.size()]))) {
-        if (descriptor instanceof RelayNetworkStatusConsensus) {
-          this.addRelayNetworkStatusConsensus(
-              (RelayNetworkStatusConsensus) descriptor);
-        } else if (descriptor instanceof ExtraInfoDescriptor) {
-          this.addExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
-        }
+    DescriptorReader reader =
+        DescriptorSourceFactory.createDescriptorReader();
+    reader.setMaxDescriptorsInQueue(10);
+    reader.setHistoryFile(this.historyFile);
+    for (Descriptor descriptor : reader.readDescriptors(
+        this.descriptorDirectories)) {
+      if (descriptor instanceof RelayNetworkStatusConsensus) {
+        this.addRelayNetworkStatusConsensus(
+            (RelayNetworkStatusConsensus) descriptor);
+      } else if (descriptor instanceof ExtraInfoDescriptor) {
+        this.addExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
       }
-      reader.saveHistoryFile(historyFile);
     }
-
-    log.info("Finished importing relay descriptors.");
+    reader.saveHistoryFile(this.historyFile);
   }
 
   private void addRelayNetworkStatusConsensus(
@@ -583,9 +573,9 @@ public final class RelayDescriptorDatabaseImporter {
   }
 
   /**
-   * Close the relay descriptor database connection.
+   * Commit any non-commited parts.
    */
-  public void closeConnection() {
+  public void commit() {
 
     /* Log stats about imported descriptors. */
     log.info("Finished importing relay descriptors: {} network status entries "
@@ -609,20 +599,83 @@ public final class RelayDescriptorDatabaseImporter {
       }
     }
 
-    /* Commit any stragglers before closing. */
+    /* Commit any stragglers. */
     if (this.conn != null) {
       try {
         this.csH.executeBatch();
 
         this.conn.commit();
-      } catch (SQLException e)  {
+      } catch (SQLException e) {
         log.warn("Could not commit final records to database", e);
       }
-      try {
-        this.conn.close();
-      } catch (SQLException e) {
-        log.warn("Could not close database connection.", e);
+    }
+  }
+
+  /** Call the refresh_all() function to aggregate newly imported data. */
+  void aggregate() throws SQLException {
+    Statement st = this.conn.createStatement();
+    st.executeQuery("SELECT refresh_all()");
+  }
+
+  /** Query the servers_platforms view. */
+  List<String[]> queryBandwidth() throws SQLException {
+    List<String[]> statistics = new ArrayList<>();
+    String columns = "date, isexit, isguard, bwread, bwwrite, dirread, "
+        + "dirwrite";
+    statistics.add(columns.split(", "));
+    Statement st = this.conn.createStatement();
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
+        Locale.US);
+    String queryString = "SELECT " + columns + " FROM stats_bandwidth";
+    try (ResultSet rs = st.executeQuery(queryString)) {
+      while (rs.next()) {
+        String[] outputLine = new String[7];
+        outputLine[0] = rs.getDate("date", calendar).toLocalDate().toString();
+        outputLine[1] = getBooleanFromResultSet(rs, "isexit");
+        outputLine[2] = getBooleanFromResultSet(rs, "isguard");
+        outputLine[3] = getLongFromResultSet(rs, "bwread");
+        outputLine[4] = getLongFromResultSet(rs, "bwwrite");
+        outputLine[5] = getLongFromResultSet(rs, "dirread");
+        outputLine[6] = getLongFromResultSet(rs, "dirwrite");
+        statistics.add(outputLine);
       }
+    }
+    return statistics;
+  }
+
+  /** Retrieve the <code>boolean</code> value of the designated column in the
+   * current row of the given <code>ResultSet</code> object and format it as a
+   * <code>String</code> object with <code>"t"</code> for <code>true</code> and
+   * <code>"f"</code> for <code>false</code>, or return <code>null</code> if the
+   * retrieved value was <code>NULL</code>. */
+  private static String getBooleanFromResultSet(ResultSet rs,
+      String columnLabel) throws SQLException {
+    boolean result = rs.getBoolean(columnLabel);
+    if (rs.wasNull()) {
+      return null;
+    } else {
+      return result ? "t" : "f";
+    }
+  }
+
+  /** Retrieve the <code>long</code> value of the designated column in the
+   * current row of the given <code>ResultSet</code> object and format it as a
+   * <code>String</code> object, or return <code>null</code> if the retrieved
+   * value was <code>NULL</code>. */
+  private static String getLongFromResultSet(ResultSet rs, String columnLabel)
+      throws SQLException {
+    long result = rs.getLong(columnLabel);
+    return rs.wasNull() ? null : String.valueOf(result);
+  }
+
+  /**
+   * Close the relay descriptor database connection.
+   */
+  public void closeConnection() {
+    try {
+      this.conn.close();
+    } catch (SQLException e) {
+      log.warn("Could not close database connection.", e);
     }
   }
 }

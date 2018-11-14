@@ -315,7 +315,7 @@
     <antcall target="collectdescs" />
     <antcall target="connbidirect" />
     <antcall target="onionperf" />
-    <antcall target="legacy" />
+    <antcall target="bwhist" />
     <antcall target="advbwdist" />
     <antcall target="hidserv" />
     <antcall target="clients" />
@@ -340,39 +340,9 @@
     <antcall target="run-java" />
   </target>
 
-  <!-- Provides legacy.config file from template. -->
-  <target name="legacy-create-config" >
-    <copy file="${resources}/legacy.config.template"
-          tofile="${basedir}/legacy.config"/>
-  </target>
-
-  <!-- Expects legacy.config file in the base directory. -->
-  <target name="legacy" >
-    <property name="module.name" value="servers" />
-    <property name="localmoddir" value="${modulebase}/${module.name}" />
-    <property name="statsdir"
-              value="${localmoddir}/stats" />
-    <mkdir dir="${statsdir}" />
-
-    <copy file="${basedir}/legacy.config"
-          tofile="${localmoddir}/config"/>
-
+  <target name="bwhist" >
+    <property name="module.name" value="bwhist" />
     <antcall target="run-java" />
-
-    <exec executable="psql"
-          dir="${localmoddir}"
-          failonerror="true" >
-      <arg value="--dbname=tordir"/>
-      <arg value="-c SELECT * FROM refresh_all();" />
-    </exec>
-
-    <exec executable="psql"
-          dir="${localmoddir}"
-          failonerror="true" >
-      <arg value="-c COPY (SELECT * FROM stats_bandwidth) TO STDOUT WITH CSV HEADER;" />
-      <arg value="--dbname=tordir"/>
-      <arg value="--output=${statsdir}/bandwidth.csv" />
-    </exec>
   </target>
 
   <target name="advbwdist">
@@ -503,7 +473,7 @@
       <fileset dir="${modulebase}/onionperf/stats" includes="*.csv" />
       <fileset dir="${modulebase}/connbidirect/stats" includes="connbidirect2.csv" />
       <fileset dir="${modulebase}/advbwdist/stats" includes="advbwdist.csv" />
-      <fileset dir="${modulebase}/servers/stats" includes="*.csv" />
+      <fileset dir="${modulebase}/bwhist/stats" includes="*.csv" />
       <fileset dir="${modulebase}/hidserv/stats" includes="hidserv.csv" />
       <fileset dir="${modulebase}/clients/stats"
                includes="clients*.csv userstats-combined.csv" />

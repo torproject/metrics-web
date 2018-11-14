@@ -1,8 +1,0 @@
-## Relative paths to directories to import directory archives from
-#DirectoryArchivesDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/relay-descriptors/consensuses/
-#DirectoryArchivesDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/relay-descriptors/server-descriptors/
-#DirectoryArchivesDirectory /srv/metrics.torproject.org/metrics/shared/in/recent/relay-descriptors/extra-infos/
-#
-## JDBC string for relay descriptor database
-#RelayDescriptorDatabaseJDBC jdbc:postgresql://localhost/tordir?user=metrics&password=password
-#
