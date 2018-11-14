@@ -1,7 +1,7 @@
 /* Copyright 2017--2018 The Tor Project
  * See LICENSE for licensing information */
 
-package org.torproject.metrics.stats.ipv6servers;
+package org.torproject.metrics.stats.servers;
 
 /** Data object holding all relevant parts parsed from a (relay or bridge)
  * server descriptor. */

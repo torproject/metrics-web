@@ -1,7 +1,7 @@
 /* Copyright 2017--2018 The Tor Project
  * See LICENSE for licensing information */
 
-package org.torproject.metrics.stats.ipv6servers;
+package org.torproject.metrics.stats.servers;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -32,22 +32,22 @@ public class Ipv6ServerDescriptorTest {
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][] {
         { "Relay server descriptor without or-address or ipv6-policy line.",
-            "ipv6servers/0018ab4f2f28af683d52f06407edbf7ce1bd3b7d",
+            "servers/0018ab4f2f28af683d52f06407edbf7ce1bd3b7d",
             819200, false, false },
         { "Relay server descriptor with or-address and ipv6-policy line.",
-            "ipv6servers/01003df74972ce952ebfa390f468ef63c50efa25",
+            "servers/01003df74972ce952ebfa390f468ef63c50efa25",
             6576128, true, true },
         { "Relay server descriptor with or-address line only.",
-            "ipv6servers/018c1229d5f56eebfc1d709d4692673d098800e8",
+            "servers/018c1229d5f56eebfc1d709d4692673d098800e8",
             0, true, false },
         { "Bridge server descriptor without or-address or ipv6-policy line.",
-            "ipv6servers/000a7fe20a17bf5d9839a126b1dff43f998aac6f",
+            "servers/000a7fe20a17bf5d9839a126b1dff43f998aac6f",
             0, false, false },
         { "Bridge server descriptor with or-address line.",
-            "ipv6servers/0041dbf9fe846f9765882f7dc8332f94b709e35a",
+            "servers/0041dbf9fe846f9765882f7dc8332f94b709e35a",
             0, true, false },
         { "Bridge server descriptor with (ignored) ipv6-policy accept line.",
-            "ipv6servers/64dd486d89af14027c9a7b4347a94b74dddb5cdb",
+            "servers/64dd486d89af14027c9a7b4347a94b74dddb5cdb",
             0, false, false }
     });
   }

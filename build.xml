@@ -105,7 +105,7 @@
           depends="init"
           description="Run all available database pgTAP tests." >
     <antcall target="test-db">
-      <param name="db2test" value="ipv6servers" />
+      <param name="db2test" value="servers" />
     </antcall>
     <antcall target="test-db">
       <param name="db2test" value="userstats" />
@@ -319,7 +319,7 @@
     <antcall target="advbwdist" />
     <antcall target="hidserv" />
     <antcall target="clients" />
-    <antcall target="ipv6servers" />
+    <antcall target="servers" />
     <antcall target="webstats" />
     <antcall target="totalcw" />
     <antcall target="make-data-available" />
@@ -416,11 +416,11 @@
     </antcall>
   </target>
 
-  <target name="ipv6servers" >
-    <property name="module.name" value="ipv6servers" />
+  <target name="servers" >
+    <property name="module.name" value="servers" />
     <antcall target="run-java" >
       <param name="module.main"
-             value="org.torproject.metrics.stats.ipv6servers.Main" />
+             value="org.torproject.metrics.stats.servers.Main" />
     </antcall>
   </target>
 
@@ -477,7 +477,7 @@
       <fileset dir="${modulebase}/hidserv/stats" includes="hidserv.csv" />
       <fileset dir="${modulebase}/clients/stats"
                includes="clients*.csv userstats-combined.csv" />
-      <fileset dir="${modulebase}/ipv6servers/stats" includes="*.csv" />
+      <fileset dir="${modulebase}/servers/stats" includes="*.csv" />
       <fileset dir="${modulebase}/webstats/stats" includes="webstats.csv" />
       <fileset dir="${modulebase}/totalcw/stats" includes="totalcw.csv" />
     </copy>

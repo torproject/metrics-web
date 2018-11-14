@@ -1,7 +1,7 @@
 /* Copyright 2017--2018 The Tor Project
  * See LICENSE for licensing information */
 
-package org.torproject.metrics.stats.ipv6servers;
+package org.torproject.metrics.stats.servers;
 
 import org.torproject.descriptor.BridgeNetworkStatus;
 import org.torproject.descriptor.Descriptor;
@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-/** Main class of the ipv6servers module that imports relevant parts from server
+/** Main class of the servers module that imports relevant parts from server
  * descriptors and network statuses into a database, and exports aggregate
  * statistics to CSV files. */
 public class Main {
@@ -38,7 +38,7 @@ public class Main {
   /** Run the module. */
   public static void main(String[] args) throws Exception {
 
-    log.info("Starting ipv6servers module.");
+    log.info("Starting servers module.");
 
     log.info("Reading descriptors and inserting relevant parts into the "
         + "database.");
@@ -99,7 +99,7 @@ public class Main {
       new Writer().write(Paths.get(Configuration.output, "platforms.csv"),
           database.queryPlatforms());
 
-      log.info("Terminating ipv6servers module.");
+      log.info("Terminating servers module.");
     } catch (SQLException sqle) {
       log.error("Cannot recover from SQL exception while querying. Not writing "
           + "output file.", sqle);

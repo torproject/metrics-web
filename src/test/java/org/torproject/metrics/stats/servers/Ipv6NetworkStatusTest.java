@@ -1,7 +1,7 @@
 /* Copyright 2017--2018 The Tor Project
  * See LICENSE for licensing information */
 
-package org.torproject.metrics.stats.ipv6servers;
+package org.torproject.metrics.stats.servers;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
@@ -33,8 +33,8 @@ public class Ipv6NetworkStatusTest {
   /** Provide test data. */
   @Parameters
   public static Collection<Object[]> data() {
-    String relayFileName = "ipv6servers/2017-12-04-20-00-00-consensus.part";
-    String bridgeFileName = "ipv6servers/"
+    String relayFileName = "servers/2017-12-04-20-00-00-consensus.part";
+    String bridgeFileName = "servers/"
         + "20171204-190507-1D8F3A91C37C5D1C4C19B1AD1D0CFBE8BF72D8E1.part";
     return Arrays.asList(new Object[][] {
         { "Relay status without Guard or Exit flag and without IPv6 address. ",
