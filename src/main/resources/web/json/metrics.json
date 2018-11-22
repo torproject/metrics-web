@@ -26,7 +26,7 @@
     "id": "versions",
     "title": "Relays by tor version",
     "type": "Graph",
-    "description": "<p>This graph shows the number of running <a href=\"glossary.html#relay\">relays</a> by tor software version.  Relays report their tor software version when they announce themselves in the network.  More details on when these versions were declared stable or unstable can be found on the <a href=\"https://www.torproject.org/download/download.html\">download page</a> and in the <a href=\"https://gitweb.torproject.org/tor.git/tree/ChangeLog\">changes file</a>.</p>",
+    "description": "<p>This graph shows the number of running <a href=\"glossary.html#relay\">relays</a> by tor software version.  Relays report their tor software version when they announce themselves in the network.  New major versions are added to the graph as soon as they are first recommended by the directory authorities.  More details on when these versions were declared stable or unstable can be found on the <a href=\"https://www.torproject.org/download/download.html\">download page</a> and in the <a href=\"https://gitweb.torproject.org/tor.git/tree/ChangeLog\">changes file</a>.</p>",
     "function": "versions",
     "parameters": [
       "start",
