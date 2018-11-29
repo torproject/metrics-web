@@ -26,7 +26,8 @@ class OutputLine {
   /** Date. */
   LocalDate validAfterDate;
 
-  /** Server type, which can be "relay" or "bridge". */
+  /** Nickname of the authority generating votes, or <code>null</code> in case
+   * of consensuses. */
   String nickname;
 
   /** Whether contained relays all have the "Guard" flag. */
@@ -42,8 +43,9 @@ class OutputLine {
    * file. */
   @Override
   public String toString() {
-    return String.format("%s,%s,%s,%s,%d", validAfterDate, nickname,
-        haveGuardFlag ? "t" : "f", haveExitFlag ? "t" : "f", measuredSumAvg);
+    return String.format("%s,%s,%s,%s,%d", validAfterDate,
+        null == nickname ? "" : nickname, haveGuardFlag ? "t" : "f",
+        haveExitFlag ? "t" : "f", measuredSumAvg);
   }
 }
 

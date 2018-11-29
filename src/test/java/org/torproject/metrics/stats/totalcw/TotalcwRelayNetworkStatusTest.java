@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNull;
 
 import org.torproject.descriptor.Descriptor;
 import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.RelayNetworkStatusConsensus;
 import org.torproject.descriptor.RelayNetworkStatusVote;
 
 import org.junit.Test;
@@ -27,12 +28,15 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class TotalcwRelayNetworkStatusVoteTest {
+public class TotalcwRelayNetworkStatusTest {
 
   /** Provide test data. */
   @Parameters
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][] {
+        { "2018-10-15-00-00-00-consensus.part",
+            ZonedDateTime.parse("2018-10-15T00:00:00Z").toLocalDateTime(),
+            null, null, new long[] { 16774L, 44820L, 26600L, 49500L } },
         { "2018-10-15-00-00-00-vote-0232AF901C31A04EE9848595AF9BB7620D4C5B2E-"
             + "55A38ED50848BE1F13C6A35C3CA637B0D962C2EF.part",
             ZonedDateTime.parse("2018-10-15T00:00:00Z").toLocalDateTime(),
@@ -84,15 +88,21 @@ public class TotalcwRelayNetworkStatusVoteTest {
     for (Descriptor descriptor
         : DescriptorSourceFactory.createDescriptorParser().parseDescriptors(
         sb.toString().getBytes(), new File(this.fileName), this.fileName)) {
-      TotalcwRelayNetworkStatusVote parsedVote = new Parser()
-          .parseRelayNetworkStatusVote((RelayNetworkStatusVote) descriptor);
-      if (null == this.expectedMeasuredSums) {
-        assertNull(parsedVote);
+      TotalcwRelayNetworkStatus parsedStatus;
+      if (descriptor instanceof RelayNetworkStatusConsensus) {
+        parsedStatus = new Parser().parseRelayNetworkStatusConsensus(
+            (RelayNetworkStatusConsensus) descriptor);
       } else {
-        assertEquals(this.expectedValidAfter, parsedVote.validAfter);
-        assertEquals(this.expectedNickname, parsedVote.nickname);
-        assertEquals(this.expectedIdentityHex, parsedVote.identityHex);
-        assertArrayEquals(this.expectedMeasuredSums, parsedVote.measuredSums);
+        parsedStatus = new Parser().parseRelayNetworkStatusVote(
+            (RelayNetworkStatusVote) descriptor);
+      }
+      if (null == this.expectedMeasuredSums) {
+        assertNull(parsedStatus);
+      } else {
+        assertEquals(this.expectedValidAfter, parsedStatus.validAfter);
+        assertEquals(this.expectedNickname, parsedStatus.nickname);
+        assertEquals(this.expectedIdentityHex, parsedStatus.identityHex);
+        assertArrayEquals(this.expectedMeasuredSums, parsedStatus.measuredSums);
       }
     }
   }

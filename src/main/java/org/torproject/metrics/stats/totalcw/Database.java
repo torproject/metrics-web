@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -63,23 +65,36 @@ class Database implements AutoCloseable {
         "INSERT INTO authority (nickname, identity_hex) VALUES (?, ?)",
         Statement.RETURN_GENERATED_KEYS);
     this.psVoteSelect = this.connection.prepareStatement(
-        "SELECT EXISTS (SELECT 1 FROM vote "
+        "SELECT EXISTS (SELECT 1 FROM status "
             + "WHERE valid_after = ? AND authority_id = ?)");
     this.psVoteInsert = this.connection.prepareStatement(
-        "INSERT INTO vote (valid_after, authority_id, have_guard_flag, "
+        "INSERT INTO status (valid_after, authority_id, have_guard_flag, "
         + "have_exit_flag, measured_sum) VALUES (?, ?, ?, ?, ?)");
   }
 
-  /** Insert a parsed vote into the vote table. */
-  void insertVote(TotalcwRelayNetworkStatusVote vote) throws SQLException {
-    if (null == vote) {
-      /* Nothing to insert. */
-      return;
+  /** Insert a parsed consensus into the status table. */
+  void insertConsensus(TotalcwRelayNetworkStatus consensus)
+      throws SQLException {
+    if (null != consensus) {
+      insertStatusIfAbsent(consensus.validAfter, null, consensus.measuredSums);
     }
+  }
+
+  /** Insert a parsed vote into the status table. */
+  void insertVote(TotalcwRelayNetworkStatus vote) throws SQLException {
+    if (null != vote) {
+      int authorityId = insertAuthorityIfAbsent(vote.nickname,
+          vote.identityHex);
+      insertStatusIfAbsent(vote.validAfter, authorityId, vote.measuredSums);
+    }
+  }
+
+  private int insertAuthorityIfAbsent(String nickname, String identityHex)
+      throws SQLException {
     int authorityId = -1;
     this.psAuthoritySelect.clearParameters();
-    this.psAuthoritySelect.setString(1, vote.nickname);
-    this.psAuthoritySelect.setString(2, vote.identityHex);
+    this.psAuthoritySelect.setString(1, nickname);
+    this.psAuthoritySelect.setString(2, identityHex);
     try (ResultSet rs = this.psAuthoritySelect.executeQuery()) {
       if (rs.next()) {
         authorityId = rs.getInt(1);
@@ -87,8 +102,8 @@ class Database implements AutoCloseable {
     }
     if (authorityId < 0) {
       this.psAuthorityInsert.clearParameters();
-      this.psAuthorityInsert.setString(1, vote.nickname);
-      this.psAuthorityInsert.setString(2, vote.identityHex);
+      this.psAuthorityInsert.setString(1, nickname);
+      this.psAuthorityInsert.setString(2, identityHex);
       this.psAuthorityInsert.execute();
       try (ResultSet rs = this.psAuthorityInsert.getGeneratedKeys()) {
         if (rs.next()) {
@@ -100,13 +115,22 @@ class Database implements AutoCloseable {
             + "authority entry.");
       }
     }
+    return authorityId;
+  }
+
+  private void insertStatusIfAbsent(LocalDateTime validAfter,
+      Integer authorityId, long[] measuredSums) throws SQLException {
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
         Locale.US);
     this.psVoteSelect.clearParameters();
     this.psVoteSelect.setTimestamp(1,
-        Timestamp.from(ZonedDateTime.of(vote.validAfter,
-        ZoneId.of("UTC")).toInstant()), calendar);
-    this.psVoteSelect.setInt(2, authorityId);
+        Timestamp.from(ZonedDateTime.of(validAfter,
+            ZoneId.of("UTC")).toInstant()), calendar);
+    if (null == authorityId) {
+      this.psVoteSelect.setNull(2, Types.INTEGER);
+    } else {
+      this.psVoteSelect.setInt(2, authorityId);
+    }
     try (ResultSet rs = this.psVoteSelect.executeQuery()) {
       if (rs.next()) {
         if (rs.getBoolean(1)) {
@@ -119,12 +143,16 @@ class Database implements AutoCloseable {
          measuredSumsIndex++) {
       this.psVoteInsert.clearParameters();
       this.psVoteInsert.setTimestamp(1,
-          Timestamp.from(ZonedDateTime.of(vote.validAfter,
+          Timestamp.from(ZonedDateTime.of(validAfter,
               ZoneId.of("UTC")).toInstant()), calendar);
-      this.psVoteInsert.setInt(2, authorityId);
+      if (null == authorityId) {
+        this.psVoteInsert.setNull(2, Types.INTEGER);
+      } else {
+        this.psVoteInsert.setInt(2, authorityId);
+      }
       this.psVoteInsert.setBoolean(3, 1 == (measuredSumsIndex & 1));
       this.psVoteInsert.setBoolean(4, 2 == (measuredSumsIndex & 2));
-      this.psVoteInsert.setLong(5, vote.measuredSums[measuredSumsIndex]);
+      this.psVoteInsert.setLong(5, measuredSums[measuredSumsIndex]);
       this.psVoteInsert.execute();
     }
   }

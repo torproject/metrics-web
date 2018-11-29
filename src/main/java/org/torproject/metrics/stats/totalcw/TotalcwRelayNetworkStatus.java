@@ -5,18 +5,18 @@ package org.torproject.metrics.stats.totalcw;
 
 import java.time.LocalDateTime;
 
-/** Data object holding all relevant parts parsed from a vote. */
-class TotalcwRelayNetworkStatusVote {
+/** Data object holding all relevant parts parsed from a consensus or vote. */
+class TotalcwRelayNetworkStatus {
 
   /** Valid-after time of the vote. */
   LocalDateTime validAfter;
 
   /** The 1 to 19 character long alphanumeric nickname assigned to the authority
-   * by its operator. */
+   * by its operator, or <code>null</code> if this is a consensus. */
   String nickname;
 
   /** Uppercase hex fingerprint of the authority's (v3 authority) identity
-   * key. */
+   * key, or <code>null</code> if this is a consensus. */
   String identityHex;
 
   /** Sums of bandwidth measurements of all contained status entries with four

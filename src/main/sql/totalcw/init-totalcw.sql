@@ -18,17 +18,19 @@ CREATE TABLE authority (
   UNIQUE (nickname, identity_hex)
 );
 
--- Table of all votes with statistics on contained bandwidth measurements. Only
--- contains votes containing bandwidth measurements.
-CREATE TABLE vote (
+-- Table of all consensuses and votes with statistics on contained bandwidth
+-- measurements. Only contains consensuses containing bandwidth values and votes
+-- containing bandwidth measurements.
+CREATE TABLE status (
 
-  -- The auto-incremented numeric identifier for a vote.
-  vote_id SERIAL PRIMARY KEY,
+  -- The auto-incremented numeric identifier for a status.
+  status_id SERIAL PRIMARY KEY,
 
   -- Timestamp at which the consensus is supposed to become valid.
   valid_after TIMESTAMP WITHOUT TIME ZONE NOT NULL,
 
-  -- Numeric identifier uniquely identifying the authority generating this vote.
+  -- Numeric identifier uniquely identifying the authority generating this vote,
+  -- or NULL if this a consensus.
   authority_id INTEGER REFERENCES authority (authority_id),
 
   -- Whether contained relays had the Guard flag assigned.
@@ -45,13 +47,14 @@ CREATE TABLE vote (
 
 -- View on aggregated total consensus weight statistics in a format that is
 -- compatible for writing to an output CSV file. Votes are only included in the
--- output if at least 12 votes are known for a given authority and day.
+-- output if at least 12 statuses are known for a given authority and day.
 CREATE OR REPLACE VIEW totalcw AS
 SELECT DATE(valid_after) AS valid_after_date, nickname, have_guard_flag,
   have_exit_flag, FLOOR(AVG(measured_sum)) AS measured_sum_avg
-FROM vote NATURAL JOIN authority
+FROM status LEFT JOIN authority
+ON status.authority_id = authority.authority_id
 GROUP BY DATE(valid_after), nickname, have_guard_flag, have_exit_flag
-HAVING COUNT(vote_id) >= 12
-  AND DATE(valid_after) < (SELECT MAX(DATE(valid_after)) FROM vote)
+HAVING COUNT(status_id) >= 12
+  AND DATE(valid_after) < (SELECT MAX(DATE(valid_after)) FROM status)
 ORDER BY DATE(valid_after), nickname, have_guard_flag, have_exit_flag;
 

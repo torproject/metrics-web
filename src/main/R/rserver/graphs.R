@@ -1558,7 +1558,7 @@ write_advbw_ipv6 <- function(start_p = NULL, end_p = NULL, path_p) {
 
 prepare_totalcw <- function(start_p, end_p) {
   read.csv(paste(stats_dir, "totalcw.csv", sep = ""),
-    colClasses = c("valid_after_date" = "Date")) %>%
+    colClasses = c("valid_after_date" = "Date", "nickname" = "character")) %>%
     filter(if (!is.null(start_p))
         valid_after_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p))
@@ -1569,6 +1569,9 @@ prepare_totalcw <- function(start_p, end_p) {
 
 plot_totalcw <- function(start_p, end_p, path_p) {
   prepare_totalcw(start_p, end_p) %>%
+    mutate(nickname = ifelse(nickname == "", "consensus", nickname)) %>%
+    mutate(nickname = factor(nickname,
+      levels = c("consensus", unique(nickname[nickname != "consensus"])))) %>%
     complete(valid_after_date = full_seq(valid_after_date, period = 1),
         nesting(nickname)) %>%
     ggplot(aes(x = valid_after_date, y = measured_sum_avg,

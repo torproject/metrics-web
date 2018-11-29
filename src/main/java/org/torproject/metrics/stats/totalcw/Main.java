@@ -6,6 +6,7 @@ package org.torproject.metrics.stats.totalcw;
 import org.torproject.descriptor.Descriptor;
 import org.torproject.descriptor.DescriptorReader;
 import org.torproject.descriptor.DescriptorSourceFactory;
+import org.torproject.descriptor.RelayNetworkStatusConsensus;
 import org.torproject.descriptor.RelayNetworkStatusVote;
 
 import org.slf4j.Logger;
@@ -24,6 +25,8 @@ public class Main {
   private static Logger log = LoggerFactory.getLogger(Main.class);
 
   private static String[][] paths =  {
+    {"recent", "relay-descriptors", "consensuses"},
+    {"archive", "relay-descriptors", "consensuses"},
     {"recent", "relay-descriptors", "votes"},
     {"archive", "relay-descriptors", "votes"}};
 
@@ -32,7 +35,8 @@ public class Main {
 
     log.info("Starting totalcw module.");
 
-    log.info("Reading votes and inserting relevant parts into the database.");
+    log.info("Reading consensuses and votes and inserting relevant parts into "
+        + "the database.");
     DescriptorReader reader = DescriptorSourceFactory.createDescriptorReader();
     File historyFile = new File(Configuration.history);
     reader.setHistoryFile(historyFile);
@@ -43,7 +47,10 @@ public class Main {
             Arrays.stream(paths).map((String[] path)
                 -> Paths.get(Configuration.descriptors, path).toFile())
             .toArray(File[]::new))) {
-          if (descriptor instanceof RelayNetworkStatusVote) {
+          if (descriptor instanceof RelayNetworkStatusConsensus) {
+            database.insertConsensus(parser.parseRelayNetworkStatusConsensus(
+                (RelayNetworkStatusConsensus) descriptor));
+          } else if (descriptor instanceof RelayNetworkStatusVote) {
             database.insertVote(parser.parseRelayNetworkStatusVote(
                 (RelayNetworkStatusVote) descriptor));
           } else {
