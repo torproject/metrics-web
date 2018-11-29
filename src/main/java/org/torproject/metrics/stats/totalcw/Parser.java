@@ -19,7 +19,8 @@ class Parser {
       RelayNetworkStatusVote vote) {
     Long measuredSum = null;
     for (NetworkStatusEntry entry : vote.getStatusEntries().values()) {
-      if (entry.getMeasured() < 0L) {
+      if (null == entry.getFlags() || !entry.getFlags().contains("Running")
+          || entry.getMeasured() < 0L) {
         continue;
       }
       if (null == measuredSum) {
