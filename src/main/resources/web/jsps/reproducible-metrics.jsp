@@ -380,7 +380,18 @@ The goal is to avoid over-representing a few statuses during periods when the br
 <li>Total consensus weights across bandwidth authorities <a href="/totalcw.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 </ul>
 
-<h4>Step 1: Parse votes.</h4>
+<h4>Step 1: Parse consensuses.</h4>
+
+<p>Obtain consensuses from <a href="/collector.html#type-network-status-consensus-3">CollecTor</a>.
+Refer to the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">Tor directory protocol, version 3</a> for details on the descriptor format.</p>
+
+<p>Parse and memorize the <code>"valid-after"</code> time from the consensus header. We use this UTC timestamp to aggregate by the UTC date.</p>
+
+<p>Parse the <code>"s"</code> lines of all status entries and skip entries without the <code>"Running"</code> flag. Optionally distinguish relays by assigned <code>"Guard"</code> and <code>"Exit"</code> flags.</p>
+
+<p>Parse the (optional) <code>"w"</code> lines of all status entries and compute the total of all bandwidth values denoted by the <code>"Bandwidth="</code> keyword. If an entry does not contain such a value, skip the entry. If a consensus does not contain a single bandwidth value, skip the consensus.</code>
+
+<h4>Step 2: Parse votes.</h4>
 
 <p>Obtain votes from <a href="/collector.html#type-network-status-vote-3">CollecTor</a>.
 Refer to the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">Tor directory protocol, version 3</a> for details on the descriptor format.</p>
@@ -389,11 +400,14 @@ Refer to the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.tx
 
 <p>Also parse the <code>"nickname"</code> and <code>"identity"</code> fields from the <code>"dir-source"</code> line. We use the identity to aggregate by authority and the nickname for display purposes.</p>
 
-<p>Parse the (optional) <code>"w"</code> lines of all status entries and compute the total of all measured bandwidth values denoted by the <code>"Measured="</code> keyword. If an entry does not contain such a value, skip the entry. If a vote does not contain a single measured bandwidth value, skip the vote.</code>
+<p>Parse the <code>"s"</code> lines of all status entries and skip entries without the <code>"Running"</code> flag. Optionally distinguish relays by assigned <code>"Guard"</code> and <code>"Exit"</code> flags.</p>
 
-<h4>Step 2: Compute daily averages</h4>
+<p>Parse the (optional) <code>"w"</code> lines of all status entries and compute the total of all measured bandwidth values denoted by the <code>"Measured="</code> keyword. If an entry does not contain such a value, skip the entry. If a vote does not contain a single measured bandwidth value, skip the vote.</p>
 
-<p>Go through all previously processed votes by valid-after UTC date and authority.
+<h4>Step 3: Compute daily averages</h4>
+
+<p>Go through all previously processed consensuses and votes by valid-after UTC date and authority.
+If there are less than 12 consensuses known for a given UTC date, skip consensuses from this date.
 If an authority published less than 12 votes on a given UTC date, skip this date and authority.
 Also skip the last date of the results, because those averages may still change throughout the day.
 For all remaining combinations of date and authority, compute the arithmetic mean of total measured bandwidth, rounded down to the next-smaller integer number.</p>

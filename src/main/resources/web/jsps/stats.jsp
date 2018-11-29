@@ -321,9 +321,9 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 <h4>Columns</h4>
 
 <ul>
-<li><b>date:</b> UTC date (YYYY-MM-DD) when bridges have been listed as running.</li>
-<li><b>nickname:</b> Bandwidth authority nickname.</li>
-<li><b>totalcw:</b> Total consensus weight of all relays measured by the bandwidth authority.</li>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when relays have been listed as running.</li>
+<li><b>nickname:</b> Bandwidth authority nickname, or the empty string in case of the consensus.</li>
+<li><b>totalcw:</b> Total consensus weight of all running relays measured by the bandwidth authority or contained in the consensus.</li>
 </ul>
 
 </div>
