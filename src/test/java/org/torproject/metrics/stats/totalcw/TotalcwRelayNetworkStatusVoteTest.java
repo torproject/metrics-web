@@ -4,6 +4,7 @@
 package org.torproject.metrics.stats.totalcw;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNull;
 
 import org.torproject.descriptor.Descriptor;
@@ -35,19 +36,22 @@ public class TotalcwRelayNetworkStatusVoteTest {
         { "2018-10-15-00-00-00-vote-0232AF901C31A04EE9848595AF9BB7620D4C5B2E-"
             + "55A38ED50848BE1F13C6A35C3CA637B0D962C2EF.part",
             ZonedDateTime.parse("2018-10-15T00:00:00Z").toLocalDateTime(),
-            "dannenberg", "0232AF901C31A04EE9848595AF9BB7620D4C5B2E", -1L },
+            "dannenberg", "0232AF901C31A04EE9848595AF9BB7620D4C5B2E", null },
         { "2018-10-15-00-00-00-vote-27102BC123E7AF1D4741AE047E160C91ADC76B21-"
             + "049AB3179B12DACC391F06A10C2A8904E4339D33.part",
             ZonedDateTime.parse("2018-10-15T00:00:00Z").toLocalDateTime(),
-            "bastet", "27102BC123E7AF1D4741AE047E160C91ADC76B21", 138700L },
+            "bastet", "27102BC123E7AF1D4741AE047E160C91ADC76B21",
+            new long[] { 13700L, 47220L, 17080L, 60700L } },
         { "2018-10-15-00-00-00-vote-ED03BB616EB2F60BEC80151114BB25CEF515B226-"
             + "2669AD153408F88E416CE6206D1A75EC3324A2F4.part",
             ZonedDateTime.parse("2018-10-15T00:00:00Z").toLocalDateTime(),
-            "gabelmoo", "ED03BB616EB2F60BEC80151114BB25CEF515B226", 133370L },
+            "gabelmoo", "ED03BB616EB2F60BEC80151114BB25CEF515B226",
+            new long[] { 18020L, 43200L, 26150L, 46000L } },
         { "2018-10-15-00-00-00-vote-EFCBE720AB3A82B99F9E953CD5BF50F7EEFC7B97-"
             + "38C6A19F78948B689345EE41D7119D76246C4D3E.part",
             ZonedDateTime.parse("2018-10-15T00:00:00Z").toLocalDateTime(),
-            "Faravahar", "EFCBE720AB3A82B99F9E953CD5BF50F7EEFC7B97", 158395L }
+            "Faravahar", "EFCBE720AB3A82B99F9E953CD5BF50F7EEFC7B97",
+            new long[] { 17365L, 52030L, 35400L, 53600L } }
     });
   }
 
@@ -64,7 +68,7 @@ public class TotalcwRelayNetworkStatusVoteTest {
   public String expectedIdentityHex;
 
   @Parameter(4)
-  public long expectedMeasuredSum;
+  public long[] expectedMeasuredSums;
 
   @Test
   public void testParseVote() throws Exception {
@@ -82,13 +86,13 @@ public class TotalcwRelayNetworkStatusVoteTest {
         sb.toString().getBytes(), new File(this.fileName), this.fileName)) {
       TotalcwRelayNetworkStatusVote parsedVote = new Parser()
           .parseRelayNetworkStatusVote((RelayNetworkStatusVote) descriptor);
-      if (this.expectedMeasuredSum < 0L) {
+      if (null == this.expectedMeasuredSums) {
         assertNull(parsedVote);
       } else {
         assertEquals(this.expectedValidAfter, parsedVote.validAfter);
         assertEquals(this.expectedNickname, parsedVote.nickname);
         assertEquals(this.expectedIdentityHex, parsedVote.identityHex);
-        assertEquals(this.expectedMeasuredSum, parsedVote.measuredSum);
+        assertArrayEquals(this.expectedMeasuredSums, parsedVote.measuredSums);
       }
     }
   }

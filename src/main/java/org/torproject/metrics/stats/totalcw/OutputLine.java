@@ -13,7 +13,8 @@ class OutputLine {
   /** Column names used in the database and in the first line of the output
    * file. */
   enum Column {
-    VALID_AFTER_DATE, NICKNAME, MEASURED_SUM_AVG
+    VALID_AFTER_DATE, NICKNAME, HAVE_GUARD_FLAG, HAVE_EXIT_FLAG,
+    MEASURED_SUM_AVG
   }
 
   /** Column headers joined together with the given delimiter. */
@@ -28,6 +29,12 @@ class OutputLine {
   /** Server type, which can be "relay" or "bridge". */
   String nickname;
 
+  /** Whether contained relays all have the "Guard" flag. */
+  boolean haveGuardFlag;
+
+  /** Whether contained relays all have the "Exit" flag. */
+  boolean haveExitFlag;
+
   /** Mean value of total measured bandwidths of all relays over the day. */
   Long measuredSumAvg;
 
@@ -35,7 +42,8 @@ class OutputLine {
    * file. */
   @Override
   public String toString() {
-    return String.format("%s,%s,%d", validAfterDate, nickname, measuredSumAvg);
+    return String.format("%s,%s,%s,%s,%d", validAfterDate, nickname,
+        haveGuardFlag ? "t" : "f", haveExitFlag ? "t" : "f", measuredSumAvg);
   }
 }
 

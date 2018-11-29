@@ -1562,7 +1562,9 @@ prepare_totalcw <- function(start_p, end_p) {
     filter(if (!is.null(start_p))
         valid_after_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p))
-        valid_after_date <= as.Date(end_p) else TRUE)
+        valid_after_date <= as.Date(end_p) else TRUE) %>%
+    group_by(valid_after_date, nickname) %>%
+    summarize(measured_sum_avg = sum(measured_sum_avg))
 }
 
 plot_totalcw <- function(start_p, end_p, path_p) {

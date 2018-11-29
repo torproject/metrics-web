@@ -17,18 +17,21 @@ class Parser {
    * contain any bandwidth measurements. */
   TotalcwRelayNetworkStatusVote parseRelayNetworkStatusVote(
       RelayNetworkStatusVote vote) {
-    Long measuredSum = null;
+    boolean containsMeasuredBandwidths = false;
+    long[] measuredSums = new long[4];
     for (NetworkStatusEntry entry : vote.getStatusEntries().values()) {
       if (null == entry.getFlags() || !entry.getFlags().contains("Running")
           || entry.getMeasured() < 0L) {
         continue;
       }
-      if (null == measuredSum) {
-        measuredSum = 0L;
-      }
-      measuredSum += entry.getMeasured();
+      containsMeasuredBandwidths = true;
+      /* Encode flags as sum of Guard = 1 and (Exit and !BadExit) = 2. */
+      int measuredSumsIndex = (entry.getFlags().contains("Guard") ? 1 : 0)
+          + (entry.getFlags().contains("Exit")
+          && !entry.getFlags().contains("BadExit") ? 2 : 0);
+      measuredSums[measuredSumsIndex] += entry.getMeasured();
     }
-    if (null == measuredSum) {
+    if (!containsMeasuredBandwidths) {
       /* Return null, because we wouldn't want to add this vote to the database
        * anyway. */
       return null;
@@ -39,7 +42,7 @@ class Parser {
         .atZone(ZoneId.of("UTC")).toLocalDateTime();
     parsedVote.identityHex = vote.getIdentity();
     parsedVote.nickname = vote.getNickname();
-    parsedVote.measuredSum = measuredSum;
+    parsedVote.measuredSums = measuredSums;
     return parsedVote;
   }
 }

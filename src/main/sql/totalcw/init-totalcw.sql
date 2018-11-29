@@ -31,21 +31,27 @@ CREATE TABLE vote (
   -- Numeric identifier uniquely identifying the authority generating this vote.
   authority_id INTEGER REFERENCES authority (authority_id),
 
+  -- Whether contained relays had the Guard flag assigned.
+  have_guard_flag BOOLEAN NOT NULL,
+
+  -- Whether contained relays had the Exit flag assigned.
+  have_exit_flag BOOLEAN NOT NULL,
+
   -- Sum of bandwidth measurements of all contained status entries.
   measured_sum BIGINT NOT NULL,
 
-  UNIQUE (valid_after, authority_id)
+  UNIQUE (valid_after, authority_id, have_guard_flag, have_exit_flag)
 );
 
 -- View on aggregated total consensus weight statistics in a format that is
 -- compatible for writing to an output CSV file. Votes are only included in the
 -- output if at least 12 votes are known for a given authority and day.
 CREATE OR REPLACE VIEW totalcw AS
-SELECT DATE(valid_after) AS valid_after_date, nickname,
-  FLOOR(AVG(measured_sum)) AS measured_sum_avg
+SELECT DATE(valid_after) AS valid_after_date, nickname, have_guard_flag,
+  have_exit_flag, FLOOR(AVG(measured_sum)) AS measured_sum_avg
 FROM vote NATURAL JOIN authority
-GROUP BY DATE(valid_after), nickname
+GROUP BY DATE(valid_after), nickname, have_guard_flag, have_exit_flag
 HAVING COUNT(vote_id) >= 12
   AND DATE(valid_after) < (SELECT MAX(DATE(valid_after)) FROM vote)
-ORDER BY DATE(valid_after), nickname;
+ORDER BY DATE(valid_after), nickname, have_guard_flag, have_exit_flag;
 

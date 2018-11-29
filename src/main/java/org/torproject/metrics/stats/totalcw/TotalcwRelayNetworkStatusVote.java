@@ -19,7 +19,9 @@ class TotalcwRelayNetworkStatusVote {
    * key. */
   String identityHex;
 
-  /** Sum of bandwidth measurements of all contained status entries. */
-  long measuredSum;
+  /** Sums of bandwidth measurements of all contained status entries with four
+   * entries: 0 = neither Exit nor Guard, 1 = only Guard, 2 = only Exit, and
+   * 3 = both Guard and Exit. */
+  long[] measuredSums;
 }
 

@@ -66,9 +66,8 @@ class Database implements AutoCloseable {
         "SELECT EXISTS (SELECT 1 FROM vote "
             + "WHERE valid_after = ? AND authority_id = ?)");
     this.psVoteInsert = this.connection.prepareStatement(
-        "INSERT INTO vote (valid_after, authority_id, measured_sum) "
-            + "VALUES (?, ?, ?)",
-        Statement.RETURN_GENERATED_KEYS);
+        "INSERT INTO vote (valid_after, authority_id, have_guard_flag, "
+        + "have_exit_flag, measured_sum) VALUES (?, ?, ?, ?, ?)");
   }
 
   /** Insert a parsed vote into the vote table. */
@@ -116,22 +115,17 @@ class Database implements AutoCloseable {
         }
       }
     }
-    int voteId = -1;
-    this.psVoteInsert.clearParameters();
-    this.psVoteInsert.setTimestamp(1,
-        Timestamp.from(ZonedDateTime.of(vote.validAfter,
-            ZoneId.of("UTC")).toInstant()), calendar);
-    this.psVoteInsert.setInt(2, authorityId);
-    this.psVoteInsert.setLong(3, vote.measuredSum);
-    this.psVoteInsert.execute();
-    try (ResultSet rs = this.psVoteInsert.getGeneratedKeys()) {
-      if (rs.next()) {
-        voteId = rs.getInt(1);
-      }
-    }
-    if (voteId < 0) {
-      throw new SQLException("Could not retrieve auto-generated key for new "
-          + "vote entry.");
+    for (int measuredSumsIndex = 0; measuredSumsIndex < 4;
+         measuredSumsIndex++) {
+      this.psVoteInsert.clearParameters();
+      this.psVoteInsert.setTimestamp(1,
+          Timestamp.from(ZonedDateTime.of(vote.validAfter,
+              ZoneId.of("UTC")).toInstant()), calendar);
+      this.psVoteInsert.setInt(2, authorityId);
+      this.psVoteInsert.setBoolean(3, 1 == (measuredSumsIndex & 1));
+      this.psVoteInsert.setBoolean(4, 2 == (measuredSumsIndex & 2));
+      this.psVoteInsert.setLong(5, vote.measuredSums[measuredSumsIndex]);
+      this.psVoteInsert.execute();
     }
   }
 
@@ -159,6 +153,10 @@ class Database implements AutoCloseable {
         outputLine.validAfterDate = rs.getDate(
             OutputLine.Column.VALID_AFTER_DATE.name(), calendar).toLocalDate();
         outputLine.nickname = rs.getString(OutputLine.Column.NICKNAME.name());
+        outputLine.haveGuardFlag = rs.getBoolean(
+            OutputLine.Column.HAVE_GUARD_FLAG.name());
+        outputLine.haveExitFlag = rs.getBoolean(
+            OutputLine.Column.HAVE_EXIT_FLAG.name());
         outputLine.measuredSumAvg = rs.getLong(
             OutputLine.Column.MEASURED_SUM_AVG.name());
         statistics.add(outputLine);
