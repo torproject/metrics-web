@@ -19,32 +19,7 @@ class TotalcwRelayNetworkStatusVote {
    * key. */
   String identityHex;
 
-  /** Count of status entries containing bandwidth measurements. */
-  long measuredCount;
-
   /** Sum of bandwidth measurements of all contained status entries. */
   long measuredSum;
-
-  /** Mean value of bandwidth measurements of all contained status entries. */
-  long measuredMean;
-
-  /** Minimum value of bandwidth measurements of all contained status
-   * entries. */
-  long measuredMin;
-
-  /** First quartile value of bandwidth measurements of all contained status
-   * entries. */
-  long measuredQ1;
-
-  /** Median value of bandwidth measurements of all contained status entries. */
-  long measuredMedian;
-
-  /** Third quartile value of bandwidth measurements of all contained status
-   * entries. */
-  long measuredQ3;
-
-  /** Maximum value of bandwidth measurements of all contained status
-   * entries. */
-  long measuredMax;
 }
 

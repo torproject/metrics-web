@@ -31,31 +31,8 @@ CREATE TABLE vote (
   -- Numeric identifier uniquely identifying the authority generating this vote.
   authority_id INTEGER REFERENCES authority (authority_id),
 
-  -- Count of status entries containing bandwidth measurements.
-  measured_count BIGINT NOT NULL,
-
   -- Sum of bandwidth measurements of all contained status entries.
   measured_sum BIGINT NOT NULL,
-
-  -- Mean value of bandwidth measurements of all contained status entries.
-  measured_mean BIGINT NOT NULL,
-
-  -- Minimum value of bandwidth measurements of all contained status entries.
-  measured_min BIGINT NOT NULL,
-
-  -- First quartile value of bandwidth measurements of all contained status
-  -- entries.
-  measured_q1 BIGINT NOT NULL,
-
-  -- Median value of bandwidth measurements of all contained status entries.
-  measured_median BIGINT NOT NULL,
-
-  -- Third quartile value of bandwidth measurements of all contained status
-  -- entries.
-  measured_q3 BIGINT NOT NULL,
-
-  -- Maximum value of bandwidth measurements of all contained status entries.
-  measured_max BIGINT NOT NULL,
 
   UNIQUE (valid_after, authority_id)
 );

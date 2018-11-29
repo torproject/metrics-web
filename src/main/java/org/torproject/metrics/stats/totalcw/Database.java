@@ -66,10 +66,8 @@ class Database implements AutoCloseable {
         "SELECT EXISTS (SELECT 1 FROM vote "
             + "WHERE valid_after = ? AND authority_id = ?)");
     this.psVoteInsert = this.connection.prepareStatement(
-        "INSERT INTO vote (valid_after, authority_id, measured_count, "
-            + "measured_sum, measured_mean, measured_min, measured_q1, "
-            + "measured_median, measured_q3, measured_max) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO vote (valid_after, authority_id, measured_sum) "
+            + "VALUES (?, ?, ?)",
         Statement.RETURN_GENERATED_KEYS);
   }
 
@@ -124,14 +122,7 @@ class Database implements AutoCloseable {
         Timestamp.from(ZonedDateTime.of(vote.validAfter,
             ZoneId.of("UTC")).toInstant()), calendar);
     this.psVoteInsert.setInt(2, authorityId);
-    this.psVoteInsert.setLong(3, vote.measuredCount);
-    this.psVoteInsert.setLong(4, vote.measuredSum);
-    this.psVoteInsert.setLong(5, vote.measuredMean);
-    this.psVoteInsert.setLong(6, vote.measuredMin);
-    this.psVoteInsert.setLong(7, vote.measuredQ1);
-    this.psVoteInsert.setLong(8, vote.measuredMedian);
-    this.psVoteInsert.setLong(9, vote.measuredQ3);
-    this.psVoteInsert.setLong(10, vote.measuredMax);
+    this.psVoteInsert.setLong(3, vote.measuredSum);
     this.psVoteInsert.execute();
     try (ResultSet rs = this.psVoteInsert.getGeneratedKeys()) {
       if (rs.next()) {
