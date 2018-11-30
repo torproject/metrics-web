@@ -15,15 +15,6 @@
 
 <div class="container">
 
-<div class="panel panel-danger">
-<div class="panel-heading">
-<h5 class="panel-title">Work in progress notice</h5>
-</div>
-<div class="panel-body">
-<p>As of July 2018, this page is still a work in progress. Handle with care!</p>
-</div>
-</div>
-
 <h1>Reproducible Metrics
 <a href="#reproducible-metrics" name="reproducible-metrics" class="anchor">#</a></h1>
 
@@ -103,7 +94,7 @@ Split observations to the covered UTC dates by assuming a linear distribution of
 <h4>Step 3: Estimate fraction of reported directory-request statistics</h4>
 
 <p>The next step after parsing descriptors is to estimate the fraction of reported directory-request statistics on a given day.
-This fraction, a value between <var>0%</var> and <var>100%</var>, will be used in the next step to extrapolate observed request numbers to expected network totals.
+This fraction will be used in the next step to extrapolate observed request numbers to expected network totals.
 For further background on the following calculation method, refer to the technical report titled <a href="https://research.torproject.org/techreports/counting-daily-bridge-users-2012-10-24.pdf">"Counting daily bridge users"</a> which also applies to relay users.
 In the following, we're using the term server instead of relay or bridge, because the estimation method is exactly the same for relays and bridges.</p>
 
@@ -139,7 +130,7 @@ This approach also works with <var>r(R)</var> being the sum of requests from <em
 <pre>r(N) = floor(r(R) / frac / 10)</pre>
 
 <p>A client that is connected 24/7 makes about 15 requests per day, but not all clients are connected 24/7, so we picked the number 10 for the average client. We simply divide directory requests by 10 and consider the result as the number of users. Another way of looking at it, is that we assume that each request represents a client that stays online for one tenth of a day, so 2 hours and 24 minutes.</p>
-<p>Skip dates where <var>frac</var> is smaller than 10% and hence too low for a robust estimate, or where <var>frac</var> is greater than 100%, which would indicate an issue in the previous step.</p>
+<p>Skip dates where <var>frac</var> is smaller than 10% and hence too low for a robust estimate. Also skip dates where <var>frac</var> is greater than 110%, which would indicate an issue in the previous step. We picked 110% as upper bound, not 100%, because there can be relays reporting statistics that temporarily didn't make it into the consensus, and we accept up to 10% of those additional statistics. However, there needs to be some upper bound to exclude obvious outliers with fractions of 120%, 150%, or even 200%.</p>
 
 <h4>Step 5: Compute ranges of expected clients per day to detect potential censorship events</h4>
 
@@ -278,13 +269,11 @@ Refer to the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.tx
 <li>Relay flags: Parse relay flags from the <code>"s"</code> line. If there is no <code>"Running"</code> flag, skip this consensus entry. This ensures that we only consider running relays. Also parse any other relay flags from the <code>"s"</code> line that the relay had assigned.</li>
 </ul>
 
-<p>If a consensus contains zero running relays, we skip it in the <a href="/relays-ipv6.html">Relays by IP version</a> graph, but not in the other graphs (simply because we didn't get around to changing those graphs).
+<p>If a consensus contains zero running relays, we skip it.
 This is mostly to rule out a rare edge case when only a minority of <a href="/glossary.html#directory-authority">directory authorities</a> voted on the <code>"Running"</code> flag.
 In those cases, such a consensus would skew the average, even though relays were likely running.</p>
 
 <h4>Step 2: Parse relay server descriptors</h4>
-
-<p>Parsing relay server descriptors is an optional step. You only need to do this if you want to break down the number of running relays by something that relays report in their server descriptors. This includes, among other things, the relay's platform string containing tor software version and operating system and whether the relay announced an IPv6 OR address or permitted exiting to IPv6 targets.</p>
 
 <p>Obtain relay server descriptors from <a href="/collector.html#type-server-descriptor">CollecTor</a>.
 Again, refer to the <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">Tor directory protocol, version 3</a> for details on the descriptor format.</p>
@@ -307,21 +296,16 @@ If the platform line is missing, we skip this descriptor, which later leads to n
 
 <h4>Step 3: Compute daily averages</h4>
 
-<p>Optionally, match consensus entries with server descriptors by SHA-1 digest.
+<p>Match consensus entries with server descriptors by SHA-1 digest.
 Every consensus entry references exactly one server descriptor, and a server descriptor may be referenced from an arbitrary number of consensus entries.
-We handle missing server descriptors differently in the graphs covered in this section:</p>
-
-<ul>
-<li><a href="/versions.html">Relays by tor version</a> and <a href="/platforms.html">Relays by platform</a>: If a referenced server descriptor is missing, we also skip the consensus entry. We are aware that this is slightly wrong, because we should either exclude a consensus with too few matching server descriptors from the overall result, or at least count these relays as unknown tor version or unknown platform.</li>
-<li><a href="/relays-ipv6.html">Relays by IP version</a>: If at least 0.1% of referenced server descriptors are missing, we skip the consensus. We chose this threshold as low, because missing server descriptors may easily skew the results. However, a small number of missing server descriptors per consensus is acceptable and also unavoidable.</li>
-</ul>
+If at least 0.1% of referenced server descriptors are missing, we skip the consensus. We chose this threshold as low, because missing server descriptors may easily skew the results. However, a small number of missing server descriptors per consensus is acceptable and also unavoidable.</p>
 
 <p>Go through all previously processed consensuses by valid-after UTC date.
 Compute the arithmetic mean of running relays, possibly broken down by relay flag, tor version, platform, or IPv6 capabilities, as the sum of all running relays divided by the number of consensuses.
 Round down to the next integer number.</p>
 
 <p>Skip the last day of the results if it matches the current UTC date, because those averages may still change throughout the day.
-For the <a href="/relays-ipv6.html">Relays by IP version</a> graph we further skip days for which fewer than 12 consensuses are known. The goal is to avoid over-representing a few consensuses during periods when the directory authorities had trouble producing a consensus for at least half of the day.</p>
+Further skip days for which fewer than 12 consensuses are known. The goal is to avoid over-representing a few consensuses during periods when the directory authorities had trouble producing a consensus for at least half of the day.</p>
 
 <h3 id="running-bridges" class="hover">Running bridges
 <a href="#running-bridges" class="anchor">#</a>
@@ -360,9 +344,6 @@ This timestamp is used to uniquely identify the status while processing, and the
 
 <h4>Step 2: Parse bridge server descriptors.</h4>
 
-<p>Parsing bridge server descriptors is an optional step. You only need to do this if you want to break down the number of running bridges by something that bridges report in their server descriptors.
-This includes, among other things, whether the bridge announced an IPv6 OR address.</p>
-
 <p>Obtain bridge server descriptors from <a href="/collector.html#type-bridge-server-descriptor">CollecTor</a>.
 As above, refer to the <a href="/bridge-descriptors.html">Tor bridge descriptors page</a> for details on the descriptor format.</p>
 
@@ -375,21 +356,16 @@ As above, refer to the <a href="/bridge-descriptors.html">Tor bridge descriptors
 
 <h4>Step 3: Compute daily averages</h4>
 
-<p>Optionally, match status entries with server descriptors by SHA-1 digest.
+<p>Match status entries with server descriptors by SHA-1 digest.
 Every status entry references exactly one server descriptor, and a server descriptor may be referenced from an arbitrary number of status entries.
 If at least 0.1% of referenced server descriptors are missing, we skip the status.
 We chose this threshold as low, because missing server descriptors may easily skew the results.
 However, a small number of missing server descriptors per status is acceptable and also unavoidable.</p>
 
-<p>We compute averages differently in the graphs covered in this section:</p>
-
-<ul>
-<li><a href="/networksize.html">Relays and bridges</a>: For each bridge authority, compute the arithmetic mean of running bridges as the sum of all running bridges divided by the number of statuses; sum up averages for all bridge authorities per day and round down to the next integer number.</li>
-<li><a href="/bridges-ipv6.html">Bridges by IP version</a>: Compute the arithmetic mean of running bridges as the sum of all running bridges divided by the number of statuses and round down to the next integer number. We are aware that this approach does not correctly reflect that bridges typically register at a single bridge authority only.</li>
-</ul>
+<p>Compute the arithmetic mean of running bridges as the sum of all running bridges divided by the number of statuses and round down to the next integer number. We are aware that this approach does not correctly reflect that bridges typically register at a single bridge authority only.</p>
 
 <p>Skip the last day of the results if it matches the current UTC date, because those averages may still change throughout the day.
-For the <a href="/bridges-ipv6.html">Bridges by IP version</a> graph we further skip days for which fewer than 12 statuses are known.
+Further skip days for which fewer than 12 statuses are known.
 The goal is to avoid over-representing a few statuses during periods when the bridge directory authority had trouble producing a status for at least half of the day.</p>
 
 <h3 id="consensus-weight" class="hover">Consensus weight
@@ -483,12 +459,7 @@ We consider a relay with the <code>"Guard"</code> flag as guard and a relay with
 
 <p>In order to compute these averages, first match consensus entries with server descriptors by SHA-1 digest.
 Every consensus entry references exactly one server descriptor, and a server descriptor may be referenced from an arbitrary number of consensus entries.
-We handle missing server descriptors differently in the graphs covered in this section:</p>
-
-<ul>
-<li><a href="/bandwidth.html">Total relay bandwidth</a> and <a href="/bandwidth-flags.html">Advertised and consumed bandwidth by relay flag</a>: If a referenced server descriptor is missing, we also skip the consensus entry. We are aware that this is slightly wrong, because we should rather exclude a consensus with too few matching server descriptors from the overall result than including it with an advertised bandwidth sum that is too low.</li>
-<li><a href="/advbw-ipv6.html">Advertised bandwidth by IP version</a>: If at least 0.1% of referenced server descriptors are missing, we skip the consensus. We chose this threshold as low, because missing server descriptors may easily skew the results. However, a small number of missing server descriptors per consensus is acceptable and also unavoidable.</li>
-</ul>
+If at least 0.1% of referenced server descriptors are missing, we skip the consensus. We chose this threshold as low, because missing server descriptors may easily skew the results. However, a small number of missing server descriptors per consensus is acceptable and also unavoidable.</p>
 
 <p>Go through all previously processed consensuses by valid-after UTC date.
 Compute the arithmetic mean of advertised bandwidth as the sum of all advertised bandwidth values divided by the number of consensuses.
@@ -497,7 +468,7 @@ Round down to the next integer number.</p>
 <p>Break down numbers by guards and/or exits by taking into account which <a href="/glossary.html#relay-flag">relay flags</a> a consensus entry had that referenced a server descriptor.</p>
 
 <p>Skip the last day of the results if it matches the current UTC date, because those averages may still change throughout the day.
-For the <a href="/advbw-ipv6.html">Advertised bandwidth by IP version</a> graph we further skip days for which fewer than 12 consensuses are known.
+Further skip days for which fewer than 12 consensuses are known.
 The goal is to avoid over-representing a few consensuses during periods when the directory authorities had trouble producing a consensus for at least half of the day.</p>
 
 <h4>Step 4: Compute ranks and percentiles</h4>
