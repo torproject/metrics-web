@@ -678,8 +678,13 @@ CREATE OR REPLACE VIEW estimated AS SELECT
     FROM aggregated WHERE hh * nn > 0.0) a
 
   -- Only include estimates with at least 10% of nodes reporting directory
-  -- request statistics.
-  WHERE a.frac BETWEEN 0.1 AND 1.0
+  -- request statistics, and exclude estimates with fractions higher than 110%.
+  -- The upper bound is 110% and not 100%, because there can be relays reporting
+  -- statistics that temporarily didn't make it into the consensus, and we
+  -- accept up to 10% of those additional statistics. However, there needs to be
+  -- some upper bound to exclude obvious outliers with fractions of 120%, 150%,
+  -- or even 200%. See #28305 for more details.
+  WHERE a.frac BETWEEN 0.1 AND 1.1
 
   -- Skip estimates that are as recent as yesterday or newer.
   AND a.date < current_date - 1
