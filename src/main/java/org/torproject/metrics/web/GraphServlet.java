@@ -103,14 +103,6 @@ public class GraphServlet extends MetricServlet {
     this.defaultParameters.put("version", new String[][] {
         { "v4", " selected", "IPv4" },
         { "v6", "", "IPv6" } });
-    this.defaultParameters.put("source", new String[][] {
-        { "all", " checked" },
-        { "torperf", "" },
-        { "moria", "" },
-        { "siv", "" },
-        { "op-hk", "" },
-        { "op-nl", "" },
-        { "op-us", "" }});
     this.defaultParameters.put("server", new String[][] {
         { "public", " checked" },
         { "onion", "" }});

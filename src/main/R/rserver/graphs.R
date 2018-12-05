@@ -592,70 +592,49 @@ write_relayflags <- function(start_p = NULL, end_p = NULL, flag_p = NULL,
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-plot_torperf <- function(start_p, end_p, source_p, server_p, filesize_p,
-    path_p) {
-  filesize_val <- ifelse(filesize_p == "50kb", 50 * 1024,
-          ifelse(filesize_p == "1mb", 1024 * 1024, 5 * 1024 * 1024))
-  t <- read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
-    colClasses = c("date" = "Date", "source" = "character"))
-  known_sources <- c("all", unique(t[t$source != "", "source"]))
-  colours <- data.frame(source = known_sources,
-      colour = brewer.pal(length(known_sources), "Paired"),
-      stringsAsFactors = FALSE)
-  colour <- colours[colours$source == source_p, "colour"]
-  filesizes <- data.frame(filesizes = c("5mb", "1mb", "50kb"),
-      label = c("5 MiB", "1 MiB", "50 KiB"), stringsAsFactors = FALSE)
-  filesize_str <- filesizes[filesizes$filesize == filesize_p, "label"]
-  t[t$date >= as.Date(start_p) & t$date <= as.Date(end_p) &
-         t$filesize == filesize_val &
-         t$source == ifelse(source_p == "all", "", source_p) &
-         t$server == server_p, ] %>%
-    transmute(date, q1 = q1 / 1e3, md = md / 1e3, q3 = q3 / 1e3) %>%
-    complete(date = full_seq(date, period = 1)) %>%
-    ggplot(aes(x = date, y = md, fill = "line")) +
-    geom_line(colour = colour, size = 0.75) +
-    geom_ribbon(aes(x = date, ymin = q1, ymax = q3, fill = "ribbon")) +
-    scale_x_date(name = "", breaks = custom_breaks,
-      labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "s"),
-      limits = c(0, NA)) +
-    scale_fill_manual(name = paste("Measured times on",
-        ifelse(source_p == "all", "all sources", source_p), "per day"),
-      breaks = c("line", "ribbon"),
-      labels = c("Median", "1st to 3rd quartile"),
-      values = paste(colour, c("", "66"), sep = "")) +
-    ggtitle(paste("Time to complete", filesize_str,
-        "request to", server_p, "server")) +
-    labs(caption = copyright_notice) +
-    theme(legend.position = "top")
-  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
-}
-
-# Ideally, this function would share code with plot_torperf by using a
-# common prepare_torperf function. This just turned out to be a bit
-# harder than for other functions, because plot_torperf uses different
-# colours based on which sources exist, unrelated to which source is
-# plotted. Left as future work.
-write_torperf <- function(start_p = NULL, end_p = NULL, source_p = NULL,
-    server_p = NULL, filesize_p = NULL, path_p) {
+prepare_torperf <- function(start_p, end_p, server_p, filesize_p, path_p) {
   read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+    colClasses = c("date" = "Date", "source" = "character")) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(if (!is.null(source_p))
-        source == ifelse(source_p == "all", "", source_p) else TRUE) %>%
     filter(if (!is.null(server_p)) server == server_p else TRUE) %>%
     filter(if (!is.null(filesize_p))
         filesize == ifelse(filesize_p == "50kb", 50 * 1024,
         ifelse(filesize_p == "1mb", 1024 * 1024, 5 * 1024 * 1024)) else
         TRUE) %>%
     transmute(date, filesize, source, server, q1 = q1 / 1e3, md = md / 1e3,
-      q3 = q3 / 1e3) %>%
+      q3 = q3 / 1e3)
+}
+
+plot_torperf <- function(start_p, end_p, server_p, filesize_p, path_p) {
+  prepare_torperf(start_p, end_p, server_p, filesize_p, path_p) %>%
+    filter(source != "") %>%
+    complete(date = full_seq(date, period = 1), nesting(source)) %>%
+    ggplot(aes(x = date, y = md, ymin = q1, ymax = q3, fill = source)) +
+    geom_ribbon(alpha = 0.5) +
+    geom_line(aes(colour = source), size = 0.75) +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "s"),
+      limits = c(0, NA)) +
+    scale_fill_hue(name = "Source") +
+    scale_colour_hue(name = "Source") +
+    ggtitle(paste("Time to complete",
+        ifelse(filesize_p == "50kb", "50 KiB",
+        ifelse(filesize_p == "1mb", "1 MiB", "5 MiB")),
+        "request to", server_p, "server")) +
+    labs(caption = copyright_notice) +
+    theme(legend.position = "top")
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
+write_torperf <- function(start_p = NULL, end_p = NULL, server_p = NULL,
+    filesize_p = NULL, path_p) {
+  prepare_torperf(start_p, end_p, server_p, filesize_p, path_p) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-prepare_torperf_failures <- function(start_p, end_p, source_p, server_p,
-    filesize_p) {
+prepare_torperf_failures <- function(start_p, end_p, server_p, filesize_p) {
   read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
@@ -664,31 +643,29 @@ prepare_torperf_failures <- function(start_p, end_p, source_p, server_p,
         filesize == ifelse(filesize_p == "50kb", 50 * 1024,
         ifelse(filesize_p == "1mb", 1024 * 1024, 5 * 1024 * 1024)) else
         TRUE) %>%
-    filter(if (!is.null(source_p))
-        source == ifelse(source_p == "all", "", source_p) else TRUE) %>%
     filter(if (!is.null(server_p)) server == server_p else TRUE) %>%
     filter(requests > 0) %>%
     transmute(date, filesize, source, server, timeouts = timeouts / requests,
         failures = failures / requests)
 }
 
-plot_torperf_failures <- function(start_p, end_p, source_p, server_p,
-    filesize_p, path_p) {
-  filesizes <- data.frame(filesizes = c("5mb", "1mb", "50kb"),
-      label = c("5 MiB", "1 MiB", "50 KiB"), stringsAsFactors = FALSE)
-  filesize_str <- filesizes[filesizes$filesize == filesize_p, "label"]
-  prepare_torperf_failures(start_p, end_p, source_p, server_p, filesize_p) %>%
+plot_torperf_failures <- function(start_p, end_p, server_p, filesize_p,
+    path_p) {
+  prepare_torperf_failures(start_p, end_p, server_p, filesize_p) %>%
+    filter(source != "") %>%
     gather(variable, value, -c(date, filesize, source, server)) %>%
-    ggplot(aes(x = date, y = value, colour = variable)) +
-    geom_point(size = 2) +
+    mutate(variable = factor(variable, levels = c("timeouts", "failures"),
+      labels = c("Timeouts", "Failures"))) %>%
+    ggplot(aes(x = date, y = value, colour = source)) +
+    geom_point(size = 2, alpha = 0.5) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = percent, limits = c(0, NA)) +
-    scale_colour_hue(name = paste("Problems encountered on",
-        ifelse(source_p == "all", "all sources", source_p)),
-        h.start = 45, breaks = c("timeouts", "failures"),
-        labels = c("Timeouts", "Failures")) +
-    ggtitle(paste("Timeouts and failures of", filesize_str,
+    scale_colour_hue(name = "Source") +
+    facet_grid(variable ~ .) +
+    ggtitle(paste("Timeouts and failures of",
+        ifelse(filesize_p == "50kb", "50 KiB",
+        ifelse(filesize_p == "1mb", "1 MiB", "5 MiB")),
         "requests to", server_p, "server")) +
     labs(caption = copyright_notice) +
     theme(legend.position = "top")
@@ -696,81 +673,74 @@ plot_torperf_failures <- function(start_p, end_p, source_p, server_p,
 }
 
 write_torperf_failures <- function(start_p = NULL, end_p = NULL,
-    source_p = NULL, server_p = NULL, filesize_p = NULL, path_p) {
-  prepare_torperf_failures(start_p, end_p, source_p, server_p, filesize_p) %>%
+    server_p = NULL, filesize_p = NULL, path_p) {
+  prepare_torperf_failures(start_p, end_p, server_p, filesize_p) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-prepare_onionperf_buildtimes <- function(start_p, end_p, source_p) {
+prepare_onionperf_buildtimes <- function(start_p, end_p) {
     read.csv(paste(stats_dir, "buildtimes.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
-    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(if (!is.null(source_p))
-        source == ifelse(source_p == "all", "", source_p) else TRUE)
+    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE)
 }
 
-write_onionperf_buildtimes <- function(start_p = NULL, end_p = NULL,
-    source_p = NULL, path_p) {
-  prepare_onionperf_buildtimes(start_p, end_p, source_p) %>%
+write_onionperf_buildtimes <- function(start_p = NULL, end_p = NULL, path_p) {
+  prepare_onionperf_buildtimes(start_p, end_p) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-plot_onionperf_buildtimes <- function(start_p, end_p, source_p, path_p) {
-  prepare_onionperf_buildtimes(start_p, end_p, source_p) %>%
+plot_onionperf_buildtimes <- function(start_p, end_p, path_p) {
+  prepare_onionperf_buildtimes(start_p, end_p) %>%
+    filter(source != "") %>%
     mutate(date = as.Date(date),
       position = factor(position, levels = seq(1, 3, 1),
         labels = c("1st hop", "2nd hop", "3rd hop"))) %>%
-    ggplot(aes(x = date, y = md, colour = position, fill = position)) +
-    geom_line(size = 0.75) +
-    geom_ribbon(aes(x = as.Date(date), ymin = q1, ymax = q3, alpha = 0.5),
-      show.legend = FALSE) +
+    complete(date = full_seq(date, period = 1), nesting(source, position)) %>%
+    ggplot(aes(x = date, y = md, ymin = q1, ymax = q3, fill = source)) +
+    geom_ribbon(alpha = 0.5) +
+    geom_line(aes(colour = source), size = 0.75) +
+    facet_grid(position ~ .) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "ms"),
       limits = c(0, NA)) +
-    scale_colour_hue(name = "Medians and interquartile ranges") +
-    scale_fill_hue(name = "Medians and interquartile ranges") +
-    ggtitle(ifelse(source_p == "all", "Circuit build times on all sources",
-        paste("Circuit build times on", source_p))) +
+    scale_fill_hue(name = "Source") +
+    scale_colour_hue(name = "Source") +
+    ggtitle("Circuit build times") +
     labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
 }
 
-prepare_onionperf_latencies <- function(start_p, end_p, source_p) {
+prepare_onionperf_latencies <- function(start_p, end_p, server_p) {
     read.csv(paste(stats_dir, "latencies.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(if (!is.null(source_p))
-        source == ifelse(source_p == "all", "", source_p) else TRUE)
+    filter(if (!is.null(server_p)) server == server_p else TRUE)
 }
 
 write_onionperf_latencies <- function(start_p = NULL, end_p = NULL,
-    source_p = NULL, path_p) {
-  prepare_onionperf_latencies(start_p, end_p, source_p) %>%
+    server_p = NULL, path_p) {
+  prepare_onionperf_latencies(start_p, end_p, server_p) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-plot_onionperf_latencies <- function(start_p, end_p, source_p, path_p) {
-  prepare_onionperf_latencies(start_p, end_p, source_p) %>%
-    mutate(date = as.Date(date),
-      server = factor(server, levels = c("public", "onion"),
-        labels = c("public server", "onion server"))) %>%
-    ggplot(aes(x = date, y = md, colour = server, fill = server)) +
-    geom_line(size = 0.75) +
-    geom_ribbon(aes(x = as.Date(date), ymin = q1, ymax = q3, alpha = 0.5),
-      show.legend = FALSE) +
+plot_onionperf_latencies <- function(start_p, end_p, server_p, path_p) {
+  prepare_onionperf_latencies(start_p, end_p, server_p) %>%
+    filter(source != "") %>%
+    complete(date = full_seq(date, period = 1), nesting(source)) %>%
+    ggplot(aes(x = date, y = md, ymin = q1, ymax = q3, fill = source)) +
+    geom_ribbon(alpha = 0.5) +
+    geom_line(aes(colour = source), size = 0.75) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "ms"),
       limits = c(0, NA)) +
-    scale_colour_hue(name = "Medians and interquartile ranges") +
-    scale_fill_hue(name = "Medians and interquartile ranges") +
-    ggtitle(ifelse(source_p == "all",
-        "Circuit round-trip latencies on all sources",
-        paste("Circuit round-trip latencies on", source_p))) +
+    scale_fill_hue(name = "Source") +
+    scale_colour_hue(name = "Source") +
+    ggtitle(paste("Circuit round-trip latencies to", server_p, "server")) +
     labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)

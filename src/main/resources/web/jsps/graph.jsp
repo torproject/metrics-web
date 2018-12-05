@@ -122,15 +122,6 @@
         </select>
       </p>
     </c:if>
-    <c:if test="${fn:length(source) > 0}">
-      <p><b>Source:</b>
-      <c:forEach var="row" items="${source}">
-        <label class="radio-label">
-          <input type="radio" name="source" value="${row[0]}"${row[1]}> ${row[0]}
-        </label>
-      </c:forEach>
-      </p>
-    </c:if>
     <c:if test="${fn:length(server) > 0}">
       <p><b>Server:</b>
       <c:forEach var="row" items="${server}">

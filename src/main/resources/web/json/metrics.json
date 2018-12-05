@@ -290,7 +290,6 @@
     "parameters": [
       "start",
       "end",
-      "source",
       "server",
       "filesize"
     ]
@@ -304,7 +303,6 @@
     "parameters": [
       "start",
       "end",
-      "source",
       "server",
       "filesize"
     ]
@@ -317,8 +315,7 @@
     "function": "onionperf_buildtimes",
     "parameters": [
       "start",
-      "end",
-      "source"
+      "end"
     ]
   },
   {
@@ -330,7 +327,7 @@
     "parameters": [
       "start",
       "end",
-      "source"
+      "server"
     ]
   },
   {

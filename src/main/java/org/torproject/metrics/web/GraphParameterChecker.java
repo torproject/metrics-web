@@ -61,8 +61,6 @@ public class GraphParameterChecker {
     }
     this.knownParameterValues.put("country", sb.toString());
     this.knownParameterValues.put("events", "on,off,points");
-    this.knownParameterValues.put("source", "all,siv,moria,torperf,op-hk,"
-        + "op-nl,op-us");
     this.knownParameterValues.put("server", "public,onion");
     this.knownParameterValues.put("filesize", "50kb,1mb,5mb");
     this.knownParameterValues.put("transport", "obfs2,obfs3,obfs4,"
@@ -197,28 +195,6 @@ public class GraphParameterChecker {
         eventsParameter = new String[] { "off" };
       }
       recognizedGraphParameters.put("events", eventsParameter);
-    }
-
-    /* Parse torperf data source if supported by the graph type. Only a
-     * single source can be passed. If no source is passed, use "torperf"
-     * as default. */
-    if (supportedGraphParameters.contains("source")) {
-      String[] sourceParameter = (String[]) requestParameters.get(
-          "source");
-      List<String> knownSources = Arrays.asList(
-          this.knownParameterValues.get("source").split(","));
-      if (sourceParameter != null) {
-        if (sourceParameter.length != 1) {
-          return null;
-        }
-        if (sourceParameter[0].length() == 0
-            || !knownSources.contains(sourceParameter[0])) {
-          return null;
-        }
-      } else {
-        sourceParameter = new String[] { "all" };
-      }
-      recognizedGraphParameters.put("source", sourceParameter);
     }
 
     /* Parse onionperf server if supported by the graph type. Only a single
