@@ -68,9 +68,9 @@
   },
   {
     "id": "bandwidth",
-    "title": "Total relay bandwidth",
+    "title": "Total relay bandwidth (deprecated)",
     "type": "Graph",
-    "description": "<p>This graph shows the total <a href=\"glossary.html#advertised-bandwidth\">advertised</a> and <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> of all <a href=\"glossary.html#relay\">relays</a> in the network.</p>",
+    "description": "<p>This graph shows the total <a href=\"glossary.html#advertised-bandwidth\">advertised</a> and <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> of all <a href=\"glossary.html#relay\">relays</a> in the network. <strong>This graph will disappear by December 20, 2018, because it won't contain anything new compared to the soon-to-be tweaked <a href=\"/bandwidth-flags.html\">Advertised and consumed bandwidth by relay flags</a> graph.</strong></p>",
     "function": "bandwidth",
     "parameters": [
       "start",
@@ -79,9 +79,9 @@
   },
   {
     "id": "bwhist-flags",
-    "title": "Consumed bandwidth by Exit/Guard flag combination",
+    "title": "Consumed bandwidth by Exit/Guard flag combination (deprecated)",
     "type": "Graph",
-    "description": "<p>This graph shows the <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> reported by relays, subdivided into four distinct subsets by assigned \"Exit\" and/or \"Guard\" <a href=\"glossary.html#relay-flag\">flags</a>.</p>",
+    "description": "<p>This graph shows the <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> reported by relays, subdivided into four distinct subsets by assigned \"Exit\" and/or \"Guard\" <a href=\"glossary.html#relay-flag\">flags</a>. <strong>This graph will disappear by December 20, 2018, because it won't contain anything new compared to the soon-to-be tweaked <a href=\"/bandwidth-flags.html\">Advertised and consumed bandwidth by relay flags</a> graph.</strong></p>",
     "function": "bwhist_flags",
     "parameters": [
       "start",
