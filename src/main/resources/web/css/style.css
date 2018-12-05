@@ -897,9 +897,14 @@ body.noscript #navbar-toggle-checkbox:checked ~ .collapse {
 .onionoo th.method { width:10%; }
 .onionoo th.url { width:40%; }
 .onionoo th.description { width:50%; }
-.onionoo span.red {
+
+
+/* Styles used on our various protocol specification pages. */
+
+span.red {
     color:#d9534f;
 }
-.onionoo span.blue {
+span.blue {
     color:#337ab7;
 }
+
