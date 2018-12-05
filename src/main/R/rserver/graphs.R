@@ -788,41 +788,37 @@ write_connbidirect <- function(start_p = NULL, end_p = NULL, path_p) {
 prepare_bandwidth_flags <- function(start_p, end_p) {
   advbw <- read.csv(paste(stats_dir, "advbw.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    transmute(date, isguard, isexit, variable = "advbw",
-      value = advbw * 8 / 1e9)
+    transmute(date, have_guard_flag = isguard, have_exit_flag = isexit,
+      variable = "advbw", value = advbw * 8 / 1e9)
   bwhist <- read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
-    transmute(date, isguard, isexit, variable = "bwhist",
-      value = (bwread + bwwrite) * 8 / 2e9)
+    transmute(date, have_guard_flag = isguard, have_exit_flag = isexit,
+      variable = "bwhist", value = (bwread + bwwrite) * 8 / 2e9)
   rbind(advbw, bwhist) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    group_by(date, variable) %>%
-    summarize(exit = sum(value[isexit == "t"]),
-      guard = sum(value[isguard == "t"])) %>%
-    gather(flag, value, -date, -variable) %>%
-    unite(variable, flag, variable) %>%
-    mutate(variable = factor(variable,
-      levels = c("guard_advbw", "guard_bwhist", "exit_advbw", "exit_bwhist")))
+    filter(have_exit_flag != "") %>%
+    filter(have_guard_flag != "")
 }
 
 plot_bandwidth_flags <- function(start_p, end_p, path_p) {
   prepare_bandwidth_flags(start_p, end_p) %>%
-    complete(date = full_seq(date, period = 1),
-      variable = unique(variable)) %>%
-    ggplot(aes(x = date, y = value, colour = variable)) +
-    geom_line() +
+    unite(flags, have_guard_flag, have_exit_flag) %>%
+    mutate(flags = factor(flags, levels = c("f_t", "t_t", "t_f", "f_f"),
+      labels = c("Exit only", "Guard and Exit", "Guard only",
+      "Neither Guard nor Exit"))) %>%
+    mutate(variable = ifelse(variable == "advbw",
+      "Advertised bandwidth", "Consumed bandwidth")) %>%
+    ggplot(aes(x = date, y = value, fill = flags)) +
+    geom_area() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
-    scale_colour_manual(name = "",
-        breaks = c("guard_advbw", "guard_bwhist", "exit_advbw", "exit_bwhist"),
-        labels = c("Guard, advertised bandwidth", "Guard, bandwidth history",
-                   "Exit, advertised bandwidth", "Exit, bandwidth history"),
-        values = c("#E69F00", "#D6C827", "#009E73", "#00C34F")) +
-    ggtitle(paste("Advertised bandwidth and bandwidth history by",
-        "relay flags")) +
+    scale_fill_manual(name = "",
+      values = c("#03B3FF", "#39FF02", "#FFFF00", "#AAAA99")) +
+    facet_grid(variable ~ .) +
+    ggtitle("Advertised and consumed bandwidth by relay flags") +
     labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
