@@ -15,46 +15,50 @@ import org.torproject.descriptor.RelayNetworkStatusConsensus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
+import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.TimeZone;
 import java.util.TreeMap;
 
 public class Main {
 
   private static Logger log = LoggerFactory.getLogger(Main.class);
 
+  private static final String jdbcString
+      = System.getProperty("clients.database", "jdbc:postgresql:userstats");
+
+  private static Database database;
+
   /** Executes this data-processing module. */
   public static void main(String[] args) throws Exception {
-    parseArgs(args);
+
+    log.info("Starting clients module.");
+
+    log.info("Connecting to database.");
+    database = new Database(jdbcString);
+
+    log.info("Reading relay descriptors and importing relevant parts into the "
+        + "database.");
     parseRelayDescriptors();
+
+    log.info("Reading bridge descriptors and importing relevant parts into the "
+        + "database.");
     parseBridgeDescriptors();
-    closeOutputFiles();
-  }
 
-  private static boolean writeToSingleFile = true;
-  private static boolean byStatsDateNotByDescHour = false;
+    log.info("Processing newly imported data.");
+    database.processImported();
+    database.commit();
 
-  private static void parseArgs(String[] args) {
-    if (args.length == 0) {
-      writeToSingleFile = true;
-    } else if (args.length == 1 && args[0].equals("--stats-date")) {
-      writeToSingleFile = false;
-      byStatsDateNotByDescHour = true;
-    } else if (args.length == 1 && args[0].equals("--desc-hour")) {
-      writeToSingleFile = false;
-      byStatsDateNotByDescHour = false;
-    } else {
-      log.warn("Usage: java {} [ --stats-date | --desc-hour ]",
-          Main.class.getName());
-      System.exit(1);
-    }
+    log.info("Querying aggregated statistics from the database.");
+    new Writer().write(Paths.get("stats", "userstats.csv"),
+        database.queryEstimated());
+    new Writer().write(Paths.get("stats", "userstats-combined.csv"),
+        database.queryCombined());
+
+    log.info("Disconnecting from database.");
+    database.close();
   }
 
   private static final long ONE_HOUR_MILLIS = 60L * 60L * 1000L;
@@ -80,11 +84,12 @@ public class Main {
             (RelayNetworkStatusConsensus) descriptor);
       }
     }
+    database.commit();
     descriptorReader.saveHistoryFile(historyFile);
   }
 
   private static void parseRelayExtraInfoDescriptor(
-      ExtraInfoDescriptor descriptor) throws IOException {
+      ExtraInfoDescriptor descriptor) throws SQLException {
     long publishedMillis = descriptor.getPublishedMillis();
     String fingerprint = descriptor.getFingerprint()
         .toUpperCase();
@@ -103,7 +108,7 @@ public class Main {
   private static void parseRelayDirreqV3Reqs(String fingerprint,
       long publishedMillis, long dirreqStatsEndMillis,
       long dirreqStatsIntervalLengthMillis,
-      SortedMap<String, Integer> requests) throws IOException {
+      SortedMap<String, Integer> requests) throws SQLException {
     if (requests == null
         || publishedMillis - dirreqStatsEndMillis > ONE_WEEK_MILLIS
         || dirreqStatsIntervalLengthMillis != ONE_DAY_MILLIS) {
@@ -130,19 +135,17 @@ public class Main {
         String country = e.getKey();
         double reqs = ((double) e.getValue()) - 4.0;
         sum += reqs;
-        writeOutputLine(fingerprint, "relay", "responses", country,
-            "", "", fromMillis, toMillis, reqs * intervalFraction,
-            publishedMillis);
+        database.insertIntoImported(fingerprint, "relay", "responses", country,
+            "", "", fromMillis, toMillis, reqs * intervalFraction);
       }
-      writeOutputLine(fingerprint, "relay", "responses", "", "",
-          "", fromMillis, toMillis, sum * intervalFraction,
-          publishedMillis);
+      database.insertIntoImported(fingerprint, "relay", "responses", "", "",
+          "", fromMillis, toMillis, sum * intervalFraction);
     }
   }
 
   private static void parseRelayDirreqWriteHistory(String fingerprint,
       long publishedMillis, BandwidthHistory dirreqWriteHistory)
-      throws IOException {
+      throws SQLException {
     if (dirreqWriteHistory == null
         || publishedMillis - dirreqWriteHistory.getHistoryEndMillis()
         > ONE_WEEK_MILLIS) {
@@ -177,14 +180,14 @@ public class Main {
         } else if (i == 1) {
           break;
         }
-        writeOutputLine(fingerprint, "relay", "bytes", "", "", "",
-            fromMillis, toMillis, writtenBytes, publishedMillis);
+        database.insertIntoImported(fingerprint, "relay", "bytes", "", "", "",
+            fromMillis, toMillis, writtenBytes);
       }
     }
   }
 
   private static void parseRelayNetworkStatusConsensus(
-      RelayNetworkStatusConsensus consensus) throws IOException {
+      RelayNetworkStatusConsensus consensus) throws SQLException {
     long fromMillis = consensus.getValidAfterMillis();
     long toMillis = consensus.getFreshUntilMillis();
     for (NetworkStatusEntry statusEntry
@@ -192,8 +195,8 @@ public class Main {
       String fingerprint = statusEntry.getFingerprint()
           .toUpperCase();
       if (statusEntry.getFlags().contains("Running")) {
-        writeOutputLine(fingerprint, "relay", "status", "", "", "",
-            fromMillis, toMillis, 0.0, fromMillis);
+        database.insertIntoImported(fingerprint, "relay", "status", "", "", "",
+            fromMillis, toMillis, 0.0);
       }
     }
   }
@@ -213,11 +216,12 @@ public class Main {
         parseBridgeNetworkStatus((BridgeNetworkStatus) descriptor);
       }
     }
+    database.commit();
     descriptorReader.saveHistoryFile(historyFile);
   }
 
   private static void parseBridgeExtraInfoDescriptor(
-      ExtraInfoDescriptor descriptor) throws IOException {
+      ExtraInfoDescriptor descriptor) throws SQLException {
     String fingerprint = descriptor.getFingerprint().toUpperCase();
     long publishedMillis = descriptor.getPublishedMillis();
     long dirreqStatsEndMillis = descriptor.getDirreqStatsEndMillis();
@@ -240,7 +244,7 @@ public class Main {
       SortedMap<String, Integer> responses,
       SortedMap<String, Integer> bridgeIps,
       SortedMap<String, Integer> bridgeIpTransports,
-      SortedMap<String, Integer> bridgeIpVersions) throws IOException {
+      SortedMap<String, Integer> bridgeIpVersions) throws SQLException {
     if (responses == null
         || publishedMillis - dirreqStatsEndMillis > ONE_WEEK_MILLIS
         || dirreqStatsIntervalLengthMillis != ONE_DAY_MILLIS) {
@@ -264,18 +268,15 @@ public class Main {
         }
         double intervalFraction = ((double) (toMillis - fromMillis))
             / ((double) dirreqStatsIntervalLengthMillis);
-        writeOutputLine(fingerprint, "bridge", "responses", "", "",
-            "", fromMillis, toMillis, resp * intervalFraction,
-            publishedMillis);
+        database.insertIntoImported(fingerprint, "bridge", "responses", "", "",
+            "", fromMillis, toMillis, resp * intervalFraction);
         parseBridgeRespByCategory(fingerprint, fromMillis, toMillis, resp,
-            dirreqStatsIntervalLengthMillis, "country", bridgeIps,
-            publishedMillis);
+            dirreqStatsIntervalLengthMillis, "country", bridgeIps);
         parseBridgeRespByCategory(fingerprint, fromMillis, toMillis, resp,
             dirreqStatsIntervalLengthMillis, "transport",
-            bridgeIpTransports, publishedMillis);
+            bridgeIpTransports);
         parseBridgeRespByCategory(fingerprint, fromMillis, toMillis, resp,
-            dirreqStatsIntervalLengthMillis, "version", bridgeIpVersions,
-            publishedMillis);
+            dirreqStatsIntervalLengthMillis, "version", bridgeIpVersions);
       }
     }
   }
@@ -283,8 +284,8 @@ public class Main {
   private static void parseBridgeRespByCategory(String fingerprint,
       long fromMillis, long toMillis, double resp,
       long dirreqStatsIntervalLengthMillis, String category,
-      SortedMap<String, Integer> frequencies, long publishedMillis)
-      throws IOException {
+      SortedMap<String, Integer> frequencies)
+      throws SQLException {
     double total = 0.0;
     SortedMap<String, Double> frequenciesCopy = new TreeMap<>();
     if (frequencies != null) {
@@ -322,16 +323,16 @@ public class Main {
       double val = resp * intervalFraction * e.getValue() / total;
       switch (category) {
         case "country":
-          writeOutputLine(fingerprint, "bridge", "responses", e.getKey(),
-              "", "", fromMillis, toMillis, val, publishedMillis);
+          database.insertIntoImported(fingerprint, "bridge", "responses",
+              e.getKey(), "", "", fromMillis, toMillis, val);
           break;
         case "transport":
-          writeOutputLine(fingerprint, "bridge", "responses", "",
-              e.getKey(), "", fromMillis, toMillis, val, publishedMillis);
+          database.insertIntoImported(fingerprint, "bridge", "responses", "",
+              e.getKey(), "", fromMillis, toMillis, val);
           break;
         case "version":
-          writeOutputLine(fingerprint, "bridge", "responses", "", "",
-              e.getKey(), fromMillis, toMillis, val, publishedMillis);
+          database.insertIntoImported(fingerprint, "bridge", "responses", "",
+              "", e.getKey(), fromMillis, toMillis, val);
           break;
         default:
           /* Ignore any other categories. */
@@ -341,7 +342,7 @@ public class Main {
 
   private static void parseBridgeDirreqWriteHistory(String fingerprint,
       long publishedMillis, BandwidthHistory dirreqWriteHistory)
-      throws IOException {
+      throws SQLException {
     if (dirreqWriteHistory == null
         || publishedMillis - dirreqWriteHistory.getHistoryEndMillis()
         > ONE_WEEK_MILLIS) {
@@ -376,14 +377,14 @@ public class Main {
         } else if (i == 1) {
           break;
         }
-        writeOutputLine(fingerprint, "bridge", "bytes", "",
-            "", "", fromMillis, toMillis, writtenBytes, publishedMillis);
+        database.insertIntoImported(fingerprint, "bridge", "bytes", "",
+            "", "", fromMillis, toMillis, writtenBytes);
       }
     }
   }
 
   private static void parseBridgeNetworkStatus(BridgeNetworkStatus status)
-      throws IOException {
+      throws SQLException {
     long publishedMillis = status.getPublishedMillis();
     long fromMillis = (publishedMillis / ONE_HOUR_MILLIS)
         * ONE_HOUR_MILLIS;
@@ -393,86 +394,9 @@ public class Main {
       String fingerprint = statusEntry.getFingerprint()
           .toUpperCase();
       if (statusEntry.getFlags().contains("Running")) {
-        writeOutputLine(fingerprint, "bridge", "status", "", "", "",
-            fromMillis, toMillis, 0.0, publishedMillis);
+        database.insertIntoImported(fingerprint, "bridge", "status", "", "", "",
+            fromMillis, toMillis, 0.0);
       }
-    }
-  }
-
-  private static Map<String, BufferedWriter> openOutputFiles = new HashMap<>();
-
-  private static void writeOutputLine(String fingerprint, String node,
-      String metric, String country, String transport, String version,
-      long fromMillis, long toMillis, double val, long publishedMillis)
-      throws IOException {
-    if (fromMillis > toMillis) {
-      return;
-    }
-    String fromDateTime = formatDateTimeMillis(fromMillis);
-    String toDateTime = formatDateTimeMillis(toMillis);
-    BufferedWriter bw = getOutputFile(fromDateTime, publishedMillis);
-    bw.write(String.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.1f\n",
-        fingerprint, node, metric, country, transport, version,
-        fromDateTime, toDateTime, val));
-  }
-
-  private static SimpleDateFormat dateTimeFormat = null;
-
-  private static String formatDateTimeMillis(long millis) {
-    if (dateTimeFormat == null) {
-      dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-      dateTimeFormat.setLenient(false);
-      dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    }
-    return dateTimeFormat.format(millis);
-  }
-
-  private static BufferedWriter getOutputFile(String fromDateTime,
-      long publishedMillis) throws IOException {
-    String outputFileName;
-    if (writeToSingleFile) {
-      outputFileName = "out/userstats.sql";
-    } else if (byStatsDateNotByDescHour) {
-      outputFileName = "out/userstats-" + fromDateTime.substring(0, 10)
-          + ".sql";
-    } else {
-      String publishedHourDateTime = formatDateTimeMillis(
-          (publishedMillis / ONE_HOUR_MILLIS) * ONE_HOUR_MILLIS);
-      outputFileName = "out/userstats-"
-          + publishedHourDateTime.substring(0, 10) + "-"
-          + publishedHourDateTime.substring(11, 13) + ".sql";
-    }
-    BufferedWriter bw = openOutputFiles.get(outputFileName);
-    if (bw == null) {
-      bw = openOutputFile(outputFileName);
-      openOutputFiles.put(outputFileName, bw);
-    }
-    return bw;
-  }
-
-  private static BufferedWriter openOutputFile(String outputFileName)
-      throws IOException {
-    File outputFile = new File(outputFileName);
-    outputFile.getParentFile().mkdirs();
-    BufferedWriter bw = new BufferedWriter(new FileWriter(
-        outputFileName));
-    bw.write("BEGIN;\n");
-    bw.write("LOCK TABLE imported NOWAIT;\n");
-    bw.write("COPY imported (fingerprint, node, metric, country, "
-        + "transport, version, stats_start, stats_end, val) FROM "
-        + "stdin;\n");
-    return bw;
-  }
-
-  private static void closeOutputFiles() throws IOException {
-    for (BufferedWriter bw : openOutputFiles.values()) {
-      bw.write("\\.\n");
-      bw.write("SELECT merge();\n");
-      bw.write("SELECT aggregate();\n");
-      bw.write("SELECT combine();\n");
-      bw.write("TRUNCATE imported;\n");
-      bw.write("COMMIT;\n");
-      bw.close();
     }
   }
 }

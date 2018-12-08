@@ -367,28 +367,6 @@
     <mkdir dir="${statsdir}" />
 
     <antcall target="run-java" />
-    <apply executable="psql" failonerror="true" >
-      <arg value="--dbname=userstats"/>
-      <arg value="-f"/>
-      <fileset dir="${localmoddir}/out"
-               includes="*.sql" />
-    </apply>
-
-    <exec executable="psql"
-          dir="${localmoddir}"
-          failonerror="true" >
-      <arg value="-c COPY (SELECT * FROM estimated) TO STDOUT WITH CSV HEADER;" />
-      <arg value="--dbname=userstats"/>
-      <arg value="--output=userstats.csv" />
-    </exec>
-
-    <exec executable="psql"
-          dir="${localmoddir}"
-          failonerror="true" >
-      <arg value="-c COPY (SELECT * FROM combined) TO STDOUT WITH CSV HEADER;" />
-      <arg value="--dbname=userstats"/>
-      <arg value="--output=userstats-combined.csv" />
-    </exec>
 
     <antcall target="run-R" >
       <param name="module.Rscript" value="userstats-detector.R" />
