@@ -59,6 +59,11 @@ public class Main {
 
     log.info("Disconnecting from database.");
     database.close();
+
+    log.info("Running detector.");
+    new Detector().detect();
+
+    log.info("Terminating clients module.");
   }
 
   private static final long ONE_HOUR_MILLIS = 60L * 60L * 1000L;

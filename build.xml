@@ -23,7 +23,6 @@
   <property name="tardepends" value="war" />
 
   <property name="Rsources" value="${basedir}/src/main/R" />
-  <property name="pysources" value="${basedir}/src/main/python" />
 
   <property name="specdir" value="${basedir}/generated/spec" />
 
@@ -360,32 +359,7 @@
 
   <target name="clients" >
     <property name="module.name" value="clients" />
-    <property name="localmoddir" value="${modulebase}/${module.name}" />
-
-    <property name="statsdir"
-              value="${localmoddir}/stats" />
-    <mkdir dir="${statsdir}" />
-
     <antcall target="run-java" />
-
-    <antcall target="run-R" >
-      <param name="module.Rscript" value="userstats-detector.R" />
-    </antcall>
-
-    <exec executable="python"
-          dir="${localmoddir}"
-          failonerror="true" >
-      <arg value="${pysources}/${module.name}/detector.py" />
-      <arg value="userstats-detector.csv" />
-      <arg value="userstats-ranges.csv" />
-    </exec>
-
-    <antcall target="run-R" >
-      <param name="module.Rscript" value="merge-clients.R" />
-    </antcall>
-
-    <copy file="${localmoddir}/clients.csv" todir="${statsdir}" />
-    <copy file="${localmoddir}/userstats-combined.csv" todir="${statsdir}" />
   </target>
 
   <target name="servers" >
