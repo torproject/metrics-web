@@ -10,15 +10,19 @@ import org.torproject.descriptor.NetworkStatusEntry;
 import org.torproject.descriptor.RelayNetworkStatusConsensus;
 import org.torproject.descriptor.ServerDescriptor;
 
+import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,6 +142,39 @@ public class Main {
     }
     descriptorReader.saveHistoryFile(historyFile);
     bw.close();
+
+    /* Aggregate statistics. */
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    String today = dateFormat.format(new Date());
+    SortedMap<String, List<Long>> preAggregatedValues = new TreeMap<>();
+    try (BufferedReader br = new BufferedReader(new FileReader(resultsFile))) {
+      br.readLine(); /* Skip header. */
+      String line;
+      while (null != (line = br.readLine())) {
+        String[] parts = line.split(",");
+        String date = parts[0].substring(0, 10);
+        if (date.compareTo(today) >= 0) {
+          continue;
+        }
+        String isExit = parts[1].equals("TRUE") ? "t" : "";
+        String keyWithoutTime = String.format("%s,%s,%s,%s",
+            date, isExit, parts[2], parts[3]);
+        long value = Long.parseLong(parts[4]);
+        preAggregatedValues.putIfAbsent(keyWithoutTime, new ArrayList<>());
+        preAggregatedValues.get(keyWithoutTime).add(value);
+      }
+    }
+    File aggregateResultsFile = new File("stats/advbwdist.csv");
+    aggregateResultsFile.getParentFile().mkdirs();
+    try (BufferedWriter bw2 = new BufferedWriter(
+        new FileWriter(aggregateResultsFile))) {
+      bw2.write("date,isexit,relay,percentile,advbw\n");
+      for (Map.Entry<String, List<Long>> e : preAggregatedValues.entrySet()) {
+        bw2.write(String.format("%s,%.0f%n", e.getKey(),
+            computeMedian(e.getValue())));
+      }
+    }
   }
 
   /** Compute percentiles (between 0 and 100) for the given list of values, and
@@ -167,6 +204,15 @@ public class Main {
       }
     }
     return computedPercentiles;
+  }
+
+  /** Return the median for the given list of values, or <code>Double.NaN</code>
+   * if the given list is empty. */
+  static double computeMedian(List<Long> valueList) {
+    Median median = new Median()
+        .withEstimationType(Percentile.EstimationType.R_7);
+    median.setData(valueList.stream().mapToDouble(Long::doubleValue).toArray());
+    return Math.floor(median.evaluate());
   }
 }
 
