@@ -431,8 +431,7 @@ Relays self-report their advertised bandwidth in their server descriptors which 
 <p>The following description applies to the following graphs:</p>
 
 <ul>
-<li>Total relay bandwidth (just the advertised bandwidth part; for the consumed bandwidth part <a href="#consumed-bandwidth">see below</a>) <a href="/bandwidth.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
-<li>Advertised and consumed bandwidth by relay flag (just the advertised bandwidth part; for the consumed bandwidth part <a href="#consumed-bandwidth">see below</a>) <a href="/bandwidth-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
+<li>Advertised and consumed bandwidth by relay flags (just the advertised bandwidth part; for the consumed bandwidth part <a href="#consumed-bandwidth">see below</a>) <a href="/bandwidth-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 <li>Advertised bandwidth by IP version <a href="/advbw-ipv6.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 <li>Advertised bandwidth distribution <a href="/advbwdist-perc.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 <li>Advertised bandwidth of n-th fastest relays <a href="/advbwdist-relay.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
@@ -469,7 +468,7 @@ We consider a relay with the <code>"Guard"</code> flag as guard and a relay with
 
 <h4>Step 3: Compute daily averages</h4>
 
-<p>The first three graphs described here, namely <a href="/bandwidth.html">Total relay bandwidth</a>, <a href="/bandwidth-flags.html">Advertised and consumed bandwidth by relay flag</a>, and <a href="/advbw-ipv6.html">Advertised bandwidth by IP version</a>, have in common that they show daily averages of advertised bandwidth.</p>
+<p>The first two graphs described here, namely <a href="/bandwidth-flags.html">Advertised and consumed bandwidth by relay flags</a> and <a href="/advbw-ipv6.html">Advertised bandwidth by IP version</a>, have in common that they show daily averages of advertised bandwidth.</p>
 
 <p>In order to compute these averages, first match consensus entries with server descriptors by SHA-1 digest.
 Every consensus entry references exactly one server descriptor, and a server descriptor may be referenced from an arbitrary number of consensus entries.
@@ -514,9 +513,7 @@ Relays self-report bandwidth histories as part of their extra-info descriptors, 
 <p>The following description applies to the following graphs:</p>
 
 <ul>
-<li>Total relay bandwidth (just the consumed bandwidth part; for the advertised bandwidth part <a href="#advertised-bandwidth">see above</a>) <a href="/bandwidth.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
-<li>Advertised and consumed bandwidth by relay flag (just the consumed bandwidth part; for the advertised bandwidth part <a href="#advertised-bandwidth">see above</a>) <a href="/bandwidth-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
-<li>Consumed bandwidth by Exit/Guard flag combination <a href="/bwhist-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
+<li>Advertised and consumed bandwidth by relay flags (just the consumed bandwidth part; for the advertised bandwidth part <a href="#advertised-bandwidth">see above</a>) <a href="/bandwidth-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 <li>Bandwidth spent on answering directory requests <a href="/dirbytes.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 </ul>
 
@@ -552,13 +549,13 @@ We consider a relay with the <code>"Guard"</code> flag as guard and a relay with
 
 <h4>Step 3: Compute daily totals</h4>
 
-<p>The first three graphs described here, namely <a href="/bandwidth.html">Total relay bandwidth</a>, <a href="/bandwidth-flags.html">Advertised and consumed bandwidth by relay flag</a>, and <a href="/bwhist-flags.html">Consumed bandwidth by Exit/Guard flag combination</a>, show daily totals of all bytes written or read by relays.
-For all three graphs, we sum up all read and written bytes on a given day and divide the result by 2.
+<p>The first graph described here, <a href="/bandwidth-flags.html">Advertised and consumed bandwidth by relay flags</a>, shows daily totals of all bytes written or read by relays.
+For this graph, we sum up all read and written bytes on a given day and divide the result by 2.
 However, we only include bandwidth histories for a given day if a relay was listed as running in a consensus at least once on that day.
 We attribute bandwidth to guards and/or exits if a relay was a guard and/or exit at least in one consensus on a day.</p>
 
-<p>The fourth graph, <a href="/dirbytes.html">Bandwidth spent on answering directory requests</a>, shows bytes spent by <a href="/glossary.html#directory-mirror">directory mirrors</a> on answering directory requests.
-As opposed to the first three graphs, all bandwidth histories are included, regardless of whether a relay was listed as running in a consensus.
+<p>The second graph, <a href="/dirbytes.html">Bandwidth spent on answering directory requests</a>, shows bytes spent by <a href="/glossary.html#directory-mirror">directory mirrors</a> on answering directory requests.
+As opposed to the first graph, all bandwidth histories are included, regardless of whether a relay was listed as running in a consensus.
 Also, we compute total read directory and total written directory bytes for this fourth graph, not an average of the two.</p>
 
 <h3 id="connbidirect" class="hover">Connection usage

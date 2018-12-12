@@ -30,8 +30,6 @@
     <url-pattern>/relayflags.html</url-pattern>
     <url-pattern>/versions.html</url-pattern>
     <url-pattern>/platforms.html</url-pattern>
-    <url-pattern>/bandwidth.html</url-pattern>
-    <url-pattern>/bwhist-flags.html</url-pattern>
     <url-pattern>/bandwidth-flags.html</url-pattern>
     <url-pattern>/dirbytes.html</url-pattern>
     <url-pattern>/advbwdist-perc.html</url-pattern>
@@ -119,12 +117,6 @@
     <url-pattern>/platforms.png</url-pattern>
     <url-pattern>/platforms.pdf</url-pattern>
     <url-pattern>/platforms.csv</url-pattern>
-    <url-pattern>/bandwidth.png</url-pattern>
-    <url-pattern>/bandwidth.pdf</url-pattern>
-    <url-pattern>/bandwidth.csv</url-pattern>
-    <url-pattern>/bwhist-flags.png</url-pattern>
-    <url-pattern>/bwhist-flags.pdf</url-pattern>
-    <url-pattern>/bwhist-flags.csv</url-pattern>
     <url-pattern>/bandwidth-flags.png</url-pattern>
     <url-pattern>/bandwidth-flags.pdf</url-pattern>
     <url-pattern>/bandwidth-flags.csv</url-pattern>

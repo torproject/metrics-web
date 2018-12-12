@@ -49,7 +49,7 @@ https://metrics.torproject.org/identifier.csv
 <li><b>September 15, 2018:</b> Removed all pre-aggregated CSV files.</li>
 <li><b>October 28, 2018:</b> Added and/or removed columns to <a href="#webstats-tb-platform">Tor Browser downloads and updates by platform</a> and <a href="#webstats-tb-locale">Tor Browser downloads and updates by locale</a> graphs.</li>
 <li><b>December 20, 2018:</b> Removed source parameters and output rows with aggregates over all sources from <a href="#torperf">Time to download files over Tor</a>, <a href="#torperf-failures">Timeouts and failures of downloading files over Tor</a>, <a href="#onionperf-buildtimes">Circuit build times</a>, <a href="#onionperf-latencies">Circuit round-trip latencies</a> graphs.</li>
-<li><b>December 20, 2018 (scheduled):</b> Remove two graphs <a href="#bandwidth">Total relay bandwidth</a> and <a href="#bwhist-flags">Consumed bandwidth by Exit/Guard flag combination</a>, and update the data format of the <a href="#bandwidth-flags">Advertised and consumed bandwidth by relay flag</a> graph to cover all data previously contained in the first two graphs.</li>
+<li><b>December 20, 2018:</b> Removed two graphs Total relay bandwidth and Consumed bandwidth by Exit/Guard flag combination, and updated the data format of the <a href="#bandwidth-flags">Advertised and consumed bandwidth by relay flags</a> graph to cover all data previously contained in the first two graphs.</li>
 </ul>
 
 </div>
@@ -332,32 +332,7 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 <h2><i class="fa fa-road fa-fw" aria-hidden="true"></i>
 Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 
-<h3>Total relay bandwidth
-<a href="/bandwidth.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
-<a href="/bandwidth.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="#bandwidth" name="bandwidth" class="anchor">#</a></h3>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Deprecated</h3>
-<p>This graph will disappear by December 20, 2018, because it won't contain anything new compared to the soon-to-be tweaked <a href="#bandwidth-flags">Advertised and consumed bandwidth by relay flags</a> graph.</p>
-</div>
-
-<h4>Parameters</h4>
-
-<ul>
-<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-</ul>
-
-<h4>Columns</h4>
-
-<ul>
-<li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
-<li><b>advbw:</b> Total advertised bandwidth in Gbit/s that relays are capable to provide.</li>
-<li><b>bwhist:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of all relays.</li>
-</ul>
-
-<h3>Advertised and consumed bandwidth by relay flag
+<h3>Advertised and consumed bandwidth by relay flags
 <a href="/bandwidth-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
 <a href="/bandwidth-flags.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
 <a href="#bandwidth-flags" name="bandwidth-flags" class="anchor">#</a></h3>
@@ -373,14 +348,10 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
-<li><b>guard_advbw:</b> Total advertised bandwidth in Gbit/s that relays with the <b>"Guard"</b> relay flag are capable to provide. <span class="red">This column is going to be removed after December 20, 2018.</span></li>
-<li><b>guard_bwhist:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays with the <b>"Guard"</b> relay flag. <span class="red">This column is going to be removed after December 20, 2018.</span></li>
-<li><b>exit_advbw:</b> Total advertised bandwidth in Gbit/s that relays with the <b>"Exit"</b> relay flag are capable to provide. <span class="red">This column is going to be removed after December 20, 2018.</span></li>
-<li><b>exit_bwhist:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays with the <b>"Exit"</b> relay flag. <span class="red">This column is going to be removed after December 20, 2018.</span></li>
-<li><b>have_guard_flag:</b> Whether relays included in this row had the <code>"Guard"</code> relay flag assigned (<code>"t"</code>) or not (<code>"f"</code>). <span class="blue">This column is going to be added after December 20, 2018.</span></li>
-<li><b>have_exit_flag:</b> Whether relays included in this row had the <code>"Exit"</code> relay flag assigned and at the same time the <code>"BadExit"</code> not assigned (<code>"t"</code>) or not (<code>"f"</code>). <span class="blue">This column is going to be added after December 20, 2018.</span></li>
-<li><b>advbw:</b> Total advertised bandwidth in Gbit/s that relays are capable to provide. <span class="blue">This column is going to be added after December 20, 2018.</span></li>
-<li><b>bwhist:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic. <span class="blue">This column is going to be added after December 20, 2018.</span></li>
+<li><b>have_guard_flag:</b> Whether relays included in this row had the <code>"Guard"</code> relay flag assigned (<code>"t"</code>) or not (<code>"f"</code>).</li>
+<li><b>have_exit_flag:</b> Whether relays included in this row had the <code>"Exit"</code> relay flag assigned and at the same time the <code>"BadExit"</code> not assigned (<code>"t"</code>) or not (<code>"f"</code>).</li>
+<li><b>advbw:</b> Total advertised bandwidth in Gbit/s that relays are capable to provide.</li>
+<li><b>bwhist:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic.</li>
 </ul>
 
 <h3>Advertised bandwidth by IP version
@@ -449,33 +420,6 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <li><b>n:</b> Position of the relay in an ordered list of all advertised bandwidths, starting at 1 for the fastest relay in the network.</li>
 <li><b>all:</b> Advertised bandwidth in Gbit/s of n-th fastest relay.</li>
 <li><b>exits:</b> Advertised bandwidth in Gbit/s of n-th fastest relay with the <b>"Exit"</b> relay flag.</li>
-</ul>
-
-<h3>Consumed bandwidth by Exit/Guard flag combination
-<a href="/bwhist-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
-<a href="/bwhist-flags.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
-<a href="#bwhist-flags" name="bwhist-flags" class="anchor">#</a></h3>
-
-<div class="bs-callout bs-callout-warning">
-<h3>Deprecated</h3>
-<p>This graph will disappear by December 20, 2018, because it won't contain anything new compared to the soon-to-be tweaked <a href="#bandwidth-flags">Advertised and consumed bandwidth by relay flags</a> graph.</p>
-</div>
-
-<h4>Parameters</h4>
-
-<ul>
-<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-</ul>
-
-<h4>Columns</h4>
-
-<ul>
-<li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
-<li><b>exit_only:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays without <b>"Guard"</b> and with <b>"Exit"</b> relay flag.</li>
-<li><b>guard_and_exit:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays with both <b>"Guard"</b> and <b>"Exit"</b> relay flag.</li>
-<li><b>guard_only:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays with <b>"Guard"</b> and without <b>"Exit"</b> relay flag.</li>
-<li><b>middle_only:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of relays with neither <b>"Guard"</b> nor <b>"Exit"</b> relay flag.</li>
 </ul>
 
 <h3>Bandwidth spent on answering directory requests
