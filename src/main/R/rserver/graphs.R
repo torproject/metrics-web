@@ -348,6 +348,9 @@ robust_call <- function(wrappee, filename) {
        })
 }
 
+# Disable readr's automatic progress bar.
+options(readr.show_progress = FALSE)
+
 prepare_networksize <- function(start_p, end_p) {
   read.csv(paste(stats_dir, "networksize.csv", sep = ""),
     colClasses = c("date" = "Date")) %>%
@@ -863,8 +866,19 @@ write_bandwidth_flags <- function(start_p = NULL, end_p = NULL, path_p) {
 
 plot_userstats <- function(start_p, end_p, node_p, variable_p, value_p,
     events_p, path_p) {
-  load(paste(rdata_dir, "clients-", node_p, ".RData", sep = ""))
-  c <- data
+  c <- read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        node = col_character(),
+        country = col_character(),
+        transport = col_character(),
+        version = col_character(),
+        lower = col_double(),
+        upper = col_double(),
+        clients = col_double(),
+        frac = col_skip()),
+      na = character()) %>%
+    filter(node == node_p)
   u <- c[c$date >= start_p & c$date <= end_p, c("date", "country", "transport",
       "version", "lower", "upper", "clients")]
   u <- rbind(u, data.frame(date = start_p,
@@ -1011,14 +1025,24 @@ plot_userstats_bridge_version <- function(start_p, end_p, version_p, path_p) {
 
 write_userstats_relay_country <- function(start_p = NULL, end_p = NULL,
     country_p = NULL, events_p = NULL, path_p) {
-  load(paste(rdata_dir, "clients-relay.RData", sep = ""))
-  u <- data %>%
+  read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        node = col_character(),
+        country = col_character(),
+        transport = col_character(),
+        version = col_character(),
+        lower = col_double(),
+        upper = col_double(),
+        clients = col_double(),
+        frac = col_double())) %>%
+    filter(node == "relay") %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(country_p))
       country == ifelse(country_p == "all", "", country_p) else TRUE) %>%
-    filter(transport == "") %>%
-    filter(version == "") %>%
+    filter(is.na(transport)) %>%
+    filter(is.na(version)) %>%
     select(date, country, clients, lower, upper, frac) %>%
     rename(users = clients) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
@@ -1026,14 +1050,24 @@ write_userstats_relay_country <- function(start_p = NULL, end_p = NULL,
 
 write_userstats_bridge_country <- function(start_p = NULL, end_p = NULL,
     country_p = NULL, path_p) {
-  load(paste(rdata_dir, "clients-bridge.RData", sep = ""))
-  data %>%
+  read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        node = col_character(),
+        country = col_character(),
+        transport = col_character(),
+        version = col_character(),
+        lower = col_double(),
+        upper = col_double(),
+        clients = col_double(),
+        frac = col_double())) %>%
+    filter(node == "bridge") %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(country_p))
       country == ifelse(country_p == "all", "", country_p) else TRUE) %>%
-    filter(transport == "") %>%
-    filter(version == "") %>%
+    filter(is.na(transport)) %>%
+    filter(is.na(version)) %>%
     select(date, country, clients, frac) %>%
     rename(users = clients) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
@@ -1041,13 +1075,23 @@ write_userstats_bridge_country <- function(start_p = NULL, end_p = NULL,
 
 write_userstats_bridge_transport <- function(start_p = NULL, end_p = NULL,
     transport_p = NULL, path_p) {
-  load(paste(rdata_dir, "clients-bridge.RData", sep = ""))
-  u <- data %>%
+  u <- read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        node = col_character(),
+        country = col_character(),
+        transport = col_character(),
+        version = col_character(),
+        lower = col_double(),
+        upper = col_double(),
+        clients = col_double(),
+        frac = col_double())) %>%
+    filter(node == "bridge") %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(country == "") %>%
-    filter(version == "") %>%
-    filter(transport != "") %>%
+    filter(is.na(country)) %>%
+    filter(is.na(version)) %>%
+    filter(!is.na(transport)) %>%
     select(date, transport, clients, frac)
   if (is.null(transport_p) || "!<OR>" %in% transport_p) {
     n <- u %>%
@@ -1068,12 +1112,22 @@ write_userstats_bridge_transport <- function(start_p = NULL, end_p = NULL,
 
 write_userstats_bridge_version <- function(start_p = NULL, end_p = NULL,
     version_p = NULL, path_p) {
-  load(paste(rdata_dir, "clients-bridge.RData", sep = ""))
-  data %>%
+  read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        node = col_character(),
+        country = col_character(),
+        transport = col_character(),
+        version = col_character(),
+        lower = col_double(),
+        upper = col_double(),
+        clients = col_double(),
+        frac = col_double())) %>%
+    filter(node == "bridge") %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(country == "") %>%
-    filter(transport == "") %>%
+    filter(is.na(country)) %>%
+    filter(is.na(transport)) %>%
     filter(if (!is.null(version_p)) version == version_p else TRUE) %>%
     select(date, version, clients, frac) %>%
     rename(users = clients) %>%
@@ -1081,8 +1135,16 @@ write_userstats_bridge_version <- function(start_p = NULL, end_p = NULL,
 }
 
 prepare_userstats_bridge_combined <- function(start_p, end_p, country_p) {
-  load(paste(rdata_dir, "userstats-bridge-combined.RData", sep = ""))
-  data %>%
+  read_csv(file = paste(stats_dir, "userstats-combined.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        node = col_skip(),
+        country = col_character(),
+        transport = col_character(),
+        version = col_skip(),
+        frac = col_double(),
+        low = col_double(),
+        high = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(country_p)) country == country_p else TRUE)
@@ -1135,7 +1197,7 @@ prepare_advbwdist_perc <- function(start_p, end_p, p_p) {
     filter(if (!is.null(p_p)) percentile %in% as.numeric(p_p) else
       percentile != "") %>%
     transmute(date, percentile = as.factor(percentile),
-      variable = ifelse(isexit != "t", "all", "exits"),
+      variable = ifelse(is.na(isexit), "all", "exits"),
       advbw = advbw * 8 / 1e9)
 }
 
@@ -1258,11 +1320,20 @@ write_hidserv_rend_relayed_cells <- function(start_p = NULL, end_p = NULL,
 }
 
 prepare_webstats_tb <- function(start_p, end_p) {
-  load(paste(rdata_dir, "webstats-tb.RData", sep = ""))
-  data %>%
+  read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
+      col_types = cols(
+        log_date = col_date(format = ""),
+        request_type = col_factor(),
+        platform = col_skip(),
+        channel = col_skip(),
+        locale = col_skip(),
+        incremental = col_skip(),
+        count = col_double())) %>%
     filter(if (!is.null(start_p)) log_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) log_date <= as.Date(end_p) else TRUE) %>%
-    mutate(request_type = factor(request_type))
+    filter(request_type %in% c("tbid", "tbsd", "tbup", "tbur")) %>%
+    group_by(log_date, request_type) %>%
+    summarize(count = sum(count))
 }
 
 plot_webstats_tb <- function(start_p, end_p, path_p) {
@@ -1296,8 +1367,15 @@ write_webstats_tb <- function(start_p = NULL, end_p = NULL, path_p) {
 }
 
 prepare_webstats_tb_platform <- function(start_p, end_p) {
-  read.csv(paste(stats_dir, "webstats.csv", sep = ""),
-    colClasses = c("log_date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
+      col_types = cols(
+        log_date = col_date(format = ""),
+        request_type = col_factor(),
+        platform = col_factor(),
+        channel = col_skip(),
+        locale = col_skip(),
+        incremental = col_skip(),
+        count = col_double())) %>%
     filter(if (!is.null(start_p)) log_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) log_date <= as.Date(end_p) else TRUE) %>%
     filter(request_type %in% c("tbid", "tbup")) %>%
@@ -1337,8 +1415,15 @@ write_webstats_tb_platform <- function(start_p = NULL, end_p = NULL, path_p) {
 }
 
 plot_webstats_tb_locale <- function(start_p, end_p, path_p) {
-  d <- read.csv(paste(stats_dir, "webstats.csv", sep = ""),
-    colClasses = c("log_date" = "Date", "locale" = "character"))
+  d <- read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
+      col_types = cols(
+        log_date = col_date(format = ""),
+        request_type = col_factor(),
+        platform = col_skip(),
+        channel = col_skip(),
+        locale = col_factor(),
+        incremental = col_skip(),
+        count = col_double()))
   d <- d[d$log_date >= start_p & d$log_date <= end_p &
          d$request_type %in% c("tbid", "tbup"), ]
   levels(d$request_type) <- list(
@@ -1375,8 +1460,15 @@ plot_webstats_tb_locale <- function(start_p, end_p, path_p) {
 # plot_webstats_tb_locale needs the preliminary data frame e for its
 # breaks and labels. Left as future work.
 write_webstats_tb_locale <- function(start_p = NULL, end_p = NULL, path_p) {
-  read.csv(paste(stats_dir, "webstats.csv", sep = ""),
-    colClasses = c("log_date" = "Date", "locale" = "character")) %>%
+  read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
+      col_types = cols(
+        log_date = col_date(format = ""),
+        request_type = col_factor(),
+        platform = col_skip(),
+        channel = col_skip(),
+        locale = col_factor(),
+        incremental = col_skip(),
+        count = col_double())) %>%
     filter(if (!is.null(start_p)) log_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) log_date <= as.Date(end_p) else TRUE) %>%
     filter(request_type %in% c("tbid", "tbup")) %>%
@@ -1390,11 +1482,20 @@ write_webstats_tb_locale <- function(start_p = NULL, end_p = NULL, path_p) {
 }
 
 prepare_webstats_tm <- function(start_p, end_p) {
-  load(paste(rdata_dir, "webstats-tm.RData", sep = ""))
-  data %>%
+  read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
+      col_types = cols(
+        log_date = col_date(format = ""),
+        request_type = col_factor(),
+        platform = col_skip(),
+        channel = col_skip(),
+        locale = col_skip(),
+        incremental = col_skip(),
+        count = col_double())) %>%
     filter(if (!is.null(start_p)) log_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) log_date <= as.Date(end_p) else TRUE) %>%
-    mutate(request_type = factor(request_type))
+    filter(request_type %in% c("tmid", "tmup")) %>%
+    group_by(log_date, request_type) %>%
+    summarize(count = sum(count))
 }
 
 plot_webstats_tm <- function(start_p, end_p, path_p) {
