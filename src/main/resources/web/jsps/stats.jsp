@@ -610,6 +610,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to a version 2 onion server.</li>
 </ul>
 
 <h4>Columns</h4>
