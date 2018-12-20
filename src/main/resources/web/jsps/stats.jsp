@@ -48,7 +48,7 @@ https://metrics.torproject.org/identifier.csv
 <li><b>August 15, 2018:</b> Made the first batch of changes to per-graph CSV files.</li>
 <li><b>September 15, 2018:</b> Removed all pre-aggregated CSV files.</li>
 <li><b>October 28, 2018:</b> Added and/or removed columns to <a href="#webstats-tb-platform">Tor Browser downloads and updates by platform</a> and <a href="#webstats-tb-locale">Tor Browser downloads and updates by locale</a> graphs.</li>
-<li><b>December 20, 2018 (scheduled):</b> Remove source parameters and output rows with aggregates over all sources from <a href="#torperf">Time to download files over Tor</a>, <a href="#torperf-failures">Timeouts and failures of downloading files over Tor</a>, <a href="#onionperf-buildtimes">Circuit build times</a>, <a href="#onionperf-latencies">Circuit round-trip latencies</a> graphs.</li>
+<li><b>December 20, 2018:</b> Removed source parameters and output rows with aggregates over all sources from <a href="#torperf">Time to download files over Tor</a>, <a href="#torperf-failures">Timeouts and failures of downloading files over Tor</a>, <a href="#onionperf-buildtimes">Circuit build times</a>, <a href="#onionperf-latencies">Circuit round-trip latencies</a> graphs.</li>
 <li><b>December 20, 2018 (scheduled):</b> Remove two graphs <a href="#bandwidth">Total relay bandwidth</a> and <a href="#bwhist-flags">Consumed bandwidth by Exit/Guard flag combination</a>, and update the data format of the <a href="#bandwidth-flags">Advertised and consumed bandwidth by relay flag</a> graph to cover all data previously contained in the first two graphs.</li>
 </ul>
 
@@ -536,7 +536,6 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements, or <b>"all"</b> for measurements performed by any service. <span class="red">This parameter is going to be removed after December 20, 2018.</span></li>
 <li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to a version 2 onion server.</li>
 <li><b>filesize:</b> Size of the downloaded file in bytes, with pre-defined possible values: <b>"50kb"</b>, <b>"1mb"</b>, or <b>"5mb"</b>.</li>
 </ul>
@@ -546,7 +545,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
 <li><b>filesize:</b> Size of the downloaded file in bytes.</li>
-<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements. If this column contains the empty string, all measurements are included, regardless of which service performed them. <span class="red">Output rows with aggregates over all sources are going to be removed after December 20, 2018.</span></li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
 <li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
 <li><b>q1:</b> First quartile of time in milliseconds until receiving the last byte.</li>
 <li><b>md:</b> Median of time in milliseconds until receiving the last byte.</li>
@@ -563,7 +562,6 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements, or <b>"all"</b> for measurements performed by any service. <span class="red">This parameter is going to be removed after December 20, 2018.</span></li>
 <li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to a version 2 onion server.</li>
 <li><b>filesize:</b> Size of the downloaded file in bytes, with pre-defined possible values: <b>"50kb"</b>, <b>"1mb"</b>, or <b>"5mb"</b>.</li>
 </ul>
@@ -573,7 +571,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
 <li><b>filesize:</b> Size of the downloaded file in bytes.</li>
-<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements. If this column contains the empty string, all measurements are included, regardless of which service performed them. <span class="red">Output rows with aggregates over all sources are going to be removed after December 20, 2018.</span></li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
 <li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
 <li><b>timeouts:</b> Fraction of requests that timed out when attempting to download the static file over Tor.</li>
 <li><b>failures:</b> Fraction of requests that failed when attempting to download the static file over Tor.</li>
@@ -589,14 +587,13 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements, or <b>"all"</b> for measurements performed by any service. <span class="red">This parameter is going to be removed after December 20, 2018.</span></li>
 </ul>
 
 <h4>Columns</h4>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
-<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements. If this column contains the empty string, all measurements are included, regardless of which service performed them. <span class="red">Output rows with aggregates over all sources are going to be removed after December 20, 2018.</span></li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
 <li><b>position:</b> Position in the circuit, from first to third hop.</li>
 <li><b>q1:</b> First quartile of time in milliseconds until successfully extending the circuit to the given position.</li>
 <li><b>md:</b> Median of time in milliseconds until successfully extending the circuit to the given position.</li>
@@ -613,14 +610,13 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements, or <b>"all"</b> for measurements performed by any service. <span class="red">This parameter is going to be removed after December 20, 2018.</span></li>
 </ul>
 
 <h4>Columns</h4>
 
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
-<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements. If this column contains the empty string, all measurements are included, regardless of which service performed them. <span class="red">Output rows with aggregates over all sources are going to be removed after December 20, 2018.</span></li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
 <li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
 <li><b>q1:</b> First quartile of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
 <li><b>md:</b> Median of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
