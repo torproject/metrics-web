@@ -532,6 +532,7 @@ public final class RelayDescriptorDatabaseImporter {
         this.addExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
       }
     }
+    this.commit();
     reader.saveHistoryFile(this.historyFile);
   }
 
@@ -615,6 +616,7 @@ public final class RelayDescriptorDatabaseImporter {
   void aggregate() throws SQLException {
     Statement st = this.conn.createStatement();
     st.executeQuery("SELECT refresh_all()");
+    this.commit();
   }
 
   /** Query the servers_platforms view. */
