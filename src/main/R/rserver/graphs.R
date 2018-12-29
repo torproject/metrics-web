@@ -922,14 +922,15 @@ write_userstats_relay_country <- function(start_p = NULL, end_p = NULL,
         lower = col_double(),
         upper = col_double(),
         clients = col_double(),
-        frac = col_double())) %>%
+        frac = col_double()),
+      na = character()) %>%
     filter(node == "relay") %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(country_p))
       country == ifelse(country_p == "all", "", country_p) else TRUE) %>%
-    filter(is.na(transport)) %>%
-    filter(is.na(version)) %>%
+    filter(transport == "") %>%
+    filter(version == "") %>%
     select(date, country, clients, lower, upper, frac) %>%
     rename(users = clients) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
@@ -947,14 +948,15 @@ write_userstats_bridge_country <- function(start_p = NULL, end_p = NULL,
         lower = col_double(),
         upper = col_double(),
         clients = col_double(),
-        frac = col_double())) %>%
+        frac = col_double()),
+      na = character()) %>%
     filter(node == "bridge") %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(country_p))
       country == ifelse(country_p == "all", "", country_p) else TRUE) %>%
-    filter(is.na(transport)) %>%
-    filter(is.na(version)) %>%
+    filter(transport == "") %>%
+    filter(version == "") %>%
     select(date, country, clients, frac) %>%
     rename(users = clients) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
@@ -1031,7 +1033,8 @@ prepare_userstats_bridge_combined <- function(start_p, end_p, country_p) {
         version = col_skip(),
         frac = col_double(),
         low = col_double(),
-        high = col_double())) %>%
+        high = col_double()),
+      na = character()) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(country_p)) country == country_p else TRUE)
