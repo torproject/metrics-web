@@ -42,7 +42,7 @@
       </div>
 
       <div class="col-sm-4">
-        <a href="bandwidth.html"><i class="fa fa-road fa-fw fa-4x" aria-hidden="true"></i> <h3>Traffic</h3> <p>How much traffic the Tor network can handle and how much traffic there is.</p></a>
+        <a href="bandwidth-flags.html"><i class="fa fa-road fa-fw fa-4x" aria-hidden="true"></i> <h3>Traffic</h3> <p>How much traffic the Tor network can handle and how much traffic there is.</p></a>
       </div>
 
       <div class="col-sm-4">
