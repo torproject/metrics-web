@@ -93,8 +93,7 @@
     </c:if>
     <c:if test="${fn:length(events) > 0}">
       <p>
-        <label for="events"><b>Show possible censorship events if available (<a
-               href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">BETA</a>):</b></label>
+        <label for="events"><b>Show possible <a href="http://research.torproject.org/techreports/detector-2011-09-09.pdf">censorship events</a> if available:</b></label>
         <select name="events" id="events">
         <c:forEach var="row" items="${events}">
           <option value="${row[0]}"${row[1]}>${row[2]}</option>
