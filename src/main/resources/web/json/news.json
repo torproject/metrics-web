@@ -2489,6 +2489,15 @@
     "target" : "https://en.wikipedia.org/wiki/Hurricane_Maria#Puerto_Rico_3"
   } ]
 }, {
+  "start" : "2017-10-04",
+  "protocols" : [ "fte" ],
+  "short_description" : "Permanent hardware failure of default FTE bridge 128.105.214.161:8080.",
+  "description" : "Permanent hardware failure of default FTE bridge 128.105.214.161:8080.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/28521#comment:2"
+  } ]
+}, {
   "start" : "2017-10-05",
   "protocols" : [ "ipv4", "ipv6" ],
   "short_description" : "geoip and geoip6 databases updated to \"October 4 2017 Maxmind GeoLite2 Country\"",
@@ -2534,6 +2543,9 @@
   "links" : [ {
     "label" : "wikipedia",
     "target" : "https://en.wikipedia.org/wiki/19th_National_Congress_of_the_Communist_Party_of_China"
+  }, {
+    "label" : "Psiphon users",
+    "target" : "https://media.ccc.de/v/35c3-9964-cat_mouse_evading_the_censors_in_2018#t=2067"
   } ]
 }, {
   "start" : "2017-10-25",
@@ -2754,6 +2766,9 @@
   }, {
     "label" : "tweet",
     "target" : "https://twitter.com/nusenu_/status/948914485045145601"
+  }, {
+    "label" : "Psiphon users",
+    "target" : "https://media.ccc.de/v/35c3-9964-cat_mouse_evading_the_censors_in_2018#t=1770"
   } ]
 }, {
   "start" : "2018-01-01",
@@ -3045,6 +3060,16 @@
     "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-03-01&end=2018-07-15&country=ru"
   } ]
 }, {
+  "start" : "2018-04-20",
+  "end" : "2018-04-27",
+  "protocols" : [ "onion" ],
+  "short_description" : "The number of v2 onion services increases from 70k to 120k.",
+  "description" : "The number of v2 onion services increases from 70k to 120k.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26081"
+  } ]
+}, {
   "start" : "2018-04-28",
   "places" : [ "ru" ],
   "short_description" : "Russia unblocks about 3 million IP addresses belonging to Amazon and OVH.",
@@ -3074,6 +3099,9 @@
   }, {
     "label" : "bridge graph",
     "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-03-11&end=2018-06-01&country=ir"
+  }, {
+    "label" : "Psiphon users",
+    "target" : "https://media.ccc.de/v/35c3-9964-cat_mouse_evading_the_censors_in_2018#t=1922"
   } ]
 }, {
   "start" : "2018-05-08",
@@ -3169,6 +3197,16 @@
     "target" : "https://www.accessnow.org/venezuela-blocks-tor/"
   } ]
 }, {
+  "start" : "2018-06-24",
+  "end" : "2018-07-06",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Metrics for Snowflake are missing, for unknown reasons",
+  "description" : "Metrics for Snowflake are missing, for unknown reasons. The gap is nearly contemporaneous with the gap the measurements for all transports/bridges caused by Bifroest&ndash;Serge bridge authority switchover, but starts about 2 weeks earlier in Snowflake's case.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26783"
+  } ]
+}, {
   "start" : "2018-06-27",
   "protocols" : [ "meek" ],
   "short_description" : "Release of Tor Browser 8.0a9 with non-working meek.",
@@ -3198,6 +3236,9 @@
   }, {
     "label" : "AllAfrica article",
     "target" : "http://allafrica.com/stories/201807040129.html"
+  }, {
+    "label" : "OONI report",
+    "target" : "https://ooni.io/post/uganda-social-media-tax/"
   } ]
 }, {
   "start" : "2018-07-04",
@@ -3253,6 +3294,25 @@
   } ]
 }, {
   "start" : "2018-07-14",
+  "end" : "2018-07-25",
+  "places" : [ "iq" ],
+  "short_description" : "Protests, Internet shutdowns, and social media blocks in Iraq.",
+  "description" : "Protests, Internet shutdowns, and social media blocks in Iraq.",
+  "links" : [ {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-06-01&end=2018-09-01&country=iq"
+  }, {
+    "label" : "NetBlocks post",
+    "target" : "https://netblocks.org/reports/study-shows-extent-of-iraq-internet-shutdown-and-social-media-restrictions-during-protests-zPyXjzAE"
+  }, {
+    "label" : "NRT article about end",
+    "target" : "http://www.nrttv.com/EN/News.aspx?id=2810&MapID=1"
+  }, {
+    "label" : "Psiphon users",
+    "target" : "https://media.ccc.de/v/35c3-9964-cat_mouse_evading_the_censors_in_2018#t=1729"
+  } ]
+}, {
+  "start" : "2018-07-14",
   "protocols" : [ "bridge" ],
   "short_description" : "Release of Tor 0.2.9.16, 0.3.2.11, 0.3.3.9, and 0.3.4.5-rc",
   "description" : "Release of Tor 0.2.9.16, 0.3.2.11, 0.3.3.9, and 0.3.4.5-rc. Switches bridge authority from Bifroest to <a href=\"https://metrics.torproject.org/rs.html#details/BA44A889E64B93FAA2B114E02C2A279A8555C533\">Serge</a>. The number of bridges begins counting up from zero as bridges are upgraded. The estimated number of bridge users remained unavailable until 2018-07-21 because of the discontinuity.",
@@ -3302,6 +3362,9 @@
   }, {
     "label" : "Daily Star article on throttling",
     "target" : "https://www.thedailystar.net/country/bangladesh-mobile-internet-speed-brought-down-across-for-24hrs-1615909"
+  }, {
+    "label" : "NetBlocks report",
+    "target" : "https://netblocks.org/reports/bangladesh-internet-shutdown-student-protests-jDA37KAW"
   } ]
 }, {
   "start" : "2018-08-04",
@@ -3314,6 +3377,95 @@
   }, {
     "label" : "tor-relays thread",
     "target" : "https://lists.torproject.org/pipermail/tor-relays/2018-August/015850.html"
+  } ]
+}, {
+  "start" : "2018-09-26",
+  "ongoing" : true,
+  "protocols" : [ "fte" ],
+  "short_description" : "Outage of default FTE bridge 128.105.214.162:8080.",
+  "description" : "Outage of default FTE bridge 128.105.214.162:8080.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/28521#comment:3"
+  } ]
+}, {
+  "start" : "2018-09-26",
+  "ongoing" : true,
+  "protocols" : [ "fte" ],
+  "short_description" : "Outage of default FTE bridge 128.105.214.163:8080.",
+  "description" : "Outage of default FTE bridge 128.105.214.163:8080.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/28521#comment:3"
+  } ]
+}, {
+  "start" : "2018-10-25",
+  "end" : "2018-10-28",
+  "protocols" : [ "relay" ],
+  "short_description" : "Gap in observed number of relay users, caused by the estimated fraction of reporting relays exceeding 100%.",
+  "description" : "Gap in observed number of relay users, caused by the estimated fraction of reporting relays exceeding 100%.",
+  "links" : [ {
+    "label" : "metrics-team post",
+    "target" : "https://lists.torproject.org/pipermail/metrics-team/2018-November/000936.html"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/28305"
+  }, {
+    "label" : "graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-10-01&end=2018-11-01&country=all&events=off"
+  }, {
+    "label" : "archived graph",
+    "target" : "https://web.archive.org/web/20181104023227/https://metrics.torproject.org/userstats-relay-country.html?start=2018-10-01&end=2018-11-01&country=all&events=off"
+  } ]
+}, {
+  "start" : "2018-11-16",
+  "end" : "2018-11-22",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "A full disk stops the Snowflake bridge and fallback proxies from working.",
+  "description" : "A full disk stops the Snowflake bridge and fallback proxies from working.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/28390"
+  } ]
+}, {
+  "start" : "2018-11-19",
+  "end" : "2018-11-27",
+  "short_description" : "Slow-running processes on the metrics host cause an observed drop in the overall relay bandwidth graph.",
+  "description" : "Slow-running processes on the metrics host cause an observed drop in the overall relay bandwidth graph.",
+  "links" : [ {
+    "label" : "mailing list thread",
+    "target" : "https://lists.torproject.org/pipermail/metrics-team/2018-December/000971.html"
+  } ]
+}, {
+  "start" : "2018-11-26",
+  "end" : "2018-11-28",
+  "short_description" : "Outage of the onionperf-us instance, caused by a Greenhost east coast VPS migration.",
+  "description" : "Outage of the onionperf-us instance, caused by a Greenhost east coast VPS migration.",
+  "links" : [ {
+    "label" : "mailing list post",
+    "target" : "https://lists.torproject.org/pipermail/metrics-team/2018-November/000967.html"
+  } ]
+}, {
+  "start" : "2018-11-26",
+  "end" : "2018-11-28",
+  "protocols" : [ "flashproxy" ],
+  "short_description" : "Outage of the flash proxy badge hosting server, flashproxy.bamsoftware.com, caused by a Greenhost east coast VPS migration.",
+  "description" : "Outage of the flash proxy badge hosting server, flashproxy.bamsoftware.com, caused by a Greenhost east coast VPS migration."
+}, {
+  "start" : "2018-12-20",
+  "ongoing" : true,
+  "places" : [ "sd" ],
+  "short_description" : "Protests and social media blocks in Sudan.",
+  "description" : "Protests and social media blocks in Sudan.",
+  "links" : [ {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-11-15&end=2019-01-15&country=sd&events=off"
+  }, {
+    "label" : "Access Now post",
+    "target" : "https://www.accessnow.org/amid-countrywide-protest-sudan-shuts-down-social-media-on-mobile-networks/"
+  }, {
+    "label" : "Psiphon users",
+    "target" : "https://media.ccc.de/v/35c3-9964-cat_mouse_evading_the_censors_in_2018#t=1670"
   } ]
 }, {
   "start" : "2016-02-24",
@@ -3420,8 +3572,8 @@
   "end" : "2017-03-01",
   "places" : [ "ae" ],
   "protocols" : [ "<OR>", "relay" ],
-  "short_description" : "Huge increase in relay users",
-  "description" : "Huge increase in relay users (400k+). An anonymous contributor suggests that it may be a botnet, based on the large number of hosts with an open SMB port in the UAE.",
+  "short_description" : "Huge spike in relay users",
+  "description" : "Huge spike in relay users (400k+). An anonymous contributor suggests that it may be a botnet, based on the large number of hosts with an open SMB port in the UAE.",
   "links" : [ {
     "label" : "graph",
     "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-06-01&country=ae&events=off"
@@ -3480,14 +3632,17 @@
   "unknown" : true
 }, {
   "start" : "2017-03-01",
-  "end" : "2017-07-01",
+  "end" : "2018-11-12",
   "places" : [ "ae" ],
   "protocols" : [ "<OR>", "relay" ],
-  "short_description" : "Another increase in relay users, with a slower rate of growth than the previous one.",
-  "description" : "Another increase in relay users, with a slower rate of growth than the previous one.",
+  "short_description" : "Another increase in relay users, slower and more sustained than the previous one.",
+  "description" : "Another increase in relay users, slower and more sustained than the previous one.",
   "links" : [ {
     "label" : "graph",
-    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-09-01&country=ae&events=off"
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2016-07-01&end=2019-01-01&country=ae&events=off"
+  }, {
+    "label" : "ticket about end",
+    "target" : "https://bugs.torproject.org/28898#comment:2"
   } ],
   "unknown" : true
 }, {
@@ -3606,18 +3761,6 @@
   "links" : [ {
     "label" : "graph",
     "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2017-01-01&end=2017-09-01&country=ae&events=off"
-  } ],
-  "unknown" : true
-}, {
-  "start" : "2017-07-01",
-  "end" : "2017-08-30",
-  "places" : [ "ae" ],
-  "protocols" : [ "<OR>", "relay" ],
-  "short_description" : "Slow increase in relay users.",
-  "description" : "Slow increase in relay users.",
-  "links" : [ {
-    "label" : "graph",
-    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2017-11-01&country=ae&events=off"
   } ],
   "unknown" : true
 }, {
@@ -3786,17 +3929,6 @@
   } ],
   "unknown" : true
 }, {
-  "start" : "2017-09-01",
-  "places" : [ "ae" ],
-  "protocols" : [ "<OR>", "relay" ],
-  "short_description" : "Relay users remain volatile but flatten their rate of growth.",
-  "description" : "Relay users remain volatile but flatten their rate of growth.",
-  "links" : [ {
-    "label" : "graph",
-    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2017-06-01&end=2018-02-01&country=ae&events=off"
-  } ],
-  "unknown" : true
-}, {
   "start" : "2017-09-02",
   "end" : "2017-09-21",
   "protocols" : [ "obfs4" ],
@@ -3953,6 +4085,18 @@
   }, {
     "label" : "comment",
     "target" : "https://bugs.torproject.org/21014#comment:19"
+  } ],
+  "unknown" : true
+}, {
+  "start" : "2018-05-22",
+  "end" : "2018-06-08",
+  "places" : [ "iq" ],
+  "protocols" : [ "obfs4" ],
+  "short_description" : "Increase in obfs4 users in Iraq, followed by a slow decrease",
+  "description" : "Increase in obfs4 users in Iraq, followed by a slow decrease. No matching change in relay users or other transports.",
+  "links" : [ {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-04-01&end=2018-08-01&country=iq"
   } ],
   "unknown" : true
 }, {
