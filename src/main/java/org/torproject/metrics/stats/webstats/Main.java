@@ -100,7 +100,7 @@ public class Main {
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         importedLogFileUrls.add(String.format("%s_%s_access.log_%s.xz",
-            rs.getString(1), rs.getString(2),
+            rs.getString(2), rs.getString(1),
             rs.getDate(3).toLocalDate().format(dateFormat)));
       }
     }
@@ -111,13 +111,19 @@ public class Main {
 
   static void importLogFiles(Connection connection, SortedSet<String> skipFiles,
       File... inDirectories) {
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
     for (Descriptor descriptor : DescriptorSourceFactory
         .createDescriptorReader().readDescriptors(inDirectories)) {
       if (!(descriptor instanceof WebServerAccessLog)) {
         continue;
       }
       WebServerAccessLog logFile = (WebServerAccessLog) descriptor;
-      if (skipFiles.contains(logFile.getDescriptorFile().getName())) {
+      String logFileNameWithTruncatedParts = String.format(
+          "%s_%s_access.log_%s.xz",
+          truncateString(logFile.getVirtualHost(), 128),
+          truncateString(logFile.getPhysicalHost(), 32),
+          logFile.getLogDate().format(dateFormat));
+      if (skipFiles.contains(logFileNameWithTruncatedParts)) {
         continue;
       }
       try {
