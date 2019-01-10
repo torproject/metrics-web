@@ -1265,52 +1265,7 @@ write_webstats_tb_platform <- function(start_p = NULL, end_p = NULL, path_p) {
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-plot_webstats_tb_locale <- function(start_p, end_p, path_p) {
-  d <- read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
-      col_types = cols(
-        log_date = col_date(format = ""),
-        request_type = col_factor(),
-        platform = col_skip(),
-        channel = col_skip(),
-        locale = col_factor(),
-        incremental = col_skip(),
-        count = col_double()))
-  d <- d[d$log_date >= start_p & d$log_date <= end_p &
-         d$request_type %in% c("tbid", "tbup"), ]
-  levels(d$request_type) <- list(
-      "Initial downloads" = "tbid",
-      "Update pings" = "tbup")
-  e <- d
-  e <- aggregate(list(count = e$count), by = list(locale = e$locale), FUN = sum)
-  e <- e[order(e$count, decreasing = TRUE), ]
-  e <- e[1:5, ]
-  d <- aggregate(list(count = d$count), by = list(log_date = d$log_date,
-    request_type = d$request_type,
-    locale = ifelse(d$locale %in% e$locale, d$locale, "(other)")), FUN = sum)
-  ggplot(d, aes(x = log_date, y = count, colour = locale)) +
-    geom_point() +
-    geom_line() +
-    scale_x_date(name = "", breaks = custom_breaks,
-      labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
-    scale_colour_hue(name = "Locale",
-        breaks = c(e$locale, "(other)"),
-        labels = c(e$locale, "Other")) +
-    facet_grid(request_type ~ ., scales = "free_y") +
-    theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
-          strip.background = element_rect(fill = NA),
-          legend.position = "top") +
-    ggtitle("Tor Browser downloads and updates by locale") +
-    labs(caption = copyright_notice)
-  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
-}
-
-# Ideally, this function would share code with plot_webstats_tb_locale
-# by using a common prepare_webstats_tb_locale function. This just
-# turned out to be a bit harder than for other functions, because
-# plot_webstats_tb_locale needs the preliminary data frame e for its
-# breaks and labels. Left as future work.
-write_webstats_tb_locale <- function(start_p = NULL, end_p = NULL, path_p) {
+prepare_webstats_tb_locale <- function(start_p, end_p) {
   read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
       col_types = cols(
         log_date = col_date(format = ""),
@@ -1328,7 +1283,45 @@ write_webstats_tb_locale <- function(start_p = NULL, end_p = NULL, path_p) {
     summarize(count = sum(count)) %>%
     mutate(request_type = factor(request_type, levels = c("tbid", "tbup"))) %>%
     spread(request_type, count, fill = 0) %>%
-    rename(initial_downloads = tbid, update_pings = tbup) %>%
+    rename(initial_downloads = tbid, update_pings = tbup)
+}
+
+plot_webstats_tb_locale <- function(start_p, end_p, path_p) {
+  d <- prepare_webstats_tb_locale(start_p, end_p) %>%
+    gather(request_type, count, -c(date, locale)) %>%
+    mutate(request_type = factor(request_type,
+      levels = c("initial_downloads", "update_pings"),
+      labels = c("Initial downloads", "Update pings")))
+  e <- d
+  e <- aggregate(list(count = e$count), by = list(locale = e$locale), FUN = sum)
+  e <- e[order(e$count, decreasing = TRUE), ]
+  e <- e[1:5, ]
+  d <- aggregate(list(count = d$count), by = list(date = d$date,
+    request_type = d$request_type,
+    locale = ifelse(d$locale %in% e$locale, d$locale, "(other)")), FUN = sum)
+  d %>%
+    complete(date = full_seq(date, period = 1),
+      nesting(locale, request_type)) %>%
+    ggplot(aes(x = date, y = count, colour = locale)) +
+    geom_point() +
+    geom_line() +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
+    scale_colour_hue(name = "Locale",
+        breaks = c(e$locale, "(other)"),
+        labels = c(as.character(e$locale), "Other")) +
+    facet_grid(request_type ~ ., scales = "free_y") +
+    theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
+          strip.background = element_rect(fill = NA),
+          legend.position = "top") +
+    ggtitle("Tor Browser downloads and updates by locale") +
+    labs(caption = copyright_notice)
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
+write_webstats_tb_locale <- function(start_p = NULL, end_p = NULL, path_p) {
+  prepare_webstats_tb_locale(start_p, end_p) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
