@@ -751,9 +751,9 @@ write_bandwidth_flags <- function(start_p = NULL, end_p = NULL, path_p) {
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-plot_userstats <- function(start_p, end_p, node_p, variable_p, value_p,
-    events_p, path_p) {
-  c <- read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
+prepare_userstats_relay_country <- function(start_p, end_p, country_p,
+    events_p) {
+  read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
       col_types = cols(
         date = col_date(format = ""),
         node = col_character(),
@@ -763,97 +763,26 @@ plot_userstats <- function(start_p, end_p, node_p, variable_p, value_p,
         lower = col_double(),
         upper = col_double(),
         clients = col_double(),
-        frac = col_skip()),
+        frac = col_double()),
       na = character()) %>%
-    filter(node == node_p)
-  u <- c[c$date >= start_p & c$date <= end_p, c("date", "country", "transport",
-      "version", "lower", "upper", "clients")]
-  u <- rbind(u, data.frame(date = start_p,
-      country = ifelse(variable_p == "country" & value_p != "all", value_p, ""),
-      transport = ifelse(variable_p == "transport", value_p, ""),
-      version = ifelse(variable_p == "version", value_p, ""),
-      lower = 0, upper = 0, clients = 0))
-  if (node_p == "relay") {
-    if (value_p != "all") {
-      u <- u[u$country == value_p, ]
-      title <- paste("Directly connecting users from", countryname(value_p))
-    } else {
-      u <- u[u$country == "", ]
-      title <- "Directly connecting users"
-    }
-    u <- aggregate(list(lower = u$lower, upper = u$upper,
-                        users = u$clients),
-                   by = list(date = as.Date(u$date, "%Y-%m-%d"),
-                             value = u$country),
-                   FUN = sum)
-  } else if (variable_p == "transport") {
-    if ("!<OR>" %in% value_p) {
-      n <- u[u$transport != "" & u$transport != "<OR>", ]
-      n <- aggregate(list(lower = n$lower, upper = n$upper,
-                          clients = n$clients),
-                     by = list(date = n$date),
-                     FUN = sum)
-      u <- rbind(u, data.frame(date = n$date,
-                               country = "", transport = "!<OR>",
-                               version = "", lower = n$lower,
-                               upper = n$upper, clients = n$clients))
-    }
-    if (length(value_p) > 1) {
-      u <- u[u$transport %in% value_p, ]
-      u <- aggregate(list(lower = u$lower, upper = u$upper,
-                          users = u$clients),
-                     by = list(date = as.Date(u$date, "%Y-%m-%d"),
-                               value = u$transport),
-                     FUN = sum)
-      title <- paste("Bridge users by transport")
-    } else {
-      u <- u[u$transport == value_p, ]
-      u <- aggregate(list(lower = u$lower, upper = u$upper,
-                          users = u$clients),
-                     by = list(date = as.Date(u$date, "%Y-%m-%d"),
-                               value = u$transport),
-                     FUN = sum)
-      title <- paste("Bridge users using",
-               ifelse(value_p == "<??>", "unknown pluggable transport(s)",
-               ifelse(value_p == "<OR>", "default OR protocol",
-               ifelse(value_p == "!<OR>", "any pluggable transport",
-               ifelse(value_p == "fte", "FTE",
-               ifelse(value_p == "websocket", "Flash proxy/websocket",
-               paste("transport", value_p)))))))
-    }
-  } else if (variable_p == "version") {
-    u <- u[u$version == value_p, ]
-    title <- paste("Bridge users using IP", value_p, sep = "")
-    u <- aggregate(list(lower = u$lower, upper = u$upper,
-                        users = u$clients),
-                   by = list(date = as.Date(u$date, "%Y-%m-%d"),
-                             value = u$version),
-                   FUN = sum)
-  } else {
-    if (value_p != "all") {
-      u <- u[u$country == value_p, ]
-      title <- paste("Bridge users from", countryname(value_p))
-    } else {
-      u <- u[u$country == "" & u$transport == "" & u$version == "", ]
-      title <- "Bridge users"
-    }
-    u <- aggregate(list(lower = u$lower, upper = u$upper,
-                        users = u$clients),
-                   by = list(date = as.Date(u$date, "%Y-%m-%d"),
-                             value = u$country),
-                   FUN = sum)
-  }
-  u <- merge(x = u, all.y = TRUE, y = data.frame(expand.grid(
-             date = seq(from = as.Date(start_p, "%Y-%m-%d"),
-             to = as.Date(end_p, "%Y-%m-%d"), by = "1 day"),
-             value = ifelse(value_p == "all", "", value_p))))
-  if (length(value_p) > 1) {
-    plot <- ggplot(u, aes(x = date, y = users, colour = value))
-  } else {
-    plot <- ggplot(u, aes(x = date, y = users))
-  }
+    filter(node == "relay") %>%
+    filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
+    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
+    filter(if (!is.null(country_p))
+      country == ifelse(country_p == "all", "", country_p) else TRUE) %>%
+    filter(transport == "") %>%
+    filter(version == "") %>%
+    select(date, country, clients, lower, upper, frac) %>%
+    rename(users = clients)
+}
+
+plot_userstats_relay_country <- function(start_p, end_p, country_p, events_p,
+    path_p) {
+  u <- prepare_userstats_relay_country(start_p, end_p, country_p, events_p) %>%
+    complete(date = full_seq(date, period = 1))
+  plot <- ggplot(u, aes(x = date, y = users))
   if (length(na.omit(u$users)) > 0 & events_p != "off" &
-      variable_p == "country" & length(value_p) == 1 && value_p != "all") {
+      country_p != "all") {
     upturns <- u[u$users > u$upper, c("date", "users")]
     downturns <- u[u$users < u$lower, c("date", "users")]
     if (events_p == "on") {
@@ -875,69 +804,20 @@ plot_userstats <- function(start_p, end_p, node_p, variable_p, value_p,
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
-    ggtitle(title) +
+    ggtitle(paste("Directly connecting users",
+        ifelse(country_p == "all", "",
+        paste(" from", countryname(country_p))), sep = "")) +
     labs(caption = copyright_notice)
-  if (length(value_p) > 1) {
-    plot <- plot +
-      scale_colour_hue(name = "", breaks = value_p,
-            labels = ifelse(value_p == "<??>", "Unknown PT",
-                     ifelse(value_p == "<OR>", "Default OR protocol",
-                     ifelse(value_p == "!<OR>", "Any PT",
-                     ifelse(value_p == "fte", "FTE",
-                     ifelse(value_p == "websocket", "Flash proxy/websocket",
-                     value_p))))))
-  }
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
-}
-
-plot_userstats_relay_country <- function(start_p, end_p, country_p, events_p,
-    path_p) {
-  plot_userstats(start_p, end_p, "relay", "country", country_p, events_p,
-    path_p)
-}
-
-plot_userstats_bridge_country <- function(start_p, end_p, country_p, path_p) {
-  plot_userstats(start_p, end_p, "bridge", "country", country_p, "off", path_p)
-}
-
-plot_userstats_bridge_transport <- function(start_p, end_p, transport_p,
-    path_p) {
-  plot_userstats(start_p, end_p, "bridge", "transport", transport_p, "off",
-    path_p)
-}
-
-plot_userstats_bridge_version <- function(start_p, end_p, version_p, path_p) {
-  plot_userstats(start_p, end_p, "bridge", "version", version_p, "off", path_p)
 }
 
 write_userstats_relay_country <- function(start_p = NULL, end_p = NULL,
     country_p = NULL, events_p = NULL, path_p) {
-  read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
-      col_types = cols(
-        date = col_date(format = ""),
-        node = col_character(),
-        country = col_character(),
-        transport = col_character(),
-        version = col_character(),
-        lower = col_double(),
-        upper = col_double(),
-        clients = col_double(),
-        frac = col_double()),
-      na = character()) %>%
-    filter(node == "relay") %>%
-    filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
-    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(if (!is.null(country_p))
-      country == ifelse(country_p == "all", "", country_p) else TRUE) %>%
-    filter(transport == "") %>%
-    filter(version == "") %>%
-    select(date, country, clients, lower, upper, frac) %>%
-    rename(users = clients) %>%
+  prepare_userstats_relay_country(start_p, end_p, country_p, events_p) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-write_userstats_bridge_country <- function(start_p = NULL, end_p = NULL,
-    country_p = NULL, path_p) {
+prepare_userstats_bridge_country <- function(start_p, end_p, country_p) {
   read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
       col_types = cols(
         date = col_date(format = ""),
@@ -958,12 +838,32 @@ write_userstats_bridge_country <- function(start_p = NULL, end_p = NULL,
     filter(transport == "") %>%
     filter(version == "") %>%
     select(date, country, clients, frac) %>%
-    rename(users = clients) %>%
+    rename(users = clients)
+}
+
+plot_userstats_bridge_country <- function(start_p, end_p, country_p, path_p) {
+  prepare_userstats_bridge_country(start_p, end_p, country_p) %>%
+    complete(date = full_seq(date, period = 1)) %>%
+    ggplot(aes(x = date, y = users)) +
+    geom_line() +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
+    ggtitle(paste("Bridge users",
+        ifelse(country_p == "all", "",
+        paste(" from", countryname(country_p))), sep = "")) +
+    labs(caption = copyright_notice)
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
+write_userstats_bridge_country <- function(start_p = NULL, end_p = NULL,
+    country_p = NULL, path_p) {
+  prepare_userstats_bridge_country(start_p, end_p, country_p) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-write_userstats_bridge_transport <- function(start_p = NULL, end_p = NULL,
-    transport_p = NULL, path_p) {
+prepare_userstats_bridge_transport <- function(start_p = NULL, end_p = NULL,
+    transport_p = NULL) {
   u <- read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
       col_types = cols(
         date = col_date(format = ""),
@@ -992,15 +892,58 @@ write_userstats_bridge_transport <- function(start_p = NULL, end_p = NULL,
   }
   u %>%
     filter(if (!is.null(transport_p)) transport %in% transport_p else TRUE) %>%
-    group_by(date, transport) %>%
     select(date, transport, clients, frac) %>%
     rename(users = clients) %>%
-    arrange(date, transport) %>%
+    arrange(date, transport)
+}
+
+plot_userstats_bridge_transport <- function(start_p, end_p, transport_p,
+    path_p) {
+  if (length(transport_p) > 1) {
+    title <- paste("Bridge users by transport")
+  } else {
+    title <- paste("Bridge users using",
+             ifelse(transport_p == "<??>", "unknown pluggable transport(s)",
+             ifelse(transport_p == "<OR>", "default OR protocol",
+             ifelse(transport_p == "!<OR>", "any pluggable transport",
+             ifelse(transport_p == "fte", "FTE",
+             ifelse(transport_p == "websocket", "Flash proxy/websocket",
+             paste("transport", transport_p)))))))
+  }
+  u <- prepare_userstats_bridge_transport(start_p, end_p, transport_p) %>%
+    complete(date = full_seq(date, period = 1), nesting(transport))
+  if (length(transport_p) > 1) {
+    plot <- ggplot(u, aes(x = date, y = users, colour = transport))
+  } else {
+    plot <- ggplot(u, aes(x = date, y = users))
+  }
+  plot <- plot +
+    geom_line() +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
+    ggtitle(title) +
+    labs(caption = copyright_notice)
+  if (length(transport_p) > 1) {
+    plot <- plot +
+      scale_colour_hue(name = "", breaks = transport_p,
+            labels = ifelse(transport_p == "<??>", "Unknown PT",
+                     ifelse(transport_p == "<OR>", "Default OR protocol",
+                     ifelse(transport_p == "!<OR>", "Any PT",
+                     ifelse(transport_p == "fte", "FTE",
+                     ifelse(transport_p == "websocket", "Flash proxy/websocket",
+                     transport_p))))))
+  }
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
+write_userstats_bridge_transport <- function(start_p = NULL, end_p = NULL,
+    transport_p = NULL, path_p) {
+  prepare_userstats_bridge_transport(start_p, end_p, transport_p) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
-write_userstats_bridge_version <- function(start_p = NULL, end_p = NULL,
-    version_p = NULL, path_p) {
+prepare_userstats_bridge_version <- function(start_p, end_p, version_p) {
   read_csv(file = paste(stats_dir, "clients.csv", sep = ""),
       col_types = cols(
         date = col_date(format = ""),
@@ -1019,7 +962,25 @@ write_userstats_bridge_version <- function(start_p = NULL, end_p = NULL,
     filter(is.na(transport)) %>%
     filter(if (!is.null(version_p)) version == version_p else TRUE) %>%
     select(date, version, clients, frac) %>%
-    rename(users = clients) %>%
+    rename(users = clients)
+}
+
+plot_userstats_bridge_version <- function(start_p, end_p, version_p, path_p) {
+  prepare_userstats_bridge_version(start_p, end_p, version_p) %>%
+    complete(date = full_seq(date, period = 1)) %>%
+    ggplot(aes(x = date, y = users)) +
+    geom_line() +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
+    ggtitle(paste("Bridge users using IP", version_p, sep = "")) +
+    labs(caption = copyright_notice)
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
+write_userstats_bridge_version <- function(start_p = NULL, end_p = NULL,
+    version_p = NULL, path_p) {
+  prepare_userstats_bridge_version(start_p, end_p, version_p) %>%
     write.csv(path_p, quote = FALSE, row.names = FALSE, na = "")
 }
 
