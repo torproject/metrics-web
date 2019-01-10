@@ -122,7 +122,7 @@ public class RObjectGenerator implements ServletContextListener {
     StringBuilder queryBuilder = new StringBuilder();
     queryBuilder.append("robust_call(as.call(list(");
     if ("csv".equalsIgnoreCase(fileType)) {
-      queryBuilder.append("write_");
+      queryBuilder.append("write_data, prepare_");
       /* When we checked parameters above we also put in defaults for missing
        * parameters. This is okay for graphs, but we want to support CSV files
        * with empty parameters. Using the parameters we got here. */
