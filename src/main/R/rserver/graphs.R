@@ -359,8 +359,11 @@ write_data <- function(FUN, ..., path_p) {
 options(readr.show_progress = FALSE)
 
 prepare_networksize <- function(start_p = NULL, end_p = NULL) {
-  read.csv(paste(stats_dir, "networksize.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "networksize.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        relays = col_double(),
+        bridges = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE)
 }
@@ -416,8 +419,11 @@ plot_versions <- function(start_p, end_p, path_p) {
 }
 
 prepare_platforms <- function(start_p = NULL, end_p = NULL) {
-  read.csv(paste(stats_dir, "platforms.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "platforms.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        platform = col_factor(levels = NULL),
+        relays = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     mutate(platform = tolower(platform)) %>%
@@ -443,12 +449,19 @@ plot_platforms <- function(start_p, end_p, path_p) {
 }
 
 prepare_dirbytes <- function(start_p = NULL, end_p = NULL) {
-  read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "bandwidth.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        isexit = col_logical(),
+        isguard = col_logical(),
+        bwread = col_skip(),
+        bwwrite = col_skip(),
+        dirread = col_double(),
+        dirwrite = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(isexit == "") %>%
-    filter(isguard == "") %>%
+    filter(is.na(isexit)) %>%
+    filter(is.na(isguard)) %>%
     mutate(dirread = dirread * 8 / 1e9,
       dirwrite = dirwrite * 8 / 1e9) %>%
     select(date, dirread, dirwrite)
@@ -473,8 +486,11 @@ plot_dirbytes <- function(start_p, end_p, path_p) {
 }
 
 prepare_relayflags <- function(start_p = NULL, end_p = NULL, flag_p = NULL) {
-  read.csv(paste(stats_dir, "relayflags.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "relayflags.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        flag = col_factor(levels = NULL),
+        relays = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(flag_p)) flag %in% flag_p else TRUE)
@@ -483,7 +499,7 @@ prepare_relayflags <- function(start_p = NULL, end_p = NULL, flag_p = NULL) {
 plot_relayflags <- function(start_p, end_p, flag_p, path_p) {
   prepare_relayflags(start_p, end_p, flag_p) %>%
     complete(date = full_seq(date, period = 1), flag = unique(flag)) %>%
-    ggplot(aes(x = date, y = relays, colour = as.factor(flag))) +
+    ggplot(aes(x = date, y = relays, colour = flag)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -498,8 +514,18 @@ plot_relayflags <- function(start_p, end_p, flag_p, path_p) {
 
 prepare_torperf <- function(start_p = NULL, end_p = NULL, server_p = NULL,
     filesize_p = NULL) {
-  read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
-    colClasses = c("date" = "Date", "source" = "character")) %>%
+  read_csv(file = paste(stats_dir, "torperf-1.1.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        filesize = col_double(),
+        source = col_character(),
+        server = col_character(),
+        q1 = col_double(),
+        md = col_double(),
+        q3 = col_double(),
+        timeouts = col_skip(),
+        failures = col_skip(),
+        requests = col_skip())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(server_p)) server == server_p else TRUE) %>%
@@ -535,8 +561,18 @@ plot_torperf <- function(start_p, end_p, server_p, filesize_p, path_p) {
 
 prepare_torperf_failures <- function(start_p = NULL, end_p = NULL,
     server_p = NULL, filesize_p = NULL) {
-  read.csv(paste(stats_dir, "torperf-1.1.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "torperf-1.1.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        filesize = col_double(),
+        source = col_character(),
+        server = col_character(),
+        q1 = col_skip(),
+        md = col_skip(),
+        q3 = col_skip(),
+        timeouts = col_double(),
+        failures = col_double(),
+        requests = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(filesize_p))
@@ -573,8 +609,14 @@ plot_torperf_failures <- function(start_p, end_p, server_p, filesize_p,
 }
 
 prepare_onionperf_buildtimes <- function(start_p = NULL, end_p = NULL) {
-    read.csv(paste(stats_dir, "buildtimes.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "buildtimes.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        source = col_character(),
+        position = col_double(),
+        q1 = col_double(),
+        md = col_double(),
+        q3 = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE)
 }
@@ -604,8 +646,14 @@ plot_onionperf_buildtimes <- function(start_p, end_p, path_p) {
 
 prepare_onionperf_latencies <- function(start_p = NULL, end_p = NULL,
     server_p = NULL) {
-  read.csv(paste(stats_dir, "latencies.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "latencies.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        source = col_character(),
+        server = col_character(),
+        q1 = col_double(),
+        md = col_double(),
+        q3 = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(server_p)) server == server_p else TRUE)
@@ -631,8 +679,12 @@ plot_onionperf_latencies <- function(start_p, end_p, server_p, path_p) {
 }
 
 prepare_connbidirect <- function(start_p = NULL, end_p = NULL) {
-  read.csv(paste(stats_dir, "connbidirect2.csv", sep = ""),
-    colClasses = c("date" = "Date", "direction" = "factor")) %>%
+  read_csv(file = paste(stats_dir, "connbidirect2.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        direction = col_factor(),
+        quantile = col_double(),
+        fraction = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     mutate(quantile = paste("X", quantile, sep = ""),
@@ -665,19 +717,30 @@ plot_connbidirect <- function(start_p, end_p, path_p) {
 }
 
 prepare_bandwidth_flags <- function(start_p = NULL, end_p = NULL) {
-  advbw <- read.csv(paste(stats_dir, "advbw.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  advbw <- read_csv(file = paste(stats_dir, "advbw.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        isexit = col_logical(),
+        isguard = col_logical(),
+        advbw = col_double())) %>%
     transmute(date, have_guard_flag = isguard, have_exit_flag = isexit,
       variable = "advbw", value = advbw * 8 / 1e9)
-  bwhist <- read.csv(paste(stats_dir, "bandwidth.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  bwhist <- read_csv(file = paste(stats_dir, "bandwidth.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        isexit = col_logical(),
+        isguard = col_logical(),
+        bwread = col_double(),
+        bwwrite = col_double(),
+        dirread = col_double(),
+        dirwrite = col_double())) %>%
     transmute(date, have_guard_flag = isguard, have_exit_flag = isexit,
       variable = "bwhist", value = (bwread + bwwrite) * 8 / 2e9)
   rbind(advbw, bwhist) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(have_exit_flag != "") %>%
-    filter(have_guard_flag != "") %>%
+    filter(!is.na(have_exit_flag)) %>%
+    filter(!is.na(have_guard_flag)) %>%
     spread(variable, value)
 }
 
@@ -685,7 +748,8 @@ plot_bandwidth_flags <- function(start_p, end_p, path_p) {
   prepare_bandwidth_flags(start_p, end_p) %>%
     gather(variable, value, c(advbw, bwhist)) %>%
     unite(flags, have_guard_flag, have_exit_flag) %>%
-    mutate(flags = factor(flags, levels = c("f_t", "t_t", "t_f", "f_f"),
+    mutate(flags = factor(flags,
+      levels = c("FALSE_TRUE", "TRUE_TRUE", "TRUE_FALSE", "FALSE_FALSE"),
       labels = c("Exit only", "Guard and Exit", "Guard only",
       "Neither Guard nor Exit"))) %>%
     mutate(variable = ifelse(variable == "advbw",
@@ -968,14 +1032,19 @@ plot_userstats_bridge_combined <- function(start_p, end_p, country_p, path_p) {
 }
 
 prepare_advbwdist_perc <- function(start_p = NULL, end_p = NULL, p_p = NULL) {
-  read.csv(paste(stats_dir, "advbwdist.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "advbwdist.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        isexit = col_logical(),
+        relay = col_skip(),
+        percentile = col_integer(),
+        advbw = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(p_p)) percentile %in% as.numeric(p_p) else
       percentile != "") %>%
     transmute(date, percentile = as.factor(percentile),
-      variable = ifelse(isexit == "t", "exits", "all"),
+      variable = ifelse(is.na(isexit), "all", "exits"),
       advbw = advbw * 8 / 1e9) %>%
     spread(variable, advbw) %>%
     rename(p = percentile)
@@ -1000,14 +1069,19 @@ plot_advbwdist_perc <- function(start_p, end_p, p_p, path_p) {
 }
 
 prepare_advbwdist_relay <- function(start_p = NULL, end_p = NULL, n_p = NULL) {
-  read.csv(paste(stats_dir, "advbwdist.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "advbwdist.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        isexit = col_logical(),
+        relay = col_integer(),
+        percentile = col_skip(),
+        advbw = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(n_p)) relay %in% as.numeric(n_p) else
       relay != "") %>%
     transmute(date, relay = as.factor(relay),
-      variable = ifelse(isexit != "t", "all", "exits"),
+      variable = ifelse(is.na(isexit), "all", "exits"),
       advbw = advbw * 8 / 1e9) %>%
     spread(variable, advbw) %>%
     rename(n = relay)
@@ -1032,8 +1106,15 @@ plot_advbwdist_relay <- function(start_p, end_p, n_p, path_p) {
 }
 
 prepare_hidserv_dir_onions_seen <- function(start_p = NULL, end_p = NULL) {
-  read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "hidserv.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        type = col_factor(),
+        wmean = col_skip(),
+        wmedian = col_skip(),
+        wiqm = col_double(),
+        frac = col_double(),
+        stats = col_skip())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(type == "dir-onions-seen") %>%
@@ -1053,8 +1134,15 @@ plot_hidserv_dir_onions_seen <- function(start_p, end_p, path_p) {
 }
 
 prepare_hidserv_rend_relayed_cells <- function(start_p = NULL, end_p = NULL) {
-  read.csv(paste(stats_dir, "hidserv.csv", sep = ""),
-    colClasses = c("date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "hidserv.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        type = col_factor(),
+        wmean = col_skip(),
+        wmedian = col_skip(),
+        wiqm = col_double(),
+        frac = col_double(),
+        stats = col_skip())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(type == "rend-relayed-cells") %>%
@@ -1257,8 +1345,17 @@ plot_webstats_tm <- function(start_p, end_p, path_p) {
 }
 
 prepare_relays_ipv6 <- function(start_p = NULL, end_p = NULL) {
-  read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
-    colClasses = c("valid_after_date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "ipv6servers.csv", sep = ""),
+      col_types = cols(
+        valid_after_date = col_date(format = ""),
+        server = col_factor(),
+        guard_relay = col_skip(),
+        exit_relay = col_skip(),
+        announced_ipv6 = col_logical(),
+        exiting_ipv6_relay = col_logical(),
+        reachable_ipv6_relay = col_logical(),
+        server_count_sum_avg = col_double(),
+        advertised_bandwidth_bytes_sum_avg = col_skip())) %>%
     filter(if (!is.null(start_p))
         valid_after_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p))
@@ -1266,9 +1363,9 @@ prepare_relays_ipv6 <- function(start_p = NULL, end_p = NULL) {
     filter(server == "relay") %>%
     group_by(valid_after_date) %>%
     summarize(total = sum(server_count_sum_avg),
-      announced = sum(server_count_sum_avg[announced_ipv6 == "t"]),
-      reachable = sum(server_count_sum_avg[reachable_ipv6_relay == "t"]),
-      exiting = sum(server_count_sum_avg[exiting_ipv6_relay == "t"])) %>%
+      announced = sum(server_count_sum_avg[announced_ipv6]),
+      reachable = sum(server_count_sum_avg[reachable_ipv6_relay]),
+      exiting = sum(server_count_sum_avg[exiting_ipv6_relay])) %>%
     complete(valid_after_date = full_seq(valid_after_date, period = 1)) %>%
     gather(total, announced, reachable, exiting, key = "category",
       value = "count") %>%
@@ -1295,8 +1392,17 @@ plot_relays_ipv6 <- function(start_p, end_p, path_p) {
 }
 
 prepare_bridges_ipv6 <- function(start_p = NULL, end_p = NULL) {
-  read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
-    colClasses = c("valid_after_date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "ipv6servers.csv", sep = ""),
+      col_types = cols(
+        valid_after_date = col_date(format = ""),
+        server = col_factor(),
+        guard_relay = col_skip(),
+        exit_relay = col_skip(),
+        announced_ipv6 = col_logical(),
+        exiting_ipv6_relay = col_skip(),
+        reachable_ipv6_relay = col_skip(),
+        server_count_sum_avg = col_double(),
+        advertised_bandwidth_bytes_sum_avg = col_skip())) %>%
     filter(if (!is.null(start_p))
         valid_after_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p))
@@ -1304,7 +1410,7 @@ prepare_bridges_ipv6 <- function(start_p = NULL, end_p = NULL) {
     filter(server == "bridge") %>%
     group_by(valid_after_date) %>%
     summarize(total = sum(server_count_sum_avg),
-      announced = sum(server_count_sum_avg[announced_ipv6 == "t"])) %>%
+      announced = sum(server_count_sum_avg[announced_ipv6])) %>%
     complete(valid_after_date = full_seq(valid_after_date, period = 1)) %>%
     rename(date = valid_after_date)
 }
@@ -1327,8 +1433,17 @@ plot_bridges_ipv6 <- function(start_p, end_p, path_p) {
 }
 
 prepare_advbw_ipv6 <- function(start_p = NULL, end_p = NULL) {
-  read.csv(paste(stats_dir, "ipv6servers.csv", sep = ""),
-    colClasses = c("valid_after_date" = "Date")) %>%
+  read_csv(file = paste(stats_dir, "ipv6servers.csv", sep = ""),
+      col_types = cols(
+        valid_after_date = col_date(format = ""),
+        server = col_factor(),
+        guard_relay = col_logical(),
+        exit_relay = col_logical(),
+        announced_ipv6 = col_logical(),
+        exiting_ipv6_relay = col_logical(),
+        reachable_ipv6_relay = col_logical(),
+        server_count_sum_avg = col_skip(),
+        advertised_bandwidth_bytes_sum_avg = col_double())) %>%
     filter(if (!is.null(start_p))
         valid_after_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p))
@@ -1338,14 +1453,14 @@ prepare_advbw_ipv6 <- function(start_p = NULL, end_p = NULL) {
         advertised_bandwidth_bytes_sum_avg * 8 / 1e9) %>%
     group_by(valid_after_date) %>%
     summarize(total = sum(advertised_bandwidth_bytes_sum_avg),
-      total_guard = sum(advertised_bandwidth_bytes_sum_avg[guard_relay != "f"]),
-      total_exit = sum(advertised_bandwidth_bytes_sum_avg[exit_relay != "f"]),
+      total_guard = sum(advertised_bandwidth_bytes_sum_avg[guard_relay]),
+      total_exit = sum(advertised_bandwidth_bytes_sum_avg[exit_relay]),
       reachable_guard = sum(advertised_bandwidth_bytes_sum_avg[
-        reachable_ipv6_relay != "f" & guard_relay != "f"]),
+        reachable_ipv6_relay & guard_relay]),
       reachable_exit = sum(advertised_bandwidth_bytes_sum_avg[
-        reachable_ipv6_relay != "f" & exit_relay != "f"]),
+        reachable_ipv6_relay & exit_relay]),
       exiting = sum(advertised_bandwidth_bytes_sum_avg[
-        exiting_ipv6_relay != "f"])) %>%
+        exiting_ipv6_relay])) %>%
     complete(valid_after_date = full_seq(valid_after_date, period = 1)) %>%
     rename(date = valid_after_date)
 }
@@ -1372,8 +1487,13 @@ plot_advbw_ipv6 <- function(start_p, end_p, path_p) {
 }
 
 prepare_totalcw <- function(start_p = NULL, end_p = NULL) {
-  read.csv(paste(stats_dir, "totalcw.csv", sep = ""),
-    colClasses = c("valid_after_date" = "Date", "nickname" = "character")) %>%
+  read_csv(file = paste(stats_dir, "totalcw.csv", sep = ""),
+      col_types = cols(
+        valid_after_date = col_date(format = ""),
+        nickname = col_character(),
+        have_guard_flag = col_logical(),
+        have_exit_flag = col_logical(),
+        measured_sum_avg = col_double())) %>%
     filter(if (!is.null(start_p))
         valid_after_date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p))
