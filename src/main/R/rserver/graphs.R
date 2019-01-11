@@ -682,7 +682,7 @@ prepare_connbidirect <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "connbidirect2.csv", sep = ""),
       col_types = cols(
         date = col_date(format = ""),
-        direction = col_factor(),
+        direction = col_factor(levels = NULL),
         quantile = col_double(),
         fraction = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
@@ -1109,7 +1109,7 @@ prepare_hidserv_dir_onions_seen <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "hidserv.csv", sep = ""),
       col_types = cols(
         date = col_date(format = ""),
-        type = col_factor(),
+        type = col_factor(levels = NULL),
         wmean = col_skip(),
         wmedian = col_skip(),
         wiqm = col_double(),
@@ -1137,7 +1137,7 @@ prepare_hidserv_rend_relayed_cells <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "hidserv.csv", sep = ""),
       col_types = cols(
         date = col_date(format = ""),
-        type = col_factor(),
+        type = col_factor(levels = NULL),
         wmean = col_skip(),
         wmedian = col_skip(),
         wiqm = col_double(),
@@ -1167,7 +1167,7 @@ prepare_webstats_tb <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
       col_types = cols(
         log_date = col_date(format = ""),
-        request_type = col_factor(),
+        request_type = col_factor(levels = NULL),
         platform = col_skip(),
         channel = col_skip(),
         locale = col_skip(),
@@ -1210,8 +1210,8 @@ prepare_webstats_tb_platform <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
       col_types = cols(
         log_date = col_date(format = ""),
-        request_type = col_factor(),
-        platform = col_factor(),
+        request_type = col_factor(levels = NULL),
+        platform = col_factor(levels = NULL),
         channel = col_skip(),
         locale = col_skip(),
         incremental = col_skip(),
@@ -1253,10 +1253,10 @@ prepare_webstats_tb_locale <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
       col_types = cols(
         log_date = col_date(format = ""),
-        request_type = col_factor(),
+        request_type = col_factor(levels = NULL),
         platform = col_skip(),
         channel = col_skip(),
-        locale = col_factor(),
+        locale = col_factor(levels = NULL),
         incremental = col_skip(),
         count = col_double())) %>%
     filter(if (!is.null(start_p)) log_date >= as.Date(start_p) else TRUE) %>%
@@ -1308,7 +1308,7 @@ prepare_webstats_tm <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
       col_types = cols(
         log_date = col_date(format = ""),
-        request_type = col_factor(),
+        request_type = col_factor(levels = NULL),
         platform = col_skip(),
         channel = col_skip(),
         locale = col_skip(),
@@ -1348,7 +1348,7 @@ prepare_relays_ipv6 <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "ipv6servers.csv", sep = ""),
       col_types = cols(
         valid_after_date = col_date(format = ""),
-        server = col_factor(),
+        server = col_factor(levels = NULL),
         guard_relay = col_skip(),
         exit_relay = col_skip(),
         announced_ipv6 = col_logical(),
@@ -1395,7 +1395,7 @@ prepare_bridges_ipv6 <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "ipv6servers.csv", sep = ""),
       col_types = cols(
         valid_after_date = col_date(format = ""),
-        server = col_factor(),
+        server = col_factor(levels = NULL),
         guard_relay = col_skip(),
         exit_relay = col_skip(),
         announced_ipv6 = col_logical(),
@@ -1436,7 +1436,7 @@ prepare_advbw_ipv6 <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "ipv6servers.csv", sep = ""),
       col_types = cols(
         valid_after_date = col_date(format = ""),
-        server = col_factor(),
+        server = col_factor(levels = NULL),
         guard_relay = col_logical(),
         exit_relay = col_logical(),
         announced_ipv6 = col_logical(),
