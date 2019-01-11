@@ -405,7 +405,9 @@ plot_versions <- function(start_p, end_p, path_p) {
     stringsAsFactors = FALSE)
   versions <- s[s$version %in% known_versions, ]
   visible_versions <- sort(unique(versions$version))
-  ggplot(versions, aes(x = date, y = relays, colour = version)) +
+  versions <- versions %>%
+    complete(date = full_seq(date, period = 1), nesting(version)) %>%
+    ggplot(aes(x = date, y = relays, colour = version)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -433,6 +435,7 @@ prepare_platforms <- function(start_p = NULL, end_p = NULL) {
 plot_platforms <- function(start_p, end_p, path_p) {
   prepare_platforms(start_p, end_p) %>%
     gather(platform, relays, -date) %>%
+    complete(date = full_seq(date, period = 1), nesting(platform)) %>%
     ggplot(aes(x = date, y = relays, colour = platform)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
@@ -470,6 +473,7 @@ prepare_dirbytes <- function(start_p = NULL, end_p = NULL) {
 plot_dirbytes <- function(start_p, end_p, path_p) {
   prepare_dirbytes(start_p, end_p) %>%
     gather(variable, value, -date) %>%
+    complete(date = full_seq(date, period = 1), nesting(variable)) %>%
     ggplot(aes(x = date, y = value, colour = variable)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
@@ -695,10 +699,10 @@ prepare_connbidirect <- function(start_p = NULL, end_p = NULL) {
 
 plot_connbidirect <- function(start_p, end_p, path_p) {
   prepare_connbidirect(start_p, end_p) %>%
-    ggplot(aes(x = date, y = md, colour = direction)) +
-    geom_line(size = 0.75) +
-    geom_ribbon(aes(x = date, ymin = q1, ymax = q3,
-                fill = direction), alpha = 0.5, show.legend = FALSE) +
+    complete(date = full_seq(date, period = 1), nesting(direction)) %>%
+    ggplot(aes(x = date, y = md, ymin = q1, ymax = q3, fill = direction)) +
+    geom_ribbon(alpha = 0.5) +
+    geom_line(aes(colour = direction), size = 0.75) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = percent, limits = c(0, NA)) +
@@ -1013,11 +1017,12 @@ plot_userstats_bridge_combined <- function(start_p, end_p, country_p, path_p) {
     a <- aggregate(list(mid = (u$high + u$low) / 2),
                    by = list(transport = u$transport), FUN = sum)
     a <- a[order(a$mid, decreasing = TRUE)[1:top], ]
-    u <- u[u$transport %in% a$transport, ]
+    u <- u[u$transport %in% a$transport, ] %>%
+      complete(date = full_seq(date, period = 1), nesting(country, transport))
     title <- paste("Bridge users by transport from ",
                    countryname(country_p), sep = "")
     ggplot(u, aes(x = as.Date(date), ymin = low, ymax = high,
-                colour = transport, fill = transport)) +
+      fill = transport)) +
     geom_ribbon(alpha = 0.5, size = 0.5) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
@@ -1055,6 +1060,7 @@ plot_advbwdist_perc <- function(start_p, end_p, p_p, path_p) {
     gather(variable, advbw, -c(date, p)) %>%
     mutate(variable = ifelse(variable == "all", "All relays",
       "Exits only")) %>%
+    complete(date = full_seq(date, period = 1), nesting(p, variable)) %>%
     ggplot(aes(x = date, y = advbw, colour = p)) +
     facet_grid(variable ~ .) +
     geom_line() +
@@ -1092,6 +1098,7 @@ plot_advbwdist_relay <- function(start_p, end_p, n_p, path_p) {
     gather(variable, advbw, -c(date, n)) %>%
     mutate(variable = ifelse(variable == "all", "All relays",
       "Exits only")) %>%
+    complete(date = full_seq(date, period = 1), nesting(n, variable)) %>%
     ggplot(aes(x = date, y = advbw, colour = n)) +
     facet_grid(variable ~ .) +
     geom_line() +
@@ -1123,6 +1130,7 @@ prepare_hidserv_dir_onions_seen <- function(start_p = NULL, end_p = NULL) {
 
 plot_hidserv_dir_onions_seen <- function(start_p, end_p, path_p) {
   prepare_hidserv_dir_onions_seen(start_p, end_p) %>%
+    complete(date = full_seq(date, period = 1)) %>%
     ggplot(aes(x = date, y = onions)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
@@ -1152,6 +1160,7 @@ prepare_hidserv_rend_relayed_cells <- function(start_p = NULL, end_p = NULL) {
 
 plot_hidserv_rend_relayed_cells <- function(start_p, end_p, path_p) {
   prepare_hidserv_rend_relayed_cells(start_p, end_p) %>%
+    complete(date = full_seq(date, period = 1)) %>%
     ggplot(aes(x = date, y = relayed)) +
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
@@ -1192,6 +1201,8 @@ plot_webstats_tb <- function(start_p, end_p, path_p) {
         "update_requests"),
       labels = c("Initial downloads", "Signature downloads", "Update pings",
         "Update requests"))) %>%
+    ungroup() %>%
+    complete(date = full_seq(date, period = 1), nesting(request_type)) %>%
     ggplot(aes(x = date, y = count)) +
     geom_point() +
     geom_line() +
@@ -1231,6 +1242,9 @@ plot_webstats_tb_platform <- function(start_p, end_p, path_p) {
     mutate(request_type = factor(request_type,
       levels = c("initial_downloads", "update_pings"),
       labels = c("Initial downloads", "Update pings"))) %>%
+    ungroup() %>%
+    complete(date = full_seq(date, period = 1),
+      nesting(platform, request_type)) %>%
     ggplot(aes(x = date, y = count, colour = platform)) +
     geom_point() +
     geom_line() +
@@ -1299,6 +1313,7 @@ plot_webstats_tb_locale <- function(start_p, end_p, path_p) {
     theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
           strip.background = element_rect(fill = NA),
           legend.position = "top") +
+    guides(col = guide_legend(nrow = 1)) +
     ggtitle("Tor Browser downloads and updates by locale") +
     labs(caption = copyright_notice)
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
@@ -1320,7 +1335,7 @@ prepare_webstats_tm <- function(start_p = NULL, end_p = NULL) {
     group_by(log_date, request_type) %>%
     summarize(count = sum(count)) %>%
     mutate(request_type = factor(request_type, levels = c("tmid", "tmup"))) %>%
-    spread(request_type, count, drop = FALSE) %>%
+    spread(request_type, count, drop = FALSE, fill = 0) %>%
     rename(date = log_date, initial_downloads = tmid, update_pings = tmup)
 }
 
@@ -1330,6 +1345,8 @@ plot_webstats_tm <- function(start_p, end_p, path_p) {
     mutate(request_type = factor(request_type,
       levels = c("initial_downloads", "update_pings"),
       labels = c("Initial downloads", "Update pings"))) %>%
+    ungroup() %>%
+    complete(date = full_seq(date, period = 1), nesting(request_type)) %>%
     ggplot(aes(x = date, y = count)) +
     geom_point() +
     geom_line() +
@@ -1366,15 +1383,12 @@ prepare_relays_ipv6 <- function(start_p = NULL, end_p = NULL) {
       announced = sum(server_count_sum_avg[announced_ipv6]),
       reachable = sum(server_count_sum_avg[reachable_ipv6_relay]),
       exiting = sum(server_count_sum_avg[exiting_ipv6_relay])) %>%
-    complete(valid_after_date = full_seq(valid_after_date, period = 1)) %>%
-    gather(total, announced, reachable, exiting, key = "category",
-      value = "count") %>%
-    rename(date = valid_after_date) %>%
-    spread(category, count)
+    rename(date = valid_after_date)
 }
 
 plot_relays_ipv6 <- function(start_p, end_p, path_p) {
   prepare_relays_ipv6(start_p, end_p) %>%
+    complete(date = full_seq(date, period = 1)) %>%
     gather(category, count, -date) %>%
     ggplot(aes(x = date, y = count, colour = category)) +
     geom_line() +
@@ -1411,12 +1425,12 @@ prepare_bridges_ipv6 <- function(start_p = NULL, end_p = NULL) {
     group_by(valid_after_date) %>%
     summarize(total = sum(server_count_sum_avg),
       announced = sum(server_count_sum_avg[announced_ipv6])) %>%
-    complete(valid_after_date = full_seq(valid_after_date, period = 1)) %>%
     rename(date = valid_after_date)
 }
 
 plot_bridges_ipv6 <- function(start_p, end_p, path_p) {
   prepare_bridges_ipv6(start_p, end_p) %>%
+    complete(date = full_seq(date, period = 1)) %>%
     gather(category, count, -date) %>%
     ggplot(aes(x = date, y = count, colour = category)) +
     geom_line() +
@@ -1461,12 +1475,12 @@ prepare_advbw_ipv6 <- function(start_p = NULL, end_p = NULL) {
         reachable_ipv6_relay & exit_relay]),
       exiting = sum(advertised_bandwidth_bytes_sum_avg[
         exiting_ipv6_relay])) %>%
-    complete(valid_after_date = full_seq(valid_after_date, period = 1)) %>%
     rename(date = valid_after_date)
 }
 
 plot_advbw_ipv6 <- function(start_p, end_p, path_p) {
   prepare_advbw_ipv6(start_p, end_p) %>%
+    complete(date = full_seq(date, period = 1)) %>%
     gather(category, advbw, -date) %>%
     ggplot(aes(x = date, y = advbw, colour = category)) +
     geom_line() +
@@ -1506,9 +1520,10 @@ prepare_totalcw <- function(start_p = NULL, end_p = NULL) {
 
 plot_totalcw <- function(start_p, end_p, path_p) {
   prepare_totalcw(start_p, end_p) %>%
-    mutate(nickname = ifelse(nickname == "", "consensus", nickname)) %>%
+    mutate(nickname = ifelse(is.na(nickname), "consensus", nickname)) %>%
     mutate(nickname = factor(nickname,
       levels = c("consensus", unique(nickname[nickname != "consensus"])))) %>%
+    ungroup() %>%
     complete(date = full_seq(date, period = 1), nesting(nickname)) %>%
     ggplot(aes(x = date, y = totalcw, colour = nickname)) +
     geom_line(na.rm = TRUE) +
