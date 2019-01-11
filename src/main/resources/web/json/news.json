@@ -3468,6 +3468,19 @@
     "target" : "https://media.ccc.de/v/35c3-9964-cat_mouse_evading_the_censors_in_2018#t=1670"
   } ]
 }, {
+  "start" : "2019-01-07",
+  "end" : "2018-01-08",
+  "places" : [ "ga" ],
+  "short_description" : "Internet shutdown in Gabon following a coup attempt.",
+  "description" : "Internet shutdown in Gabon following a coup attempt.",
+  "links" : [ {
+    "label" : "OONI report",
+    "target" : "https://ooni.torproject.org/post/gabon-internet-disruption/"
+  }, {
+    "label" : "NetBlocks report",
+    "target" : "https://netblocks.org/reports/evidence-of-gabon-full-internet-shutdown-coup-attempt-dQ8oo18n"
+  } ]
+}, {
   "start" : "2016-02-24",
   "places" : [ "tm" ],
   "protocols" : [ "<OR>" ],
