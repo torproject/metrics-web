@@ -68,7 +68,7 @@ FROM (
 SELECT DATE(start) AS date,
   filesize,
   source,
-  CASE WHEN endpointremote LIKE '%.onion%' THEN 'onion'
+  CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
     ELSE 'public' END AS server,
   CASE WHEN COUNT(*) > 0 THEN
     PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY datacomplete)
@@ -85,7 +85,7 @@ UNION
 SELECT DATE(start) AS date,
   filesize,
   '' AS source,
-  CASE WHEN endpointremote LIKE '%.onion%' THEN 'onion'
+  CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
     ELSE 'public' END AS server,
   CASE WHEN COUNT(*) > 0 THEN
     PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY datacomplete)
@@ -137,7 +137,7 @@ SELECT date,
 FROM (
 SELECT DATE(start) AS date,
   source,
-  CASE WHEN endpointremote LIKE '%.onion%' THEN 'onion'
+  CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
     ELSE 'public' END AS server,
   PERCENTILE_CONT(ARRAY[0.25,0.5,0.75])
   WITHIN GROUP(ORDER BY dataresponse - datarequest) AS q
@@ -149,7 +149,7 @@ GROUP BY date, source, server
 UNION
 SELECT DATE(start) AS date,
   '' AS source,
-  CASE WHEN endpointremote LIKE '%.onion%' THEN 'onion'
+  CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
     ELSE 'public' END AS server,
   PERCENTILE_CONT(ARRAY[0.25,0.5,0.75])
   WITHIN GROUP(ORDER BY dataresponse - datarequest) AS q
