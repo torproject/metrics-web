@@ -92,6 +92,11 @@
   <td><a href="/collector/archive/relay-descriptors/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
+  <td><a href="#type-detached-signature-3">Detached Signatures</a></td>
+  <td><code>@type detached-signature-3 1.0</code></td>
+  <td></td>
+</tr>
+<tr>
   <td><a href="#type-network-status-microdesc-consensus-3">Microdescriptor Consensuses</a></td>
   <td><code>@type network-status-microdesc-consensus-3 1.0</code></td>
   <td><a href="/collector/recent/relay-descriptors/microdescs/consensus-microdesc/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
@@ -102,6 +107,11 @@
   <td><code>@type microdescriptor 1.0</code></td>
   <td><a href="/collector/recent/relay-descriptors/microdescs/micro/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/relay-descriptors/microdescs/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+</tr>
+<tr>
+  <td><a href="#type-network-status-entry-3">Network Status Entries</a></td>
+  <td><code>@type network-status-entry-3 1.0</code></td>
+  <td></td>
 </tr>
 <tr>
   <td><a href="#type-network-status-2">Version 2 Network Statuses</a></td>
@@ -176,6 +186,14 @@
   <td></td>
   <td><a href="/collector/recent/webstats/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/webstats/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+</tr>
+<tr class="tableHeadline">
+  <td colspan="3"><b><a href="#bandwidth-files">Bandwidth Files</a></b></td>
+</tr>
+<tr>
+  <td><a href="#type-bandwidth-file">Bandwidth Files</a></td>
+  <td><code>@type bandwidth-file 1.2</code></td>
+  <td></td>
 </tr>
 </tbody>
 </table>
@@ -298,6 +316,17 @@ These key certificates change once every few months, so they are only
 available in a single descriptor archive tarball.
 </p>
 
+<h3 id="type-detached-signature-3" class="hover">Detached Signatures
+<small><code>@type detached-signature-3 1.0</code></small>
+<a href="#type-detached-signature-3" class="anchor">#</a>
+</h3>
+
+<p>
+Detached signature as per section 3.10 of the dir-spec, and downloadable for
+DistSeconds every consensus freshness period (usually five minutes each hour)
+via the <code>/tor/status-vote/next/consensus-signatures</code> resource.
+</p>
+
 <h3 id="type-network-status-microdesc-consensus-3" class="hover">Microdescriptor Consensuses
 <small><code>@type network-status-microdesc-consensus-3 1.0</code></small>
 <a href="/collector/recent/relay-descriptors/microdescs/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
@@ -333,6 +362,17 @@ The microdescriptors in descriptor archive tarballs
 contain one descriptor per file, whereas the recently published files
 contain all descriptors collected in an hour concatenated into a single
 file.
+</p>
+
+<h3 id="type-network-status-entry-3" class="hover">Network Status Entries
+<small><code>@type network-status-entry-3 1.0</code></small>
+<a href="#type-network-status-entry-3" class="anchor">#</a>
+</h3>
+
+<p>
+Individual router status entry from an unflavored v3 network status document.
+These are available from Tor's control port <code>GETINFO ns/*</code> commands
+and NS events.
 </p>
 
 <h3 id="type-network-status-2" class="hover">Version 2 Network Statuses
@@ -729,6 +769,24 @@ any privacy-sensitive parts.
 <p>
 The data format and sanitizing steps for Tor web server logs are specified in
 detail on a separate <a href="web-server-logs.html">page</a>.
+</p>
+
+
+<br>
+<h2 id="bandwidth-files" class="hover">Bandwidth Files
+<a href="#bandwidth-files" class="anchor">#</a>
+</h2>
+
+<h3 id="type-bandwidth-file" class="hover">Bandwidth Files
+<small><code>@type bandwidth-file 1.2</code></small>
+<a href="#type-bandwidth-file" class="anchor">#</a>
+</h3>
+
+<p>
+Bandwidth authority metrics as defined in the <a href="https://gitweb.torproject.org/torspec.git/tree/bandwidth-file-spec.txt">bandwidth-file-spec</a>.
+These are available from a DirPort's
+<code>/tor/status-vote/next/bandwidth</code> url and CollecTor (both are
+<a href="https://trac.torproject.org/projects/tor/ticket/21377">pending</a>).
 </p>
 
 
