@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Arrays;
 
@@ -24,11 +23,14 @@ public class Main {
 
   private static Logger log = LoggerFactory.getLogger(Main.class);
 
-  private static String[][] paths =  {
-    {"recent", "relay-descriptors", "consensuses"},
-    {"archive", "relay-descriptors", "consensuses"},
-    {"recent", "relay-descriptors", "votes"},
-    {"archive", "relay-descriptors", "votes"}};
+  private static final File baseDir = new File(
+      org.torproject.metrics.stats.main.Main.modulesDir, "totalcw");
+
+  private static String[] paths =  {
+      "recent/relay-descriptors/consensuses",
+      "archive/relay-descriptors/consensuses",
+      "recent/relay-descriptors/votes",
+      "archive/relay-descriptors/votes" };
 
   /** Run the module. */
   public static void main(String[] args) throws Exception {
@@ -38,15 +40,15 @@ public class Main {
     log.info("Reading consensuses and votes and inserting relevant parts into "
         + "the database.");
     DescriptorReader reader = DescriptorSourceFactory.createDescriptorReader();
-    File historyFile = new File(Configuration.history);
+    File historyFile = new File(baseDir, "status/read-descriptors");
     reader.setHistoryFile(historyFile);
     Parser parser = new Parser();
-    try (Database database = new Database(Configuration.database)) {
+    try (Database database = new Database()) {
       try {
         for (Descriptor descriptor : reader.readDescriptors(
-            Arrays.stream(paths).map((String[] path)
-                -> Paths.get(Configuration.descriptors, path).toFile())
-            .toArray(File[]::new))) {
+            Arrays.stream(paths).map((String path) -> new File(
+                org.torproject.metrics.stats.main.Main.descriptorsDir, path))
+                .toArray(File[]::new))) {
           if (descriptor instanceof RelayNetworkStatusConsensus) {
             database.insertConsensus(parser.parseRelayNetworkStatusConsensus(
                 (RelayNetworkStatusConsensus) descriptor));
@@ -71,9 +73,10 @@ public class Main {
 
       log.info("Querying aggregated statistics from the database.");
       Iterable<OutputLine> output = database.queryTotalcw();
-      log.info("Writing aggregated statistics to {}.", Configuration.output);
+      File outputFile = new File(baseDir, "stats/totalcw.csv");
+      log.info("Writing aggregated statistics to {}.", outputFile);
       if (null != output) {
-        new Writer().write(Paths.get(Configuration.output), output);
+        new Writer().write(outputFile.toPath(), output);
       }
 
       log.info("Terminating totalcw module.");

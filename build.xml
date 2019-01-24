@@ -18,18 +18,14 @@
   <property name="name" value="metrics-web"/>
 
   <property name="project-main-class"
-            value="org.torproject.TBD" />
+            value="org.torproject.metrics.stats.main.Main" />
+  <property name="jarincludes" value="logback.xml" />
   <property name="additional2sign" value="${warfile}" />
   <property name="tardepends" value="war" />
 
   <property name="Rsources" value="${basedir}/src/main/R" />
 
   <property name="specdir" value="${basedir}/generated/spec" />
-
-  <!-- Deployment base folder.
-       Be aware that this is also set in R scripts and web.xml, currently! -->
-  <property name="metrics-web.deployment.base"
-            value="/srv/metrics.torproject.org/metrics" />
 
   <!-- The coverage needs to be improved! -->
   <target name="coverage-check">
@@ -301,85 +297,6 @@
     <delete file="${specdir}/${specfile}.tmp2" quiet="true" />
   </target>
 
-  <!-- This can be adapted to point at the actual work directory. -->
-  <property name="prepare.deployment"
-            value="/srv/metrics.torproject.org/metrics/work" />
-
-  <!-- Don't alter the following. -->
-  <property name="modulebase" value="${prepare.deployment}/modules" />
-
-  <!-- Operational tasks. -->
-  <target name="run-web-prepare" depends="init" >
-    <mkdir dir="${prepare.deployment}/modules" />
-    <antcall target="collectdescs" />
-    <antcall target="connbidirect" />
-    <antcall target="onionperf" />
-    <antcall target="bwhist" />
-    <antcall target="advbwdist" />
-    <antcall target="hidserv" />
-    <antcall target="clients" />
-    <antcall target="servers" />
-    <antcall target="webstats" />
-    <antcall target="totalcw" />
-    <antcall target="make-data-available" />
-  </target>
-
-  <target name="collectdescs" >
-    <property name="module.name" value="collectdescs" />
-    <antcall target="run-java" />
-  </target>
-
-  <target name="connbidirect" >
-    <property name="module.name" value="connbidirect" />
-    <antcall target="run-java" />
-  </target>
-
-  <target name="onionperf" >
-    <property name="module.name" value="onionperf" />
-    <antcall target="run-java" />
-  </target>
-
-  <target name="bwhist" >
-    <property name="module.name" value="bwhist" />
-    <antcall target="run-java" />
-  </target>
-
-  <target name="advbwdist">
-    <property name="module.name" value="advbwdist" />
-    <antcall target="run-java" />
-  </target>
-
-  <target name="hidserv" >
-    <property name="module.name" value="hidserv" />
-    <antcall target="run-java" />
-  </target>
-
-  <target name="clients" >
-    <property name="module.name" value="clients" />
-    <antcall target="run-java" />
-  </target>
-
-  <target name="servers" >
-    <property name="module.name" value="servers" />
-    <antcall target="run-java" >
-      <param name="module.main"
-             value="org.torproject.metrics.stats.servers.Main" />
-    </antcall>
-  </target>
-
-  <target name="webstats" >
-    <property name="module.name" value="webstats" />
-    <antcall target="run-java" />
-  </target>
-
-  <target name="totalcw" >
-    <property name="module.name" value="totalcw" />
-    <antcall target="run-java" >
-      <param name="module.main"
-             value="org.torproject.metrics.stats.totalcw.Main" />
-    </antcall>
-  </target>
-
   <!--
       The run-rserver target documents a working option of
       configuring an R server for running metrics-web.
@@ -399,55 +316,6 @@
       <arg value="--RS-conf" />
       <arg value="${Rsources}/Rserv.conf" />
     </exec>
-  </target>
-
-  <target name="make-data-available" >
-    <property name="statsdir" value="${metrics-web.deployment.base}/shared/stats/" />
-    <mkdir dir="${statsdir}" />
-    <property name="rdatadir" value="${metrics-web.deployment.base}/shared/RData" />
-    <mkdir dir="${rdatadir}" />
-    <copy todir="${statsdir}" >
-      <fileset dir="${modulebase}/onionperf/stats" includes="*.csv" />
-      <fileset dir="${modulebase}/connbidirect/stats" includes="connbidirect2.csv" />
-      <fileset dir="${modulebase}/advbwdist/stats" includes="advbwdist.csv" />
-      <fileset dir="${modulebase}/bwhist/stats" includes="*.csv" />
-      <fileset dir="${modulebase}/hidserv/stats" includes="hidserv.csv" />
-      <fileset dir="${modulebase}/clients/stats"
-               includes="clients*.csv userstats-combined.csv" />
-      <fileset dir="${modulebase}/servers/stats" includes="*.csv" />
-      <fileset dir="${modulebase}/webstats/stats" includes="webstats.csv" />
-      <fileset dir="${modulebase}/totalcw/stats" includes="totalcw.csv" />
-    </copy>
-    <copy todir="${rdatadir}" >
-      <fileset dir="${resources}/web/images/" includes="no-data-available.*" />
-    </copy>
-  </target>
-
-  <!-- Support tasks for operation -->
-  <target name="run-java">
-    <echo message="Running java module ${module.name} ... " />
-    <available file="${dist}/${jarfile}" property="have.jar"/>
-    <fail unless="have.jar" message="Please run 'ant jar' first."/>
-    <condition property="mainclass"
-               value="${module.main}"
-               else="org.torproject.metrics.stats.${module.name}.Main" >
-      <isset property="module.main"/>
-    </condition>
-    <property name="workingdir" value="${modulebase}/${module.name}" />
-    <mkdir dir="${workingdir}" />
-    <java dir="${workingdir}"
-          fork="true"
-          maxmemory="4g"
-          classname="${mainclass}">
-      <classpath>
-        <pathelement location="${dist}/${jarfile}"/>
-        <pathelement location="${resources}"/>
-      </classpath>
-      <jvmarg value="-DLOGBASE=../logs"/>
-      <jvmarg value="-Duser.language=us" />
-      <jvmarg value="-Duser.region=US" />
-    </java>
-    <echo message="Java module ${module.name} finished. " />
   </target>
 
   <!-- The following line adds the common targets and properties

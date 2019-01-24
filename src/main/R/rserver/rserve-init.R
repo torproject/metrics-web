@@ -333,7 +333,7 @@ copyright_notice <- "The Tor Project - https://metrics.torproject.org/"
 
 stats_dir <- "/srv/metrics.torproject.org/metrics/shared/stats/"
 
-rdata_dir <- "/srv/metrics.torproject.org/metrics/shared/RData/"
+no_data_available_dir <- "/srv/metrics.torproject.org/metrics/src/main/R/rserver/"
 
 # Helper function that copies the appropriate no data object to filename.
 copy_no_data <- function(filename) {
@@ -342,8 +342,8 @@ copy_no_data <- function(filename) {
   if (".csv" == extension) {
     write("# No data available for the given parameters.", file=filename)
   } else {
-    file.copy(paste(rdata_dir, "no-data-available", extension, sep = ""),
-      filename)
+    file.copy(paste(no_data_available_dir, "no-data-available", extension,
+      sep = ""), filename)
   }
 }
 

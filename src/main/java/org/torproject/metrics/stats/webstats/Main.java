@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -48,6 +47,11 @@ public class Main {
   /** Logger for this class. */
   private static Logger log = LoggerFactory.getLogger(Main.class);
 
+  private static final String jdbcString = String.format(
+      "jdbc:postgresql://localhost/webstats?user=%s&password=%s",
+      System.getProperty("metrics.dbuser", "metrics"),
+      System.getProperty("metrics.dbpass", "password"));
+
   private static final String LOG_DATE = "log_date";
 
   private static final String REQUEST_TYPE = "request_type";
@@ -66,22 +70,27 @@ public class Main {
       + PLATFORM + "," + CHANNEL + "," + LOCALE + "," + INCREMENTAL + ","
       + COUNT;
 
+  private static final File baseDir = new File(
+      org.torproject.metrics.stats.main.Main.modulesDir, "webstats");
+
   /** Executes this data-processing module. */
   public static void main(String[] args) throws Exception {
     log.info("Starting webstats module.");
-    String dbUrlString = "jdbc:postgresql:webstats";
-    Connection connection = connectToDatabase(dbUrlString);
+    Connection connection = connectToDatabase();
     SortedSet<String> skipFiles = queryImportedFileNames(connection);
     importLogFiles(connection, skipFiles,
-        new File("../../shared/in/recent/webstats"),
-        new File("../../shared/in/archive/webstats"));
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "recent/webstats"),
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "archive/webstats"));
     SortedSet<String> statistics = queryWebstats(connection);
-    writeStatistics(Paths.get("stats", "webstats.csv"), statistics);
+    writeStatistics(new File(baseDir, "stats/webstats.csv").toPath(),
+        statistics);
     disconnectFromDatabase(connection);
     log.info("Terminated webstats module.");
   }
 
-  private static Connection connectToDatabase(String jdbcString)
+  private static Connection connectToDatabase()
       throws SQLException {
     log.info("Connecting to database.");
     Connection connection = DriverManager.getConnection(jdbcString);

@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -37,23 +36,30 @@ public class Main {
   /** Logger for this class. */
   private static Logger log = LoggerFactory.getLogger(Main.class);
 
+  private static final String jdbcString = String.format(
+      "jdbc:postgresql://localhost/onionperf?user=%s&password=%s",
+      System.getProperty("metrics.dbuser", "metrics"),
+      System.getProperty("metrics.dbpass", "password"));
+
+  private static final File baseDir = new File(
+      org.torproject.metrics.stats.main.Main.modulesDir, "onionperf");
+
   /** Executes this data-processing module. */
   public static void main(String[] args) throws Exception {
     log.info("Starting onionperf module.");
-    String dbUrlString = "jdbc:postgresql:onionperf";
-    Connection connection = connectToDatabase(dbUrlString);
+    Connection connection = connectToDatabase();
     importOnionPerfFiles(connection);
-    writeStatistics(Paths.get("stats", "torperf-1.1.csv"),
+    writeStatistics(new File(baseDir, "stats/torperf-1.1.csv").toPath(),
         queryOnionPerf(connection));
-    writeStatistics(Paths.get("stats", "buildtimes.csv"),
+    writeStatistics(new File(baseDir, "stats/buildtimes.csv").toPath(),
         queryBuildTimes(connection));
-    writeStatistics(Paths.get("stats", "latencies.csv"),
+    writeStatistics(new File(baseDir, "stats/latencies.csv").toPath(),
         queryLatencies(connection));
     disconnectFromDatabase(connection);
     log.info("Terminated onionperf module.");
   }
 
-  private static Connection connectToDatabase(String jdbcString)
+  private static Connection connectToDatabase()
       throws SQLException {
     log.info("Connecting to database.");
     Connection connection = DriverManager.getConnection(jdbcString);
@@ -91,8 +97,10 @@ public class Main {
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     DescriptorReader dr = DescriptorSourceFactory.createDescriptorReader();
     for (Descriptor d : dr.readDescriptors(
-        new File("../../shared/in/archive/torperf"),
-        new File("../../shared/in/recent/torperf"))) {
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "archive/torperf"),
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "recent/torperf"))) {
       if (!(d instanceof TorperfResult)) {
         continue;
       }

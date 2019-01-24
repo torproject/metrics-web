@@ -29,7 +29,10 @@ import java.util.TimeZone;
 class Database implements AutoCloseable {
 
   /** Database connection string. */
-  private String jdbcString;
+  private static final String jdbcString = String.format(
+      "jdbc:postgresql://localhost/ipv6servers?user=%s&password=%s",
+      System.getProperty("metrics.dbuser", "metrics"),
+      System.getProperty("metrics.dbpass", "password"));
 
   /** Connection object for all interactions with the database. */
   private Connection connection;
@@ -87,15 +90,14 @@ class Database implements AutoCloseable {
 
   /** Create a new Database instance and prepare for inserting or querying
    * data. */
-  Database(String jdbcString) throws SQLException {
-    this.jdbcString = jdbcString;
+  Database() throws SQLException {
     this.connect();
     this.prepareStatements();
     this.initializeCaches();
   }
 
   private void connect() throws SQLException {
-    this.connection = DriverManager.getConnection(this.jdbcString);
+    this.connection = DriverManager.getConnection(jdbcString);
     this.connection.setAutoCommit(false);
   }
 

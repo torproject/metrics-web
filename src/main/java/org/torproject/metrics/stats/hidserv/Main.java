@@ -16,6 +16,9 @@ public class Main {
 
   private static Logger log = LoggerFactory.getLogger(Main.class);
 
+  private static final File baseDir = new File(
+      org.torproject.metrics.stats.main.Main.modulesDir, "hidserv");
+
   /** Parses new descriptors, extrapolate contained statistics using
    * computed network fractions, aggregate results, and writes results to
    * disk. */
@@ -23,9 +26,11 @@ public class Main {
 
     /* Initialize directories and file paths. */
     File[] inDirectories = new File[] {
-        new File("../../shared/in/recent/relay-descriptors/consensuses"),
-        new File("../../shared/in/recent/relay-descriptors/extra-infos") };
-    File statusDirectory = new File("status");
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "recent/relay-descriptors/consensuses"),
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "recent/relay-descriptors/extra-infos") };
+    File statusDirectory = new File(baseDir, "status");
 
     /* Initialize parser and read parse history to avoid parsing
      * descriptor files that haven't changed since the last execution. */
@@ -71,7 +76,8 @@ public class Main {
      * other statistics.  Write the result to a .csv file that can be
      * processed by other tools. */
     log.info("Aggregating statistics...");
-    File hidservStatsExtrapolatedCsvFile = new File("stats/hidserv.csv");
+    File hidservStatsExtrapolatedCsvFile = new File(baseDir,
+        "stats/hidserv.csv");
     Aggregator aggregator = new Aggregator(statusDirectory,
         extrapolatedHidServStatsStore, hidservStatsExtrapolatedCsvFile);
     aggregator.aggregateHidServStats();

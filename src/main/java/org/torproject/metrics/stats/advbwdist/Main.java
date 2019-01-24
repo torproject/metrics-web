@@ -32,6 +32,9 @@ import java.util.TreeMap;
 
 public class Main {
 
+  private static final File baseDir = new File(
+      org.torproject.metrics.stats.main.Main.modulesDir, "advbwdist");
+
   /** Executes this data-processing module. */
   public static void main(String[] args) throws IOException {
 
@@ -41,7 +44,8 @@ public class Main {
     DescriptorReader descriptorReader =
         DescriptorSourceFactory.createDescriptorReader();
     for (Descriptor descriptor : descriptorReader.readDescriptors(new File(
-        "../../shared/in/recent/relay-descriptors/server-descriptors"))) {
+        org.torproject.metrics.stats.main.Main.descriptorsDir,
+        "recent/relay-descriptors/server-descriptors"))) {
       if (!(descriptor instanceof ServerDescriptor)) {
         continue;
       }
@@ -56,9 +60,9 @@ public class Main {
 
     /* Parse consensuses, keeping a parse history. */
     descriptorReader = DescriptorSourceFactory.createDescriptorReader();
-    File historyFile = new File("status/parsed-consensuses");
+    File historyFile = new File(baseDir, "status/parsed-consensuses");
     descriptorReader.setHistoryFile(historyFile);
-    File resultsFile = new File("stats/advbwdist-validafter.csv");
+    File resultsFile = new File(baseDir, "stats/advbwdist-validafter.csv");
     resultsFile.getParentFile().mkdirs();
     boolean writeHeader = !resultsFile.exists();
     BufferedWriter bw = new BufferedWriter(new FileWriter(resultsFile,
@@ -70,7 +74,8 @@ public class Main {
         "yyyy-MM-dd HH:mm:ss");
     dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     for (Descriptor descriptor : descriptorReader.readDescriptors(new File(
-        "../../shared/in/recent/relay-descriptors/consensuses"))) {
+        org.torproject.metrics.stats.main.Main.descriptorsDir,
+        "recent/relay-descriptors/consensuses"))) {
       if (!(descriptor instanceof RelayNetworkStatusConsensus)) {
         continue;
       }
@@ -165,7 +170,7 @@ public class Main {
         preAggregatedValues.get(keyWithoutTime).add(value);
       }
     }
-    File aggregateResultsFile = new File("stats/advbwdist.csv");
+    File aggregateResultsFile = new File(baseDir, "stats/advbwdist.csv");
     aggregateResultsFile.getParentFile().mkdirs();
     try (BufferedWriter bw2 = new BufferedWriter(
         new FileWriter(aggregateResultsFile))) {

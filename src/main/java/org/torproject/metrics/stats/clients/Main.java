@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.SortedMap;
@@ -26,10 +25,10 @@ public class Main {
 
   private static Logger log = LoggerFactory.getLogger(Main.class);
 
-  private static final String jdbcString
-      = System.getProperty("clients.database", "jdbc:postgresql:userstats");
-
   private static Database database;
+
+  static final File baseDir = new File(
+      org.torproject.metrics.stats.main.Main.modulesDir, "clients");
 
   /** Executes this data-processing module. */
   public static void main(String[] args) throws Exception {
@@ -37,7 +36,7 @@ public class Main {
     log.info("Starting clients module.");
 
     log.info("Connecting to database.");
-    database = new Database(jdbcString);
+    database = new Database();
 
     log.info("Reading relay descriptors and importing relevant parts into the "
         + "database.");
@@ -52,10 +51,10 @@ public class Main {
     database.commit();
 
     log.info("Querying aggregated statistics from the database.");
-    new Writer().write(Paths.get("stats", "userstats.csv"),
+    new Writer().write(new File(baseDir, "stats/userstats.csv").toPath(),
         database.queryEstimated());
-    new Writer().write(Paths.get("stats", "userstats-combined.csv"),
-        database.queryCombined());
+    new Writer().write(new File(baseDir, "stats/userstats-combined.csv")
+        .toPath(), database.queryCombined());
 
     log.info("Disconnecting from database.");
     database.close();
@@ -75,13 +74,17 @@ public class Main {
   private static void parseRelayDescriptors() throws Exception {
     DescriptorReader descriptorReader =
         DescriptorSourceFactory.createDescriptorReader();
-    File historyFile = new File("status/relay-descriptors");
+    File historyFile = new File(baseDir, "status/relay-descriptors");
     descriptorReader.setHistoryFile(historyFile);
     for (Descriptor descriptor : descriptorReader.readDescriptors(
-        new File("../../shared/in/recent/relay-descriptors/consensuses"),
-        new File("../../shared/in/recent/relay-descriptors/extra-infos"),
-        new File("../../shared/in/archive/relay-descriptors/consensuses"),
-        new File("../../shared/in/archive/relay-descriptors/extra-infos"))) {
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "recent/relay-descriptors/consensuses"),
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "recent/relay-descriptors/extra-infos"),
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "archive/relay-descriptors/consensuses"),
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "archive/relay-descriptors/extra-infos"))) {
       if (descriptor instanceof ExtraInfoDescriptor) {
         parseRelayExtraInfoDescriptor((ExtraInfoDescriptor) descriptor);
       } else if (descriptor instanceof RelayNetworkStatusConsensus) {
@@ -209,11 +212,13 @@ public class Main {
   private static void parseBridgeDescriptors() throws Exception {
     DescriptorReader descriptorReader =
         DescriptorSourceFactory.createDescriptorReader();
-    File historyFile = new File("status/bridge-descriptors");
+    File historyFile = new File(baseDir, "status/bridge-descriptors");
     descriptorReader.setHistoryFile(historyFile);
     for (Descriptor descriptor : descriptorReader.readDescriptors(
-        new File("../../shared/in/recent/bridge-descriptors"),
-        new File("../../shared/in/archive/bridge-descriptors"))) {
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "recent/bridge-descriptors"),
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "archive/bridge-descriptors"))) {
       if (descriptor instanceof ExtraInfoDescriptor) {
         parseBridgeExtraInfoDescriptor(
             (ExtraInfoDescriptor) descriptor);

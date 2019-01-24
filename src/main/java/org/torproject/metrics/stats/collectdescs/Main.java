@@ -10,6 +10,9 @@ import java.io.File;
 
 public class Main {
 
+  private static final File baseDir = new File(
+      org.torproject.metrics.stats.main.Main.modulesDir, "collectdescs");
+
   /** Executes this data-processing module. */
   public static void main(String[] args) {
     /* Fetch recent descriptors from CollecTor. */
@@ -27,7 +30,7 @@ public class Main {
             "/recent/relay-descriptors/votes/",
             "/recent/torperf/",
             "/recent/webstats/"
-        }, 0L, new File("../../shared/in"), true);
+        }, 0L, org.torproject.metrics.stats.main.Main.descriptorsDir, true);
   }
 }
 

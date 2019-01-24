@@ -53,7 +53,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -70,10 +69,12 @@ import java.util.stream.Collectors;
 public class Detector {
 
   /** Input file. */
-  private static final Path INPUT_PATH = Paths.get("stats", "userstats.csv");
+  private static final Path INPUT_PATH = new File(Main.baseDir,
+      "stats/userstats.csv").toPath();
 
   /** Output file. */
-  private static final Path OUTPUT_PATH = Paths.get("stats", "clients.csv");
+  private static final Path OUTPUT_PATH = new File(Main.baseDir,
+      "stats/clients.csv").toPath();
 
   /** Number of largest locations to be included in the detection algorithm. */
   private static final int NUM_LARGEST_LOCATIONS = 50;

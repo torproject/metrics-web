@@ -129,13 +129,18 @@ public class Main {
 
   static final long ONE_DAY_IN_MILLIS = 86400000L;
 
+  private static final File baseDir = new File(
+      org.torproject.metrics.stats.main.Main.modulesDir, "connbidirect");
+
   /** Executes this data-processing module. */
   public static void main(String[] args) throws IOException {
-    File parseHistoryFile = new File("stats/parse-history");
-    File aggregateStatsFile = new File("stats/connbidirect2.csv");
+    File parseHistoryFile = new File(baseDir, "stats/parse-history");
+    File aggregateStatsFile = new File(baseDir, "stats/connbidirect2.csv");
     File[] descriptorsDirectories = new File[] {
-        new File("../../shared/in/archive/relay-descriptors/extra-infos"),
-        new File("../../shared/in/recent/relay-descriptors/extra-infos")};
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "archive/relay-descriptors/extra-infos"),
+        new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
+            "recent/relay-descriptors/extra-infos")};
     SortedMap<String, Long> parseHistory = parseParseHistory(
         readStringFromFile(parseHistoryFile));
     if (parseHistory == null) {
@@ -160,7 +165,7 @@ public class Main {
           + "leave out those descriptors in future runs.");
       return;
     }
-    File rawStatsFile = new File("stats/raw-stats");
+    File rawStatsFile = new File(baseDir, "stats/raw-stats");
     SortedSet<RawStat> rawStats = parseRawStats(
         readStringFromFile(rawStatsFile));
     if (rawStats == null) {
