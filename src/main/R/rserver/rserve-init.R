@@ -1029,7 +1029,7 @@ plot_userstats_bridge_combined <- function(start_p, end_p, country_p, path_p) {
     title <- paste("Bridge users by transport from ",
                    countryname(country_p), sep = "")
     ggplot(u, aes(x = as.Date(date), ymin = low, ymax = high,
-      fill = transport)) +
+      fill = transport, colour = transport)) +
     geom_ribbon(alpha = 0.5, size = 0.5) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
