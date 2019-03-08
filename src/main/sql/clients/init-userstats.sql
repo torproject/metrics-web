@@ -761,5 +761,5 @@ CREATE OR REPLACE VIEW combined AS SELECT
   AND a.date < current_date - 1
 
   -- Order results.
-  ORDER BY date DESC;
+  ORDER BY date, node, country, LOWER(transport);
 
