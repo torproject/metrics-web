@@ -122,6 +122,24 @@ CREATE TABLE updates (
     date DATE
 );
 
+-- Return an array as the result of merging two arrays: if an array index is
+-- only contained in one array, that array element is included in the result;
+-- if an array index is contained in both arrays, the greater of the two
+-- elements is included.
+CREATE OR REPLACE FUNCTION array_merge(first BIGINT[], second BIGINT[])
+RETURNS BIGINT[] AS $$
+DECLARE
+  merged BIGINT[];
+BEGIN
+  FOR i IN LEAST(array_lower(first, 1), array_lower(second, 1))..
+      GREATEST(array_upper(first, 1), array_upper(second, 1)) LOOP
+    merged[i] := GREATEST(first[i], second[i]);
+  END LOOP;
+RETURN merged;
+END;
+$$ LANGUAGE plpgsql
+STABLE RETURNS NULL ON NULL INPUT;
+
 CREATE OR REPLACE FUNCTION array_sum (BIGINT[]) RETURNS BIGINT AS $$
   SELECT SUM($1[i])::bigint
   FROM generate_series(array_lower($1, 1), array_upper($1, 1)) index(i);
@@ -143,25 +161,10 @@ CREATE OR REPLACE FUNCTION insert_bwhist(
   ELSE
     BEGIN
     UPDATE bwhist
-    SET read[array_lower(insert_read, 1):
-          array_upper(insert_read, 1)] = insert_read,
-        written[array_lower(insert_written, 1):
-          array_upper(insert_written, 1)] = insert_written,
-        dirread[array_lower(insert_dirread, 1):
-          array_upper(insert_dirread, 1)] = insert_dirread,
-        dirwritten[array_lower(insert_dirwritten, 1):
-          array_upper(insert_dirwritten, 1)] = insert_dirwritten
-    WHERE fingerprint = insert_fingerprint AND date = insert_date;
-    -- Updating twice is an ugly workaround for PostgreSQL bug 5840
-    UPDATE bwhist
-    SET read[array_lower(insert_read, 1):
-          array_upper(insert_read, 1)] = insert_read,
-        written[array_lower(insert_written, 1):
-          array_upper(insert_written, 1)] = insert_written,
-        dirread[array_lower(insert_dirread, 1):
-          array_upper(insert_dirread, 1)] = insert_dirread,
-        dirwritten[array_lower(insert_dirwritten, 1):
-          array_upper(insert_dirwritten, 1)] = insert_dirwritten
+    SET read = array_merge(read, insert_read),
+        written = array_merge(written, insert_written),
+        dirread = array_merge(dirread, insert_dirread),
+        dirwritten = array_merge(dirwritten, insert_dirwritten)
     WHERE fingerprint = insert_fingerprint AND date = insert_date;
     END;
   END IF;
