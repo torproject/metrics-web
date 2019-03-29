@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS measurements (
   used_by INTEGER,
   endpointlocal CHARACTER VARYING(64),
   endpointproxy CHARACTER VARYING(64),
-  endpointremote CHARACTER VARYING(64),
+  endpointremote CHARACTER VARYING(96),
   hostnamelocal CHARACTER VARYING(64),
   hostnameremote CHARACTER VARYING(64),
   sourceaddress CHARACTER VARYING(64),
@@ -80,6 +80,7 @@ SELECT DATE(start) AS date,
   COUNT(*) AS requests
 FROM measurements
 WHERE DATE(start) < current_date - 1
+AND endpointremote NOT SIMILAR TO '_{56}.onion%'
 GROUP BY date, filesize, source, server
 UNION
 SELECT DATE(start) AS date,
@@ -97,6 +98,7 @@ SELECT DATE(start) AS date,
   COUNT(*) AS requests
 FROM measurements
 WHERE DATE(start) < current_date - 1
+AND endpointremote NOT SIMILAR TO '_{56}.onion%'
 GROUP BY date, filesize, 3, server) sub
 ORDER BY date, filesize, source, server;
 
@@ -145,6 +147,7 @@ FROM measurements
 WHERE DATE(start) < current_date - 1
 AND datarequest > 0
 AND dataresponse > 0
+AND endpointremote NOT SIMILAR TO '_{56}.onion%'
 GROUP BY date, source, server
 UNION
 SELECT DATE(start) AS date,
@@ -157,6 +160,7 @@ FROM measurements
 WHERE DATE(start) < current_date - 1
 AND datarequest > 0
 AND dataresponse > 0
+AND endpointremote NOT SIMILAR TO '_{56}.onion%'
 GROUP BY date, 2, server) sub
 ORDER BY date, source, server;
 
