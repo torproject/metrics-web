@@ -192,8 +192,9 @@
 </tr>
 <tr>
   <td><a href="#type-bandwidth-file">Bandwidth Files</a></td>
-  <td><code>@type bandwidth-file 1.2</code></td>
-  <td></td>
+  <td><code>@type bandwidth-file 1.0</code></td>
+  <td><a href="/collector/recent/relay-descriptors/bandwidths/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="/collector/archive/relay-descriptors/bandwidths/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 </tbody>
 </table>
@@ -778,15 +779,16 @@ detail on a separate <a href="web-server-logs.html">page</a>.
 </h2>
 
 <h3 id="type-bandwidth-file" class="hover">Bandwidth Files
-<small><code>@type bandwidth-file 1.2</code></small>
+<small><code>@type bandwidth-file 1.0</code></small>
+<a href="/collector/recent/relay-descriptors/bandwidths/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="/collector/archive/relay-descriptors/bandwidths/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-bandwidth-file" class="anchor">#</a>
 </h3>
 
 <p>
 Bandwidth authority metrics as defined in the <a href="https://gitweb.torproject.org/torspec.git/tree/bandwidth-file-spec.txt">bandwidth-file-spec</a>.
 These are available from a DirPort's
-<code>/tor/status-vote/next/bandwidth</code> url and CollecTor (both are
-<a href="https://trac.torproject.org/projects/tor/ticket/21377">pending</a>).
+<code>/tor/status-vote/next/bandwidth</code> url and CollecTor.
 </p>
 
 
