@@ -650,7 +650,8 @@ We then compute the 25th, 50th, and 75th percentile of download times by sorting
 <p>We're also interested in circuit round-trip latencies for the <a href="/onionperf-latencies.html">Circuit round-trip latencies</a> graph.
 We measure circuit latency as the time between sending the HTTP request and receiving the HTTP response header.
 We calculate latencies as <code>DATARESPONSE - DATAREQUEST</code> for measurements with non-zero values for both timestamps.
-We then compute 25th, 50th, and 75th percentiles in the same way as for download times above.</p>
+We then compute 25th, 50th, and 75th percentiles in the same way as for download times above.
+We also compute the lowest latency within 1.5 IQR of the lower quartile and the highest latency within 1.5 IQR of the upper quartile.</p>
 
 <p>Ideally, all measurements would succeed.
 But it's also possible that some measurements did not complete within a pre-defined timeout or failed for some other reason.

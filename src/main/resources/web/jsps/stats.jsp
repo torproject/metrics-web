@@ -563,9 +563,11 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
 <li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
 <li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
+<li><b>low:</b> Lowest latency within 1.5 IQR of lower quartile (lower whisker in a boxplot) of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
 <li><b>q1:</b> First quartile of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
 <li><b>md:</b> Median of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
 <li><b>q3:</b> Third quartile of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
+<li><b>high:</b> Highest latency within 1.5 IQR of upper quartile (upper whisker in a boxplot) of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
 </ul>
 
 </div>

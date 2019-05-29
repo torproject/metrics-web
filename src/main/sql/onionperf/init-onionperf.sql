@@ -130,37 +130,37 @@ GROUP BY date, 2, position) sub
 ORDER BY date, source, position;
 
 CREATE OR REPLACE VIEW latencies_stats AS
+WITH filtered_measurements AS (
+  SELECT DATE(start) AS date,
+    source,
+    CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
+      ELSE 'public' END AS server,
+    dataresponse - datarequest AS latency
+  FROM measurements
+  WHERE DATE(start) < current_date - 1
+  AND datarequest > 0
+  AND dataresponse > 0
+  AND endpointremote NOT SIMILAR TO '_{56}.onion%'
+), quartiles AS (
+  SELECT date,
+    source,
+    server,
+    PERCENTILE_CONT(ARRAY[0.25,0.5,0.75])
+      WITHIN GROUP(ORDER BY latency) AS q
+  FROM filtered_measurements
+  GROUP BY date, source, server
+)
 SELECT date,
   source,
   server,
-  TRUNC(q[1]) AS q1,
-  TRUNC(q[2]) AS md,
-  TRUNC(q[3]) AS q3
-FROM (
-SELECT DATE(start) AS date,
-  source,
-  CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
-    ELSE 'public' END AS server,
-  PERCENTILE_CONT(ARRAY[0.25,0.5,0.75])
-  WITHIN GROUP(ORDER BY dataresponse - datarequest) AS q
-FROM measurements
-WHERE DATE(start) < current_date - 1
-AND datarequest > 0
-AND dataresponse > 0
-AND endpointremote NOT SIMILAR TO '_{56}.onion%'
-GROUP BY date, source, server
-UNION
-SELECT DATE(start) AS date,
-  '' AS source,
-  CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
-    ELSE 'public' END AS server,
-  PERCENTILE_CONT(ARRAY[0.25,0.5,0.75])
-  WITHIN GROUP(ORDER BY dataresponse - datarequest) AS q
-FROM measurements
-WHERE DATE(start) < current_date - 1
-AND datarequest > 0
-AND dataresponse > 0
-AND endpointremote NOT SIMILAR TO '_{56}.onion%'
-GROUP BY date, 2, server) sub
+  MIN(CASE WHEN latency >= q[1] - ((q[3] - q[1]) * 1.5)
+    THEN latency ELSE NULL END) AS low,
+  TRUNC(AVG(q[1])) AS q1,
+  TRUNC(AVG(q[2])) AS md,
+  TRUNC(AVG(q[3])) AS q3,
+  MAX(CASE WHEN latency <= q[3] + ((q[3] - q[1]) * 1.5)
+    THEN latency ELSE NULL END) AS high
+FROM filtered_measurements NATURAL JOIN quartiles
+GROUP BY 1, 2, 3
 ORDER BY date, source, server;
 
