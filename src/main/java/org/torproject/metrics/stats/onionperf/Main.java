@@ -55,6 +55,9 @@ public class Main {
         queryBuildTimes(connection));
     writeStatistics(new File(baseDir, "stats/latencies.csv").toPath(),
         queryLatencies(connection));
+    writeStatistics(
+        new File(baseDir, "stats/onionperf-throughput.csv").toPath(),
+        queryThroughput(connection));
     disconnectFromDatabase(connection);
     log.info("Terminated onionperf module.");
   }
@@ -302,6 +305,33 @@ public class Main {
     Statement st = connection.createStatement();
     String queryString = "SELECT date, source, server, low, q1, md, q3, high "
         + "FROM latencies_stats";
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    try (ResultSet rs = st.executeQuery(queryString)) {
+      while (rs.next()) {
+        statistics.add(String.format("%s,%s,%s,%d,%d,%d,%d,%d",
+            dateFormat.format(rs.getDate("date", calendar)),
+            getStringFromResultSet(rs, "source"),
+            rs.getString("server"),
+            rs.getInt("low"),
+            rs.getInt("q1"),
+            rs.getInt("md"),
+            rs.getInt("q3"),
+            rs.getInt("high")));
+      }
+    }
+    return statistics;
+  }
+
+  static List<String> queryThroughput(Connection connection)
+      throws SQLException {
+    log.info("Querying throughput statistics from database.");
+    List<String> statistics = new ArrayList<>();
+    statistics.add("date,source,server,low,q1,md,q3,high");
+    Statement st = connection.createStatement();
+    String queryString = "SELECT date, source, server, low, q1, md, q3, high "
+        + "FROM throughput_stats";
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));

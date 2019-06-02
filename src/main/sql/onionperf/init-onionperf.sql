@@ -164,3 +164,48 @@ FROM filtered_measurements NATURAL JOIN quartiles
 GROUP BY 1, 2, 3
 ORDER BY date, source, server;
 
+-- Explanation of the number 4194304 below for computing kbps: From the FILESIZE
+-- and DATAPERC* fields we can compute the number of milliseconds that have
+-- elapsed between receiving bytes 524,288 and 1,048,576, which is a total
+-- amount of 524,288 bytes or 4,194,304 bits. If we divide that value by
+-- 4,194,304 we obtain the number of milliseconds that have elapsed for
+-- downloading 1 bit, which happens to be the same value as the number of
+-- seconds for downloading 1 kilobit. We want the reciprocal of that value which
+-- has the unit kilobits per second.
+CREATE OR REPLACE VIEW throughput_stats AS
+WITH filtered_measurements AS (
+  SELECT DATE(start) AS date,
+    source,
+    CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
+      ELSE 'public' END AS server,
+    CASE WHEN filesize = 1048576 AND dataperc100 > dataperc50
+      THEN 4194304 / (dataperc100 - dataperc50)
+      WHEN filesize = 5242880 AND dataperc20 > dataperc10
+      THEN 4194304 / (dataperc20 - dataperc10)
+      ELSE NULL END AS kbps
+  FROM measurements
+  WHERE DATE(start) < current_date - 1
+  AND endpointremote NOT SIMILAR TO '_{56}.onion%'
+), quartiles AS (
+  SELECT date,
+    source,
+    server,
+    PERCENTILE_CONT(ARRAY[0.25,0.5,0.75])
+      WITHIN GROUP(ORDER BY kbps) AS q
+  FROM filtered_measurements
+  GROUP BY date, source, server
+)
+SELECT date,
+  source,
+  server,
+  MIN(CASE WHEN kbps >= q[1] - ((q[3] - q[1]) * 1.5)
+    THEN kbps ELSE NULL END) AS low,
+  TRUNC(AVG(q[1])) AS q1,
+  TRUNC(AVG(q[2])) AS md,
+  TRUNC(AVG(q[3])) AS q3,
+  MAX(CASE WHEN kbps <= q[3] + ((q[3] - q[1]) * 1.5)
+    THEN kbps ELSE NULL END) AS high
+FROM filtered_measurements NATURAL JOIN quartiles
+GROUP BY date, source, server
+ORDER BY date, source, server;
+

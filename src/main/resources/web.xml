@@ -43,6 +43,7 @@
     <url-pattern>/torperf-failures.html</url-pattern>
     <url-pattern>/onionperf-buildtimes.html</url-pattern>
     <url-pattern>/onionperf-latencies.html</url-pattern>
+    <url-pattern>/onionperf-throughput.html</url-pattern>
     <url-pattern>/connbidirect.html</url-pattern>
     <url-pattern>/hidserv-dir-onions-seen.html</url-pattern>
     <url-pattern>/hidserv-rend-relayed-cells.html</url-pattern>
@@ -135,6 +136,9 @@
     <url-pattern>/onionperf-latencies.png</url-pattern>
     <url-pattern>/onionperf-latencies.pdf</url-pattern>
     <url-pattern>/onionperf-latencies.csv</url-pattern>
+    <url-pattern>/onionperf-throughput.png</url-pattern>
+    <url-pattern>/onionperf-throughput.pdf</url-pattern>
+    <url-pattern>/onionperf-throughput.csv</url-pattern>
     <url-pattern>/connbidirect.png</url-pattern>
     <url-pattern>/connbidirect.pdf</url-pattern>
     <url-pattern>/connbidirect.csv</url-pattern>

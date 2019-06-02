@@ -570,6 +570,32 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <li><b>high:</b> Highest latency within 1.5 IQR of upper quartile (upper whisker in a boxplot) of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
 </ul>
 
+<h3>Throughput
+<a href="/onionperf-throughput.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/onionperf-throughput.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="#onionperf-throughput" name="onionperf-throughput" class="anchor">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to a version 2 onion server.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
+<li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
+<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
+<li><b>low:</b> Lowest measured throughput within 1.5 IQR of lower quartile (lower whisker in a boxplot) in kilobits per second.</li>
+<li><b>q1:</b> First quartile of measured throughput in kilobits per second.</li>
+<li><b>md:</b> Median of measured throughput in kilobits per second.</li>
+<li><b>q3:</b> Third quartile of measured throughput in kilobits per second.</li>
+<li><b>high:</b> Highest measured throughput within 1.5 IQR of upper quartile (upper whisker in a boxplot) in kilobits per second.</li>
+</ul>
+
 </div>
 
 <div class="container">

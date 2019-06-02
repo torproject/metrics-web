@@ -697,6 +697,46 @@ plot_onionperf_latencies <- function(start_p, end_p, server_p, path_p) {
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
 }
 
+prepare_onionperf_throughput <- function(start_p = NULL, end_p = NULL,
+    server_p = NULL) {
+  read_csv(file = paste(stats_dir, "onionperf-throughput.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        source = col_character(),
+        server = col_character(),
+        low = col_double(),
+        q1 = col_double(),
+        md = col_double(),
+        q3 = col_double(),
+        high = col_double())) %>%
+    filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
+    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
+    filter(if (!is.null(server_p)) server == server_p else TRUE)
+}
+
+plot_onionperf_throughput <- function(start_p, end_p, server_p, path_p) {
+  prepare_onionperf_throughput(start_p, end_p, server_p) %>%
+    complete(date = full_seq(date, period = 1), nesting(source)) %>%
+    ggplot(aes(x = date, ymin = q1 / 1000, ymax = q3 / 1000, fill = source)) +
+    geom_ribbon(alpha = 0.5) +
+    geom_line(aes(y = md / 1000, colour = source), size = 0.75) +
+    geom_line(aes(y = high / 1000, colour = source), size = 0.375) +
+    geom_line(aes(y = low / 1000, colour = source), size = 0.375) +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "Mbps"),
+      limits = c(0, NA)) +
+    scale_fill_hue(name = "Source") +
+    scale_colour_hue(name = "Source") +
+    facet_grid(source ~ ., scales = "free", space = "free") +
+    ggtitle(paste("Throughput when downloading from", server_p, "server")) +
+    labs(caption = copyright_notice) +
+    theme(legend.position = "none",
+          strip.text.y = element_text(angle = 0, hjust = 0),
+          strip.background = element_rect(fill = NA))
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
 prepare_connbidirect <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "connbidirect2.csv", sep = ""),
       col_types = cols(

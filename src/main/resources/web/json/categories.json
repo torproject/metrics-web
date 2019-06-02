@@ -62,7 +62,8 @@
       "torperf",
       "torperf-failures",
       "onionperf-buildtimes",
-      "onionperf-latencies"
+      "onionperf-latencies",
+      "onionperf-throughput"
     ]
   },
   {

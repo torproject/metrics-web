@@ -619,6 +619,7 @@ Here we explain how we evaluate Torperf/OnionPerf measurement to obtain the same
 <li>Timeouts and failures of downloading files over Tor <a href="/torperf-failures.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 <li>Circuit build times <a href="/onionperf-buildtimes.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 <li>Circuit round-trip latencies <a href="/onionperf-latencies.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
+<li>Throughput <a href="/onionperf-throughput.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
 </ul>
 
 <h4>Step 1: Parse OnionPerf and/or Torperf measurement results</h4>
@@ -636,16 +637,22 @@ Here we explain how we evaluate Torperf/OnionPerf measurement to obtain the same
 <li><code>DATACOMPLETE</code>: Download end time that is only set if the request succeeded.</li>
 <li><code>READBYTES</code>: Total number of bytes read, which indicates whether this request succeeded (if &ge; <code>FILESIZE</code>) or failed.</li>
 <li><code>DIDTIMEOUT</code>: 1 if the request timed out, 0 otherwise.</li>
+<li><code>DATAPERCx</code>: Time when x% of expected bytes were read for x = { 10, 20, 50, 100 }.</li>
 <li><code>BUILDTIMES</code>: Comma-separated list of times when circuit hops were built, which includes all circuits used for making measurement requests, successful or not.</li>
 <li><code>ENDPOINTREMOTE</code>: Hostname, IP address, and port that was used to connect to the remote server; we use this to distinguish a request to a public server (if <code>ENDPOINTREMOTE</code> is not present or does not contain <code>".onion"</code> as substring) or to an onion server.</li>
 </ul>
 
 <h4>Step 2: Aggregate measurement results</h4>
 
-<p>Each of the measurement results parsed in the previous steps constitutes a single measurement.
+<p>Each of the measurement results parsed in the previous step constitutes a single measurement.
 We're first interested in statistics on download times for the <a href="/torperf.html">Time to download files over Tor</a> graph.
 Therefore we consider only measurements with <code>DATACOMPLETE &gt; START</code>, for which we calculate the download time as: <code>DATACOMPLETE - START</code>.
 We then compute the 25th, 50th, and 75th percentile of download times by sorting download times, determining the percentile rank, and using linear interpolation between adjacent ranks.</p>
+
+<p>Next we're interested in the average throughput of measurements for the <a href="/onionperf-throughput.html">Throughput</a> graph.
+We calculate throughput from the time between receiving 0.5 and 1 MiB of a response, which obviously excludes any measurements with responses smaller than 1 MiB.
+From <code>DATAPERC50</code> and <code>DATAPERC100</code> (if <code>FILESIZE = 1048576</code>) or <code>DATAPERC10</code> and <code>DATAPERC20</code> (if <code>FILESIZE = 5242880</code>) we can compute the number of milliseconds that have elapsed between receiving bytes 524,288 and 1,048,576, which is a total of 524,288 bytes or 4,194,304 bits.
+We divide the value 4,194,304 by this time difference to obtain throughput in bits per millisecond which happens to be the same value as the number of kilobits per second.</p>
 
 <p>We're also interested in circuit round-trip latencies for the <a href="/onionperf-latencies.html">Circuit round-trip latencies</a> graph.
 We measure circuit latency as the time between sending the HTTP request and receiving the HTTP response header.

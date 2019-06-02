@@ -309,6 +309,18 @@
     ]
   },
   {
+    "id": "onionperf-throughput",
+    "title": "Throughput",
+    "type": "Graph",
+    "description": "<p>This graph shows throughput when downloading static files of different sizes over Tor, either from a server on the public internet or from a version 2 onion server. Throughput is calculated from the time between receiving 0.5 and 1 MiB of the response. The graph shows the median of measurements as thick line, the range of measurements from first to third quartile as ribbon, and the highest and lowest non-outlier measurements as thin lines.</p>",
+    "function": "onionperf_throughput",
+    "parameters": [
+      "start",
+      "end",
+      "server"
+    ]
+  },
+  {
     "id": "connbidirect",
     "title": "Fraction of connections used uni-/bidirectionally",
     "type": "Graph",
