@@ -50,6 +50,8 @@ https://metrics.torproject.org/identifier.csv
 <li><b>October 28, 2018:</b> Added and/or removed columns to <a href="#webstats-tb-platform">Tor Browser downloads and updates by platform</a> and <a href="#webstats-tb-locale">Tor Browser downloads and updates by locale</a> graphs.</li>
 <li><b>December 20, 2018:</b> Removed source parameters and output rows with aggregates over all sources from <a href="#torperf">Time to download files over Tor</a>, <a href="#torperf-failures">Timeouts and failures of downloading files over Tor</a>, <a href="#onionperf-buildtimes">Circuit build times</a>, <a href="#onionperf-latencies">Circuit round-trip latencies</a> graphs.</li>
 <li><b>December 20, 2018:</b> Removed two graphs Total relay bandwidth and Consumed bandwidth by Exit/Guard flag combination, and updated the data format of the <a href="#bandwidth-flags">Advertised and consumed bandwidth by relay flags</a> graph to cover all data previously contained in the first two graphs.</li>
+<li><b>May 29, 2019:</b> Extended <a href="#onionperf-latencies">Circuit round-trip latencies</a> graph to contain high/low values.</li>
+<li><b>June 2, 2019:</b> Added <a href="#onionperf-throughput">Throughput</a> graph.</li>
 </ul>
 
 </div>
@@ -563,11 +565,11 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
 <li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
 <li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
-<li><b>low:</b> Lowest latency within 1.5 IQR of lower quartile (lower whisker in a boxplot) of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
+<li><b>low:</b> Lowest time in milliseconds between sending the HTTP request and receiving the HTTP response header within 1.5 IQR of lower quartile (lower whisker in a boxplot).</li>
 <li><b>q1:</b> First quartile of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
 <li><b>md:</b> Median of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
 <li><b>q3:</b> Third quartile of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
-<li><b>high:</b> Highest latency within 1.5 IQR of upper quartile (upper whisker in a boxplot) of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
+<li><b>high:</b> Highest time in milliseconds between sending the HTTP request and receiving the HTTP response header within 1.5 IQR of upper quartile (upper whisker in a boxplot).</li>
 </ul>
 
 <h3>Throughput
@@ -589,11 +591,11 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
 <li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
 <li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
-<li><b>low:</b> Lowest measured throughput within 1.5 IQR of lower quartile (lower whisker in a boxplot) in kilobits per second.</li>
+<li><b>low:</b> Lowest measured throughput in kilobits per second within 1.5 IQR of lower quartile (lower whisker in a boxplot).</li>
 <li><b>q1:</b> First quartile of measured throughput in kilobits per second.</li>
 <li><b>md:</b> Median of measured throughput in kilobits per second.</li>
 <li><b>q3:</b> Third quartile of measured throughput in kilobits per second.</li>
-<li><b>high:</b> Highest measured throughput within 1.5 IQR of upper quartile (upper whisker in a boxplot) in kilobits per second.</li>
+<li><b>high:</b> Highest measured throughput in kilobits per second within 1.5 IQR of upper quartile (upper whisker in a boxplot).</li>
 </ul>
 
 </div>
