@@ -289,7 +289,7 @@
     "id": "onionperf-buildtimes",
     "title": "Circuit build times",
     "type": "Graph",
-    "description": "<p>This graph shows build times of circuits used for downloading static files of different sizes over Tor. The graph shows the range of measurements from first to third quartile, and highlights the median. The slowest and fastest quarter of measurements are omitted from the graph.</p>",
+    "description": "<p>This graph shows build times of circuits used for downloading static files of different sizes over Tor. We disable Entry Guards in the Tor client configuration used by OnionPerf, to ensure a new guard is selected for each circuit we measure. In comparison, standard clients will reuse connections to a small number of long-term entry guards, and do not see the latency introduced by establishing new guard connections. As a result, first hop build times appear higher for these measurements compared to those commonly observed in Tor clients. The graph shows the range of measurements from first to third quartile, and highlights the median. The slowest and fastest quarter of measurements are omitted from the graph.</p>",
     "function": "onionperf_buildtimes",
     "parameters": [
       "start",
