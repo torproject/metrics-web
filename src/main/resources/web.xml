@@ -218,6 +218,17 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>MetricsGuidelinesServlet</servlet-name>
+    <servlet-class>
+      org.torproject.metrics.web.MetricsGuidelinesServlet
+    </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MetricsGuidelinesServlet</servlet-name>  
+    <url-pattern>/metrics-guidelines.html</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>NewsServlet</servlet-name>
     <servlet-class>
       org.torproject.metrics.web.NewsServlet

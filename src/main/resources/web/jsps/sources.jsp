@@ -41,6 +41,12 @@
       </ul>
     </div>
 
+	<div class="container">
+	  <h2>New sources <a href="#new" name="new" class="anchor">#</a></h2>
+	  <p>We have written <a href="/metrics-guidelines.html">guidelines for Tor developers</a> that would like metrics collected by their service to be integrated
+	  with Tor Metrics.</p>
+	</div>
+
     <div class="container">
       <h2>Specifications <a href="#specifications" name="specifications" class="anchor">#</a></h2>
       <p>The following specification documents are available for Tor network data.</p>
