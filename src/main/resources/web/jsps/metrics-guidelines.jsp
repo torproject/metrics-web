@@ -50,7 +50,7 @@
 <p>This section aims to help you organize your thoughts before making a request
  to the Metrics team. It might be that there are good reasons that something is
  not done in one of the preferred ways, but ideally data collection tools can
- be written with this guidelines in mind.</p>
+ be written with these guidelines in mind.</p>
 
 <ul>
 <li>What is your data about? Is it about servers or users or both? Is it
@@ -76,8 +76,8 @@
 <li>Is the data you're planning to give us too sensitive? If so, can you sanitize
    it yourself before giving it to us (we can help you with that), or does the
    sanitizing need to happen on our side (we should still involve you in this
-   case)?
-<p>There are currently cases where Tor Metrics performs the sanitization of
+   case)?<br>
+   There are currently cases where Tor Metrics performs the sanitization of
    data before archiving, but the preferred system would sanitize the data as
    close to the source as possible to minimize the possibility that sensitive
    data could be leaked.</li>
@@ -97,9 +97,9 @@
    data, maybe. And if we need to include fancy crypto libraries in order to
    process your data, then for sure. Any intuitions you have about possible
    difficulties would be good to know, even if things turn out to be easier in
-   the end.
-<p>As far as possible, use simple formats for providing data. The Tor Directory
-   Protocol meta-format [<a href="#ref-2">2</a>, §1.2] is a simple format for which we already have
+   the end.<br>
+   As far as possible, use simple formats for providing data. The Tor Directory
+   Protocol meta-format [<a href="#ref-2">2</a>, &sect;1.2] is a simple format for which we already have
    parsers. Without good reason, do not serialize to formats such as YAML, TOML,
    etc. as this would require adding a new parsing library into Tor Metrics just
    to parse the new data.</p></li>
