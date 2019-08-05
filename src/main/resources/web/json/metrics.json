@@ -67,6 +67,17 @@
     ]
   },
   {
+    "id": "bandwidth",
+    "title": "Total relay bandwidth",
+    "type": "Graph",
+    "description": "<p>This graph shows the total <a href=\"glossary.html#advertised-bandwidth\">advertised</a> and <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> of all <a href=\"glossary.html#relay\">relays</a> in the network.</p>",
+    "function": "bandwidth",
+    "parameters": [
+      "start",
+      "end"
+    ]
+  },
+  {
     "id": "bandwidth-flags",
     "title": "Advertised and consumed bandwidth by relay flags",
     "type": "Graph",

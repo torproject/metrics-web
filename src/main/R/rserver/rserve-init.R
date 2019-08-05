@@ -829,6 +829,30 @@ plot_bandwidth_flags <- function(start_p, end_p, path_p) {
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
 }
 
+prepare_bandwidth <- function(start_p = NULL, end_p = NULL) {
+  prepare_bandwidth_flags(start_p, end_p) %>%
+    group_by(date) %>%
+    summarize(advbw = sum(advbw), bwhist = sum(bwhist))
+}
+
+plot_bandwidth <- function(start_p, end_p, path_p) {
+  prepare_bandwidth(start_p, end_p) %>%
+    gather(variable, value, -date) %>%
+    ggplot(aes(x = date, y = value, colour = variable)) +
+    geom_line() +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+      limits = c(0, NA)) +
+    scale_colour_hue(name = "", h.start = 90,
+        breaks = c("advbw", "bwhist"),
+        labels = c("Advertised bandwidth", "Bandwidth history")) +
+    ggtitle("Total relay bandwidth") +
+    labs(caption = copyright_notice) +
+    theme(legend.position = "top")
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
 prepare_userstats_relay_country <- function(start_p = NULL, end_p = NULL,
     country_p = NULL, events_p = NULL) {
   read_csv(file = paste(stats_dir, "clients.csv", sep = ""),

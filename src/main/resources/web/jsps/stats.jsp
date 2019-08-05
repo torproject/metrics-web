@@ -52,6 +52,7 @@ https://metrics.torproject.org/identifier.csv
 <li><b>December 20, 2018:</b> Removed two graphs Total relay bandwidth and Consumed bandwidth by Exit/Guard flag combination, and updated the data format of the <a href="#bandwidth-flags">Advertised and consumed bandwidth by relay flags</a> graph to cover all data previously contained in the first two graphs.</li>
 <li><b>May 29, 2019:</b> Extended <a href="#onionperf-latencies">Circuit round-trip latencies</a> graph to contain high/low values.</li>
 <li><b>June 2, 2019:</b> Added <a href="#onionperf-throughput">Throughput</a> graph.</li>
+<li><b>August 5, 2019:</b> Re-added the <a href="#bandwidth">Total relay bandwidth</a> graph due to popular demand.</li>
 </ul>
 
 </div>
@@ -333,6 +334,26 @@ Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 <div class="container">
 <h2><i class="fa fa-road fa-fw" aria-hidden="true"></i>
 Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
+
+<h3>Total relay bandwidth
+<a href="/bandwidth.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/bandwidth.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="#bandwidth" name="bandwidth" class="anchor">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
+<li><b>advbw:</b> Total advertised bandwidth in Gbit/s that relays are capable to provide.</li>
+<li><b>bwhist:</b> Total consumed bandwidth in Gbit/s as the average of written and read traffic of all relays.</li>
+</ul>
 
 <h3>Advertised and consumed bandwidth by relay flags
 <a href="/bandwidth-flags.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>

@@ -43,6 +43,7 @@
     "summary": "How much traffic the Tor network can handle and how much traffic there is.",
     "description": "We measure total available bandwidth and current capacity by aggregating what relays and bridges report to directory authorities.",
     "metrics": [
+      "bandwidth",
       "bandwidth-flags",
       "advbw-ipv6",
       "advbwdist-perc",
