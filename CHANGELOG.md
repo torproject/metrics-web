@@ -5,6 +5,15 @@
    - Add Apache Commons Math 3.6.1 as dependency.
    - Extend ipv6servers module to generate servers part of legacy
      module.
+   - Use Ivy for resolving external dependencies rather than relying
+     on files found in Debian stable packages. Requires installing Ivy
+     (using `apt-get install ivy`, `brew install ivy`, or similar) and
+     running `ant resolve` (or `ant -lib /usr/share/java resolve`).
+     Retrieved files are then copied to the `lib/` directory, except
+     for dependencies on other metrics libraries that still need to be
+     copied to the `lib/` directory manually. Current dependency
+     versions resolved by Ivy are the same as in Debian stretch with
+     few exceptions.
 
 
 # Changes in version 1.2.0 - 2018-08-25

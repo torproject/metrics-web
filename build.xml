@@ -4,12 +4,13 @@
        <!ENTITY base SYSTEM "src/build/java/base.xml">
 ]>
 
-<project default="usage" name="metrics-web" basedir=".">
+<project default="usage" name="metrics-web" basedir="."
+         xmlns:ivy="antlib:org.apache.ivy.ant">
 
   <property name="javadoc-title" value="MetricsWeb API Documentation"/>
   <property name="implementation-title" value="metrics-web" />
   <property name="release.version" value="1.2.0-dev" />
-  <property name="metricslibversion" value="2.4.0" />
+  <property name="metricslibversion" value="2.6.2" />
   <property name="exoneratorversion" value="4.1.0" />
   <property name="jetty.version" value="-9.2.21.v20170120" />
   <property name="warfile"
@@ -46,48 +47,48 @@
     <include name="jackson-databind-2.8.6.jar"/>
     <include name="logback-core-1.1.9.jar" />
     <include name="logback-classic-1.1.9.jar" />
-    <include name="REngine.jar"/>
-    <include name="Rserve.jar"/>
+    <include name="REngine-2.1.0.jar"/>
+    <include name="Rserve-1.8.1.jar"/>
     <include name="slf4j-api-1.7.22.jar"/>
   </patternset>
 
   <patternset id="library" >
     <patternset refid="common" />
-    <include name="metrics-lib-${metricslibversion}.jar"/>
+    <include name="metrics-lib-${metricslibversion}-thin.jar"/>
     <include name="commons-compress-1.13.jar"/>
     <include name="commons-math3-3.6.1.jar"/>
     <include name="postgresql-9.4.1212.jar"/>
-    <include name="servlet-api-3.1.jar"/>
+    <include name="javax.servlet-api-3.1.0.jar"/>
     <include name="xz-1.6.jar"/>
   </patternset>
 
   <patternset id="web" >
     <include name="exonerator-${exoneratorversion}-thin.jar" />
-    <include name="jetty9-annotations${jetty.version}.jar"/>
-    <include name="jetty9-server${jetty.version}.jar"/>
-    <include name="jetty9-servlet${jetty.version}.jar"/>
-    <include name="jetty9-util${jetty.version}.jar"/>
-    <include name="jetty9-http${jetty.version}.jar"/>
-    <include name="jetty9-io${jetty.version}.jar"/>
-    <include name="jetty9-xml${jetty.version}.jar"/>
-    <include name="jetty9-webapp${jetty.version}.jar"/>
-    <include name="jetty9-continuation${jetty.version}.jar"/>
-    <include name="jetty9-security${jetty.version}.jar"/>
+    <include name="jetty-annotations${jetty.version}.jar"/>
+    <include name="jetty-server${jetty.version}.jar"/>
+    <include name="jetty-servlet${jetty.version}.jar"/>
+    <include name="jetty-util${jetty.version}.jar"/>
+    <include name="jetty-http${jetty.version}.jar"/>
+    <include name="jetty-io${jetty.version}.jar"/>
+    <include name="jetty-xml${jetty.version}.jar"/>
+    <include name="jetty-webapp${jetty.version}.jar"/>
+    <include name="jetty-continuation${jetty.version}.jar"/>
+    <include name="jetty-security${jetty.version}.jar"/>
   </patternset>
 
   <patternset id="webruntime" >
-    <include name="asm-5.2.jar" />
-    <include name="asm-commons-5.2.jar" />
+    <include name="asm-5.0.1.jar" />
+    <include name="asm-commons-5.0.1.jar" />
     <include name="commons-compress-1.13.jar"/>
-    <include name="jetty9-plus${jetty.version}.jar"/>
-    <include name="jetty9-jndi${jetty.version}.jar"/>
-    <include name="jetty9-apache-jsp${jetty.version}-tweaked.jar" />
+    <include name="jetty-plus${jetty.version}.jar"/>
+    <include name="jetty-jndi${jetty.version}.jar"/>
+    <include name="apache-jsp${jetty.version}.jar" />
     <include name="metrics-lib-${metricslibversion}.jar"/>
     <include name="taglibs-standard-spec-1.2.5.jar"/>
-    <include name="tomcat8-embed-jasper-8.5.14.jar" />
-    <include name="tomcat8-embed-el-8.5.14.jar" />
-    <include name="tomcat8-embed-core-8.5.14.jar" />
-    <include name="eclipse-ecj-3.11.1.jar" />
+    <include name="tomcat-embed-jasper-8.5.14.jar" />
+    <include name="tomcat-embed-el-8.5.14.jar" />
+    <include name="tomcat-embed-core-8.5.14.jar" />
+    <include name="ecj-4.6.1.jar" />
   </patternset>
 
   <patternset id="runtime" >
@@ -138,22 +139,10 @@
   <!-- Create a .war file for deployment. -->
   <target name="war"
           depends="submoduleupdate,jar">
-    <echo message="Removing problematic service definitions from"/>
-    <echo message="${libs}/jetty9-apache-jsp${jetty.version}.jar and using "/>
-    <echo message="${libs}/jetty9-apache-jsp${jetty.version}-tweaked.jar below." />
-    <delete file="${libs}/jetty9-apache-jsp${jetty.version}-tweaked.jar"
-            quiet="true" />
-
-    <jar destfile="${libs}/jetty9-apache-jsp${jetty.version}-tweaked.jar">
-      <zipfileset src="${libs}/jetty9-apache-jsp${jetty.version}.jar" >
-        <exclude name="**/javax.servlet.ServletContainerInitializer"/>
-      </zipfileset>
-    </jar>
 
     <antcall target="generate-ml-javadoc" />
 
     <war destfile="${dist}/${warfile}"
-         duplicate="fail"
          webxml="${resources}/web.xml"
 	       basedir="${classes}">
       <restrict>
