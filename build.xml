@@ -210,6 +210,7 @@
           dir="${basedir}/src/submods/metrics-lib"
           failonerror="true" >
       <arg value="clean" />
+      <arg value="resolve" />
       <arg value="docs" />
     </exec>
   </target>
