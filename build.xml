@@ -83,7 +83,7 @@
     <include name="jetty-plus${jetty.version}.jar"/>
     <include name="jetty-jndi${jetty.version}.jar"/>
     <include name="apache-jsp${jetty.version}.jar" />
-    <include name="metrics-lib-${metricslibversion}.jar"/>
+    <include name="metrics-lib-${metricslibversion}-thin.jar"/>
     <include name="taglibs-standard-spec-1.2.5.jar"/>
     <include name="tomcat-embed-jasper-8.5.14.jar" />
     <include name="tomcat-embed-el-8.5.14.jar" />
