@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -176,8 +177,8 @@ public class Aggregator {
         /* Put together all aggregated values in a single line. */
         String date = e.getKey();
         int numStats = weightedValues.size();
-        sb.append(String.format("%s,%s,%.0f,%.0f,%.0f,%.8f,%d%n", date,
-            type, weightedMean, weightedMedian, weightedInterquartileMean,
+        sb.append(String.format(Locale.US, "%s,%s,%.0f,%.0f,%.0f,%.8f,%d%n",
+            date, type, weightedMean, weightedMedian, weightedInterquartileMean,
             sumFraction, numStats));
       }
     }

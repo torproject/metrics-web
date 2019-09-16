@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /** Computed fraction of hidden-service activity that a single relay is
@@ -116,9 +117,9 @@ public class ComputedNetworkFractions implements Document {
         validAfterDate);
     String second = validAfterHour
         + (this.fractionRendRelayedCells == 0.0 ? ","
-            : String.format(",%f", this.fractionRendRelayedCells))
+            : String.format(Locale.US, ",%f", this.fractionRendRelayedCells))
         + (this.fractionDirOnionsSeen == 0.0 ? ","
-            : String.format(",%f", this.fractionDirOnionsSeen));
+            : String.format(Locale.US, ",%f", this.fractionDirOnionsSeen));
     return new String[] { first, second };
   }
 

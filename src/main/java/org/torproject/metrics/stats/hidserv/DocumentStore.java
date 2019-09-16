@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -136,7 +137,7 @@ public class DocumentStore<T extends Document> {
             && !formattedString0.startsWith(prefix)) {
           /* Skip line not starting with prefix. */
         } else {
-          T document = this.clazz.newInstance();
+          T document = this.clazz.getDeclaredConstructor().newInstance();
           if (!document.parse(new String[] { formattedString0,
               line.substring(1) })) {
             log.warn("Unable to read line {} from {}. Not retrieving any "
@@ -151,7 +152,8 @@ public class DocumentStore<T extends Document> {
       log.warn("Unable to read {}. Not retrieving any previously stored "
           + "documents.", documentFile.getAbsolutePath(), e);
       return null;
-    } catch (InstantiationException | IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException
+        | NoSuchMethodException | InvocationTargetException e) {
       log.warn("Unable to read {}. Cannot instantiate document object.",
           documentFile.getAbsolutePath(), e);
       return null;
