@@ -15,6 +15,7 @@
      versions resolved by Ivy are the same as in Debian stretch with
      few exceptions.
    - Remove Cobertura from the build process.
+   - Update PostgreSQL JDBC driver version to 42.2.5.
 
 
 # Changes in version 1.2.0 - 2018-08-25
