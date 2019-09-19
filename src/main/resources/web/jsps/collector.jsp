@@ -158,7 +158,8 @@
 <tr>
   <td><a href="#type-bridge-pool-assignment">Bridge Pool Assignments</a></td>
   <td><code>@type bridge-pool-assignment 1.0</code></td>
-  <td><a href="/collector/archive/bridge-pool-assignments/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+  <td><a href="/collector/recent/bridge-pool-assignments/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="/collector/archive/bridge-pool-assignments/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
   <td colspan="3"><b><a href="#exit-lists">TorDNSEL's Exit Lists</a></b></td>
@@ -573,6 +574,7 @@ statistical analysis.
 
 <h3 id="type-bridge-pool-assignment" class="hover">Bridge Pool Assignments
 <small><code>@type bridge-pool-assignment 1.0</code></small>
+<a href="/collector/recent/bridge-pool-assignments/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
 <a href="/collector/archive/bridge-pool-assignments/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
 <a href="#type-bridge-pool-assignment" class="anchor">#</a>
 </h3>
@@ -612,11 +614,6 @@ bridge-pool-assignment 2011-03-13 14:38:03
 0103bb5b00ad3102b2dbafe9ce709a0a7c1060e4 https ring=2 port=443 flag=stable
 [...]
 </pre>
-
-<p>
-As of December 8, 2014, bridge pool assignment files are no longer
-archived.
-</p>
 
 <br>
 <h2 id="exit-lists" class="hover">TorDNSEL's Exit Lists
