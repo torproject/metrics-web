@@ -308,6 +308,20 @@
     </exec>
   </target>
 
+  <target name="fetch-exonerator" depends="init"
+          description="Fetch ExoneraTor from dist.torproject.org">
+    <mkdir dir="${downloadedlibs}"/>
+    <get src="https://dist.torproject.org/exonerator/${exoneratorversion}/exonerator-${exoneratorversion}.tar.gz"
+         dest="${downloadedlibs}"/>
+    <untar src="${downloadedlibs}/exonerator-${exoneratorversion}.tar.gz"
+           dest="${libs}" compression="gzip">
+      <patternset>
+        <include name="**/exonerator-${exoneratorversion}-thin.jar"/>
+      </patternset>
+      <mapper type="flatten"/>
+    </untar>
+  </target>
+
   <!-- The following line adds the common targets and properties
        for Metrics' Java Projects.
   -->
