@@ -416,6 +416,17 @@
     ]
   },
   {
+    "id": "webstats-tb-channel",
+    "title": "Tor Browser updates by release channel",
+    "type": "Graph",
+    "description": "<p>This graph shows absolute numbers of requests to Tor's web servers made by Tor Browser to check whether a newer version is available or to download a newer version, broken down by release channel.</p>",
+    "function": "webstats_tb_channel",
+    "parameters": [
+      "start",
+      "end"
+    ]
+  },
+  {
     "id": "webstats-tm",
     "title": "Tor Messenger downloads and updates",
     "type": "Graph",

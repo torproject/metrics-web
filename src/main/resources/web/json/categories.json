@@ -88,6 +88,7 @@
       "webstats-tb",
       "webstats-tb-platform",
       "webstats-tb-locale",
+      "webstats-tb-channel",
       "webstats-tm"
     ]
   }

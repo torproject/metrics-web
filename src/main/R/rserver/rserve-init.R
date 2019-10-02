@@ -1399,6 +1399,52 @@ plot_webstats_tb_locale <- function(start_p, end_p, path_p) {
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
 }
 
+prepare_webstats_tb_channel <- function(start_p = NULL, end_p = NULL) {
+  read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
+      col_types = cols(
+        log_date = col_date(format = ""),
+        request_type = col_factor(levels = NULL),
+        platform = col_skip(),
+        channel = col_factor(levels = NULL),
+        locale = col_skip(),
+        incremental = col_skip(),
+        count = col_double())) %>%
+    filter(if (!is.null(start_p)) log_date >= as.Date(start_p) else TRUE) %>%
+    filter(if (!is.null(end_p)) log_date <= as.Date(end_p) else TRUE) %>%
+    filter(request_type %in% c("tbup", "tbur")) %>%
+    filter(channel %in% c("a", "r")) %>%
+    group_by(log_date, channel, request_type) %>%
+    summarize(count = sum(count)) %>%
+    dcast(log_date + channel ~ request_type, value.var = "count") %>%
+    rename(date = log_date, update_pings = tbup, update_requests = tbur)
+}
+
+plot_webstats_tb_channel <- function(start_p, end_p, path_p) {
+  prepare_webstats_tb_channel(start_p, end_p) %>%
+    gather(request_type, count, -c(date, channel)) %>%
+    unite("request_type_channel", request_type, channel) %>%
+    mutate(request_type_channel = factor(request_type_channel,
+      levels = c("update_pings_r", "update_pings_a",
+                 "update_requests_r", "update_requests_a"),
+      labels = c("Update pings (stable)", "Update pings (alpha)",
+                 "Update requests (stable)", "Update requests (alpha)"))) %>%
+    ungroup() %>%
+    complete(date = full_seq(date, period = 1),
+      nesting(request_type_channel)) %>%
+    ggplot(aes(x = date, y = count)) +
+    geom_point() +
+    geom_line() +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
+    facet_grid(request_type_channel ~ ., scales = "free_y") +
+    theme(strip.text.y = element_text(angle = 0, hjust = 0, size = rel(1.5)),
+          strip.background = element_rect(fill = NA)) +
+    ggtitle("Tor Browser updates by release channel") +
+    labs(caption = copyright_notice)
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
 prepare_webstats_tm <- function(start_p = NULL, end_p = NULL) {
   read_csv(file = paste(stats_dir, "webstats.csv", sep = ""),
       col_types = cols(

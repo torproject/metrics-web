@@ -53,6 +53,7 @@ https://metrics.torproject.org/identifier.csv
 <li><b>May 29, 2019:</b> Extended <a href="#onionperf-latencies">Circuit round-trip latencies</a> graph to contain high/low values.</li>
 <li><b>June 2, 2019:</b> Added <a href="#onionperf-throughput">Throughput</a> graph.</li>
 <li><b>August 5, 2019:</b> Re-added the <a href="#bandwidth">Total relay bandwidth</a> graph due to popular demand.</li>
+<li><b>October 2, 2019:</b> Added <a href="#webstats-tb-channel">Tor Browser updates by release channel</a> graph.</li>
 </ul>
 
 </div>
@@ -733,6 +734,27 @@ Applications <a href="#applications" name="applications" class="anchor">#</a></h
 <li><b>locale:</b> Locale, like "en-US" for English (United States), "de" for German, etc., and "??" for unrecognized locales.</li>
 <li><b>initial_downloads:</b> Number of Tor Browser initial downloads.</li>
 <li><b>update_pings:</b> Number of Tor Browser update pings.</li>
+</ul>
+
+<h3>Tor Browser updates by release channel
+<a href="/webstats-tb-channel.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/webstats-tb-channel.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="#webstats-tb-channel" name="webstats-tb-channel" class="anchor">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when requests to <code>torproject.org</code> web servers have been logged.</li>
+<li><b>channel:</b> Release channel, like "r" for stable releases and "a" for alpha releases.</li>
+<li><b>update_pings:</b> Number of Tor Browser update pings.</li>
+<li><b>update_requests:</b> Number of Tor Browser update requests.</li>
 </ul>
 
 <h3>Tor Messenger downloads and updates
