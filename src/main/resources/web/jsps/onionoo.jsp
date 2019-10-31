@@ -1852,7 +1852,8 @@ IP version the bridge uses and to detect whether the bridge changed its
 address.
 Sanitized IP addresses always change on the 1st of every month at 00:00:00
 UTC, regardless of the bridge actually changing its IP address.
-TCP ports are not sanitized.
+TCP ports are sanitized in a similar way as IP addresses to hide the
+location of bridges with unusual TCP ports.
 </p>
 </li>
 
