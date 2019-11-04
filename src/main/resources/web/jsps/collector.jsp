@@ -152,6 +152,11 @@
   <td><code>@type hidden-service-descriptor 1.0</code></td>
   <td></td>
 </tr>
+<tr>
+  <td><a href="#type-hidden-service-descriptor-3">Hidden Service Descriptors v3</a></td>
+  <td><code>@type hidden-service-descriptor-3 1.0</code></td>
+  <td></td>
+</tr>
 <tr class="tableHeadline">
   <td colspan="3"><b><a href="#bridge-pool-assignments">BridgeDB's Bridge Pool Assignments</a></b></td>
 </tr>
@@ -551,6 +556,19 @@ Hidden service descriptors contain all details that are necessary for
 clients to connect to a hidden service.
 Despite the version number being 1.0, these descriptors are part of the
 version 2 hidden service protocol.
+</p>
+
+<h3 id="type-hidden-service-descriptor-3" class="hover">Hidden Service Descriptors v3
+<small><code>@type hidden-service-descriptor-3 1.0</code></small>
+<a href="#type-hidden-service-descriptor-3" class="anchor">#</a>
+</h3>
+
+<p>
+Hidden service descriptors contain details required to connect to version
+3 hidden service.
+Despite the version number being 1.0, these descriptors are part of the
+<a href="https://gitweb.torproject.org/torspec.git/tree/rend-spec-v3.txt">version
+3 hidden service protocol</a>.
 </p>
 
 <br>
