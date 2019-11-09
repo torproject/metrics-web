@@ -1,4 +1,4 @@
-# Changes in version 1.3.0 - 2018-??-??
+# Changes in version 1.3.0 - 2019-11-09
 
  * Medium changes
    - Start downloading and processing votes.
