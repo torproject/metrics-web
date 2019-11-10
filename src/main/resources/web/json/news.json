@@ -540,6 +540,9 @@
   "links" : [ {
     "label" : "blog post",
     "target" : "https://blog.torproject.org/combined-flash-proxy-pyobfsproxy-browser-bundles"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/7824"
   } ]
 }, {
   "start" : "2013-02-08",
@@ -2165,7 +2168,7 @@
     "label" : "news article",
     "target" : "https://www.rt.com/business/388502-ukraine-bans-vk-yandex/"
   }, {
-    "label" : "reddit post",
+    "label" : "Reddit post",
     "target" : "https://www.reddit.com/r/TOR/comments/6c9ig1"
   }, {
     "label" : "relay graph",
@@ -2807,6 +2810,19 @@
     "target" : "https://metrics.torproject.org/versions.html?start=2017-12-01&end=2018-03-01"
   } ]
 }, {
+  "start" : "2018-01-18",
+  "end" : "2018-02-24",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Outage of Snowflake broker caused by the disabling of the Let's Encrypt TLS-SNI-01 challenge.",
+  "description" : "Outage of Snowflake broker caused by the disabling of the Let's Encrypt TLS-SNI-01 challenge.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/25345"
+  }, {
+    "label" : "graph",
+    "target" : "https://bugs.torproject.org/30693#comment:3"
+  } ]
+}, {
   "start" : "2018-01-20",
   "protocols" : [ "relay" ],
   "short_description" : "Some more directory authorities upgrade to 0.3.2.9 which enforces new requirements for the exit flag",
@@ -3026,6 +3042,19 @@
     "target" : "https://bugs.torproject.org/25688#comment:1"
   } ]
 }, {
+  "start" : "2018-04-02",
+  "end" : "2018-04-18",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Accidentally misconfigured the 3 proxy-go instances that were meant to point to the new standalone broker so that they pointed to the old App Engine broker.",
+  "description" : "Accidentally misconfigured the 3 proxy-go instances that were meant to point to the new standalone broker so that they pointed to the old App Engine broker.",
+  "links" : [ {
+    "label" : "start",
+    "target" : "https://bugs.torproject.org/25688#comment:1"
+  }, {
+    "label" : "end",
+    "target" : "https://bugs.torproject.org/22874#comment:10"
+  } ]
+}, {
   "start" : "2018-04-05",
   "protocols" : [ "ipv4", "ipv6" ],
   "short_description" : "geoip and geoip6 databases updated to \"April 3 2018 Maxmind GeoLite2 Country\"",
@@ -3045,6 +3074,15 @@
   } ]
 }, {
   "start" : "2018-04-16",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Moved the Snowflake broker from App Engine to a standalone server.",
+  "description" : "Moved the Snowflake broker from App Engine to a standalone server.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/22874#comment:9"
+  } ]
+}, {
+  "start" : "2018-04-16",
   "end" : "2018-05-08",
   "places" : [ "ru" ],
   "short_description" : "Russia tries to block Telegram; blocks about 18 million IP addresses including some belonging to Amazon and Google cloud services.",
@@ -3058,16 +3096,6 @@
   }, {
     "label" : "bridge graph",
     "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-03-01&end=2018-07-15&country=ru"
-  } ]
-}, {
-  "start" : "2018-04-20",
-  "end" : "2018-04-27",
-  "protocols" : [ "onion" ],
-  "short_description" : "The number of v2 onion services increases from 70k to 120k.",
-  "description" : "The number of v2 onion services increases from 70k to 120k.",
-  "links" : [ {
-    "label" : "ticket",
-    "target" : "https://bugs.torproject.org/26081"
   } ]
 }, {
   "start" : "2018-04-28",
@@ -3152,6 +3180,18 @@
   "links" : [ {
     "label" : "commit",
     "target" : "https://gitweb.torproject.org/tor.git/commit/?id=033e4723f3651062779ff64a619ec526950857f5"
+  } ]
+}, {
+  "start" : "2018-05-17",
+  "protocols" : [ "bridge" ],
+  "short_description" : "Release of tor 0.3.4.1-alpha",
+  "description" : "Release of tor 0.3.4.1-alpha. Has a bug that makes idle bridges unuseful.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/28717"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/28912"
   } ]
 }, {
   "start" : "2018-06-09",
@@ -3379,6 +3419,52 @@
     "target" : "https://lists.torproject.org/pipermail/tor-relays/2018-August/015850.html"
   } ]
 }, {
+  "start" : "2018-08-09",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"August 7 2018 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"August 7 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 4C2E4FF8220FFFB4989564728701016DF705BCBF</code>, <code>geoip6-db-digest F3F5C576BF3E8D5FD9F6F33603D7BFD64DEAA8B5</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=fe19b40fe9e2f78caf6f58bb3cc627a6fbb0e2c5"
+  } ]
+}, {
+  "start" : "2018-09-10",
+  "protocols" : [ "bridge" ],
+  "short_description" : "Release of tor 0.3.4.8, 0.2.9.17, 0.3.2.12, and 0.3.3.10",
+  "description" : "Release of tor 0.3.4.8, 0.2.9.17, 0.3.2.12, and 0.3.3.10. 0.3.4.8, containing a bug that makes idle bridges unuseful, becomes the stable release.",
+  "links" : [ {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/new-release-tor-0348-also-other-stable-updates-02917-03212-and-03310"
+  } ]
+}, {
+  "start" : "2018-09-11",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"September 6 2018 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"September 6 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest C9118A0D763E069B890674A4D5000A3DB846746B</code>, <code>geoip6-db-digest 8A46B41B2AE16F3705C67DEECD20EAA50B043A51</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=19429fac23734070933591774d2436bf92896297"
+  } ]
+}, {
+  "start" : "2018-09-15",
+  "end" : "2018-09-16",
+  "places" : [ "ae" ],
+  "protocols" : [ "obfs4" ],
+  "short_description" : "Reported blocking of obfs4 in the UAE.",
+  "description" : "Reported blocking of obfs4 in the UAE.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/27723"
+  }, {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/27723#comment:4"
+  } ]
+}, {
+  "start" : "2018-09-18",
+  "protocols" : [ "bridge" ],
+  "short_description" : "Release of tor 0.3.5.1-alpha, containing a bug that makes idle bridges unuseful.",
+  "description" : "Release of tor 0.3.5.1-alpha, containing a bug that makes idle bridges unuseful."
+}, {
   "start" : "2018-09-26",
   "ongoing" : true,
   "protocols" : [ "fte" ],
@@ -3399,6 +3485,15 @@
     "target" : "https://bugs.torproject.org/28521#comment:3"
   } ]
 }, {
+  "start" : "2018-10-10",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"October 9 2018 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"October 9 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 76907A8345DA84CC724CDD573B6E08F6A089FEEB</code>, <code>geoip6-db-digest 5852AB4D3A96D7526DD47D5573CB4FA32BE4ECEB</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=119df9c1c0781e379bc83e06b9c4cb6417b50a2f"
+  } ]
+}, {
   "start" : "2018-10-25",
   "end" : "2018-10-28",
   "protocols" : [ "relay" ],
@@ -3416,6 +3511,15 @@
   }, {
     "label" : "archived graph",
     "target" : "https://web.archive.org/web/20181104023227/https://metrics.torproject.org/userstats-relay-country.html?start=2018-10-01&end=2018-11-01&country=all&events=off"
+  } ]
+}, {
+  "start" : "2018-11-11",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"November 6 2018 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"November 6 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 603BE8A0CA1B7164D76DBC75A280C9CA0A556F65</code>, <code>geoip6-db-digest 1CEF662539C0D91EC07A7C5C13134E3317B451E4</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=5ba3d09a89502963029483422dc41abbd356cabb"
   } ]
 }, {
   "start" : "2018-11-16",
@@ -3452,6 +3556,26 @@
   "short_description" : "Outage of the flash proxy badge hosting server, flashproxy.bamsoftware.com, caused by a Greenhost east coast VPS migration.",
   "description" : "Outage of the flash proxy badge hosting server, flashproxy.bamsoftware.com, caused by a Greenhost east coast VPS migration."
 }, {
+  "start" : "2018-12-05",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"December 5 2018 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"December 5 2018 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 0684E08BDC01ABB41A717E9C55BDEB21531CFAC8</code>, <code>geoip6-db-digest AFFAD1475879D57B1C1EA119141EFA0E57547290</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=57798eb1cb7a5c6e5b5a82625d986757be569d75"
+  } ]
+}, {
+  "start" : "2018-12-18",
+  "end" : "2018-12-21",
+  "places" : [ "ae" ],
+  "protocols" : [ "<OR>" ],
+  "short_description" : "Reported blocking of vanilla Tor in the UAE.",
+  "description" : "Reported blocking of vanilla Tor in the UAE.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/27723#comment:16"
+  } ]
+}, {
   "start" : "2018-12-20",
   "ongoing" : true,
   "places" : [ "sd" ],
@@ -3480,6 +3604,368 @@
     "label" : "NetBlocks report",
     "target" : "https://netblocks.org/reports/evidence-of-gabon-full-internet-shutdown-coup-attempt-dQ8oo18n"
   } ]
+}, {
+  "start" : "2019-01-07",
+  "protocols" : [ "bridge" ],
+  "short_description" : "Release of tor 0.3.5.7, 0.3.4.10, and 0.3.3.11",
+  "description" : "Release of tor 0.3.5.7, 0.3.4.10, and 0.3.3.11. Fixes the bug, present since 0.3.5.1-alpha/0.3.4.1-alpha, of idle bridges being unuseful.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/28717#comment:32"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/28912"
+  }, {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/new-releases-tor-0357-03410-and-03311"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/29184"
+  } ]
+}, {
+  "start" : "2019-01-07",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"January 3 2019 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"January 3 2019 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 2B8A70B399CF8B471289A4DB52947DE965D8DE5F</code>, <code>geoip6-db-digest FEA33E6F398DF67252F41DDD3D010E69B33D544E</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=445d6750f79c266c0e21e7a31e6d5f872f8a4ec8"
+  } ]
+}, {
+  "start" : "2019-02-07",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Disabled the 3 proxy-go instances that were pointing at the former broker hosted on App Engine.",
+  "description" : "Disabled the 3 proxy-go instances that were pointing at the former broker hosted on App Engine.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/29308#comment:4"
+  } ]
+}, {
+  "start" : "2019-02-12",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"February 5 2019 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"February 5 2019 Maxmind GeoLite2 Country\" (<code>geoip-db-digest DDAA25B4425EAA45EE8E92A6531CD3246C8E989A</code>, <code>geoip6-db-digest 0368FA722D90026E60BD60A26F615791A7A53D21</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=a3f9ddcf033881ac78cda0aa7e6a9fd7195868cc"
+  } ]
+}, {
+  "start" : "2019-03-06",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"March 4 2019 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"March 4 2019 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 5B90C2F06292D8237A5C77E27ED4ABABF4AE0684</code>, <code>geoip6-db-digest E971FCA4A89F6C685928FF9371D1BF7A2484F4CA</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=2e74edb53ef9ac417d8424a0785af839f83791ca"
+  } ]
+}, {
+  "start" : "2019-03-22",
+  "end" : "2019-03-22",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Outage of the Snowflake broker, caused by a full disk.",
+  "description" : "Outage of the Snowflake broker, caused by a full disk.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/29861"
+  } ]
+}, {
+  "start" : "2019-04-03",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"April 2 2019 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"April 2 2019 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 62A97D4DEBF76A5CE5C232B95BBF05B191EB8AAA</code>, <code>geoip6-db-digest 66620E57A8427C53D6084B3229807DC320CDC3D0</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=54e249e269c63fd5f003dd8c15faa6a13902f8e4"
+  } ]
+}, {
+  "start" : "2019-04-16",
+  "end" : "2019-04-16",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Outage of Snowflake fallback proxy-go instances, caused by a failure to restart after segregating old logs.",
+  "description" : "Outage of Snowflake fallback proxy-go instances, caused by a failure to restart after segregating old logs.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/30205"
+  } ]
+}, {
+  "start" : "2019-04-23",
+  "ongoing" : true,
+  "places" : [ "lk" ],
+  "short_description" : "Sri Lanka blocks Facebook, WhatsApp, Instagram, YouTube after bombings.",
+  "description" : "Sri Lanka blocks Facebook, WhatsApp, Instagram, YouTube after bombings.",
+  "links" : [ {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2019-03-15&end=2019-05-15&country=lk&events=off"
+  }, {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2019-03-15&end=2019-05-15&country=lk"
+  }, {
+    "label" : "article",
+    "target" : "https://gizmodo.com/sri-lanka-blocks-facebook-whatsapp-after-easter-bombin-1834199629"
+  } ]
+}, {
+  "start" : "2019-04-28",
+  "end" : "2019-04-29",
+  "places" : [ "bj" ],
+  "short_description" : "Social media blocking and Internet blackout during parliamentary elections in Benin.",
+  "description" : "Social media blocking and Internet blackout during parliamentary elections in Benin.",
+  "links" : [ {
+    "label" : "OONI report",
+    "target" : "https://ooni.io/post/2019-benin-social-media-blocking/#social-media-blocking"
+  } ]
+}, {
+  "start" : "2019-04-29",
+  "short_description" : "Network equipment failure at site of op-ab OnionPerf instance",
+  "description" : "Network equipment failure at site of op-ab OnionPerf instance",
+  "links" : [ {
+    "label" : "performance graph",
+    "target" : "https://metrics.torproject.org/torperf.html?start=2019-04-25&end=2019-05-04&server=public&filesize=50kb"
+  } ]
+}, {
+  "start" : "2019-05-01",
+  "places" : [ "cn" ],
+  "protocols" : [ "snowflake" ],
+  "short_description" : "China blocks the default Snowflake proxies.",
+  "description" : "China blocks the default Snowflake proxies.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/30350"
+  } ]
+}, {
+  "start" : "2019-05-16",
+  "end" : "2019-06-23",
+  "places" : [ "ir" ],
+  "protocols" : [ "relay" ],
+  "short_description" : "Tor becomes directly accessible in Iran, leading to an explosion in relay users up to about 1.5 million, before being blocked again.",
+  "description" : "Tor becomes directly accessible in Iran, leading to an explosion in relay users up to about 1.5 million, before being blocked again.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/30636"
+  }, {
+    "label" : "comment about end",
+    "target" : "https://bugs.torproject.org/30636#comment:25"
+  }, {
+    "label" : "tor-talk thread",
+    "target" : "https://lists.torproject.org/pipermail/tor-talk/2019-June/045221.html"
+  }, {
+    "label" : "Reddit thread",
+    "target" : "https://www.reddit.com/r/TOR/comments/bw4byr/surge_in_users/"
+  }, {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/30636#comment:30"
+  }, {
+    "label" : "Reddit thread",
+    "target" : "https://www.reddit.com/r/TOR/comments/c4lwdj/today_iran_government_blocked_tor_bootsraping_in/"
+  } ]
+}, {
+  "start" : "2019-05-17",
+  "protocols" : [ "ipv4", "ipv6" ],
+  "short_description" : "geoip and geoip6 databases updated to \"May 13 2019 Maxmind GeoLite2 Country\"",
+  "description" : "geoip and geoip6 databases updated to \"May 13 2019 Maxmind GeoLite2 Country\" (<code>geoip-db-digest 35DFDA2D06D2A0467EF37D60A67B438B11952B74</code>, <code>geoip6-db-digest C0193A1D086819353FABBF70AADB15866B7B2525</code>).",
+  "links" : [ {
+    "label" : "commit",
+    "target" : "https://gitweb.torproject.org/tor.git/commit/?id=4e262196a88d2a7d3be059d075f53a6f182b2773"
+  } ]
+}, {
+  "start" : "2019-05-22",
+  "protocols" : [ "fte" ],
+  "short_description" : "Release of Tor Browser 9.0a1, removes support for FTE.",
+  "description" : "Release of Tor Browser 9.0a1, removes support for FTE.",
+  "links" : [ {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/new-release-tor-browser-90a1"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/30319"
+  } ]
+}, {
+  "start" : "2019-05-28",
+  "short_description" : "Failure of network equipment at site of op-ab OnionPerf instance",
+  "description" : "Failure of network equipment at site of op-ab OnionPerf instance (equipment now replaced)",
+  "links" : [ {
+    "label" : "onionperf timeouts graph",
+    "target" : "https://metrics.torproject.org/torperf-failures.html?start=2019-05-23&end=2019-06-02&server=public&filesize=50kb"
+  } ]
+}, {
+  "start" : "2019-06-20",
+  "protocols" : [ "obfs4" ],
+  "short_description" : "A call to set up new obfs4 bridges is posted to the tor-relays mailing list.",
+  "description" : "A call to set up new obfs4 bridges is posted to the tor-relays mailing list.",
+  "links" : [ {
+    "label" : "mailing list thread",
+    "target" : "https://lists.torproject.org/pipermail/tor-relays/2019-June/017419.html"
+  }, {
+    "label" : "thread continues",
+    "target" : "https://lists.torproject.org/pipermail/tor-relays/2019-July/017477.html"
+  } ]
+}, {
+  "start" : "2019-06-21",
+  "ongoing" : true,
+  "places" : [ "mm" ],
+  "short_description" : "Internet shutdown in parts of Myanmar.",
+  "description" : "Internet shutdown in parts of Myanmar.",
+  "links" : [ {
+    "label" : "report",
+    "target" : "https://reliefweb.int/report/myanmar/myanmar-end-internet-shutdown-rakhine-chin-states"
+  } ]
+}, {
+  "start" : "2019-06-26",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "The Snowflake web browser extension for Firefox is published.",
+  "description" : "The Snowflake web browser extension for Firefox is published.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/30931#comment:10"
+  } ]
+}, {
+  "start" : "2019-07-02",
+  "end" : "2019-08-26",
+  "places" : [ "ir" ],
+  "protocols" : [ "<OR>", "relay", "bridge" ],
+  "short_description" : "Relays in Iran are reported to be unblocked once again, and user numbers recover to about 25% of the maximum they had reached during the previous period of unblocking",
+  "description" : "Relays in Iran are reported to be unblocked once again, and user numbers recover to about 25% of the maximum they had reached during the previous period of unblocking. They then drop precipitously, and <OR> bridge users increase.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/30636"
+  }, {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/30636#comment:31"
+  }, {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/30636#comment:32"
+  } ]
+}, {
+  "start" : "2019-07-03",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "The Snowflake web browser extension for Chrome is published.",
+  "description" : "The Snowflake web browser extension for Chrome is published.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/30999#comment:5"
+  } ]
+}, {
+  "start" : "2019-07-18",
+  "end" : "2019-08-07",
+  "places" : [ "kz" ],
+  "short_description" : "The Kazakh ISP KazTelecom does man-in-the-middle of TLS connections.",
+  "description" : "The Kazakh ISP KazTelecom does man-in-the-middle of TLS connections.",
+  "links" : [ {
+    "label" : "Censored Planet report",
+    "target" : "https://github.com/net4people/bbs/issues/6#issuecomment-519131315"
+  }, {
+    "label" : "post about end",
+    "target" : "https://github.com/net4people/bbs/issues/6#issuecomment-519131315"
+  } ]
+}, {
+  "start" : "2019-07-23",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "The broker domain name snowflake-broker.bamsoftware.com is blocked by Google Safe Browsing, preventing the Snowflake web browser extension from working.",
+  "description" : "The broker domain name snowflake-broker.bamsoftware.com is blocked by Google Safe Browsing, preventing the Snowflake web browser extension from working.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/31230"
+  }, {
+    "label" : "comment noting decrease in proxies",
+    "target" : "https://bugs.torproject.org/31200?cversion=0&cnum_hist=3#comment:3"
+  } ]
+}, {
+  "start" : "2019-07-26",
+  "protocols" : [ "flashproxy", "snowflake" ],
+  "short_description" : "Cupcake 2.0 is released, now working with Snowflake rather than flash proxy.",
+  "description" : "Cupcake 2.0 is released, now working with Snowflake rather than flash proxy.",
+  "links" : [ {
+    "label" : "Chrome Web Store page",
+    "target" : "https://chrome.google.com/webstore/detail/cupcake/dajjbehmbnbppjkcnpdkaniapgdppdnc"
+  } ]
+}, {
+  "start" : "2019-07-26",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Version 0.0.8 of the Snowflake extension for Firefox is released, changing domains from bamsoftware.com to freehaven.net in order to work around the Google Safe Browsing block.",
+  "description" : "Version 0.0.8 of the Snowflake extension for Firefox is released, changing domains from bamsoftware.com to freehaven.net in order to work around the Google Safe Browsing block.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/31250#comment:6"
+  } ]
+}, {
+  "start" : "2019-07-27",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Version 0.0.7 of the Snowflake extension for Chrome is released, changing domains from bamsoftware.com to freehaven.net in order to work around the Google Safe Browsing block.",
+  "description" : "Version 0.0.7 of the Snowflake extension for Chrome is released, changing domains from bamsoftware.com to freehaven.net in order to work around the Google Safe Browsing block.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/31250#comment:13"
+  } ]
+}, {
+  "start" : "2019-07-27",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "The Snowflake proxy hosted at snowflake.torproject.org is updated, changing domains from bamsoftware.com to freehaven.net in order to work around the Google Safe Browsing block.",
+  "description" : "The Snowflake proxy hosted at snowflake.torproject.org is updated, changing domains from bamsoftware.com to freehaven.net in order to work around the Google Safe Browsing block.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/31250#comment:16"
+  } ]
+}, {
+  "start" : "2019-08-06",
+  "end" : "2019-08-09",
+  "short_description" : "Experiment to test the accuracy of relays' advertised bandwidth estimation.",
+  "description" : "Experiment to test the accuracy of relays' advertised bandwidth estimation.",
+  "links" : [ {
+    "label" : "description of experiment",
+    "target" : "https://lists.torproject.org/pipermail/tor-relays/2019-July/017535.html"
+  }, {
+    "label" : "post announcing start",
+    "target" : "https://lists.torproject.org/pipermail/tor-relays/2019-August/017599.html"
+  }, {
+    "label" : "post announcing end",
+    "target" : "https://lists.torproject.org/pipermail/tor-relays/2019-August/017617.html"
+  }, {
+    "label" : "advertised bandwidth graph",
+    "target" : "https://metrics.torproject.org/bandwidth.html?start=2019-07-01&end=2019-09-01"
+  }, {
+    "label" : "relay flags graph",
+    "target" : "https://metrics.torproject.org/bandwidth-flags.html?start=2019-07-01&end=2019-09-01"
+  } ]
+}, {
+  "start" : "2019-10-01",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Release of Tor Browser 9.0a7, the first release that has Snowflake for Windows.",
+  "description" : "Release of Tor Browser 9.0a7, the first release that has Snowflake for Windows.",
+  "links" : [ {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/new-release-tor-browser-90a7"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/25483"
+  } ]
+}, {
+  "start" : "2019-10-17",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Pointed snowflake-broker.torproject.net",
+  "description" : "Pointed snowflake-broker.torproject.net (one of three domain names for the Snowflake broker) to a new broker instance set up with IPv6. Metrics unintentionally start being collected from the new instance, instead of the old instance that was still in use.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/32128"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/32231"
+  } ]
+}, {
+  "start" : "2019-10-28",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Version 0.0.13 of the Snowflake extension is released, decreasing the poll frequency to once every 300 s",
+  "description" : "Version 0.0.13 of the Snowflake extension is released, decreasing the poll frequency to once every 300 s. The standalone proxy-go instances still poll once every 5 s.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/32129#comment:5"
+  } ]
+}, {
+  "start" : "2014-06-01",
+  "end" : "2014-06-19",
+  "places" : [ "ru" ],
+  "protocols" : [ "<OR>", "relay" ],
+  "short_description" : "Rapid increase of relay users in Russia, going from 80K to 200K before settling in around 150K.",
+  "description" : "Rapid increase of relay users in Russia, going from 80K to 200K before settling in around 150K.",
+  "unknown" : true
 }, {
   "start" : "2016-02-24",
   "places" : [ "tm" ],
@@ -3594,7 +4080,7 @@
     "label" : "metrics-team thread",
     "target" : "https://lists.torproject.org/pipermail/metrics-team/2017-January/000284.html"
   }, {
-    "label" : "reddit thread",
+    "label" : "Reddit thread",
     "target" : "https://www.reddit.com/r/TOR/comments/5pbukk/united_arab_emirates_went_from_10k_tor_users_to/"
   }, {
     "label" : "comment about botnet",
@@ -3963,7 +4449,7 @@
     "label" : "de graph",
     "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2017-08-15&end=2017-12-01&country=de&events=off"
   }, {
-    "label" : "reddit thread",
+    "label" : "Reddit thread",
     "target" : "https://www.reddit.com/r/TOR/comments/7b53kq/direct_users_from_germany_go_from_200k_to_500k_in/"
   }, {
     "label" : "ticket",
@@ -4008,7 +4494,7 @@
     "label" : "graph",
     "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2017-11-01&end=2018-01-15&country=de&events=off"
   }, {
-    "label" : "reddit thread",
+    "label" : "Reddit thread",
     "target" : "https://www.reddit.com/r/TOR/comments/7ldrox/tor_usage_in_germany_what_happend/"
   }, {
     "label" : "ticket",
@@ -4069,6 +4555,29 @@
   } ],
   "unknown" : true
 }, {
+  "start" : "2018-04-25",
+  "end" : "2018-07-02",
+  "protocols" : [ "onion" ],
+  "short_description" : "The number of v2 onion services increases from 70k to 120k.",
+  "description" : "The number of v2 onion services increases from 70k to 120k.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/26081"
+  } ],
+  "unknown" : true
+}, {
+  "start" : "2018-05-22",
+  "end" : "2018-06-08",
+  "places" : [ "iq" ],
+  "protocols" : [ "obfs4" ],
+  "short_description" : "Increase in obfs4 users in Iraq, followed by a slow decrease",
+  "description" : "Increase in obfs4 users in Iraq, followed by a slow decrease. No matching change in relay users or other transports.",
+  "links" : [ {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-04-01&end=2018-08-01&country=iq"
+  } ],
+  "unknown" : true
+}, {
   "start" : "2018-05-23",
   "ongoing" : true,
   "protocols" : [ "bridge" ],
@@ -4101,15 +4610,14 @@
   } ],
   "unknown" : true
 }, {
-  "start" : "2018-05-22",
-  "end" : "2018-06-08",
-  "places" : [ "iq" ],
-  "protocols" : [ "obfs4" ],
-  "short_description" : "Increase in obfs4 users in Iraq, followed by a slow decrease",
-  "description" : "Increase in obfs4 users in Iraq, followed by a slow decrease. No matching change in relay users or other transports.",
+  "start" : "2018-07-20",
+  "end" : "2019-05-02",
+  "protocols" : [ "onion" ],
+  "short_description" : "The number of v2 onion services increases from 70k to 100k.",
+  "description" : "The number of v2 onion services increases from 70k to 100k.",
   "links" : [ {
-    "label" : "bridge graph",
-    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-04-01&end=2018-08-01&country=iq"
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/26081#comment:2"
   } ],
   "unknown" : true
 }, {
@@ -4125,6 +4633,66 @@
   }, {
     "label" : "bridge graph",
     "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2018-05-01&end=2018-09-15&country=tr"
+  } ],
+  "unknown" : true
+}, {
+  "start" : "2019-02-16",
+  "ongoing" : true,
+  "places" : [ "by" ],
+  "protocols" : [ "relay" ],
+  "short_description" : "Increase of relay users in Belarus.",
+  "description" : "Increase of relay users in Belarus.",
+  "links" : [ {
+    "label" : "graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2018-07-01&end=2019-06-01&country=by&events=off"
+  }, {
+    "label" : "mailing list post",
+    "target" : "https://lists.torproject.org/pipermail/metrics-team/2019-May/001064.html"
+  } ],
+  "unknown" : true
+}, {
+  "start" : "2019-04-17",
+  "short_description" : "Tor browser update pings roughly double.",
+  "description" : "Tor browser update pings roughly double.",
+  "links" : [ {
+    "label" : "graph",
+    "target" : "https://metrics.torproject.org/webstats-tb-platform.html?start=2019-04-01&end=2019-05-01"
+  }, {
+    "label" : "metrics-team thread",
+    "target" : "https://lists.torproject.org/pipermail/metrics-team/2019-May/001053.html"
+  } ],
+  "unknown" : true
+}, {
+  "start" : "2019-04-27",
+  "ongoing" : true,
+  "places" : [ "ru" ],
+  "protocols" : [ "relay" ],
+  "short_description" : "Relay users increase by about 100K, in an apparent weekly cycle",
+  "description" : "Relay users increase by about 100K, in an apparent weekly cycle. Bridge users are not similarly affected.",
+  "links" : [ {
+    "label" : "relay graph",
+    "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2019-03-01&end=2019-06-15&country=ru"
+  }, {
+    "label" : "bridge graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-country.html?start=2019-03-01&end=2019-06-15&country=ru"
+  }, {
+    "label" : "tor-talk thread",
+    "target" : "https://lists.torproject.org/pipermail/tor-talk/2019-June/045221.html"
+  }, {
+    "label" : "Reddit thread",
+    "target" : "https://www.reddit.com/r/TOR/comments/bw4byr/surge_in_users/"
+  } ],
+  "unknown" : true
+}, {
+  "start" : "2019-10-03",
+  "ongoing" : true,
+  "places" : [ "cn" ],
+  "protocols" : [ "bridge" ],
+  "short_description" : "New default bridge, 193.11.166.194, is already blocked by the GFW – two days after the Tor Browser alpha release that shipped with it",
+  "description" : "New default bridge, 193.11.166.194, is already blocked by the GFW &ndash; two days after the <a href=\"https://blog.torproject.org/new-release-tor-browser-90a7\">Tor Browser alpha release</a> that shipped with it. The block may have happened sooner, though. We only tested the bridge just now.",
+  "links" : [ {
+    "label" : "new default bridge",
+    "target" : "https://bugs.torproject.org/31164"
   } ],
   "unknown" : true
 } ]
