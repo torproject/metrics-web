@@ -351,19 +351,19 @@ public class Main {
     return statistics;
   }
 
-  /** Retrieves the <code>String</code> value of the designated column in the
-   * current row of the given <code>ResultSet</code> object, or returns the
-   * empty string if the retrieved value was <code>NULL</code>. */
+  /** Retrieves the {@code String} value of the designated column in the
+   * current row of the given {@code ResultSet} object, or returns the
+   * empty string if the retrieved value was {@code NULL}. */
   private static String getStringFromResultSet(ResultSet rs, String columnLabel)
       throws SQLException {
     String result = rs.getString(columnLabel);
     return null == result ? "" : result;
   }
 
-  /** Retrieves the <code>double</code> value of the designated column in the
-   * current row of the given <code>ResultSet</code> object as a
-   * <code>Double</code> object, or <code>null</code> if the retrieved value was
-   * <code>NULL</code>. */
+  /** Retrieves the {@code double} value of the designated column in the
+   * current row of the given {@code ResultSet} object as a
+   * {@code Double} object, or {@code null} if the retrieved value was
+   * {@code NULL}. */
   private static Double getDoubleFromResultSet(ResultSet rs, String columnLabel)
       throws SQLException {
     double result = rs.getDouble(columnLabel);

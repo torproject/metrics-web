@@ -14,7 +14,7 @@ import java.time.ZoneId;
  * data objects for them. */
 class Parser {
 
-  /** Parse and return a consensus, but return <code>null</code> if the
+  /** Parse and return a consensus, but return {@code null} if the
    * consensus did not contain any bandwidth values. */
   TotalcwRelayNetworkStatus parseRelayNetworkStatusConsensus(
       RelayNetworkStatusConsensus consensus) {
@@ -45,7 +45,7 @@ class Parser {
     return parsedStatus;
   }
 
-  /** Parse and return a vote, but return <code>null</code> if the vote did not
+  /** Parse and return a vote, but return {@code null} if the vote did not
    * contain any bandwidth measurements. */
   TotalcwRelayNetworkStatus parseRelayNetworkStatusVote(
       RelayNetworkStatusVote vote) {

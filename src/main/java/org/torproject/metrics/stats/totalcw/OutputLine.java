@@ -26,7 +26,7 @@ class OutputLine {
   /** Date. */
   LocalDate validAfterDate;
 
-  /** Nickname of the authority generating votes, or <code>null</code> in case
+  /** Nickname of the authority generating votes, or {@code null} in case
    * of consensuses. */
   String nickname;
 

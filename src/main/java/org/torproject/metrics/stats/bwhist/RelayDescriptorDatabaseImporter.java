@@ -645,11 +645,11 @@ public final class RelayDescriptorDatabaseImporter {
     return statistics;
   }
 
-  /** Retrieve the <code>boolean</code> value of the designated column in the
-   * current row of the given <code>ResultSet</code> object and format it as a
-   * <code>String</code> object with <code>"t"</code> for <code>true</code> and
-   * <code>"f"</code> for <code>false</code>, or return <code>null</code> if the
-   * retrieved value was <code>NULL</code>. */
+  /** Retrieve the {@code boolean} value of the designated column in the
+   * current row of the given {@code ResultSet} object and format it as a
+   * {@code String} object with {@code "t"} for {@code true} and
+   * {@code "f"} for {@code false}, or return {@code null} if the
+   * retrieved value was {@code NULL}. */
   private static String getBooleanFromResultSet(ResultSet rs,
       String columnLabel) throws SQLException {
     boolean result = rs.getBoolean(columnLabel);
@@ -660,10 +660,10 @@ public final class RelayDescriptorDatabaseImporter {
     }
   }
 
-  /** Retrieve the <code>long</code> value of the designated column in the
-   * current row of the given <code>ResultSet</code> object and format it as a
-   * <code>String</code> object, or return <code>null</code> if the retrieved
-   * value was <code>NULL</code>. */
+  /** Retrieve the {@code long} value of the designated column in the
+   * current row of the given {@code ResultSet} object and format it as a
+   * {@code String} object, or return {@code null} if the retrieved
+   * value was {@code NULL}. */
   private static String getLongFromResultSet(ResultSet rs, String columnLabel)
       throws SQLException {
     long result = rs.getLong(columnLabel);

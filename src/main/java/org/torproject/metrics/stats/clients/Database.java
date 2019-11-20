@@ -140,10 +140,10 @@ class Database implements AutoCloseable {
     return statistics;
   }
 
-  /** Retrieve the <code>int</code> value of the designated column in the
-   * current row of the given <code>ResultSet</code> object and format it as a
-   * <code>String</code> object, or return <code>null</code> if the retrieved
-   * value was <code>NULL</code>. */
+  /** Retrieve the {@code int} value of the designated column in the
+   * current row of the given {@code ResultSet} object and format it as a
+   * {@code String} object, or return {@code null} if the retrieved
+   * value was {@code NULL}. */
   private static String getIntFromResultSet(ResultSet rs, String columnLabel)
       throws SQLException {
     int result = rs.getInt(columnLabel);

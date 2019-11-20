@@ -12,11 +12,11 @@ class TotalcwRelayNetworkStatus {
   LocalDateTime validAfter;
 
   /** The 1 to 19 character long alphanumeric nickname assigned to the authority
-   * by its operator, or <code>null</code> if this is a consensus. */
+   * by its operator, or {@code null} if this is a consensus. */
   String nickname;
 
   /** Uppercase hex fingerprint of the authority's (v3 authority) identity
-   * key, or <code>null</code> if this is a consensus. */
+   * key, or {@code null} if this is a consensus. */
   String identityHex;
 
   /** Sums of bandwidth measurements of all contained status entries with four

@@ -211,7 +211,7 @@ public class Main {
     return computedPercentiles;
   }
 
-  /** Return the median for the given list of values, or <code>Double.NaN</code>
+  /** Return the median for the given list of values, or {@code Double.NaN}
    * if the given list is empty. */
   static double computeMedian(List<Long> valueList) {
     Median median = new Median()
