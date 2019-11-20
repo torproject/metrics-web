@@ -147,7 +147,7 @@ public class Parser {
          * file, followed by its absolute path. */
         String absolutePath = e.getKey();
         long lastModifiedMillis = e.getValue();
-        bw.write(String.valueOf(lastModifiedMillis) + " " + absolutePath
+        bw.write(lastModifiedMillis + " " + absolutePath
             + "\n");
       }
     } catch (IOException e) {

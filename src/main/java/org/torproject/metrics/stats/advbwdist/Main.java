@@ -205,7 +205,7 @@ public class Main {
         computedPercentiles.put(p, minValue);
       } else {
         computedPercentiles.put(p,
-            (long) Math.floor(percentile.evaluate((double) p)));
+            (long) Math.floor(percentile.evaluate(p)));
       }
     }
     return computedPercentiles;

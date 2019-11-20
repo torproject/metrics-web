@@ -271,7 +271,7 @@ public class Simulate {
     for (Map.Entry<Double, SortedSet<Integer>> e
         : storedDescs.entrySet()) {
       double fingerprint = e.getKey();
-      long observed = (long) e.getValue().size();
+      long observed = e.getValue().size();
       long afterBinning = ((observed + binSize - 1L) / binSize) * binSize;
       double randomDouble = rnd.nextDouble();
       double laplaceNoise = -b * (randomDouble > 0.5 ? 1.0 : -1.0)

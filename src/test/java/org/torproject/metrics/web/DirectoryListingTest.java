@@ -54,7 +54,7 @@ public class DirectoryListingTest {
     assertEquals(4, dl.size());
     for (String key : new String[]{"/collector/a1/", "/collector/",
         "/collector/a1/p2/", "/collector/a1/p1/"}) {
-      assertTrue("Missing: " + key, dl.keySet().contains(key));
+      assertTrue("Missing: " + key, dl.containsKey(key));
     }
     assertEquals("[Parent Directory, /collector.html, , ]",
         Arrays.toString(dl.get("/collector/").get(0)));
