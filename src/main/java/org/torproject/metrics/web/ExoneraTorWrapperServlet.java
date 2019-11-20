@@ -28,7 +28,7 @@ public class ExoneraTorWrapperServlet extends AnyServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
+      throws IOException {
     request.setAttribute("categories", this.categories);
     this.exoneraTorServlet.doGet(request, response);
   }
