@@ -68,7 +68,8 @@ public class Main {
       } catch (NoSuchMethodException | IllegalAccessException
           | InvocationTargetException e) {
         log.warn("Caught an exception when invoking the main method of the {} "
-            + "module. Moving on to the next module, if available.", e);
+            + "module. Moving on to the next module, if available.",
+            module.getName(), e);
       }
     }
 

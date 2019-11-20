@@ -77,7 +77,7 @@ public class UpdateNews {
           int space = desc.indexOf(" ", open);
           int close = desc.indexOf("]", open);
           if (open < 0 || space < 0 || close < 0) {
-            log.warn("Cannot convert link in line {}. Exiting.");
+            log.warn("Cannot convert link in line {}. Exiting.", line);
             System.exit(1);
           }
           desc = desc.substring(0, open) + "<a href=\""
@@ -89,7 +89,7 @@ public class UpdateNews {
           int open = desc.indexOf("`");
           int close = desc.indexOf("`", open + 1);
           if (open < 0 || close < 0) {
-            log.warn("Cannot convert code fragment in line {}. Exiting.");
+            log.warn("Cannot convert code fragment in line {}. Exiting.", line);
             System.exit(1);
           }
           desc = desc.substring(0, open) + "<code>"
