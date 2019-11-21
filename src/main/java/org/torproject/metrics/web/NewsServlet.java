@@ -10,9 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TimeZone;
-import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +21,6 @@ public class NewsServlet extends AnyServlet {
   private static final long serialVersionUID = -7696996243187241242L;
 
   protected List<News> sortedNews;
-
-  protected SortedMap<String, String> countries;
 
   @Override
   public void init() throws ServletException {
@@ -37,11 +33,6 @@ public class NewsServlet extends AnyServlet {
     }
     sortedNews.sort((o1, o2) -> o1.getStart().compareTo(o2.getStart()) * -1);
     this.sortedNews = sortedNews;
-    SortedMap<String, String> countries = new TreeMap<>();
-    for (String[] country : Countries.getInstance().getCountryList()) {
-      countries.put(country[0], country[1]);
-    }
-    this.countries = countries;
   }
 
   @Override
