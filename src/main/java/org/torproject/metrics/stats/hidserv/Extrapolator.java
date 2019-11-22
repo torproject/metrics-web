@@ -197,52 +197,46 @@ public class Extrapolator {
           }
         }
 
-        /* If we don't know a single consensus with valid-after time in
-         * the statistics interval, skip this stat. */
-        if (consensuses == 0) {
-          continue;
-        }
+        /* Compute means of network fractions, or assume 0.0 if we don't
+         * know a single consensus with valid-after time in the statistics
+         * interval. */
+        double fractionRendRelayedCells = consensuses == 0 ? 0.0
+            : sumFractionRendRelayedCells / consensuses;
+        double fractionDirOnionsSeen = consensuses == 0 ? 0.0
+            : sumFractionDirOnionsSeen / consensuses;
 
-        /* Compute means of network fractions. */
-        double fractionRendRelayedCells =
-            sumFractionRendRelayedCells / consensuses;
-        double fractionDirOnionsSeen =
-            sumFractionDirOnionsSeen / consensuses;
-
-        /* If at least one fraction is positive, extrapolate network
-         * totals. */
-        if (fractionRendRelayedCells > 0.0
-            || fractionDirOnionsSeen > 0.0) {
-          ExtrapolatedHidServStats extrapolated =
-              new ExtrapolatedHidServStats(
-              statsDateMillis, fingerprint);
-          if (fractionRendRelayedCells > 0.0) {
-            extrapolated.setFractionRendRelayedCells(
-                fractionRendRelayedCells);
-            /* Extrapolating cells on rendezvous circuits is as easy as
-             * dividing the reported number by the computed network
-             * fraction. */
-            double extrapolatedRendRelayedCells =
-                stats.getRendRelayedCells() / fractionRendRelayedCells;
-            extrapolated.setExtrapolatedRendRelayedCells(
-                extrapolatedRendRelayedCells);
-          }
-          if (fractionDirOnionsSeen > 0.0) {
-            extrapolated.setFractionDirOnionsSeen(
-                fractionDirOnionsSeen);
-            /* Extrapolating reported unique .onion addresses to the
-             * total number in the network is more difficult.  In short,
-             * each descriptor is stored to 12 (likely) different
-             * directories, so we'll have to divide the reported number by
-             * 12 and then by the computed network fraction of this
-             * directory. */
-            double extrapolatedDirOnionsSeen =
-                stats.getDirOnionsSeen() / (12.0 * fractionDirOnionsSeen);
-            extrapolated.setExtrapolatedDirOnionsSeen(
-                extrapolatedDirOnionsSeen);
-          }
-          extrapolatedStats.add(extrapolated);
+        /* Extrapolate network totals. If we don't know a single
+         * consensus, store an empty statistic anyway to avoid processing
+         * these reported statistics over and over. */
+        ExtrapolatedHidServStats extrapolated =
+            new ExtrapolatedHidServStats(
+            statsDateMillis, fingerprint);
+        if (fractionRendRelayedCells > 0.0) {
+          extrapolated.setFractionRendRelayedCells(
+              fractionRendRelayedCells);
+          /* Extrapolating cells on rendezvous circuits is as easy as
+           * dividing the reported number by the computed network
+           * fraction. */
+          double extrapolatedRendRelayedCells =
+              stats.getRendRelayedCells() / fractionRendRelayedCells;
+          extrapolated.setExtrapolatedRendRelayedCells(
+              extrapolatedRendRelayedCells);
         }
+        if (fractionDirOnionsSeen > 0.0) {
+          extrapolated.setFractionDirOnionsSeen(
+              fractionDirOnionsSeen);
+          /* Extrapolating reported unique .onion addresses to the
+           * total number in the network is more difficult.  In short,
+           * each descriptor is stored to 12 (likely) different
+           * directories, so we'll have to divide the reported number by
+           * 12 and then by the computed network fraction of this
+           * directory. */
+          double extrapolatedDirOnionsSeen =
+              stats.getDirOnionsSeen() / (12.0 * fractionDirOnionsSeen);
+          extrapolated.setExtrapolatedDirOnionsSeen(
+              extrapolatedDirOnionsSeen);
+        }
+        extrapolatedStats.add(extrapolated);
       }
     }
 

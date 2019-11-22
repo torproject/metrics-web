@@ -1,5 +1,10 @@
 # Changes in version 1.?.? - 2019-1?-??
 
+ * Medium changes
+   - Improve runtime performance of the hidserv module by storing
+     extrapolated statistics even if computed network fractions are
+     zero, to avoid re-processing these statistics over and over.
+
 
 # Changes in version 1.3.0 - 2019-11-09
 
