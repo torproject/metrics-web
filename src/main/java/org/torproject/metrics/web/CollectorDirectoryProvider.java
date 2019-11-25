@@ -3,8 +3,6 @@
 
 package org.torproject.metrics.web;
 
-import org.torproject.descriptor.index.IndexNode;
-
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -54,9 +52,10 @@ public class CollectorDirectoryProvider implements Runnable {
    * produce directory listings as requested. */
   @Override
   public void run() {
-    IndexNode indexNode;
     try {
-      indexNode = IndexNode.fetchIndex(this.host + "/index/index.json.gz");
+      DirectoryListing directoryListing
+          = DirectoryListing.ofHostString(this.host);
+      this.index.set(directoryListing);
     } catch (Exception e) {
       /* If we failed to fetch the remote index.json this time, abort the
        * update and don't override what we possibly fetched last time. If this
@@ -64,9 +63,7 @@ public class CollectorDirectoryProvider implements Runnable {
        * it's a permanent problem, we'll at least serve the last known files.
        * Unless it's a permanent problem right from when we started in which
        * case there's nothing we can do other than return 500. */
-      return;
     }
-    this.index.set(new DirectoryListing(indexNode));
   }
 
 }

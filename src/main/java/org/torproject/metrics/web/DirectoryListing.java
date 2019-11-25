@@ -3,10 +3,18 @@
 
 package org.torproject.metrics.web;
 
-import org.torproject.descriptor.index.DirectoryNode;
-import org.torproject.descriptor.index.FileNode;
-import org.torproject.descriptor.index.IndexNode;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,20 +35,127 @@ public class DirectoryListing extends HashMap<String, List<String[]>>
     extractDirectoryListings();
   }
 
+  /**
+   * Parsed {@code index.json} file, which can be the root node ("index node"),
+   * an inner node ("directory node"), or a leaf node ("file node").
+   */
+  private static class IndexNode implements Comparable<IndexNode> {
+
+    /**
+     * Relative path from this node's parent node, or the CollecTor host's base
+     * URL if this is the root node.
+     */
+    String path;
+
+    /**
+     * List of file nodes available in this directory, or {@code null} if this
+     * is a leaf node.
+     */
+    SortedSet<IndexNode> files;
+
+    /**
+     * List of directory nodes in this directory, or {@code null} if this is a
+     * leaf node.
+     */
+    SortedSet<IndexNode> directories;
+
+    /**
+     * Size of the file in bytes if this is a leaf node, or {@code null}
+     * otherwise.
+     */
+    Long size;
+
+    /**
+     * Timestamp when this file was last modified using pattern
+     * {@code "YYYY-MM-DD HH:MM"} in the UTC timezone if this is a leaf node, or
+     * {@code null} otherwise.
+     */
+    String lastModified;
+
+    /**
+     * Compare two index nodes by their (relative) path in alphabetic order.
+     *
+     * @param other The other index node to compare to.
+     * @return Comparison result of the two node's paths.
+     */
+    @Override
+    public int compareTo(IndexNode other) {
+      return this.path.compareTo(other.path);
+    }
+  }
+
+  /**
+   * Timeout in milliseconds for reading from remote CollecTor host.
+   */
+  private static final int READ_TIMEOUT = Integer.parseInt(System
+      .getProperty("sun.net.client.defaultReadTimeout", "60000"));
+
+  /**
+   * Timeout in milliseconds for connecting to remote CollecTor host.
+   */
+  private static final int CONNECT_TIMEOUT = Integer.parseInt(System
+      .getProperty("sun.net.client.defaultConnectTimeout", "60000"));
+
+  /**
+   * Object mapper for parsing {@code index.json} files.
+   */
+  private static ObjectMapper objectMapper = new ObjectMapper()
+      .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+      .setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
+      .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
+      .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+  /**
+   * Create a new instance by downloading an {@code index.json} file from the
+   * given CollecTor host and parsing its contents.
+   *
+   * @param host CollecTor host to download the {@code index.json} file from.
+   * @return Parsed directory listings.
+   * @throws IOException Thrown if downloading or parsing the {@code index.json}
+   *     file fails.
+   */
+  public static DirectoryListing ofHostString(String host) throws IOException {
+    String urlString = host + "/index/index.json.gz";
+    URLConnection connection = new URL(urlString).openConnection();
+    connection.setReadTimeout(READ_TIMEOUT);
+    connection.setConnectTimeout(CONNECT_TIMEOUT);
+    connection.connect();
+    try (InputStream inputStream
+        = new GzipCompressorInputStream(connection.getInputStream())) {
+      return ofInputStream(inputStream);
+    }
+  }
+
+  /**
+   * Create a new instance by parsing an {@code index.json} file from the
+   * given stream.
+   *
+   * @param inputStream Input stream providing (uncompressed) {@code index.json}
+   *     file contents.
+   * @return Parsed directory listings.
+   * @throws IOException Thrown if parsing the {@code index.json} file fails.
+   */
+  public static DirectoryListing ofInputStream(InputStream inputStream)
+      throws IOException {
+    IndexNode index = objectMapper.readValue(inputStream, IndexNode.class);
+    return new DirectoryListing(index);
+  }
+
   /** Extracts directory listing from an index node by visiting all nodes. */
   private void extractDirectoryListings() {
-    Map<DirectoryNode, String> directoryNodes = new HashMap<>();
+    Map<IndexNode, String> directoryNodes = new HashMap<>();
     this.put("/collector/",
         formatTableEntries("", "/", this.index.directories, this.index.files));
-    for (DirectoryNode directory : this.index.directories) {
+    for (IndexNode directory : this.index.directories) {
       directoryNodes.put(directory, "/");
     }
     while (!directoryNodes.isEmpty()) {
-      DirectoryNode currentDirectoryNode =
+      IndexNode currentDirectoryNode =
           directoryNodes.keySet().iterator().next();
       String parentPath = directoryNodes.remove(currentDirectoryNode);
       if (null != currentDirectoryNode.directories) {
-        for (DirectoryNode subDirectoryNode
+        for (IndexNode subDirectoryNode
             : currentDirectoryNode.directories) {
           directoryNodes.put(subDirectoryNode, String.format("%s%s/",
               parentPath, currentDirectoryNode.path));
@@ -55,20 +170,20 @@ public class DirectoryListing extends HashMap<String, List<String[]>>
 
   /** Formats table entries for a given directory. */
   private List<String[]> formatTableEntries(String parentPath, String path,
-      SortedSet<DirectoryNode> directories, SortedSet<FileNode> files) {
+      SortedSet<IndexNode> directories, SortedSet<IndexNode> files) {
     List<String[]> tableEntries = new ArrayList<>();
     tableEntries.add(new String[] { "Parent Directory",
         String.format("/collector%s",
         parentPath.isEmpty() ? ".html" : parentPath), "", "" });
     if (null != directories) {
-      for (DirectoryNode subDirectoryNode : directories) {
+      for (IndexNode subDirectoryNode : directories) {
         tableEntries.add(new String[] { subDirectoryNode.path,
             String.format("/collector%s%s%s/", parentPath, path,
             subDirectoryNode.path), "", "" });
       }
     }
     if (null != files) {
-      for (FileNode fileNode : new TreeSet<>(files).descendingSet()) {
+      for (IndexNode fileNode : new TreeSet<>(files).descendingSet()) {
         tableEntries.add(new String[] { fileNode.path,
             String.format("%s%s%s%s", this.index.path, parentPath,
             path, fileNode.path), fileNode.lastModified,

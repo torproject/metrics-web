@@ -6,8 +6,6 @@ package org.torproject.metrics.web;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.torproject.descriptor.index.IndexNode;
-
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -49,8 +47,8 @@ public class DirectoryListingTest {
 
   @Test
   public void testListing() throws Exception {
-    DirectoryListing dl = new DirectoryListing(IndexNode
-        .fetchIndex(new ByteArrayInputStream(jsonIndex.getBytes())));
+    DirectoryListing dl = DirectoryListing.ofInputStream(
+        new ByteArrayInputStream(jsonIndex.getBytes()));
     assertEquals(4, dl.size());
     for (String key : new String[]{"/collector/a1/", "/collector/",
         "/collector/a1/p2/", "/collector/a1/p1/"}) {
