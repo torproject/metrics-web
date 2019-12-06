@@ -3959,6 +3959,55 @@
     "target" : "https://bugs.torproject.org/32129#comment:5"
   } ]
 }, {
+  "start" : "2019-11-13",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Restarted the broker with a new proxy–broker protocol.",
+  "description" : "Restarted the broker with a new proxy&ndash;broker protocol.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/29207#comment:31"
+  } ]
+}, {
+  "start" : "2019-11-13",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Released version 0.1.0 of the Snowflake extension for Firefox and Chrome, using a new proxy–broker protocol.",
+  "description" : "Released version 0.1.0 of the Snowflake extension for Firefox and Chrome, using a new proxy&ndash;broker protocol.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/29207#comment:32"
+  } ]
+}, {
+  "start" : "2019-11-14",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Deployed webext-0.1.0 of the Snowflake proxy",
+  "description" : "Deployed webext-0.1.0 of the Snowflake proxy (which uses a new proxy&ndash;broker protocol) to snowflake.torproject.org.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/29207#comment:34"
+  } ]
+}, {
+  "start" : "2019-11-14",
+  "protocols" : [ "snowflake", "ipv6" ],
+  "short_description" : "Changed DNS to point to the IPv6-enabled Snowflake broker.",
+  "description" : "Changed DNS to point to the IPv6-enabled Snowflake broker.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/29258#comment:16"
+  } ]
+}, {
+  "start" : "2019-11-16",
+  "end" : "2019-11-23",
+  "places" : [ "ir" ],
+  "short_description" : "Internet blackout in Iran.",
+  "description" : "Internet blackout in Iran.",
+  "links" : [ {
+    "label" : "report",
+    "target" : "https://ooni.org/post/2019-iran-internet-blackout/"
+  }, {
+    "label" : "NTC thread",
+    "target" : "https://ntc.party/t/a-new-kind-of-censoship-in-iran/237"
+  } ]
+}, {
   "start" : "2014-06-01",
   "end" : "2014-06-19",
   "places" : [ "ru" ],
