@@ -54,6 +54,7 @@ https://metrics.torproject.org/identifier.csv
 <li><b>June 2, 2019:</b> Added <a href="#onionperf-throughput">Throughput</a> graph.</li>
 <li><b>August 5, 2019:</b> Re-added the <a href="#bandwidth">Total relay bandwidth</a> graph due to popular demand.</li>
 <li><b>October 2, 2019:</b> Added <a href="#webstats-tb-channel">Tor Browser updates by release channel</a> graph.</li>
+<li><b>December 18, 2019:</b> Added <a href="#bridgedb-transport">BridgeDB requests by requested transport</a> and <a href="#bridgedb-distributor">BridgeDB requests by distributor</a> graphs.</li>
 </ul>
 
 </div>
@@ -176,6 +177,46 @@ using bridges, which can be either <b>"v4"</b> or <b>"v6"</b>.</li>
 <li><b>version:</b> IP version used by clients to connect to the Tor network using bridges, which can be either <b>"v4"</b> or <b>"v6"</b>. If this column contains the empty string, all clients are included, regardless of their IP version.</li>
 <li><b>users:</b> Estimated number of clients.</li>
 <li><b>frac:</b> Fraction of bridges in percent that the estimate is based on.</li>
+</ul>
+
+<h3>BridgeDB requests by requested transport
+<a href="/bridgedb-transport.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/bridgedb-transport.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="#bridgedb-transport" name="bridgedb-transport" class="anchor">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when requests were sent to BridgeDB.</li>
+<li><b>transport:</b> Name of the pluggable transport protocol, which includes <code>"obfs2"</code>, <code>"obfs3"</code>, <code>"obfs4"</code>, <code>"scramblesuit"</code>, and <code>"fte"</code>, and which will change in the future.</li>
+<li><b>requests:</b> Approximate number of requests for the given transport.</li>
+</ul>
+
+<h3>BridgeDB requests by distributor
+<a href="/bridgedb-distributor.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a>
+<a href="/bridgedb-distributor.csv" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> data</a>
+<a href="#bridgedb-distributor" name="bridgedb-distributor" class="anchor">#</a></h3>
+
+<h4>Parameters</h4>
+
+<ul>
+<li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
+<li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
+</ul>
+
+<h4>Columns</h4>
+
+<ul>
+<li><b>date:</b> UTC date (YYYY-MM-DD) when requests were sent to BridgeDB.</li>
+<li><b>distributor:</b> Name of BridgeDB's distributor, which includes <code>"https"</code>, <code>"email"</code>, and <code>"moat"</code>, and which may change in the future.</li>
+<li><b>requests:</b> Approximate number of requests for the given distributor.</li>
 </ul>
 
 </div>

@@ -20,6 +20,7 @@ public class Main {
         DescriptorSourceFactory.createDescriptorCollector();
     collector.collectDescriptors(
         "https://collector.torproject.org", new String[] {
+            "/recent/bridgedb-metrics/",
             "/recent/bridge-descriptors/extra-infos/",
             "/recent/bridge-descriptors/server-descriptors/",
             "/recent/bridge-descriptors/statuses/",

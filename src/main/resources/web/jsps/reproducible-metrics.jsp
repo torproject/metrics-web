@@ -230,6 +230,48 @@ We therefore refer to Step 4 of the <a href="#relay-users">Relay users</a> descr
 </div>
 
 <div class="container">
+<h3 id="bridgedb-requests" class="hover">BridgeDB requests
+<a href="#bridgedb-requests" class="anchor">#</a>
+</h3>
+
+<p>BridgeDB metrics contain aggregated information about requests to the BridgeDB service.
+BridgeDB keeps track of each request per distribution method (HTTPS, moat, email), per bridge type (e.g., <code>vanilla</code> or <code>obfs4</code>) per country code or email provider (e.g., <code>"ru"</code> or <code>"gmail"</code>) per request success (<code>"success"</code> or <code>"fail"</code>).
+Every 24 hours, BridgeDB writes these metrics to disk and then begins a new measurement interval.</p>
+
+<p>The following description applies to the following graphs:</p>
+
+<ul>
+<li>BridgeDB requests by requested transport <a href="/bridgedb-transport.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
+<li>BridgeDB requests by distributor <a href="/bridgedb-distributor.html" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> graph</a></li>
+</ul>
+
+<h4>Step 1: Parse BridgeDB metrics to obtain reported request numbers</h4>
+
+<p>Obtain BridgeDB metrics from <a href="/collector.html#type-bridgedb-metrics">CollecTor</a>.
+Refer to the <a href="https://gitweb.torproject.org/bridgedb.git/tree/doc/bridgedb-metrics-spec.txt">BridgeDB metrics specification</a> for details on the descriptor format.</p>
+
+<h4>Step 2: Skip requests coming in over Tor exits</h4>
+
+<p>Skip any request counts with <code>"zz"</code> as their <code>CC/EMAIL</code> metrics key part.
+We use the <code>"zz"</code> pseudo country code for requests originating from Tor exit relays.
+We're discarding these requests because <a href="https://bugs.torproject.org/32117">bots use the Tor network to crawl BridgeDB</a>, and including bot requests would provide a
+false sense of how users interact with BridgeDB.
+Note that BridgeDB maintains a separate distribution pool for requests coming from Tor exit relays.</p>
+
+<h4>Step 3: Aggregate requests by date, distributor, and transport</h4>
+
+<p>BridgeDB metrics contain request numbers broken down by distributor, bridge type, and a few more dimensions.
+For our purposes we only care about total request numbers by date and either distributor or transport.
+Our total request number includes both successful (i.e., the user ended up getting bridge lines)
+and unsuccessful (e.g., the user failed to solve the CAPTCHA) requests.
+We're using request sums by these three dimensions as aggregates and we are subtracting <code>bin_size/2</code>
+from each count to better approximate the count before binning.
+As date we're using the date of the BridgeDB metrics interval end.
+If we encounter more than one BridgeDB metrics interval end on the same UTC date (which shouldn't be possible with an interval length of 24 hours), we arbitrarily keep whichever we process first.</p>
+
+</div>
+
+<div class="container">
 <h2><i class="fa fa-server fa-fw" aria-hidden="true"></i>
 Servers <a href="#servers" name="servers" class="anchor">#</a></h2>
 

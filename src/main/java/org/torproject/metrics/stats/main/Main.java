@@ -56,7 +56,8 @@ public class Main {
         org.torproject.metrics.stats.clients.Main.class,
         org.torproject.metrics.stats.servers.Main.class,
         org.torproject.metrics.stats.webstats.Main.class,
-        org.torproject.metrics.stats.totalcw.Main.class
+        org.torproject.metrics.stats.totalcw.Main.class,
+        org.torproject.metrics.stats.bridgedb.Main.class
     };
 
     for (Class<?> module : modules) {
@@ -84,7 +85,8 @@ public class Main {
         new File(modulesDir, "clients/stats/userstats-combined.csv"),
         new File(modulesDir, "servers/stats"),
         new File(modulesDir, "webstats/stats"),
-        new File(modulesDir, "totalcw/stats")
+        new File(modulesDir, "totalcw/stats"),
+        new File(modulesDir, "bridgedb/stats")
     };
     List<String> copiedFiles = new ArrayList<>();
     for (File moduleStatsDir : moduleStatsDirs) {

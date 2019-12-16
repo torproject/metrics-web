@@ -447,5 +447,27 @@
       "start",
       "end"
     ]
+  },
+  {
+    "id": "bridgedb-transport",
+    "title": "BridgeDB requests by requested transport",
+    "type": "Graph",
+    "description": "<p>This graph shows the number of BridgeDB requests for each requested transport. BridgeDB requests over Tor are not included in these numbers.</p>",
+    "function": "bridgedb_transport",
+    "parameters": [
+      "start",
+      "end"
+    ]
+  },
+  {
+    "id": "bridgedb-distributor",
+    "title": "BridgeDB requests by distributor",
+    "type": "Graph",
+    "description": "<p>This graph shows the number of BridgeDB requests for each distributor. HTTPS requests over Tor are not included in these numbers.</p>",
+    "function": "bridgedb_distributor",
+    "parameters": [
+      "start",
+      "end"
+    ]
   }
 ]

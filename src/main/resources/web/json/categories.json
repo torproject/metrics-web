@@ -11,6 +11,8 @@
       "userstats-bridge-transport",
       "userstats-bridge-combined",
       "userstats-bridge-version",
+      "bridgedb-transport",
+      "bridgedb-distributor",
       "userstats-relay-table",
       "userstats-censorship-events",
       "userstats-bridge-table",

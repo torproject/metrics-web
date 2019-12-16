@@ -57,6 +57,8 @@
     <url-pattern>/bridges-ipv6.html</url-pattern>
     <url-pattern>/advbw-ipv6.html</url-pattern>
     <url-pattern>/totalcw.html</url-pattern>
+    <url-pattern>/bridgedb-transport.html</url-pattern>
+    <url-pattern>/bridgedb-distributor.html</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -201,6 +203,12 @@
     <url-pattern>/totalcw.png</url-pattern>
     <url-pattern>/totalcw.pdf</url-pattern>
     <url-pattern>/totalcw.csv</url-pattern>
+    <url-pattern>/bridgedb-transport.png</url-pattern>
+    <url-pattern>/bridgedb-transport.pdf</url-pattern>
+    <url-pattern>/bridgedb-transport.csv</url-pattern>
+    <url-pattern>/bridgedb-distributor.png</url-pattern>
+    <url-pattern>/bridgedb-distributor.pdf</url-pattern>
+    <url-pattern>/bridgedb-distributor.csv</url-pattern>
   </servlet-mapping>
 
   <servlet>

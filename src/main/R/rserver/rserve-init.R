@@ -1721,3 +1721,59 @@ write_userstats_censorship_events <- function(start, end, path) {
   write.csv(r, path, quote = FALSE, row.names = FALSE)
 }
 
+prepare_bridgedb_transport <- function(start_p = NULL, end_p = NULL) {
+  read_csv(file = paste(stats_dir, "bridgedb-stats.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        distributor = col_skip(),
+        transport = col_character(),
+        requests = col_double())) %>%
+    filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
+    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
+    group_by(date, transport) %>%
+    summarize(requests = sum(requests)) %>%
+    arrange(date, transport)
+}
+
+plot_bridgedb_transport <- function(start_p, end_p, path_p) {
+  prepare_bridgedb_transport(start_p, end_p) %>%
+    complete(date = full_seq(date, period = 1), nesting(transport)) %>%
+    ggplot(aes(x = date, y = requests, colour = transport)) +
+    geom_line(na.rm = TRUE) +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
+    scale_colour_hue(name = "") +
+    ggtitle("BridgeDB requests by requested transport") +
+    labs(caption = copyright_notice)
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
+prepare_bridgedb_distributor <- function(start_p = NULL, end_p = NULL) {
+  read_csv(file = paste(stats_dir, "bridgedb-stats.csv", sep = ""),
+      col_types = cols(
+        date = col_date(format = ""),
+        distributor = col_character(),
+        transport = col_skip(),
+        requests = col_double())) %>%
+    filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
+    filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
+    group_by(date, distributor) %>%
+    summarize(requests = sum(requests)) %>%
+    arrange(date, distributor)
+}
+
+plot_bridgedb_distributor <- function(start_p, end_p, path_p) {
+  prepare_bridgedb_distributor(start_p, end_p) %>%
+    complete(date = full_seq(date, period = 1), nesting(distributor)) %>%
+    ggplot(aes(x = date, y = requests, colour = distributor)) +
+    geom_line(na.rm = TRUE) +
+    scale_x_date(name = "", breaks = custom_breaks,
+      labels = custom_labels, minor_breaks = custom_minor_breaks) +
+    scale_y_continuous(name = "", labels = formatter, limits = c(0, NA)) +
+    scale_colour_hue(name = "") +
+    ggtitle("BridgeDB requests by distributor") +
+    labs(caption = copyright_notice)
+  ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
+}
+
