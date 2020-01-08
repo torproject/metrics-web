@@ -44,13 +44,13 @@
     <c:if test="${fn:length(start) > 0}">
       <p>
         <label for="start">Start date:</label>
-        <input type="text" name="start" size="10" value="${start[0]}" placeholder="yyyy-mm-dd" id="start">
+        <input type="date" name="start" size="10" value="${start[0]}" placeholder="yyyy-mm-dd" id="start">
       </p>
     </c:if>
     <c:if test="${fn:length(end) > 0}">
       <p>
         <label for="end">End date:</label>
-        <input type="text" name="end" size="10" value="${end[0]}" placeholder="yyyy-mm-dd" id="end">
+        <input type="date" name="end" size="10" value="${end[0]}" placeholder="yyyy-mm-dd" id="end">
       </p>
     </c:if>
     <c:if test="${fn:length(p) > 0}">
