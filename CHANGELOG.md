@@ -5,6 +5,9 @@
      extrapolated statistics even if computed network fractions are
      zero, to avoid re-processing these statistics over and over.
 
+ * Minor changes
+   - Make Jetty host configurable.
+
 
 # Changes in version 1.3.0 - 2019-11-09
 
