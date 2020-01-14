@@ -817,7 +817,8 @@ We need to subtract out the multiple counting of .onion addresses to come up wit
 the service stores <em>two</em> replicas per descriptor using different descriptor identifiers, both descriptor replicas get stored to <em>three</em> different onion-service directories each, and the service changes descriptor identifiers once every 24 hours which leads to <em>two</em> different descriptor identifiers per replica.</p>
 
 <p>To be clear, this approximation is not entirely accurate.
-For example, the two replicas or the descriptors with changed descriptor identifiers could have been stored to the same directory.
+For example, the descriptors of roughly 1/24 of services are seen by 3 rather than 2 sets of onion-service directories, when a service changes descriptor identifiers once at the beginning of a relay's statistics interval and once again towards the end.
+In some cases, the two replicas or the descriptors with changed descriptor identifiers could have been stored to the same directory.
 As another example, onion-service directories might have joined or left the network and other directories might have become responsible for storing a descriptor which also include that .onion address in their statistics.
 However, for the subsequent analysis, we assume that neither of these cases affects results substantially.</p>
 
