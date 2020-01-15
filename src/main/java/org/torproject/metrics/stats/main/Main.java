@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Main {
 
@@ -28,6 +29,8 @@ public class Main {
   public static void main(String[] args) {
 
     log.info("Starting metrics update run.");
+
+    Locale.setDefault(Locale.US);
 
     File[] outputDirs = new File[] { modulesDir, statsDir };
     for (File outputDir : outputDirs) {

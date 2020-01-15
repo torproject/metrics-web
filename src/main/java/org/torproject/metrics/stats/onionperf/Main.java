@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -251,7 +250,7 @@ public class Main {
     Statement st = connection.createStatement();
     String queryString = "SELECT date, filesize, source, server, q1, md, q3, "
         + "timeouts, failures, requests FROM onionperf";
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     try (ResultSet rs = st.executeQuery(queryString)) {
@@ -280,7 +279,7 @@ public class Main {
     Statement st = connection.createStatement();
     String queryString = "SELECT date, source, position, q1, md, q3 "
         + "FROM buildtimes_stats";
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     try (ResultSet rs = st.executeQuery(queryString)) {
@@ -305,7 +304,7 @@ public class Main {
     Statement st = connection.createStatement();
     String queryString = "SELECT date, source, server, low, q1, md, q3, high "
         + "FROM latencies_stats";
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     try (ResultSet rs = st.executeQuery(queryString)) {
@@ -332,7 +331,7 @@ public class Main {
     Statement st = connection.createStatement();
     String queryString = "SELECT date, source, server, low, q1, md, q3, high "
         + "FROM throughput_stats";
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     try (ResultSet rs = st.executeQuery(queryString)) {

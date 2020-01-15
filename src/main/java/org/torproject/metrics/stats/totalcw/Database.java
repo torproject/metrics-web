@@ -17,7 +17,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 /** Database wrapper to connect to the database, insert data, run the stored
@@ -122,8 +121,7 @@ class Database implements AutoCloseable {
 
   private void insertStatusIfAbsent(LocalDateTime validAfter,
       Integer authorityId, long[] measuredSums) throws SQLException {
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     this.psVoteSelect.clearParameters();
     this.psVoteSelect.setTimestamp(1,
         Timestamp.from(ZonedDateTime.of(validAfter,
@@ -173,8 +171,7 @@ class Database implements AutoCloseable {
   Iterable<OutputLine> queryTotalcw() throws SQLException {
     List<OutputLine> statistics = new ArrayList<>();
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + OutputLine.columnHeadersDelimitedBy(", ")
         + " FROM totalcw";
     try (ResultSet rs = st.executeQuery(queryString)) {

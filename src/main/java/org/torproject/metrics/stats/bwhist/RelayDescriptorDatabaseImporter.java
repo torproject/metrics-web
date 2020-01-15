@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -626,8 +625,7 @@ public final class RelayDescriptorDatabaseImporter {
         + "dirwrite";
     statistics.add(columns.split(", "));
     Statement st = this.conn.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM stats_bandwidth";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {

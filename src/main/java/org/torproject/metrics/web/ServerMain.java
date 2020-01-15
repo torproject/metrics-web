@@ -9,12 +9,15 @@ import org.eclipse.jetty.xml.XmlConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Locale;
+
 public class ServerMain {
 
   private static final Logger log = LoggerFactory.getLogger(ServerMain.class);
 
   /** Starts the web server listening for incoming client connections. */
   public static void main(String[] args) {
+    Locale.setDefault(Locale.US);
     try {
       Resource jettyXml = Resource.newSystemResource("jetty.xml");
       log.info("Reading configuration from '{}'.", jettyXml);

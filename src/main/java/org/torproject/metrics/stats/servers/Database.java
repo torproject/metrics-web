@@ -18,7 +18,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -267,8 +266,7 @@ class Database implements AutoCloseable {
     this.psStatusesSelect.clearParameters();
     this.psStatusesSelect.setString(1,
         networkStatus.isRelay ? "relay" : "bridge");
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     this.psStatusesSelect.setTimestamp(2,
         Timestamp.from(ZonedDateTime.of(networkStatus.timestamp,
         ZoneId.of("UTC")).toInstant()), calendar);
@@ -414,8 +412,7 @@ class Database implements AutoCloseable {
         + "server_count_sum_avg, advertised_bandwidth_bytes_sum_avg";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM ipv6servers";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
@@ -443,8 +440,7 @@ class Database implements AutoCloseable {
     String columns = "date, isexit, isguard, advbw";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM bandwidth_advbw";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
@@ -465,8 +461,7 @@ class Database implements AutoCloseable {
     String columns = "date, relays, bridges";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM servers_networksize";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
@@ -486,8 +481,7 @@ class Database implements AutoCloseable {
     String columns = "date, flag, relays";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM servers_relayflags";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
@@ -507,8 +501,7 @@ class Database implements AutoCloseable {
     String columns = "date, version, relays";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM servers_versions";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
@@ -528,8 +521,7 @@ class Database implements AutoCloseable {
     String columns = "date, platform, relays";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM servers_platforms";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {

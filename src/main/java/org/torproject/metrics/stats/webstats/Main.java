@@ -33,7 +33,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TimeZone;
@@ -272,10 +271,9 @@ public class Main {
     SortedSet<String> statistics = new TreeSet<>();
     Statement st = connection.createStatement();
     String queryString = "SELECT " + ALL_COLUMNS + " FROM webstats";
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"),
-        Locale.US);
+    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         statistics.add(String.format("%s,%s,%s,%s,%s,%s,%d",

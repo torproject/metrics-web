@@ -6,8 +6,6 @@ package org.torproject.metrics.stats.hidserv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Locale;
-
 /** Extrapolated network totals of hidden-service statistics reported by a
  * single relay.  Extrapolated values are based on reported statistics and
  * computed network fractions in the statistics interval. */
@@ -118,10 +116,10 @@ public class ExtrapolatedHidServStats implements Document {
         DateTimeHelper.ISO_DATE_FORMAT);
     String second = this.fingerprint
         + (this.fractionRendRelayedCells == 0.0 ? ",,"
-        : String.format(Locale.US, ",%.0f,%f",
+        : String.format(",%.0f,%f",
         this.extrapolatedRendRelayedCells, this.fractionRendRelayedCells))
         + (this.fractionDirOnionsSeen == 0.0 ? ",,"
-        : String.format(Locale.US, ",%.0f,%f",
+        : String.format(",%.0f,%f",
         this.extrapolatedDirOnionsSeen, this.fractionDirOnionsSeen));
     return new String[] { first, second };
   }

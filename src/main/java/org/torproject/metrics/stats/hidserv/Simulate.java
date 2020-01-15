@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.SortedMap;
@@ -197,7 +196,7 @@ public class Simulate {
           totalInterquartileProbability += extrapolation[2];
         }
       }
-      sb.append(String.format(Locale.US, "%d,%.2f,%.0f,%.0f,%.0f%n", run,
+      sb.append(String.format("%d,%.2f,%.0f,%.0f,%.0f%n", run,
           fraction, totalValues / totalProbability, weightedMedian,
           totalInterquartileValues / totalInterquartileProbability));
     }
@@ -352,7 +351,7 @@ public class Simulate {
           totalInterquartileProbability += extrapolation[2];
         }
       }
-      sb.append(String.format(Locale.US, "%d,%.2f,%.0f,%.0f,%.0f%n", run,
+      sb.append(String.format("%d,%.2f,%.0f,%.0f,%.0f%n", run,
           fraction, totalValues / totalProbability, weightedMedian,
           totalInterquartileValues / totalInterquartileProbability));
     }
