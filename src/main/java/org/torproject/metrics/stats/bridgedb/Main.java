@@ -1,4 +1,4 @@
-/* Copyright 2019 The Tor Project
+/* Copyright 2019--2020 The Tor Project
  * See LICENSE for licensing information */
 
 package org.torproject.metrics.stats.bridgedb;

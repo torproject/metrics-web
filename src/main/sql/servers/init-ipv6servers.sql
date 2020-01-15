@@ -1,4 +1,4 @@
--- Copyright 2017--2018 The Tor Project
+-- Copyright 2017--2020 The Tor Project
 -- See LICENSE for licensing information
 
 -- Table of all known flags, to match flag strings to bit positions in the flags

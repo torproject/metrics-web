@@ -35,7 +35,7 @@
  * (Clear BSD license:
  * http://labs.metacarta.com/license-explanation.html#license)
  *
- * Copyright 2018 The Tor Project
+ * Copyright 2018--2020 The Tor Project
  * See LICENSE for licensing information */
 
 package org.torproject.metrics.stats.clients;
