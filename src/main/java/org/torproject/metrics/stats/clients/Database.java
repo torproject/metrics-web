@@ -12,9 +12,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 /** Database wrapper to connect to the database, insert data, run the stored
  * procedure for aggregating data, and query aggregated data as output. */
@@ -94,12 +92,11 @@ class Database implements AutoCloseable {
     String columns = "date, node, country, transport, version, frac, users";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM estimated";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         String[] outputLine = new String[7];
-        outputLine[0] = rs.getDate("date", calendar).toLocalDate().toString();
+        outputLine[0] = rs.getDate("date").toLocalDate().toString();
         outputLine[1] = rs.getString("node");
         outputLine[2] = rs.getString("country");
         outputLine[3] = rs.getString("transport");
@@ -118,12 +115,11 @@ class Database implements AutoCloseable {
     String columns = "date, node, country, transport, version, frac, low, high";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM combined";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         String[] outputLine = new String[8];
-        outputLine[0] = rs.getDate("date", calendar).toLocalDate().toString();
+        outputLine[0] = rs.getDate("date").toLocalDate().toString();
         outputLine[1] = rs.getString("node");
         outputLine[2] = rs.getString("country");
         outputLine[3] = rs.getString("transport");

@@ -10,6 +10,7 @@
    - Configure a base URL in order to turn ExoneraTor's permanent
      links into https:// links.
    - Set default locale `US` at the beginning of the execution.
+   - Set default time zone `UTC` at the beginning of the execution.
 
 
 # Changes in version 1.3.0 - 2019-11-09

@@ -11,6 +11,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Main {
 
@@ -31,6 +32,7 @@ public class Main {
     log.info("Starting metrics update run.");
 
     Locale.setDefault(Locale.US);
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
     File[] outputDirs = new File[] { modulesDir, statsDir };
     for (File outputDir : outputDirs) {

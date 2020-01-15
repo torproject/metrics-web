@@ -24,11 +24,9 @@ import java.sql.Types;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TimeZone;
 
 public class Main {
 
@@ -96,7 +94,6 @@ public class Main {
         "INSERT INTO buildtimes (measurement_id, position, buildtime, delta) "
             + "VALUES (?, ?, ?, ?)");
 
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     DescriptorReader dr = DescriptorSourceFactory.createDescriptorReader();
     for (Descriptor d : dr.readDescriptors(
         new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
@@ -113,7 +110,7 @@ public class Main {
       psMeasurementsSelect.setString(1, truncatedSource);
       psMeasurementsSelect.setInt(2, tr.getFileSize());
       psMeasurementsSelect.setTimestamp(3,
-          new Timestamp(tr.getStartMillis()), calendar);
+          new Timestamp(tr.getStartMillis()));
       try (ResultSet rs = psMeasurementsSelect.executeQuery()) {
         if (rs.next()) {
           measurementId = rs.getInt(1);
@@ -124,7 +121,7 @@ public class Main {
         psMeasurementsInsert.setString(1, truncatedSource);
         psMeasurementsInsert.setInt(2, tr.getFileSize());
         psMeasurementsInsert.setTimestamp(3,
-            new Timestamp(tr.getStartMillis()), calendar);
+            new Timestamp(tr.getStartMillis()));
         long[] timestamps = new long[] { tr.getSocketMillis(),
             tr.getConnectMillis(), tr.getNegotiateMillis(),
             tr.getRequestMillis(), tr.getResponseMillis(),
@@ -158,13 +155,13 @@ public class Main {
           psMeasurementsInsert.setNull(26, Types.TIMESTAMP);
         } else {
           psMeasurementsInsert.setTimestamp(26,
-              new Timestamp(tr.getLaunchMillis()), calendar);
+              new Timestamp(tr.getLaunchMillis()));
         }
         if (tr.getUsedAtMillis() < 0L) {
           psMeasurementsInsert.setNull(27, Types.TIMESTAMP);
         } else {
           psMeasurementsInsert.setTimestamp(27,
-              new Timestamp(tr.getUsedAtMillis()), calendar);
+              new Timestamp(tr.getUsedAtMillis()));
         }
         if (tr.getTimeout() < 0L) {
           psMeasurementsInsert.setNull(28, Types.INTEGER);
@@ -251,12 +248,10 @@ public class Main {
     String queryString = "SELECT date, filesize, source, server, q1, md, q3, "
         + "timeouts, failures, requests FROM onionperf";
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         statistics.add(String.format("%s,%d,%s,%s,%.0f,%.0f,%.0f,%d,%d,%d",
-            dateFormat.format(rs.getDate("date", calendar)),
+            dateFormat.format(rs.getDate("date")),
             rs.getInt("filesize"),
             getStringFromResultSet(rs, "source"),
             getStringFromResultSet(rs, "server"),
@@ -280,12 +275,10 @@ public class Main {
     String queryString = "SELECT date, source, position, q1, md, q3 "
         + "FROM buildtimes_stats";
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         statistics.add(String.format("%s,%s,%d,%d,%d,%d",
-            dateFormat.format(rs.getDate("date", calendar)),
+            dateFormat.format(rs.getDate("date")),
             getStringFromResultSet(rs, "source"),
             rs.getInt("position"),
             rs.getInt("q1"),
@@ -305,12 +298,10 @@ public class Main {
     String queryString = "SELECT date, source, server, low, q1, md, q3, high "
         + "FROM latencies_stats";
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         statistics.add(String.format("%s,%s,%s,%d,%d,%d,%d,%d",
-            dateFormat.format(rs.getDate("date", calendar)),
+            dateFormat.format(rs.getDate("date")),
             getStringFromResultSet(rs, "source"),
             rs.getString("server"),
             rs.getInt("low"),
@@ -332,12 +323,10 @@ public class Main {
     String queryString = "SELECT date, source, server, low, q1, md, q3, high "
         + "FROM throughput_stats";
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         statistics.add(String.format("%s,%s,%s,%d,%d,%d,%d,%d",
-            dateFormat.format(rs.getDate("date", calendar)),
+            dateFormat.format(rs.getDate("date")),
             getStringFromResultSet(rs, "source"),
             rs.getString("server"),
             rs.getInt("low"),

@@ -14,14 +14,12 @@ import java.sql.Types;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TimeZone;
 
 /** Database wrapper to connect to the database, insert data, run the stored
  * procedure for aggregating data, and query aggregated data as output. */
@@ -266,10 +264,9 @@ class Database implements AutoCloseable {
     this.psStatusesSelect.clearParameters();
     this.psStatusesSelect.setString(1,
         networkStatus.isRelay ? "relay" : "bridge");
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     this.psStatusesSelect.setTimestamp(2,
         Timestamp.from(ZonedDateTime.of(networkStatus.timestamp,
-        ZoneId.of("UTC")).toInstant()), calendar);
+        ZoneId.of("UTC")).toInstant()));
     try (ResultSet rs = this.psStatusesSelect.executeQuery()) {
       if (rs.next()) {
         if (rs.getBoolean(1)) {
@@ -284,7 +281,7 @@ class Database implements AutoCloseable {
         networkStatus.isRelay ? "relay" : "bridge");
     this.psStatusesInsert.setTimestamp(2,
         Timestamp.from(ZonedDateTime.of(networkStatus.timestamp,
-        ZoneId.of("UTC")).toInstant()), calendar);
+        ZoneId.of("UTC")).toInstant()));
     this.psStatusesInsert.setInt(3, networkStatus.running);
     if (null != networkStatus.totalConsensusWeight) {
       this.psStatusesInsert.setFloat(4, networkStatus.totalConsensusWeight);
@@ -412,12 +409,11 @@ class Database implements AutoCloseable {
         + "server_count_sum_avg, advertised_bandwidth_bytes_sum_avg";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM ipv6servers";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         String[] outputLine = new String[9];
-        outputLine[0] = rs.getDate("valid_after_date", calendar)
+        outputLine[0] = rs.getDate("valid_after_date")
             .toLocalDate().toString();
         outputLine[1] = rs.getString("server");
         outputLine[2] = rs.getString("guard_relay");
@@ -440,12 +436,11 @@ class Database implements AutoCloseable {
     String columns = "date, isexit, isguard, advbw";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM bandwidth_advbw";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         String[] outputLine = new String[4];
-        outputLine[0] = rs.getDate("date", calendar).toLocalDate().toString();
+        outputLine[0] = rs.getDate("date").toLocalDate().toString();
         outputLine[1] = rs.getString("isexit");
         outputLine[2] = rs.getString("isguard");
         outputLine[3] = getLongFromResultSet(rs, "advbw");
@@ -461,12 +456,11 @@ class Database implements AutoCloseable {
     String columns = "date, relays, bridges";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM servers_networksize";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         String[] outputLine = new String[3];
-        outputLine[0] = rs.getDate("date", calendar).toLocalDate().toString();
+        outputLine[0] = rs.getDate("date").toLocalDate().toString();
         outputLine[1] = getLongFromResultSet(rs, "relays");
         outputLine[2] = getLongFromResultSet(rs, "bridges");
         statistics.add(outputLine);
@@ -481,12 +475,11 @@ class Database implements AutoCloseable {
     String columns = "date, flag, relays";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM servers_relayflags";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         String[] outputLine = new String[3];
-        outputLine[0] = rs.getDate("date", calendar).toLocalDate().toString();
+        outputLine[0] = rs.getDate("date").toLocalDate().toString();
         outputLine[1] = rs.getString("flag");
         outputLine[2] = getLongFromResultSet(rs, "relays");
         statistics.add(outputLine);
@@ -501,12 +494,11 @@ class Database implements AutoCloseable {
     String columns = "date, version, relays";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM servers_versions";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         String[] outputLine = new String[3];
-        outputLine[0] = rs.getDate("date", calendar).toLocalDate().toString();
+        outputLine[0] = rs.getDate("date").toLocalDate().toString();
         outputLine[1] = rs.getString("version");
         outputLine[2] = getLongFromResultSet(rs, "relays");
         statistics.add(outputLine);
@@ -521,12 +513,11 @@ class Database implements AutoCloseable {
     String columns = "date, platform, relays";
     statistics.add(columns.split(", "));
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM servers_platforms";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         String[] outputLine = new String[3];
-        outputLine[0] = rs.getDate("date", calendar).toLocalDate().toString();
+        outputLine[0] = rs.getDate("date").toLocalDate().toString();
         outputLine[1] = rs.getString("platform");
         outputLine[2] = getLongFromResultSet(rs, "relays");
         statistics.add(outputLine);

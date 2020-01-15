@@ -31,11 +31,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
-import java.util.TimeZone;
 import java.util.TreeSet;
 
 /** Main class of the webstats module that downloads log files from the server,
@@ -272,12 +270,10 @@ public class Main {
     Statement st = connection.createStatement();
     String queryString = "SELECT " + ALL_COLUMNS + " FROM webstats";
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         statistics.add(String.format("%s,%s,%s,%s,%s,%s,%d",
-            dateFormat.format(rs.getDate(LOG_DATE, calendar)),
+            dateFormat.format(rs.getDate(LOG_DATE)),
             emptyNull(rs.getString(REQUEST_TYPE)),
             emptyNull(rs.getString(PLATFORM)),
             emptyNull(rs.getString(CHANNEL)),

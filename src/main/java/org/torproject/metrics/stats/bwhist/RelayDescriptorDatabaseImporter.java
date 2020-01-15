@@ -25,13 +25,11 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TimeZone;
 import java.util.TreeSet;
 
 /**
@@ -154,7 +152,6 @@ public final class RelayDescriptorDatabaseImporter {
 
     /* Initialize date format, so that we can format timestamps. */
     this.dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    this.dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
   }
 
   private void addDateToScheduledUpdates(long timestamp)
@@ -189,11 +186,10 @@ public final class RelayDescriptorDatabaseImporter {
     if (this.importIntoDatabase) {
       try {
         this.addDateToScheduledUpdates(validAfter);
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         Timestamp validAfterTimestamp = new Timestamp(validAfter);
         if (lastCheckedStatusEntries != validAfter) {
           insertedStatusEntries.clear();
-          this.psSs.setTimestamp(1, validAfterTimestamp, cal);
+          this.psSs.setTimestamp(1, validAfterTimestamp);
           ResultSet rs = psSs.executeQuery();
           while (rs.next()) {
             String insertedFingerprint = rs.getString(1);
@@ -204,11 +200,11 @@ public final class RelayDescriptorDatabaseImporter {
         }
         if (!insertedStatusEntries.contains(fingerprint)) {
           this.psR.clearParameters();
-          this.psR.setTimestamp(1, validAfterTimestamp, cal);
+          this.psR.setTimestamp(1, validAfterTimestamp);
           this.psR.setString(2, nickname);
           this.psR.setString(3, fingerprint);
           this.psR.setString(4, descriptor);
-          this.psR.setTimestamp(5, new Timestamp(published), cal);
+          this.psR.setTimestamp(5, new Timestamp(published));
           this.psR.setString(6, address);
           this.psR.setLong(7, orPort);
           this.psR.setLong(8, dirPort);
@@ -625,12 +621,11 @@ public final class RelayDescriptorDatabaseImporter {
         + "dirwrite";
     statistics.add(columns.split(", "));
     Statement st = this.conn.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + columns + " FROM stats_bandwidth";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         String[] outputLine = new String[7];
-        outputLine[0] = rs.getDate("date", calendar).toLocalDate().toString();
+        outputLine[0] = rs.getDate("date").toLocalDate().toString();
         outputLine[1] = getBooleanFromResultSet(rs, "isexit");
         outputLine[2] = getBooleanFromResultSet(rs, "isguard");
         outputLine[3] = getLongFromResultSet(rs, "bwread");

@@ -15,9 +15,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 /** Database wrapper to connect to the database, insert data, run the stored
  * procedure for aggregating data, and query aggregated data as output. */
@@ -121,11 +119,10 @@ class Database implements AutoCloseable {
 
   private void insertStatusIfAbsent(LocalDateTime validAfter,
       Integer authorityId, long[] measuredSums) throws SQLException {
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     this.psVoteSelect.clearParameters();
     this.psVoteSelect.setTimestamp(1,
         Timestamp.from(ZonedDateTime.of(validAfter,
-            ZoneId.of("UTC")).toInstant()), calendar);
+            ZoneId.of("UTC")).toInstant()));
     if (null == authorityId) {
       this.psVoteSelect.setNull(2, Types.INTEGER);
     } else {
@@ -144,7 +141,7 @@ class Database implements AutoCloseable {
       this.psVoteInsert.clearParameters();
       this.psVoteInsert.setTimestamp(1,
           Timestamp.from(ZonedDateTime.of(validAfter,
-              ZoneId.of("UTC")).toInstant()), calendar);
+              ZoneId.of("UTC")).toInstant()));
       if (null == authorityId) {
         this.psVoteInsert.setNull(2, Types.INTEGER);
       } else {
@@ -171,14 +168,13 @@ class Database implements AutoCloseable {
   Iterable<OutputLine> queryTotalcw() throws SQLException {
     List<OutputLine> statistics = new ArrayList<>();
     Statement st = this.connection.createStatement();
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     String queryString = "SELECT " + OutputLine.columnHeadersDelimitedBy(", ")
         + " FROM totalcw";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
         OutputLine outputLine = new OutputLine();
         outputLine.validAfterDate = rs.getDate(
-            OutputLine.Column.VALID_AFTER_DATE.name(), calendar).toLocalDate();
+            OutputLine.Column.VALID_AFTER_DATE.name()).toLocalDate();
         outputLine.nickname = rs.getString(OutputLine.Column.NICKNAME.name());
         outputLine.haveGuardFlag = rs.getBoolean(
             OutputLine.Column.HAVE_GUARD_FLAG.name());
