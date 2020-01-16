@@ -7,6 +7,8 @@
 
  * Minor changes
    - Make Jetty host configurable.
+   - Configure a base URL in order to turn ExoneraTor's permanent
+     links into https:// links.
 
 
 # Changes in version 1.3.0 - 2019-11-09
