@@ -106,6 +106,11 @@
       <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt" target="_blank">directory
       protocol specification</a>.</p>
 
+      <p id="rendezvous-point"><b><a href="#rendezvous-point">rendezvous
+      point:</a></b> a relay connecting a client to an onion service, where each
+      party builds a three-hop circuit, meeting at the rendezvous
+      point.</p>
+
     </div>
 
 <jsp:include page="bottom.jsp"/>

@@ -357,7 +357,7 @@
     "id": "hidserv-rend-relayed-cells",
     "title": "Onion-service traffic (versions 2 and 3)",
     "type": "Graph",
-    "description": "<p>This graph shows the amount of onion-service traffic from version 2 and version 3 onion services in the network per day.  This number is extrapolated from aggregated statistics on onion-service traffic reported by single <a href=\"glossary.html#relay\">relays</a> acting as rendezvous points for version 2 and 3 <a href=\"glossary.html#onion-service\">onion services</a>, if at least 1% of relays reported these statistics.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
+    "description": "<p>This graph shows the amount of onion-service traffic from version 2 and version 3 onion services relayed by <a href=\"glossary.html#rendezvous-point\">rendezvous points</a>.  This number is extrapolated from aggregated statistics on onion-service traffic reported by single <a href=\"glossary.html#relay\">relays</a> acting as <a href=\"glossary.html#rendezvous-point\">rendezvous points</a> for version 2 and 3 <a href=\"glossary.html#onion-service\">onion services</a>, if at least 1% of relays reported these statistics.  For more details on the extrapolation algorithm, see <a href=\"https://blog.torproject.org/blog/some-statistics-about-onions\">this blog post</a> and <a href=\"https://research.torproject.org/techreports/extrapolating-hidserv-stats-2015-01-31.pdf\">this technical report</a>.</p>",
     "function": "hidserv_rend_relayed_cells",
     "parameters": [
       "start",
