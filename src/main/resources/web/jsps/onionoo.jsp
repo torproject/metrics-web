@@ -328,6 +328,15 @@ to "6_months" graphs in all documents containing history objects, removed the
 "fingerprint" parameter, and removed the previously deprecated "as_number" field
 from details documents on September 10, 2018.
 <a href="#versions_7_0" class="anchor">#</a></li>
+<li><a id="versions_8_0"></a><strong>8.0</strong>:
+(scheduled, but not deployed yet!):
+Include graph history objects even if the time periods they cover are already
+contained in other graph history objects with shorter time periods and higher
+data resolutions, remove "3_days" and "1_week" bandwidth graphs, change
+"1_month" bandwidth graph to a data resolution of 24 hours, add back "1_month"
+clients graph, and remove "1_week" uptime and weights graphs, to be deployed
+after February 20, 2020.
+<a href="#versions_8_0" class="anchor">#</a></li>
 </ul>
 
 
@@ -483,41 +492,20 @@ Lookups are case-insensitive.
 </li>
 
 <li>
-<a id="parameters_fingerprint"></a>
-<b>fingerprint <span class="label label-warning">removed</span></b>
-<a href="#parameters_fingerprint" class="anchor">#</a>
-<p>
-Return only the relay with the parameter value matching the fingerprint
-or the bridge with the parameter value matching the hashed fingerprint.
-Fingerprints must consist of 40 hex characters, case does not matter.
-This parameter is quite similar to the <strong>lookup</strong> parameter
-with two exceptions:
-(1) the provided relay fingerprint or hashed bridge fingerprint <i>must
-not</i> be hashed (again) using SHA-1;
-(2) the response will contain any matching relay or bridge regardless of
-whether they have been running in the past week.
-<span class="red">Removed on September 10, 2018.</span>
-</p>
-</li>
-
-<li>
 <a id="parameters_country"></a>
-<b>country <span class="label label-primary">updated</span></b>
+<b>country</b>
 <a href="#parameters_country" class="anchor">#</a>
 <p>
 Return only relays which are located in the given country as identified by a
 two-letter country code.  Filtering by country code is case-insensitive. The
 special country code <tt>xz</tt> can be used for relays that were not found in
 the GeoIP database.
-<span class="blue">Updated to recognize special country code
-<tt>xz</tt> on July
-16, 2018.</span>
 </p>
 </li>
 
 <li>
 <a id="parameters_as"></a>
-<b>as <span class="label label-primary">updated</span></b>
+<b>as</b>
 <a href="#parameters_as" class="anchor">#</a>
 <p>
 Return only relays which are located in either one of the given autonomous
@@ -526,15 +514,12 @@ Multiple AS numbers can be provided separated by commas.
 Filtering by AS number is case-insensitive.
 The special AS number <tt>0</tt> can be used for relays that were not found in
 the GeoIP database.
-<span class="blue">Updated to recognize special AS number <tt>0</tt>
-on July 16, 2018 and to support comma-separated lists of AS numbers on August 3,
-2018.</span>
 </p>
 </li>
 
 <li>
 <a id="parameters_as_name"></a>
-<b>as_name <span class="label label-primary">new</span></b>
+<b>as_name</b>
 <a href="#parameters_as_name" class="anchor">#</a>
 <p>
 Return only relays with the parameter value matching (part of) the autonomous
@@ -545,7 +530,6 @@ Only printable ASCII characters are permitted in the parameter value,
 some of which need to be percent-encoded (# as %23, % as %25, &#38; as
 %26, + as %2B, and / as %2F).
 Comparisons are case-insensitive.
-<span class="blue">Added on August 3, 2018.</span>
 </p>
 </li>
 
@@ -629,7 +613,7 @@ a family.
 
 <li>
 <a id="parameters_version"></a>
-<b>version <span class="label label-primary">updated</span></b>
+<b>version</b>
 <a href="#parameters_version" class="anchor">#</a>
 <p>
 Return only relays or bridges running either Tor version from a list or range
@@ -640,19 +624,16 @@ Multiple versions can either be provided as a comma-separated list (","), as a
 range separated by two dots (".."), or as a list of ranges.
 Provided versions are parsed and matched by parsed dotted numbers, rather than
 by string prefix.
-<span class="blue">Extended to support lists and ranges on September 10,
-2018.</span>
 </p>
 </li>
 
 <li>
 <a id="parameters_os"></a>
-<b>os <span class="label label-primary">new</span></b>
+<b>os</b>
 <a href="#parameters_os" class="anchor">#</a>
 <p>
 Return only relays or bridges running on an operating system that starts with
 the parameter value. Searches are case-insensitive.
-<span class="blue">Added on July 16, 2018.</span>
 </p>
 </li>
 
@@ -951,13 +932,12 @@ Relay summary objects contain the following key-value pairs:
 
 <li>
 <a id="summary_relay_n"></a>
-<b>n <span class="label label-primary">updated</span></b>
+<b>n</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
 <a href="#summary_relay_n" class="anchor">#</a>
 <p>
 Relay nickname consisting of 1&ndash;19 alphanumerical characters.
-<span class="blue">Turned into required field on March 14, 2018.</span>
 </p>
 </li>
 
@@ -1014,13 +994,12 @@ Bridge summary objects contain the following key-value pairs:
 
 <li>
 <a id="summary_bridge_n"></a>
-<b>n <span class="label label-primary">updated</span></b>
+<b>n</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
 <a href="#summary_bridge_n" class="anchor">#</a>
 <p>
 Bridge nickname consisting of 1&ndash;19 alphanumerical characters.
-<span class="blue">Turned into required field on March 14, 2018.</span>
 </p>
 </li>
 
@@ -1079,13 +1058,12 @@ Relay details objects contain the following key-value pairs:
 
 <li>
 <a id="details_relay_nickname"></a>
-<b>nickname <span class="label label-primary">updated</span></b>
+<b>nickname</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
 <a href="#details_relay_nickname" class="anchor">#</a>
 <p>
 Relay nickname consisting of 1&ndash;19 alphanumerical characters.
-<span class="blue">Turned into required field on March 14, 2018.</span>
 </p>
 </li>
 
@@ -1118,7 +1096,7 @@ IPv6 hex characters are all lower-case.
 
 <li>
 <a id="details_relay_exit_addresses"></a>
-<b>exit_addresses <span class="label label-primary">updated</span></b>
+<b>exit_addresses</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_exit_addresses" class="anchor">#</a>
@@ -1126,8 +1104,6 @@ IPv6 hex characters are all lower-case.
 Array of IPv4 addresses that the
 relay used to exit to the Internet in the past 24 hours.
 Omitted if array is empty.
-Changed on April 17, 2018 to include all exit addresses, regardless of whether
-they are used as onion-routing addresses or not.
 </p>
 </li>
 
@@ -1312,7 +1288,7 @@ database.
 
 <li>
 <a id="details_relay_as"></a>
-<b>as <span class="label label-primary">new</span></b>
+<b>as</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_as_number" class="anchor">#</a>
@@ -1322,23 +1298,6 @@ resolving the relay's first onion-routing IP address.
 AS number strings start with "AS", followed directly by the AS number.
 Omitted if the relay IP address could not be found in the AS
 database.
-<span class="blue">Added on August 3, 2018.</span>
-</p>
-</li>
-
-<li>
-<a id="details_relay_as_number"></a>
-<b>as_number</b> <span class="label label-warning">removed</span>
-<code class="typeof">string</code>
-<span class="required-false">optional</span>
-<a href="#details_relay_as_number" class="anchor">#</a>
-<p>
-AS number as found in an AS database by
-resolving the relay's first onion-routing IP address.
-AS number strings start with "AS", followed directly by the AS number.
-Omitted if the relay IP address could not be found in the AS
-database.
-<span class="red">Removed on September 10, 2018.</span>
 </p>
 </li>
 
@@ -1389,7 +1348,7 @@ was successful yet, or if no A record was found matching the PTR record.
 
 <li>
 <a id="details_relay_verified_host_names"></a>
-<b>verified_host_names</b> <span class="label label-primary">new</span></b>
+<b>verified_host_names</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_verified_host_names" class="anchor">#</a>
@@ -1404,14 +1363,12 @@ was successful yet, or if no A records were found matching the PTR records
 (i.e. it was not possible to verify the value of any of the PTR records).
 A DNSSEC validating resolver is used for these lookups. Failure to validate
 DNSSEC signatures will prevent those names from appearing in this field.
-<span class="blue">Added on July 16, 2018. Updated to clarify that
-a DNSSEC validating resolver is used on August 17, 2018.</span>
 </p>
 </li>
 
 <li>
 <a id="details_relay_unverified_host_names"></a>
-<b>unverified_host_names</b> <span class="label label-primary">new</span></b>
+<b>unverified_host_names</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_unverified_host_names" class="anchor">#</a>
@@ -1425,8 +1382,6 @@ was successful yet, or if A records were found matching all PTR records
 (i.e. it was possible to verify the value of each of the PTR records).
 A DNSSEC validating resolver is used for these lookups. Failure to validate
 DNSSEC signatures will prevent those names from appearing in this field.
-<span class="blue">Added on July 16, 2018. Updated to clarify that
-a DNSSEC validating resolver is used on August 17, 2018.</span>
 </p>
 </li>
 
@@ -1619,7 +1574,7 @@ the relay did not report which version it runs.
 
 <li>
 <a id="details_relay_version_status"></a>
-<b>version_status</b> <span class="label label-primary">new</span></b>
+<b>version_status</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_version_status" class="anchor">#</a>
@@ -1636,13 +1591,12 @@ but it is not newer than every recommended version;
 "unrecommended" if none of the above conditions hold.
 Omitted if either the directory authorities did not recommend versions, or the
 relay did not report which version it runs.
-<span class="blue">Added on April 6, 2018.</span>
 </p>
 </li>
 
 <li>
 <a id="details_relay_effective_family"></a>
-<b>effective_family <span class="label label-primary">updated</span></b>
+<b>effective_family</b>
 <code class="typeof">array of strings</code>
 <span class="required-false">optional</span>
 <a href="#details_relay_effective_family" class="anchor">#</a>
@@ -1653,8 +1607,6 @@ These relays are part of this relay's family and they consider this relay
 to be part of their family.
 Always contains the relay's own fingerprint.
 Omitted if the descriptor containing this information cannot be found.
-<span class="blue">Updated to always include the relay's own fingerprint on
-March 14, 2018.</span>
 </p>
 </li>
 
@@ -1809,13 +1761,12 @@ Bridge details objects contain the following key-value pairs:
 
 <li>
 <a id="details_bridge_nickname"></a>
-<b>nickname <span class="label label-primary">updated</span></b>
+<b>nickname</b>
 <code class="typeof">string</code>
 <span class="required-true">required</span>
 <a href="#details_bridge_nickname" class="anchor">#</a>
 <p>
 Bridge nickname consisting of 1&ndash;19 alphanumerical characters.
-<span class="blue">Turned into required field on March 14, 2018.</span>
 </p>
 </li>
 
@@ -1982,7 +1933,7 @@ the bridge did not report which version it runs.
 
 <li>
 <a id="details_bridge_version_status"></a>
-<b>version_status</b> <span class="label label-primary">new</span></b>
+<b>version_status</b>
 <code class="typeof">string</code>
 <span class="required-false">optional</span>
 <a href="#details_bridge_version_status" class="anchor">#</a>
@@ -1999,7 +1950,6 @@ but it is not newer than every recommended version;
 "unrecommended" if none of the above conditions hold.
 Omitted if either the directory authorities did not recommend versions, or the
 bridge did not report which version it runs.
-<span class="blue">Added on April 6, 2018.</span>
 </p>
 </li>
 
@@ -2152,7 +2102,7 @@ hexadecimal characters.
 
 <li>
 <a id="bandwidth_relay_write_history"></a>
-<b>write_history <span class="label label-primary">updated</span></b>
+<b>write_history</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
 <a href="#bandwidth_relay_write_history" class="anchor">#</a>
@@ -2176,8 +2126,6 @@ The unit is bytes per second.
 Contained graph history objects may contain null values if the relay did
 not provide any bandwidth data or only data for less than 20% of a given
 time period.
-<span class="blue">Updated to no longer contain a "3_months" graph and instead a
-"6_months" graph on September 10, 2018.</span>
 </p>
 </li>
 
@@ -2288,7 +2236,7 @@ hexadecimal characters.
 
 <li>
 <a id="weights_relay_consensus_weight_fraction"></a>
-<b>consensus_weight_fraction <span class="label label-primary">updated</span></b>
+<b>consensus_weight_fraction</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
 <a href="#weights_relay_consensus_weight_fraction" class="anchor">#</a>
@@ -2311,8 +2259,6 @@ period and higher data resolution.
 The unit is path-selection probability.
 Contained graph history objects may contain null values if the relay was
 running less than 20% of a given time period.
-<span class="blue">Updated to no longer contain a "3_months" graph and instead a
-"6_months" graph on September 10, 2018.</span>
 </p>
 </li>
 
@@ -2425,7 +2371,7 @@ of 40 upper-case hexadecimal characters.
 
 <li>
 <a id="clients_bridge_average_clients"></a>
-<b>average_clients <span class="label label-primary">updated</span></b>
+<b>average_clients</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
 <a href="#clients_bridge_average_clients" class="anchor">#</a>
@@ -2444,8 +2390,6 @@ time period and higher data resolution.
 The unit is number of clients.
 Contained graph history objects may contain null values if the bridge did
 not report client statistics for at least 50% of a given time period.
-<span class="blue">Updated to no longer contain "1_week", "1_month", and
-"3_months" graphs and instead a "6_months" graph on September 10, 2018.</span>
 </p>
 </li>
 
@@ -2489,7 +2433,7 @@ hexadecimal characters.
 
 <li>
 <a id="uptime_relay_uptime"></a>
-<b>uptime <span class="label label-primary">updated</span></b>
+<b>uptime</b>
 <code class="typeof">object</code>
 <span class="required-false">optional</span>
 <a href="#uptime_relay_uptime" class="anchor">#</a>
@@ -2509,8 +2453,6 @@ period and higher data resolution.
 The unit is fractional uptime from 0 to 1.
 Contained graph history objects may contain null values if less than 20%
 of network statuses have been processed for a given time period.
-<span class="blue">Updated to no longer contain a "3_months" graph and instead a
-"6_months" graph on September 10, 2018.</span>
 </p>
 </li>
 
