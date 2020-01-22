@@ -1,4 +1,3 @@
-require(reshape2)
 require(ggplot2)
 require(RColorBrewer)
 require(scales)
@@ -437,7 +436,7 @@ prepare_platforms <- function(start_p = NULL, end_p = NULL) {
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     mutate(platform = tolower(platform)) %>%
-    dcast(date ~ platform, value.var = "relays")
+    spread(platform, relays)
 }
 
 plot_platforms <- function(start_p, end_p, path_p) {
@@ -748,7 +747,7 @@ prepare_connbidirect <- function(start_p = NULL, end_p = NULL) {
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     mutate(quantile = paste("X", quantile, sep = ""),
       fraction = fraction / 100) %>%
-    dcast(date + direction ~ quantile, value.var = "fraction") %>%
+    spread(quantile, fraction) %>%
     rename(q1 = X0.25, md = X0.5, q3 = X0.75)
 }
 
@@ -800,8 +799,7 @@ prepare_bandwidth_flags <- function(start_p = NULL, end_p = NULL) {
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(!is.na(have_exit_flag)) %>%
     filter(!is.na(have_guard_flag)) %>%
-    dcast(date + have_guard_flag + have_exit_flag ~ variable,
-      value.var = "value")
+    spread(variable, value)
 }
 
 plot_bandwidth_flags <- function(start_p, end_p, path_p) {
@@ -1131,7 +1129,7 @@ prepare_advbwdist_perc <- function(start_p = NULL, end_p = NULL, p_p = NULL) {
     transmute(date, percentile = as.factor(percentile),
       variable = ifelse(is.na(isexit), "all", "exits"),
       advbw = advbw * 8 / 1e9) %>%
-    dcast(date + percentile ~ variable, value.var = "advbw") %>%
+    spread(variable, advbw) %>%
     rename(p = percentile)
 }
 
@@ -1169,7 +1167,7 @@ prepare_advbwdist_relay <- function(start_p = NULL, end_p = NULL, n_p = NULL) {
     transmute(date, relay = as.factor(relay),
       variable = ifelse(is.na(isexit), "all", "exits"),
       advbw = advbw * 8 / 1e9) %>%
-    dcast(date + relay ~ variable, value.var = "advbw") %>%
+    spread(variable, advbw) %>%
     rename(n = relay)
 }
 
@@ -1267,7 +1265,7 @@ prepare_webstats_tb <- function(start_p = NULL, end_p = NULL) {
     filter(request_type %in% c("tbid", "tbsd", "tbup", "tbur")) %>%
     group_by(log_date, request_type) %>%
     summarize(count = sum(count)) %>%
-    dcast(log_date ~ request_type, value.var = "count") %>%
+    spread(request_type, count) %>%
     rename(date = log_date, initial_downloads = tbid,
       signature_downloads = tbsd, update_pings = tbup,
       update_requests = tbur)
@@ -1312,7 +1310,7 @@ prepare_webstats_tb_platform <- function(start_p = NULL, end_p = NULL) {
     filter(request_type %in% c("tbid", "tbup")) %>%
     group_by(log_date, platform, request_type) %>%
     summarize(count = sum(count)) %>%
-    dcast(log_date + platform ~ request_type, value.var = "count") %>%
+    spread(request_type, count, fill = 0) %>%
     rename(date = log_date, initial_downloads = tbid, update_pings = tbup)
 }
 
@@ -1360,7 +1358,7 @@ prepare_webstats_tb_locale <- function(start_p = NULL, end_p = NULL) {
     group_by(date, locale, request_type) %>%
     summarize(count = sum(count)) %>%
     mutate(request_type = factor(request_type, levels = c("tbid", "tbup"))) %>%
-    dcast(date + locale ~ request_type, value.var = "count") %>%
+    spread(request_type, count, fill = 0) %>%
     rename(initial_downloads = tbid, update_pings = tbup)
 }
 
@@ -1415,7 +1413,7 @@ prepare_webstats_tb_channel <- function(start_p = NULL, end_p = NULL) {
     filter(channel %in% c("a", "r")) %>%
     group_by(log_date, channel, request_type) %>%
     summarize(count = sum(count)) %>%
-    dcast(log_date + channel ~ request_type, value.var = "count") %>%
+    spread(request_type, count) %>%
     rename(date = log_date, update_pings = tbup, update_requests = tbur)
 }
 
@@ -1461,8 +1459,7 @@ prepare_webstats_tm <- function(start_p = NULL, end_p = NULL) {
     group_by(log_date, request_type) %>%
     summarize(count = sum(count)) %>%
     mutate(request_type = factor(request_type, levels = c("tmid", "tmup"))) %>%
-    dcast(log_date ~ request_type, value.var = "count", drop = FALSE,
-      fill = 0) %>%
+    spread(request_type, count, drop = FALSE, fill = 0) %>%
     rename(date = log_date, initial_downloads = tmid, update_pings = tmup)
 }
 
