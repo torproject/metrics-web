@@ -29,7 +29,7 @@
       claims to have handled on behalf of <a href="#client">clients</a>.</p>
       
       <p id="bridge"><b><a href="#bridge">bridge:</a></b> a
-      <a href="#relay">relay</a> whose
+      <a href="#server">server</a> in the Tor network whose
       existence is non-public and which can therefore provide access for blocked
       <a href="#client">clients</a>, often in combination with
       <a href="#pluggable-transport">pluggable transports</a>, which registers
@@ -91,8 +91,8 @@
       and used by <a href="#client">clients</a> to circumvent transport-level
       blockings (for example, by ISPs or governments).</p>
       
-      <p id="relay"><b><a href="#relay">relay:</a></b> a publicly-listed node in
-      the Tor
+      <p id="relay"><b><a href="#relay">relay:</a></b> a publicly-listed
+      <a href="#server">server</a> in the Tor
       network that forwards traffic on behalf of <a href="#client">clients</a>,
       and that registers itself with the
       <a href="#directory-authority">directory authorities</a>.</p>
@@ -110,6 +110,11 @@
       point:</a></b> a relay connecting a client to an onion service, where each
       party builds a three-hop circuit, meeting at the rendezvous
       point.</p>
+
+      <p id="server"><b><a href="#server">server:</a></b> a node in the Tor
+      network, either a <a href="#relay">relay</a> or a
+      <a href="#bridge">bridge</a>, that forwards traffic on behalf of
+      <a href="#client">clients</a>.</p>
 
     </div>
 
