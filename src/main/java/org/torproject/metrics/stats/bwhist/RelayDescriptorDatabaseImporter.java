@@ -133,13 +133,8 @@ public final class RelayDescriptorDatabaseImporter {
         this.psSs = conn.prepareStatement("SELECT fingerprint "
             + "FROM statusentry WHERE validafter = ?");
         this.psR = conn.prepareStatement("INSERT INTO statusentry "
-            + "(validafter, nickname, fingerprint, descriptor, "
-            + "published, address, orport, dirport, isauthority, "
-            + "isbadexit, isbaddirectory, isexit, isfast, isguard, "
-            + "ishsdir, isnamed, isstable, isrunning, isunnamed, "
-            + "isvalid, isv2dir, isv3dir, version, bandwidth, ports, "
-            + "rawdesc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
-            + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            + "(validafter, fingerprint, isauthority, isexit, isguard, "
+            + "isrunning) VALUES (?, ?, ?, ?, ?, ?)");
         this.csH = conn.prepareCall("{call insert_bwhist(?, ?, ?, ?, ?, "
             + "?)}");
         this.psU = conn.prepareStatement("INSERT INTO scheduled_updates "
@@ -178,11 +173,8 @@ public final class RelayDescriptorDatabaseImporter {
   /**
    * Insert network status consensus entry into database.
    */
-  public void addStatusEntryContents(long validAfter, String nickname,
-      String fingerprint, String descriptor, long published,
-      String address, long orPort, long dirPort,
-      SortedSet<String> flags, String version, long bandwidth,
-      String ports, byte[] rawDescriptor) {
+  public void addStatusEntryContents(long validAfter, String fingerprint,
+      SortedSet<String> flags) {
     if (this.importIntoDatabase) {
       try {
         this.addDateToScheduledUpdates(validAfter);
@@ -201,31 +193,11 @@ public final class RelayDescriptorDatabaseImporter {
         if (!insertedStatusEntries.contains(fingerprint)) {
           this.psR.clearParameters();
           this.psR.setTimestamp(1, validAfterTimestamp);
-          this.psR.setString(2, nickname);
-          this.psR.setString(3, fingerprint);
-          this.psR.setString(4, descriptor);
-          this.psR.setTimestamp(5, new Timestamp(published));
-          this.psR.setString(6, address);
-          this.psR.setLong(7, orPort);
-          this.psR.setLong(8, dirPort);
-          this.psR.setBoolean(9, flags.contains("Authority"));
-          this.psR.setBoolean(10, flags.contains("BadExit"));
-          this.psR.setBoolean(11, flags.contains("BadDirectory"));
-          this.psR.setBoolean(12, flags.contains("Exit"));
-          this.psR.setBoolean(13, flags.contains("Fast"));
-          this.psR.setBoolean(14, flags.contains("Guard"));
-          this.psR.setBoolean(15, flags.contains("HSDir"));
-          this.psR.setBoolean(16, flags.contains("Named"));
-          this.psR.setBoolean(17, flags.contains("Stable"));
-          this.psR.setBoolean(18, flags.contains("Running"));
-          this.psR.setBoolean(19, flags.contains("Unnamed"));
-          this.psR.setBoolean(20, flags.contains("Valid"));
-          this.psR.setBoolean(21, flags.contains("V2Dir"));
-          this.psR.setBoolean(22, flags.contains("V3Dir"));
-          this.psR.setString(23, version);
-          this.psR.setLong(24, bandwidth);
-          this.psR.setString(25, ports);
-          this.psR.setBytes(26, rawDescriptor);
+          this.psR.setString(2, fingerprint);
+          this.psR.setBoolean(3, flags.contains("Authority"));
+          this.psR.setBoolean(4, flags.contains("Exit"));
+          this.psR.setBoolean(5, flags.contains("Guard"));
+          this.psR.setBoolean(6, flags.contains("Running"));
           this.psR.executeUpdate();
           rrsCount++;
           if (rrsCount % autoCommitCount == 0)  {
@@ -536,14 +508,7 @@ public final class RelayDescriptorDatabaseImporter {
     for (NetworkStatusEntry statusEntry
         : consensus.getStatusEntries().values()) {
       this.addStatusEntryContents(consensus.getValidAfterMillis(),
-          statusEntry.getNickname(),
-          statusEntry.getFingerprint().toLowerCase(),
-          statusEntry.getDescriptor().toLowerCase(),
-          statusEntry.getPublishedMillis(), statusEntry.getAddress(),
-          statusEntry.getOrPort(), statusEntry.getDirPort(),
-          statusEntry.getFlags(), statusEntry.getVersion(),
-          statusEntry.getBandwidth(), statusEntry.getPortList(),
-          statusEntry.getStatusEntryBytes());
+          statusEntry.getFingerprint().toLowerCase(), statusEntry.getFlags());
     }
   }
 

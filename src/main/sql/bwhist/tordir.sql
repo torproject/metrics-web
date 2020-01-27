@@ -35,31 +35,11 @@ $$ LANGUAGE plpgsql;
 -- Each statusentry references a valid descriptor.
 CREATE TABLE statusentry (
     validafter TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    nickname CHARACTER VARYING(19) NOT NULL,
     fingerprint CHARACTER(40) NOT NULL,
-    descriptor CHARACTER(40) NOT NULL,
-    published TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    address CHARACTER VARYING(15) NOT NULL,
-    orport INTEGER NOT NULL,
-    dirport INTEGER NOT NULL,
     isauthority BOOLEAN DEFAULT FALSE NOT NULL,
-    isbadexit BOOLEAN DEFAULT FALSE NOT NULL,
-    isbaddirectory BOOLEAN DEFAULT FALSE NOT NULL,
     isexit BOOLEAN DEFAULT FALSE NOT NULL,
-    isfast BOOLEAN DEFAULT FALSE NOT NULL,
     isguard BOOLEAN DEFAULT FALSE NOT NULL,
-    ishsdir BOOLEAN DEFAULT FALSE NOT NULL,
-    isnamed BOOLEAN DEFAULT FALSE NOT NULL,
-    isstable BOOLEAN DEFAULT FALSE NOT NULL,
-    isrunning BOOLEAN DEFAULT FALSE NOT NULL,
-    isunnamed BOOLEAN DEFAULT FALSE NOT NULL,
-    isvalid BOOLEAN DEFAULT FALSE NOT NULL,
-    isv2dir BOOLEAN DEFAULT FALSE NOT NULL,
-    isv3dir BOOLEAN DEFAULT FALSE NOT NULL,
-    version CHARACTER VARYING(50),
-    bandwidth BIGINT,
-    ports TEXT,
-    rawdesc BYTEA NOT NULL
+    isrunning BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE OR REPLACE FUNCTION delete_old_statusentry()
@@ -85,25 +65,8 @@ CREATE TABLE bwhist_flags (
 -- use to estimate user numbers.
 CREATE TABLE user_stats (
     date DATE NOT NULL,
-    country CHARACTER(2) NOT NULL,
-    r BIGINT,
     dw BIGINT,
-    dr BIGINT,
-    drw BIGINT,
-    drr BIGINT,
-    bw BIGINT,
-    br BIGINT,
-    bwd BIGINT,
-    brd BIGINT,
-    bwr BIGINT,
-    brr BIGINT,
-    bwdr BIGINT,
-    brdr BIGINT,
-    bwp BIGINT,
-    brp BIGINT,
-    bwn BIGINT,
-    brn BIGINT,
-    CONSTRAINT user_stats_pkey PRIMARY KEY(date, country)
+    dr BIGINT
 );
 
 -- Dates to be included in the next refresh run.
@@ -236,22 +199,13 @@ CREATE OR REPLACE FUNCTION refresh_user_stats() RETURNS INTEGER AS $$
   DELETE FROM user_stats WHERE date IN (SELECT date FROM updates);
   -- Now insert new user statistics.
   EXECUTE '
-  INSERT INTO user_stats (date, country, dw, dr, bwd, brd, bwp, brp)
+  INSERT INTO user_stats (date, dw, dr)
   SELECT
          bwhist_by_relay.date AS date,
-         ''zy'' AS country,
          SUM(CASE WHEN authority IS NOT NULL
            THEN NULL ELSE dirwritten END) AS dw,
          SUM(CASE WHEN authority IS NOT NULL
-           THEN NULL ELSE dirread END) AS dr,
-         SUM(CASE WHEN dirwritten = 0 OR authority IS NOT NULL
-           THEN NULL ELSE written END) AS bwd,
-         SUM(CASE WHEN dirwritten = 0 OR authority IS NOT NULL
-           THEN NULL ELSE read END) AS brd,
-         SUM(CASE WHEN opendirport IS NULL OR authority IS NOT NULL
-           THEN NULL ELSE written END) AS bwp,
-         SUM(CASE WHEN opendirport IS NULL OR authority IS NOT NULL
-           THEN NULL ELSE read END) AS brp
+           THEN NULL ELSE dirread END) AS dr
   FROM (
     -- Retrieve aggregate bandwidth histories of all relays in the given
     -- time frame.
@@ -266,7 +220,6 @@ CREATE OR REPLACE FUNCTION refresh_user_stats() RETURNS INTEGER AS $$
     -- For each relay, tell how often it had an open directory port and
     -- how often it had the Authority flag assigned on a given date.
     SELECT fingerprint, DATE(validafter) AS date,
-      SUM(CASE WHEN dirport > 0 THEN 1 ELSE NULL END) AS opendirport,
       SUM(CASE WHEN isauthority IS TRUE THEN 1 ELSE NULL END) AS authority
     FROM statusentry
     WHERE validafter >= ''' || min_date || '''
@@ -276,8 +229,8 @@ CREATE OR REPLACE FUNCTION refresh_user_stats() RETURNS INTEGER AS $$
   ) statusentry_by_relay
   ON bwhist_by_relay.fingerprint = statusentry_by_relay.fingerprint
   AND bwhist_by_relay.date = statusentry_by_relay.date
-  -- Group by date and country, summing up the bandwidth histories.
-  GROUP BY 1, 2';
+  -- Group by date, summing up the bandwidth histories.
+  GROUP BY 1';
   RETURN 1;
   END;
 $$ LANGUAGE plpgsql;
@@ -292,7 +245,7 @@ CREATE OR REPLACE FUNCTION refresh_all() RETURNS INTEGER AS $$
     INSERT INTO updates SELECT * FROM scheduled_updates;
     RAISE NOTICE '% Refreshing bandwidth history.', timeofday();
     PERFORM refresh_bwhist_flags();
-    RAISE NOTICE '% Refreshing user statistics.', timeofday();
+    RAISE NOTICE '% Refreshing directory bytes history.', timeofday();
     PERFORM refresh_user_stats();
     RAISE NOTICE '% Deleting processed dates.', timeofday();
     DELETE FROM scheduled_updates WHERE id IN (SELECT id FROM updates);
@@ -319,7 +272,6 @@ UNION ALL
   FLOOR(CAST(dr AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirread,
   FLOOR(CAST(dw AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirwrite
   FROM user_stats
-  WHERE country = 'zy'
-  AND date < current_date - 2)
+  WHERE date < current_date - 2)
 ORDER BY date, isexit, isguard;
 
