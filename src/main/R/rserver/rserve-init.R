@@ -486,7 +486,7 @@ plot_dirbytes <- function(start_p, end_p, path_p) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+    scale_y_continuous(name = "", labels = function(x) sprintf("%.1f Gbit/s", x),
       limits = c(0, NA)) +
     scale_colour_hue(name = "",
         breaks = c("dirwrite", "dirread"),
