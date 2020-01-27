@@ -66,7 +66,9 @@ CREATE TABLE bwhist_flags (
 CREATE TABLE user_stats (
     date DATE NOT NULL,
     dw BIGINT,
-    dr BIGINT
+    dr BIGINT,
+    daw BIGINT,
+    dar BIGINT
 );
 
 -- Dates to be included in the next refresh run.
@@ -199,13 +201,17 @@ CREATE OR REPLACE FUNCTION refresh_user_stats() RETURNS INTEGER AS $$
   DELETE FROM user_stats WHERE date IN (SELECT date FROM updates);
   -- Now insert new user statistics.
   EXECUTE '
-  INSERT INTO user_stats (date, dw, dr)
+  INSERT INTO user_stats (date, dw, dr, daw, dar)
   SELECT
          bwhist_by_relay.date AS date,
          SUM(CASE WHEN authority IS NOT NULL
            THEN NULL ELSE dirwritten END) AS dw,
          SUM(CASE WHEN authority IS NOT NULL
-           THEN NULL ELSE dirread END) AS dr
+           THEN NULL ELSE dirread END) AS dr,
+         SUM(CASE WHEN authority IS NULL
+           THEN NULL ELSE dirwritten END) AS daw,
+         SUM(CASE WHEN authority IS NULL
+           THEN NULL ELSE dirread END) AS dar
   FROM (
     -- Retrieve aggregate bandwidth histories of all relays in the given
     -- time frame.
@@ -263,14 +269,16 @@ CREATE VIEW stats_bandwidth AS
   (SELECT date, isexit, isguard,
   read / 86400 AS bwread,
   written / 86400 AS bwwrite,
-  NULL AS dirread, NULL AS dirwrite
+  NULL AS dirread, NULL AS dirwrite, NULL AS dirauthread, NULL AS dirauthwrite
   FROM bwhist_flags
   WHERE date < current_date - 2)
 UNION ALL
   (SELECT date, NULL AS isexit, NULL AS isguard,
   NULL AS bwread, NULL AS bwwrite,
   FLOOR(CAST(dr AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirread,
-  FLOOR(CAST(dw AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirwrite
+  FLOOR(CAST(dw AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirwrite,
+  FLOOR(CAST(dar AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirauthread,
+  FLOOR(CAST(daw AS NUMERIC) / CAST(86400 AS NUMERIC)) AS dirauthwrite
   FROM user_stats
   WHERE date < current_date - 2)
 ORDER BY date, isexit, isguard;

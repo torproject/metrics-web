@@ -583,13 +583,13 @@ public final class RelayDescriptorDatabaseImporter {
   List<String[]> queryBandwidth() throws SQLException {
     List<String[]> statistics = new ArrayList<>();
     String columns = "date, isexit, isguard, bwread, bwwrite, dirread, "
-        + "dirwrite";
+        + "dirwrite, dirauthread, dirauthwrite";
     statistics.add(columns.split(", "));
     Statement st = this.conn.createStatement();
     String queryString = "SELECT " + columns + " FROM stats_bandwidth";
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
-        String[] outputLine = new String[7];
+        String[] outputLine = new String[9];
         outputLine[0] = rs.getDate("date").toLocalDate().toString();
         outputLine[1] = getBooleanFromResultSet(rs, "isexit");
         outputLine[2] = getBooleanFromResultSet(rs, "isguard");
@@ -597,6 +597,8 @@ public final class RelayDescriptorDatabaseImporter {
         outputLine[4] = getLongFromResultSet(rs, "bwwrite");
         outputLine[5] = getLongFromResultSet(rs, "dirread");
         outputLine[6] = getLongFromResultSet(rs, "dirwrite");
+        outputLine[7] = getLongFromResultSet(rs, "dirauthread");
+        outputLine[8] = getLongFromResultSet(rs, "dirauthwrite");
         statistics.add(outputLine);
       }
     }

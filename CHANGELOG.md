@@ -4,6 +4,7 @@
    - Improve runtime performance of the hidserv module by storing
      extrapolated statistics even if computed network fractions are
      zero, to avoid re-processing these statistics over and over.
+   - Extract directory authority bytes per day in the bwhist module.
 
  * Minor changes
    - Make Jetty host configurable.
