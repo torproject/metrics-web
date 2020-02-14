@@ -328,6 +328,10 @@ to "6_months" graphs in all documents containing history objects, removed the
 "fingerprint" parameter, and removed the previously deprecated "as_number" field
 from details documents on September 10, 2018.
 <a href="#versions_7_0" class="anchor">#</a></li>
+<li><a id="versions_7_1"></a><strong>7.1</strong>:
+Added "bridgedb_distributor" field to bridge details documents on February 14,
+2020.
+<a href="#versions_7_1" class="anchor">#</a></li>
 <li><a id="versions_8_0"></a><strong>8.0</strong>:
 (scheduled, but not deployed yet!):
 Include graph history objects even if the time periods they cover are already
@@ -1961,6 +1965,19 @@ bridge did not report which version it runs.
 <a href="#details_bridge_transports" class="anchor">#</a>
 <p>
 Array of (pluggable) transport names supported by this bridge.
+</p>
+</li>
+
+<li>
+<a id="details_bridge_bridgedb_distributor"></a>
+<b>bridgedb_distributor <span class="label label-primary">new</span></b>
+<code class="typeof">string</code>
+<span class="required-false">optional</span>
+<a href="#details_bridge_bridgedb_distributor" class="anchor">#</a>
+<p>
+BridgeDB distributor that this bridge is currently assigned to.
+Omitted if this bridge is currently not assigned to any BridgeDB distributor.
+<span class="blue">Added on February 14, 2020.</span>
 </p>
 </li>
 
