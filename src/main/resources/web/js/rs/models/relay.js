@@ -237,6 +237,7 @@ define([
                     relay.as = relay.as ? relay.as : null;
                     relay.as_name = relay.as_name ? relay.as_name : null;
                     relay.transports = relay.transports ? relay.transports : null;
+                    relay.bridgedb_distributor = relay.bridgedb_distributor ? relay.bridgedb_distributor : null;
                     relay.fingerprint = relay.hashed_fingerprint ? relay.hashed_fingerprint : relay.fingerprint;
                     model.set({badexit: false});
                     relay.flags = model.parseflags(relay.flags, relay.is_bridge);

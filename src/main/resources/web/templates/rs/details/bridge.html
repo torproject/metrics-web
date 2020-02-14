@@ -80,6 +80,9 @@
     <dt><span class="tip" title="Transport protocols supported by this bridge.">Transport protocols</span></dt>
     <dd><%= relay.get('transports') ? relay.get('transports') : 'none' %></dd>
 
+    <dt><span class="tip" title="BridgeDB distributor that this bridge is currently assigned to.">Bridge distribution mechanism</span></dt>
+    <dd><%= relay.get('bridgedb_distributor') ? relay.get('bridgedb_distributor') : 'none' %></dd>
+
     </dl>
     </div>
 </div>
