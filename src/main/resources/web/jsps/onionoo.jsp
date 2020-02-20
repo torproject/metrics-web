@@ -333,13 +333,12 @@ Added "bridgedb_distributor" field to bridge details documents on February 14,
 2020.
 <a href="#versions_7_1" class="anchor">#</a></li>
 <li><a id="versions_8_0"></a><strong>8.0</strong>:
-(scheduled, but not deployed yet!):
-Include graph history objects even if the time periods they cover are already
+Included graph history objects even if the time periods they cover are already
 contained in other graph history objects with shorter time periods and higher
-data resolutions, remove "3_days" and "1_week" bandwidth graphs, change
-"1_month" bandwidth graph to a data resolution of 24 hours, add back "1_month"
-clients graph, and remove "1_week" uptime and weights graphs, to be deployed
-after February 20, 2020.
+data resolutions, removed "3_days" and "1_week" bandwidth graphs, changed
+"1_month" bandwidth graph to a data resolution of 24 hours, added back "1_month"
+clients graph, and removed "1_week" uptime and weights graphs on February 20,
+2020.
 <a href="#versions_8_0" class="anchor">#</a></li>
 </ul>
 
@@ -2128,15 +2127,10 @@ Object containing graph history objects with written bytes for different
 time periods.
 Keys are string representation of the time period covered by the graph
 history object.
-Keys are fixed strings <strong>"3_days"</strong>,
-<strong>"1_week"</strong>, <strong>"1_month"</strong>,
-<strong>"6_months"</strong>, <strong>"1_year"</strong>, and
-<strong>"5_years"</strong>.
+Keys are fixed strings <strong>"1_month"</strong>, <strong>"6_months"</strong>,
+<strong>"1_year"</strong>, and <strong>"5_years"</strong>.
 Keys refer to the last known bandwidth history of a relay, not to the time
 when the bandwidth document was published.
-A graph history object is only contained if the time period it covers is
-not already contained in another graph history object with shorter time
-period and higher data resolution.
 Similarly, a graph history object is excluded if the relay did not provide
 bandwidth histories on the required level of detail.
 The unit is bytes per second.
@@ -2265,14 +2259,10 @@ This fraction is a very rough approximation of the probability of this
 relay to be selected by clients.
 Keys are string representation of the time period covered by the graph
 history object.
-Keys are fixed strings <strong>"1_week"</strong>,
-<strong>"1_month"</strong>, <strong>"6_months"</strong>,
+Keys are fixed strings <strong>"1_month"</strong>, <strong>"6_months"</strong>,
 <strong>"1_year"</strong>, and <strong>"5_years"</strong>.
 Keys refer to the last known weights history of a relay, not to the time
 when the weights document was published.
-A graph history object is only contained if the time period it covers is
-not already contained in another graph history object with shorter time
-period and higher data resolution.
 The unit is path-selection probability.
 Contained graph history objects may contain null values if the relay was
 running less than 20% of a given time period.
@@ -2397,13 +2387,10 @@ Object containing graph history objects with the average number of clients
 connecting to this bridge.
 Keys are string representation of the time period covered by the graph
 history object.
-Keys are fixed strings <strong>"6_months"</strong>,
+Keys are fixed strings <strong>"1_month"</strong>, <strong>"6_months"</strong>,
 <strong>"1_year"</strong>, and <strong>"5_years"</strong>.
 Keys refer to the last known clients history of a bridge, not to the time
 when the clients document was published.
-A graph history object is only contained if the time period it covers
-is not already contained in another clients graph object with shorter
-time period and higher data resolution.
 The unit is number of clients.
 Contained graph history objects may contain null values if the bridge did
 not report client statistics for at least 50% of a given time period.
@@ -2459,14 +2446,10 @@ Object containing graph history objects with the fractional uptime of this
 relay.
 Keys are string representation of the time period covered by the graph
 history object.
-Keys are fixed strings <strong>"1_week"</strong>,
-<strong>"1_month"</strong>, <strong>"6_months"</strong>,
+Keys are fixed strings <strong>"1_month"</strong>, <strong>"6_months"</strong>,
 <strong>"1_year"</strong>, and <strong>"5_years"</strong>.
 Keys refer to the last known uptime history of a relay, not to the time
 when the uptime document was published.
-A graph history object is only contained if the time period it covers is
-not already contained in another graph history object with shorter time
-period and higher data resolution.
 The unit is fractional uptime from 0 to 1.
 Contained graph history objects may contain null values if less than 20%
 of network statuses have been processed for a given time period.
