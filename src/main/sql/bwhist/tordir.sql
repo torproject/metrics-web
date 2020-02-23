@@ -114,34 +114,24 @@ CREATE OR REPLACE FUNCTION insert_bwhist(
     insert_fingerprint CHARACTER(40), insert_date DATE,
     insert_read BIGINT[], insert_written BIGINT[],
     insert_dirread BIGINT[], insert_dirwritten BIGINT[])
-    RETURNS INTEGER AS $$
-  BEGIN
-  IF (SELECT COUNT(*) FROM bwhist
-      WHERE fingerprint = insert_fingerprint AND date = insert_date) = 0
-      THEN
-    INSERT INTO bwhist (fingerprint, date, read, written, dirread,
-        dirwritten)
-    VALUES (insert_fingerprint, insert_date, insert_read, insert_written,
-        insert_dirread, insert_dirwritten);
-  ELSE
-    BEGIN
-    UPDATE bwhist
-    SET read = array_merge(read, insert_read),
-        written = array_merge(written, insert_written),
-        dirread = array_merge(dirread, insert_dirread),
-        dirwritten = array_merge(dirwritten, insert_dirwritten)
-    WHERE fingerprint = insert_fingerprint AND date = insert_date;
-    END;
-  END IF;
-  UPDATE bwhist
-  SET read_sum = array_sum(read),
-      written_sum = array_sum(written),
-      dirread_sum = array_sum(dirread),
-      dirwritten_sum = array_sum(dirwritten)
-  WHERE fingerprint = insert_fingerprint AND date = insert_date;
-  RETURN 1;
-  END;
-$$ LANGUAGE plpgsql;
+    RETURNS VOID AS $$
+  INSERT INTO bwhist (fingerprint, date, read, read_sum, written, written_sum,
+        dirread, dirread_sum, dirwritten, dirwritten_sum)
+    VALUES (insert_fingerprint, insert_date, insert_read,
+        array_sum(insert_read), insert_written, array_sum(insert_written),
+        insert_dirread, array_sum(insert_dirread), insert_dirwritten,
+        array_sum(insert_dirwritten))
+    ON CONFLICT ON CONSTRAINT bwhist_pkey DO UPDATE
+    SET read = array_merge(bwhist.read, insert_read),
+        read_sum = array_sum(array_merge(bwhist.read, insert_read)),
+        written = array_merge(bwhist.written, insert_written),
+        written_sum = array_sum(array_merge(bwhist.written, insert_written)),
+        dirread = array_merge(bwhist.dirread, insert_dirread),
+        dirread_sum = array_sum(array_merge(bwhist.dirread, insert_dirread)),
+        dirwritten = array_merge(bwhist.dirwritten, insert_dirwritten),
+        dirwritten_sum = array_sum(
+            array_merge(bwhist.dirwritten, insert_dirwritten));
+$$ LANGUAGE SQL;
 
 -- refresh_* functions
 -- The following functions keep their corresponding aggregate tables

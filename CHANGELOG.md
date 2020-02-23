@@ -5,6 +5,8 @@
      extrapolated statistics even if computed network fractions are
      zero, to avoid re-processing these statistics over and over.
    - Extract directory authority bytes per day in the bwhist module.
+   - Rewrite insert_bwhist in SQL to improve performance of the bwhist
+     module.
 
  * Minor changes
    - Make Jetty host configurable.
