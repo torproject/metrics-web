@@ -4008,6 +4008,34 @@
     "target" : "https://ntc.party/t/a-new-kind-of-censoship-in-iran/237"
   } ]
 }, {
+  "start" : "2020-02-18",
+  "end" : "2020-02-18",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Outage of the Snowflake bridge caused by memory exhaustion.",
+  "description" : "Outage of the Snowflake bridge caused by memory exhaustion.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/33364"
+  } ]
+}, {
+  "start" : "2020-02-19",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Deployed a Turbo Tunnel–capable Snowflake bridge.",
+  "description" : "Deployed a Turbo Tunnel&ndash;capable Snowflake bridge.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/33336#comment:8"
+  } ]
+}, {
+  "start" : "2020-02-22",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Made the Snowflake bridge stop reporting client IP addresses of 0.0.0.0",
+  "description" : "Made the Snowflake bridge stop reporting client IP addresses of 0.0.0.0. This also affects log messages that report how many client connections had an attached IP address.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/33385#comment:3"
+  } ]
+}, {
   "start" : "2014-06-01",
   "end" : "2014-06-19",
   "places" : [ "ru" ],
