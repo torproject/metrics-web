@@ -322,6 +322,14 @@
     </untar>
   </target>
 
+  <target name="update-fallback-dir-list"
+          description="Update the fallback directory list used by Relay Search">
+    <exec executable="bash">
+      <arg value="-c"/>
+      <arg value="python3 src/main/python/fallback_dir.py | tee src/main/resources/web/js/rs/fallback_dir.js"/>
+    </exec>
+  </target>
+
   <!-- The following line adds the common targets and properties
        for Metrics' Java Projects.
   -->
