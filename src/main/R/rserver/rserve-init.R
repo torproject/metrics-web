@@ -467,22 +467,31 @@ prepare_dirbytes <- function(start_p = NULL, end_p = NULL) {
         bwread = col_skip(),
         bwwrite = col_skip(),
         dirread = col_double(),
-        dirwrite = col_double())) %>%
+        dirwrite = col_double(),
+        dirauthread = col_double(),
+        dirauthwrite = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(is.na(isexit)) %>%
     filter(is.na(isguard)) %>%
     mutate(dirread = dirread * 8 / 1e9,
-      dirwrite = dirwrite * 8 / 1e9) %>%
-    select(date, dirread, dirwrite)
+      dirwrite = dirwrite * 8 / 1e9,
+      dirauthread = dirauthread * 8 / 1e9,
+      dirauthwrite = dirauthwrite * 8 / 1e9) %>%
+    select(date, dirread, dirwrite, dirauthread, dirauthwrite)
 }
 
 plot_dirbytes <- function(start_p, end_p, path_p) {
   prepare_dirbytes(start_p, end_p) %>%
     gather(variable, value, -date) %>%
+    mutate(readwrite = ifelse(grepl("read", variable), "dirread", "dirwrite"),
+      authority = factor(
+          ifelse(grepl("auth", variable), "authorities", "mirrors"),
+          levels = c("authorities", "mirrors"))) %>%
     complete(date = full_seq(date, period = 1), nesting(variable)) %>%
-    ggplot(aes(x = date, y = value, colour = variable)) +
+    ggplot(aes(x = date, y = value, colour = readwrite)) +
     geom_line() +
+    facet_grid(authority ~ ., scales = "free_y", space = "free_y") +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "", labels = function(x) sprintf("%.1f Gbit/s", x),
@@ -492,7 +501,9 @@ plot_dirbytes <- function(start_p, end_p, path_p) {
         labels = c("Written dir bytes", "Read dir bytes")) +
     ggtitle("Number of bytes spent on answering directory requests") +
     labs(caption = copyright_notice) +
-    theme(legend.position = "top")
+    theme(legend.position = "top",
+          strip.text.y = element_text(angle = 0, hjust = 0),
+          strip.background = element_rect(fill = NA))
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
 }
 

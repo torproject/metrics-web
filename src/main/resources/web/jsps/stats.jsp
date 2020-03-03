@@ -505,6 +505,8 @@ Traffic <a href="#traffic" name="traffic" class="anchor">#</a></h2>
 <li><b>date:</b> UTC date (YYYY-MM-DD) that relays reported bandwidth data for.</li>
 <li><b>dirread:</b> Bandwidth in Gbit/s that directory mirrors have read when serving directory data.</li>
 <li><b>dirwrite:</b> Bandwidth in Gbit/s that directory mirrors have written when serving directory data.</li>
+<li><b>dirauthread:</b> Bandwidth in Gbit/s that directory authorities have read when serving directory data.</li>
+<li><b>dirauthwrite:</b> Bandwidth in Gbit/s that directory authorities have written when serving directory data.</li>
 </ul>
 
 <h3>Fraction of connections used uni-/bidirectionally

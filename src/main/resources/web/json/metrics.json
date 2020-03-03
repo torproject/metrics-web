@@ -92,7 +92,7 @@
     "id": "dirbytes",
     "title": "Bandwidth spent on answering directory requests",
     "type": "Graph",
-    "description": "<p>This graph shows the portion of <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> that <a href=\"glossary.html#directory-mirror\">directory mirrors</a> have spent on answering directory requests.</p>",
+    "description": "<p>This graph shows the portion of <a href=\"glossary.html#bandwidth-history\">consumed bandwidth</a> that <a href=\"glossary.html#directory-authority\">directory authorities</a> and <a href=\"glossary.html#directory-mirror\">directory mirrors</a> have spent on answering directory requests.</p>",
     "function": "dirbytes",
     "parameters": [
       "start",

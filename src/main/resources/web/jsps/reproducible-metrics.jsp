@@ -598,7 +598,7 @@ For both graphs we sum up all read and written bytes on a given day and divide t
 However, we only include bandwidth histories for a given day if a relay was listed as running in a consensus at least once on that day.
 We attribute bandwidth to guards and/or exits if a relay was a guard and/or exit at least in one consensus on a day.</p>
 
-<p>The third graph, <a href="/dirbytes.html">Bandwidth spent on answering directory requests</a>, shows bytes spent by <a href="/glossary.html#directory-mirror">directory mirrors</a> on answering directory requests.
+<p>The third graph, <a href="/dirbytes.html">Bandwidth spent on answering directory requests</a>, shows bytes spent by <a href="/glossary.html#directory-authority">directory authorities</a> and <a href="/glossary.html#directory-mirror">directory mirrors</a> on answering directory requests.
 As opposed to the first two graphs, all bandwidth histories are included, regardless of whether a relay was listed as running in a consensus.
 Also, we compute total read directory and total written directory bytes for this fourth graph, not an average of the two.</p>
 
