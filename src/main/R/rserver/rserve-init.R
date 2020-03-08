@@ -488,7 +488,7 @@ plot_dirbytes <- function(start_p, end_p, path_p) {
       authority = factor(
           ifelse(grepl("auth", variable), "authorities", "mirrors"),
           levels = c("authorities", "mirrors"))) %>%
-    complete(date = full_seq(date, period = 1), nesting(variable)) %>%
+    complete(date = full_seq(date, period = 1), nesting(readwrite, authority)) %>%
     ggplot(aes(x = date, y = value, colour = readwrite)) +
     geom_line() +
     facet_grid(authority ~ ., scales = "free_y", space = "free_y") +
