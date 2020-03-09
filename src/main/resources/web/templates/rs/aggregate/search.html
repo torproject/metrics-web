@@ -26,6 +26,13 @@
 	backend IP address. If the problem persits consult <a
 		href="https://trac.torproject.org/">the bugtracker.</a></p>
     </div>
+    <% } else if (error == 4) { %>
+    <div class="alert alert-danger">
+        <strong>Query error!</strong><p>The backend server reports a problem
+        with your query. Please have a look at
+        <a href="#about">the About page</a> that explains what type of search
+        queries are supported by Relay Search.</p>
+    </div>
     <% } else if (error == 5) { %>
     <div class="alert alert-warning">
         <strong>No query submitted!</strong>

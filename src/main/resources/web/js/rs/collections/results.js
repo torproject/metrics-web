@@ -78,7 +78,9 @@ define([
                 chunkedLookup();
             }).fail(
                 function(jqXHR, textStatus, errorThrown) {
-                if(jqXHR.statusText == "error") {
+                if (jqXHR.status / 100 == 4) {
+                    error(4);
+                } else if(jqXHR.statusText == "error") {
                     error(2);
                 } else {
                     error(3);
