@@ -43,6 +43,9 @@ define([
                 if (flag == "Stable") {
                     output.push([flag, "stable", "This relay is suitable for long-lived circuits."]);
                 }
+                if (flag == "StaleDesc") {
+                    output.push([flag, "staledesc", "This relay should upload a new descriptor because the old one is too old."]);
+                }
                 if (flag == "V2Dir") {
                     output.push([flag, "v2dir", "This relay implements the v2 directory protocol or higher."]);
                 }
