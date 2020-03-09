@@ -67,7 +67,7 @@ td, th {
 }
 
 .flags-cell {
-    width: 150px;
+    min-width: 150px;
 }
 
 /* Allow displaying long contact info (#23868) */
