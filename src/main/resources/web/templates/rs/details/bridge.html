@@ -81,7 +81,19 @@
     <dd><%= relay.get('transports') ? relay.get('transports') : 'none' %></dd>
 
     <dt><span class="tip" title="BridgeDB distributor that this bridge is currently assigned to.">Bridge distribution mechanism</span></dt>
-    <dd><%= relay.get('bridgedb_distributor') ? relay.get('bridgedb_distributor') : 'none' %></dd>
+    <% if (!relay.get('bridgedb_distributor')) { %>
+    <dd><a href="https://bridges.torproject.org/info#none">None</a></dd>
+    <% } else if (relay.get('bridgedb_distributor') === 'unallocated') { %>
+    <dd><a href="https://bridges.torproject.org/info#reserved">Reserved</a></dd>
+    <% } else if (relay.get('bridgedb_distributor') === 'https') { %>
+    <dd><a href="https://bridges.torproject.org/info#https">HTTPS</a></dd>
+    <% } else if (relay.get('bridgedb_distributor') === 'email') { %>
+    <dd><a href="https://bridges.torproject.org/info#email">Email</a></dd>
+    <% } else if (relay.get('bridgedb_distributor') === 'moat') { %>
+    <dd><a href="https://bridges.torproject.org/info#moat">Moat</a></dd>
+    <% } else { %>
+    <dd><a href="https://bridges.torproject.org/info#<%= relay.get('bridgedb_distributor') %>"><%= relay.get('bridgedb_distributor') %></a></dd>
+    <% } %>
 
     </dl>
     </div>
