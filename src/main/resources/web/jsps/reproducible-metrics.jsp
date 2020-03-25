@@ -85,13 +85,21 @@ As above, refer to the <a href="https://gitweb.torproject.org/torspec.git/tree/d
 
 <p>Parse the <code>"dirreq-write-history"</code> line containing written bytes spent on answering directory requests. If the contained statistics end time is more than 1 week older than the descriptor publication time in the <code>"published"</code> line, skip this line to avoid including statistics in the aggregation that have very likely been reported in earlier descriptors and processed before. If a statistics interval spans more than 1 UTC date, split observations to the covered UTC dates by assuming a linear distribution of observations.</p>
 
-<p>Parse the <code>"dirreq-stats-end"</code> and <code>"dirreq-v3-reqs"</code> lines containing directory-request statistics.
+<p>Parse the <code>"dirreq-stats-end"</code>, <code>"dirreq-v3-resp"</code>, and <code>"dirreq-v3-reqs"</code> lines containing directory-request statistics.
 If the statistics end time in the <code>"dirreq-stats-end"</code> line is more than 1 week older than the descriptor publication time in the <code>"published"</code> line, skip these directory request statistics for the same reason as given above: to avoid including statistics in the aggregation that have very likely been reported in earlier descriptors and processed before.
 Also skip statistics with an interval length other than 1 day.
-Parse successful requests by country from the <code>"dirreq-v3-reqs"</code> line. From each number, subtract <code>4</code> to undo the binning operation that has been applied by the relay. Discard the resulting number if it's zero or negative.
+Parse successful requests from the <code>"ok"</code> part of the <code>"dirreq-v3-resp"</code> line, subtract <code>4</code> to undo the binning operation that has been applied by the relay, and discard the resulting number if it's zero or negative.
+Parse successful requests by country from the <code>"dirreq-v3-reqs"</code> line, subtract <code>4</code> from each number to undo the binning operation that has been applied by the relay, and discard the resulting number if it's zero or negative.
 Split observations to the covered UTC dates by assuming a linear distribution of observations.</p>
 
-<h4>Step 3: Estimate fraction of reported directory-request statistics</h4>
+<h4>Step 3: Approximate directory requests by country</h4>
+
+<p>Relays report directory request numbers in two places: as a total number (<code>"dirreq-v3-resp"</code> line) and as numbers broken down by country (<code>"dirreq-v3-reqs"</code> line).
+Rather than using numbers broken down by country directly we multiply total requests with the fraction of requests from a given country.
+This has two reasons: it reduces the overall effect of binning, and it makes relay and bridge user estimates more comparable.
+If a relay for some reason only reports total requests and not requests by country, we attribute all requests to "??" which stands for Unknown Country.</p>
+
+<h4>Step 4: Estimate fraction of reported directory-request statistics</h4>
 
 <p>The next step after parsing descriptors is to estimate the fraction of reported directory-request statistics on a given day.
 This fraction will be used in the next step to extrapolate observed request numbers to expected network totals.
@@ -117,7 +125,7 @@ frac = -----------------------------
                 h(H) * n(N)
 </pre>
 
-<h4>Step 4: Compute estimated relay users per country</h4>
+<h4>Step 5: Compute estimated relay users per country</h4>
 
 <p>With the estimated fraction of reported directory-request statistics from the previous step it is now possible to compute estimates for relay users.
 Similar to the previous step, the same approach described here also applies to estimating bridge users by country, transport, or IP version as described further down below.</p>
@@ -132,7 +140,7 @@ This approach also works with <var>r(R)</var> being the sum of requests from <em
 <p>A client that is connected 24/7 makes about 15 requests per day, but not all clients are connected 24/7, so we picked the number 10 for the average client. We simply divide directory requests by 10 and consider the result as the number of users. Another way of looking at it, is that we assume that each request represents a client that stays online for one tenth of a day, so 2 hours and 24 minutes.</p>
 <p>Skip dates where <var>frac</var> is smaller than 10% and hence too low for a robust estimate. Also skip dates where <var>frac</var> is greater than 110%, which would indicate an issue in the previous step. We picked 110% as upper bound, not 100%, because there can be relays reporting statistics that temporarily didn't make it into the consensus, and we accept up to 10% of those additional statistics. However, there needs to be some upper bound to exclude obvious outliers with fractions of 120%, 150%, or even 200%.</p>
 
-<h4>Step 5: Compute ranges of expected clients per day to detect potential censorship events</h4>
+<h4>Step 6: Compute ranges of expected clients per day to detect potential censorship events</h4>
 
 <p>As last step in reproducing relay user numbers, compute ranges of expected clients per day to detect potential censorship events.
 For further details on the detection method, refer to the technical report titled <a href="https://research.torproject.org/techreports/detector-2011-09-09.pdf">"An anomaly-based censorship-detection system for Tor"</a>.
@@ -220,12 +228,12 @@ This allows us to combine unique IP address sets by country and by transport and
 <h4>Step 4: Estimate fraction of reported directory-request statistics</h4>
 
 <p>The step for estimating the fraction of reported directory-request statistics is pretty much the same for bridges and for relays.
-This is why we refer to Step 3 of the <a href="#relay-users">Relay users</a> description for this estimation.</p>
+This is why we refer to Step 4 of the <a href="#relay-users">Relay users</a> description for this estimation.</p>
 
 <h4>Step 5: Compute estimated bridge users per country, transport, or IP version</h4>
 
 <p>Similar to the previous step, this step is equivalent for bridge users and relay users.
-We therefore refer to Step 4 of the <a href="#relay-users">Relay users</a> description for transforming directory request numbers to user numbers.</p>
+We therefore refer to Step 5 of the <a href="#relay-users">Relay users</a> description for transforming directory request numbers to user numbers.</p>
 
 </div>
 

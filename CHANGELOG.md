@@ -7,6 +7,9 @@
    - Extract directory authority bytes per day in the bwhist module.
    - Rewrite insert_bwhist in SQL to improve performance of the bwhist
      module.
+   - Estimate relay users by country based on responses to directory
+     requests to reduce the overall effect of binning and to make
+     relay and bridge user estimates more comparable.
 
  * Minor changes
    - Make Jetty host configurable.

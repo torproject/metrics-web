@@ -104,20 +104,22 @@ public class Main {
     long dirreqStatsEndMillis = descriptor.getDirreqStatsEndMillis();
     long dirreqStatsIntervalLengthMillis =
         descriptor.getDirreqStatsIntervalLength() * 1000L;
+    SortedMap<String, Integer> responses = descriptor.getDirreqV3Resp();
     SortedMap<String, Integer> requests = descriptor.getDirreqV3Reqs();
     BandwidthHistory dirreqWriteHistory =
         descriptor.getDirreqWriteHistory();
-    parseRelayDirreqV3Reqs(fingerprint, publishedMillis,
-        dirreqStatsEndMillis, dirreqStatsIntervalLengthMillis, requests);
+    parseRelayDirreqV3Resp(fingerprint, publishedMillis, dirreqStatsEndMillis,
+        dirreqStatsIntervalLengthMillis, responses, requests);
     parseRelayDirreqWriteHistory(fingerprint, publishedMillis,
         dirreqWriteHistory);
   }
 
-  private static void parseRelayDirreqV3Reqs(String fingerprint,
+  private static void parseRelayDirreqV3Resp(String fingerprint,
       long publishedMillis, long dirreqStatsEndMillis,
       long dirreqStatsIntervalLengthMillis,
+      SortedMap<String, Integer> responses,
       SortedMap<String, Integer> requests) throws SQLException {
-    if (requests == null
+    if (responses == null
         || publishedMillis - dirreqStatsEndMillis > ONE_WEEK_MILLIS
         || dirreqStatsIntervalLengthMillis != ONE_DAY_MILLIS) {
       /* Cut off all observations that are one week older than
@@ -129,25 +131,43 @@ public class Main {
         - dirreqStatsIntervalLengthMillis;
     long utcBreakMillis = (dirreqStatsEndMillis / ONE_DAY_MILLIS)
         * ONE_DAY_MILLIS;
-    for (int i = 0; i < 2; i++) {
-      long fromMillis = i == 0 ? statsStartMillis
-          : utcBreakMillis;
-      long toMillis = i == 0 ? utcBreakMillis : dirreqStatsEndMillis;
-      if (fromMillis >= toMillis) {
-        continue;
+    double resp = ((double) responses.get("ok")) - 4.0;
+    if (resp > 0.0) {
+      for (int i = 0; i < 2; i++) {
+        long fromMillis = i == 0 ? statsStartMillis : utcBreakMillis;
+        long toMillis = i == 0 ? utcBreakMillis : dirreqStatsEndMillis;
+        if (fromMillis >= toMillis) {
+          continue;
+        }
+        double intervalFraction = ((double) (toMillis - fromMillis))
+            / ((double) dirreqStatsIntervalLengthMillis);
+        double total = 0L;
+        SortedMap<String, Double> requestsCopy = new TreeMap<>();
+        if (null != requests) {
+          for (Map.Entry<String, Integer> e : requests.entrySet()) {
+            if (e.getValue() < 4.0) {
+              continue;
+            }
+            double frequency = ((double) e.getValue()) - 4.0;
+            requestsCopy.put(e.getKey(), frequency);
+            total += frequency;
+          }
+        }
+        /* If we're not told any requests, or at least none of them are greater
+         * than 4, put in a default that we'll attribute all responses to. */
+        if (requestsCopy.isEmpty()) {
+          requestsCopy.put("??", 4.0);
+          total = 4.0;
+        }
+        for (Map.Entry<String, Double> e : requestsCopy.entrySet()) {
+          String country = e.getKey();
+          double val = resp * intervalFraction * e.getValue() / total;
+          database.insertIntoImported(fingerprint, "relay", "responses",
+              country, "", "", fromMillis, toMillis, val);
+        }
+        database.insertIntoImported(fingerprint, "relay", "responses", "", "",
+            "", fromMillis, toMillis, resp * intervalFraction);
       }
-      double intervalFraction =  ((double) (toMillis - fromMillis))
-          / ((double) dirreqStatsIntervalLengthMillis);
-      double sum = 0L;
-      for (Map.Entry<String, Integer> e : requests.entrySet()) {
-        String country = e.getKey();
-        double reqs = ((double) e.getValue()) - 4.0;
-        sum += reqs;
-        database.insertIntoImported(fingerprint, "relay", "responses", country,
-            "", "", fromMillis, toMillis, reqs * intervalFraction);
-      }
-      database.insertIntoImported(fingerprint, "relay", "responses", "", "",
-          "", fromMillis, toMillis, sum * intervalFraction);
     }
   }
 
