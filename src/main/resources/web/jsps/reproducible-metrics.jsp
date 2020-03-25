@@ -198,10 +198,11 @@ As above, refer to the <a href="/bridge-descriptors.html">Tor bridge descriptors
 
 <p>Parse the <code>"dirreq-write-history"</code> line containing written bytes spent on answering directory requests. If the contained statistics end time is more than 1 week older than the descriptor publication time in the <code>"published"</code> line, skip this line to avoid including statistics in the aggregation that have very likely been reported in earlier descriptors and processed before. If a statistics interval spans more than 1 UTC date, split observations to the covered UTC dates by assuming a linear distribution of observations.</p>
 
-<p>Parse the <code>"dirreq-stats-end"</code> and <code>"dirreq-v3-resp"</code> lines containing directory-request statistics.
+<p>Parse the <code>"dirreq-stats-end"</code>, <code>"dirreq-v3-resp"</code>, and <code>"dirreq-v3-reqs"</code> lines containing directory-request statistics.
 If the statistics end time in the <code>"dirreq-stats-end"</code> line is more than 1 week older than the descriptor publication time in the <code>"published"</code> line, skip these directory request statistics for the same reason as given above: to avoid including statistics in the aggregation that have very likely been reported in earlier descriptors and processed before.
 Also skip statistics with an interval length other than 1 day.
-Parse successful requests from the <code>"ok"</code> part of the <code>"dirreq-v3-resp"</code> line. Subtract <code>4</code> to undo the binning operation that has been applied by the bridge. Discard the resulting number if it's zero or negative.
+Parse successful requests from the <code>"ok"</code> part of the <code>"dirreq-v3-resp"</code> line, subtract <code>4</code> to undo the binning operation that has been applied by the bridge, and discard the resulting number if it's zero or negative.
+Parse successful requests by country from the <code>"dirreq-v3-reqs"</code> line, subtract <code>4</code> from each number to undo the binning operation that has been applied by the bridge, and discard the resulting number if it's zero or negative.
 Split observations to the covered UTC dates by assuming a linear distribution of observations.</p>
 
 <p>Parse the <code>"bridge-ips"</code>, <code>"bridge-ip-versions"</code>, and <code>"bridge-ip-transports"</code> lines containing unique connecting IP addresses by country, IP version, and transport. From each number of unique IP addresses, subtract 4 to undo the binning operation that has been applied by the bridge. Discard the resulting number if it's zero or negative.</p>
@@ -210,9 +211,15 @@ Split observations to the covered UTC dates by assuming a linear distribution of
 
 <h4>Step 3: Approximate directory requests by country, transport, and IP version</h4>
 
-<p>Bridges, unlike relays, do not report directory request numbers by country, transport, or IP version.
-However, bridges do report unique IP address counts by country, by transport, and by IP version.
-We approximate directory request numbers by multiplying the fraction of unique IP addresses from a given country, transport, or IP version with the total number of successful requests.</p>
+<p>Older bridges did not report directory requests by country but only total requests and unique IP address counts by country.
+In that case we approximate directory requests by country by multiplying the total number with the fraction of unique IP addresses from a given country.
+For newer bridges that do report directory requests by country we still take total requests as starting point and multiply with the fraction of requests by country.
+Otherwise, if we had used directory requests by country directly, totals by country, transport, and IP version would not match.
+If a bridge reports neither directory requests by country nor unique IP addresses by country, we attribute all requests to "??" which stands for Unknown Country.</p>
+
+<p>Bridges do not report directory requests by transport or IP version.
+We approximate these numbers by multiplying the total number of requests with the fraction of unique IP addresses by transport or IP version.
+If a bridge does not report unique IP addresses by transport or IP version, we attribute all requests to the default onion-routing protocol or to IPv4, respectively.</p>
 
 <p>As a special case, we also approximate lower and upper bounds for directory requests by country <em>and</em> transport.
 This approximation is based on the fact that most bridges only provide a small number of transports.
@@ -222,8 +229,6 @@ This allows us to combine unique IP address sets by country and by transport and
 <li>We calculate the lower bound as <code>max(0, C(b) + T(b) - S(b))</code> using the following definitions: <code>C(b)</code> is the number of requests from a given country reported by bridge <code>b</code>; <code>T(b)</code> is the number of requests using a given transport reported by bridge <code>b</code>; and <code>S(b)</code> is the total numbers of requests reported by bridge <code>b</code>. Reasoning: If the sum <code>C(b) + T(b)</code> exceeds the total number of requests from all countries and transports <code>S(b)</code>, there must be requests from that country and transport. And if that is not the case, <code>0</code> is the lower limit.</li>
 <li>We calculate the upper bound as <code>min(C(b), T(b))</code> with the definitions from above. Reasoning: There cannot be more requests by country and transport than there are requests by either of the two numbers.
 </ul>
-
-<p>If a bridge does not report unique IP addresses by country, transport, or IP version, we attribute all requests to "??" which stands for Unknown Country, to the default onion-routing protocol, or to IPv4.</p>
 
 <h4>Step 4: Estimate fraction of reported directory-request statistics</h4>
 

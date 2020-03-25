@@ -260,6 +260,7 @@ public class Main {
     parseBridgeDirreqV3Resp(fingerprint, publishedMillis,
         dirreqStatsEndMillis, dirreqStatsIntervalLengthMillis,
         descriptor.getDirreqV3Resp(),
+        descriptor.getDirreqV3Reqs(),
         descriptor.getBridgeIps(),
         descriptor.getBridgeIpTransports(),
         descriptor.getBridgeIpVersions());
@@ -272,6 +273,7 @@ public class Main {
       long publishedMillis, long dirreqStatsEndMillis,
       long dirreqStatsIntervalLengthMillis,
       SortedMap<String, Integer> responses,
+      SortedMap<String, Integer> requests,
       SortedMap<String, Integer> bridgeIps,
       SortedMap<String, Integer> bridgeIpTransports,
       SortedMap<String, Integer> bridgeIpVersions) throws SQLException {
@@ -301,7 +303,8 @@ public class Main {
         database.insertIntoImported(fingerprint, "bridge", "responses", "", "",
             "", fromMillis, toMillis, resp * intervalFraction);
         parseBridgeRespByCategory(fingerprint, fromMillis, toMillis, resp,
-            dirreqStatsIntervalLengthMillis, "country", bridgeIps);
+            dirreqStatsIntervalLengthMillis, "country",
+            null != requests ? requests : bridgeIps);
         parseBridgeRespByCategory(fingerprint, fromMillis, toMillis, resp,
             dirreqStatsIntervalLengthMillis, "transport",
             bridgeIpTransports);
@@ -331,7 +334,7 @@ public class Main {
     /* If we're not told any frequencies, or at least none of them are
      * greater than 4, put in a default that we'll attribute all responses
      * to. */
-    if (total == 0) {
+    if (frequenciesCopy.isEmpty()) {
       switch (category) {
         case "country":
           frequenciesCopy.put("??", 4.0);

@@ -10,6 +10,9 @@
    - Estimate relay users by country based on responses to directory
      requests to reduce the overall effect of binning and to make
      relay and bridge user estimates more comparable.
+   - Estimate bridge users by country based on requests by country, if
+     available, to get more accurate numbers than those obtained from
+     unique IP address counts.
 
  * Minor changes
    - Make Jetty host configurable.
