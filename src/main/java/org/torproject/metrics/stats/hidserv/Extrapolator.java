@@ -20,7 +20,8 @@ import java.util.TreeSet;
  * observed by the relay. */
 public class Extrapolator {
 
-  private static Logger log = LoggerFactory.getLogger(Extrapolator.class);
+  private static final Logger logger
+      = LoggerFactory.getLogger(Extrapolator.class);
 
   /** Document file containing previously parsed reported hidden-service
    * statistics. */
@@ -89,7 +90,7 @@ public class Extrapolator {
 
     /* Make sure that all documents could be retrieved correctly. */
     if (extrapolatedStats == null || reportedStats == null) {
-      log.warn("Could not read previously parsed or extrapolated "
+      logger.warn("Could not read previously parsed or extrapolated "
           + "hidserv-stats. Skipping.");
       return false;
     }

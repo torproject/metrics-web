@@ -35,7 +35,7 @@ import java.util.TreeSet;
  * document files for later use. */
 public class Parser {
 
-  private static Logger log = LoggerFactory.getLogger(Parser.class);
+  private static final Logger logger = LoggerFactory.getLogger(Parser.class);
 
   /** File containing tuples of last-modified times and file names of
    * descriptor files parsed in the previous execution. */
@@ -111,12 +111,12 @@ public class Parser {
             String[] parts = line.split(" ", 2);
             excludedFiles.put(parts[1], Long.parseLong(parts[0]));
           } catch (NumberFormatException e) {
-            log.warn("Illegal line '{}' in parse history. Skipping line.", line,
-                e);
+            logger.warn("Illegal line '{}' in parse history. Skipping line.",
+                line, e);
           }
         }
       } catch (IOException e) {
-        log.warn("Could not read history file '{}'. Not "
+        logger.warn("Could not read history file '{}'. Not "
             + "excluding descriptors in this execution.",
             this.parseHistoryFile.getAbsolutePath(), e);
       }
@@ -151,8 +151,9 @@ public class Parser {
             + "\n");
       }
     } catch (IOException e) {
-      log.warn("Could not write history file '{}'. Not excluding descriptors "
-          + "in next execution.", this.parseHistoryFile.getAbsolutePath(), e);
+      logger.warn("Could not write history file '{}'. Not excluding "
+          + "descriptors in next execution.",
+          this.parseHistoryFile.getAbsolutePath(), e);
     }
   }
 
@@ -231,7 +232,7 @@ public class Parser {
     } else if (extraInfoDescriptor.getHidservStatsEndMillis() >= 0L
         || extraInfoDescriptor.getHidservRendRelayedCells() != null
         || extraInfoDescriptor.getHidservDirOnionsSeen() != null) {
-      log.warn("Relay {} published incomplete hidserv-stats. Ignoring.",
+      logger.warn("Relay {} published incomplete hidserv-stats. Ignoring.",
           fingerprint);
     }
   }
@@ -252,7 +253,7 @@ public class Parser {
     SortedMap<String, Integer> bandwidthWeights =
         consensus.getBandwidthWeights();
     if (bandwidthWeights == null) {
-      log.warn("Consensus with valid-after time {} doesn't contain any Wxx "
+      logger.warn("Consensus with valid-after time {} doesn't contain any Wxx "
           + "weights. Skipping.",
           DateTimeHelper.format(consensus.getValidAfterMillis()));
       return;
@@ -264,7 +265,7 @@ public class Parser {
         new TreeSet<>(Arrays.asList("Wmg,Wmm,Wme,Wmd".split(",")));
     expectedWeightKeys.removeAll(bandwidthWeights.keySet());
     if (!expectedWeightKeys.isEmpty()) {
-      log.warn("Consensus with valid-after time {} doesn't contain expected "
+      logger.warn("Consensus with valid-after time {} doesn't contain expected "
           + "Wmx weights. Skipping.",
           DateTimeHelper.format(consensus.getValidAfterMillis()));
       return;

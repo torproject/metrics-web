@@ -14,7 +14,7 @@ import java.io.File;
  * do not overlap. */
 public class Main {
 
-  private static Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   private static final File baseDir = new File(
       org.torproject.metrics.stats.main.Main.modulesDir, "hidserv");
@@ -34,7 +34,7 @@ public class Main {
 
     /* Initialize parser and read parse history to avoid parsing
      * descriptor files that haven't changed since the last execution. */
-    log.info("Initializing parser and reading parse history...");
+    logger.info("Initializing parser and reading parse history...");
     DocumentStore<ReportedHidServStats> reportedHidServStatsStore =
         new DocumentStore<>(ReportedHidServStats.class);
     DocumentStore<ComputedNetworkFractions>
@@ -46,28 +46,28 @@ public class Main {
 
     /* Parse new descriptors and store their contents using the document
      * stores. */
-    log.info("Parsing descriptors...");
+    logger.info("Parsing descriptors...");
     parser.parseDescriptors();
 
     /* Write the parse history to avoid parsing descriptor files again
      * next time.  It's okay to do this now and not at the end of the
      * execution, because even if something breaks apart below, it's safe
      * not to parse descriptor files again. */
-    log.info("Writing parse history...");
+    logger.info("Writing parse history...");
     parser.writeParseHistory();
 
     /* Extrapolate reported statistics using computed network fractions
      * and write the result to disk using a document store.  The result is
      * a single file with extrapolated network totals based on reports by
      * single relays. */
-    log.info("Extrapolating statistics...");
+    logger.info("Extrapolating statistics...");
     DocumentStore<ExtrapolatedHidServStats> extrapolatedHidServStatsStore
         = new DocumentStore<>(ExtrapolatedHidServStats.class);
     Extrapolator extrapolator = new Extrapolator(statusDirectory,
         reportedHidServStatsStore, computedNetworkFractionsStore,
         extrapolatedHidServStatsStore);
     if (!extrapolator.extrapolateHidServStats()) {
-      log.warn("Could not extrapolate statistics. Terminating.");
+      logger.warn("Could not extrapolate statistics. Terminating.");
       return;
     }
 
@@ -75,7 +75,7 @@ public class Main {
      * This includes calculating daily weighted interquartile means, among
      * other statistics.  Write the result to a .csv file that can be
      * processed by other tools. */
-    log.info("Aggregating statistics...");
+    logger.info("Aggregating statistics...");
     File hidservStatsExtrapolatedCsvFile = new File(baseDir,
         "stats/hidserv.csv");
     Aggregator aggregator = new Aggregator(statusDirectory,
@@ -83,7 +83,7 @@ public class Main {
     aggregator.aggregateHidServStats();
 
     /* End this execution. */
-    log.info("Terminating.");
+    logger.info("Terminating.");
   }
 }
 

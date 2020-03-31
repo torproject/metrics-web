@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 public class Main {
 
-  private static Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   private static String[] paths =  {
       "recent/relay-descriptors/consensuses",
@@ -34,9 +34,9 @@ public class Main {
   /** Executes this data-processing module. */
   public static void main(String[] args) throws Exception {
 
-    log.info("Starting bwhist module.");
+    logger.info("Starting bwhist module.");
 
-    log.info("Reading descriptors and inserting relevant parts into the "
+    logger.info("Reading descriptors and inserting relevant parts into the "
         + "database.");
     File[] descriptorDirectories = Arrays.stream(paths).map((String path)
         -> new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
@@ -47,17 +47,17 @@ public class Main {
         historyFile, jdbcString);
     database.importRelayDescriptors();
 
-    log.info("Aggregating database entries.");
+    logger.info("Aggregating database entries.");
     database.aggregate();
 
-    log.info("Querying aggregated statistics from the database.");
+    logger.info("Querying aggregated statistics from the database.");
     new Writer().write(new File(baseDir, "stats/bandwidth.csv").toPath(),
         database.queryBandwidth());
 
-    log.info("Closing database connection.");
+    logger.info("Closing database connection.");
     database.closeConnection();
 
-    log.info("Terminating bwhist module.");
+    logger.info("Terminating bwhist module.");
   }
 }
 

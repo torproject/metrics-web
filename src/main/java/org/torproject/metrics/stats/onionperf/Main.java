@@ -31,7 +31,7 @@ import java.util.Set;
 public class Main {
 
   /** Logger for this class. */
-  private static Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   private static final String jdbcString = String.format(
       "jdbc:postgresql://localhost/onionperf?user=%s&password=%s",
@@ -43,7 +43,7 @@ public class Main {
 
   /** Executes this data-processing module. */
   public static void main(String[] args) throws Exception {
-    log.info("Starting onionperf module.");
+    logger.info("Starting onionperf module.");
     Connection connection = connectToDatabase();
     importOnionPerfFiles(connection);
     writeStatistics(new File(baseDir, "stats/torperf-1.1.csv").toPath(),
@@ -56,15 +56,15 @@ public class Main {
         new File(baseDir, "stats/onionperf-throughput.csv").toPath(),
         queryThroughput(connection));
     disconnectFromDatabase(connection);
-    log.info("Terminated onionperf module.");
+    logger.info("Terminated onionperf module.");
   }
 
   private static Connection connectToDatabase()
       throws SQLException {
-    log.info("Connecting to database.");
+    logger.info("Connecting to database.");
     Connection connection = DriverManager.getConnection(jdbcString);
     connection.setAutoCommit(false);
-    log.info("Successfully connected to database.");
+    logger.info("Successfully connected to database.");
     return connection;
   }
 
@@ -240,7 +240,7 @@ public class Main {
 
   static List<String> queryOnionPerf(Connection connection)
       throws SQLException {
-    log.info("Querying statistics from database.");
+    logger.info("Querying statistics from database.");
     List<String> statistics = new ArrayList<>();
     statistics
         .add("date,filesize,source,server,q1,md,q3,timeouts,failures,requests");
@@ -268,7 +268,7 @@ public class Main {
 
   static List<String> queryBuildTimes(Connection connection)
       throws SQLException {
-    log.info("Querying buildtime statistics from database.");
+    logger.info("Querying buildtime statistics from database.");
     List<String> statistics = new ArrayList<>();
     statistics.add("date,source,position,q1,md,q3");
     Statement st = connection.createStatement();
@@ -291,7 +291,7 @@ public class Main {
 
   static List<String> queryLatencies(Connection connection)
       throws SQLException {
-    log.info("Querying latency statistics from database.");
+    logger.info("Querying latency statistics from database.");
     List<String> statistics = new ArrayList<>();
     statistics.add("date,source,server,low,q1,md,q3,high");
     Statement st = connection.createStatement();
@@ -316,7 +316,7 @@ public class Main {
 
   static List<String> queryThroughput(Connection connection)
       throws SQLException {
-    log.info("Querying throughput statistics from database.");
+    logger.info("Querying throughput statistics from database.");
     List<String> statistics = new ArrayList<>();
     statistics.add("date,source,server,low,q1,md,q3,high");
     Statement st = connection.createStatement();
@@ -361,14 +361,14 @@ public class Main {
   static void writeStatistics(Path webstatsPath, List<String> statistics)
       throws IOException {
     webstatsPath.toFile().getParentFile().mkdirs();
-    log.info("Writing {} lines to {}.", statistics.size(),
+    logger.info("Writing {} lines to {}.", statistics.size(),
         webstatsPath.toFile().getAbsolutePath());
     Files.write(webstatsPath, statistics, StandardCharsets.UTF_8);
   }
 
   private static void disconnectFromDatabase(Connection connection)
       throws SQLException {
-    log.info("Disconnecting from database.");
+    logger.info("Disconnecting from database.");
     connection.close();
   }
 }

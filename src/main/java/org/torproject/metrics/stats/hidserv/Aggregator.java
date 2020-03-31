@@ -24,7 +24,8 @@ import java.util.TreeMap;
  * statistics and the total network fraction of reporting relays. */
 public class Aggregator {
 
-  private static Logger log = LoggerFactory.getLogger(Aggregator.class);
+  private static final Logger logger
+      = LoggerFactory.getLogger(Aggregator.class);
 
   /** Document file containing extrapolated hidden-service statistics. */
   private File extrapolatedHidServStatsFile;
@@ -62,7 +63,7 @@ public class Aggregator {
         this.extrapolatedHidServStatsStore.retrieve(
         this.extrapolatedHidServStatsFile);
     if (extrapolatedStats == null) {
-      log.warn("Unable to retrieve extrapolated hidden-service "
+      logger.warn("Unable to retrieve extrapolated hidden-service "
           + "statistics from file {}. Skipping aggregation step.",
           this.extrapolatedHidServStatsFile.getAbsolutePath());
       return;
@@ -188,7 +189,7 @@ public class Aggregator {
         this.hidservStatsCsvFile))) {
       bw.write(sb.toString());
     } catch (IOException e) {
-      log.warn("Unable to write results to {}. Ignoring.",
+      logger.warn("Unable to write results to {}. Ignoring.",
           this.extrapolatedHidServStatsFile.getAbsolutePath());
     }
   }

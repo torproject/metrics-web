@@ -42,7 +42,7 @@ import java.util.TreeSet;
 public class Main {
 
   /** Logger for this class. */
-  private static Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   private static final String jdbcString = String.format(
       "jdbc:postgresql://localhost/webstats?user=%s&password=%s",
@@ -72,7 +72,7 @@ public class Main {
 
   /** Executes this data-processing module. */
   public static void main(String[] args) throws Exception {
-    log.info("Starting webstats module.");
+    logger.info("Starting webstats module.");
     Connection connection = connectToDatabase();
     SortedSet<String> skipFiles = queryImportedFileNames(connection);
     importLogFiles(connection, skipFiles,
@@ -84,21 +84,21 @@ public class Main {
     writeStatistics(new File(baseDir, "stats/webstats.csv").toPath(),
         statistics);
     disconnectFromDatabase(connection);
-    log.info("Terminated webstats module.");
+    logger.info("Terminated webstats module.");
   }
 
   private static Connection connectToDatabase()
       throws SQLException {
-    log.info("Connecting to database.");
+    logger.info("Connecting to database.");
     Connection connection = DriverManager.getConnection(jdbcString);
     connection.setAutoCommit(false);
-    log.info("Successfully connected to database.");
+    logger.info("Successfully connected to database.");
     return connection;
   }
 
   static SortedSet<String> queryImportedFileNames(Connection connection)
       throws SQLException {
-    log.info("Querying previously imported log files.");
+    logger.info("Querying previously imported log files.");
     SortedSet<String> importedLogFileUrls = new TreeSet<>();
     Statement st = connection.createStatement();
     String queryString = "SELECT server, site, log_date FROM files";
@@ -110,7 +110,7 @@ public class Main {
             rs.getDate(3).toLocalDate().format(dateFormat)));
       }
     }
-    log.info("Found {} previously imported log files.",
+    logger.info("Found {} previously imported log files.",
         importedLogFileUrls.size());
     return importedLogFileUrls;
   }
@@ -142,11 +142,11 @@ public class Main {
             logFile.getPhysicalHost(), logFile.getVirtualHost(),
             logFile.getLogDate(), parsedLogLines);
       } catch (DescriptorParseException exc) {
-        log.warn("Cannot parse log file with file name {}.  Retrying in the "
+        logger.warn("Cannot parse log file with file name {}.  Retrying in the "
             + "next run.", logFile.getDescriptorFile().getName(), exc);
       } catch (SQLException exc) {
-        log.warn("Cannot import log file with file name {} into the database. "
-            + "Rolling back and retrying in the next run.",
+        logger.warn("Cannot import log file with file name {} into the "
+            + "database. Rolling back and retrying in the next run.",
             logFile.getDescriptorFile().getName(), exc);
         try {
           connection.rollback();
@@ -173,7 +173,7 @@ public class Main {
         + COUNT + ") VALUES (?, CAST(? AS method), ?, ?, ?)");
     int fileId = insertFile(psFiles, urlString, server, site, logDate);
     if (fileId < 0) {
-      log.debug("Skipping previously imported log file {}.", urlString);
+      logger.debug("Skipping previously imported log file {}.", urlString);
       return;
     }
     for (Map.Entry<String, Long> requests : parsedLogLines.entrySet()) {
@@ -185,7 +185,7 @@ public class Main {
       int resourceId = insertResource(psResourcesSelect, psResourcesInsert,
           resource);
       if (resourceId < 0) {
-        log.error("Could not retrieve auto-generated key for new resources "
+        logger.error("Could not retrieve auto-generated key for new resources "
             + "entry.");
         connection.rollback();
         return;
@@ -194,7 +194,7 @@ public class Main {
           count);
     }
     connection.commit();
-    log.debug("Finished importing log file with file name {} into database.",
+    logger.debug("Finished importing log file with file name {} into database.",
         urlString);
   }
 
@@ -265,7 +265,7 @@ public class Main {
 
   static SortedSet<String> queryWebstats(Connection connection)
       throws SQLException {
-    log.info("Querying statistics from database.");
+    logger.info("Querying statistics from database.");
     SortedSet<String> statistics = new TreeSet<>();
     Statement st = connection.createStatement();
     String queryString = "SELECT " + ALL_COLUMNS + " FROM webstats";
@@ -295,14 +295,14 @@ public class Main {
     List<String> lines = new ArrayList<>();
     lines.add(ALL_COLUMNS);
     lines.addAll(statistics);
-    log.info("Writing {} lines to {}.", lines.size(),
+    logger.info("Writing {} lines to {}.", lines.size(),
         webstatsPath.toFile().getAbsolutePath());
     Files.write(webstatsPath, lines, StandardCharsets.UTF_8);
   }
 
   private static void disconnectFromDatabase(Connection connection)
       throws SQLException {
-    log.info("Disconnecting from database.");
+    logger.info("Disconnecting from database.");
     connection.close();
   }
 }

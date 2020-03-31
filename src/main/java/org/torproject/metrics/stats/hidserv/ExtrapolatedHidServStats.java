@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * computed network fractions in the statistics interval. */
 public class ExtrapolatedHidServStats implements Document {
 
-  private static Logger log
+  private static final Logger logger
       = LoggerFactory.getLogger(ExtrapolatedHidServStats.class);
 
   /** Date of statistics interval end in milliseconds. */
@@ -136,7 +136,7 @@ public class ExtrapolatedHidServStats implements Document {
   @Override
   public boolean parse(String[] formattedStrings) {
     if (formattedStrings.length != 2) {
-      log.warn("Invalid number of formatted strings: {}. Skipping.",
+      logger.warn("Invalid number of formatted strings: {}. Skipping.",
           formattedStrings.length);
       return false;
     }
@@ -144,7 +144,7 @@ public class ExtrapolatedHidServStats implements Document {
         DateTimeHelper.ISO_DATE_FORMAT);
     String[] secondParts = formattedStrings[1].split(",", 5);
     if (secondParts.length != 5) {
-      log.warn("Invalid number of comma-separated values: {}. Skipping.",
+      logger.warn("Invalid number of comma-separated values: {}. Skipping.",
           secondParts.length);
       return false;
     }

@@ -15,7 +15,7 @@ import java.util.TimeZone;
 
 public class Main {
 
-  private static final Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   private static final String baseDir = System.getProperty("metrics.basedir",
       "/srv/metrics.torproject.org/metrics");
@@ -29,7 +29,7 @@ public class Main {
   /** Start the metrics update run. */
   public static void main(String[] args) {
 
-    log.info("Starting metrics update run.");
+    logger.info("Starting metrics update run.");
 
     Locale.setDefault(Locale.US);
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
@@ -40,11 +40,11 @@ public class Main {
         continue;
       }
       if (outputDir.mkdirs()) {
-        log.info("Successfully created module base directory {} and any "
+        logger.info("Successfully created module base directory {} and any "
               + "nonexistent parent directories.",
             outputDir.getAbsolutePath());
       } else {
-        log.error("Unable to create module base directory {} and any "
+        logger.error("Unable to create module base directory {} and any "
               + "nonexistent parent directories. Exiting.",
             outputDir.getAbsolutePath());
         return;
@@ -67,19 +67,19 @@ public class Main {
 
     for (Class<?> module : modules) {
       try {
-        log.info("Starting {} module.", module.getName());
+        logger.info("Starting {} module.", module.getName());
         module.getDeclaredMethod("main", String[].class)
             .invoke(null, (Object) args);
-        log.info("Completed {} module.", module.getName());
+        logger.info("Completed {} module.", module.getName());
       } catch (NoSuchMethodException | IllegalAccessException
           | InvocationTargetException e) {
-        log.warn("Caught an exception when invoking the main method of the {} "
-            + "module. Moving on to the next module, if available.",
+        logger.warn("Caught an exception when invoking the main method of the "
+            + "{} module. Moving on to the next module, if available.",
             module.getName(), e);
       }
     }
 
-    log.info("Making module data available.");
+    logger.info("Making module data available.");
     File[] moduleStatsDirs = new File[] {
         new File(modulesDir, "connbidirect/stats"),
         new File(modulesDir, "onionperf/stats"),
@@ -96,13 +96,15 @@ public class Main {
     List<String> copiedFiles = new ArrayList<>();
     for (File moduleStatsDir : moduleStatsDirs) {
       if (!moduleStatsDir.exists()) {
-        log.warn("Skipping nonexistent module stats dir {}.", moduleStatsDir);
+        logger.warn("Skipping nonexistent module stats dir {}.",
+            moduleStatsDir);
         continue;
       }
       File[] moduleStatsFiles = moduleStatsDir.isDirectory()
           ? moduleStatsDir.listFiles() : new File[] { moduleStatsDir };
       if (null == moduleStatsFiles) {
-        log.warn("Skipping nonexistent module stats dir {}.", moduleStatsDir);
+        logger.warn("Skipping nonexistent module stats dir {}.",
+            moduleStatsDir);
         continue;
       }
       for (File statsFile : moduleStatsFiles) {
@@ -115,16 +117,16 @@ public class Main {
               StandardCopyOption.REPLACE_EXISTING);
           copiedFiles.add(statsFile.getName());
         } catch (IOException e) {
-          log.warn("Unable to copy module stats file {} to stats output "
+          logger.warn("Unable to copy module stats file {} to stats output "
               + "directory {}. Skipping.", statsFile, statsDir, e);
         }
       }
     }
     if (!copiedFiles.isEmpty()) {
-      log.info("Successfully copied {} files to stats output directory: {}",
+      logger.info("Successfully copied {} files to stats output directory: {}",
           copiedFiles.size(), copiedFiles);
     }
 
-    log.info("Completed metrics update run.");
+    logger.info("Completed metrics update run.");
   }
 }

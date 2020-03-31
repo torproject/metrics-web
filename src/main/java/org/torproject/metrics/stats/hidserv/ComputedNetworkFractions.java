@@ -15,7 +15,7 @@ import java.util.Map;
  * status entries and bandwidth weights in a network status consensus. */
 public class ComputedNetworkFractions implements Document {
 
-  private static Logger log
+  private static final Logger logger
       = LoggerFactory.getLogger(ComputedNetworkFractions.class);
 
   /** Relay fingerprint consisting of 40 upper-case hex characters. */
@@ -137,18 +137,18 @@ public class ComputedNetworkFractions implements Document {
   @Override
   public boolean parse(String[] formattedStrings) {
     if (formattedStrings.length != 2) {
-      log.warn("Invalid number of formatted strings. Skipping.");
+      logger.warn("Invalid number of formatted strings. Skipping.");
       return false;
     }
     String[] firstParts = formattedStrings[0].split(",", 2);
     if (firstParts.length != 2) {
-      log.warn("Invalid number of comma-separated values. Skipping.");
+      logger.warn("Invalid number of comma-separated values. Skipping.");
       return false;
     }
     String fingerprint = firstParts[0];
     String[] secondParts = formattedStrings[1].split(",", 3);
     if (secondParts.length != 3) {
-      log.warn("Invalid number of comma-separated values. Skipping.");
+      logger.warn("Invalid number of comma-separated values. Skipping.");
       return false;
     }
     String validAfterDate = firstParts[1];
@@ -166,7 +166,7 @@ public class ComputedNetworkFractions implements Document {
     if (validAfterDateMillis == DateTimeHelper.NO_TIME_AVAILABLE
         || validAfterTimeMillis < 0L
         || validAfterTimeMillis >= DateTimeHelper.ONE_DAY) {
-      log.warn("Invalid date/hour format. Skipping.");
+      logger.warn("Invalid date/hour format. Skipping.");
       return false;
     }
     long validAfterMillis = validAfterDateMillis + validAfterTimeMillis;
@@ -179,7 +179,7 @@ public class ComputedNetworkFractions implements Document {
           ? 0.0 : Double.parseDouble(secondParts[2]);
       return true;
     } catch (NumberFormatException e) {
-      log.warn("Invalid number format. Skipping.");
+      logger.warn("Invalid number format. Skipping.");
       return false;
     }
   }

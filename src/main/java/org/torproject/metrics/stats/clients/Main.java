@@ -23,7 +23,7 @@ import java.util.TreeMap;
 
 public class Main {
 
-  private static Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   private static Database database;
 
@@ -33,36 +33,36 @@ public class Main {
   /** Executes this data-processing module. */
   public static void main(String[] args) throws Exception {
 
-    log.info("Starting clients module.");
+    logger.info("Starting clients module.");
 
-    log.info("Connecting to database.");
+    logger.info("Connecting to database.");
     database = new Database();
 
-    log.info("Reading relay descriptors and importing relevant parts into the "
-        + "database.");
+    logger.info("Reading relay descriptors and importing relevant parts into "
+        + "the database.");
     parseRelayDescriptors();
 
-    log.info("Reading bridge descriptors and importing relevant parts into the "
-        + "database.");
+    logger.info("Reading bridge descriptors and importing relevant parts into "
+        + "the database.");
     parseBridgeDescriptors();
 
-    log.info("Processing newly imported data.");
+    logger.info("Processing newly imported data.");
     database.processImported();
     database.commit();
 
-    log.info("Querying aggregated statistics from the database.");
+    logger.info("Querying aggregated statistics from the database.");
     new Writer().write(new File(baseDir, "stats/userstats.csv").toPath(),
         database.queryEstimated());
     new Writer().write(new File(baseDir, "stats/userstats-combined.csv")
         .toPath(), database.queryCombined());
 
-    log.info("Disconnecting from database.");
+    logger.info("Disconnecting from database.");
     database.close();
 
-    log.info("Running detector.");
+    logger.info("Running detector.");
     new Detector().detect();
 
-    log.info("Terminating clients module.");
+    logger.info("Terminating clients module.");
   }
 
   private static final long ONE_HOUR_MILLIS = 60L * 60L * 1000L;

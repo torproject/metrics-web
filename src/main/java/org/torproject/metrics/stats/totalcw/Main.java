@@ -21,7 +21,7 @@ import java.util.Arrays;
  * CSV file. */
 public class Main {
 
-  private static Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   private static final File baseDir = new File(
       org.torproject.metrics.stats.main.Main.modulesDir, "totalcw");
@@ -35,10 +35,10 @@ public class Main {
   /** Run the module. */
   public static void main(String[] args) throws Exception {
 
-    log.info("Starting totalcw module.");
+    logger.info("Starting totalcw module.");
 
-    log.info("Reading consensuses and votes and inserting relevant parts into "
-        + "the database.");
+    logger.info("Reading consensuses and votes and inserting relevant parts "
+        + "into the database.");
     DescriptorReader reader = DescriptorSourceFactory.createDescriptorReader();
     File historyFile = new File(baseDir, "status/read-descriptors");
     reader.setHistoryFile(historyFile);
@@ -56,33 +56,33 @@ public class Main {
             database.insertVote(parser.parseRelayNetworkStatusVote(
                 (RelayNetworkStatusVote) descriptor));
           } else {
-            log.debug("Skipping unknown descriptor of type {}.",
+            logger.debug("Skipping unknown descriptor of type {}.",
                 descriptor.getClass());
           }
         }
 
-        log.info("Committing all updated parts in the database.");
+        logger.info("Committing all updated parts in the database.");
         database.commit();
       } catch (SQLException sqle) {
-        log.error("Cannot recover from SQL exception while inserting data. "
+        logger.error("Cannot recover from SQL exception while inserting data. "
             + "Rolling back and exiting.", sqle);
         database.rollback();
         return;
       }
       reader.saveHistoryFile(historyFile);
 
-      log.info("Querying aggregated statistics from the database.");
+      logger.info("Querying aggregated statistics from the database.");
       Iterable<OutputLine> output = database.queryTotalcw();
       File outputFile = new File(baseDir, "stats/totalcw.csv");
-      log.info("Writing aggregated statistics to {}.", outputFile);
+      logger.info("Writing aggregated statistics to {}.", outputFile);
       if (null != output) {
         new Writer().write(outputFile.toPath(), output);
       }
 
-      log.info("Terminating totalcw module.");
+      logger.info("Terminating totalcw module.");
     } catch (SQLException sqle) {
-      log.error("Cannot recover from SQL exception while querying. Not writing "
-          + "output file.", sqle);
+      logger.error("Cannot recover from SQL exception while querying. Not "
+          + "writing output file.", sqle);
     }
   }
 }

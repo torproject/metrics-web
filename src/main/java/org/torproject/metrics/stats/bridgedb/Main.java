@@ -24,7 +24,7 @@ import java.util.TreeMap;
 
 public class Main {
 
-  private static Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   private static final Path bridgedbStatsCsvFile
       = org.torproject.metrics.stats.main.Main.modulesDir.toPath()
@@ -55,7 +55,7 @@ public class Main {
         }
         String[] lineParts = line.split(",");
         if (lineParts.length != 4) {
-          log.warn("Skipping unrecognized line '{}' in {}.", line,
+          logger.warn("Skipping unrecognized line '{}' in {}.", line,
               bridgedbStatsCsvFile.toAbsolutePath());
           continue;
         }
@@ -64,8 +64,8 @@ public class Main {
         long value = Long.parseLong(lineParts[3]);
         readStatistics.put(key, value);
       }
-      log.debug("Read {} containing {} non-header lines.", bridgedbStatsCsvFile,
-          readStatistics.size());
+      logger.debug("Read {} containing {} non-header lines.",
+          bridgedbStatsCsvFile, readStatistics.size());
     }
     return readStatistics;
   }
@@ -82,7 +82,7 @@ public class Main {
       }
       BridgedbMetrics bridgedbMetrics = (BridgedbMetrics) descriptor;
       if (!"1".equals(bridgedbMetrics.bridgedbMetricsVersion())) {
-        log.warn("Unable to process BridgeDB metrics version {} != 1.",
+        logger.warn("Unable to process BridgeDB metrics version {} != 1.",
             bridgedbMetrics.bridgedbMetricsVersion());
         continue;
       }
@@ -100,7 +100,7 @@ public class Main {
           continue;
         }
         if (bridgedbMetricCount.getValue() < 10) {
-          log.warn("Skipping too small BridgeDB metric count {} < 10 in {}.",
+          logger.warn("Skipping too small BridgeDB metric count {} < 10 in {}.",
               bridgedbMetricCount.getValue(),
               descriptor.getDescriptorFile().getAbsolutePath());
           continue;
@@ -141,8 +141,8 @@ public class Main {
           statistic.getValue()));
     }
     Files.write(bridgedbStatsCsvFile, lines, StandardOpenOption.CREATE);
-    log.debug("Wrote {} containing {} non-header lines.", bridgedbStatsCsvFile,
-        lines.size() - 1);
+    logger.debug("Wrote {} containing {} non-header lines.",
+        bridgedbStatsCsvFile, lines.size() - 1);
   }
 }
 

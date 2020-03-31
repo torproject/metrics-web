@@ -13,21 +13,22 @@ import java.util.Locale;
 
 public class ServerMain {
 
-  private static final Logger log = LoggerFactory.getLogger(ServerMain.class);
+  private static final Logger logger
+      = LoggerFactory.getLogger(ServerMain.class);
 
   /** Starts the web server listening for incoming client connections. */
   public static void main(String[] args) {
     Locale.setDefault(Locale.US);
     try {
       Resource jettyXml = Resource.newSystemResource("jetty.xml");
-      log.info("Reading configuration from '{}'.", jettyXml);
+      logger.info("Reading configuration from '{}'.", jettyXml);
       XmlConfiguration configuration
           = new XmlConfiguration(jettyXml.getInputStream());
       Server server = (Server) configuration.configure();
       server.start();
       server.join();
     } catch (Exception ex) {
-      log.error("Exiting, because of: {}.", ex.getMessage(), ex);
+      logger.error("Exiting, because of: {}.", ex.getMessage(), ex);
       System.exit(1);
     }
   }

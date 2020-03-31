@@ -34,7 +34,7 @@ import java.util.TreeSet;
 
 public class Main {
 
-  private static Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   static class RawStat implements Comparable<RawStat> {
 
@@ -79,12 +79,12 @@ public class Main {
           return new RawStat(dateDays, fingerprint, fractionRead,
               fractionWrite, fractionBoth);
         } else {
-          log.warn("Could not deserialize raw statistic from string '{}'.",
+          logger.warn("Could not deserialize raw statistic from string '{}'.",
               string);
           return null;
         }
       } catch (NumberFormatException e) {
-        log.warn("Could not deserialize raw statistic from string '{}'.",
+        logger.warn("Could not deserialize raw statistic from string '{}'.",
             string, e);
         return null;
       }
@@ -144,13 +144,13 @@ public class Main {
     SortedMap<String, Long> parseHistory = parseParseHistory(
         readStringFromFile(parseHistoryFile));
     if (parseHistory == null) {
-      log.warn("Could not parse {}. Proceeding without parse history.",
+      logger.warn("Could not parse {}. Proceeding without parse history.",
           parseHistoryFile.getAbsolutePath());
     }
     SortedMap<String, Short> aggregateStats = parseAggregateStats(
         readStringFromFile(aggregateStatsFile));
     if (aggregateStats == null) {
-      log.warn("Could not parse previously aggregated "
+      logger.warn("Could not parse previously aggregated "
           + "statistics.  Not proceeding, because we would otherwise "
           + "lose previously aggregated values for which we don't have "
           + "raw statistics anymore.");
@@ -160,7 +160,7 @@ public class Main {
     parseHistory = addRawStatsFromDescriptors(newRawStats,
         descriptorsDirectories, parseHistory);
     if (parseHistory == null) {
-      log.warn("Could not parse raw statistics from "
+      logger.warn("Could not parse raw statistics from "
           + "descriptors.  Not proceeding, because we would otherwise "
           + "leave out those descriptors in future runs.");
       return;
@@ -169,7 +169,7 @@ public class Main {
     SortedSet<RawStat> rawStats = parseRawStats(
         readStringFromFile(rawStatsFile));
     if (rawStats == null) {
-      log.warn("Could not parse previously parsed raw "
+      logger.warn("Could not parse previously parsed raw "
           + "statistics.  Not proceeding, because we might otherwise "
           + "leave out previously parsed statistics in the aggregates.");
       return;
@@ -189,7 +189,7 @@ public class Main {
         sb.append("\n ")
             .append(dateFormat.format(conflictingDate * ONE_DAY_IN_MILLIS));
       }
-      log.warn(sb.toString());
+      logger.warn(sb.toString());
       return;
     }
     updateAggregateStats(aggregateStats, rawStats);
@@ -248,19 +248,19 @@ public class Main {
       while ((line = lnr.readLine()) != null) {
         String[] parts = line.split(",");
         if (parts.length < 2) {
-          log.warn("Invalid line {} in parse history: '{}'.",
+          logger.warn("Invalid line {} in parse history: '{}'.",
               lnr.getLineNumber(), line);
           return null;
         }
         parsedParseHistory.put(parts[0], Long.parseLong(parts[1]));
       }
     } catch (IOException e) {
-      log.warn("Unexpected I/O exception while reading line {} from parse "
+      logger.warn("Unexpected I/O exception while reading line {} from parse "
           + "history.", lnr.getLineNumber(), e);
       return null;
     } catch (NumberFormatException e) {
-      log.warn("Invalid line {} in parse history: '{}'.", lnr.getLineNumber(),
-          line, e);
+      logger.warn("Invalid line {} in parse history: '{}'.",
+          lnr.getLineNumber(), line, e);
       return null;
     }
     return parsedParseHistory;
@@ -295,14 +295,14 @@ public class Main {
     String line = "";
     try {
       if (!AGGREGATE_STATS_HEADER.equals(lnr.readLine())) {
-        log.warn("First line of aggregate statistics does not "
+        logger.warn("First line of aggregate statistics does not "
             + "contain the header line. Is this the correct file?");
         return null;
       }
       while ((line = lnr.readLine()) != null) {
         String[] parts = line.split(",");
         if (parts.length != 4) {
-          log.warn("Invalid line {} in aggregate statistics: '{}'.",
+          logger.warn("Invalid line {} in aggregate statistics: '{}'.",
               lnr.getLineNumber(), line);
           return null;
         }
@@ -310,11 +310,11 @@ public class Main {
             + parts[2], Short.parseShort(parts[3]));
       }
     } catch (IOException e) {
-      log.warn("Unexpected I/O exception while reading line {} from aggregate "
-          + "statistics.", lnr.getLineNumber(), e);
+      logger.warn("Unexpected I/O exception while reading line {} from "
+          + "aggregate statistics.", lnr.getLineNumber(), e);
       return null;
     } catch (NumberFormatException e) {
-      log.warn("Invalid line {} in aggregate statistics: '{}'.",
+      logger.warn("Invalid line {} in aggregate statistics: '{}'.",
           lnr.getLineNumber(), line, e);
       return null;
     }
@@ -341,19 +341,19 @@ public class Main {
       while ((line = lnr.readLine()) != null) {
         RawStat rawStat = RawStat.fromString(line);
         if (rawStat == null) {
-          log.warn("Invalid line {} in raw statistics: '{}'.",
+          logger.warn("Invalid line {} in raw statistics: '{}'.",
               lnr.getLineNumber(), line);
           return null;
         }
         parsedRawStats.add(rawStat);
       }
     } catch (IOException e) {
-      log.warn("Unexpected I/O exception while reading line {} from raw "
+      logger.warn("Unexpected I/O exception while reading line {} from raw "
           + "statistics.", lnr.getLineNumber(), e);
       return null;
     } catch (NumberFormatException e) {
-      log.warn("Invalid line {} in raw statistics: '{}'.", lnr.getLineNumber(),
-          line, e);
+      logger.warn("Invalid line {} in raw statistics: '{}'.",
+          lnr.getLineNumber(), line, e);
       return null;
     }
     return parsedRawStats;
@@ -392,7 +392,7 @@ public class Main {
     int write = extraInfo.getConnBiDirectWrite();
     int both = extraInfo.getConnBiDirectBoth();
     if (below < 0 || read < 0 || write < 0 || both < 0) {
-      log.debug("Could not parse incomplete conn-bi-direct statistics. "
+      logger.debug("Could not parse incomplete conn-bi-direct statistics. "
           + "Skipping descriptor.");
       return null;
     }

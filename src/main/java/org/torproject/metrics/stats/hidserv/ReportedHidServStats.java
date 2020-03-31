@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * by the relay in the "hidserv-" lines of its extra-info descriptor. */
 public class ReportedHidServStats implements Document {
 
-  private static Logger log
+  private static final Logger logger
       = LoggerFactory.getLogger(ReportedHidServStats.class);
 
   /* Relay fingerprint consisting of 40 upper-case hex characters. */
@@ -115,7 +115,7 @@ public class ReportedHidServStats implements Document {
   @Override
   public boolean parse(String[] formattedStrings) {
     if (formattedStrings.length != 2) {
-      log.warn("Invalid number of formatted strings: {} Skipping.",
+      logger.warn("Invalid number of formatted strings: {} Skipping.",
           formattedStrings.length);
       return false;
     }

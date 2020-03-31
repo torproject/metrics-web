@@ -22,7 +22,7 @@ import java.util.Arrays;
  * statistics to CSV files. */
 public class Main {
 
-  private static Logger log = LoggerFactory.getLogger(Main.class);
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
   private static final File baseDir = new File(
       org.torproject.metrics.stats.main.Main.modulesDir, "servers");
@@ -40,9 +40,9 @@ public class Main {
   /** Run the module. */
   public static void main(String[] args) throws Exception {
 
-    log.info("Starting servers module.");
+    logger.info("Starting servers module.");
 
-    log.info("Reading descriptors and inserting relevant parts into the "
+    logger.info("Reading descriptors and inserting relevant parts into the "
         + "database.");
     DescriptorReader reader = DescriptorSourceFactory.createDescriptorReader();
     File historyFile = new File(baseDir, "status/read-descriptors");
@@ -64,30 +64,30 @@ public class Main {
             database.insertStatus(parser.parseBridgeNetworkStatus(
                 (BridgeNetworkStatus) descriptor));
           } else if (null != descriptor.getRawDescriptorBytes()) {
-            log.debug("Skipping unknown descriptor of type {} starting with "
+            logger.debug("Skipping unknown descriptor of type {} starting with "
                 + "'{}'.", descriptor.getClass(),
                 new String(descriptor.getRawDescriptorBytes(), 0,
                 Math.min(descriptor.getRawDescriptorLength(), 100)));
           } else {
-            log.debug("Skipping unknown, empty descriptor of type {}.",
+            logger.debug("Skipping unknown, empty descriptor of type {}.",
                 descriptor.getClass());
           }
         }
 
-        log.info("Aggregating database entries.");
+        logger.info("Aggregating database entries.");
         database.aggregate();
 
-        log.info("Committing all updated parts in the database.");
+        logger.info("Committing all updated parts in the database.");
         database.commit();
       } catch (SQLException sqle) {
-        log.error("Cannot recover from SQL exception while inserting or "
+        logger.error("Cannot recover from SQL exception while inserting or "
             + "aggregating data. Rolling back and exiting.", sqle);
         database.rollback();
         return;
       }
       reader.saveHistoryFile(historyFile);
 
-      log.info("Querying aggregated statistics from the database.");
+      logger.info("Querying aggregated statistics from the database.");
       File outputDir = new File(baseDir, "stats");
       new Writer().write(new File(outputDir, "ipv6servers.csv").toPath(),
           database.queryServersIpv6());
@@ -102,10 +102,10 @@ public class Main {
       new Writer().write(new File(outputDir, "platforms.csv").toPath(),
           database.queryPlatforms());
 
-      log.info("Terminating servers module.");
+      logger.info("Terminating servers module.");
     } catch (SQLException sqle) {
-      log.error("Cannot recover from SQL exception while querying. Not writing "
-          + "output file.", sqle);
+      logger.error("Cannot recover from SQL exception while querying. Not "
+          + "writing output file.", sqle);
     }
   }
 }

@@ -24,7 +24,7 @@ import java.util.TreeSet;
  * contains its own main method.) */
 public class Simulate {
 
-  private static Logger log = LoggerFactory.getLogger(Simulate.class);
+  private static final Logger logger = LoggerFactory.getLogger(Simulate.class);
 
   private static File simCellsCsvFile =
       new File("out/csv/sim-cells.csv");
@@ -34,11 +34,11 @@ public class Simulate {
 
   /** Runs two simulations to evaluate this data-processing module. */
   public static void main(String[] args) throws Exception {
-    log.info("Simulating extrapolation of rendezvous cells");
+    logger.info("Simulating extrapolation of rendezvous cells");
     simulateManyCells();
-    log.info("Simulating extrapolation of .onions");
+    logger.info("Simulating extrapolation of .onions");
     simulateManyOnions();
-    log.info("Terminating.");
+    logger.info("Terminating.");
   }
 
   private static Random rnd = new Random();
@@ -51,7 +51,7 @@ public class Simulate {
     final int numberOfExtrapolations = 1000;
     for (int i = 0; i < numberOfExtrapolations; i++) {
       bw.write(simulateCells(i));
-      log.info(".");
+      logger.info(".");
     }
     bw.close();
   }
@@ -64,7 +64,7 @@ public class Simulate {
     final int numberOfExtrapolations = 1000;
     for (int i = 0; i < numberOfExtrapolations; i++) {
       bw.write(simulateOnions(i));
-      log.info(".");
+      logger.info(".");
     }
     bw.close();
   }
