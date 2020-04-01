@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 /**
  * Checks request parameters passed to graph-generating servlets.
@@ -45,7 +44,6 @@ public class GraphParameterChecker {
    */
   public GraphParameterChecker() {
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     this.availableGraphs = new HashMap<>();
     for (Metric metric : ContentProvider.getInstance().getMetricsList()) {
       if ("Graph".equals(metric.getType())) {

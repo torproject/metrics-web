@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.TimeZone;
 import java.util.TreeMap;
 
 public class Main {
@@ -72,7 +71,6 @@ public class Main {
     }
     SimpleDateFormat dateTimeFormat = new SimpleDateFormat(
         "yyyy-MM-dd HH:mm:ss");
-    dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     for (Descriptor descriptor : descriptorReader.readDescriptors(new File(
         org.torproject.metrics.stats.main.Main.descriptorsDir,
         "recent/relay-descriptors/consensuses"))) {
@@ -150,7 +148,6 @@ public class Main {
 
     /* Aggregate statistics. */
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     String today = dateFormat.format(new Date());
     SortedMap<String, List<Long>> preAggregatedValues = new TreeMap<>();
     try (BufferedReader br = new BufferedReader(new FileReader(resultsFile))) {

@@ -8,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
 /** Utility class to format and parse dates and timestamps. */
 public class DateTimeHelper {
@@ -49,7 +48,6 @@ public class DateTimeHelper {
     if (!threadDateFormats.containsKey(format)) {
       DateFormat dateFormat = new SimpleDateFormat(format);
       dateFormat.setLenient(false);
-      dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
       threadDateFormats.put(format, dateFormat);
     }
     return threadDateFormats.get(format);

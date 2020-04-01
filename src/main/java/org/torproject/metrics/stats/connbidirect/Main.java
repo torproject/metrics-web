@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -184,7 +183,6 @@ public class Main {
           + "proceeding.  To fix this, you'll have to re-import "
           + "statistics for the following dates:");
       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-      dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
       for (long conflictingDate : conflictingDates) {
         sb.append("\n ")
             .append(dateFormat.format(conflictingDate * ONE_DAY_IN_MILLIS));
@@ -436,7 +434,6 @@ public class Main {
       SortedMap<String, Short> aggregateStats,
       SortedSet<RawStat> rawStats) {
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     String yesterday = dateFormat.format(System.currentTimeMillis()
         - ONE_DAY_IN_MILLIS);
     SortedMap<String, List<Short>> fractionsByDateAndDirection

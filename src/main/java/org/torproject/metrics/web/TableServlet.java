@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +62,6 @@ public class TableServlet extends MetricServlet {
     request.setAttribute("tableheader",
         this.tableHeaders.get(requestedId));
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Date defaultEndDate = new Date();
     Date defaultStartDate = new Date(defaultEndDate.getTime()
         - 90L * 24L * 60L * 60L * 1000L);

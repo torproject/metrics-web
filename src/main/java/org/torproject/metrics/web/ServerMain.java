@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class ServerMain {
 
@@ -19,6 +20,7 @@ public class ServerMain {
   /** Starts the web server listening for incoming client connections. */
   public static void main(String[] args) {
     Locale.setDefault(Locale.US);
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     try {
       Resource jettyXml = Resource.newSystemResource("jetty.xml");
       logger.info("Reading configuration from '{}'.", jettyXml);

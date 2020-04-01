@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 /**
  * Checks request parameters passed to generate tables.
@@ -41,7 +40,6 @@ public class TableParameterChecker {
    */
   public TableParameterChecker() {
     this.dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
     this.availableTables = new HashMap<>();
     for (Metric metric : ContentProvider.getInstance().getMetricsList()) {

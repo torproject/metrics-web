@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +47,7 @@ public class NewsServlet extends AnyServlet {
       HttpServletResponse response) throws IOException, ServletException {
     /* Create categories based on current system time. */
     Map<String, String[]> cutOffDates = new LinkedHashMap<>();
-    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    Calendar cal = Calendar.getInstance();
     cal.set(Calendar.DAY_OF_WEEK, 1);
     cutOffDates.put(String.format("%tF", cal),
         new String[] { "This week", "week" });

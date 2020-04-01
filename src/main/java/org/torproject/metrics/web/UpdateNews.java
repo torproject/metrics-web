@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class UpdateNews {
 
@@ -24,6 +25,7 @@ public class UpdateNews {
   /** Update news. */
   public static void main(String[] args) throws Exception {
     Locale.setDefault(Locale.US);
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     URL textFile = new URL(
         "https://trac.torproject.org/projects/tor/wiki/doc/"
         + "MetricsTimeline?format=txt");
