@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,14 +26,25 @@ import java.util.TreeSet;
 
 /** Map with all directory listings for all directories and subdirectories
  * contained in an index.json file. */
-public class DirectoryListing extends HashMap<String, List<String[]>>
-    implements Map<String, List<String[]>> {
+public class DirectoryListing {
 
   private IndexNode index;
+
+  private Map<String, List<String[]>> formattedTableEntries = new HashMap<>();
+
+  private Map<String, String> formattedPublishedTimes = new HashMap<>();
 
   DirectoryListing(IndexNode index) {
     this.index = index;
     extractDirectoryListings();
+  }
+
+  public Map<String, List<String[]>> getFormattedTableEntries() {
+    return this.formattedTableEntries;
+  }
+
+  public Map<String, String> getFormattedPublishedTimes() {
+    return this.formattedPublishedTimes;
   }
 
   /**
@@ -70,6 +83,18 @@ public class DirectoryListing extends HashMap<String, List<String[]>>
      * {@code null} otherwise.
      */
     String lastModified;
+
+    /**
+     * Earliest publication timestamp of contained descriptors using pattern
+     * {@code "YYYY-MM-DD HH:MM"} in the UTC timezone.
+     */
+    String firstPublished;
+
+    /**
+     * Latest publication timestamp of contained descriptors using pattern
+     * {@code "YYYY-MM-DD HH:MM"} in the UTC timezone.
+     */
+    String lastPublished;
 
     /**
      * Compare two index nodes by their (relative) path in alphabetic order.
@@ -144,11 +169,16 @@ public class DirectoryListing extends HashMap<String, List<String[]>>
   /** Extracts directory listing from an index node by visiting all nodes. */
   private void extractDirectoryListings() {
     Map<IndexNode, String> directoryNodes = new HashMap<>();
-    this.put("/collector/",
+    this.formattedTableEntries.put("/collector/",
         formatTableEntries("", "/", this.index.directories, this.index.files));
     for (IndexNode directory : this.index.directories) {
       directoryNodes.put(directory, "/");
     }
+    LocalDate today = LocalDate.now();
+    String todayString = today
+        .format(DateTimeFormatter.ISO_DATE).substring(0, 7);
+    String lastWeekString = today.minusWeeks(1L)
+        .format(DateTimeFormatter.ISO_DATE).substring(0, 7);
     while (!directoryNodes.isEmpty()) {
       IndexNode currentDirectoryNode =
           directoryNodes.keySet().iterator().next();
@@ -160,10 +190,14 @@ public class DirectoryListing extends HashMap<String, List<String[]>>
               parentPath, currentDirectoryNode.path));
         }
       }
-      this.put(String
-          .format("/collector%s%s/", parentPath, currentDirectoryNode.path),
+      String currentDirectoryPath = String
+          .format("/collector%s%s/", parentPath, currentDirectoryNode.path);
+      this.formattedTableEntries.put(currentDirectoryPath,
           formatTableEntries(parentPath, currentDirectoryNode.path + "/",
           currentDirectoryNode.directories, currentDirectoryNode.files));
+      this.formattedPublishedTimes.put(currentDirectoryPath,
+          formatPublishedTimes(todayString, lastWeekString,
+          currentDirectoryNode.files));
     }
   }
 
@@ -201,6 +235,34 @@ public class DirectoryListing extends HashMap<String, List<String[]>>
     char pre = "KMGTPE".charAt(exp - 1);
     return String
         .format("%.1f %siB", bytes / Math.pow(1024, exp), pre);
+  }
+
+  /** Formats first and last published times for a given directory. */
+  private String formatPublishedTimes(String todayString, String lastWeekString,
+      SortedSet<IndexNode> files) {
+    if (null != files) {
+      SortedSet<String> publishedYearMonths = new TreeSet<>();
+      for (IndexNode file : files) {
+        if (null != file.firstPublished && file.firstPublished.length() > 6) {
+          publishedYearMonths.add(file.firstPublished.substring(0, 7));
+        }
+        if (null != file.lastPublished && file.lastPublished.length() > 6) {
+          publishedYearMonths.add(file.lastPublished.substring(0, 7));
+        }
+      }
+      if (publishedYearMonths.isEmpty()) {
+        return "";
+      } else if (publishedYearMonths.last().equals(todayString)
+          || publishedYearMonths.last().equals(lastWeekString)) {
+        return String.format("%s to present", publishedYearMonths.first());
+      } else if (publishedYearMonths.size() == 1) {
+        return publishedYearMonths.first();
+      } else {
+        return String.format("%s to %s", publishedYearMonths.first(),
+            publishedYearMonths.last());
+      }
+    }
+    return "";
   }
 }
 

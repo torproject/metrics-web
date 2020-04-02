@@ -4,8 +4,7 @@
 package org.torproject.metrics.web;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -45,21 +44,24 @@ public class CollecTorServlet extends AnyServlet {
       requestedPath = requestedPath.substring(requestedPath.indexOf(
           "/collector"));
     }
-    Map<String, List<String[]>> index;
+    DirectoryListing index = this.collectorDirectory.getIndex();
     if ("/collector.html".equals(requestedPath)) {
       request.setAttribute("categories", this.categories);
+      request.setAttribute("published", null == index
+          ? new HashMap<String, String>() : index.getFormattedPublishedTimes());
       request.getRequestDispatcher("WEB-INF/collector.jsp").forward(request,
           response);
-    } else if (null == (index = this.collectorDirectory.getIndex())) {
+    } else if (null == index) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
           "Index of CollecTor files unavailable.");
     } else if (!requestedPath.endsWith("/")
-        && index.containsKey(requestedPath + "/")) {
+        && index.getFormattedTableEntries().containsKey(requestedPath + "/")) {
       response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
       response.setHeader("Location", requestedPath + "/");
-    } else if (index.containsKey(requestedPath)) {
+    } else if (index.getFormattedTableEntries().containsKey(requestedPath)) {
       request.setAttribute("categories", this.categories);
-      request.setAttribute("files", index.get(requestedPath));
+      request.setAttribute("files",
+          index.getFormattedTableEntries().get(requestedPath));
       request.getRequestDispatcher("/WEB-INF/collector-files.jsp").forward(
           request, response);
     } else {

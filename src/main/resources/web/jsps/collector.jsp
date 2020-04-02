@@ -48,63 +48,72 @@
           <h1 id="available-descriptors" class="hover">Available Descriptors
 <a href="#available-descriptors" class="anchor">#</a></h1>
 
-<p>Descriptors are available in two different file formats: recent descriptors that were published in the last 72 hours are available as plain text, and archived descriptors covering over 10 years of Tor network history are available as compressed tarballs.</p>
+<p>Descriptors are available in two different file formats: recent descriptors that were published in the last 72 hours are available as plain text, and archived descriptors covering many years of Tor network history are available as compressed tarballs.</p>
 
 <table class="table">
 <thead>
 <tr>
 <th>Descriptor Type</th>
 <th>Type Annotation</th>
+<th>Published</th>
 <th class="thDescriptors">Descriptors</th>
 </tr>
 </thead>
 <tbody>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#relay-descriptors">Tor Relay Descriptors</a></b></td>
+  <td colspan="4"><b><a href="#relay-descriptors">Tor Relay Descriptors</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-server-descriptor">Relay Server Descriptors</a></td>
   <td><code>@type server-descriptor 1.0</code></td>
+  <td>${published["/collector/archive/relay-descriptors/server-descriptors/"]}</td>
   <td><a href="/collector/recent/relay-descriptors/server-descriptors/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/relay-descriptors/server-descriptors/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-extra-info">Relay Extra-info Descriptors</a></td>
   <td><code>@type extra-info 1.0</code></td>
+  <td>${published["/collector/archive/relay-descriptors/extra-infos/"]}</td>
   <td><a href="/collector/recent/relay-descriptors/extra-infos/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/relay-descriptors/extra-infos/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-network-status-consensus-3">Network Status Consensuses</a></td>
   <td><code>@type network-status-consensus-3 1.0</code></td>
+  <td>${published["/collector/archive/relay-descriptors/consensuses/"]}</td>
   <td><a href="/collector/recent/relay-descriptors/consensuses/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/relay-descriptors/consensuses/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-network-status-vote-3">Network Status Votes</a></td>
   <td><code>@type network-status-vote-3 1.0</code></td>
+  <td>${published["/collector/archive/relay-descriptors/votes/"]}</td>
   <td><a href="/collector/recent/relay-descriptors/votes/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/relay-descriptors/votes/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-dir-key-certificate-3">Directory Key Certificates</a></td>
   <td><code>@type dir-key-certificate-3 1.0</code></td>
+  <td></td>
   <td><a href="/collector/archive/relay-descriptors/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-detached-signature-3">Detached Signatures</a></td>
   <td><code>@type detached-signature-3 1.0</code></td>
   <td></td>
+  <td></td>
 </tr>
 <tr>
   <td><a href="#type-network-status-microdesc-consensus-3">Microdescriptor Consensuses</a></td>
   <td><code>@type network-status-microdesc-consensus-3 1.0</code></td>
+  <td>${published["/collector/archive/relay-descriptors/microdescs/"]}</td>
   <td><a href="/collector/recent/relay-descriptors/microdescs/consensus-microdesc/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/relay-descriptors/microdescs/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-microdescriptor">Microdescriptors</a></td>
   <td><code>@type microdescriptor 1.0</code></td>
+  <td>${published["/collector/archive/relay-descriptors/microdescs/"]}</td>
   <td><a href="/collector/recent/relay-descriptors/microdescs/micro/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/relay-descriptors/microdescs/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
@@ -112,111 +121,126 @@
   <td><a href="#type-network-status-entry-3">Network Status Entries</a></td>
   <td><code>@type network-status-entry-3 1.0</code></td>
   <td></td>
+  <td></td>
 </tr>
 <tr>
   <td><a href="#type-network-status-2">Version 2 Network Statuses</a></td>
   <td><code>@type network-status-2 1.0</code></td>
+  <td>${published["/collector/archive/relay-descriptors/statuses/"]}</td>
   <td><a href="/collector/archive/relay-descriptors/statuses/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-directory">Version 1 Directories</a></td>
   <td><code>@type directory 1.0</code></td>
+  <td>${published["/collector/archive/relay-descriptors/tor/"]}</td>
   <td><a href="/collector/archive/relay-descriptors/tor/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#bridge-descriptors">Tor Bridge Descriptors</a></b></td>
+  <td colspan="4"><b><a href="#bridge-descriptors">Tor Bridge Descriptors</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-bridge-network-status">Bridge Network Statuses</a></td>
   <td><code>@type bridge-network-status 1.2</code></td>
+  <td>${published["/collector/archive/bridge-descriptors/statuses/"]}</td>
   <td><a href="/collector/recent/bridge-descriptors/statuses/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/bridge-descriptors/statuses/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-bridge-server-descriptor">Bridge Server Descriptors</a></td>
   <td><code>@type bridge-server-descriptor 1.2</code></td>
+  <td>${published["/collector/archive/bridge-descriptors/server-descriptors/"]}</td>
   <td><a href="/collector/recent/bridge-descriptors/server-descriptors/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/bridge-descriptors/server-descriptors/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr>
   <td><a href="#type-bridge-extra-info">Bridge Extra-info Descriptors</a></td>
   <td><code>@type bridge-extra-info 1.3</code></td>
+  <td>${published["/collector/archive/bridge-descriptors/extra-infos/"]}</td>
   <td><a href="/collector/recent/bridge-descriptors/extra-infos/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/bridge-descriptors/extra-infos/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#tor-hidden-service-descriptors">Tor Hidden Service Descriptors</a></b></td>
+  <td colspan="4"><b><a href="#tor-hidden-service-descriptors">Tor Hidden Service Descriptors</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-hidden-service-descriptor">Hidden Service Descriptors</a></td>
   <td><code>@type hidden-service-descriptor 1.0</code></td>
+  <td></td>
   <td></td>
 </tr>
 <tr>
   <td><a href="#type-hidden-service-descriptor-3">Hidden Service Descriptors v3</a></td>
   <td><code>@type hidden-service-descriptor-3 1.0</code></td>
   <td></td>
+  <td></td>
 </tr>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#bridge-pool-assignments">BridgeDB's Bridge Pool Assignments</a></b></td>
+  <td colspan="4"><b><a href="#bridge-pool-assignments">BridgeDB's Bridge Pool Assignments</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-bridge-pool-assignment">Bridge Pool Assignments</a></td>
   <td><code>@type bridge-pool-assignment 1.0</code></td>
+  <td>${published["/collector/archive/bridge-pool-assignments/"]}</td>
   <td><a href="/collector/recent/bridge-pool-assignments/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/bridge-pool-assignments/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#exit-lists">TorDNSEL's Exit Lists</a></b></td>
+  <td colspan="4"><b><a href="#exit-lists">TorDNSEL's Exit Lists</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-tordnsel">Exit Lists</a></td>
   <td><code>@type tordnsel 1.0</code></td>
+  <td>${published["/collector/archive/exit-lists/"]}</td>
   <td><a href="/collector/recent/exit-lists/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/exit-lists/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#torperf">Torperf's and OnionPerf's Performance Data</a></b></td>
+  <td colspan="4"><b><a href="#torperf">Torperf's and OnionPerf's Performance Data</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-torperf">Torperf Measurement Results</a></td>
   <td><code>@type torperf 1.1</code></td>
+  <td>${published["/collector/archive/torperf/"]}</td>
   <td><a href="/collector/recent/torperf/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/torperf/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#webstats">Tor web server logs</a></b></td>
+  <td colspan="4"><b><a href="#webstats">Tor web server logs</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-webstats">Tor web server logs</a></td>
   <td></td>
+  <td>${published["/collector/archive/webstats/"]}</td>
   <td><a href="/collector/recent/webstats/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/webstats/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#bandwidth-files">Bandwidth Files</a></b></td>
+  <td colspan="4"><b><a href="#bandwidth-files">Bandwidth Files</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-bandwidth-file">Bandwidth Files</a></td>
   <td><code>@type bandwidth-file 1.0</code></td>
+  <td>${published["/collector/archive/relay-descriptors/bandwidths/"]}</td>
   <td><a href="/collector/recent/relay-descriptors/bandwidths/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/relay-descriptors/bandwidths/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#snowflake-stats">Snowflake Statistics</a></b></td>
+  <td colspan="4"><b><a href="#snowflake-stats">Snowflake Statistics</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-snowflake-stats">Snowflake Statistics</a></td>
   <td><code>@type snowflake-stats 1.0</code></td>
+  <td>${published["/collector/archive/snowflakes/"]}</td>
   <td><a href="/collector/recent/snowflakes/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/snowflakes/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
 <tr class="tableHeadline">
-  <td colspan="3"><b><a href="#bridgedb-metrics">BridgeDB metrics</a></b></td>
+  <td colspan="4"><b><a href="#bridgedb-metrics">BridgeDB metrics</a></b></td>
 </tr>
 <tr>
   <td><a href="#type-bridgedb-metrics">BridgeDB metrics</a></td>
   <td><code>@type bridgedb-metrics 1.0</code></td>
+  <td>${published["/collector/archive/bridgedb-metrics/"]}</td>
   <td><a href="/collector/recent/bridgedb-metrics/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/bridgedb-metrics/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>

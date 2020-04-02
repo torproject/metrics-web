@@ -3,8 +3,6 @@
 
 package org.torproject.metrics.web;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +21,7 @@ public class CollectorDirectoryProvider implements Runnable {
       Executors.newScheduledThreadPool(1);
 
   /** Last known directory listings. */
-  private final AtomicReference<Map<String, List<String[]>>> index
+  private final AtomicReference<DirectoryListing> index
       = new AtomicReference<>(null);
 
   CollectorDirectoryProvider(String host) {
@@ -33,7 +31,7 @@ public class CollectorDirectoryProvider implements Runnable {
 
   /** Returns the index object in a thread-safe way, blocking the invoking
    * thread at most 10 seconds if no index object is available. */
-  Map<String, List<String[]>> getIndex() {
+  DirectoryListing getIndex() {
     if (null == this.index.get()) {
       long waitingSinceMillis = System.currentTimeMillis();
       do {
