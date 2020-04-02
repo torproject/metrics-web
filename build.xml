@@ -165,7 +165,7 @@
         </archives>
       </restrict>
       <exclude name="**/Test*.class" />
-      <zipfileset dir="${resources}"
+      <zipfileset dir="${buildresources}"
                   prefix=""
                   includes="logback.xml" />
       <zipfileset dir="${resources}/web"
