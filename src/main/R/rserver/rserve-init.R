@@ -1,3 +1,22 @@
+# Copyright 2010--2020 The Tor Project
+# See LICENSE for licensing information
+#
+# Be sure to run this file through lintr after making non-trivial changes:
+#
+#   require(ggplot2)
+#   require(lintr)
+#   lint("rserve-init.R")
+#
+# The following warnings can be ignored:
+#
+#  - style: Commented code should be removed. (Refers to code above.)
+#  - style: Variable and function name style should be snake_case. (Refers to
+#    FUN in write_data function.)
+#  - style: Variable and function names should not be longer than 30 characters.
+#    (Refers to prepare_ and plot_ functions for graphs with long names.)
+#  - warning: no visible binding for global variable ‘...’ (Refers to columns
+#    passed in aes() function.)
+
 require(ggplot2)
 require(RColorBrewer)
 require(scales)
@@ -333,14 +352,15 @@ copyright_notice <- "The Tor Project - https://metrics.torproject.org/"
 
 stats_dir <- "/srv/metrics.torproject.org/metrics/shared/stats/"
 
-no_data_available_dir <- "/srv/metrics.torproject.org/metrics/src/main/R/rserver/"
+no_data_available_dir <-
+  "/srv/metrics.torproject.org/metrics/src/main/R/rserver/"
 
 # Helper function that copies the appropriate no data object to filename.
 copy_no_data <- function(filename) {
   len <- nchar(filename)
   extension <- substr(filename, len - 3, len)
   if (".csv" == extension) {
-    write("# No data available for the given parameters.", file=filename)
+    write("# No data available for the given parameters.", file = filename)
   } else {
     file.copy(paste(no_data_available_dir, "no-data-available", extension,
       sep = ""), filename)
@@ -405,7 +425,6 @@ prepare_versions <- function(start_p = NULL, end_p = NULL) {
 plot_versions <- function(start_p, end_p, path_p) {
   s <- prepare_versions(start_p, end_p)
   known_versions <- unique(s$version)
-  getPalette <- colorRampPalette(brewer.pal(12, "Paired"))
   colours <- data.frame(breaks = known_versions,
     values = rep(brewer.pal(min(12, length(known_versions)), "Paired"),
                  len = length(known_versions)),
@@ -488,13 +507,15 @@ plot_dirbytes <- function(start_p, end_p, path_p) {
       authority = factor(
           ifelse(grepl("auth", variable), "authorities", "mirrors"),
           levels = c("authorities", "mirrors"))) %>%
-    complete(date = full_seq(date, period = 1), nesting(readwrite, authority)) %>%
+    complete(date = full_seq(date, period = 1),
+      nesting(readwrite, authority)) %>%
     ggplot(aes(x = date, y = value, colour = readwrite)) +
     geom_line() +
     facet_grid(authority ~ ., scales = "free_y", space = "free_y") +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = function(x) sprintf("%.1f Gbit/s", x),
+    scale_y_continuous(name = "",
+      labels = function(x) sprintf("%.1f Gbit/s", x),
       limits = c(0, NA)) +
     scale_colour_hue(name = "",
         breaks = c("dirwrite", "dirread"),
@@ -1679,8 +1700,8 @@ write_userstats <- function(start, end, node, path) {
   end <- min(end, as.character(Sys.Date()))
   c <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "clients.csv", sep = ""), stringsAsFactors = FALSE)
-  c <- c[c$date >= start & c$date <= end & c$country != '' &
-         c$transport == '' & c$version == '' & c$node == node, ]
+  c <- c[c$date >= start & c$date <= end & c$country != "" &
+         c$transport == "" & c$version == "" & c$node == node, ]
   u <- data.frame(country = c$country, users = c$clients,
                   stringsAsFactors = FALSE)
   u <- u[!is.na(u$users), ]
@@ -1692,26 +1713,26 @@ write_userstats <- function(start, end, node, path) {
   u <- u[1:10, ]
   u <- data.frame(
     cc = as.character(u$country),
-    country = sub('the ', '', countrynames(as.character(u$country))),
+    country = sub("the ", "", countrynames(as.character(u$country))),
     abs = round(u$users),
     rel = sprintf("%.2f", round(100 * u$users / total, 2)))
   write.csv(u, path, quote = FALSE, row.names = FALSE)
 }
 
 write_userstats_relay <- function(start, end, path) {
-  write_userstats(start, end, 'relay', path)
+  write_userstats(start, end, "relay", path)
 }
 
 write_userstats_bridge <- function(start, end, path) {
-  write_userstats(start, end, 'bridge', path)
+  write_userstats(start, end, "bridge", path)
 }
 
 write_userstats_censorship_events <- function(start, end, path) {
   end <- min(end, as.character(Sys.Date()))
   c <- read.csv(paste("/srv/metrics.torproject.org/metrics/shared/stats/",
                 "clients.csv", sep = ""), stringsAsFactors = FALSE)
-  c <- c[c$date >= start & c$date <= end & c$country != '' &
-         c$transport == '' & c$version == '' & c$node == 'relay', ]
+  c <- c[c$date >= start & c$date <= end & c$country != "" &
+         c$transport == "" & c$version == "" & c$node == "relay", ]
   r <- data.frame(date = c$date, country = c$country,
                   upturn = ifelse(!is.na(c$upper) &
                                   c$clients > c$upper, 1, 0),
@@ -1723,7 +1744,7 @@ write_userstats_censorship_events <- function(start, end, path) {
   r <- r[order(r$downturn, r$upturn, decreasing = TRUE), ]
   r <- r[1:10, ]
   r <- data.frame(cc = r$country,
-    country = sub('the ', '', countrynames(as.character(r$country))),
+    country = sub("the ", "", countrynames(as.character(r$country))),
     downturns = r$downturn,
     upturns = r$upturn)
   write.csv(r, path, quote = FALSE, row.names = FALSE)
@@ -1784,4 +1805,3 @@ plot_bridgedb_distributor <- function(start_p, end_p, path_p) {
     labs(caption = copyright_notice)
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)
 }
-
