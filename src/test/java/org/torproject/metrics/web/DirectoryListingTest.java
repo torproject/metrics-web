@@ -49,26 +49,35 @@ public class DirectoryListingTest {
   public void testListing() throws Exception {
     DirectoryListing dl = DirectoryListing.ofInputStream(
         new ByteArrayInputStream(jsonIndex.getBytes()));
-    assertEquals(4, dl.size());
+    assertEquals(4, dl.getFormattedTableEntries().size());
     for (String key : new String[]{"/collector/a1/", "/collector/",
         "/collector/a1/p2/", "/collector/a1/p1/"}) {
-      assertTrue("Missing: " + key, dl.containsKey(key));
+      assertTrue("Missing: " + key,
+          dl.getFormattedTableEntries().containsKey(key));
     }
     assertEquals("[Parent Directory, /collector.html, , ]",
-        Arrays.toString(dl.get("/collector/").get(0)));
-    assertEquals(3, dl.get("/collector/a1/").size());
+        Arrays.toString(dl.getFormattedTableEntries()
+        .get("/collector/").get(0)));
+    assertEquals(3, dl.getFormattedTableEntries()
+        .get("/collector/a1/").size());
     assertEquals("[Parent Directory, /collector/, , ]",
-        Arrays.toString(dl.get("/collector/a1/").get(0)));
+        Arrays.toString(dl.getFormattedTableEntries()
+        .get("/collector/a1/").get(0)));
     assertEquals("[p1, /collector/a1/p1/, , ]",
-        Arrays.toString(dl.get("/collector/a1/").get(1)));
+        Arrays.toString(dl.getFormattedTableEntries()
+        .get("/collector/a1/").get(1)));
     assertEquals("[p2, /collector/a1/p2/, , ]",
-        Arrays.toString(dl.get("/collector/a1/").get(2)));
+        Arrays.toString(dl.getFormattedTableEntries()
+        .get("/collector/a1/").get(2)));
     assertEquals("[Parent Directory, /collector/a1/, , ]",
-        Arrays.toString(dl.get("/collector/a1/p1/").get(0)));
-    assertEquals(2, dl.get("/collector/a1/p2/").size());
+        Arrays.toString(dl.getFormattedTableEntries()
+        .get("/collector/a1/p1/").get(0)));
+    assertEquals(2, dl.getFormattedTableEntries()
+        .get("/collector/a1/p2/").size());
     assertEquals("[file3, https://some.collector.url/a1/p2/file3, "
         + "2012-03-03 15:15, 609.5 KiB]",
-        Arrays.toString(dl.get("/collector/a1/p2/").get(1)));
+        Arrays.toString(dl.getFormattedTableEntries()
+        .get("/collector/a1/p2/").get(1)));
   }
 }
 
