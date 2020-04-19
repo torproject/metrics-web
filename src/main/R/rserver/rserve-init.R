@@ -515,7 +515,7 @@ plot_dirbytes <- function(start_p, end_p, path_p) {
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "",
-      labels = function(x) sprintf("%.1f Gbit/s", x),
+      labels = unit_format(accuracy = 0.1, unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "",
         breaks = c("dirwrite", "dirread"),
@@ -1176,7 +1176,8 @@ plot_advbwdist_perc <- function(start_p, end_p, p_p, path_p) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+    scale_y_continuous(name = "",
+      labels = unit_format(accuracy = 0.01, unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "Percentile") +
     ggtitle("Advertised bandwidth distribution") +
@@ -1214,7 +1215,8 @@ plot_advbwdist_relay <- function(start_p, end_p, n_p, path_p) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+    scale_y_continuous(name = "",
+      labels = unit_format(accuracy = 0.01, unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "n") +
     ggtitle("Advertised bandwidth of n-th fastest relays") +
