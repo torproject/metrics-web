@@ -4036,6 +4036,15 @@
     "target" : "https://bugs.torproject.org/33385#comment:3"
   } ]
 }, {
+  "start" : "2020-04-23",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Redeployed the Snowflake bridge with support for non–Turbo Tunnel clients and KCP–Turbo Tunnel clients, removing support for QUIC–Turbo Tunnel clients.",
+  "description" : "Redeployed the Snowflake bridge with support for non&ndash;Turbo Tunnel clients and KCP&ndash;Turbo Tunnel clients, removing support for QUIC&ndash;Turbo Tunnel clients.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/33745#comment:12"
+  } ]
+}, {
   "start" : "2014-06-01",
   "end" : "2014-06-19",
   "places" : [ "ru" ],
