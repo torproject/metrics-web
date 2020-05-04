@@ -204,6 +204,13 @@
   <td><a href="/collector/recent/torperf/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
       <a href="/collector/archive/torperf/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
 </tr>
+<tr>
+  <td><a href="#type-torperf">OnionPerf Analysis Files</a></td>
+  <td/>
+  <td>${published["/collector/archive/onionperf/"]}</td>
+  <td><a href="/collector/recent/onionperf/" class="btn btn-primary btn-xs pull-left"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+      <a href="/collector/archive/onionperf/" class="btn btn-primary btn-xs pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a></td>
+</tr>
 <tr class="tableHeadline">
   <td colspan="4"><b><a href="#webstats">Tor web server logs</a></b></td>
 </tr>
@@ -801,7 +808,15 @@ measurement; optional.</li>
 <li><code>SOURCEADDRESS:</code> Public IP address of the OnionPerf host obtained by connecting to well-known servers and finding the IP address in the result, which may be <code>"unknown"</code> if OnionPerf was not able to find this information; optional.</li>
 </ul>
 
+<h3 id="type-torperf" class="hover">OnionPerf Analysis Files
+<a href="/collector/recent/onionperf/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> recent</a>
+<a href="/collector/archive/onionperf/" class="btn btn-primary btn-xs"><i class="fa fa-chevron-right" aria-hidden="true"></i> archive</a>
+<a href="#type-torperf" class="anchor">#</a>
+</h3>
 
+<p>OnionPerf exports its measurements once per day in an analysis file using the
+JSON format specified
+<a href="https://gitweb.torproject.org/onionperf.git/tree/README_JSON.md">here</a>.</p>
 
 <br>
 <h2 id="webstats" class="hover">Tor web server logs
