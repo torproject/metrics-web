@@ -97,9 +97,9 @@ public class Main {
     DescriptorReader dr = DescriptorSourceFactory.createDescriptorReader();
     for (Descriptor d : dr.readDescriptors(
         new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
-            "archive/torperf"),
+            "archive/onionperf"),
         new File(org.torproject.metrics.stats.main.Main.descriptorsDir,
-            "recent/torperf"))) {
+            "recent/onionperf"))) {
       if (!(d instanceof TorperfResult)) {
         continue;
       }

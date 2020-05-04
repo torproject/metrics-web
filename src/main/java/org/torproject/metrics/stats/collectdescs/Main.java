@@ -29,7 +29,7 @@ public class Main {
             "/recent/relay-descriptors/extra-infos/",
             "/recent/relay-descriptors/server-descriptors/",
             "/recent/relay-descriptors/votes/",
-            "/recent/torperf/",
+            "/recent/onionperf/",
             "/recent/webstats/"
         }, 0L, org.torproject.metrics.stats.main.Main.descriptorsDir, true);
   }
