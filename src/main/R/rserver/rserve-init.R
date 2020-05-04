@@ -337,6 +337,16 @@ formatter <- function(x, ...) {
   format(x, ..., scientific = FALSE, big.mark = " ")
 }
 
+# Helper function that takes a unit as input and returns a format function that
+# takes breaks as input and returns labels with that unit as output. In contrast
+# to the unit_format function in our somewhat outdated scales package this
+# function determines more reasonably how many digits it needs to print.
+custom_unit_format <- function(unit) {
+  function(x) {
+    paste(format(x, scientific = FALSE, big.mark = " "), unit)
+  }
+}
+
 theme_update(
   # Make plot title centered, and leave some room to the plot.
   plot.title = element_text(hjust = 0.5, margin = margin(b = 11)),
@@ -515,7 +525,7 @@ plot_dirbytes <- function(start_p, end_p, path_p) {
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "",
-      labels = unit_format(accuracy = 0.1, unit = "Gbit/s"),
+      labels = custom_unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "",
         breaks = c("dirwrite", "dirread"),
@@ -589,7 +599,7 @@ plot_torperf <- function(start_p, end_p, server_p, filesize_p, path_p) {
     geom_line(aes(colour = source), size = 0.75) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "s"),
+    scale_y_continuous(name = "", labels = custom_unit_format(unit = "s"),
       limits = c(0, NA)) +
     scale_fill_hue(name = "Source") +
     scale_colour_hue(name = "Source") +
@@ -677,7 +687,7 @@ plot_onionperf_buildtimes <- function(start_p, end_p, path_p) {
     facet_grid(position ~ .) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "ms"),
+    scale_y_continuous(name = "", labels = custom_unit_format(unit = "ms"),
       limits = c(0, NA)) +
     scale_fill_hue(name = "Source") +
     scale_colour_hue(name = "Source") +
@@ -715,7 +725,7 @@ plot_onionperf_latencies <- function(start_p, end_p, server_p, path_p) {
     geom_line(aes(y = low, colour = source), size = 0.375) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "ms"),
+    scale_y_continuous(name = "", labels = custom_unit_format(unit = "ms"),
       limits = c(0, NA)) +
     scale_fill_hue(name = "Source") +
     scale_colour_hue(name = "Source") +
@@ -755,7 +765,7 @@ plot_onionperf_throughput <- function(start_p, end_p, server_p, path_p) {
     geom_line(aes(y = low / 1000, colour = source), size = 0.375) +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "Mbps"),
+    scale_y_continuous(name = "", labels = custom_unit_format(unit = "Mbps"),
       limits = c(0, NA)) +
     scale_fill_hue(name = "Source") +
     scale_colour_hue(name = "Source") +
@@ -848,7 +858,7 @@ plot_bandwidth_flags <- function(start_p, end_p, path_p) {
     geom_area() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+    scale_y_continuous(name = "", labels = custom_unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_fill_manual(name = "",
       values = c("#03B3FF", "#39FF02", "#FFFF00", "#AAAA99")) +
@@ -872,7 +882,7 @@ plot_bandwidth <- function(start_p, end_p, path_p) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+    scale_y_continuous(name = "", labels = custom_unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
         breaks = c("advbw", "bwhist"),
@@ -1177,7 +1187,7 @@ plot_advbwdist_perc <- function(start_p, end_p, p_p, path_p) {
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "",
-      labels = unit_format(accuracy = 0.01, unit = "Gbit/s"),
+      labels = custom_unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "Percentile") +
     ggtitle("Advertised bandwidth distribution") +
@@ -1216,7 +1226,7 @@ plot_advbwdist_relay <- function(start_p, end_p, n_p, path_p) {
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
     scale_y_continuous(name = "",
-      labels = unit_format(accuracy = 0.01, unit = "Gbit/s"),
+      labels = custom_unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "n") +
     ggtitle("Advertised bandwidth of n-th fastest relays") +
@@ -1277,7 +1287,7 @@ plot_hidserv_rend_relayed_cells <- function(start_p, end_p, path_p) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+    scale_y_continuous(name = "", labels = custom_unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     ggtitle("Onion-service traffic") +
     labs(caption = copyright_notice)
@@ -1644,7 +1654,7 @@ plot_advbw_ipv6 <- function(start_p, end_p, path_p) {
     geom_line() +
     scale_x_date(name = "", breaks = custom_breaks,
       labels = custom_labels, minor_breaks = custom_minor_breaks) +
-    scale_y_continuous(name = "", labels = unit_format(unit = "Gbit/s"),
+    scale_y_continuous(name = "", labels = custom_unit_format(unit = "Gbit/s"),
       limits = c(0, NA)) +
     scale_colour_hue(name = "", h.start = 90,
       breaks = c("total", "total_guard", "total_exit", "reachable_guard",
