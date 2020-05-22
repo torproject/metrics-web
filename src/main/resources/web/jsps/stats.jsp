@@ -55,6 +55,7 @@ https://metrics.torproject.org/identifier.csv
 <li><b>August 5, 2019:</b> Re-added the <a href="#bandwidth">Total relay bandwidth</a> graph due to popular demand.</li>
 <li><b>October 2, 2019:</b> Added <a href="#webstats-tb-channel">Tor Browser updates by release channel</a> graph.</li>
 <li><b>December 18, 2019:</b> Added <a href="#bridgedb-transport">BridgeDB requests by requested transport</a> and <a href="#bridgedb-distributor">BridgeDB requests by distributor</a> graphs.</li>
+<li><b>May 24, 2020:</b> Included version 3 onion service measurements in <a href="#torperf">Time to download files over Tor</a>, <a href="#torperf-failures">Timeouts and failures of downloading files over Tor</a>, <a href="#onionperf-buildtimes">Circuit build times</a>, <a href="#onionperf-latencies">Circuit round-trip latencies</a> graphs.</li>
 </ul>
 
 </div>
@@ -547,7 +548,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to a version 2 onion server.</li>
+<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to an onion server.</li>
 <li><b>filesize:</b> Size of the downloaded file in bytes, with pre-defined possible values: <b>"50kb"</b>, <b>"1mb"</b>, or <b>"5mb"</b>.</li>
 </ul>
 
@@ -557,7 +558,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
 <li><b>filesize:</b> Size of the downloaded file in bytes.</li>
 <li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
-<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
+<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to an onion server.</li>
 <li><b>q1:</b> First quartile of time in milliseconds until receiving the last byte.</li>
 <li><b>md:</b> Median of time in milliseconds until receiving the last byte.</li>
 <li><b>q3:</b> Third quartile of time in milliseconds until receiving the last byte.</li>
@@ -573,7 +574,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to a version 2 onion server.</li>
+<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to an onion server.</li>
 <li><b>filesize:</b> Size of the downloaded file in bytes, with pre-defined possible values: <b>"50kb"</b>, <b>"1mb"</b>, or <b>"5mb"</b>.</li>
 </ul>
 
@@ -583,7 +584,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
 <li><b>filesize:</b> Size of the downloaded file in bytes.</li>
 <li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
-<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
+<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to an onion server.</li>
 <li><b>timeouts:</b> Fraction of requests that timed out when attempting to download the static file over Tor.</li>
 <li><b>failures:</b> Fraction of requests that failed when attempting to download the static file over Tor.</li>
 </ul>
@@ -621,7 +622,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to a version 2 onion server.</li>
+<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to an onion server.</li>
 </ul>
 
 <h4>Columns</h4>
@@ -629,7 +630,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
 <li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
-<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
+<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to an onion server.</li>
 <li><b>low:</b> Lowest time in milliseconds between sending the HTTP request and receiving the HTTP response header within 1.5 IQR of lower quartile (lower whisker in a boxplot).</li>
 <li><b>q1:</b> First quartile of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
 <li><b>md:</b> Median of time in milliseconds between sending the HTTP request and receiving the HTTP response header.</li>
@@ -647,7 +648,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
-<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to a version 2 onion server.</li>
+<li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to an onion server.</li>
 </ul>
 
 <h4>Columns</h4>
@@ -655,7 +656,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <ul>
 <li><b>date:</b> UTC date (YYYY-MM-DD) when download performance was measured.</li>
 <li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
-<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to a version 2 onion server.</li>
+<li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to an onion server.</li>
 <li><b>low:</b> Lowest measured throughput in kilobits per second within 1.5 IQR of lower quartile (lower whisker in a boxplot).</li>
 <li><b>q1:</b> First quartile of measured throughput in kilobits per second.</li>
 <li><b>md:</b> Median of measured throughput in kilobits per second.</li>

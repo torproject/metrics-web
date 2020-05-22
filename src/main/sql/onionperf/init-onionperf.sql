@@ -80,7 +80,6 @@ SELECT DATE(start) AS date,
   COUNT(*) AS requests
 FROM measurements
 WHERE DATE(start) < current_date - 1
-AND (endpointremote IS NULL OR endpointremote NOT SIMILAR TO '_{56}.onion%')
 GROUP BY date, filesize, source, server
 UNION
 SELECT DATE(start) AS date,
@@ -98,7 +97,6 @@ SELECT DATE(start) AS date,
   COUNT(*) AS requests
 FROM measurements
 WHERE DATE(start) < current_date - 1
-AND (endpointremote IS NULL OR endpointremote NOT SIMILAR TO '_{56}.onion%')
 GROUP BY date, filesize, 3, server) sub
 ORDER BY date, filesize, source, server;
 
@@ -140,7 +138,6 @@ WITH filtered_measurements AS (
   WHERE DATE(start) < current_date - 1
   AND datarequest > 0
   AND dataresponse > 0
-  AND (endpointremote IS NULL OR endpointremote NOT SIMILAR TO '_{56}.onion%')
 ), quartiles AS (
   SELECT date,
     source,
@@ -185,7 +182,6 @@ WITH filtered_measurements AS (
       ELSE NULL END AS kbps
   FROM measurements
   WHERE DATE(start) < current_date - 1
-  AND (endpointremote IS NULL OR endpointremote NOT SIMILAR TO '_{56}.onion%')
 ), quartiles AS (
   SELECT date,
     source,
