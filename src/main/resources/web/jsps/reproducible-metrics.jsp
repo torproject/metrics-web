@@ -694,6 +694,7 @@ Here we explain how we evaluate Torperf/OnionPerf measurement to obtain the same
 <li><code>DATACOMPLETE</code>: Download end time that is only set if the request succeeded.</li>
 <li><code>READBYTES</code>: Total number of bytes read, which indicates whether this request succeeded (if &ge; <code>FILESIZE</code>) or failed.</li>
 <li><code>DIDTIMEOUT</code>: 1 if the request timed out, 0 otherwise.</li>
+<li><code>PARTIAL51200</code> and <code>PARTIAL1048576</code>: Time when 51200 or 1048576 bytes were read.</li>
 <li><code>DATAPERCx</code>: Time when x% of expected bytes were read for x = { 10, 20, 50, 100 }.</li>
 <li><code>BUILDTIMES</code>: Comma-separated list of times when circuit hops were built, which includes all circuits used for making measurement requests, successful or not.</li>
 <li><code>ENDPOINTREMOTE</code>: Hostname, IP address, and port that was used to connect to the remote server; we use this to distinguish a request to a public server (if <code>ENDPOINTREMOTE</code> is not present or does not contain <code>".onion"</code> as substring) or to an onion server.</li>
@@ -703,7 +704,9 @@ Here we explain how we evaluate Torperf/OnionPerf measurement to obtain the same
 
 <p>Each of the measurement results parsed in the previous step constitutes a single measurement.
 We're first interested in statistics on download times for the <a href="/torperf.html">Time to download files over Tor</a> graph.
-Therefore we consider only measurements with <code>DATACOMPLETE &gt; START</code>, for which we calculate the download time as: <code>DATACOMPLETE - START</code>.
+Therefore we consider complete downloads as well as partial downloads.
+For complete downloads we calculate the download time as <code>DATACOMPLETE - START</code> for measurements with <code>DATACOMPLETE &gt; START</code>.
+For partial downloads of larger file sizes we calculate the download time as <code>PARTIAL51200 - START</code> for measurements with <code>PARTIAL51200 &gt; START</code> and <code>FILESIZE &gt; 51200</code>; and <code>PARTIAL1048576 - START</code> for measurements with <code>PARTIAL1048576 &gt; START</code> and <code>FILESIZE &gt; 1048576</code>.
 We then compute the 25th, 50th, and 75th percentile of download times by sorting download times, determining the percentile rank, and using linear interpolation between adjacent ranks.</p>
 
 <p>Next we're interested in the average throughput of measurements for the <a href="/onionperf-throughput.html">Throughput</a> graph.

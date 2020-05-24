@@ -17,6 +17,15 @@ CREATE TABLE IF NOT EXISTS measurements (
   writebytes INTEGER,
   readbytes INTEGER,
   didtimeout BOOLEAN,
+  partial10240 INTEGER,
+  partial20480 INTEGER,
+  partial51200 INTEGER,
+  partial102400 INTEGER,
+  partial204800 INTEGER,
+  partial512000 INTEGER,
+  partial1048576 INTEGER,
+  partial2097152 INTEGER,
+  partial5242880 INTEGER,
   dataperc0 INTEGER,
   dataperc10 INTEGER,
   dataperc20 INTEGER,
@@ -52,6 +61,54 @@ CREATE TABLE IF NOT EXISTS buildtimes (
 );
 
 CREATE TYPE server AS ENUM ('public', 'onion');
+
+CREATE OR REPLACE VIEW onionperf_including_partials AS
+WITH measurements_including_partials AS (
+  SELECT start,
+    filesize,
+    source,
+    endpointremote,
+    datacomplete
+  FROM measurements
+  UNION
+  SELECT start,
+    51200 AS filesize,
+    source,
+    endpointremote,
+    partial51200 AS datacomplete
+  FROM measurements
+  WHERE filesize > 51200
+  AND partial51200 IS NOT NULL
+  UNION
+  SELECT start,
+    1048576 AS filesize,
+    source,
+    endpointremote,
+    partial1048576 AS datacomplete
+  FROM measurements
+  WHERE filesize > 1048576
+  AND partial1048576 IS NOT NULL
+), grouped AS (
+  SELECT DATE(start) AS date,
+    filesize,
+    source,
+    CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
+      ELSE 'public' END AS server,
+    CASE WHEN COUNT(*) > 0 THEN
+      PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY datacomplete)
+      ELSE NULL END AS q
+  FROM measurements_including_partials
+  GROUP BY date, filesize, source, server
+)
+SELECT date,
+  filesize,
+  source,
+  server,
+  CASE WHEN q IS NULL THEN NULL ELSE TRUNC(q[1]) END AS q1,
+  CASE WHEN q IS NULL THEN NULL ELSE TRUNC(q[2]) END AS md,
+  CASE WHEN q IS NULL THEN NULL ELSE TRUNC(q[3]) END AS q3
+FROM grouped
+ORDER BY date, filesize, source, server;
 
 CREATE OR REPLACE VIEW onionperf AS
 SELECT date,

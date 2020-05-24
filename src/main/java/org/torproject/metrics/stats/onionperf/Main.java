@@ -46,6 +46,9 @@ public class Main {
     logger.info("Starting onionperf module.");
     Connection connection = connectToDatabase();
     importOnionPerfFiles(connection);
+    writeStatistics(
+        new File(baseDir, "stats/onionperf-including-partials.csv").toPath(),
+        queryOnionperfIncludingPartials(connection));
     writeStatistics(new File(baseDir, "stats/torperf-1.1.csv").toPath(),
         queryOnionPerf(connection));
     writeStatistics(new File(baseDir, "stats/buildtimes.csv").toPath(),
@@ -83,7 +86,10 @@ public class Main {
         + "dataperc60, dataperc70, dataperc80, dataperc90, dataperc100, "
         + "launch, used_at, timeout, quantile, circ_id, used_by, "
         + "endpointlocal, endpointproxy, endpointremote, hostnamelocal, "
-        + "hostnameremote, sourceaddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, "
+        + "hostnameremote, sourceaddress, partial10240, partial20480, "
+        + "partial51200, partial102400, partial204800, partial512000, "
+        + "partial1048576, partial2097152, partial5242880) "
+        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
         + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
         + "?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
@@ -195,6 +201,18 @@ public class Main {
                 truncateString(onionPerfStrings[j], 64));
           }
         }
+        int[] partialBytes = new int[] { 10240, 20480, 51200, 102400, 204800,
+            512000, 1048576, 2097152, 5242880 };
+        for (int i = 38, j = 0; j < partialBytes.length; i++, j++) {
+          if (null == tr.getPartials()
+              || !tr.getPartials().containsKey(partialBytes[j])) {
+            psMeasurementsInsert.setNull(i, Types.INTEGER);
+          } else {
+            psMeasurementsInsert.setInt(i,
+                (int) (tr.getPartials().get(partialBytes[j])
+                - tr.getStartMillis()));
+          }
+        }
         psMeasurementsInsert.execute();
         try (ResultSet rs = psMeasurementsInsert.getGeneratedKeys()) {
           if (rs.next()) {
@@ -238,9 +256,34 @@ public class Main {
     return originalString;
   }
 
+  static List<String> queryOnionperfIncludingPartials(Connection connection)
+      throws SQLException {
+    logger.info("Querying statistics including partials from database.");
+    List<String> statistics = new ArrayList<>();
+    statistics
+        .add("date,filesize,source,server,q1,md,q3");
+    Statement st = connection.createStatement();
+    String queryString = "SELECT date, filesize, source, server, q1, md, q3 "
+        + " FROM onionperf_including_partials";
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    try (ResultSet rs = st.executeQuery(queryString)) {
+      while (rs.next()) {
+        statistics.add(String.format("%s,%d,%s,%s,%.0f,%.0f,%.0f",
+            dateFormat.format(rs.getDate("date")),
+            rs.getInt("filesize"),
+            getStringFromResultSet(rs, "source"),
+            getStringFromResultSet(rs, "server"),
+            getDoubleFromResultSet(rs, "q1"),
+            getDoubleFromResultSet(rs, "md"),
+            getDoubleFromResultSet(rs, "q3")));
+      }
+    }
+    return statistics;
+  }
+
   static List<String> queryOnionPerf(Connection connection)
       throws SQLException {
-    logger.info("Querying statistics from database.");
+    logger.info("Querying timeout and failure statistics from database.");
     List<String> statistics = new ArrayList<>();
     statistics
         .add("date,filesize,source,server,q1,md,q3,timeouts,failures,requests");

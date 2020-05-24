@@ -274,8 +274,7 @@
     "id": "torperf",
     "title": "Time to download files over Tor",
     "type": "Graph",
-    "description": "<p>This graph shows overall performance when downloading static files of different sizes over Tor, either from a server on the public internet or from an onion server.  The graph shows the range of measurements from first to third quartile, and highlights the median.  The slowest and fastest quarter of measurements are omitted from the graph.</p>",
-    "function": "torperf",
+    "description": "<p>This graph shows overall performance when downloading static files of different sizes over Tor, either from a server on the public internet or from an onion server.  Download times include complete downloads of the shown file size as well as partial downloads of larger file sizes.  The graph shows the range of measurements from first to third quartile, and highlights the median.  The slowest and fastest quarter of measurements are omitted from the graph.</p>",    "function": "torperf",
     "parameters": [
       "start",
       "end",

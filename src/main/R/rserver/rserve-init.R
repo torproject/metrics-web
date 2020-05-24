@@ -567,7 +567,8 @@ plot_relayflags <- function(start_p, end_p, flag_p, path_p) {
 
 prepare_torperf <- function(start_p = NULL, end_p = NULL, server_p = NULL,
     filesize_p = NULL) {
-  read_csv(file = paste(stats_dir, "torperf-1.1.csv", sep = ""),
+  read_csv(file = paste(stats_dir, "onionperf-including-partials.csv",
+        sep = ""),
       col_types = cols(
         date = col_date(format = ""),
         filesize = col_double(),
@@ -575,10 +576,7 @@ prepare_torperf <- function(start_p = NULL, end_p = NULL, server_p = NULL,
         server = col_character(),
         q1 = col_double(),
         md = col_double(),
-        q3 = col_double(),
-        timeouts = col_skip(),
-        failures = col_skip(),
-        requests = col_skip())) %>%
+        q3 = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
     filter(if (!is.null(server_p)) server == server_p else TRUE) %>%

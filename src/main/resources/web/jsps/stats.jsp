@@ -56,6 +56,7 @@ https://metrics.torproject.org/identifier.csv
 <li><b>October 2, 2019:</b> Added <a href="#webstats-tb-channel">Tor Browser updates by release channel</a> graph.</li>
 <li><b>December 18, 2019:</b> Added <a href="#bridgedb-transport">BridgeDB requests by requested transport</a> and <a href="#bridgedb-distributor">BridgeDB requests by distributor</a> graphs.</li>
 <li><b>May 24, 2020:</b> Included version 3 onion service measurements in <a href="#torperf">Time to download files over Tor</a>, <a href="#torperf-failures">Timeouts and failures of downloading files over Tor</a>, <a href="#onionperf-buildtimes">Circuit build times</a>, <a href="#onionperf-latencies">Circuit round-trip latencies</a> graphs.</li>
+<li><b>May 24, 2020:</b> Included partial downloads of larger file sizes in <a href="#torperf">Time to download files over Tor</a> graph.</li>
 </ul>
 
 </div>
@@ -549,7 +550,7 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <li><b>start:</b> First UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>end:</b> Last UTC date (YYYY-MM-DD) to include in the file.</li>
 <li><b>server:</b> Either <b>"public"</b> for requests to a server on the public internet, or <b>"onion"</b> for requests to an onion server.</li>
-<li><b>filesize:</b> Size of the downloaded file in bytes, with pre-defined possible values: <b>"50kb"</b>, <b>"1mb"</b>, or <b>"5mb"</b>.</li>
+<li><b>filesize:</b> Size of the completely or partially downloaded file in bytes, with pre-defined possible values: <b>"50kb"</b>, <b>"1mb"</b>, or <b>"5mb"</b>.</li>
 </ul>
 
 <h4>Columns</h4>
@@ -559,9 +560,9 @@ Performance <a href="#performance" name="performance" class="anchor">#</a></h2>
 <li><b>filesize:</b> Size of the downloaded file in bytes.</li>
 <li><b>source:</b> Name of the OnionPerf or Torperf service performing measurements.</li>
 <li><b>server:</b> Either <b>"public"</b> if the request was made to a server on the public internet, or <b>"onion"</b> if the request was made to an onion server.</li>
-<li><b>q1:</b> First quartile of time in milliseconds until receiving the last byte.</li>
-<li><b>md:</b> Median of time in milliseconds until receiving the last byte.</li>
-<li><b>q3:</b> Third quartile of time in milliseconds until receiving the last byte.</li>
+<li><b>q1:</b> First quartile of time in milliseconds until receiving the number of bytes in <b>filesize</b>.</li>
+<li><b>md:</b> Median of time in milliseconds until receiving the number of bytes in <b>filesize</b>.</li>
+<li><b>q3:</b> Third quartile of time in milliseconds until receiving the number of bytes in <b>filesize</b>.</li>
 </ul>
 
 <h3>Timeouts and failures of downloading files over Tor
