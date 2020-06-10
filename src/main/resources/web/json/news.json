@@ -4045,6 +4045,30 @@
     "target" : "https://bugs.torproject.org/33745#comment:12"
   } ]
 }, {
+  "start" : "2020-05-22",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Release of Tor Browser 9.5a13, the first release with Turbo Tunnel session persistence features for Snowflake.",
+  "description" : "Release of Tor Browser 9.5a13, the first release with Turbo Tunnel session persistence features for Snowflake.",
+  "links" : [ {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/new-release-tor-browser-95a13"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/34043"
+  } ]
+}, {
+  "start" : "2020-06-02",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Release of Tor Browser 10.0a1, the first release with Snowflake for Android.",
+  "description" : "Release of Tor Browser 10.0a1, the first release with Snowflake for Android.",
+  "links" : [ {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/new-release-tor-browser-100a1"
+  }, {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/30318"
+  } ]
+}, {
   "start" : "2014-06-01",
   "end" : "2014-06-19",
   "places" : [ "ru" ],
