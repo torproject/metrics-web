@@ -81,8 +81,9 @@ public class Main {
         continue;
       }
       BridgedbMetrics bridgedbMetrics = (BridgedbMetrics) descriptor;
-      if (!"1".equals(bridgedbMetrics.bridgedbMetricsVersion())) {
-        logger.warn("Unable to process BridgeDB metrics version {} != 1.",
+      if (!bridgedbMetrics.bridgedbMetricsVersion().startsWith("1")
+          && !bridgedbMetrics.bridgedbMetricsVersion().startsWith("2")) {
+        logger.warn("Unable to process BridgeDB metrics version {} > 2.",
             bridgedbMetrics.bridgedbMetricsVersion());
         continue;
       }
@@ -99,13 +100,17 @@ public class Main {
           /* Unable to extract relevant key parts. */
           continue;
         }
+        String distributor = keyParts[0];
+        if (distributor.equals("internal")) {
+          /* Skip internal metrics added in BridgeDB metrics version 2. */
+          continue;
+        }
         if (bridgedbMetricCount.getValue() < 10) {
           logger.warn("Skipping too small BridgeDB metric count {} < 10 in {}.",
               bridgedbMetricCount.getValue(),
               descriptor.getDescriptorFile().getAbsolutePath());
           continue;
         }
-        String distributor = keyParts[0];
         String transport = keyParts[1];
         String ccOrEmail = keyParts[2];
         if (ccOrEmail.equals("zz")) {
