@@ -611,36 +611,26 @@ plot_torperf <- function(start_p, end_p, server_p, filesize_p, path_p) {
 }
 
 prepare_torperf_failures <- function(start_p = NULL, end_p = NULL,
-    server_p = NULL, filesize_p = NULL) {
-  read_csv(file = paste(stats_dir, "torperf-1.1.csv", sep = ""),
+    server_p = NULL) {
+  read_csv(file = paste(stats_dir, "onionperf-failures.csv", sep = ""),
       col_types = cols(
         date = col_date(format = ""),
-        filesize = col_double(),
         source = col_character(),
         server = col_character(),
-        q1 = col_skip(),
-        md = col_skip(),
-        q3 = col_skip(),
         timeouts = col_double(),
         failures = col_double(),
         requests = col_double())) %>%
     filter(if (!is.null(start_p)) date >= as.Date(start_p) else TRUE) %>%
     filter(if (!is.null(end_p)) date <= as.Date(end_p) else TRUE) %>%
-    filter(if (!is.null(filesize_p))
-        filesize == ifelse(filesize_p == "50kb", 50 * 1024,
-        ifelse(filesize_p == "1mb", 1024 * 1024, 5 * 1024 * 1024)) else
-        TRUE) %>%
     filter(if (!is.null(server_p)) server == server_p else TRUE) %>%
     filter(requests > 0) %>%
-    transmute(date, filesize, source, server, timeouts = timeouts / requests,
+    transmute(date, source, server, timeouts = timeouts / requests,
         failures = failures / requests)
 }
 
-plot_torperf_failures <- function(start_p, end_p, server_p, filesize_p,
-    path_p) {
-  prepare_torperf_failures(start_p, end_p, server_p, filesize_p) %>%
-    filter(source != "") %>%
-    gather(variable, value, -c(date, filesize, source, server)) %>%
+plot_torperf_failures <- function(start_p, end_p, server_p, path_p) {
+  prepare_torperf_failures(start_p, end_p, server_p) %>%
+    gather(variable, value, -c(date, source, server)) %>%
     mutate(variable = factor(variable, levels = c("timeouts", "failures"),
       labels = c("Timeouts", "Failures"))) %>%
     ggplot(aes(x = date, y = value, colour = source)) +
@@ -650,10 +640,7 @@ plot_torperf_failures <- function(start_p, end_p, server_p, filesize_p,
     scale_y_continuous(name = "", labels = percent, limits = c(0, NA)) +
     scale_colour_hue(name = "Source") +
     facet_grid(variable ~ .) +
-    ggtitle(paste("Timeouts and failures of",
-        ifelse(filesize_p == "50kb", "50 KiB",
-        ifelse(filesize_p == "1mb", "1 MiB", "5 MiB")),
-        "requests to", server_p, "server")) +
+    ggtitle(paste("Timeouts and failures of requests to", server_p, "server")) +
     labs(caption = copyright_notice) +
     theme(legend.position = "top")
   ggsave(filename = path_p, width = 8, height = 5, dpi = 150)

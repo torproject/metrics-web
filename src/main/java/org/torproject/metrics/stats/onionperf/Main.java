@@ -49,8 +49,8 @@ public class Main {
     writeStatistics(
         new File(baseDir, "stats/onionperf-including-partials.csv").toPath(),
         queryOnionperfIncludingPartials(connection));
-    writeStatistics(new File(baseDir, "stats/torperf-1.1.csv").toPath(),
-        queryOnionPerf(connection));
+    writeStatistics(new File(baseDir, "stats/onionperf-failures.csv").toPath(),
+        queryOnionperfFailures(connection));
     writeStatistics(new File(baseDir, "stats/buildtimes.csv").toPath(),
         queryBuildTimes(connection));
     writeStatistics(new File(baseDir, "stats/latencies.csv").toPath(),
@@ -281,26 +281,21 @@ public class Main {
     return statistics;
   }
 
-  static List<String> queryOnionPerf(Connection connection)
+  static List<String> queryOnionperfFailures(Connection connection)
       throws SQLException {
     logger.info("Querying timeout and failure statistics from database.");
     List<String> statistics = new ArrayList<>();
-    statistics
-        .add("date,filesize,source,server,q1,md,q3,timeouts,failures,requests");
+    statistics.add("date,source,server,timeouts,failures,requests");
     Statement st = connection.createStatement();
-    String queryString = "SELECT date, filesize, source, server, q1, md, q3, "
-        + "timeouts, failures, requests FROM onionperf";
+    String queryString = "SELECT date, source, server, timeouts, failures, "
+        + "requests FROM onionperf_failures";
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     try (ResultSet rs = st.executeQuery(queryString)) {
       while (rs.next()) {
-        statistics.add(String.format("%s,%d,%s,%s,%.0f,%.0f,%.0f,%d,%d,%d",
+        statistics.add(String.format("%s,%s,%s,%d,%d,%d",
             dateFormat.format(rs.getDate("date")),
-            rs.getInt("filesize"),
             getStringFromResultSet(rs, "source"),
             getStringFromResultSet(rs, "server"),
-            getDoubleFromResultSet(rs, "q1"),
-            getDoubleFromResultSet(rs, "md"),
-            getDoubleFromResultSet(rs, "q3"),
             rs.getInt("timeouts"),
             rs.getInt("failures"),
             rs.getInt("requests")));

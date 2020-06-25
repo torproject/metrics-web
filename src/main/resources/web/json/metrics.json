@@ -291,8 +291,7 @@
     "parameters": [
       "start",
       "end",
-      "server",
-      "filesize"
+      "server"
     ]
   },
   {

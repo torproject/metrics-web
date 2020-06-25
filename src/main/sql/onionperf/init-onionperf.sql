@@ -110,26 +110,11 @@ SELECT date,
 FROM grouped
 ORDER BY date, filesize, source, server;
 
-CREATE OR REPLACE VIEW onionperf AS
-SELECT date,
-  filesize,
-  source,
-  server,
-  CASE WHEN q IS NULL THEN NULL ELSE q[1] END AS q1,
-  CASE WHEN q IS NULL THEN NULL ELSE q[2] END AS md,
-  CASE WHEN q IS NULL THEN NULL ELSE q[3] END AS q3,
-  timeouts,
-  failures,
-  requests
-FROM (
+CREATE OR REPLACE VIEW onionperf_failures AS
 SELECT DATE(start) AS date,
-  filesize,
   source,
   CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
     ELSE 'public' END AS server,
-  CASE WHEN COUNT(*) > 0 THEN
-    PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY datacomplete)
-    ELSE NULL END AS q,
   COUNT(CASE WHEN didtimeout OR datacomplete < 1 THEN 1 ELSE NULL END)
     AS timeouts,
   COUNT(CASE WHEN NOT didtimeout AND datacomplete >= 1
@@ -137,25 +122,8 @@ SELECT DATE(start) AS date,
   COUNT(*) AS requests
 FROM measurements
 WHERE DATE(start) < current_date - 1
-GROUP BY date, filesize, source, server
-UNION
-SELECT DATE(start) AS date,
-  filesize,
-  '' AS source,
-  CASE WHEN endpointremote LIKE '%.onion:%' THEN 'onion'
-    ELSE 'public' END AS server,
-  CASE WHEN COUNT(*) > 0 THEN
-    PERCENTILE_CONT(ARRAY[0.25,0.5,0.75]) WITHIN GROUP(ORDER BY datacomplete)
-    ELSE NULL END AS q,
-  COUNT(CASE WHEN didtimeout OR datacomplete < 1 THEN 1 ELSE NULL END)
-    AS timeouts,
-  COUNT(CASE WHEN NOT didtimeout AND datacomplete >= 1
-    AND readbytes < filesize THEN 1 ELSE NULL END) AS failures,
-  COUNT(*) AS requests
-FROM measurements
-WHERE DATE(start) < current_date - 1
-GROUP BY date, filesize, 3, server) sub
-ORDER BY date, filesize, source, server;
+GROUP BY date, source, server
+ORDER BY date, source, server;
 
 CREATE OR REPLACE VIEW buildtimes_stats AS
 SELECT date,
