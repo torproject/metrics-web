@@ -13,7 +13,7 @@
    - Estimate bridge users by country based on requests by country, if
      available, to get more accurate numbers than those obtained from
      unique IP address counts.
-   - Update to metrics-lib 2.13.0 and ExoneraTor 4.4.0.
+   - Update to metrics-lib 2.14.0 and ExoneraTor 4.4.0.
    - Switch from processing Torperf .tpf to OnionPerf analysis .json
      files.
 
