@@ -125,3 +125,8 @@ document.write('<div class="topButton" style="display:none;"><a href="#top"><i c
 </nav>
 <!-- /primary navigation -->
 
+<div class="container">
+  <div class="alert alert-success">
+    The Tor Project is working with Simply Secure to improve the experience of the Tor Metrics website. <strong><a href="https://tools.simplysecure.org/survey/index.php?r=survey/index&sid=39865&lang=en" title="Tor Metrics User Research" target="_blank">Want to collaborate? Take this survey!</a></strong>
+  </div><!-- alert -->
+</div><!-- container -->
