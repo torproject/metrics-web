@@ -955,7 +955,8 @@ Index files use the following custom JSON data format that might still be extend
 <li><code>"types"</code>: Descriptor types as found in <code>@type</code> annotations of contained descriptors.</li>
 <li><code>"first_published"</code>: Earliest publication timestamp of contained descriptors using pattern <code>"YYYY-MM-DD HH:MM"</code> in the UTC timezone.</li>
 <li><code>"last_published"</code>: Latest publication timestamp of contained descriptors using pattern <code>"YYYY-MM-DD HH:MM"</code> in the UTC timezone.</li>
-<li><code>"sha256"</code>: SHA-256 digest of this file.</li>
+<li><code>"sha256"</code>: SHA-256 digest of this file, encoded in Base64.</li>
+
 </ul></li>
 </ul>
 
