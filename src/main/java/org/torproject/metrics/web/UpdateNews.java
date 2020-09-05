@@ -26,24 +26,24 @@ public class UpdateNews {
   public static void main(String[] args) throws Exception {
     Locale.setDefault(Locale.US);
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-    URL textFile = new URL(
-        "https://trac.torproject.org/projects/tor/wiki/doc/"
-        + "MetricsTimeline?format=txt");
+    URL textFile = new URL("https://gitlab.torproject.org/tpo/metrics/timeline/"
+        + "-/raw/master/README.md");
     List<News> news = new ArrayList<>();
     try (BufferedReader br = new BufferedReader(new InputStreamReader(
         textFile.openStream()))) {
       String line;
-      Boolean unknown = null;
+      boolean reachedTimelineSection = false;
       while ((line = br.readLine()) != null) {
-        if (line.startsWith("== Unknown")) {
-          unknown = true;
+        if (!reachedTimelineSection && !line.startsWith("## Timeline")) {
           continue;
         }
-        if (!line.startsWith("||") || line.startsWith("||=start")) {
+        reachedTimelineSection = true;
+        if (!line.startsWith("|") || line.startsWith("|start date|")
+            || line.startsWith("|-------")) {
           continue;
         }
         line = line.trim();
-        String[] parts = line.split("\\|\\|");
+        String[] parts = line.split("\\|");
         News entry = new News();
         entry.start = parts[1].replaceAll("~", "").trim();
         if (entry.start.contains(" ")) {
@@ -78,17 +78,19 @@ public class UpdateNews {
         }
         String desc = parts[5].trim();
         while (desc.contains("[")) {
-          int open = desc.indexOf("[");
-          int space = desc.indexOf(" ", open);
-          int close = desc.indexOf("]", open);
-          if (open < 0 || space < 0 || close < 0) {
+          int labelStart = desc.indexOf("[");
+          int labelEnd = desc.indexOf("]", labelStart);
+          int targetStart = desc.indexOf("(", labelEnd);
+          int targetEnd = desc.indexOf(")", targetStart);
+          if (labelStart < 0 || labelEnd < 0 || targetStart < 0
+              || targetEnd < 0) {
             logger.warn("Cannot convert link in line {}. Exiting.", line);
             System.exit(1);
           }
-          desc = desc.substring(0, open) + "<a href=\""
-              + desc.substring(open + 1, space) + "\">"
-              + desc.substring(space + 1, close) + "</a>"
-              + desc.substring(close + 1);
+          desc = desc.substring(0, labelStart) + "<a href=\""
+              + desc.substring(targetStart + 1, targetEnd) + "\">"
+              + desc.substring(labelStart + 1, labelEnd) + "</a>"
+              + desc.substring(targetEnd + 1);
         }
         while (desc.contains("`")) {
           int open = desc.indexOf("`");
@@ -120,16 +122,25 @@ public class UpdateNews {
         }
         entry.shortDescription = shortDesc;
         if (parts.length >= 7) {
-          for (String link : parts[6].split("[\\[\\]]")) {
-            link = link.trim();
-            if (link.isEmpty()) {
-              continue;
+          String links = parts[6];
+          while (links.contains("[")) {
+            int labelStart = links.indexOf("[");
+            int labelEnd = links.indexOf("]", labelStart);
+            int targetStart = links.indexOf("(", labelEnd);
+            int targetEnd = links.indexOf(")", targetStart);
+            if (labelStart < 0 || labelEnd < 0 || targetStart < 0
+                || targetEnd < 0) {
+              logger.warn("Cannot convert link in line {}. Exiting.", line);
+              System.exit(1);
             }
-            entry.addLink(link.substring(link.indexOf(" ") + 1),
-                link.substring(0, link.indexOf(" ")));
+            entry.addLink(links.substring(labelStart + 1, labelEnd),
+                links.substring(targetStart + 1, targetEnd));
+            links = links.substring(targetEnd + 1);
           }
         }
-        entry.unknown = unknown;
+        if (parts.length >= 8) {
+          entry.unknown = parts[7].equalsIgnoreCase("x");
+        }
         news.add(entry);
       }
     }
