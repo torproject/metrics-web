@@ -5,7 +5,7 @@
   "description" : "Shutdown of default obfs4 bridge frosty.",
   "links" : [ {
     "label" : "ticket",
-    "target" : "https://gitlab.torproject.org/tpo/applications/tor-browser-build/-/issues/40066"
+    "target" : "https://bugs.torproject.org/tpo/applications/tor-browser-build/40066"
   } ]
 }, {
   "start" : "2020-08-13",
@@ -14,7 +14,7 @@
   "description" : "Deployed version 0.4.1 of the Snowflake WebExtension, with NAT type detection in the browser.",
   "links" : [ {
     "label" : "comment",
-    "target" : "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake-webext/-/issues/13#note_2705805"
+    "target" : "https://bugs.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake-webext/13#note_2705805"
   } ]
 }, {
   "start" : "2020-07-06",
@@ -23,7 +23,7 @@
   "description" : "Deployed NAT-aware matching at the Snowflake broker.",
   "links" : [ {
     "label" : "comment",
-    "target" : "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake/-/issues/34129#note_2685268"
+    "target" : "https://bugs.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake/34129#note_2685268"
   } ]
 }, {
   "start" : "2020-06-30",
@@ -3539,6 +3539,19 @@
   "links" : [ {
     "label" : "commit",
     "target" : "https://gitweb.torproject.org/tor.git/commit/?id=1496056c121d02193433d98173213e52eb3e90a7"
+  } ]
+}, {
+  "start" : "2015-12-31",
+  "end" : "2020-06-04",
+  "places" : [ "mx" ],
+  "short_description" : "The Telmex ISP in Mexico blocks seven directory authorities.",
+  "description" : "The Telmex ISP in Mexico blocks seven directory authorities.",
+  "links" : [ {
+    "label" : "mailing list post",
+    "target" : "https://lists.torproject.org/pipermail/tor-relays/2016-January/008491.html"
+  }, {
+    "label" : "article",
+    "target" : "https://globalvoices.org/2020/09/08/we-made-the-largest-mexican-telecommunications-operator-stop-blocking-secure-internet/"
   } ]
 }, {
   "start" : "2015-12-25",

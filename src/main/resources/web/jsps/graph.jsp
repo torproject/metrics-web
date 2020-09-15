@@ -160,8 +160,8 @@
           <div class="row">
             <div class="col-md-12">
               <h2>Related events</h2>
-              <p>The following events have been manually collected on
-              <a href="https://trac.torproject.org/projects/tor/wiki/doc/MetricsTimeline" target="_blank">this wiki page</a>
+              <p>The following events have been manually collected in the
+              <a href="https://gitlab.torproject.org/tpo/metrics/timeline" target="_blank">metrics-timeline Git repository</a>
               and might be related to the displayed graph.</p>
               <c:if test="${displayEventsNotice}">
               <div class="alert alert-danger">

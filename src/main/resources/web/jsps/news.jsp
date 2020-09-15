@@ -19,7 +19,7 @@
         </a>
       </div>
       <h1>News <a href="#news" name="news" class="anchor">#</a></h1>
-      <p>You're a journalist or more generally a person who wants to know what's going on in the Tor network?  We're collecting unusual events in the Tor network together with any insights we have into what we think has happened.</p>
+      <p>You're a journalist or more generally a person who wants to know what's going on in the Tor network?  We're collecting unusual events in the Tor network together with any insights we have into what we think has happened in the <a href="https://gitlab.torproject.org/tpo/metrics/timeline" target="_blank">metrics-timeline Git repository</a>.</p>
     </div>
 
     <c:forEach var="category" items="${news}" varStatus="status">
