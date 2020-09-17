@@ -238,11 +238,44 @@ public class Parser {
   }
 
   /** Removes noise from a reported stats value by rounding to the nearest
-   * right side of a bin and subtracting half of the bin size. */
+   * right side of a bin and subtracting half of the bin size.
+   *
+   * For negative integers, the right side of the bin is the greater number
+   * (e.g. for a binsize of 8, and reportedNumber -9, the right side of the bin
+   * is -8) . */
   private long removeNoise(long reportedNumber, long binSize) {
-    long roundedToNearestRightSideOfTheBin =
-        Math.floorDiv((reportedNumber + binSize / 2), binSize) * binSize;
-    return roundedToNearestRightSideOfTheBin - binSize / 2;
+      long result;
+
+      /* Handle bad edge case */
+      if (binSize == 0) {
+          return reportedNumber;
+      }
+
+      /* remainder for positives is the distance to the left side of the bin
+       * (e.g. for binsize 8, remainder for 13 is 5 and remainder for 10 is 2)
+       *
+       * For negatives, remainder is the distance to the right side of the bin
+       * (e.g. for binsize 8, remainder for -1 is 1 and remainder for -18 is 2)
+       */
+      long remainder = Math.abs(reportedNumber) % binSize;
+      if (remainder == 0) {
+          return reportedNumber;
+      }
+
+      /* Now get to the right side of the bin */
+      long roundedToNearestRightSideOfTheBin;
+      if (reportedNumber < 0) {
+          roundedToNearestRightSideOfTheBin = -(Math.abs(reportedNumber) - remainder);
+      } else {
+          roundedToNearestRightSideOfTheBin = reportedNumber + binSize - remainder;
+      }
+
+      /* And now subtract half of the bin size from that */
+      result = roundedToNearestRightSideOfTheBin - binSize / 2;
+
+//      logger.warn("For reported number {} we went to: {} (right side of bin {}) (remainder {}) (binsize {})",
+//                  reportedNumber, result, roundedToNearestRightSideOfTheBin, remainder, binSize);
+      return result;
   }
 
   /** Parses the given consensus. */
