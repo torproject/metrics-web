@@ -34,8 +34,7 @@
       <ul>
         <li><a href="https://gitweb.torproject.org/user/phw/exitmap.git" target="_blank">Exitmap</a> is a fast and extensible scanner for Tor exit relays.</li>
         <li><a href="https://www.torproject.org/projects/tordnsel.html.en" target="_blank">TorDNSEL</a> publishes lists of IP addresses of multi-homed Tor exits.</li>
-        <li><a href="https://gitweb.torproject.org/torperf.git" target="_blank">Torperf</a> measures Tor performance with a set of utilities and Python scripts.</li>
-        <li><a href="https://github.com/robgjansen/onionperf" target="_blank">OnionPerf</a> measures the performance of onion services.</li>
+        <li><a href="https://gitlab.torproject.org/tpo/metrics/onionperf" target="_blank">OnionPerf</a> measures Tor performance with a set of utilities and Python scripts.</li>
         <li><a href="https://ooni.torproject.org/" target="_blank">OONI</a> detects censorship, surveillance, and traffic manipulation on the internet.</li>
         <li><a href="https://gitweb.torproject.org/user/phw/sybilhunter.git/" target="_blank">Sybilhunter</a> attempts to detect Sybil attacks on the Tor network.</li>
       </ul>
