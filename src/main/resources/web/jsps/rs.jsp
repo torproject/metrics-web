@@ -29,7 +29,7 @@
     <noscript>
       <div class="alert alert-warning">
       <p><strong>JavaScript required</strong><br>
-      Please enable JavaScript to use this service. If you are using Tor Browser on High Security mode, it is possible to enable JavaScript to run only on this page. Click the NoScript <img src="images/noscript.png"> icon on your address bar and select "Temporarily allow all on this page". Relay Search only uses JavaScript resources that are hosted by the Tor Metrics team.</p>
+      Please enable JavaScript to use this service. If you are using Tor Browser on Safest mode, you'll have to switch to Safer or Standard mode. Relay Search only uses JavaScript resources that are hosted by the Tor Metrics team.</p>
     </noscript>
   </div>
 </div> <!-- /container -->
