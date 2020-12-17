@@ -1,4 +1,56 @@
 [ {
+  "start" : "2020-12-05",
+  "end" : "2020-12-09",
+  "protocols" : [ "meek", "moat" ],
+  "short_description" : "An update to an Azure CDN edge server TLS certificate causes an outage of meek and Moat",
+  "description" : "An update to an Azure CDN edge server TLS certificate causes an outage of meek and Moat. It is fixed by the release of Tor Browser 10.0.6, which updates the built-in public key pinning of obfs4proxy.",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/tpo/anti-censorship/pluggable-transports/meek/40001"
+  }, {
+    "label" : "blog post",
+    "target" : "https://blog.torproject.org/new-release-tor-browser-1006#comments"
+  }, {
+    "label" : "meek graph",
+    "target" : "https://metrics.torproject.org/userstats-bridge-transport.html?start=2020-11-01&end=2020-12-31&transport=meek"
+  }, {
+    "label" : "BridgeDB graph",
+    "target" : "https://metrics.torproject.org/bridgedb-distributor.html?start=2020-11-01&end=2020-12-31"
+  }, {
+    "label" : "certificate transparency",
+    "target" : "https://crt.sh/?q=cd29bc427d93bc4453d129a294cfd5e082eacbf3fe9a19b7718a50422b6e6cc5"
+  } ]
+}, {
+  "start" : "2020-11-08",
+  "end" : "2020-11-09",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Outage of the snowflake bridge",
+  "description" : "Outage of the snowflake bridge",
+  "links" : [ {
+    "label" : "ticket",
+    "target" : "https://bugs.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake/40020"
+  } ]
+}, {
+  "start" : "2020-10-27",
+  "ongoing" : true,
+  "places" : [ "tz" ],
+  "protocols" : [ "<OR>", "obfs4" ],
+  "short_description" : "Blocking of Tor and default obfs4 bridges during elections in Tanzania.",
+  "description" : "Blocking of Tor and default obfs4 bridges during elections in Tanzania.",
+  "links" : [ {
+    "label" : "OONI report",
+    "target" : "https://ooni.org/post/2020-tanzania-blocks-social-media-tor-election-day/#blocking-of-tor"
+  } ]
+}, {
+  "start" : "2020-10-05",
+  "protocols" : [ "snowflake" ],
+  "short_description" : "Deployed version 0.4.2 of the Snowflake WebExtension, with better counting of clients.",
+  "description" : "Deployed version 0.4.2 of the Snowflake WebExtension, with better counting of clients.",
+  "links" : [ {
+    "label" : "comment",
+    "target" : "https://bugs.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake/33157#note_2710701"
+  } ]
+}, {
   "start" : "2020-08-31",
   "protocols" : [ "obfs4" ],
   "short_description" : "Shutdown of default obfs4 bridge frosty.",
@@ -15,6 +67,19 @@
   "links" : [ {
     "label" : "comment",
     "target" : "https://bugs.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake-webext/13#note_2705805"
+  } ]
+}, {
+  "start" : "2020-08-09",
+  "end" : "2020-08-12",
+  "places" : [ "by" ],
+  "short_description" : "Internet shutdowns in Belarus, during protests following a presidential election.",
+  "description" : "Internet shutdowns in Belarus, during protests following a presidential election.",
+  "links" : [ {
+    "label" : "report",
+    "target" : "https://ooni.org/post/2020-belarus-internet-outages-website-censorship/#internet-outages-amid-2020-belarusian-presidential-election"
+  }, {
+    "label" : "thread",
+    "target" : "https://github.com/net4people/bbs/issues/46"
   } ]
 }, {
   "start" : "2020-07-06",
@@ -347,6 +412,9 @@
   "links" : [ {
     "label" : "report",
     "target" : "https://reliefweb.int/report/myanmar/myanmar-end-internet-shutdown-rakhine-chin-states"
+  }, {
+    "label" : "2020 report",
+    "target" : "https://public.opentech.fund/documents/The_Rise_of_Online_Censorship_and_Surveillance_in_Myanmar.pdf#page=6"
   } ]
 }, {
   "start" : "2019-06-20",
@@ -589,6 +657,19 @@
     "target" : "https://bugs.torproject.org/29308#comment:4"
   } ]
 }, {
+  "start" : "2019-01-14",
+  "end" : "2019-01-21",
+  "places" : [ "zw" ],
+  "short_description" : "Internet shutdown and blocking of Facebook, WhatsApp, and Twitter in Zimbabwe.",
+  "description" : "Internet shutdown and blocking of Facebook, WhatsApp, and Twitter in Zimbabwe.",
+  "links" : [ {
+    "label" : "article",
+    "target" : "https://www.bbc.com/news/world-africa-46917259"
+  }, {
+    "label" : "OONI report",
+    "target" : "https://ooni.org/post/zimbabwe-protests-social-media-blocking-2019/"
+  } ]
+}, {
   "start" : "2019-01-07",
   "protocols" : [ "bridge" ],
   "short_description" : "Release of tor 0.3.5.7, 0.3.4.10, and 0.3.3.11",
@@ -617,7 +698,7 @@
   } ]
 }, {
   "start" : "2019-01-07",
-  "end" : "2018-01-08",
+  "end" : "2019-01-08",
   "places" : [ "ga" ],
   "short_description" : "Internet shutdown in Gabon following a coup attempt.",
   "description" : "Internet shutdown in Gabon following a coup attempt.",
@@ -1908,6 +1989,19 @@
     "target" : "https://bugs.torproject.org/28521#comment:2"
   } ]
 }, {
+  "start" : "2017-10-01",
+  "end" : "2018-03-01",
+  "places" : [ "cm" ],
+  "short_description" : "Internet shutdown in parts of Cameroon.",
+  "description" : "Internet shutdown in parts of Cameroon.",
+  "links" : [ {
+    "label" : "article",
+    "target" : "https://internetwithoutborders.org/new-internet-shutdown-ordered-in-cameroon/"
+  }, {
+    "label" : "article",
+    "target" : "https://www.accessnow.org/shutdown-ended-cameroonians-still-feeling-impact/"
+  } ]
+}, {
   "start" : "2017-09-26",
   "end" : "2017-10-22",
   "places" : [ "de" ],
@@ -2811,6 +2905,19 @@
     "target" : "https://lists.torproject.org/pipermail/tor-dev/2017-January/011812.html"
   } ]
 }, {
+  "start" : "2017-01-16",
+  "end" : "2017-04-20",
+  "places" : [ "cm" ],
+  "short_description" : "Internet shutdown in parts of Cameroon.",
+  "description" : "Internet shutdown in parts of Cameroon.",
+  "links" : [ {
+    "label" : "article",
+    "target" : "https://cipesa.org/2017/01/13-days-later-cameroon-maintains-internet-shutdown-despite-global-outcry/"
+  }, {
+    "label" : "article",
+    "target" : "https://www.accessnow.org/victory-cameroon-94-days-internet-back/"
+  } ]
+}, {
   "start" : "2017-01-15",
   "end" : "2017-03-01",
   "places" : [ "ae" ],
@@ -3334,6 +3441,16 @@
   }, {
     "label" : "relay graph",
     "target" : "https://metrics.torproject.org/userstats-relay-country.html?start=2016-04-01&end=2016-09-01&country=tr"
+  } ]
+}, {
+  "start" : "2016-07-07",
+  "end" : "2016-07-07",
+  "places" : [ "zw" ],
+  "short_description" : "Four-hour block of WhatsApp in Zimbabwe.",
+  "description" : "Four-hour block of WhatsApp in Zimbabwe.",
+  "links" : [ {
+    "label" : "article",
+    "target" : "https://cipesa.org/2016/07/zimbabwe-becomes-the-latest-country-to-shut-down-social-media/"
   } ]
 }, {
   "start" : "2016-06-12",
